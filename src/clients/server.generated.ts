@@ -18,39 +18,6 @@ export class Client {
     }
 
     /**
-     * @return No content
-     */
-    getTest(): Promise<void> {
-        let url_ = this.baseUrl + "/test";
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_ = <RequestInit>{
-            method: "GET",
-            headers: {
-            }
-        };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processGetTest(_response);
-        });
-    }
-
-    protected processGetTest(response: Response): Promise<void> {
-        const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
-        if (status === 204) {
-            return response.text().then((_responseText) => {
-            return;
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            });
-        }
-        return Promise.resolve<void>(<any>null);
-    }
-
-    /**
      * @return Ok
      */
     getGreetName(name: string): Promise<string> {
@@ -89,6 +56,1734 @@ export class Client {
         }
         return Promise.resolve<string>(<any>null);
     }
+
+    /**
+     * @return Ok
+     */
+    getProducts(): Promise<Product[]> {
+        let url_ = this.baseUrl + "/product";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <RequestInit>{
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processGetProducts(_response);
+        });
+    }
+
+    protected processGetProducts(response: Response): Promise<Product[]> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(Product.fromJS(item));
+            }
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<Product[]>(<any>null);
+    }
+
+    /**
+     * @return Ok
+     */
+    createProduct(body: ProductParams): Promise<Product> {
+        let url_ = this.baseUrl + "/product";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ = <RequestInit>{
+            body: content_,
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processCreateProduct(_response);
+        });
+    }
+
+    protected processCreateProduct(response: Response): Promise<Product> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = Product.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<Product>(<any>null);
+    }
+
+    /**
+     * @return Ok
+     */
+    getProduct(id: number): Promise<Product> {
+        let url_ = this.baseUrl + "/product/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <RequestInit>{
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processGetProduct(_response);
+        });
+    }
+
+    protected processGetProduct(response: Response): Promise<Product> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = Product.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<Product>(<any>null);
+    }
+
+    /**
+     * @return Ok
+     */
+    updateProduct(id: number, body: Partial_ProductParams): Promise<Product> {
+        let url_ = this.baseUrl + "/product/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ = <RequestInit>{
+            body: content_,
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processUpdateProduct(_response);
+        });
+    }
+
+    protected processUpdateProduct(response: Response): Promise<Product> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = Product.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<Product>(<any>null);
+    }
+
+    /**
+     * @return Ok
+     */
+    getCompanies(): Promise<Company[]> {
+        let url_ = this.baseUrl + "/company";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <RequestInit>{
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processGetCompanies(_response);
+        });
+    }
+
+    protected processGetCompanies(response: Response): Promise<Company[]> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(Company.fromJS(item));
+            }
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<Company[]>(<any>null);
+    }
+
+    /**
+     * @return Ok
+     */
+    createCompany(body: CompanyParams): Promise<Company> {
+        let url_ = this.baseUrl + "/company";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ = <RequestInit>{
+            body: content_,
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processCreateCompany(_response);
+        });
+    }
+
+    protected processCreateCompany(response: Response): Promise<Company> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = Company.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<Company>(<any>null);
+    }
+
+    /**
+     * @return Ok
+     */
+    getCompany(id: number): Promise<Company> {
+        let url_ = this.baseUrl + "/company/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <RequestInit>{
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processGetCompany(_response);
+        });
+    }
+
+    protected processGetCompany(response: Response): Promise<Company> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = Company.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<Company>(<any>null);
+    }
+
+    /**
+     * @return Ok
+     */
+    updateCompany(id: number, body: Partial_CompanyParams): Promise<Company> {
+        let url_ = this.baseUrl + "/company/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ = <RequestInit>{
+            body: content_,
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processUpdateCompany(_response);
+        });
+    }
+
+    protected processUpdateCompany(response: Response): Promise<Company> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = Company.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<Company>(<any>null);
+    }
+
+    /**
+     * @return Ok
+     */
+    getContracts(): Promise<Contract[]> {
+        let url_ = this.baseUrl + "/contract";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <RequestInit>{
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processGetContracts(_response);
+        });
+    }
+
+    protected processGetContracts(response: Response): Promise<Contract[]> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(Contract.fromJS(item));
+            }
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<Contract[]>(<any>null);
+    }
+
+    /**
+     * @return Ok
+     */
+    createContract(body: ContractParams): Promise<Contract> {
+        let url_ = this.baseUrl + "/contract";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ = <RequestInit>{
+            body: content_,
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processCreateContract(_response);
+        });
+    }
+
+    protected processCreateContract(response: Response): Promise<Contract> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = Contract.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<Contract>(<any>null);
+    }
+
+    /**
+     * @return Ok
+     */
+    getContract(id: number): Promise<Contract> {
+        let url_ = this.baseUrl + "/contract/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <RequestInit>{
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processGetContract(_response);
+        });
+    }
+
+    protected processGetContract(response: Response): Promise<Contract> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = Contract.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<Contract>(<any>null);
+    }
+
+    /**
+     * @return Ok
+     */
+    updateContract(id: number, body: Partial_ContractParams): Promise<Contract> {
+        let url_ = this.baseUrl + "/contract/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ = <RequestInit>{
+            body: content_,
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processUpdateContract(_response);
+        });
+    }
+
+    protected processUpdateContract(response: Response): Promise<Contract> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = Contract.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<Contract>(<any>null);
+    }
+}
+
+export enum ProductStatus {
+    ACTIVE = "ACTIVE",
+    INACTIVE = "INACTIVE",
+}
+
+export class Product implements IProduct {
+    id!: number;
+    nameDutch!: string;
+    nameEnglish!: string;
+    targetPrice!: number;
+    description!: string;
+    contractTextDutch!: string;
+    contractTextEnglish!: string;
+    deliverySpecificationDutch!: string;
+    deliverySpecificationEnglish!: string;
+    status!: ProductStatus;
+    instances!: ProductInstance[];
+    statusChanges!: Status[];
+
+    constructor(data?: IProduct) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+        if (!data) {
+            this.instances = [];
+            this.statusChanges = [];
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.nameDutch = _data["nameDutch"];
+            this.nameEnglish = _data["nameEnglish"];
+            this.targetPrice = _data["targetPrice"];
+            this.description = _data["description"];
+            this.contractTextDutch = _data["contractTextDutch"];
+            this.contractTextEnglish = _data["contractTextEnglish"];
+            this.deliverySpecificationDutch = _data["deliverySpecificationDutch"];
+            this.deliverySpecificationEnglish = _data["deliverySpecificationEnglish"];
+            this.status = _data["status"];
+            if (Array.isArray(_data["instances"])) {
+                this.instances = [] as any;
+                for (let item of _data["instances"])
+                    this.instances!.push(ProductInstance.fromJS(item));
+            }
+            if (Array.isArray(_data["statusChanges"])) {
+                this.statusChanges = [] as any;
+                for (let item of _data["statusChanges"])
+                    this.statusChanges!.push(Status.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): Product {
+        data = typeof data === 'object' ? data : {};
+        let result = new Product();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["nameDutch"] = this.nameDutch;
+        data["nameEnglish"] = this.nameEnglish;
+        data["targetPrice"] = this.targetPrice;
+        data["description"] = this.description;
+        data["contractTextDutch"] = this.contractTextDutch;
+        data["contractTextEnglish"] = this.contractTextEnglish;
+        data["deliverySpecificationDutch"] = this.deliverySpecificationDutch;
+        data["deliverySpecificationEnglish"] = this.deliverySpecificationEnglish;
+        data["status"] = this.status;
+        if (Array.isArray(this.instances)) {
+            data["instances"] = [];
+            for (let item of this.instances)
+                data["instances"].push(item.toJSON());
+        }
+        if (Array.isArray(this.statusChanges)) {
+            data["statusChanges"] = [];
+            for (let item of this.statusChanges)
+                data["statusChanges"].push(item.toJSON());
+        }
+        return data; 
+    }
+}
+
+export interface IProduct {
+    id: number;
+    nameDutch: string;
+    nameEnglish: string;
+    targetPrice: number;
+    description: string;
+    contractTextDutch: string;
+    contractTextEnglish: string;
+    deliverySpecificationDutch: string;
+    deliverySpecificationEnglish: string;
+    status: ProductStatus;
+    instances: ProductInstance[];
+    statusChanges: Status[];
+}
+
+export enum CompanyStatus {
+    ACTIVE = "ACTIVE",
+    INACTIVE = "INACTIVE",
+}
+
+export class Contract implements IContract {
+    id!: number;
+    title!: string;
+    companyId!: number;
+    company!: Company;
+    products!: Product[];
+    contactId!: number;
+    contact!: Contact;
+    date!: Date;
+    poNumber!: string;
+    comments!: string;
+    statusChanges!: Status[];
+
+    constructor(data?: IContract) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+        if (!data) {
+            this.company = new Company();
+            this.products = [];
+            this.contact = new Contact();
+            this.statusChanges = [];
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.title = _data["title"];
+            this.companyId = _data["companyId"];
+            this.company = _data["company"] ? Company.fromJS(_data["company"]) : new Company();
+            if (Array.isArray(_data["products"])) {
+                this.products = [] as any;
+                for (let item of _data["products"])
+                    this.products!.push(Product.fromJS(item));
+            }
+            this.contactId = _data["contactId"];
+            this.contact = _data["contact"] ? Contact.fromJS(_data["contact"]) : new Contact();
+            this.date = _data["date"] ? new Date(_data["date"].toString()) : <any>undefined;
+            this.poNumber = _data["poNumber"];
+            this.comments = _data["comments"];
+            if (Array.isArray(_data["statusChanges"])) {
+                this.statusChanges = [] as any;
+                for (let item of _data["statusChanges"])
+                    this.statusChanges!.push(Status.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): Contract {
+        data = typeof data === 'object' ? data : {};
+        let result = new Contract();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["title"] = this.title;
+        data["companyId"] = this.companyId;
+        data["company"] = this.company ? this.company.toJSON() : <any>undefined;
+        if (Array.isArray(this.products)) {
+            data["products"] = [];
+            for (let item of this.products)
+                data["products"].push(item.toJSON());
+        }
+        data["contactId"] = this.contactId;
+        data["contact"] = this.contact ? this.contact.toJSON() : <any>undefined;
+        data["date"] = this.date ? this.date.toISOString() : <any>undefined;
+        data["poNumber"] = this.poNumber;
+        data["comments"] = this.comments;
+        if (Array.isArray(this.statusChanges)) {
+            data["statusChanges"] = [];
+            for (let item of this.statusChanges)
+                data["statusChanges"].push(item.toJSON());
+        }
+        return data; 
+    }
+}
+
+export interface IContract {
+    id: number;
+    title: string;
+    companyId: number;
+    company: Company;
+    products: Product[];
+    contactId: number;
+    contact: Contact;
+    date: Date;
+    poNumber: string;
+    comments: string;
+    statusChanges: Status[];
+}
+
+export class ProductInstance implements IProductInstance {
+    id!: number;
+    productId!: number;
+    product!: Product;
+    contractId!: number;
+    contract!: Contract;
+    invoiceId!: number;
+    invoice!: Invoice;
+    price!: number;
+    comment!: string;
+    status!: ProductInstanceStatus;
+
+    constructor(data?: IProductInstance) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+        if (!data) {
+            this.product = new Product();
+            this.contract = new Contract();
+            this.invoice = new Invoice();
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.productId = _data["productId"];
+            this.product = _data["product"] ? Product.fromJS(_data["product"]) : new Product();
+            this.contractId = _data["contractId"];
+            this.contract = _data["contract"] ? Contract.fromJS(_data["contract"]) : new Contract();
+            this.invoiceId = _data["invoiceId"];
+            this.invoice = _data["invoice"] ? Invoice.fromJS(_data["invoice"]) : new Invoice();
+            this.price = _data["price"];
+            this.comment = _data["comment"];
+            this.status = _data["status"];
+        }
+    }
+
+    static fromJS(data: any): ProductInstance {
+        data = typeof data === 'object' ? data : {};
+        let result = new ProductInstance();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["productId"] = this.productId;
+        data["product"] = this.product ? this.product.toJSON() : <any>undefined;
+        data["contractId"] = this.contractId;
+        data["contract"] = this.contract ? this.contract.toJSON() : <any>undefined;
+        data["invoiceId"] = this.invoiceId;
+        data["invoice"] = this.invoice ? this.invoice.toJSON() : <any>undefined;
+        data["price"] = this.price;
+        data["comment"] = this.comment;
+        data["status"] = this.status;
+        return data; 
+    }
+}
+
+export interface IProductInstance {
+    id: number;
+    productId: number;
+    product: Product;
+    contractId: number;
+    contract: Contract;
+    invoiceId: number;
+    invoice: Invoice;
+    price: number;
+    comment: string;
+    status: ProductInstanceStatus;
+}
+
+export class Company implements ICompany {
+    id!: number;
+    name!: string;
+    description!: string;
+    phoneNumber!: string;
+    comments!: string;
+    status!: CompanyStatus;
+    lastUpdated!: Date;
+    endDate?: Date;
+    contracts!: Contract[];
+    invoices!: Invoice[];
+    contacts!: Contact[];
+    statusChanges!: Status[];
+
+    constructor(data?: ICompany) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+        if (!data) {
+            this.contracts = [];
+            this.invoices = [];
+            this.contacts = [];
+            this.statusChanges = [];
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.name = _data["name"];
+            this.description = _data["description"];
+            this.phoneNumber = _data["phoneNumber"];
+            this.comments = _data["comments"];
+            this.status = _data["status"];
+            this.lastUpdated = _data["lastUpdated"] ? new Date(_data["lastUpdated"].toString()) : <any>undefined;
+            this.endDate = _data["endDate"] ? new Date(_data["endDate"].toString()) : <any>undefined;
+            if (Array.isArray(_data["contracts"])) {
+                this.contracts = [] as any;
+                for (let item of _data["contracts"])
+                    this.contracts!.push(Contract.fromJS(item));
+            }
+            if (Array.isArray(_data["invoices"])) {
+                this.invoices = [] as any;
+                for (let item of _data["invoices"])
+                    this.invoices!.push(Invoice.fromJS(item));
+            }
+            if (Array.isArray(_data["contacts"])) {
+                this.contacts = [] as any;
+                for (let item of _data["contacts"])
+                    this.contacts!.push(Contact.fromJS(item));
+            }
+            if (Array.isArray(_data["statusChanges"])) {
+                this.statusChanges = [] as any;
+                for (let item of _data["statusChanges"])
+                    this.statusChanges!.push(Status.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): Company {
+        data = typeof data === 'object' ? data : {};
+        let result = new Company();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["name"] = this.name;
+        data["description"] = this.description;
+        data["phoneNumber"] = this.phoneNumber;
+        data["comments"] = this.comments;
+        data["status"] = this.status;
+        data["lastUpdated"] = this.lastUpdated ? this.lastUpdated.toISOString() : <any>undefined;
+        data["endDate"] = this.endDate ? this.endDate.toISOString() : <any>undefined;
+        if (Array.isArray(this.contracts)) {
+            data["contracts"] = [];
+            for (let item of this.contracts)
+                data["contracts"].push(item.toJSON());
+        }
+        if (Array.isArray(this.invoices)) {
+            data["invoices"] = [];
+            for (let item of this.invoices)
+                data["invoices"].push(item.toJSON());
+        }
+        if (Array.isArray(this.contacts)) {
+            data["contacts"] = [];
+            for (let item of this.contacts)
+                data["contacts"].push(item.toJSON());
+        }
+        if (Array.isArray(this.statusChanges)) {
+            data["statusChanges"] = [];
+            for (let item of this.statusChanges)
+                data["statusChanges"].push(item.toJSON());
+        }
+        return data; 
+    }
+}
+
+export interface ICompany {
+    id: number;
+    name: string;
+    description: string;
+    phoneNumber: string;
+    comments: string;
+    status: CompanyStatus;
+    lastUpdated: Date;
+    endDate?: Date;
+    contracts: Contract[];
+    invoices: Invoice[];
+    contacts: Contact[];
+    statusChanges: Status[];
+}
+
+export enum InvoiceStatus {
+    WAITING = "WAITING",
+    SENT = "SENT",
+    COLLECTED = "COLLECTED",
+    UNCOLLECTIBLE = "UNCOLLECTIBLE",
+}
+
+export enum EntityType {
+    NULL = "NULL",
+    USER = "USER",
+    COMPANY = "COMPANY",
+    CONTRACT = "CONTRACT",
+    INVOICE = "INVOICE",
+    PRODUCT = "PRODUCT",
+    CONTACT = "CONTACT",
+}
+
+export enum Gender {
+    MALE = "MALE",
+    FEMALE = "FEMALE",
+    OTHER = "OTHER",
+    UNKOWN = "UNKOWN",
+}
+
+export class User implements IUser {
+    id!: number;
+    gender!: Gender;
+    firstName!: string;
+    middleName!: string;
+    lastName!: string;
+    email!: string;
+    comment!: string;
+    roles!: Role[];
+    statusChanges!: Status[];
+    madeChanges!: Status[];
+
+    constructor(data?: IUser) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+        if (!data) {
+            this.roles = [];
+            this.statusChanges = [];
+            this.madeChanges = [];
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.gender = _data["gender"];
+            this.firstName = _data["firstName"];
+            this.middleName = _data["middleName"];
+            this.lastName = _data["lastName"];
+            this.email = _data["email"];
+            this.comment = _data["comment"];
+            if (Array.isArray(_data["roles"])) {
+                this.roles = [] as any;
+                for (let item of _data["roles"])
+                    this.roles!.push(Role.fromJS(item));
+            }
+            if (Array.isArray(_data["statusChanges"])) {
+                this.statusChanges = [] as any;
+                for (let item of _data["statusChanges"])
+                    this.statusChanges!.push(Status.fromJS(item));
+            }
+            if (Array.isArray(_data["madeChanges"])) {
+                this.madeChanges = [] as any;
+                for (let item of _data["madeChanges"])
+                    this.madeChanges!.push(Status.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): User {
+        data = typeof data === 'object' ? data : {};
+        let result = new User();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["gender"] = this.gender;
+        data["firstName"] = this.firstName;
+        data["middleName"] = this.middleName;
+        data["lastName"] = this.lastName;
+        data["email"] = this.email;
+        data["comment"] = this.comment;
+        if (Array.isArray(this.roles)) {
+            data["roles"] = [];
+            for (let item of this.roles)
+                data["roles"].push(item.toJSON());
+        }
+        if (Array.isArray(this.statusChanges)) {
+            data["statusChanges"] = [];
+            for (let item of this.statusChanges)
+                data["statusChanges"].push(item.toJSON());
+        }
+        if (Array.isArray(this.madeChanges)) {
+            data["madeChanges"] = [];
+            for (let item of this.madeChanges)
+                data["madeChanges"].push(item.toJSON());
+        }
+        return data; 
+    }
+}
+
+export interface IUser {
+    id: number;
+    gender: Gender;
+    firstName: string;
+    middleName: string;
+    lastName: string;
+    email: string;
+    comment: string;
+    roles: Role[];
+    statusChanges: Status[];
+    madeChanges: Status[];
+}
+
+export class Role implements IRole {
+    name!: string;
+    users!: User[];
+
+    constructor(data?: IRole) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+        if (!data) {
+            this.users = [];
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.name = _data["name"];
+            if (Array.isArray(_data["users"])) {
+                this.users = [] as any;
+                for (let item of _data["users"])
+                    this.users!.push(User.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): Role {
+        data = typeof data === 'object' ? data : {};
+        let result = new Role();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["name"] = this.name;
+        if (Array.isArray(this.users)) {
+            data["users"] = [];
+            for (let item of this.users)
+                data["users"].push(item.toJSON());
+        }
+        return data; 
+    }
+}
+
+export interface IRole {
+    name: string;
+    users: User[];
+}
+
+export class Status implements IStatus {
+    id!: number;
+    title!: string;
+    comment!: string;
+    createdById!: number;
+    entityType!: EntityType;
+    createdBy!: User;
+    companyId!: number;
+    company!: Company;
+    contractId!: number;
+    contract!: Contract;
+    invoiceId!: number;
+    invoice!: Invoice;
+    userId!: number;
+    user!: User;
+    productId!: number;
+    product!: Product;
+    contactId!: number;
+    contact!: Contact;
+
+    constructor(data?: IStatus) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+        if (!data) {
+            this.createdBy = new User();
+            this.company = new Company();
+            this.contract = new Contract();
+            this.invoice = new Invoice();
+            this.user = new User();
+            this.product = new Product();
+            this.contact = new Contact();
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.title = _data["title"];
+            this.comment = _data["comment"];
+            this.createdById = _data["createdById"];
+            this.entityType = _data["entityType"];
+            this.createdBy = _data["createdBy"] ? User.fromJS(_data["createdBy"]) : new User();
+            this.companyId = _data["companyId"];
+            this.company = _data["company"] ? Company.fromJS(_data["company"]) : new Company();
+            this.contractId = _data["contractId"];
+            this.contract = _data["contract"] ? Contract.fromJS(_data["contract"]) : new Contract();
+            this.invoiceId = _data["invoiceId"];
+            this.invoice = _data["invoice"] ? Invoice.fromJS(_data["invoice"]) : new Invoice();
+            this.userId = _data["userId"];
+            this.user = _data["user"] ? User.fromJS(_data["user"]) : new User();
+            this.productId = _data["productId"];
+            this.product = _data["product"] ? Product.fromJS(_data["product"]) : new Product();
+            this.contactId = _data["contactId"];
+            this.contact = _data["contact"] ? Contact.fromJS(_data["contact"]) : new Contact();
+        }
+    }
+
+    static fromJS(data: any): Status {
+        data = typeof data === 'object' ? data : {};
+        let result = new Status();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["title"] = this.title;
+        data["comment"] = this.comment;
+        data["createdById"] = this.createdById;
+        data["entityType"] = this.entityType;
+        data["createdBy"] = this.createdBy ? this.createdBy.toJSON() : <any>undefined;
+        data["companyId"] = this.companyId;
+        data["company"] = this.company ? this.company.toJSON() : <any>undefined;
+        data["contractId"] = this.contractId;
+        data["contract"] = this.contract ? this.contract.toJSON() : <any>undefined;
+        data["invoiceId"] = this.invoiceId;
+        data["invoice"] = this.invoice ? this.invoice.toJSON() : <any>undefined;
+        data["userId"] = this.userId;
+        data["user"] = this.user ? this.user.toJSON() : <any>undefined;
+        data["productId"] = this.productId;
+        data["product"] = this.product ? this.product.toJSON() : <any>undefined;
+        data["contactId"] = this.contactId;
+        data["contact"] = this.contact ? this.contact.toJSON() : <any>undefined;
+        return data; 
+    }
+}
+
+export interface IStatus {
+    id: number;
+    title: string;
+    comment: string;
+    createdById: number;
+    entityType: EntityType;
+    createdBy: User;
+    companyId: number;
+    company: Company;
+    contractId: number;
+    contract: Contract;
+    invoiceId: number;
+    invoice: Invoice;
+    userId: number;
+    user: User;
+    productId: number;
+    product: Product;
+    contactId: number;
+    contact: Contact;
+}
+
+export class Invoice implements IInvoice {
+    id!: number;
+    products!: ProductInstance[];
+    companyId!: number;
+    company!: Company;
+    price!: number;
+    comment!: string;
+    status!: InvoiceStatus;
+    statusChanges!: Status[];
+
+    constructor(data?: IInvoice) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+        if (!data) {
+            this.products = [];
+            this.company = new Company();
+            this.statusChanges = [];
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            if (Array.isArray(_data["products"])) {
+                this.products = [] as any;
+                for (let item of _data["products"])
+                    this.products!.push(ProductInstance.fromJS(item));
+            }
+            this.companyId = _data["companyId"];
+            this.company = _data["company"] ? Company.fromJS(_data["company"]) : new Company();
+            this.price = _data["price"];
+            this.comment = _data["comment"];
+            this.status = _data["status"];
+            if (Array.isArray(_data["statusChanges"])) {
+                this.statusChanges = [] as any;
+                for (let item of _data["statusChanges"])
+                    this.statusChanges!.push(Status.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): Invoice {
+        data = typeof data === 'object' ? data : {};
+        let result = new Invoice();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        if (Array.isArray(this.products)) {
+            data["products"] = [];
+            for (let item of this.products)
+                data["products"].push(item.toJSON());
+        }
+        data["companyId"] = this.companyId;
+        data["company"] = this.company ? this.company.toJSON() : <any>undefined;
+        data["price"] = this.price;
+        data["comment"] = this.comment;
+        data["status"] = this.status;
+        if (Array.isArray(this.statusChanges)) {
+            data["statusChanges"] = [];
+            for (let item of this.statusChanges)
+                data["statusChanges"].push(item.toJSON());
+        }
+        return data; 
+    }
+}
+
+export interface IInvoice {
+    id: number;
+    products: ProductInstance[];
+    companyId: number;
+    company: Company;
+    price: number;
+    comment: string;
+    status: InvoiceStatus;
+    statusChanges: Status[];
+}
+
+export class Contact implements IContact {
+    id!: number;
+    gender!: Gender;
+    firstName!: string;
+    middleName!: string;
+    lastName!: string;
+    email!: string;
+    comment!: string;
+    companyId!: number;
+    company!: Company;
+    contracts!: Contract[];
+    statusChanges!: Status[];
+
+    constructor(data?: IContact) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+        if (!data) {
+            this.company = new Company();
+            this.contracts = [];
+            this.statusChanges = [];
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.gender = _data["gender"];
+            this.firstName = _data["firstName"];
+            this.middleName = _data["middleName"];
+            this.lastName = _data["lastName"];
+            this.email = _data["email"];
+            this.comment = _data["comment"];
+            this.companyId = _data["companyId"];
+            this.company = _data["company"] ? Company.fromJS(_data["company"]) : new Company();
+            if (Array.isArray(_data["contracts"])) {
+                this.contracts = [] as any;
+                for (let item of _data["contracts"])
+                    this.contracts!.push(Contract.fromJS(item));
+            }
+            if (Array.isArray(_data["statusChanges"])) {
+                this.statusChanges = [] as any;
+                for (let item of _data["statusChanges"])
+                    this.statusChanges!.push(Status.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): Contact {
+        data = typeof data === 'object' ? data : {};
+        let result = new Contact();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["gender"] = this.gender;
+        data["firstName"] = this.firstName;
+        data["middleName"] = this.middleName;
+        data["lastName"] = this.lastName;
+        data["email"] = this.email;
+        data["comment"] = this.comment;
+        data["companyId"] = this.companyId;
+        data["company"] = this.company ? this.company.toJSON() : <any>undefined;
+        if (Array.isArray(this.contracts)) {
+            data["contracts"] = [];
+            for (let item of this.contracts)
+                data["contracts"].push(item.toJSON());
+        }
+        if (Array.isArray(this.statusChanges)) {
+            data["statusChanges"] = [];
+            for (let item of this.statusChanges)
+                data["statusChanges"].push(item.toJSON());
+        }
+        return data; 
+    }
+}
+
+export interface IContact {
+    id: number;
+    gender: Gender;
+    firstName: string;
+    middleName: string;
+    lastName: string;
+    email: string;
+    comment: string;
+    companyId: number;
+    company: Company;
+    contracts: Contract[];
+    statusChanges: Status[];
+}
+
+export enum ProductInstanceStatus {
+    WAITING = "WAITING",
+    DELIVERED = "DELIVERED",
+    NOT_DELIVERED = "NOT_DELIVERED",
+}
+
+export class ProductParams implements IProductParams {
+    nameDutch!: string;
+    nameEnglish!: string;
+    targetPrice!: number;
+    description!: string;
+    contractTextDutch!: string;
+    contractTextEnglish!: string;
+    deliverySpecificationDutch!: string;
+    deliverySpecificationEnglish!: string;
+
+    constructor(data?: IProductParams) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.nameDutch = _data["nameDutch"];
+            this.nameEnglish = _data["nameEnglish"];
+            this.targetPrice = _data["targetPrice"];
+            this.description = _data["description"];
+            this.contractTextDutch = _data["contractTextDutch"];
+            this.contractTextEnglish = _data["contractTextEnglish"];
+            this.deliverySpecificationDutch = _data["deliverySpecificationDutch"];
+            this.deliverySpecificationEnglish = _data["deliverySpecificationEnglish"];
+        }
+    }
+
+    static fromJS(data: any): ProductParams {
+        data = typeof data === 'object' ? data : {};
+        let result = new ProductParams();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["nameDutch"] = this.nameDutch;
+        data["nameEnglish"] = this.nameEnglish;
+        data["targetPrice"] = this.targetPrice;
+        data["description"] = this.description;
+        data["contractTextDutch"] = this.contractTextDutch;
+        data["contractTextEnglish"] = this.contractTextEnglish;
+        data["deliverySpecificationDutch"] = this.deliverySpecificationDutch;
+        data["deliverySpecificationEnglish"] = this.deliverySpecificationEnglish;
+        return data; 
+    }
+}
+
+export interface IProductParams {
+    nameDutch: string;
+    nameEnglish: string;
+    targetPrice: number;
+    description: string;
+    contractTextDutch: string;
+    contractTextEnglish: string;
+    deliverySpecificationDutch: string;
+    deliverySpecificationEnglish: string;
+}
+
+/** Make all properties in T optional */
+export class Partial_ProductParams implements IPartial_ProductParams {
+    nameDutch?: string;
+    nameEnglish?: string;
+    targetPrice?: number;
+    description?: string;
+    contractTextDutch?: string;
+    contractTextEnglish?: string;
+    deliverySpecificationDutch?: string;
+    deliverySpecificationEnglish?: string;
+
+    constructor(data?: IPartial_ProductParams) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.nameDutch = _data["nameDutch"];
+            this.nameEnglish = _data["nameEnglish"];
+            this.targetPrice = _data["targetPrice"];
+            this.description = _data["description"];
+            this.contractTextDutch = _data["contractTextDutch"];
+            this.contractTextEnglish = _data["contractTextEnglish"];
+            this.deliverySpecificationDutch = _data["deliverySpecificationDutch"];
+            this.deliverySpecificationEnglish = _data["deliverySpecificationEnglish"];
+        }
+    }
+
+    static fromJS(data: any): Partial_ProductParams {
+        data = typeof data === 'object' ? data : {};
+        let result = new Partial_ProductParams();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["nameDutch"] = this.nameDutch;
+        data["nameEnglish"] = this.nameEnglish;
+        data["targetPrice"] = this.targetPrice;
+        data["description"] = this.description;
+        data["contractTextDutch"] = this.contractTextDutch;
+        data["contractTextEnglish"] = this.contractTextEnglish;
+        data["deliverySpecificationDutch"] = this.deliverySpecificationDutch;
+        data["deliverySpecificationEnglish"] = this.deliverySpecificationEnglish;
+        return data; 
+    }
+}
+
+/** Make all properties in T optional */
+export interface IPartial_ProductParams {
+    nameDutch?: string;
+    nameEnglish?: string;
+    targetPrice?: number;
+    description?: string;
+    contractTextDutch?: string;
+    contractTextEnglish?: string;
+    deliverySpecificationDutch?: string;
+    deliverySpecificationEnglish?: string;
+}
+
+export class CompanyParams implements ICompanyParams {
+    name!: string;
+    description!: string;
+    phoneNumber!: string;
+    comments!: string;
+    status!: CompanyStatus;
+    endDate?: Date;
+
+    constructor(data?: ICompanyParams) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.name = _data["name"];
+            this.description = _data["description"];
+            this.phoneNumber = _data["phoneNumber"];
+            this.comments = _data["comments"];
+            this.status = _data["status"];
+            this.endDate = _data["endDate"] ? new Date(_data["endDate"].toString()) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): CompanyParams {
+        data = typeof data === 'object' ? data : {};
+        let result = new CompanyParams();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["name"] = this.name;
+        data["description"] = this.description;
+        data["phoneNumber"] = this.phoneNumber;
+        data["comments"] = this.comments;
+        data["status"] = this.status;
+        data["endDate"] = this.endDate ? this.endDate.toISOString() : <any>undefined;
+        return data; 
+    }
+}
+
+export interface ICompanyParams {
+    name: string;
+    description: string;
+    phoneNumber: string;
+    comments: string;
+    status: CompanyStatus;
+    endDate?: Date;
+}
+
+/** Make all properties in T optional */
+export class Partial_CompanyParams implements IPartial_CompanyParams {
+    name?: string;
+    description?: string;
+    phoneNumber?: string;
+    comments?: string;
+    status?: CompanyStatus;
+    endDate?: Date;
+
+    constructor(data?: IPartial_CompanyParams) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.name = _data["name"];
+            this.description = _data["description"];
+            this.phoneNumber = _data["phoneNumber"];
+            this.comments = _data["comments"];
+            this.status = _data["status"];
+            this.endDate = _data["endDate"] ? new Date(_data["endDate"].toString()) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): Partial_CompanyParams {
+        data = typeof data === 'object' ? data : {};
+        let result = new Partial_CompanyParams();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["name"] = this.name;
+        data["description"] = this.description;
+        data["phoneNumber"] = this.phoneNumber;
+        data["comments"] = this.comments;
+        data["status"] = this.status;
+        data["endDate"] = this.endDate ? this.endDate.toISOString() : <any>undefined;
+        return data; 
+    }
+}
+
+/** Make all properties in T optional */
+export interface IPartial_CompanyParams {
+    name?: string;
+    description?: string;
+    phoneNumber?: string;
+    comments?: string;
+    status?: CompanyStatus;
+    endDate?: Date;
+}
+
+export class ContractParams implements IContractParams {
+    title!: string;
+    companyId!: number;
+    date!: Date;
+    poNumber!: string;
+    comments!: string;
+
+    constructor(data?: IContractParams) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.title = _data["title"];
+            this.companyId = _data["companyId"];
+            this.date = _data["date"] ? new Date(_data["date"].toString()) : <any>undefined;
+            this.poNumber = _data["poNumber"];
+            this.comments = _data["comments"];
+        }
+    }
+
+    static fromJS(data: any): ContractParams {
+        data = typeof data === 'object' ? data : {};
+        let result = new ContractParams();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["title"] = this.title;
+        data["companyId"] = this.companyId;
+        data["date"] = this.date ? this.date.toISOString() : <any>undefined;
+        data["poNumber"] = this.poNumber;
+        data["comments"] = this.comments;
+        return data; 
+    }
+}
+
+export interface IContractParams {
+    title: string;
+    companyId: number;
+    date: Date;
+    poNumber: string;
+    comments: string;
+}
+
+/** Make all properties in T optional */
+export class Partial_ContractParams implements IPartial_ContractParams {
+    title?: string;
+    companyId?: number;
+    date?: Date;
+    poNumber?: string;
+    comments?: string;
+
+    constructor(data?: IPartial_ContractParams) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.title = _data["title"];
+            this.companyId = _data["companyId"];
+            this.date = _data["date"] ? new Date(_data["date"].toString()) : <any>undefined;
+            this.poNumber = _data["poNumber"];
+            this.comments = _data["comments"];
+        }
+    }
+
+    static fromJS(data: any): Partial_ContractParams {
+        data = typeof data === 'object' ? data : {};
+        let result = new Partial_ContractParams();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["title"] = this.title;
+        data["companyId"] = this.companyId;
+        data["date"] = this.date ? this.date.toISOString() : <any>undefined;
+        data["poNumber"] = this.poNumber;
+        data["comments"] = this.comments;
+        return data; 
+    }
+}
+
+/** Make all properties in T optional */
+export interface IPartial_ContractParams {
+    title?: string;
+    companyId?: number;
+    date?: Date;
+    poNumber?: string;
+    comments?: string;
 }
 
 export class ApiException extends Error {
