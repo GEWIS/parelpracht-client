@@ -1,16 +1,20 @@
 import React from 'react';
-import { BrowserRouter as Router } from 'react-router-dom';
+import { Provider } from 'react-redux';
+import { ConnectedRouter } from 'connected-react-router';
+/* import { BrowserRouter as Router } from 'react-router-dom'; */
 import './App.scss';
 
+import store, { history } from './stores/store';
 import { Routes } from './Routes';
 
 function App() {
+  console.log(store.getState());
   return (
-    <div>
-      <Router>
+    <Provider store={store}>
+      <ConnectedRouter history={history}>
         <Routes />
-      </Router>
-    </div>
+      </ConnectedRouter>
+    </Provider>
   );
 }
 

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Button, Container, Icon } from 'semantic-ui-react';
-import { ProductsTable } from '../product/ProductTable';
+import ProductsTable from '../product/ProductTable';
 
 export default function ProductsPage() {
   return (
