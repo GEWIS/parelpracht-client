@@ -4,6 +4,8 @@ import {
 } from 'react-router-dom';
 import { Container, Icon, Menu } from 'semantic-ui-react';
 import ProductsPage from './pages/ProductsPage';
+import SingleProductPage from './pages/SingleProductPage';
+/* import SingleProductPage from './pages/SingleProductPage'; */
 
 function Routes() {
   return (
@@ -30,9 +32,10 @@ function Routes() {
       </Menu>
 
       <Switch>
-        <Route path="/product">
+        <Route path="/product" exact>
           <ProductsPage />
         </Route>
+        <Route path="/product/:productId" exact component={SingleProductPage} />
       </Switch>
     </div>
   );

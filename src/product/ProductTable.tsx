@@ -1,29 +1,46 @@
-import React, { useEffect, useState } from 'react';
-import { Placeholder, Table } from 'semantic-ui-react';
-import { Client, Product } from '../clients/server.generated';
+import React, { useEffect } from 'react';
+import { connect } from 'react-redux';
+import { Dispatch } from 'redux';
+import { Table } from 'semantic-ui-react';
+import { Product } from '../clients/server.generated';
+import { fetchProducts as createFetchProducts } from '../stores/product/actionCreators';
+import { RootState } from '../stores/store';
 import { ProductRow } from './ProductRow';
 
-export function ProductsTable() {
-  const [products, setProducts] = useState([] as Product[]);
+interface Props {
+  products: Product[];
 
+  fetchProducts: () => void;
+}
+
+function ProductsTable({ products, fetchProducts }: Props) {
   useEffect(() => {
-    const fetchProducts = async () => {
-      const client = new Client();
-      setProducts(await client.getProducts());
-    };
-
     fetchProducts();
   }, []);
 
   return (
-    <Table singleLine>
+    <Table singleLine selectable>
       <Table.Header>
-        <Table.HeaderCell>Name</Table.HeaderCell>
-        <Table.HeaderCell>Target price</Table.HeaderCell>
+        <Table.Row>
+          <Table.HeaderCell>Name</Table.HeaderCell>
+          <Table.HeaderCell>Target price</Table.HeaderCell>
+        </Table.Row>
       </Table.Header>
       <Table.Body>
-        {products.map((x) => <ProductRow product={x} />)}
+        {products.map((x) => <ProductRow product={x} key={x.id} />)}
       </Table.Body>
     </Table>
   );
 }
+
+const mapStateToProps = (state: RootState) => {
+  return {
+    products: state.product.list,
+  };
+};
+
+const mapDispatchToProps = (dispatch: Dispatch) => ({
+  fetchProducts: () => dispatch(createFetchProducts()),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(ProductsTable);
