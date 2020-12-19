@@ -8,7 +8,6 @@ import store, { history } from './stores/store';
 import { Routes } from './Routes';
 
 function App() {
-  console.log(store.getState());
   return (
     <Provider store={store}>
       <ConnectedRouter history={history}>

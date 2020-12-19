@@ -1,9 +1,11 @@
 import * as React from 'react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
-import { Container, Grid } from 'semantic-ui-react';
+import {
+  Container, Dimmer, Grid, Loader,
+} from 'semantic-ui-react';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Product } from '../clients/server.generated';
 import { fetchSingleProduct, clearSingleProduct } from '../stores/product/actionCreators';
 import { RootState } from '../stores/store';
@@ -18,31 +20,37 @@ interface Props extends RouteComponentProps<{ productId: string }> {
   clearProduct: () => void;
 }
 
-function SingleProductPage({
-  match, product, fetchProduct, clearProduct, status,
-}: Props) {
-  useEffect(() => {
-    const { productId } = match.params;
-    clearProduct();
-    fetchProduct(Number.parseInt(productId, 10));
-  }, []);
+class SingleProductPage extends React.Component<Props> {
+  public constructor(props: Props) {
+    super(props);
+    const { productId } = props.match.params;
 
-  console.log(`${status}: ${product?.nameDutch}`);
-  let title = 'Product';
-  if (status === ResourceStatus.FETCHED && product !== undefined) {
-    title = product.nameDutch;
+    props.clearProduct();
+    props.fetchProduct(Number.parseInt(productId, 10));
   }
 
-  return (
-    <Container style={{ paddingTop: '7em' }}>
-      <h1>{title}</h1>
-      <Grid columns={2}>
-        <Grid.Column>
-          <ProductProps product={product} status={status} />
-        </Grid.Column>
-      </Grid>
-    </Container>
-  );
+  public render() {
+    const { status, product } = this.props;
+
+    if (status !== ResourceStatus.FETCHED || product === undefined) {
+      return (
+        <Container style={{ paddingTop: '7em' }}>
+          <Loader content="Loading" active />
+        </Container>
+      );
+    }
+
+    return (
+      <Container style={{ paddingTop: '7em' }}>
+        <h1>{product.nameDutch}</h1>
+        <Grid columns={2}>
+          <Grid.Column>
+            <ProductProps product={product} />
+          </Grid.Column>
+        </Grid>
+      </Container>
+    );
+  }
 }
 
 const mapStateToProps = (state: RootState) => {

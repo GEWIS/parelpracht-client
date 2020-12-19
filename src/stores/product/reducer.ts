@@ -17,6 +17,12 @@ export default function productReducer(
   state: ProductState = initialState, action: ProductAction,
 ): ProductState {
   switch (action.type) {
+    case ProductActionType.Fetch:
+      return {
+        ...state,
+        listStatus: ResourceStatus.FETCHING,
+      };
+
     case ProductActionType.Set:
       return {
         ...state,
@@ -29,6 +35,12 @@ export default function productReducer(
         ...state,
         list: [],
         listStatus: ResourceStatus.EMPTY,
+      };
+
+    case ProductActionType.FetchSingle:
+      return {
+        ...state,
+        singleStatus: ResourceStatus.FETCHING,
       };
 
     case ProductActionType.SetSingle:

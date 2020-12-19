@@ -1,31 +1,18 @@
 import React, {
-  useState, ChangeEvent, SetStateAction, Dispatch,
+  useState, ChangeEvent,
 } from 'react';
 
 import {
-  Dimmer, Form, Input, Loader, Segment,
+  Form, Input, Segment,
 } from 'semantic-ui-react';
 import { Product } from '../clients/server.generated';
-import ResourceStatus from '../stores/resourceStatus';
 
 interface Props {
-  product: Product | undefined;
-  status: ResourceStatus;
+  product: Product;
 }
 
 export function ProductProps(props: Props) {
-  const { product, status } = props;
-
-  if (status !== ResourceStatus.FETCHED || product === undefined) {
-    return (
-      <Segment>
-        <h3>Details</h3>
-        <Dimmer active inverted>
-          <Loader inverted content="Loading" />
-        </Dimmer>
-      </Segment>
-    );
-  }
+  const { product } = props;
 
   const [nameDutch, setNameDutch] = useState(product.nameDutch);
   const [nameEnglish, setNameEnglish] = useState(product.nameEnglish);
