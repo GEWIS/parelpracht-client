@@ -1,45 +1,253 @@
 import React, {
-  useState, ChangeEvent,
+  ChangeEvent,
 } from 'react';
-
+import { connect } from 'react-redux';
+import { Dispatch } from 'redux';
 import {
-  Form, Input, Segment,
+  Button,
+  Checkbox,
+  Form, Icon, Input, Label, Segment, TextArea,
 } from 'semantic-ui-react';
-import { Product } from '../clients/server.generated';
+import { Product, ProductParams, ProductStatus } from '../clients/server.generated';
+import { saveSingleProduct } from '../stores/product/actionCreators';
+import ResourceStatus from '../stores/resourceStatus';
+import { RootState } from '../stores/store';
+import ProductPropsButtons from './ProductPropsButtons';
 
 interface Props {
   product: Product;
+  status: ResourceStatus;
+
+  saveProduct: (id: number, product: ProductParams) => void;
 }
 
-export function ProductProps(props: Props) {
-  const { product } = props;
+interface State {
+  editing: boolean;
 
-  const [nameDutch, setNameDutch] = useState(product.nameDutch);
-  const [nameEnglish, setNameEnglish] = useState(product.nameEnglish);
-
-  return (
-    <Segment>
-      <h3>Details</h3>
-      <Form>
-        <Form.Group widths="equal">
-          <Form.Field
-            id="form-input-dutch-name"
-            fluid
-            control={Input}
-            label="Name (Dutch)"
-            value={nameDutch}
-            onChange={(e: ChangeEvent<HTMLInputElement>) => setNameDutch(e.target.value)}
-          />
-          <Form.Field
-            fluid
-            id="form-input-english-name"
-            control={Input}
-            label="Name (English)"
-            value={nameEnglish}
-            onChange={(e: ChangeEvent<HTMLInputElement>) => setNameEnglish(e.target.value)}
-          />
-        </Form.Group>
-      </Form>
-    </Segment>
-  );
+  nameDutch: string;
+  nameEnglish: string;
+  targetPrice: string;
+  status: ProductStatus;
+  description: string;
+  contractTextDutch: string;
+  contractTextEnglish: string;
+  deliverySpecDutch: string;
+  deliverySpecEnglish: string;
 }
+
+class ProductProps extends React.Component<Props, State> {
+  public constructor(props: Props) {
+    super(props);
+
+    this.state = {
+      editing: false,
+      ...this.extractState(props),
+    };
+  }
+
+  extractState = (props: Props) => {
+    const { product } = props;
+    return {
+      nameDutch: product.nameDutch,
+      nameEnglish: product.nameEnglish,
+      targetPrice: product.targetPrice.toString(),
+      status: product.status,
+      description: product.description,
+      contractTextDutch: product.contractTextDutch,
+      contractTextEnglish: product.contractTextEnglish,
+      deliverySpecDutch: product.deliverySpecificationDutch,
+      deliverySpecEnglish: product.deliverySpecificationEnglish,
+    };
+  };
+
+  edit = () => {
+    this.setState({ editing: true, ...this.extractState(this.props) });
+  };
+
+  cancel = () => {
+    this.setState({ editing: false, ...this.extractState(this.props) });
+  };
+
+  save = () => {
+    this.props.saveProduct(this.props.product.id,
+      new ProductParams({
+        nameDutch: this.state.nameDutch,
+        nameEnglish: this.state.nameEnglish,
+        targetPrice: parseFloat(this.state.targetPrice),
+        status: this.state.status,
+        description: this.state.description,
+        contractTextDutch: this.state.contractTextDutch,
+        contractTextEnglish: this.state.contractTextEnglish,
+        deliverySpecificationEnglish: this.state.deliverySpecEnglish,
+        deliverySpecificationDutch: this.state.deliverySpecDutch,
+      }));
+    this.setState({ editing: false });
+  };
+
+  render() {
+    const {
+      editing,
+      nameDutch, nameEnglish,
+      targetPrice, status,
+      description,
+      contractTextDutch, contractTextEnglish,
+      deliverySpecDutch, deliverySpecEnglish,
+    } = this.state;
+
+    return (
+      <Segment>
+        <h2>
+          Details
+
+          <ProductPropsButtons
+            editing={editing}
+            status={this.props.status}
+            cancel={this.cancel}
+            edit={this.edit}
+            save={this.save}
+          />
+        </h2>
+
+        <Form style={{ marginTop: '2em' }}>
+          <Form.Group widths="equal">
+            <Form.Field
+              disabled={!editing}
+              id="form-input-dutch-name"
+              fluid
+              control={Input}
+              label="Name (Dutch)"
+              value={nameDutch}
+              onChange={(e: ChangeEvent<HTMLInputElement>) => this.setState({
+                nameDutch: e.target.value,
+              })}
+            />
+            <Form.Field
+              disabled={!editing}
+              fluid
+              id="form-input-english-name"
+              control={Input}
+              label="Name (English)"
+              value={nameEnglish}
+              onChange={(e: ChangeEvent<HTMLInputElement>) => this.setState({
+                nameEnglish: e.target.value,
+              })}
+            />
+          </Form.Group>
+          <Form.Group widths="equal">
+            <Form.Field disabled={!editing}>
+              {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
+              <label htmlFor="form-input-target-price">
+                Target Price
+              </label>
+              <Input
+                labelPosition="left"
+                id="form-input-target-price"
+                value={targetPrice}
+                onChange={(e) => this.setState({ targetPrice: e.target.value })}
+              >
+                <Label basic>€</Label>
+                <input />
+              </Input>
+            </Form.Field>
+            <Form.Field disabled={!editing}>
+              {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
+              <label htmlFor="form-check-status">
+                Status
+              </label>
+              <Checkbox
+                toggle
+                id="form-check-status"
+                label={status === ProductStatus.ACTIVE ? 'Active' : 'Inactive'}
+                checked={status === ProductStatus.ACTIVE}
+                onChange={(_, data) => this.setState({
+                  status:
+                    data.checked ? ProductStatus.ACTIVE : ProductStatus.INACTIVE,
+                })}
+              />
+            </Form.Field>
+          </Form.Group>
+          <Form.Field disabled={!editing}>
+            {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
+            <label htmlFor="form-input-description">
+              Description
+            </label>
+            <TextArea
+              id="form-input-description"
+              value={description}
+              onChange={(e) => this.setState({ description: e.target.value })}
+              placeholder="Description"
+            />
+          </Form.Field>
+          <Form.Field disabled={!editing}>
+            {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
+            <label htmlFor="form-input-contract-text-dutch">
+              Contract Text (Dutch)
+            </label>
+            <TextArea
+              id="form-input-contract-text-dutch"
+              value={contractTextDutch}
+              onChange={
+                (e) => this.setState({ contractTextDutch: e.target.value })
+              }
+              placeholder="Contract Text (Dutch)"
+            />
+          </Form.Field>
+          <Form.Field disabled={!editing}>
+            {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
+            <label htmlFor="form-input-contract-text-english">
+              Contract Text (English)
+            </label>
+            <TextArea
+              id="form-input-contract-text-english"
+              value={contractTextEnglish}
+              onChange={
+                (e) => this.setState({ contractTextEnglish: e.target.value })
+              }
+              placeholder="Contract Text (English)"
+            />
+          </Form.Field>
+          <Form.Field disabled={!editing}>
+            {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
+            <label htmlFor="form-input-delivery-spec-dutch">
+              Delivery Specification (Dutch)
+            </label>
+            <TextArea
+              id="form-input-delivery-spec-dutch"
+              value={deliverySpecDutch}
+              onChange={
+                (e) => this.setState({ deliverySpecDutch: e.target.value })
+              }
+              placeholder="Delivery Specification (Dutch)"
+            />
+          </Form.Field>
+          <Form.Field disabled={!editing}>
+            {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
+            <label htmlFor="form-input-delivery-spec-english">
+              Delivery Specification (English)
+            </label>
+            <TextArea
+              id="form-delivery-spec-english"
+              value={deliverySpecEnglish}
+              onChange={
+                (e) => this.setState({ deliverySpecEnglish: e.target.value })
+              }
+              placeholder="Delivery Specification (English)"
+            />
+          </Form.Field>
+        </Form>
+      </Segment>
+    );
+  }
+}
+
+const mapStateToProps = (state: RootState) => {
+  return {
+    status: state.product.singleStatus,
+  };
+};
+
+const mapDispatchToProps = (dispatch: Dispatch) => ({
+  saveProduct: (id: number, product: ProductParams) => dispatch(saveSingleProduct(id, product)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(ProductProps);

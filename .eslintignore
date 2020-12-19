@@ -6,3 +6,4 @@ dist
 coverage
 
 src/serviceWorker.ts
+src/clients/server.generated.ts

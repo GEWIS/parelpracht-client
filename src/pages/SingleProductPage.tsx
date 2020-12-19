@@ -1,15 +1,14 @@
 import * as React from 'react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import {
-  Container, Dimmer, Grid, Loader,
+  Container, Grid, Loader,
 } from 'semantic-ui-react';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
-import { useEffect, useState } from 'react';
 import { Product } from '../clients/server.generated';
 import { fetchSingleProduct, clearSingleProduct } from '../stores/product/actionCreators';
 import { RootState } from '../stores/store';
-import { ProductProps } from '../product/ProductProps';
+import ProductProps from '../product/ProductProps';
 import ResourceStatus from '../stores/resourceStatus';
 
 interface Props extends RouteComponentProps<{ productId: string }> {
@@ -30,9 +29,9 @@ class SingleProductPage extends React.Component<Props> {
   }
 
   public render() {
-    const { status, product } = this.props;
+    const { product } = this.props;
 
-    if (status !== ResourceStatus.FETCHED || product === undefined) {
+    if (product === undefined) {
       return (
         <Container style={{ paddingTop: '7em' }}>
           <Loader content="Loading" active />
@@ -42,7 +41,7 @@ class SingleProductPage extends React.Component<Props> {
 
     return (
       <Container style={{ paddingTop: '7em' }}>
-        <h1>{product.nameDutch}</h1>
+        <h1>{product?.nameDutch ?? 'Product'}</h1>
         <Grid columns={2}>
           <Grid.Column>
             <ProductProps product={product} />
