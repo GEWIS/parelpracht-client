@@ -16,6 +16,7 @@ module.exports = {
     "class-methods-use-this": "off",
     "@typescript-eslint/no-unused-vars": ["warn"],
     "react/prefer-stateless-function": "off",
-    "react/prop-types": "off"
+    "react/prop-types": "off",
+    "unicode-bom": "off"
   }
 };

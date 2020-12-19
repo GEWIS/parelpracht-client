@@ -1,0 +1,21 @@
+form.ui.form {
+  .field .checkbox {
+    margin-top: 0.5em;
+  }
+
+  .field.disabled {
+    opacity: 1;
+
+    label, .input, input {
+      opacity: 1;
+    }
+
+    input, .basic.label, textarea {
+      border: 1px solid rgba(34,36,38, 0);
+    }
+
+    textarea {
+      resize: none;
+    }
+  }
+}
