@@ -6,6 +6,8 @@ import { ProductState } from './state';
 const initialState: ProductState = {
   list: [],
   listStatus: ResourceStatus.EMPTY,
+  listSortColumn: 'id',
+  listSortDirection: 'asc',
 
   single: undefined,
   singleStatus: ResourceStatus.EMPTY,
@@ -35,6 +37,24 @@ export default function productReducer(
         ...state,
         list: [],
         listStatus: ResourceStatus.EMPTY,
+      };
+
+    case ProductActionType.ChangeSort:
+      if (state.listSortColumn === action.column) {
+        if (state.listSortDirection === 'desc') {
+          return { ...state, listSortColumn: 'id', listSortDirection: 'asc' };
+        }
+
+        return {
+          ...state,
+          listSortDirection: 'desc',
+        };
+      }
+
+      return {
+        ...state,
+        listSortColumn: action.column,
+        listSortDirection: 'asc',
       };
 
     case ProductActionType.FetchSingle:

@@ -6,6 +6,7 @@ export enum ProductActionType {
   Fetch = 'Products/Fetch',
   Set = 'Products/Set',
   Clear = 'Products/Clear',
+  ChangeSort = 'Products/ChangeSort',
 
   FetchSingle = 'Products/FetchSingle',
   SetSingle = 'Products/SetSingle',
@@ -22,6 +23,10 @@ export type ProductsSetAction = Action<ProductActionType.Set> & {
 };
 
 export type ProductsClearAction = Action<ProductActionType.Clear>;
+
+export type ProductsChangeSortAction = Action<ProductActionType.ChangeSort> & {
+  column: string;
+};
 
 export type ProductsFetchSingleAction = Action<ProductActionType.FetchSingle> & {
   id: number,
