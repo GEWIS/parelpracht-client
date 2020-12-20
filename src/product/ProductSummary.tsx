@@ -17,7 +17,8 @@ function ProductSummary(props: Props) {
   const { product, status } = props;
   if (product === undefined
     || (status !== ResourceStatus.FETCHED
-      && status !== ResourceStatus.SAVING)) {
+      && status !== ResourceStatus.SAVING
+      && status !== ResourceStatus.ERROR)) {
     return (
       <>
         <Header as="h1" attached="top" inverted>

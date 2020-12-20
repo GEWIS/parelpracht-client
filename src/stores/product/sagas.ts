@@ -42,6 +42,18 @@ function* saveSingleProduct(action: ProductsSaveSingleAction) {
   yield put(setSingleProduct(product));
 }
 
+function* errorSaveSingleProduct() {
+  yield put(errorSingleProduct());
+}
+
+function* watchSaveSingleProduct() {
+  yield takeEveryWithErrorHandling(
+    ProductActionType.SaveSingle,
+    saveSingleProduct,
+    { onErrorSaga: errorSaveSingleProduct },
+  );
+}
+
 function* createSingleProduct(action: ProductsCreateSingleAction) {
   const client = new Client();
   const product = yield call([client, client.createProduct], action.product);
@@ -68,8 +80,6 @@ export default [
   function* watchFetchSingleProduct() {
     yield takeEveryWithErrorHandling(ProductActionType.FetchSingle, fetchSingleProduct);
   },
-  function* watchSaveSingleProduct() {
-    yield takeEveryWithErrorHandling(ProductActionType.SaveSingle, saveSingleProduct);
-  },
+  watchSaveSingleProduct,
   watchCreateSingleProduct,
 ];
