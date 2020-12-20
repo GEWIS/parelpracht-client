@@ -43,6 +43,7 @@ export default function productReducer(
         singleStatus: ResourceStatus.FETCHING,
       };
 
+    case ProductActionType.CreateSingle:
     case ProductActionType.SaveSingle:
       return {
         ...state,

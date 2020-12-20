@@ -1,7 +1,10 @@
 import { call, put, takeEvery } from 'redux-saga/effects';
 import { Client } from '../../clients/server.generated';
-import { setProducts, setSingleProduct, fetchSingleProduct as createFetchSingleProduct } from './actionCreators';
-import { ProductActionType, ProductsFetchSingleAction, ProductsSaveSingleAction } from './actions';
+import { setProducts, setSingleProduct, fetchProducts as createFetchProducts } from './actionCreators';
+import {
+  ProductActionType, ProductsCreateSingleAction, ProductsFetchSingleAction,
+  ProductsSaveSingleAction,
+} from './actions';
 
 function* fetchProducts() {
   const client = new Client();
@@ -22,6 +25,13 @@ function* saveSingleProduct(action: ProductsSaveSingleAction) {
   yield put(setSingleProduct(product));
 }
 
+function* createSingleProduct(action: ProductsCreateSingleAction) {
+  const client = new Client();
+  const product = yield call([client, client.createProduct], action.product);
+  yield put(setSingleProduct(product));
+  yield put(createFetchProducts());
+}
+
 export default [
   function* watchFetchProducts() { yield takeEvery(ProductActionType.Fetch, fetchProducts); },
   function* watchFetchSingleProduct() {
@@ -29,5 +39,8 @@ export default [
   },
   function* watchSaveSingleProduct() {
     yield takeEvery(ProductActionType.SaveSingle, saveSingleProduct);
+  },
+  function* watchCreateSingleProduct() {
+    yield takeEvery(ProductActionType.CreateSingle, createSingleProduct);
   },
 ];

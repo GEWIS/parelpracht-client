@@ -5,13 +5,14 @@ import {
 import { Container, Icon, Menu } from 'semantic-ui-react';
 import ProductsPage from './pages/ProductsPage';
 import SingleProductPage from './pages/SingleProductPage';
+import ProductCreate from './product/ProductCreate';
 /* import SingleProductPage from './pages/SingleProductPage'; */
 
 function Routes() {
   return (
     <div>
       {/* TODO: Refactor menu */}
-      <Menu fixed="top" inverted>
+      <Menu fixed="top" inverted size="large">
         <Container>
           <Menu.Item as={NavLink} header to="/" exact>
             CRM
@@ -30,13 +31,22 @@ function Routes() {
           </Menu.Item>
         </Container>
       </Menu>
+      <Container
+        className="main"
+        fluid
+      >
+        <Switch>
+          <Route path="/product" exact>
+            <ProductsPage />
+          </Route>
+          <Route path="/product/new" exact>
+            <ProductsPage />
+            <ProductCreate />
+          </Route>
+          <Route path="/product/:productId" exact component={SingleProductPage} />
+        </Switch>
+      </Container>
 
-      <Switch>
-        <Route path="/product" exact>
-          <ProductsPage />
-        </Route>
-        <Route path="/product/:productId" exact component={SingleProductPage} />
-      </Switch>
     </div>
   );
 }

@@ -1,6 +1,7 @@
 import { Product, ProductParams } from '../../clients/server.generated';
 import {
   ProductActionType, ProductsClearAction, ProductsClearSingleAction,
+  ProductsCreateSingleAction,
   ProductsFetchAction, ProductsFetchSingleAction, ProductsSaveSingleAction,
   ProductsSetAction, ProductsSetSingleAction,
 } from './actions';
@@ -26,6 +27,10 @@ export function setSingleProduct(product: Product): ProductsSetSingleAction {
 
 export function saveSingleProduct(id: number, product: ProductParams): ProductsSaveSingleAction {
   return { type: ProductActionType.SaveSingle, id, product };
+}
+
+export function createSingleProduct(product: ProductParams): ProductsCreateSingleAction {
+  return { type: ProductActionType.CreateSingle, product };
 }
 
 export function clearSingleProduct(): ProductsClearSingleAction {

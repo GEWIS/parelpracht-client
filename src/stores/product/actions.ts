@@ -10,6 +10,7 @@ export enum ProductActionType {
   FetchSingle = 'Products/FetchSingle',
   SetSingle = 'Products/SetSingle',
   SaveSingle = 'Products/SaveSingle',
+  CreateSingle = 'Products/CreateSingle',
   ClearSingle = 'Products/SetClear',
 }
 
@@ -32,6 +33,10 @@ export type ProductsSetSingleAction = Action<ProductActionType.SetSingle> & {
 
 export type ProductsSaveSingleAction = Action<ProductActionType.SaveSingle> & {
   id: number
+  product: ProductParams,
+};
+
+export type ProductsCreateSingleAction = Action<ProductActionType.CreateSingle> & {
   product: ProductParams,
 };
 
