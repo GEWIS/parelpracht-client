@@ -1,6 +1,6 @@
 import { Product, ProductParams } from '../../clients/server.generated';
 import {
-  ProductActionType, ProductsClearAction, ProductsClearSingleAction,
+  ProductActionType, ProductsChangeSortAction, ProductsClearAction, ProductsClearSingleAction,
   ProductsCreateSingleAction,
   ProductsFetchAction, ProductsFetchSingleAction, ProductsSaveSingleAction,
   ProductsSetAction, ProductsSetSingleAction,
@@ -16,6 +16,10 @@ export function setProducts(products: Product[]): ProductsSetAction {
 
 export function clearProducts(): ProductsClearAction {
   return { type: ProductActionType.Clear };
+}
+
+export function changeSortProducts(column: string): ProductsChangeSortAction {
+  return { type: ProductActionType.ChangeSort, column };
 }
 
 export function fetchSingleProduct(id: number): ProductsFetchSingleAction {

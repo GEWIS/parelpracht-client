@@ -6,6 +6,9 @@ import { ProductState } from './state';
 const initialState: ProductState = {
   list: [],
   listStatus: ResourceStatus.EMPTY,
+  listSortColumn: 'id',
+  listSortDirection: 'ASC',
+  listLastUpdated: new Date(),
 
   single: undefined,
   singleStatus: ResourceStatus.EMPTY,
@@ -28,6 +31,7 @@ export default function productReducer(
         ...state,
         list: action.products,
         listStatus: ResourceStatus.FETCHED,
+        listLastUpdated: new Date(),
       };
 
     case ProductActionType.Clear:
@@ -35,6 +39,28 @@ export default function productReducer(
         ...state,
         list: [],
         listStatus: ResourceStatus.EMPTY,
+      };
+
+    case ProductActionType.ChangeSort:
+      if (state.listSortColumn === action.column) {
+        if (state.listSortDirection === 'DESC') {
+          return {
+            ...state,
+            listSortColumn: 'id',
+            listSortDirection: 'ASC',
+          };
+        }
+
+        return {
+          ...state,
+          listSortDirection: 'DESC',
+        };
+      }
+
+      return {
+        ...state,
+        listSortColumn: action.column,
+        listSortDirection: 'ASC',
       };
 
     case ProductActionType.FetchSingle:

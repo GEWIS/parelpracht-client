@@ -112,7 +112,7 @@ class ProductProps extends React.Component<Props, State> {
     return (
       <Segment>
         <h2>
-          Details
+          {this.props.create ? 'New Product' : 'Details'}
 
           <ProductPropsButtons
             editing={editing}
