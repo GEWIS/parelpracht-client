@@ -49,6 +49,14 @@ class ProductProps extends React.Component<Props, State> {
     };
   }
 
+  componentDidUpdate(prevProps: Props) {
+    if (prevProps.status === ResourceStatus.SAVING
+      && this.props.status === ResourceStatus.FETCHED) {
+      // eslint-disable-next-line react/no-did-update-set-state
+      this.setState({ editing: false });
+    }
+  }
+
   extractState = (props: Props) => {
     const { product } = props;
     return {
@@ -95,7 +103,6 @@ class ProductProps extends React.Component<Props, State> {
       this.props.createProduct(this.toParams());
     } else {
       this.props.saveProduct(this.props.product.id, this.toParams());
-      this.setState({ editing: false });
     }
   };
 
