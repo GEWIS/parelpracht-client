@@ -1,20 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
-import { Button, Grid, Input } from 'semantic-ui-react';
 import TimeAgo from 'javascript-time-ago';
-import { fetchProducts } from '../stores/product/actionCreators';
-import { countProducts, sortColumn } from '../stores/product/selectors';
+import { fetchProducts, searchProducts } from '../stores/product/actionCreators';
+import { countFetchedProducts, countTotalProducts, sortColumn } from '../stores/product/selectors';
 import ResourceStatus from '../stores/resourceStatus';
 import { RootState } from '../stores/store';
+import TableControls from '../components/TableControls';
 
 interface Props {
   status: ResourceStatus;
-  count: number;
+  countFetched: number;
+  countTotal: number;
   column: string;
   lastUpdated: Date;
+  search: string;
 
   refresh: () => void;
+  setSearch: (search: string) => void;
 }
 
 function ProductTableControls(props: Props) {
@@ -29,38 +32,34 @@ function ProductTableControls(props: Props) {
 
   const timeAgo = new TimeAgo();
   return (
-    <Grid columns={2}>
-      <Grid.Column style={{ paddingTop: 0, paddingBottom: '0.5em' }} verticalAlign="middle">
-        <p>
-          {`${props.count} item(s) \u00b7
-            sorted on ${props.column} \u00b7
-            updated ${timeAgo.format(props.lastUpdated)}`}
-        </p>
-      </Grid.Column>
-      <Grid.Column style={{ paddingTop: 0, paddingBottom: '0.5em' }} verticalAlign="middle">
-        <Button
-          icon="refresh"
-          floated="right"
-          onClick={props.refresh}
-          loading={props.status === ResourceStatus.FETCHING}
-        />
-        <div style={{ float: 'right' }}>
-          <Input icon="search" iconPosition="left" placeholder="Search..." />
-        </div>
-      </Grid.Column>
-    </Grid>
+    <TableControls
+      status={props.status}
+      countFetched={props.countFetched}
+      countTotal={props.countTotal}
+      column={props.column}
+      lastUpdated={props.lastUpdated}
+      search={props.search}
+      refresh={props.refresh}
+      setSearch={props.setSearch}
+    />
   );
 }
 
 const mapStateToProps = (state: RootState) => ({
   status: state.product.listStatus,
-  count: countProducts(state),
+  countFetched: countFetchedProducts(state),
+  countTotal: countTotalProducts(state),
   column: sortColumn(state),
   lastUpdated: state.product.listLastUpdated,
+  search: state.product.listSearch,
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
   refresh: () => dispatch(fetchProducts()),
+  setSearch: (search: string) => {
+    dispatch(searchProducts(search));
+    dispatch(fetchProducts());
+  },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProductTableControls);
