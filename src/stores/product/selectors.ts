@@ -1,7 +1,11 @@
 import { RootState } from '../store';
 
-export function countProducts(state: RootState): number {
+export function countFetchedProducts(state: RootState): number {
   return state.product.list.length;
+}
+
+export function countTotalProducts(state: RootState): number {
+  return state.product.listCount;
 }
 
 export function sortColumn(state: RootState): string {

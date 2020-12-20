@@ -1,5 +1,5 @@
 import {
-  call, put, select, takeEvery,
+  call, put, select, takeEvery, throttle,
 } from 'redux-saga/effects';
 import { Client, Dir } from '../../clients/server.generated';
 import type { RootState } from '../store';
@@ -13,12 +13,17 @@ function* fetchProducts() {
   const client = new Client();
 
   const state: RootState = yield select();
-  const { listSortColumn, listSortDirection } = state.product;
+  const {
+    listSortColumn, listSortDirection,
+    listTake, listSkip,
+    listSearch,
+  } = state.product;
 
-  const products = yield call(
+  const { list, count } = yield call(
     [client, client.getProducts], listSortColumn, listSortDirection as Dir,
+    listSkip, listTake, listSearch,
   );
-  yield put(setProducts(products));
+  yield put(setProducts(list, count));
 }
 
 function* fetchSingleProduct(action: ProductsFetchSingleAction) {
@@ -42,7 +47,9 @@ function* createSingleProduct(action: ProductsCreateSingleAction) {
 }
 
 export default [
-  function* watchFetchProducts() { yield takeEvery(ProductActionType.Fetch, fetchProducts); },
+  function* watchFetchProducts() {
+    yield throttle(500, ProductActionType.Fetch, fetchProducts);
+  },
   function* watchFetchSingleProduct() {
     yield takeEvery(ProductActionType.FetchSingle, fetchSingleProduct);
   },

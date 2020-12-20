@@ -60,9 +60,12 @@ export class Client {
     /**
      * @param col (optional) 
      * @param dir (optional) 
+     * @param skip (optional) 
+     * @param take (optional) 
+     * @param search (optional) 
      * @return Ok
      */
-    getProducts(col: string | undefined, dir: Dir | undefined): Promise<Product[]> {
+    getProducts(col: string | undefined, dir: Dir | undefined, skip: number | undefined, take: number | undefined, search: string | undefined): Promise<ProductListResponse> {
         let url_ = this.baseUrl + "/product?";
         if (col === null)
             throw new Error("The parameter 'col' cannot be null.");
@@ -72,6 +75,18 @@ export class Client {
             throw new Error("The parameter 'dir' cannot be null.");
         else if (dir !== undefined)
             url_ += "dir=" + encodeURIComponent("" + dir) + "&";
+        if (skip === null)
+            throw new Error("The parameter 'skip' cannot be null.");
+        else if (skip !== undefined)
+            url_ += "skip=" + encodeURIComponent("" + skip) + "&";
+        if (take === null)
+            throw new Error("The parameter 'take' cannot be null.");
+        else if (take !== undefined)
+            url_ += "take=" + encodeURIComponent("" + take) + "&";
+        if (search === null)
+            throw new Error("The parameter 'search' cannot be null.");
+        else if (search !== undefined)
+            url_ += "search=" + encodeURIComponent("" + search) + "&";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ = <RequestInit>{
@@ -86,18 +101,14 @@ export class Client {
         });
     }
 
-    protected processGetProducts(response: Response): Promise<Product[]> {
+    protected processGetProducts(response: Response): Promise<ProductListResponse> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            if (Array.isArray(resultData200)) {
-                result200 = [] as any;
-                for (let item of resultData200)
-                    result200!.push(Product.fromJS(item));
-            }
+            result200 = ProductListResponse.fromJS(resultData200);
             return result200;
             });
         } else if (status !== 200 && status !== 204) {
@@ -105,7 +116,7 @@ export class Client {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<Product[]>(<any>null);
+        return Promise.resolve<ProductListResponse>(<any>null);
     }
 
     /**
@@ -1448,6 +1459,57 @@ export enum ProductInstanceStatus {
     NOT_DELIVERED = "NOT_DELIVERED",
 }
 
+export class ProductListResponse implements IProductListResponse {
+    list!: Product[];
+    count!: number;
+
+    constructor(data?: IProductListResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+        if (!data) {
+            this.list = [];
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["list"])) {
+                this.list = [] as any;
+                for (let item of _data["list"])
+                    this.list!.push(Product.fromJS(item));
+            }
+            this.count = _data["count"];
+        }
+    }
+
+    static fromJS(data: any): ProductListResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new ProductListResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.list)) {
+            data["list"] = [];
+            for (let item of this.list)
+                data["list"].push(item.toJSON());
+        }
+        data["count"] = this.count;
+        return data; 
+    }
+}
+
+export interface IProductListResponse {
+    list: Product[];
+    count: number;
+}
+
 export class ProductParams implements IProductParams {
     nameDutch!: string;
     nameEnglish!: string;
@@ -1807,8 +1869,8 @@ export interface IPartial_ContractParams_ {
 }
 
 export enum Dir {
-    Asc = "asc",
-    Desc = "desc",
+    ASC = "ASC",
+    DESC = "DESC",
 }
 
 export class ApiException extends Error {

@@ -5,10 +5,15 @@ import { ProductState } from './state';
 
 const initialState: ProductState = {
   list: [],
+  listCount: 0,
   listStatus: ResourceStatus.EMPTY,
+
   listSortColumn: 'id',
   listSortDirection: 'ASC',
   listLastUpdated: new Date(),
+  listSkip: 0,
+  listTake: 10,
+  listSearch: '',
 
   single: undefined,
   singleStatus: ResourceStatus.EMPTY,
@@ -30,6 +35,7 @@ export default function productReducer(
       return {
         ...state,
         list: action.products,
+        listCount: action.count,
         listStatus: ResourceStatus.FETCHED,
         listLastUpdated: new Date(),
       };
@@ -38,14 +44,48 @@ export default function productReducer(
       return {
         ...state,
         list: [],
+        listSkip: 0,
         listStatus: ResourceStatus.EMPTY,
       };
+
+    case ProductActionType.SetTake:
+      return {
+        ...state,
+        listSkip: 0,
+        listTake: action.take,
+      };
+
+    case ProductActionType.Search:
+      return {
+        ...state,
+        listSkip: 0,
+        listSearch: action.search,
+      };
+
+    case ProductActionType.NextPage:
+      if (state.listSkip + state.listTake < state.listCount) {
+        return {
+          ...state,
+          listSkip: state.listSkip + state.listTake,
+        };
+      }
+      return state;
+
+    case ProductActionType.PrevPage:
+      if (state.listSkip > 0) {
+        return {
+          ...state,
+          listSkip: Math.max(state.listSkip - state.listTake, 0),
+        };
+      }
+      return state;
 
     case ProductActionType.ChangeSort:
       if (state.listSortColumn === action.column) {
         if (state.listSortDirection === 'DESC') {
           return {
             ...state,
+            listSkip: 0,
             listSortColumn: 'id',
             listSortDirection: 'ASC',
           };
@@ -53,12 +93,14 @@ export default function productReducer(
 
         return {
           ...state,
+          listSkip: 0,
           listSortDirection: 'DESC',
         };
       }
 
       return {
         ...state,
+        listSkip: 0,
         listSortColumn: action.column,
         listSortDirection: 'ASC',
       };
