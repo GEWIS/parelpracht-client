@@ -5,7 +5,7 @@ import {
 import { Container, Icon, Menu } from 'semantic-ui-react';
 import ProductsPage from './pages/ProductsPage';
 import SingleProductPage from './pages/SingleProductPage';
-import ProductCreate from './product/ProductCreate';
+import ProductCreatePage from './pages/ProductCreatePage';
 /* import SingleProductPage from './pages/SingleProductPage'; */
 
 function Routes() {
@@ -41,7 +41,7 @@ function Routes() {
           </Route>
           <Route path="/product/new" exact>
             <ProductsPage />
-            <ProductCreate />
+            <ProductCreatePage />
           </Route>
           <Route path="/product/:productId" exact component={SingleProductPage} />
         </Switch>
