@@ -2,7 +2,7 @@ import * as React from 'react';
 import { NavLink, RouteComponentProps, withRouter } from 'react-router-dom';
 import {
   Breadcrumb,
-  Container, Grid, Loader,
+  Container, Grid, Loader, Segment,
 } from 'semantic-ui-react';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
@@ -53,7 +53,9 @@ class SingleProductPage extends React.Component<Props> {
         <ProductSummary />
         <Grid columns={2}>
           <Grid.Column>
-            <ProductProps product={product} />
+            <Segment>
+              <ProductProps product={product} />
+            </Segment>
           </Grid.Column>
         </Grid>
       </Container>

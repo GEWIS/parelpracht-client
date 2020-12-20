@@ -21,16 +21,6 @@ interface Props {
 }
 
 function ProductTableControls(props: Props) {
-  // Make sure the component refreshes every minute to update "updated ..."
-  const [, setTime] = useState(Date.now());
-  useEffect(() => {
-    const interval = setInterval(() => setTime(Date.now()), 60 * 1000);
-    return () => {
-      clearInterval(interval);
-    };
-  }, []);
-
-  const timeAgo = new TimeAgo();
   return (
     <TableControls
       status={props.status}

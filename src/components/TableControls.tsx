@@ -50,7 +50,7 @@ function TableControls(props: Props) {
           placeholder="Search..."
           value={props.search}
           action={
-            <Button icon="close icon" onClick={() => props.setSearch('')} />
+            <Button icon="close" onClick={() => props.setSearch('')} />
           }
           onChange={(e) => props.setSearch(e.target.value)}
         />

@@ -5,15 +5,21 @@ import createSagaMiddleware from 'redux-saga';
 import { all } from 'redux-saga/effects';
 import { connectRouter, routerMiddleware, RouterState } from 'connected-react-router';
 
+import alertsReducer from './alerts/reducer';
 import productReducer from './product/reducer';
 
+import alertsSagas from './alerts/sagas';
 import productSagas from './product/sagas';
 
 // Import all watching sagas
-const watchSagas = [...productSagas];
+const watchSagas = [
+  ...alertsSagas,
+  ...productSagas,
+];
 
 // Set up root reducer
 const reducers = {
+  alerts: alertsReducer,
   product: productReducer,
 };
 

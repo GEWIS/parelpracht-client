@@ -125,6 +125,12 @@ export default function productReducer(
         singleStatus: ResourceStatus.FETCHED,
       };
 
+    case ProductActionType.ErrorSingle:
+      return {
+        ...state,
+        singleStatus: ResourceStatus.ERROR,
+      };
+
     case ProductActionType.ClearSingle:
       return {
         ...state,
