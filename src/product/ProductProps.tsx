@@ -4,21 +4,25 @@ import React, {
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import {
-  Button,
   Checkbox,
-  Form, Icon, Input, Label, Segment, TextArea,
+  Form, Input, Label, Segment, TextArea,
 } from 'semantic-ui-react';
 import { Product, ProductParams, ProductStatus } from '../clients/server.generated';
-import { saveSingleProduct } from '../stores/product/actionCreators';
+import { formatPrice } from '../helpers/monetary';
+import { createSingleProduct, saveSingleProduct } from '../stores/product/actionCreators';
 import ResourceStatus from '../stores/resourceStatus';
 import { RootState } from '../stores/store';
 import ProductPropsButtons from './ProductPropsButtons';
 
 interface Props {
+  create?: boolean;
+  onCancel?: () => void;
+
   product: Product;
   status: ResourceStatus;
 
   saveProduct: (id: number, product: ProductParams) => void;
+  createProduct: (product: ProductParams) => void;
 }
 
 interface State {
@@ -40,7 +44,7 @@ class ProductProps extends React.Component<Props, State> {
     super(props);
 
     this.state = {
-      editing: false,
+      editing: props.create ?? false,
       ...this.extractState(props),
     };
   }
@@ -50,7 +54,7 @@ class ProductProps extends React.Component<Props, State> {
     return {
       nameDutch: product.nameDutch,
       nameEnglish: product.nameEnglish,
-      targetPrice: product.targetPrice.toString(),
+      targetPrice: formatPrice(product.targetPrice),
       status: product.status,
       description: product.description,
       contractTextDutch: product.contractTextDutch,
@@ -60,28 +64,39 @@ class ProductProps extends React.Component<Props, State> {
     };
   };
 
+  toParams = (): ProductParams => {
+    return new ProductParams({
+      nameDutch: this.state.nameDutch,
+      nameEnglish: this.state.nameEnglish,
+      targetPrice: Math.round(Number.parseFloat(this.state.targetPrice) * 100),
+      status: this.state.status,
+      description: this.state.description,
+      contractTextDutch: this.state.contractTextDutch,
+      contractTextEnglish: this.state.contractTextEnglish,
+      deliverySpecificationEnglish: this.state.deliverySpecEnglish,
+      deliverySpecificationDutch: this.state.deliverySpecDutch,
+    });
+  };
+
   edit = () => {
     this.setState({ editing: true, ...this.extractState(this.props) });
   };
 
   cancel = () => {
-    this.setState({ editing: false, ...this.extractState(this.props) });
+    if (!this.props.create) {
+      this.setState({ editing: false, ...this.extractState(this.props) });
+    } else if (this.props.onCancel) {
+      this.props.onCancel();
+    }
   };
 
   save = () => {
-    this.props.saveProduct(this.props.product.id,
-      new ProductParams({
-        nameDutch: this.state.nameDutch,
-        nameEnglish: this.state.nameEnglish,
-        targetPrice: parseFloat(this.state.targetPrice),
-        status: this.state.status,
-        description: this.state.description,
-        contractTextDutch: this.state.contractTextDutch,
-        contractTextEnglish: this.state.contractTextEnglish,
-        deliverySpecificationEnglish: this.state.deliverySpecEnglish,
-        deliverySpecificationDutch: this.state.deliverySpecDutch,
-      }));
-    this.setState({ editing: false });
+    if (this.props.create) {
+      this.props.createProduct(this.toParams());
+    } else {
+      this.props.saveProduct(this.props.product.id, this.toParams());
+      this.setState({ editing: false });
+    }
   };
 
   render() {
@@ -248,6 +263,7 @@ const mapStateToProps = (state: RootState) => {
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
   saveProduct: (id: number, product: ProductParams) => dispatch(saveSingleProduct(id, product)),
+  createProduct: (product: ProductParams) => dispatch(createSingleProduct(product)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProductProps);

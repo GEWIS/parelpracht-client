@@ -1,6 +1,7 @@
 import * as React from 'react';
-import { RouteComponentProps, withRouter } from 'react-router-dom';
+import { NavLink, RouteComponentProps, withRouter } from 'react-router-dom';
 import {
+  Breadcrumb,
   Container, Grid, Loader,
 } from 'semantic-ui-react';
 import { Dispatch } from 'redux';
@@ -10,6 +11,7 @@ import { fetchSingleProduct, clearSingleProduct } from '../stores/product/action
 import { RootState } from '../stores/store';
 import ProductProps from '../product/ProductProps';
 import ResourceStatus from '../stores/resourceStatus';
+import ProductSummary from '../product/ProductSummary';
 
 interface Props extends RouteComponentProps<{ productId: string }> {
   product: Product | undefined;
@@ -33,15 +35,22 @@ class SingleProductPage extends React.Component<Props> {
 
     if (product === undefined) {
       return (
-        <Container style={{ paddingTop: '7em' }}>
+        <Container style={{ paddingTop: '2em' }}>
           <Loader content="Loading" active />
         </Container>
       );
     }
 
     return (
-      <Container style={{ paddingTop: '7em' }}>
-        <h1>{product?.nameDutch ?? 'Product'}</h1>
+      <Container style={{ paddingTop: '2em' }}>
+        <Breadcrumb
+          icon="right angle"
+          sections={[
+            { key: 'Products', content: <NavLink to="/product">Products</NavLink>, link: 'true' },
+            { key: 'Product', content: product.nameDutch, active: true },
+          ]}
+        />
+        <ProductSummary />
         <Grid columns={2}>
           <Grid.Column>
             <ProductProps product={product} />

@@ -1,16 +1,43 @@
 import * as React from 'react';
-import { Button, Container, Icon } from 'semantic-ui-react';
+import { RouteComponentProps, withRouter } from 'react-router-dom';
+import {
+  Button, Container, Grid, Header, Icon, Segment,
+} from 'semantic-ui-react';
 import ProductsTable from '../product/ProductTable';
+import ProductTableControls from '../product/ProductTableControls';
 
-export default function ProductsPage() {
+function ProductsPage(props: RouteComponentProps) {
   return (
-    <Container style={{ paddingTop: '7em' }}>
-      <h1>Products</h1>
-      <Button icon labelPosition="left" primary>
-        <Icon name="plus" />
-        Add product
-      </Button>
-      <ProductsTable />
-    </Container>
+    <>
+      <Segment style={{ backgroundColor: '#eee' }} vertical basic>
+        <Container style={{ paddingTop: '2em' }}>
+          <Grid columns={2}>
+            <Grid.Column>
+              <Header as="h1">
+                <Icon name="shopping bag" />
+                <Header.Content>
+                  <Header.Subheader>Products</Header.Subheader>
+                  All Products
+                </Header.Content>
+              </Header>
+            </Grid.Column>
+            <Grid.Column>
+              <Button icon labelPosition="left" primary floated="right" onClick={() => props.history.push('/product/new')}>
+                <Icon name="plus" />
+                Add Product
+              </Button>
+            </Grid.Column>
+          </Grid>
+
+          <ProductTableControls />
+
+        </Container>
+      </Segment>
+      <Container>
+        <ProductsTable />
+      </Container>
+    </>
   );
 }
+
+export default withRouter(ProductsPage);

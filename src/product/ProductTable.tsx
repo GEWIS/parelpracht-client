@@ -19,11 +19,13 @@ function ProductsTable({ products, fetchProducts }: Props) {
   }, []);
 
   return (
-    <Table singleLine selectable>
+    <Table singleLine selectable attached>
       <Table.Header>
         <Table.Row>
-          <Table.HeaderCell>Name</Table.HeaderCell>
+          <Table.HeaderCell>Name (Dutch)</Table.HeaderCell>
+          <Table.HeaderCell>Name (English)</Table.HeaderCell>
           <Table.HeaderCell>Target price</Table.HeaderCell>
+          <Table.HeaderCell>Status</Table.HeaderCell>
         </Table.Row>
       </Table.Header>
       <Table.Body>
