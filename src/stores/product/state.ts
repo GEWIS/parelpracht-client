@@ -5,7 +5,8 @@ export interface ProductState {
   list: Product[];
   listStatus: ResourceStatus;
   listSortColumn: string;
-  listSortDirection: 'asc' | 'desc';
+  listSortDirection: 'ASC' | 'DESC';
+  listLastUpdated: Date;
 
   single: Product | undefined;
   singleStatus: ResourceStatus;

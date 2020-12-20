@@ -64,14 +64,17 @@ const mapStateToProps = (state: RootState) => {
   return {
     products: state.product.list,
     column: state.product.listSortColumn,
-    direction: state.product.listSortDirection === 'asc'
+    direction: state.product.listSortDirection === 'ASC'
       ? 'ascending' : 'descending' as 'ascending' | 'descending',
   };
 };
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
   fetchProducts: () => dispatch(createFetchProducts()),
-  changeSort: (column: string) => dispatch(changeSortProducts(column)),
+  changeSort: (column: string) => {
+    dispatch(changeSortProducts(column));
+    dispatch(createFetchProducts());
+  },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProductsTable);

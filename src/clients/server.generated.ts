@@ -58,10 +58,20 @@ export class Client {
     }
 
     /**
+     * @param col (optional) 
+     * @param dir (optional) 
      * @return Ok
      */
-    getProducts(): Promise<Product[]> {
-        let url_ = this.baseUrl + "/product";
+    getProducts(col: string | undefined, dir: Dir | undefined): Promise<Product[]> {
+        let url_ = this.baseUrl + "/product?";
+        if (col === null)
+            throw new Error("The parameter 'col' cannot be null.");
+        else if (col !== undefined)
+            url_ += "col=" + encodeURIComponent("" + col) + "&";
+        if (dir === null)
+            throw new Error("The parameter 'dir' cannot be null.");
+        else if (dir !== undefined)
+            url_ += "dir=" + encodeURIComponent("" + dir) + "&";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ = <RequestInit>{
@@ -565,6 +575,7 @@ export class Product implements IProduct {
     id!: number;
     nameDutch!: string;
     nameEnglish!: string;
+    /** Price is stored * 100 and as integer */
     targetPrice!: number;
     description!: string;
     contractTextDutch!: string;
@@ -642,7 +653,7 @@ export class Product implements IProduct {
             for (let item of this.statusChanges)
                 data["statusChanges"].push(item.toJSON());
         }
-        return data;
+        return data; 
     }
 }
 
@@ -650,6 +661,7 @@ export interface IProduct {
     id: number;
     nameDutch: string;
     nameEnglish: string;
+    /** Price is stored * 100 and as integer */
     targetPrice: number;
     description: string;
     contractTextDutch: string;
@@ -746,7 +758,7 @@ export class Contract implements IContract {
             for (let item of this.statusChanges)
                 data["statusChanges"].push(item.toJSON());
         }
-        return data;
+        return data; 
     }
 }
 
@@ -824,7 +836,7 @@ export class ProductInstance implements IProductInstance {
         data["price"] = this.price;
         data["comment"] = this.comment;
         data["status"] = this.status;
-        return data;
+        return data; 
     }
 }
 
@@ -940,7 +952,7 @@ export class Company implements ICompany {
             for (let item of this.statusChanges)
                 data["statusChanges"].push(item.toJSON());
         }
-        return data;
+        return data; 
     }
 }
 
@@ -1067,7 +1079,7 @@ export class User implements IUser {
             for (let item of this.madeChanges)
                 data["madeChanges"].push(item.toJSON());
         }
-        return data;
+        return data; 
     }
 }
 
@@ -1126,7 +1138,7 @@ export class Role implements IRole {
             for (let item of this.users)
                 data["users"].push(item.toJSON());
         }
-        return data;
+        return data; 
     }
 }
 
@@ -1223,7 +1235,7 @@ export class Status implements IStatus {
         data["product"] = this.product ? this.product.toJSON() : <any>undefined;
         data["contactId"] = this.contactId;
         data["contact"] = this.contact ? this.contact.toJSON() : <any>undefined;
-        return data;
+        return data; 
     }
 }
 
@@ -1318,7 +1330,7 @@ export class Invoice implements IInvoice {
             for (let item of this.statusChanges)
                 data["statusChanges"].push(item.toJSON());
         }
-        return data;
+        return data; 
     }
 }
 
@@ -1412,7 +1424,7 @@ export class Contact implements IContact {
             for (let item of this.statusChanges)
                 data["statusChanges"].push(item.toJSON());
         }
-        return data;
+        return data; 
     }
 }
 
@@ -1488,7 +1500,7 @@ export class ProductParams implements IProductParams {
         data["contractTextEnglish"] = this.contractTextEnglish;
         data["deliverySpecificationDutch"] = this.deliverySpecificationDutch;
         data["deliverySpecificationEnglish"] = this.deliverySpecificationEnglish;
-        return data;
+        return data; 
     }
 }
 
@@ -1557,7 +1569,7 @@ export class Partial_ProductParams_ implements IPartial_ProductParams_ {
         data["contractTextEnglish"] = this.contractTextEnglish;
         data["deliverySpecificationDutch"] = this.deliverySpecificationDutch;
         data["deliverySpecificationEnglish"] = this.deliverySpecificationEnglish;
-        return data;
+        return data; 
     }
 }
 
@@ -1617,7 +1629,7 @@ export class CompanyParams implements ICompanyParams {
         data["comments"] = this.comments;
         data["status"] = this.status;
         data["endDate"] = this.endDate ? this.endDate.toISOString() : <any>undefined;
-        return data;
+        return data; 
     }
 }
 
@@ -1674,7 +1686,7 @@ export class Partial_CompanyParams_ implements IPartial_CompanyParams_ {
         data["comments"] = this.comments;
         data["status"] = this.status;
         data["endDate"] = this.endDate ? this.endDate.toISOString() : <any>undefined;
-        return data;
+        return data; 
     }
 }
 
@@ -1728,7 +1740,7 @@ export class ContractParams implements IContractParams {
         data["date"] = this.date ? this.date.toISOString() : <any>undefined;
         data["poNumber"] = this.poNumber;
         data["comments"] = this.comments;
-        return data;
+        return data; 
     }
 }
 
@@ -1781,7 +1793,7 @@ export class Partial_ContractParams_ implements IPartial_ContractParams_ {
         data["date"] = this.date ? this.date.toISOString() : <any>undefined;
         data["poNumber"] = this.poNumber;
         data["comments"] = this.comments;
-        return data;
+        return data; 
     }
 }
 
@@ -1792,6 +1804,11 @@ export interface IPartial_ContractParams_ {
     date?: Date;
     poNumber?: string;
     comments?: string;
+}
+
+export enum Dir {
+    Asc = "asc",
+    Desc = "desc",
 }
 
 export class ApiException extends Error {

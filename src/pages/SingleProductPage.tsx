@@ -46,7 +46,7 @@ class SingleProductPage extends React.Component<Props> {
         <Breadcrumb
           icon="right angle"
           sections={[
-            { key: 'Products', content: <NavLink to="/product">Products</NavLink>, link: 'true' },
+            { key: 'Products', content: <NavLink to="/product">Products</NavLink> },
             { key: 'Product', content: product.nameDutch, active: true },
           ]}
         />

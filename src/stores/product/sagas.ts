@@ -1,5 +1,8 @@
-import { call, put, takeEvery } from 'redux-saga/effects';
-import { Client } from '../../clients/server.generated';
+import {
+  call, put, select, takeEvery,
+} from 'redux-saga/effects';
+import { Client, Dir } from '../../clients/server.generated';
+import type { RootState } from '../store';
 import { setProducts, setSingleProduct, fetchProducts as createFetchProducts } from './actionCreators';
 import {
   ProductActionType, ProductsCreateSingleAction, ProductsFetchSingleAction,
@@ -8,7 +11,13 @@ import {
 
 function* fetchProducts() {
   const client = new Client();
-  const products = yield call([client, client.getProducts]);
+
+  const state: RootState = yield select();
+  const { listSortColumn, listSortDirection } = state.product;
+
+  const products = yield call(
+    [client, client.getProducts], listSortColumn, listSortDirection as Dir,
+  );
   yield put(setProducts(products));
 }
 

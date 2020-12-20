@@ -12,7 +12,7 @@ export enum ProductActionType {
   SetSingle = 'Products/SetSingle',
   SaveSingle = 'Products/SaveSingle',
   CreateSingle = 'Products/CreateSingle',
-  ClearSingle = 'Products/SetClear',
+  ClearSingle = 'Products/ClearSingle',
 }
 
 // Actions
