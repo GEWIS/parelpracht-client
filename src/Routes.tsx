@@ -6,6 +6,7 @@ import { Container, Icon, Menu } from 'semantic-ui-react';
 import ProductsPage from './pages/ProductsPage';
 import SingleProductPage from './pages/SingleProductPage';
 import ProductCreatePage from './pages/ProductCreatePage';
+import AlertContainer from './components/alerts/AlertContainer';
 /* import SingleProductPage from './pages/SingleProductPage'; */
 
 function Routes() {
@@ -35,6 +36,7 @@ function Routes() {
         className="main"
         fluid
       >
+        <AlertContainer internal />
         <Switch>
           <Route path="/product" exact>
             <ProductsPage />

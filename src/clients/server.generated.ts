@@ -152,6 +152,13 @@ export class Client {
             result200 = Product.fromJS(resultData200);
             return result200;
             });
+        } else if (status === 400) {
+            return response.text().then((_responseText) => {
+            let result400: any = null;
+            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result400 = WrappedApiError.fromJS(resultData400);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result400);
+            });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
@@ -235,6 +242,13 @@ export class Client {
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
             result200 = Product.fromJS(resultData200);
             return result200;
+            });
+        } else if (status === 400) {
+            return response.text().then((_responseText) => {
+            let result400: any = null;
+            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result400 = WrappedApiError.fromJS(resultData400);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result400);
             });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
@@ -1508,6 +1522,97 @@ export class ProductListResponse implements IProductListResponse {
 export interface IProductListResponse {
     list: Product[];
     count: number;
+}
+
+export class ApiError implements IApiError {
+    name!: string;
+    message!: string;
+    stack?: string;
+    /** The status code of the error, as defined by HTTP status codes. */
+    statusCode!: number;
+
+    constructor(data?: IApiError) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.name = _data["name"];
+            this.message = _data["message"];
+            this.stack = _data["stack"];
+            this.statusCode = _data["statusCode"];
+        }
+    }
+
+    static fromJS(data: any): ApiError {
+        data = typeof data === 'object' ? data : {};
+        let result = new ApiError();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["name"] = this.name;
+        data["message"] = this.message;
+        data["stack"] = this.stack;
+        data["statusCode"] = this.statusCode;
+        return data; 
+    }
+}
+
+export interface IApiError {
+    name: string;
+    message: string;
+    stack?: string;
+    /** The status code of the error, as defined by HTTP status codes. */
+    statusCode: number;
+}
+
+/** WrappedApiError represents the type returned by the server. */
+export class WrappedApiError implements IWrappedApiError {
+    error!: ApiError;
+
+    constructor(data?: IWrappedApiError) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+        if (!data) {
+            this.error = new ApiError();
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.error = _data["error"] ? ApiError.fromJS(_data["error"]) : new ApiError();
+        }
+    }
+
+    static fromJS(data: any): WrappedApiError {
+        data = typeof data === 'object' ? data : {};
+        let result = new WrappedApiError();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["error"] = this.error ? this.error.toJSON() : <any>undefined;
+        return data; 
+    }
+}
+
+/** WrappedApiError represents the type returned by the server. */
+export interface IWrappedApiError {
+    error: ApiError;
 }
 
 export class ProductParams implements IProductParams {

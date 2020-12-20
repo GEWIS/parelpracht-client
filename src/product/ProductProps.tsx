@@ -110,7 +110,7 @@ class ProductProps extends React.Component<Props, State> {
     } = this.state;
 
     return (
-      <Segment>
+      <>
         <h2>
           {this.props.create ? 'New Product' : 'Details'}
 
@@ -250,7 +250,7 @@ class ProductProps extends React.Component<Props, State> {
             />
           </Form.Field>
         </Form>
-      </Segment>
+      </>
     );
   }
 }

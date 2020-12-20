@@ -2,8 +2,11 @@ import {
   call, put, select, takeEvery, throttle,
 } from 'redux-saga/effects';
 import { Client, Dir } from '../../clients/server.generated';
+import { takeEveryWithErrorHandling } from '../errorHandling';
 import type { RootState } from '../store';
-import { setProducts, setSingleProduct, fetchProducts as createFetchProducts } from './actionCreators';
+import {
+  setProducts, setSingleProduct, fetchProducts as createFetchProducts, errorSingleProduct,
+} from './actionCreators';
 import {
   ProductActionType, ProductsCreateSingleAction, ProductsFetchSingleAction,
   ProductsSaveSingleAction,
@@ -46,17 +49,27 @@ function* createSingleProduct(action: ProductsCreateSingleAction) {
   yield put(createFetchProducts());
 }
 
+function* errorCreateSingleProduct() {
+  yield put(errorSingleProduct());
+}
+
+function* watchCreateSingleProduct() {
+  yield takeEveryWithErrorHandling(
+    ProductActionType.CreateSingle,
+    createSingleProduct,
+    { onErrorSaga: errorCreateSingleProduct },
+  );
+}
+
 export default [
   function* watchFetchProducts() {
     yield throttle(500, ProductActionType.Fetch, fetchProducts);
   },
   function* watchFetchSingleProduct() {
-    yield takeEvery(ProductActionType.FetchSingle, fetchSingleProduct);
+    yield takeEveryWithErrorHandling(ProductActionType.FetchSingle, fetchSingleProduct);
   },
   function* watchSaveSingleProduct() {
-    yield takeEvery(ProductActionType.SaveSingle, saveSingleProduct);
+    yield takeEveryWithErrorHandling(ProductActionType.SaveSingle, saveSingleProduct);
   },
-  function* watchCreateSingleProduct() {
-    yield takeEvery(ProductActionType.CreateSingle, createSingleProduct);
-  },
+  watchCreateSingleProduct,
 ];

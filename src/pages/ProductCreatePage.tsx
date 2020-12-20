@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {
-  Modal,
+  Modal, Segment,
 } from 'semantic-ui-react';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
@@ -10,6 +10,7 @@ import { fetchSingleProduct, clearSingleProduct } from '../stores/product/action
 import { RootState } from '../stores/store';
 import ProductProps from '../product/ProductProps';
 import ResourceStatus from '../stores/resourceStatus';
+import AlertContainer from '../components/alerts/AlertContainer';
 
 interface Props extends RouteComponentProps {
   status: ResourceStatus;
@@ -54,7 +55,10 @@ class ProductCreatePage extends React.Component<Props> {
         dimmer="blurring"
         closeOnDimmerClick={false}
       >
-        <ProductProps product={product} create onCancel={this.close} />
+        <Segment>
+          <AlertContainer />
+          <ProductProps product={product} create onCancel={this.close} />
+        </Segment>
       </Modal>
     );
   }
