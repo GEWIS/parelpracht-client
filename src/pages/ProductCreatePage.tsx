@@ -8,7 +8,7 @@ import { Redirect, RouteComponentProps, withRouter } from 'react-router-dom';
 import { Product, ProductStatus } from '../clients/server.generated';
 import { fetchSingleProduct, clearSingleProduct } from '../stores/product/actionCreators';
 import { RootState } from '../stores/store';
-import ProductProps from './ProductProps';
+import ProductProps from '../product/ProductProps';
 import ResourceStatus from '../stores/resourceStatus';
 
 interface Props extends RouteComponentProps {
@@ -17,20 +17,23 @@ interface Props extends RouteComponentProps {
   clearProduct: () => void;
 }
 
-class ProductCreate extends React.Component<Props> {
+class ProductCreatePage extends React.Component<Props> {
   public constructor(props: Props) {
     super(props);
 
     props.clearProduct();
   }
 
+  componentDidUpdate(prevProps: Props) {
+    if (prevProps.status === ResourceStatus.SAVING
+      && this.props.status === ResourceStatus.FETCHED) {
+      this.close();
+    }
+  }
+
   close = () => { this.props.history.push('/product'); };
 
   public render() {
-    if (this.props.status === ResourceStatus.FETCHED) {
-      return <Redirect to="/product" />;
-    }
-
     const product: Product = {
       id: 0,
       nameDutch: '',
@@ -68,4 +71,4 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   clearProduct: () => dispatch(clearSingleProduct()),
 });
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ProductCreate));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ProductCreatePage));
