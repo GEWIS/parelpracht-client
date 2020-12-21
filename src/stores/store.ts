@@ -13,7 +13,6 @@ import alertsSagas from './alerts/sagas';
 import productSagas from './product/sagas';
 import companySagas from './company/sagas';
 import { tablesReducer } from './tables/reducer';
-import companyReducer from './company/reducer';
 
 // Import all watching sagas
 const watchSagas = [
