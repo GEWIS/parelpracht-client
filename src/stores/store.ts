@@ -10,6 +10,7 @@ import productReducer from './product/reducer';
 
 import alertsSagas from './alerts/sagas';
 import productSagas from './product/sagas';
+import { tablesReducer } from './tables/reducer';
 import companyReducer from './company/reducer';
 
 // Import all watching sagas
@@ -22,6 +23,7 @@ const watchSagas = [
 const reducers = {
   alerts: alertsReducer,
   product: productReducer,
+  tables: tablesReducer,
   company: companyReducer,
 };
 

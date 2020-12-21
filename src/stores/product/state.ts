@@ -2,7 +2,7 @@ import { Product } from '../../clients/server.generated';
 import ResourceStatus from '../resourceStatus';
 
 export interface ProductState {
-  list: Product[];
+/*   list: Product[];
   listCount: number;
   listStatus: ResourceStatus;
 
@@ -11,7 +11,7 @@ export interface ProductState {
   listLastUpdated: Date;
   listSkip: number;
   listTake: number;
-  listSearch: string;
+  listSearch: string; */
 
   single: Product | undefined;
   singleStatus: ResourceStatus;

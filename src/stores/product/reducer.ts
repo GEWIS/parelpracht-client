@@ -4,7 +4,7 @@ import { ProductActionType } from './actions';
 import { ProductState } from './state';
 
 const initialState: ProductState = {
-  list: [],
+/*   list: [],
   listCount: 0,
   listStatus: ResourceStatus.EMPTY,
 
@@ -13,7 +13,7 @@ const initialState: ProductState = {
   listLastUpdated: new Date(),
   listSkip: 0,
   listTake: 10,
-  listSearch: '',
+  listSearch: '', */
 
   single: undefined,
   singleStatus: ResourceStatus.EMPTY,
@@ -25,7 +25,7 @@ export default function productReducer(
   state: ProductState = initialState, action: ProductAction,
 ): ProductState {
   switch (action.type) {
-    case ProductActionType.Fetch:
+    /* case ProductActionType.Fetch:
       return {
         ...state,
         listStatus: ResourceStatus.FETCHING,
@@ -103,7 +103,7 @@ export default function productReducer(
         listSkip: 0,
         listSortColumn: action.column,
         listSortDirection: 'ASC',
-      };
+      }; */
 
     case ProductActionType.FetchSingle:
       return {
