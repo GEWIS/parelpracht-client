@@ -3,21 +3,21 @@ import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import { Table } from 'semantic-ui-react';
 import { Company } from '../../clients/server.generated';
-import TablePagination from '../../components/TablePagination';
-import {
-  fetchCompanies as createFetchCompanies, changeSortCompanies,
-  setTakeCompanies, prevPageCompanies, nextPageCompanies,
-} from '../../stores/company/actionCreators';
-import { countFetchedCompanies, countTotalCompanies } from '../../stores/company/selectors';
+import TablePagination from '../TablePagination';
 import { RootState } from '../../stores/store';
+import {
+  changeSortTable, fetchTable, nextPageTable, prevPageTable, setTakeTable,
+} from '../../stores/tables/actionCreators';
+import { countFetched, countTotal, getTable } from '../../stores/tables/selectors';
+import { Tables } from '../../stores/tables/tables';
 import { CompanyRow } from './CompanyRow';
 
 interface Props {
   companies: Company[];
   column: string;
   direction: 'ascending' | 'descending';
-  countTotal: number;
-  countFetched: number;
+  total: number;
+  fetched: number;
   skip: number;
   take: number;
 
@@ -30,7 +30,7 @@ interface Props {
 
 function CompaniesTable({
   companies, fetchCompanies, column, direction, changeSort,
-  countTotal, countFetched, skip, take,
+  total, fetched, skip, take,
   prevPage, nextPage, setTake,
 }: Props) {
   useEffect(() => {
@@ -43,22 +43,10 @@ function CompaniesTable({
         <Table.Header>
           <Table.Row>
             <Table.HeaderCell
-              sorted={column === 'nameDutch' ? direction : undefined}
-              onClick={() => changeSort('nameDutch')}
+              sorted={column === 'name' ? direction : undefined}
+              onClick={() => changeSort('name')}
             >
-              Name (Dutch)
-            </Table.HeaderCell>
-            <Table.HeaderCell
-              sorted={column === 'nameEnglish' ? direction : undefined}
-              onClick={() => changeSort('nameEnglish')}
-            >
-              Name (English)
-            </Table.HeaderCell>
-            <Table.HeaderCell
-              sorted={column === 'targetPrice' ? direction : undefined}
-              onClick={() => changeSort('targetPrice')}
-            >
-              Target price
+              Name
             </Table.HeaderCell>
             <Table.HeaderCell
               sorted={column === 'status' ? direction : undefined}
@@ -73,8 +61,8 @@ function CompaniesTable({
         </Table.Body>
       </Table>
       <TablePagination
-        countTotal={countTotal}
-        countFetched={countFetched}
+        countTotal={total}
+        countFetched={fetched}
         skip={skip}
         take={take}
         nextPage={nextPage}
@@ -86,35 +74,36 @@ function CompaniesTable({
 }
 
 const mapStateToProps = (state: RootState) => {
+  const companyTable = getTable<Company>(state, Tables.Companies);
   return {
-    countTotal: countTotalCompanies(state),
-    countFetched: countFetchedCompanies(state),
-    skip: state.company.listSkip,
-    take: state.company.listTake,
-    companies: state.company.list,
-    column: state.company.listSortColumn,
-    direction: state.company.listSortDirection === 'ASC'
+    total: countTotal(state, Tables.Companies),
+    fetched: countFetched(state, Tables.Companies),
+    skip: companyTable.skip,
+    take: companyTable.take,
+    companies: companyTable.data,
+    column: companyTable.sortColumn,
+    direction: companyTable.sortDirection === 'ASC'
       ? 'ascending' : 'descending' as 'ascending' | 'descending',
   };
 };
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
-  fetchCompanies: () => dispatch(createFetchCompanies()),
+  fetchCompanies: () => dispatch(fetchTable(Tables.Companies)),
   changeSort: (column: string) => {
-    dispatch(changeSortCompanies(column));
-    dispatch(createFetchCompanies());
+    dispatch(changeSortTable(Tables.Companies, column));
+    dispatch(fetchTable(Tables.Companies));
   },
   setTake: (take: number) => {
-    dispatch(setTakeCompanies(take));
-    dispatch(createFetchCompanies());
+    dispatch(setTakeTable(Tables.Companies, take));
+    dispatch(fetchTable(Tables.Companies));
   },
   prevPage: () => {
-    dispatch(prevPageCompanies());
-    dispatch(createFetchCompanies());
+    dispatch(prevPageTable(Tables.Companies));
+    dispatch(fetchTable(Tables.Companies));
   },
   nextPage: () => {
-    dispatch(nextPageCompanies());
-    dispatch(createFetchCompanies());
+    dispatch(nextPageTable(Tables.Companies));
+    dispatch(fetchTable(Tables.Companies));
   },
 });
 

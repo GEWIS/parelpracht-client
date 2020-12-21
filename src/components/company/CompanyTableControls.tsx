@@ -1,12 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
-import TimeAgo from 'javascript-time-ago';
-import { fetchCompanies, searchCompanies } from '../../stores/company/actionCreators';
-import { countFetchedCompanies, countTotalCompanies, sortColumn } from '../../stores/company/selectors';
+import { fetchTable, searchTable } from '../../stores/tables/actionCreators';
 import ResourceStatus from '../../stores/resourceStatus';
 import { RootState } from '../../stores/store';
-import TableControls from '../../components/TableControls';
+import TableControls from '../TableControls';
+import { Tables } from '../../stores/tables/tables';
+import { countFetched, countTotal, getTable } from '../../stores/tables/selectors';
+import { Company } from '../../clients/server.generated';
+import { sortColumn } from '../../stores/company/selectors';
 
 interface Props {
   status: ResourceStatus;
@@ -35,20 +37,23 @@ function CompanyTableControls(props: Props) {
   );
 }
 
-const mapStateToProps = (state: RootState) => ({
-  status: state.company.listStatus,
-  countFetched: countFetchedCompanies(state),
-  countTotal: countTotalCompanies(state),
-  column: sortColumn(state),
-  lastUpdated: state.company.listLastUpdated,
-  search: state.company.listSearch,
-});
+const mapStateToProps = (state: RootState) => {
+  const companyTable = getTable<Company>(state, Tables.Companies);
+  return {
+    status: companyTable.status,
+    countFetched: countFetched(state, Tables.Companies),
+    countTotal: countTotal(state, Tables.Companies),
+    column: sortColumn(state),
+    lastUpdated: companyTable.lastUpdated,
+    search: companyTable.search,
+  };
+};
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
-  refresh: () => dispatch(fetchCompanies()),
+  refresh: () => dispatch(fetchTable(Tables.Companies)),
   setSearch: (search: string) => {
-    dispatch(searchCompanies(search));
-    dispatch(fetchCompanies());
+    dispatch(searchTable(Tables.Companies, search));
+    dispatch(fetchTable(Tables.Companies));
   },
 });
 
