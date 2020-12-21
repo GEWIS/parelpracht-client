@@ -9,9 +9,9 @@ import { connect } from 'react-redux';
 import { Company } from '../clients/server.generated';
 import { fetchSingleCompany, clearSingleCompany } from '../stores/company/actionCreators';
 import { RootState } from '../stores/store';
-import CompanyProps from '../components/companies/CompanyProps';
+import CompanyProps from '../components/company/CompanyProps';
 import ResourceStatus from '../stores/resourceStatus';
-import CompanySummary from '../components/companies/CompanySummary';
+import CompanySummary from '../components/company/CompanySummary';
 
 interface Props extends RouteComponentProps<{ companyId: string }> {
   company: Company | undefined;

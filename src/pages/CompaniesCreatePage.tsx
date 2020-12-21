@@ -8,7 +8,7 @@ import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { Company, CompanyStatus } from '../clients/server.generated';
 import { fetchSingleCompany, clearSingleCompany } from '../stores/company/actionCreators';
 import { RootState } from '../stores/store';
-import CompanyProps from '../components/companies/CompanyProps';
+import CompanyProps from '../components/company/CompanyProps';
 import ResourceStatus from '../stores/resourceStatus';
 import AlertContainer from '../components/alerts/AlertContainer';
 
