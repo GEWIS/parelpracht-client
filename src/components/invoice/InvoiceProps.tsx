@@ -8,7 +8,7 @@ import {
   Form, Input, Label, TextArea,
 } from 'semantic-ui-react';
 import {
-  Company, Invoice, InvoiceParams, InvoiceStatus, ProductInstance, Status,
+  Company, Invoice, InvoiceParams, ProductInstance,
 } from '../../clients/server.generated';
 import { formatPrice } from '../../helpers/monetary';
 import { createSingleInvoice } from '../../stores/invoice/actionCreators';
@@ -29,10 +29,9 @@ interface Props {
 
 interface State {
   editing: boolean;
-  product: ProductInstance[];
-  comment: string;
+  productInstances: ProductInstance[];
+  comments: string | undefined;
   companyId: number;
-  price: number;
 }
 
 class InvoiceProps extends React.Component<Props, State> {
@@ -56,19 +55,17 @@ class InvoiceProps extends React.Component<Props, State> {
   extractState = (props: Props) => {
     const { invoice } = props;
     return {
-      product: invoice.products,
-      comment: invoice.comment,
+      productInstances: invoice.products,
+      comments: invoice.comments,
       companyId: invoice.companyId,
-      price: invoice.price,
     };
   };
 
   toParams = (): InvoiceParams => {
     return new InvoiceParams({
-      product: this.state.product,
-      comment: this.state.comment,
+      productInstances: this.state.productInstances,
+      comments: this.state.comments,
       companyId: this.state.companyId,
-      price: this.state.price,
     });
   };
 
@@ -95,10 +92,9 @@ class InvoiceProps extends React.Component<Props, State> {
   render() {
     const {
       editing,
-      product,
-      comment,
+      productInstances,
+      comments,
       companyId,
-      price,
     } = this.state;
 
     return (

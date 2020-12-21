@@ -50,10 +50,6 @@ function InvoiceSummary(props: Props) {
             <h5>Company Name</h5>
             <p>{invoice.company}</p>
           </Grid.Column>
-          <Grid.Column>
-            <h5>Price</h5>
-            <p>{formatPriceFull(invoice.price)}</p>
-          </Grid.Column>
         </Grid>
       </Segment>
     </>

@@ -28,10 +28,13 @@ interface Props {
 interface State {
   editing: boolean;
   name: string;
-  description: string;
-  phoneNumber: string;
-  comments: string;
+  description: string | undefined;
+  phoneNumber: string | undefined;
   status: CompanyStatus;
+  addressStreet: string;
+  addressPostalCode: string;
+  addressCity: string;
+  addressCountry: string;
 }
 
 class CompanyProps extends React.Component<Props, State> {
@@ -58,10 +61,11 @@ class CompanyProps extends React.Component<Props, State> {
       name: company.name,
       description: company.description,
       phoneNumber: company.phoneNumber,
-      comments: company.comments,
       status: company.status,
-      // lastUpdated: company.lastUpdated,
-      endDate: company.endDate,
+      addressStreet: company.addressStreet,
+      addressPostalCode: company.addressPostalCode,
+      addressCity: company.addressCity,
+      addressCountry: company.addressCountry,
     };
   };
 
@@ -70,8 +74,11 @@ class CompanyProps extends React.Component<Props, State> {
       name: this.state.name,
       description: this.state.description,
       phoneNumber: this.state.phoneNumber,
-      comments: this.state.comments,
       status: this.state.status,
+      addressStreet: this.state.addressStreet,
+      addressPostalCode: this.state.addressPostalCode,
+      addressCity: this.state.addressCity,
+      addressCountry: this.state.addressCountry,
     });
   };
 
@@ -101,7 +108,6 @@ class CompanyProps extends React.Component<Props, State> {
       name,
       description,
       phoneNumber,
-      comments,
       status,
     } = this.state;
 
@@ -174,20 +180,6 @@ class CompanyProps extends React.Component<Props, State> {
               />
             </Form.Field>
           </Form.Group>
-          <Form.Field disabled={!editing}>
-            {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-            <label htmlFor="form-input-comments">
-              comments
-            </label>
-            <TextArea
-              id="form-input-comments"
-              value={comments}
-              onChange={
-                (e) => this.setState({ comments: e.target.value })
-              }
-              placeholder="Comments"
-            />
-          </Form.Field>
         </Form>
       </>
     );
