@@ -43,7 +43,11 @@ class CompaniesCreatePage extends React.Component<Props> {
       phoneNumber: '',
       status: CompanyStatus.ACTIVE,
       comments: '',
-    } as Company;
+      addressStreet: '',
+      addressCity: '',
+      addressPostalCode: '',
+      addressCountry: '',
+    } as any as Company;
 
     return (
       <Modal
