@@ -107,7 +107,88 @@ class CompanyProps extends React.Component<Props, State> {
 
     return (
       <>
-        <h2> Companyyyyyyyyyyyyyy details </h2>
+        <h2>
+          {this.props.create ? 'New Company' : 'Details'}
+
+          <CompanyPropsButtons
+            editing={editing}
+            status={this.props.status}
+            cancel={this.cancel}
+            edit={this.edit}
+            save={this.save}
+          />
+        </h2>
+
+        <Form style={{ marginTop: '2em' }}>
+          <Form.Group widths="equal">
+            <Form.Field
+              disabled={!editing}
+              id="form-input-name"
+              fluid
+              control={Input}
+              label="Name"
+              value={name}
+              onChange={(e: ChangeEvent<HTMLInputElement>) => this.setState({
+                name: e.target.value,
+              })}
+            />
+            <Form.Field disabled={!editing}>
+              {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
+              <label htmlFor="form-input-description">
+                Description
+              </label>
+              <TextArea
+                id="form-input-description"
+                value={description}
+                onChange={(e) => this.setState({ description: e.target.value })}
+                placeholder="Description"
+              />
+            </Form.Field>
+          </Form.Group>
+          <Form.Group widths="equal">
+            <Form.Field
+              disabled={!editing}
+              id="form-input-phonenumber"
+              fluid
+              control={Input}
+              label="phoneNumber"
+              value={phoneNumber}
+              onChange={(e: ChangeEvent<HTMLInputElement>) => this.setState({
+                phoneNumber: e.target.value,
+              })}
+            />
+            <Form.Field disabled={!editing}>
+              {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
+              <label htmlFor="form-check-status">
+                Status
+              </label>
+              <Checkbox
+                toggle
+                id="form-check-status"
+                label={status === CompanyStatus.ACTIVE ? 'Active' : 'Inactive'}
+                checked={status === CompanyStatus.ACTIVE}
+                onChange={(_, data) => this.setState({
+                  status:
+                    data.checked ? CompanyStatus.ACTIVE : CompanyStatus.INACTIVE,
+                })}
+              />
+            </Form.Field>
+          </Form.Group>
+          <Form.Field disabled={!editing}>
+            {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
+            <label htmlFor="form-input-comments">
+              comments
+            </label>
+            <TextArea
+              id="form-input-comments"
+              value={comments}
+              onChange={
+                (e) => this.setState({ comments: e.target.value })
+              }
+              placeholder="Comments"
+            />
+          </Form.Field>
+        </Form>
       </>
     );
   }

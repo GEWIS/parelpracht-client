@@ -22,7 +22,7 @@ function CompanySummary(props: Props) {
     return (
       <>
         <Header as="h1" attached="top" inverted>
-          <Icon name="shopping bag" />
+          <Icon name="building" />
           <Header.Content>
             <Header.Subheader>Company</Header.Subheader>
             <Loader active inline />
@@ -38,7 +38,7 @@ function CompanySummary(props: Props) {
   return (
     <>
       <Header as="h1" attached="top" style={{ backgroundColor: '#eee' }}>
-        <Icon name="shopping bag" />
+        <Icon name="building" />
         <Header.Content>
           <Header.Subheader>Company</Header.Subheader>
           {company.name}
