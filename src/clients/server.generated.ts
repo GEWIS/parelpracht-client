@@ -58,14 +58,14 @@ export class Client {
     }
 
     /**
-     * @param col (optional) 
-     * @param dir (optional) 
-     * @param skip (optional) 
-     * @param take (optional) 
-     * @param search (optional) 
+     * @param col (optional) Sorted column
+     * @param dir (optional) Sorting direction
+     * @param skip (optional) Number of elements to skip
+     * @param take (optional) Amount of elements to request
+     * @param search (optional) String to filter on value of select columns
      * @return Ok
      */
-    getProducts(col: string | undefined, dir: Dir | undefined, skip: number | undefined, take: number | undefined, search: string | undefined): Promise<ProductListResponse> {
+    getAllProducts(col: string | undefined, dir: Dir | undefined, skip: number | undefined, take: number | undefined, search: string | undefined): Promise<ProductListResponse> {
         let url_ = this.baseUrl + "/product?";
         if (col === null)
             throw new Error("The parameter 'col' cannot be null.");
@@ -97,11 +97,11 @@ export class Client {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processGetProducts(_response);
+            return this.processGetAllProducts(_response);
         });
     }
 
-    protected processGetProducts(response: Response): Promise<ProductListResponse> {
+    protected processGetAllProducts(response: Response): Promise<ProductListResponse> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -120,6 +120,7 @@ export class Client {
     }
 
     /**
+     * @param body Parameters to create product with
      * @return Ok
      */
     createProduct(body: ProductParams): Promise<Product> {
@@ -168,6 +169,7 @@ export class Client {
     }
 
     /**
+     * @param id ID of product to retrieve
      * @return Ok
      */
     getProduct(id: number): Promise<Product> {
@@ -208,6 +210,8 @@ export class Client {
     }
 
     /**
+     * @param id ID of product to update
+     * @param body Update subset of parameter of product
      * @return Ok
      */
     updateProduct(id: number, body: Partial_ProductParams): Promise<Product> {
@@ -259,11 +263,11 @@ export class Client {
     }
 
     /**
-     * @param col (optional) 
-     * @param dir (optional) 
-     * @param skip (optional) 
-     * @param take (optional) 
-     * @param search (optional) 
+     * @param col (optional) Sorted column
+     * @param dir (optional) Sorting direction
+     * @param skip (optional) Number of elements to skip
+     * @param take (optional) Amount of elements to request
+     * @param search (optional) String to filter on value of select columns
      * @return Ok
      */
     getAllCompanies(col: string | undefined, dir: Dir2 | undefined, skip: number | undefined, take: number | undefined, search: string | undefined): Promise<CompanyListResponse> {
@@ -321,6 +325,7 @@ export class Client {
     }
 
     /**
+     * @param body Parameters to create company with
      * @return Ok
      */
     createCompany(body: CompanyParams): Promise<Company> {
@@ -362,6 +367,7 @@ export class Client {
     }
 
     /**
+     * @param id ID of company to retrieve
      * @return Ok
      */
     getCompany(id: number): Promise<Company> {
@@ -402,6 +408,8 @@ export class Client {
     }
 
     /**
+     * @param id ID of company to update
+     * @param body Update subset of parameter of company
      * @return Ok
      */
     updateCompany(id: number, body: Partial_CompanyParams): Promise<Company> {
@@ -446,10 +454,35 @@ export class Client {
     }
 
     /**
+     * @param col (optional) Sorted column
+     * @param dir (optional) Sorting direction
+     * @param skip (optional) Number of elements to skip
+     * @param take (optional) Amount of elements to request
+     * @param search (optional) String to filter on value of select columns
      * @return Ok
      */
-    getContracts(): Promise<Contract[]> {
-        let url_ = this.baseUrl + "/contract";
+    getAllContracts(col: string | undefined, dir: Dir3 | undefined, skip: number | undefined, take: number | undefined, search: string | undefined): Promise<ContractListResponse> {
+        let url_ = this.baseUrl + "/contract?";
+        if (col === null)
+            throw new Error("The parameter 'col' cannot be null.");
+        else if (col !== undefined)
+            url_ += "col=" + encodeURIComponent("" + col) + "&";
+        if (dir === null)
+            throw new Error("The parameter 'dir' cannot be null.");
+        else if (dir !== undefined)
+            url_ += "dir=" + encodeURIComponent("" + dir) + "&";
+        if (skip === null)
+            throw new Error("The parameter 'skip' cannot be null.");
+        else if (skip !== undefined)
+            url_ += "skip=" + encodeURIComponent("" + skip) + "&";
+        if (take === null)
+            throw new Error("The parameter 'take' cannot be null.");
+        else if (take !== undefined)
+            url_ += "take=" + encodeURIComponent("" + take) + "&";
+        if (search === null)
+            throw new Error("The parameter 'search' cannot be null.");
+        else if (search !== undefined)
+            url_ += "search=" + encodeURIComponent("" + search) + "&";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ = <RequestInit>{
@@ -460,22 +493,18 @@ export class Client {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processGetContracts(_response);
+            return this.processGetAllContracts(_response);
         });
     }
 
-    protected processGetContracts(response: Response): Promise<Contract[]> {
+    protected processGetAllContracts(response: Response): Promise<ContractListResponse> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            if (Array.isArray(resultData200)) {
-                result200 = [] as any;
-                for (let item of resultData200)
-                    result200!.push(Contract.fromJS(item));
-            }
+            result200 = ContractListResponse.fromJS(resultData200);
             return result200;
             });
         } else if (status !== 200 && status !== 204) {
@@ -483,10 +512,11 @@ export class Client {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<Contract[]>(<any>null);
+        return Promise.resolve<ContractListResponse>(<any>null);
     }
 
     /**
+     * @param body Parameters to create contract with
      * @return Ok
      */
     createContract(body: ContractParams): Promise<Contract> {
@@ -528,6 +558,7 @@ export class Client {
     }
 
     /**
+     * @param id ID of contract to retrieve
      * @return Ok
      */
     getContract(id: number): Promise<Contract> {
@@ -568,6 +599,8 @@ export class Client {
     }
 
     /**
+     * @param id ID of contract to update
+     * @param body Update subset of parameter of contract
      * @return Ok
      */
     updateContract(id: number, body: Partial_ContractParams): Promise<Contract> {
@@ -609,6 +642,388 @@ export class Client {
             });
         }
         return Promise.resolve<Contract>(<any>null);
+    }
+
+    /**
+     * @param col (optional) Sorted column
+     * @param dir (optional) Sorting direction
+     * @param skip (optional) Number of elements to skip
+     * @param take (optional) Amount of elements to request
+     * @param search (optional) String to filter on value of select columns
+     * @return Ok
+     */
+    getAllInvoices(col: string | undefined, dir: Dir4 | undefined, skip: number | undefined, take: number | undefined, search: string | undefined): Promise<InvoiceListResponse> {
+        let url_ = this.baseUrl + "/Invoice?";
+        if (col === null)
+            throw new Error("The parameter 'col' cannot be null.");
+        else if (col !== undefined)
+            url_ += "col=" + encodeURIComponent("" + col) + "&";
+        if (dir === null)
+            throw new Error("The parameter 'dir' cannot be null.");
+        else if (dir !== undefined)
+            url_ += "dir=" + encodeURIComponent("" + dir) + "&";
+        if (skip === null)
+            throw new Error("The parameter 'skip' cannot be null.");
+        else if (skip !== undefined)
+            url_ += "skip=" + encodeURIComponent("" + skip) + "&";
+        if (take === null)
+            throw new Error("The parameter 'take' cannot be null.");
+        else if (take !== undefined)
+            url_ += "take=" + encodeURIComponent("" + take) + "&";
+        if (search === null)
+            throw new Error("The parameter 'search' cannot be null.");
+        else if (search !== undefined)
+            url_ += "search=" + encodeURIComponent("" + search) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <RequestInit>{
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processGetAllInvoices(_response);
+        });
+    }
+
+    protected processGetAllInvoices(response: Response): Promise<InvoiceListResponse> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = InvoiceListResponse.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<InvoiceListResponse>(<any>null);
+    }
+
+    /**
+     * @param body Parameters to create invoice with
+     * @return Ok
+     */
+    createInvoice(body: InvoiceParams): Promise<Invoice> {
+        let url_ = this.baseUrl + "/Invoice";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ = <RequestInit>{
+            body: content_,
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processCreateInvoice(_response);
+        });
+    }
+
+    protected processCreateInvoice(response: Response): Promise<Invoice> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = Invoice.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<Invoice>(<any>null);
+    }
+
+    /**
+     * @param id ID of invoice to retrieve
+     * @return Ok
+     */
+    getInvoice(id: number): Promise<Invoice> {
+        let url_ = this.baseUrl + "/Invoice/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <RequestInit>{
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processGetInvoice(_response);
+        });
+    }
+
+    protected processGetInvoice(response: Response): Promise<Invoice> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = Invoice.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<Invoice>(<any>null);
+    }
+
+    /**
+     * @param id ID of invoice to update
+     * @param body Update subset of parameter of invoice
+     * @return Ok
+     */
+    updateInvoice(id: number, body: Partial_InvoiceParams): Promise<Invoice> {
+        let url_ = this.baseUrl + "/Invoice/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ = <RequestInit>{
+            body: content_,
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processUpdateInvoice(_response);
+        });
+    }
+
+    protected processUpdateInvoice(response: Response): Promise<Invoice> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = Invoice.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<Invoice>(<any>null);
+    }
+
+    /**
+     * @param col (optional) Sorted column
+     * @param dir (optional) Sorting direction
+     * @param skip (optional) Number of elements to skip
+     * @param take (optional) Amount of elements to request
+     * @param search (optional) String to filter on value of select columns
+     * @return Ok
+     */
+    getAllContacts(col: string | undefined, dir: Dir5 | undefined, skip: number | undefined, take: number | undefined, search: string | undefined): Promise<ContactListResponse> {
+        let url_ = this.baseUrl + "/contact?";
+        if (col === null)
+            throw new Error("The parameter 'col' cannot be null.");
+        else if (col !== undefined)
+            url_ += "col=" + encodeURIComponent("" + col) + "&";
+        if (dir === null)
+            throw new Error("The parameter 'dir' cannot be null.");
+        else if (dir !== undefined)
+            url_ += "dir=" + encodeURIComponent("" + dir) + "&";
+        if (skip === null)
+            throw new Error("The parameter 'skip' cannot be null.");
+        else if (skip !== undefined)
+            url_ += "skip=" + encodeURIComponent("" + skip) + "&";
+        if (take === null)
+            throw new Error("The parameter 'take' cannot be null.");
+        else if (take !== undefined)
+            url_ += "take=" + encodeURIComponent("" + take) + "&";
+        if (search === null)
+            throw new Error("The parameter 'search' cannot be null.");
+        else if (search !== undefined)
+            url_ += "search=" + encodeURIComponent("" + search) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <RequestInit>{
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processGetAllContacts(_response);
+        });
+    }
+
+    protected processGetAllContacts(response: Response): Promise<ContactListResponse> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = ContactListResponse.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<ContactListResponse>(<any>null);
+    }
+
+    /**
+     * @param body Parameters to create contact with
+     * @return Ok
+     */
+    createContact(body: ContactParams): Promise<Contact> {
+        let url_ = this.baseUrl + "/contact";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ = <RequestInit>{
+            body: content_,
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processCreateContact(_response);
+        });
+    }
+
+    protected processCreateContact(response: Response): Promise<Contact> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = Contact.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<Contact>(<any>null);
+    }
+
+    /**
+     * @param id ID of contact to retrieve
+     * @return Ok
+     */
+    getContact(id: number): Promise<Contact> {
+        let url_ = this.baseUrl + "/contact/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <RequestInit>{
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processGetContact(_response);
+        });
+    }
+
+    protected processGetContact(response: Response): Promise<Contact> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = Contact.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<Contact>(<any>null);
+    }
+
+    /**
+     * @param id ID of contact to update
+     * @param body Update subset of parameter of contact
+     * @return Ok
+     */
+    updateContact(id: number, body: Partial_ContactParams): Promise<Contact> {
+        let url_ = this.baseUrl + "/contact/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ = <RequestInit>{
+            body: content_,
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processUpdateContact(_response);
+        });
+    }
+
+    protected processUpdateContact(response: Response): Promise<Contact> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = Contact.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<Contact>(<any>null);
     }
 }
 
@@ -1939,6 +2354,57 @@ export interface IPartial_CompanyParams {
     endDate?: Date;
 }
 
+export class ContractListResponse implements IContractListResponse {
+    list!: Contract[];
+    count!: number;
+
+    constructor(data?: IContractListResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+        if (!data) {
+            this.list = [];
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["list"])) {
+                this.list = [] as any;
+                for (let item of _data["list"])
+                    this.list!.push(Contract.fromJS(item));
+            }
+            this.count = _data["count"];
+        }
+    }
+
+    static fromJS(data: any): ContractListResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new ContractListResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.list)) {
+            data["list"] = [];
+            for (let item of this.list)
+                data["list"].push(item.toJSON());
+        }
+        data["count"] = this.count;
+        return data; 
+    }
+}
+
+export interface IContractListResponse {
+    list: Contract[];
+    count: number;
+}
+
 export class ContractParams implements IContractParams {
     title!: string;
     companyId!: number;
@@ -2045,12 +2511,368 @@ export interface IPartial_ContractParams {
     comments?: string;
 }
 
+export class InvoiceListResponse implements IInvoiceListResponse {
+    list!: Invoice[];
+    count!: number;
+
+    constructor(data?: IInvoiceListResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+        if (!data) {
+            this.list = [];
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["list"])) {
+                this.list = [] as any;
+                for (let item of _data["list"])
+                    this.list!.push(Invoice.fromJS(item));
+            }
+            this.count = _data["count"];
+        }
+    }
+
+    static fromJS(data: any): InvoiceListResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new InvoiceListResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.list)) {
+            data["list"] = [];
+            for (let item of this.list)
+                data["list"].push(item.toJSON());
+        }
+        data["count"] = this.count;
+        return data; 
+    }
+}
+
+export interface IInvoiceListResponse {
+    list: Invoice[];
+    count: number;
+}
+
+export class InvoiceParams implements IInvoiceParams {
+    product!: ProductInstance[];
+    companyId!: number;
+    price!: number;
+    comment!: string;
+
+    constructor(data?: IInvoiceParams) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+        if (!data) {
+            this.product = [];
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["product"])) {
+                this.product = [] as any;
+                for (let item of _data["product"])
+                    this.product!.push(ProductInstance.fromJS(item));
+            }
+            this.companyId = _data["companyId"];
+            this.price = _data["price"];
+            this.comment = _data["comment"];
+        }
+    }
+
+    static fromJS(data: any): InvoiceParams {
+        data = typeof data === 'object' ? data : {};
+        let result = new InvoiceParams();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.product)) {
+            data["product"] = [];
+            for (let item of this.product)
+                data["product"].push(item.toJSON());
+        }
+        data["companyId"] = this.companyId;
+        data["price"] = this.price;
+        data["comment"] = this.comment;
+        return data; 
+    }
+}
+
+export interface IInvoiceParams {
+    product: ProductInstance[];
+    companyId: number;
+    price: number;
+    comment: string;
+}
+
+/** Make all properties in T optional */
+export class Partial_InvoiceParams implements IPartial_InvoiceParams {
+    product?: ProductInstance[];
+    companyId?: number;
+    price?: number;
+    comment?: string;
+
+    constructor(data?: IPartial_InvoiceParams) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["product"])) {
+                this.product = [] as any;
+                for (let item of _data["product"])
+                    this.product!.push(ProductInstance.fromJS(item));
+            }
+            this.companyId = _data["companyId"];
+            this.price = _data["price"];
+            this.comment = _data["comment"];
+        }
+    }
+
+    static fromJS(data: any): Partial_InvoiceParams {
+        data = typeof data === 'object' ? data : {};
+        let result = new Partial_InvoiceParams();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.product)) {
+            data["product"] = [];
+            for (let item of this.product)
+                data["product"].push(item.toJSON());
+        }
+        data["companyId"] = this.companyId;
+        data["price"] = this.price;
+        data["comment"] = this.comment;
+        return data; 
+    }
+}
+
+/** Make all properties in T optional */
+export interface IPartial_InvoiceParams {
+    product?: ProductInstance[];
+    companyId?: number;
+    price?: number;
+    comment?: string;
+}
+
+export class ContactListResponse implements IContactListResponse {
+    list!: Contact[];
+    count!: number;
+
+    constructor(data?: IContactListResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+        if (!data) {
+            this.list = [];
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["list"])) {
+                this.list = [] as any;
+                for (let item of _data["list"])
+                    this.list!.push(Contact.fromJS(item));
+            }
+            this.count = _data["count"];
+        }
+    }
+
+    static fromJS(data: any): ContactListResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new ContactListResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.list)) {
+            data["list"] = [];
+            for (let item of this.list)
+                data["list"].push(item.toJSON());
+        }
+        data["count"] = this.count;
+        return data; 
+    }
+}
+
+export interface IContactListResponse {
+    list: Contact[];
+    count: number;
+}
+
+export class ContactParams implements IContactParams {
+    gender!: Gender;
+    firstName!: string;
+    middleName!: string;
+    lastName!: string;
+    email!: string;
+    comment!: string;
+    companyId!: number;
+
+    constructor(data?: IContactParams) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.gender = _data["gender"];
+            this.firstName = _data["firstName"];
+            this.middleName = _data["middleName"];
+            this.lastName = _data["lastName"];
+            this.email = _data["email"];
+            this.comment = _data["comment"];
+            this.companyId = _data["companyId"];
+        }
+    }
+
+    static fromJS(data: any): ContactParams {
+        data = typeof data === 'object' ? data : {};
+        let result = new ContactParams();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["gender"] = this.gender;
+        data["firstName"] = this.firstName;
+        data["middleName"] = this.middleName;
+        data["lastName"] = this.lastName;
+        data["email"] = this.email;
+        data["comment"] = this.comment;
+        data["companyId"] = this.companyId;
+        return data; 
+    }
+}
+
+export interface IContactParams {
+    gender: Gender;
+    firstName: string;
+    middleName: string;
+    lastName: string;
+    email: string;
+    comment: string;
+    companyId: number;
+}
+
+/** Make all properties in T optional */
+export class Partial_ContactParams implements IPartial_ContactParams {
+    gender?: Gender;
+    firstName?: string;
+    middleName?: string;
+    lastName?: string;
+    email?: string;
+    comment?: string;
+    companyId?: number;
+
+    constructor(data?: IPartial_ContactParams) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.gender = _data["gender"];
+            this.firstName = _data["firstName"];
+            this.middleName = _data["middleName"];
+            this.lastName = _data["lastName"];
+            this.email = _data["email"];
+            this.comment = _data["comment"];
+            this.companyId = _data["companyId"];
+        }
+    }
+
+    static fromJS(data: any): Partial_ContactParams {
+        data = typeof data === 'object' ? data : {};
+        let result = new Partial_ContactParams();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["gender"] = this.gender;
+        data["firstName"] = this.firstName;
+        data["middleName"] = this.middleName;
+        data["lastName"] = this.lastName;
+        data["email"] = this.email;
+        data["comment"] = this.comment;
+        data["companyId"] = this.companyId;
+        return data; 
+    }
+}
+
+/** Make all properties in T optional */
+export interface IPartial_ContactParams {
+    gender?: Gender;
+    firstName?: string;
+    middleName?: string;
+    lastName?: string;
+    email?: string;
+    comment?: string;
+    companyId?: number;
+}
+
 export enum Dir {
     ASC = "ASC",
     DESC = "DESC",
 }
 
 export enum Dir2 {
+    ASC = "ASC",
+    DESC = "DESC",
+}
+
+export enum Dir3 {
+    ASC = "ASC",
+    DESC = "DESC",
+}
+
+export enum Dir4 {
+    ASC = "ASC",
+    DESC = "DESC",
+}
+
+export enum Dir5 {
     ASC = "ASC",
     DESC = "DESC",
 }
