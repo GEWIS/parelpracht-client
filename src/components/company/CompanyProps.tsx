@@ -146,20 +146,17 @@ class CompanyProps extends React.Component<Props, State> {
             </Form.Field>
           </Form.Group>
           <Form.Group widths="equal">
-            <Form.Field disabled={!editing}>
-              {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-              <label htmlFor="form-input-phonenumber">
-                Phone Number
-              </label>
-              <Input
-                labelPosition="left"
-                id="form-input-phone-number"
-                value={phoneNumber}
-                onChange={(e) => this.setState({ phoneNumber: e.target.value })}
-              >
-                <input />
-              </Input>
-            </Form.Field>
+            <Form.Field
+              disabled={!editing}
+              id="form-input-phonenumber"
+              fluid
+              control={Input}
+              label="phoneNumber"
+              value={phoneNumber}
+              onChange={(e: ChangeEvent<HTMLInputElement>) => this.setState({
+                phoneNumber: e.target.value,
+              })}
+            />
             <Form.Field disabled={!editing}>
               {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
               <label htmlFor="form-check-status">
@@ -177,7 +174,6 @@ class CompanyProps extends React.Component<Props, State> {
               />
             </Form.Field>
           </Form.Group>
-
           <Form.Field disabled={!editing}>
             {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
             <label htmlFor="form-input-comments">
