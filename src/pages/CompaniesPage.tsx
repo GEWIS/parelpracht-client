@@ -3,6 +3,7 @@ import { RouteComponentProps, withRouter } from 'react-router-dom';
 import {
   Button, Container, Grid, Header, Icon, Segment,
 } from 'semantic-ui-react';
+import CompanyTable from '../components/company/CompanyTable';
 import ProductsTable from '../components/product/ProductTable';
 import ProductTableControls from '../components/product/ProductTableControls';
 
@@ -22,7 +23,7 @@ function CompaniesPage(props: RouteComponentProps) {
               </Header>
             </Grid.Column>
             <Grid.Column>
-              <Button icon labelPosition="left" primary floated="right" onClick={() => props.history.push('/product/new')}>
+              <Button icon labelPosition="left" primary floated="right" onClick={() => props.history.push('/company/new')}>
                 <Icon name="plus" />
                 Add Company
               </Button>
@@ -30,6 +31,9 @@ function CompaniesPage(props: RouteComponentProps) {
           </Grid>
         </Container>
       </Segment>
+      <Container>
+        <CompanyTable />
+      </Container>
     </>
   );
 }
