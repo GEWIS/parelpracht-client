@@ -698,10 +698,12 @@ export class Client {
             result200 = InvoiceListResponse.fromJS(resultData200);
             return result200;
             });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
+
+export enum CompanyStatus {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            });
+  INACTIVE = "INACTIVE",
+  ACTIVE = "ACTIVE"
+}           });
         }
         return Promise.resolve<InvoiceListResponse>(<any>null);
     }
@@ -1114,7 +1116,7 @@ export class Product implements IProduct {
             for (let item of this.statusChanges)
                 data["statusChanges"].push(item.toJSON());
         }
-        return data; 
+        return data;
     }
 }
 
@@ -1219,7 +1221,7 @@ export class Contract implements IContract {
             for (let item of this.statusChanges)
                 data["statusChanges"].push(item.toJSON());
         }
-        return data; 
+        return data;
     }
 }
 
@@ -1297,7 +1299,7 @@ export class ProductInstance implements IProductInstance {
         data["price"] = this.price;
         data["comment"] = this.comment;
         data["status"] = this.status;
-        return data; 
+        return data;
     }
 }
 
@@ -1413,7 +1415,7 @@ export class Company implements ICompany {
             for (let item of this.statusChanges)
                 data["statusChanges"].push(item.toJSON());
         }
-        return data; 
+        return data;
     }
 }
 
@@ -1540,7 +1542,7 @@ export class User implements IUser {
             for (let item of this.madeChanges)
                 data["madeChanges"].push(item.toJSON());
         }
-        return data; 
+        return data;
     }
 }
 
@@ -1599,7 +1601,7 @@ export class Role implements IRole {
             for (let item of this.users)
                 data["users"].push(item.toJSON());
         }
-        return data; 
+        return data;
     }
 }
 
@@ -1696,7 +1698,7 @@ export class Status implements IStatus {
         data["product"] = this.product ? this.product.toJSON() : <any>undefined;
         data["contactId"] = this.contactId;
         data["contact"] = this.contact ? this.contact.toJSON() : <any>undefined;
-        return data; 
+        return data;
     }
 }
 
@@ -1791,7 +1793,7 @@ export class Invoice implements IInvoice {
             for (let item of this.statusChanges)
                 data["statusChanges"].push(item.toJSON());
         }
-        return data; 
+        return data;
     }
 }
 
@@ -1885,7 +1887,7 @@ export class Contact implements IContact {
             for (let item of this.statusChanges)
                 data["statusChanges"].push(item.toJSON());
         }
-        return data; 
+        return data;
     }
 }
 
@@ -1951,7 +1953,7 @@ export class ProductListResponse implements IProductListResponse {
                 data["list"].push(item.toJSON());
         }
         data["count"] = this.count;
-        return data; 
+        return data;
     }
 }
 
@@ -1998,7 +2000,7 @@ export class ApiError implements IApiError {
         data["message"] = this.message;
         data["stack"] = this.stack;
         data["statusCode"] = this.statusCode;
-        return data; 
+        return data;
     }
 }
 
@@ -2042,7 +2044,7 @@ export class WrappedApiError implements IWrappedApiError {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["error"] = this.error ? this.error.toJSON() : <any>undefined;
-        return data; 
+        return data;
     }
 }
 
@@ -2103,7 +2105,7 @@ export class ProductParams implements IProductParams {
         data["contractTextEnglish"] = this.contractTextEnglish;
         data["deliverySpecificationDutch"] = this.deliverySpecificationDutch;
         data["deliverySpecificationEnglish"] = this.deliverySpecificationEnglish;
-        return data; 
+        return data;
     }
 }
 
@@ -2172,7 +2174,7 @@ export class Partial_ProductParams implements IPartial_ProductParams {
         data["contractTextEnglish"] = this.contractTextEnglish;
         data["deliverySpecificationDutch"] = this.deliverySpecificationDutch;
         data["deliverySpecificationEnglish"] = this.deliverySpecificationEnglish;
-        return data; 
+        return data;
     }
 }
 
@@ -2231,7 +2233,7 @@ export class CompanyListResponse implements ICompanyListResponse {
                 data["list"].push(item.toJSON());
         }
         data["count"] = this.count;
-        return data; 
+        return data;
     }
 }
 
@@ -2283,7 +2285,7 @@ export class CompanyParams implements ICompanyParams {
         data["comments"] = this.comments;
         data["status"] = this.status;
         data["endDate"] = this.endDate ? this.endDate.toISOString() : <any>undefined;
-        return data; 
+        return data;
     }
 }
 
@@ -2340,7 +2342,7 @@ export class Partial_CompanyParams implements IPartial_CompanyParams {
         data["comments"] = this.comments;
         data["status"] = this.status;
         data["endDate"] = this.endDate ? this.endDate.toISOString() : <any>undefined;
-        return data; 
+        return data;
     }
 }
 
@@ -2396,7 +2398,7 @@ export class ContractListResponse implements IContractListResponse {
                 data["list"].push(item.toJSON());
         }
         data["count"] = this.count;
-        return data; 
+        return data;
     }
 }
 
@@ -2445,7 +2447,7 @@ export class ContractParams implements IContractParams {
         data["date"] = this.date ? this.date.toISOString() : <any>undefined;
         data["poNumber"] = this.poNumber;
         data["comments"] = this.comments;
-        return data; 
+        return data;
     }
 }
 
@@ -2498,7 +2500,7 @@ export class Partial_ContractParams implements IPartial_ContractParams {
         data["date"] = this.date ? this.date.toISOString() : <any>undefined;
         data["poNumber"] = this.poNumber;
         data["comments"] = this.comments;
-        return data; 
+        return data;
     }
 }
 
@@ -2553,7 +2555,7 @@ export class InvoiceListResponse implements IInvoiceListResponse {
                 data["list"].push(item.toJSON());
         }
         data["count"] = this.count;
-        return data; 
+        return data;
     }
 }
 
@@ -2610,7 +2612,7 @@ export class InvoiceParams implements IInvoiceParams {
         data["companyId"] = this.companyId;
         data["price"] = this.price;
         data["comment"] = this.comment;
-        return data; 
+        return data;
     }
 }
 
@@ -2667,7 +2669,7 @@ export class Partial_InvoiceParams implements IPartial_InvoiceParams {
         data["companyId"] = this.companyId;
         data["price"] = this.price;
         data["comment"] = this.comment;
-        return data; 
+        return data;
     }
 }
 
@@ -2721,7 +2723,7 @@ export class ContactListResponse implements IContactListResponse {
                 data["list"].push(item.toJSON());
         }
         data["count"] = this.count;
-        return data; 
+        return data;
     }
 }
 
@@ -2776,7 +2778,7 @@ export class ContactParams implements IContactParams {
         data["email"] = this.email;
         data["comment"] = this.comment;
         data["companyId"] = this.companyId;
-        return data; 
+        return data;
     }
 }
 
@@ -2837,7 +2839,7 @@ export class Partial_ContactParams implements IPartial_ContactParams {
         data["email"] = this.email;
         data["comment"] = this.comment;
         data["companyId"] = this.companyId;
-        return data; 
+        return data;
     }
 }
 

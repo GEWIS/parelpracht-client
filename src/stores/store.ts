@@ -7,9 +7,11 @@ import { connectRouter, routerMiddleware, RouterState } from 'connected-react-ro
 
 import alertsReducer from './alerts/reducer';
 import productReducer from './product/reducer';
+import companyReducer from './company/reducer';
 
 import alertsSagas from './alerts/sagas';
 import productSagas from './product/sagas';
+import companySagas from './company/sagas';
 import { tablesReducer } from './tables/reducer';
 import companyReducer from './company/reducer';
 
@@ -17,6 +19,7 @@ import companyReducer from './company/reducer';
 const watchSagas = [
   ...alertsSagas,
   ...productSagas,
+  ...companySagas,
 ];
 
 // Set up root reducer

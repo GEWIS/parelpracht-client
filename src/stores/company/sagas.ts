@@ -1,7 +1,7 @@
 import {
   call, put, select, takeEvery, throttle,
 } from 'redux-saga/effects';
-import {Client, Dir2} from '../../clients/server.generated';
+import { Client, Dir2 } from '../../clients/server.generated';
 import { takeEveryWithErrorHandling } from '../errorHandling';
 import type { RootState } from '../store';
 import {
