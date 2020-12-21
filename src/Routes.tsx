@@ -8,8 +8,8 @@ import SingleProductPage from './pages/SingleProductPage';
 import ProductCreatePage from './pages/ProductCreatePage';
 import CompaniesPage from './pages/CompaniesPage';
 import SingleCompanyPage from './pages/SingleCompanyPage';
-import CompaniesCreatePage from './pages/CompaniesCreatePage';
 import AlertContainer from './components/alerts/AlertContainer';
+import CompaniesCreatePage from './pages/CompaniesCreatePage';
 /* import SingleProductPage from './pages/SingleProductPage'; */
 
 function Routes() {

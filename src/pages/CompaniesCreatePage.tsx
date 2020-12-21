@@ -5,7 +5,7 @@ import {
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
-import {Company, CompanyStatus, Invoice} from '../clients/server.generated';
+import { Company, CompanyStatus } from '../clients/server.generated';
 import { fetchSingleCompany, clearSingleCompany } from '../stores/company/actionCreators';
 import { RootState } from '../stores/store';
 import CompanyProps from '../components/companies/CompanyProps';
@@ -15,14 +15,14 @@ import AlertContainer from '../components/alerts/AlertContainer';
 interface Props extends RouteComponentProps {
   status: ResourceStatus;
 
-  clearCompany: () => void;
+  // clearCompany: () => void;
 }
 
 class CompaniesCreatePage extends React.Component<Props> {
   public constructor(props: Props) {
     super(props);
 
-    props.clearCompany();
+    // props.clearCompany();
   }
 
   componentDidUpdate(prevProps: Props) {
@@ -37,14 +37,13 @@ class CompaniesCreatePage extends React.Component<Props> {
   public render() {
     let company = new Company();
     company = {
-      ...company,
       id: 0,
       name: '',
       description: '',
       phoneNumber: '',
       status: CompanyStatus.ACTIVE,
       comments: '',
-    } as any;
+    } as Company;
 
     return (
       <Modal

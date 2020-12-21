@@ -105,9 +105,9 @@ class CompanyProps extends React.Component<Props, State> {
       status,
     } = this.state;
 
-    return(
+    return (
       <>
-       <h2> Companyyyyyyyyyyyyyy details </h2>
+        <h2> Companyyyyyyyyyyyyyy details </h2>
       </>
     );
   }
