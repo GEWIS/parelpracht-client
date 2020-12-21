@@ -1,4 +1,5 @@
 import { Action } from 'redux';
+import { ActionPattern } from 'redux-saga/effects';
 import { Tables } from './tables';
 
 export enum TableActionType {
@@ -12,35 +13,39 @@ export enum TableActionType {
   Search = 'Table/Search',
 }
 
-type TableAction<T> = Action<T> & {
-  table: Tables;
-};
+type TableAction<A, T> = Action<{type: A, table: T}>;
 
-export type TableFetchAction = TableAction<TableActionType.Fetch>;
+export type TableFetchAction<T> = TableAction<TableActionType.Fetch, T>;
 
-export type TableSetAction<R> = TableAction<TableActionType.Set> & {
+export type TableSetAction<T, R> = TableAction<TableActionType.Set, T> & {
   data: R[],
   count: number,
 };
 
-export type TableClearAction = TableAction<TableActionType.Clear>;
+export type TableClearAction<T> = TableAction<TableActionType.Clear, T>;
 
-export type TableChangeSortAction = TableAction<TableActionType.ChangeSort> & {
+export type TableChangeSortAction<T> = TableAction<TableActionType.ChangeSort, T> & {
   column: string;
 };
 
-export type TableSetTakeAction = TableAction<TableActionType.SetTake> & {
+export type TableSetTakeAction<T> = TableAction<TableActionType.SetTake, T> & {
   take: number;
 };
 
-export type TableSearchAction = TableAction<TableActionType.Search> & {
+export type TableSearchAction<T> = TableAction<TableActionType.Search, T> & {
   search: string;
 };
 
-export type TableNextPageAction = TableAction<TableActionType.NextPage>;
-export type TablePrevPageAction = TableAction<TableActionType.PrevPage>;
+export type TableNextPageAction<T> = TableAction<TableActionType.NextPage, T>;
+export type TablePrevPageAction<T> = TableAction<TableActionType.PrevPage, T>;
 
-export type TableActions<R> =
-  TableFetchAction | TableSetAction<R> | TableClearAction
-  | TableChangeSortAction | TableSetTakeAction | TableSearchAction
-  | TableNextPageAction | TablePrevPageAction;
+export type TableActions<T extends Tables, R> =
+  TableFetchAction<T> | TableSetAction<T, R> | TableClearAction<T>
+  | TableChangeSortAction<T> | TableSetTakeAction<T> | TableSearchAction<T>
+  | TableNextPageAction<T> | TablePrevPageAction<T>;
+
+export const tableAction = <T extends Tables>(
+  table: T, action: TableActionType,
+): ActionPattern<TableAction<any, T>> => {
+  return { type: action, table, toString: () => `${action}[${table}]` } as any;
+};

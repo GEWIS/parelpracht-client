@@ -10,6 +10,8 @@ import {
 } from '../stores/product/actionCreators';
 import { countFetchedProducts, countTotalProducts } from '../stores/product/selectors';
 import { RootState } from '../stores/store';
+import { fetchTable } from '../stores/tables/actionCreators';
+import { Tables } from '../stores/tables/tables';
 import { ProductRow } from './ProductRow';
 
 interface Props {
@@ -99,22 +101,22 @@ const mapStateToProps = (state: RootState) => {
 };
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
-  fetchProducts: () => dispatch(createFetchProducts()),
+  fetchProducts: () => dispatch(fetchTable(Tables.Products)),
   changeSort: (column: string) => {
     dispatch(changeSortProducts(column));
-    dispatch(createFetchProducts());
+    dispatch(fetchTable(Tables.Products));
   },
   setTake: (take: number) => {
     dispatch(setTakeProducts(take));
-    dispatch(createFetchProducts());
+    dispatch(fetchTable(Tables.Products));
   },
   prevPage: () => {
     dispatch(prevPageProducts());
-    dispatch(createFetchProducts());
+    dispatch(fetchTable(Tables.Products));
   },
   nextPage: () => {
     dispatch(nextPageProducts());
-    dispatch(createFetchProducts());
+    dispatch(fetchTable(Tables.Products));
   },
 });
 

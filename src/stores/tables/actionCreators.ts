@@ -6,39 +6,38 @@ import {
 } from './actions';
 import { Tables } from './tables';
 
-export function fetchTable(table: Tables): TableFetchAction {
-  return { type: TableActionType.Fetch, table };
+export function fetchTable<T>(table: T): TableFetchAction<T> {
+  return { type: { type: TableActionType.Fetch, table } };
 }
 
-export function setTable<R>(table: Tables, data: R[], count: number): TableSetAction<R> {
+export function setTable<T, R>(table: T, data: R[], count: number): TableSetAction<T, R> {
   return {
-    type: TableActionType.Set,
-    table,
+    type: { type: TableActionType.Set, table },
     data,
     count,
   };
 }
 
-export function clearTable(table: Tables): TableClearAction {
-  return { type: TableActionType.Clear, table };
+export function clearTable<T>(table: T): TableClearAction<T> {
+  return { type: { type: TableActionType.Clear, table } };
 }
 
-export function changeSortTable(table: Tables, column: string): TableChangeSortAction {
-  return { type: TableActionType.ChangeSort, table, column };
+export function changeSortTable<T>(table: T, column: string): TableChangeSortAction<T> {
+  return { type: { type: TableActionType.ChangeSort, table }, column };
 }
 
-export function setTakeTable(table: Tables, take: number): TableSetTakeAction {
-  return { type: TableActionType.SetTake, table, take };
+export function setTakeTable<T>(table: T, take: number): TableSetTakeAction<T> {
+  return { type: { type: TableActionType.SetTake, table }, take };
 }
 
-export function searchTable(table: Tables, search: string): TableSearchAction {
-  return { type: TableActionType.Search, table, search };
+export function searchTable<T>(table: T, search: string): TableSearchAction<T> {
+  return { type: { type: TableActionType.Search, table }, search };
 }
 
-export function nextPageTable(table: Tables): TableNextPageAction {
-  return { type: TableActionType.NextPage, table };
+export function nextPageTable<T>(table: T): TableNextPageAction<T> {
+  return { type: { type: TableActionType.NextPage, table } };
 }
 
-export function prevPageTable(table: Tables): TablePrevPageAction {
-  return { type: TableActionType.PrevPage, table };
+export function prevPageTable<T>(table: T): TablePrevPageAction<T> {
+  return { type: { type: TableActionType.PrevPage, table } };
 }

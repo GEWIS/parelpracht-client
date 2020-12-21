@@ -4,6 +4,8 @@ import {
 import { Client, Dir } from '../../clients/server.generated';
 import { takeEveryWithErrorHandling } from '../errorHandling';
 import type { RootState } from '../store';
+import { tableAction, TableActionType } from '../tables/actions';
+import { Tables } from '../tables/tables';
 import {
   setProducts, setSingleProduct, fetchProducts as createFetchProducts, errorSingleProduct,
 } from './actionCreators';
@@ -75,7 +77,11 @@ function* watchCreateSingleProduct() {
 
 export default [
   function* watchFetchProducts() {
-    yield throttle(500, ProductActionType.Fetch, fetchProducts);
+    yield throttle(
+      500,
+      tableAction(Tables.Products, TableActionType.Fetch),
+      fetchProducts,
+    );
   },
   function* watchFetchSingleProduct() {
     yield takeEveryWithErrorHandling(ProductActionType.FetchSingle, fetchSingleProduct);
