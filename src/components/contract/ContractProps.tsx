@@ -58,7 +58,7 @@ class ContractProps extends React.Component<Props, State> {
       title: contract.title,
       companyId: contract.companyId.toString(),
       contactId: contract.companyId.toString(),
-      comments: contract.comments,
+      comments: contract.comments ?? '',
     };
   };
 
