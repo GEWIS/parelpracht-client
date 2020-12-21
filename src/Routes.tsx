@@ -8,11 +8,14 @@ import SingleProductPage from './pages/SingleProductPage';
 import ProductCreatePage from './pages/ProductCreatePage';
 import CompaniesPage from './pages/CompaniesPage';
 import SingleCompanyPage from './pages/SingleCompanyPage';
-import AlertContainer from './components/alerts/AlertContainer';
 import CompaniesCreatePage from './pages/CompaniesCreatePage';
 import InvoicesPage from './pages/InvoicesPage';
 import SingleInvoicePage from './pages/SingleInvoicePage';
 /* import SingleProductPage from './pages/SingleProductPage'; */
+import AlertContainer from './components/alerts/AlertContainer';
+import ContractsPage from './pages/ContractsPage';
+import SingleContractPage from './pages/SingleContractPage';
+import ContractsCreatePage from './pages/ContractCreatePage';
 
 function Routes() {
   return (
@@ -70,6 +73,15 @@ function Routes() {
             <InvoicesPage />
           </Route>
           <Route path="/company/:invoiceId" exact component={SingleInvoicePage} />
+          {/* Contracts */}
+          <Route path="/contract" exact>
+            <ContractsPage />
+          </Route>
+          <Route path="/contract/new" exact>
+            <ContractsPage />
+            <ContractsCreatePage />
+          </Route>
+          <Route path="/contract/:companyId" exact component={SingleContractPage} />
         </Switch>
       </Container>
 
