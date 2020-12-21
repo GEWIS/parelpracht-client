@@ -10,6 +10,8 @@ import CompaniesPage from './pages/CompaniesPage';
 import SingleCompanyPage from './pages/SingleCompanyPage';
 import AlertContainer from './components/alerts/AlertContainer';
 import CompaniesCreatePage from './pages/CompaniesCreatePage';
+import InvoicesPage from './pages/InvoicesPage';
+import SingleInvoicePage from './pages/SingleInvoicePage';
 /* import SingleProductPage from './pages/SingleProductPage'; */
 
 function Routes() {
@@ -32,6 +34,10 @@ function Routes() {
           <Menu.Item as={NavLink} to="/contract">
             <Icon name="file alternate" />
             Contracts
+          </Menu.Item>
+          <Menu.Item as={NavLink} to="/invoice">
+            <Icon name="file alternate" />
+            Invoices
           </Menu.Item>
         </Container>
       </Menu>
@@ -59,6 +65,11 @@ function Routes() {
             <CompaniesCreatePage />
           </Route>
           <Route path="/company/:companyId" exact component={SingleCompanyPage} />
+          {/* Invoice */}
+          <Route path="/invoice" exact>
+            <InvoicesPage />
+          </Route>
+          <Route path="/company/:invoiceId" exact component={SingleInvoicePage} />
         </Switch>
       </Container>
 
