@@ -8,8 +8,9 @@ import SingleProductPage from './pages/SingleProductPage';
 import ProductCreatePage from './pages/ProductCreatePage';
 import CompaniesPage from './pages/CompaniesPage';
 import SingleCompanyPage from './pages/SingleCompanyPage';
-import AlertContainer from './components/alerts/AlertContainer';
 import CompaniesCreatePage from './pages/CompaniesCreatePage';
+import AlertContainer from './components/alerts/AlertContainer';
+import ContactsPage from './pages/ContactPage';
 /* import SingleProductPage from './pages/SingleProductPage'; */
 
 function Routes() {
@@ -31,6 +32,10 @@ function Routes() {
           </Menu.Item>
           <Menu.Item as={NavLink} to="/contract">
             <Icon name="file alternate" />
+            Contracts
+          </Menu.Item>
+          <Menu.Item as={NavLink} to="/contact">
+            <Icon name="address book" />
             Contracts
           </Menu.Item>
         </Container>
@@ -59,6 +64,10 @@ function Routes() {
             <CompaniesCreatePage />
           </Route>
           <Route path="/company/:companyId" exact component={SingleCompanyPage} />
+          {/* Contacts */ }
+          <Route path="/contact" exact>
+            <ContactsPage />
+          </Route>
         </Switch>
       </Container>
 

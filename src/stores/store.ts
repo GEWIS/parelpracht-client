@@ -11,6 +11,7 @@ import companyReducer from './company/reducer';
 
 import alertsSagas from './alerts/sagas';
 import productSagas from './product/sagas';
+import contactSagas from './contact/sagas';
 import companySagas from './company/sagas';
 import { tablesReducer } from './tables/reducer';
 
@@ -19,6 +20,7 @@ const watchSagas = [
   ...alertsSagas,
   ...productSagas,
   ...companySagas,
+  ...contactSagas,
 ];
 
 // Set up root reducer
