@@ -24,7 +24,7 @@ function CompaniesPage(props: RouteComponentProps) {
             <Grid.Column>
               <Button icon labelPosition="left" primary floated="right" onClick={() => props.history.push('/product/new')}>
                 <Icon name="plus" />
-                Add Product
+                Add Company
               </Button>
             </Grid.Column>
           </Grid>
