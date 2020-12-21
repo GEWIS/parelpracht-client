@@ -3,27 +3,28 @@ import { connect } from 'react-redux';
 import {
   Grid, Header, Icon, Loader, Placeholder, Segment,
 } from 'semantic-ui-react';
-import { Company } from '../../clients/server.generated';
+import { Contract } from '../../clients/server.generated';
+import { formatPriceFull } from '../../helpers/monetary';
 import ResourceStatus from '../../stores/resourceStatus';
 import { RootState } from '../../stores/store';
 
 interface Props {
-  company: Company | undefined;
+  contract: Contract | undefined;
   status: ResourceStatus;
 }
 
-function CompanySummary(props: Props) {
-  const { company, status } = props;
-  if (company === undefined
+function ContractSummary(props: Props) {
+  const { contract, status } = props;
+  if (contract === undefined
     || (status !== ResourceStatus.FETCHED
       && status !== ResourceStatus.SAVING
       && status !== ResourceStatus.ERROR)) {
     return (
       <>
         <Header as="h1" attached="top" inverted>
-          <Icon name="building" />
+          <Icon name="shopping bag" />
           <Header.Content>
-            <Header.Subheader>Company</Header.Subheader>
+            <Header.Subheader>Contract</Header.Subheader>
             <Loader active inline />
           </Header.Content>
         </Header>
@@ -37,21 +38,21 @@ function CompanySummary(props: Props) {
   return (
     <>
       <Header as="h1" attached="top" style={{ backgroundColor: '#eee' }}>
-        <Icon name="building" />
+        <Icon name="shopping bag" />
         <Header.Content>
-          <Header.Subheader>Company</Header.Subheader>
-          {company.name}
+          <Header.Subheader>Contract</Header.Subheader>
+          {contract.title}
         </Header.Content>
       </Header>
       <Segment attached="bottom">
         <Grid columns={4}>
           <Grid.Column>
-            <h5>Description</h5>
-            <p>{company.description}</p>
+            <h5>Title</h5>
+            <p>{contract.title}</p>
           </Grid.Column>
           <Grid.Column>
-            <h5>Status</h5>
-            <p>{company.status}</p>
+            <h5>Company ID</h5>
+            <p>{contract.companyId}</p>
           </Grid.Column>
           <Grid.Column>
             <h5>Created by</h5>
@@ -64,9 +65,9 @@ function CompanySummary(props: Props) {
 
 const mapStateToProps = (state: RootState) => {
   return {
-    company: state.company.single,
-    status: state.company.singleStatus,
+    contract: state.contract.single,
+    status: state.contract.singleStatus,
   };
 };
 
-export default connect(mapStateToProps)(CompanySummary);
+export default connect(mapStateToProps)(ContractSummary);

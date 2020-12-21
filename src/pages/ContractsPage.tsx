@@ -3,10 +3,10 @@ import { RouteComponentProps, withRouter } from 'react-router-dom';
 import {
   Button, Container, Grid, Header, Icon, Segment,
 } from 'semantic-ui-react';
-import CompanyTable from '../components/company/CompanyTable';
-import CompanyTableControls from '../components/company/CompanyTableControls';
+import ContractsTable from '../components/contract/ContractTable';
+import ContractTableControls from '../components/contract/ContractTableControls';
 
-function CompaniesPage(props: RouteComponentProps) {
+function ContractsPage(props: RouteComponentProps) {
   return (
     <>
       <Segment style={{ backgroundColor: '#eee' }} vertical basic>
@@ -14,30 +14,30 @@ function CompaniesPage(props: RouteComponentProps) {
           <Grid columns={2}>
             <Grid.Column>
               <Header as="h1">
-                <Icon name="building" />
+                <Icon name="shopping bag" />
                 <Header.Content>
-                  <Header.Subheader>Companies</Header.Subheader>
-                  All Companies
+                  <Header.Subheader>Contracts</Header.Subheader>
+                  All Contracts
                 </Header.Content>
               </Header>
             </Grid.Column>
             <Grid.Column>
-              <Button icon labelPosition="left" primary floated="right" onClick={() => props.history.push('/company/new')}>
+              <Button icon labelPosition="left" primary floated="right" onClick={() => props.history.push('/contract/new')}>
                 <Icon name="plus" />
-                Add Company
+                Add Contract
               </Button>
             </Grid.Column>
           </Grid>
 
-          <CompanyTableControls />
+          <ContractTableControls />
 
         </Container>
       </Segment>
       <Container>
-        <CompanyTable />
+        <ContractsTable />
       </Container>
     </>
   );
 }
 
-export default withRouter(CompaniesPage);
+export default withRouter(ContractsPage);

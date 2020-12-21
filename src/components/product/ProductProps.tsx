@@ -35,8 +35,8 @@ interface State {
   description: string;
   contractTextDutch: string;
   contractTextEnglish: string;
-  deliverySpecDutch: string;
-  deliverySpecEnglish: string;
+  deliverySpecDutch: string | undefined;
+  deliverySpecEnglish: string | undefined;
 }
 
 class ProductProps extends React.Component<Props, State> {

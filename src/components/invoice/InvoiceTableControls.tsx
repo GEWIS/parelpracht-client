@@ -1,14 +1,14 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
-import { fetchTable, searchTable } from '../../stores/tables/actionCreators';
+import { sortColumn } from '../../stores/invoice/selectors';
 import ResourceStatus from '../../stores/resourceStatus';
 import { RootState } from '../../stores/store';
 import TableControls from '../TableControls';
+import { fetchTable, searchTable } from '../../stores/tables/actionCreators';
 import { Tables } from '../../stores/tables/tables';
+import { Invoice } from '../../clients/server.generated';
 import { countFetched, countTotal, getTable } from '../../stores/tables/selectors';
-import { Company } from '../../clients/server.generated';
-import { sortColumn } from '../../stores/company/selectors';
 
 interface Props {
   status: ResourceStatus;
@@ -22,7 +22,7 @@ interface Props {
   setSearch: (search: string) => void;
 }
 
-function CompanyTableControls(props: Props) {
+function InvoiceTableControls(props: Props) {
   return (
     <TableControls
       status={props.status}
@@ -38,23 +38,23 @@ function CompanyTableControls(props: Props) {
 }
 
 const mapStateToProps = (state: RootState) => {
-  const companyTable = getTable<Company>(state, Tables.Companies);
+  const invoiceTable = getTable<Invoice>(state, Tables.Invoices);
   return {
-    status: companyTable.status,
-    countFetched: countFetched(state, Tables.Companies),
-    countTotal: countTotal(state, Tables.Companies),
+    status: invoiceTable.status,
+    countFetched: countFetched(state, Tables.Invoices),
+    countTotal: countTotal(state, Tables.Invoices),
     column: sortColumn(state),
-    lastUpdated: companyTable.lastUpdated,
-    search: companyTable.search,
+    lastUpdated: invoiceTable.lastUpdated,
+    search: invoiceTable.search,
   };
 };
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
-  refresh: () => dispatch(fetchTable(Tables.Companies)),
+  refresh: () => dispatch(fetchTable(Tables.Invoices)),
   setSearch: (search: string) => {
-    dispatch(searchTable(Tables.Companies, search));
-    dispatch(fetchTable(Tables.Companies));
+    dispatch(searchTable(Tables.Invoices, search));
+    dispatch(fetchTable(Tables.Invoices));
   },
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(CompanyTableControls);
+export default connect(mapStateToProps, mapDispatchToProps)(InvoiceTableControls);

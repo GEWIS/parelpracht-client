@@ -11,7 +11,12 @@ import SingleCompanyPage from './pages/SingleCompanyPage';
 import CompaniesCreatePage from './pages/CompaniesCreatePage';
 import AlertContainer from './components/alerts/AlertContainer';
 import ContactsPage from './pages/ContactPage';
+import InvoicesPage from './pages/InvoicesPage';
+import SingleInvoicePage from './pages/SingleInvoicePage';
 /* import SingleProductPage from './pages/SingleProductPage'; */
+import ContractsPage from './pages/ContractsPage';
+import SingleContractPage from './pages/SingleContractPage';
+import ContractsCreatePage from './pages/ContractCreatePage';
 
 function Routes() {
   return (
@@ -37,6 +42,10 @@ function Routes() {
           <Menu.Item as={NavLink} to="/contact">
             <Icon name="address book" />
             Contracts
+          </Menu.Item>
+          <Menu.Item as={NavLink} to="/invoice">
+            <Icon name="file alternate" />
+            Invoices
           </Menu.Item>
         </Container>
       </Menu>
@@ -64,10 +73,27 @@ function Routes() {
             <CompaniesCreatePage />
           </Route>
           <Route path="/company/:companyId" exact component={SingleCompanyPage} />
+
           {/* Contacts */ }
           <Route path="/contact" exact>
             <ContactsPage />
           </Route>
+
+          {/* Invoice */}
+          <Route path="/invoice" exact>
+            <InvoicesPage />
+          </Route>
+
+          <Route path="/company/:invoiceId" exact component={SingleInvoicePage} />
+          {/* Contracts */}
+          <Route path="/contract" exact>
+            <ContractsPage />
+          </Route>
+          <Route path="/contract/new" exact>
+            <ContractsPage />
+            <ContractsCreatePage />
+          </Route>
+          <Route path="/contract/:companyId" exact component={SingleContractPage} />
         </Switch>
       </Container>
 

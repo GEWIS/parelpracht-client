@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import { Table } from 'semantic-ui-react';
-import { Company } from '../../clients/server.generated';
+import { Invoice } from '../../clients/server.generated';
 import TablePagination from '../TablePagination';
 import { RootState } from '../../stores/store';
 import {
@@ -10,10 +10,10 @@ import {
 } from '../../stores/tables/actionCreators';
 import { countFetched, countTotal, getTable } from '../../stores/tables/selectors';
 import { Tables } from '../../stores/tables/tables';
-import { CompanyRow } from './CompanyRow';
+import { InvoiceRow } from './InvoiceRow';
 
 interface Props {
-  companies: Company[];
+  invoices: Invoice[];
   column: string;
   direction: 'ascending' | 'descending';
   total: number;
@@ -21,20 +21,20 @@ interface Props {
   skip: number;
   take: number;
 
-  fetchCompanies: () => void;
+  fetchInvoices: () => void;
   changeSort: (column: string) => void;
   setTake: (take: number) => void;
   prevPage: () => void;
   nextPage: () => void;
 }
 
-function CompaniesTable({
-  companies, fetchCompanies, column, direction, changeSort,
+function InvoicesTable({
+  invoices, fetchInvoices, column, direction, changeSort,
   total, fetched, skip, take,
   prevPage, nextPage, setTake,
 }: Props) {
   useEffect(() => {
-    fetchCompanies();
+    fetchInvoices();
   }, []);
 
   return (
@@ -43,21 +43,27 @@ function CompaniesTable({
         <Table.Header>
           <Table.Row>
             <Table.HeaderCell
-              sorted={column === 'name' ? direction : undefined}
-              onClick={() => changeSort('name')}
+              sorted={column === 'companyId' ? direction : undefined}
+              onClick={() => changeSort('companyId')}
             >
-              Name
+              Company Id
             </Table.HeaderCell>
             <Table.HeaderCell
-              sorted={column === 'status' ? direction : undefined}
-              onClick={() => changeSort('status')}
+              sorted={column === 'Company' ? direction : undefined}
+              onClick={() => changeSort('Company')}
             >
-              Status
+              Company Name
+            </Table.HeaderCell>
+            <Table.HeaderCell
+              sorted={column === 'Price' ? direction : undefined}
+              onClick={() => changeSort('Price')}
+            >
+              Price
             </Table.HeaderCell>
           </Table.Row>
         </Table.Header>
         <Table.Body>
-          {companies.map((x) => <CompanyRow company={x} key={x.id} />)}
+          {invoices.map((x) => <InvoiceRow invoice={x} key={x.id} />)}
         </Table.Body>
       </Table>
       <TablePagination
@@ -74,37 +80,37 @@ function CompaniesTable({
 }
 
 const mapStateToProps = (state: RootState) => {
-  const companyTable = getTable<Company>(state, Tables.Companies);
+  const invoiceTable = getTable<Invoice>(state, Tables.Invoices);
   return {
-    total: countTotal(state, Tables.Companies),
-    fetched: countFetched(state, Tables.Companies),
-    skip: companyTable.skip,
-    take: companyTable.take,
-    companies: companyTable.data,
-    column: companyTable.sortColumn,
-    direction: companyTable.sortDirection === 'ASC'
+    total: countTotal(state, Tables.Invoices),
+    fetched: countFetched(state, Tables.Invoices),
+    skip: invoiceTable.skip,
+    take: invoiceTable.take,
+    invoices: invoiceTable.data,
+    column: invoiceTable.sortColumn,
+    direction: invoiceTable.sortDirection === 'ASC'
       ? 'ascending' : 'descending' as 'ascending' | 'descending',
   };
 };
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
-  fetchCompanies: () => dispatch(fetchTable(Tables.Companies)),
+  fetchInvoices: () => dispatch(fetchTable(Tables.Invoices)),
   changeSort: (column: string) => {
-    dispatch(changeSortTable(Tables.Companies, column));
-    dispatch(fetchTable(Tables.Companies));
+    dispatch(changeSortTable(Tables.Invoices, column));
+    dispatch(fetchTable(Tables.Invoices));
   },
   setTake: (take: number) => {
-    dispatch(setTakeTable(Tables.Companies, take));
-    dispatch(fetchTable(Tables.Companies));
+    dispatch(setTakeTable(Tables.Invoices, take));
+    dispatch(fetchTable(Tables.Invoices));
   },
   prevPage: () => {
-    dispatch(prevPageTable(Tables.Companies));
-    dispatch(fetchTable(Tables.Companies));
+    dispatch(prevPageTable(Tables.Invoices));
+    dispatch(fetchTable(Tables.Invoices));
   },
   nextPage: () => {
-    dispatch(nextPageTable(Tables.Companies));
-    dispatch(fetchTable(Tables.Companies));
+    dispatch(nextPageTable(Tables.Invoices));
+    dispatch(fetchTable(Tables.Invoices));
   },
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(CompaniesTable);
+export default connect(mapStateToProps, mapDispatchToProps)(InvoicesTable);

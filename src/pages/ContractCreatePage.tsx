@@ -5,24 +5,24 @@ import {
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
-import { Company, CompanyStatus } from '../clients/server.generated';
-import { fetchSingleCompany, clearSingleCompany } from '../stores/company/actionCreators';
+import { Contract } from '../clients/server.generated';
+import { fetchSingleContract, clearSingleContract } from '../stores/contract/actionCreators';
 import { RootState } from '../stores/store';
-import CompanyProps from '../components/company/CompanyProps';
+import ContractProps from '../components/contract/ContractProps';
 import ResourceStatus from '../stores/resourceStatus';
 import AlertContainer from '../components/alerts/AlertContainer';
 
 interface Props extends RouteComponentProps {
   status: ResourceStatus;
 
-  // clearCompany: () => void;
+  clearContract: () => void;
 }
 
-class CompaniesCreatePage extends React.Component<Props> {
+class ContractCreatePage extends React.Component<Props> {
   public constructor(props: Props) {
     super(props);
 
-    // props.clearCompany();
+    props.clearContract();
   }
 
   componentDidUpdate(prevProps: Props) {
@@ -32,22 +32,16 @@ class CompaniesCreatePage extends React.Component<Props> {
     }
   }
 
-  close = () => { this.props.history.push('/company'); };
+  close = () => { this.props.history.push('/contract'); };
 
   public render() {
-    let company = new Company();
-    company = {
+    const contract: Contract = {
       id: 0,
-      name: '',
-      description: '',
-      phoneNumber: '',
-      status: CompanyStatus.ACTIVE,
+      companyId: 0,
+      contactId: 0,
       comments: '',
-      addressStreet: '',
-      addressCity: '',
-      addressPostalCode: '',
-      addressCountry: '',
-    } as any as Company;
+      title: '',
+    } as Contract;
 
     return (
       <Modal
@@ -58,7 +52,7 @@ class CompaniesCreatePage extends React.Component<Props> {
       >
         <Segment>
           <AlertContainer />
-          <CompanyProps company={company} create onCancel={this.close} />
+          <ContractProps contract={contract} create onCancel={this.close} />
         </Segment>
       </Modal>
     );
@@ -67,13 +61,13 @@ class CompaniesCreatePage extends React.Component<Props> {
 
 const mapStateToProps = (state: RootState) => {
   return {
-    status: state.company.singleStatus,
+    status: state.contract.singleStatus,
   };
 };
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
-  fetchCompany: (id: number) => dispatch(fetchSingleCompany(id)),
-  clear: () => dispatch(clearSingleCompany()),
+  fetchContract: (id: number) => dispatch(fetchSingleContract(id)),
+  clearContract: () => dispatch(clearSingleContract()),
 });
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(CompaniesCreatePage));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ContractCreatePage));
