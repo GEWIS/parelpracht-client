@@ -1,20 +1,13 @@
+import { Company } from '../../clients/server.generated';
 import { RootState } from '../store';
-
-export function countFetchedCompanies(state: RootState): number {
-  return state.company.list.length;
-}
-
-export function countTotalCompanies(state: RootState): number {
-  return state.company.listCount;
-}
+import { getTable } from '../tables/selectors';
+import { Tables } from '../tables/tables';
 
 export function sortColumn(state: RootState): string {
-  const column = state.company.listSortColumn;
+  const column = getTable<Company>(state, Tables.Companies).sortColumn;
   switch (column) {
     case 'id': return 'ID';
-    case 'nameDutch': return 'Name (Dutch)';
-    case 'nameEnglish': return 'Name (English)';
-    case 'targetPrice': return 'Target Price';
+    case 'name': return 'Name';
     case 'status': return 'Status';
     default: return 'unknown';
   }
