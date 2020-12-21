@@ -4,8 +4,7 @@ import {
   Button, Container, Grid, Header, Icon, Segment,
 } from 'semantic-ui-react';
 import CompanyTable from '../components/company/CompanyTable';
-import ProductsTable from '../components/product/ProductTable';
-import ProductTableControls from '../components/product/ProductTableControls';
+import CompanyTableControls from '../components/company/CompanyTableControls';
 
 function CompaniesPage(props: RouteComponentProps) {
   return (
@@ -29,6 +28,9 @@ function CompaniesPage(props: RouteComponentProps) {
               </Button>
             </Grid.Column>
           </Grid>
+
+          <CompanyTableControls />
+
         </Container>
       </Segment>
       <Container>

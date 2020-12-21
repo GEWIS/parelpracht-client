@@ -6,7 +6,7 @@ import { fetchCompanies, searchCompanies } from '../../stores/company/actionCrea
 import { countFetchedCompanies, countTotalCompanies, sortColumn } from '../../stores/company/selectors';
 import ResourceStatus from '../../stores/resourceStatus';
 import { RootState } from '../../stores/store';
-import TableControls from '../../components/TableControls';
+import TableControls from '../TableControls';
 
 interface Props {
   status: ResourceStatus;

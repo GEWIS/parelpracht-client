@@ -4,7 +4,6 @@ import {
   Grid, Header, Icon, Loader, Placeholder, Segment,
 } from 'semantic-ui-react';
 import { Company } from '../../clients/server.generated';
-import { formatPriceFull } from '../../helpers/monetary';
 import ResourceStatus from '../../stores/resourceStatus';
 import { RootState } from '../../stores/store';
 

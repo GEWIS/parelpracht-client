@@ -43,22 +43,10 @@ function CompaniesTable({
         <Table.Header>
           <Table.Row>
             <Table.HeaderCell
-              sorted={column === 'nameDutch' ? direction : undefined}
-              onClick={() => changeSort('nameDutch')}
+              sorted={column === 'name' ? direction : undefined}
+              onClick={() => changeSort('name')}
             >
-              Name (Dutch)
-            </Table.HeaderCell>
-            <Table.HeaderCell
-              sorted={column === 'nameEnglish' ? direction : undefined}
-              onClick={() => changeSort('nameEnglish')}
-            >
-              Name (English)
-            </Table.HeaderCell>
-            <Table.HeaderCell
-              sorted={column === 'targetPrice' ? direction : undefined}
-              onClick={() => changeSort('targetPrice')}
-            >
-              Target price
+              Name
             </Table.HeaderCell>
             <Table.HeaderCell
               sorted={column === 'status' ? direction : undefined}
