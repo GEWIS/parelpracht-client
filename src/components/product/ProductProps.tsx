@@ -7,11 +7,11 @@ import {
   Checkbox,
   Form, Input, Label, TextArea,
 } from 'semantic-ui-react';
-import { Product, ProductParams, ProductStatus } from '../clients/server.generated';
-import { formatPrice } from '../helpers/monetary';
-import { createSingleProduct, saveSingleProduct } from '../stores/product/actionCreators';
-import ResourceStatus from '../stores/resourceStatus';
-import { RootState } from '../stores/store';
+import { Product, ProductParams, ProductStatus } from '../../clients/server.generated';
+import { formatPrice } from '../../helpers/monetary';
+import { createSingleProduct, saveSingleProduct } from '../../stores/product/actionCreators';
+import ResourceStatus from '../../stores/resourceStatus';
+import { RootState } from '../../stores/store';
 import ProductPropsButtons from './ProductPropsButtons';
 
 interface Props {

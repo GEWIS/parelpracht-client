@@ -1,14 +1,14 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
-import { sortColumn } from '../stores/product/selectors';
-import ResourceStatus from '../stores/resourceStatus';
-import { RootState } from '../stores/store';
-import TableControls from '../components/TableControls';
-import { fetchTable, searchTable } from '../stores/tables/actionCreators';
-import { Tables } from '../stores/tables/tables';
-import { Product } from '../clients/server.generated';
-import { countFetched, countTotal, getTable } from '../stores/tables/selectors';
+import { sortColumn } from '../../stores/product/selectors';
+import ResourceStatus from '../../stores/resourceStatus';
+import { RootState } from '../../stores/store';
+import TableControls from '../TableControls';
+import { fetchTable, searchTable } from '../../stores/tables/actionCreators';
+import { Tables } from '../../stores/tables/tables';
+import { Product } from '../../clients/server.generated';
+import { countFetched, countTotal, getTable } from '../../stores/tables/selectors';
 
 interface Props {
   status: ResourceStatus;

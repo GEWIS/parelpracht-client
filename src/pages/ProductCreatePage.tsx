@@ -8,7 +8,7 @@ import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { Product, ProductStatus } from '../clients/server.generated';
 import { fetchSingleProduct, clearSingleProduct } from '../stores/product/actionCreators';
 import { RootState } from '../stores/store';
-import ProductProps from '../product/ProductProps';
+import ProductProps from '../components/product/ProductProps';
 import ResourceStatus from '../stores/resourceStatus';
 import AlertContainer from '../components/alerts/AlertContainer';
 

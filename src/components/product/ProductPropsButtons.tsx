@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, Icon } from 'semantic-ui-react';
-import ResourceStatus from '../stores/resourceStatus';
+import ResourceStatus from '../../stores/resourceStatus';
 
 interface Props {
   editing: boolean;
