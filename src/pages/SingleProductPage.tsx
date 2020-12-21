@@ -9,9 +9,9 @@ import { connect } from 'react-redux';
 import { Product } from '../clients/server.generated';
 import { fetchSingleProduct, clearSingleProduct } from '../stores/product/actionCreators';
 import { RootState } from '../stores/store';
-import ProductProps from '../product/ProductProps';
+import ProductProps from '../components/product/ProductProps';
 import ResourceStatus from '../stores/resourceStatus';
-import ProductSummary from '../product/ProductSummary';
+import ProductSummary from '../components/product/ProductSummary';
 
 interface Props extends RouteComponentProps<{ productId: string }> {
   product: Product | undefined;

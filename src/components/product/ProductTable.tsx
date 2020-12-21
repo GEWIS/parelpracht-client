@@ -2,14 +2,14 @@ import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import { Table } from 'semantic-ui-react';
-import { Product } from '../clients/server.generated';
-import TablePagination from '../components/TablePagination';
-import { RootState } from '../stores/store';
+import { Product } from '../../clients/server.generated';
+import TablePagination from '../TablePagination';
+import { RootState } from '../../stores/store';
 import {
   changeSortTable, fetchTable, nextPageTable, prevPageTable, setTakeTable,
-} from '../stores/tables/actionCreators';
-import { countFetched, countTotal, getTable } from '../stores/tables/selectors';
-import { Tables } from '../stores/tables/tables';
+} from '../../stores/tables/actionCreators';
+import { countFetched, countTotal, getTable } from '../../stores/tables/selectors';
+import { Tables } from '../../stores/tables/tables';
 import { ProductRow } from './ProductRow';
 
 interface Props {

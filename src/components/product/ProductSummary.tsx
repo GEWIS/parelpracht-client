@@ -3,10 +3,10 @@ import { connect } from 'react-redux';
 import {
   Grid, Header, Icon, Loader, Placeholder, Segment,
 } from 'semantic-ui-react';
-import { Product } from '../clients/server.generated';
-import { formatPriceFull } from '../helpers/monetary';
-import ResourceStatus from '../stores/resourceStatus';
-import { RootState } from '../stores/store';
+import { Product } from '../../clients/server.generated';
+import { formatPriceFull } from '../../helpers/monetary';
+import ResourceStatus from '../../stores/resourceStatus';
+import { RootState } from '../../stores/store';
 
 interface Props {
   product: Product | undefined;

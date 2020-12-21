@@ -1,8 +1,8 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { Table } from 'semantic-ui-react';
-import { Product, ProductStatus } from '../clients/server.generated';
-import { formatPriceFull } from '../helpers/monetary';
+import { Product, ProductStatus } from '../../clients/server.generated';
+import { formatPriceFull } from '../../helpers/monetary';
 
 interface Props {
   product: Product;

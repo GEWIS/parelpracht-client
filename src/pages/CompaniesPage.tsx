@@ -3,8 +3,8 @@ import { RouteComponentProps, withRouter } from 'react-router-dom';
 import {
   Button, Container, Grid, Header, Icon, Segment,
 } from 'semantic-ui-react';
-import ProductsTable from '../product/ProductTable';
-import ProductTableControls from '../product/ProductTableControls';
+import ProductsTable from '../components/product/ProductTable';
+import ProductTableControls from '../components/product/ProductTableControls';
 
 function CompaniesPage(props: RouteComponentProps) {
   return (
