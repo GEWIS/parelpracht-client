@@ -1,11 +1,16 @@
 import {
   call, put, select, takeEvery, throttle,
 } from 'redux-saga/effects';
-import { Client, Dir2 } from '../../clients/server.generated';
+import { Client, Company, Dir2 } from '../../clients/server.generated';
 import { takeEveryWithErrorHandling } from '../errorHandling';
 import type { RootState } from '../store';
+import { fetchTable, setTable } from '../tables/actionCreators';
+import { tableActionPattern, TableActionType } from '../tables/actions';
+import { getTable } from '../tables/selectors';
+import { Tables } from '../tables/tables';
+import { TableState } from '../tables/tableState';
 import {
-  setCompanies, setSingleCompany, fetchCompanies as createFetchCompanies, errorSingleCompany,
+  setSingleCompany, errorSingleCompany,
 } from './actionCreators';
 import {
   CompanyActionType, CompaniesCreateSingleAction, CompaniesFetchSingleAction,
@@ -15,18 +20,18 @@ import {
 function* fetchCompanies() {
   const client = new Client();
 
-  const state: RootState = yield select();
+  const state: TableState<Company> = yield select(getTable, Tables.Companies);
   const {
-    listSortColumn, listSortDirection,
-    listTake, listSkip,
-    listSearch,
-  } = state.company;
+    sortColumn, sortDirection,
+    take, skip,
+    search,
+  } = state;
 
   const { list, count } = yield call(
-    [client, client.getAllCompanies], listSortColumn, listSortDirection as Dir2,
-    listSkip, listTake, listSearch,
+    [client, client.getAllCompanies], sortColumn, sortDirection as Dir2,
+    skip, take, search,
   );
-  yield put(setCompanies(list, count));
+  yield put(setTable(Tables.Companies, list, count));
 }
 
 function* fetchSingleCompany(action: CompaniesFetchSingleAction) {
@@ -58,7 +63,7 @@ function* createSingleCompany(action: CompaniesCreateSingleAction) {
   const client = new Client();
   const company = yield call([client, client.createCompany], action.company);
   yield put(setSingleCompany(company));
-  yield put(createFetchCompanies());
+  yield put(fetchTable(Tables.Companies));
 }
 
 function* errorCreateSingleCompany() {
@@ -75,7 +80,11 @@ function* watchCreateSingleCompany() {
 
 export default [
   function* watchFetchCompanies() {
-    yield throttle(500, CompanyActionType.Fetch, fetchCompanies);
+    yield throttle(
+      500,
+      tableActionPattern(Tables.Companies, TableActionType.Fetch),
+      fetchCompanies,
+    );
   },
   function* watchFetchSingleCompany() {
     yield takeEveryWithErrorHandling(CompanyActionType.FetchSingle, fetchSingleCompany);
