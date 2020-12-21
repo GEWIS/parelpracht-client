@@ -1,7 +1,7 @@
 import {
   call, put, select, takeEvery, throttle,
 } from 'redux-saga/effects';
-import { Client, Dir } from '../../clients/server.generated';
+import {Client, Dir2} from '../../clients/server.generated';
 import { takeEveryWithErrorHandling } from '../errorHandling';
 import type { RootState } from '../store';
 import {
@@ -23,7 +23,7 @@ function* fetchCompanies() {
   } = state.company;
 
   const { list, count } = yield call(
-    [client, client.getAllCompanies], listSortColumn, listSortDirection as Dir,
+    [client, client.getAllCompanies], listSortColumn, listSortDirection as Dir2,
     listSkip, listTake, listSearch,
   );
   yield put(setCompanies(list, count));
