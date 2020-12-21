@@ -10,6 +10,7 @@ import productReducer from './product/reducer';
 
 import alertsSagas from './alerts/sagas';
 import productSagas from './product/sagas';
+import companyReducer from './company/reducer';
 
 // Import all watching sagas
 const watchSagas = [
@@ -21,6 +22,7 @@ const watchSagas = [
 const reducers = {
   alerts: alertsReducer,
   product: productReducer,
+  company: companyReducer,
 };
 
 export const history = createBrowserHistory();

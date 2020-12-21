@@ -23,7 +23,7 @@ function* fetchProducts() {
   } = state.product;
 
   const { list, count } = yield call(
-    [client, client.getProducts], listSortColumn, listSortDirection as Dir,
+    [client, client.getAllProducts], listSortColumn, listSortDirection as Dir,
     listSkip, listTake, listSearch,
   );
   yield put(setProducts(list, count));
