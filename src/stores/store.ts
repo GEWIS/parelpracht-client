@@ -9,10 +9,12 @@ import alertsReducer from './alerts/reducer';
 import productReducer from './product/reducer';
 import companyReducer from './company/reducer';
 import invoiceReducer from './invoice/reducer';
+import contractReducer from './contract/reducer';
 
 import alertsSagas from './alerts/sagas';
 import productSagas from './product/sagas';
 import companySagas from './company/sagas';
+import contractSagas from './contract/sagas';
 import invoiceSagas from './invoice/sagas';
 import { tablesReducer } from './tables/reducer';
 
@@ -22,6 +24,7 @@ const watchSagas = [
   ...productSagas,
   ...companySagas,
   ...invoiceSagas,
+  ...contractSagas,
 ];
 
 // Set up root reducer
@@ -30,6 +33,7 @@ const reducers = {
   product: productReducer,
   tables: tablesReducer,
   company: companyReducer,
+  contract: contractReducer,
   invoice: invoiceReducer,
 };
 

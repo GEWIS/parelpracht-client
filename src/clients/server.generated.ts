@@ -645,6 +645,143 @@ export class Client {
     }
 
     /**
+     * @param id - ID of the contract
+     * @param body - Create subset of product
+     * @return Ok
+     */
+    addProduct(id: number, body: ProductInstanceParams): Promise<ProductInstance> {
+        let url_ = this.baseUrl + "/contract/{id}/product";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ = <RequestInit>{
+            body: content_,
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processAddProduct(_response);
+        });
+    }
+
+    protected processAddProduct(response: Response): Promise<ProductInstance> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = ProductInstance.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<ProductInstance>(<any>null);
+    }
+
+    /**
+     * @param id ID of the contract
+     * @param prodId ID of the product instance
+     * @param body Update subset of product instance
+     * @return Ok
+     */
+    updateProduct2(id: number, prodId: number, body: Partial_ProductInstanceParams): Promise<ProductInstance> {
+        let url_ = this.baseUrl + "/contract/{id}/product/{prodId}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        if (prodId === undefined || prodId === null)
+            throw new Error("The parameter 'prodId' must be defined.");
+        url_ = url_.replace("{prodId}", encodeURIComponent("" + prodId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ = <RequestInit>{
+            body: content_,
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processUpdateProduct2(_response);
+        });
+    }
+
+    protected processUpdateProduct2(response: Response): Promise<ProductInstance> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = ProductInstance.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<ProductInstance>(<any>null);
+    }
+
+    /**
+     * @param id ID of the contract
+     * @param prodId ID of the product instance
+     * @return No content
+     */
+    deleteProduct(id: number, prodId: number): Promise<void> {
+        let url_ = this.baseUrl + "/contract/{id}/product/{prodId}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        if (prodId === undefined || prodId === null)
+            throw new Error("The parameter 'prodId' must be defined.");
+        url_ = url_.replace("{prodId}", encodeURIComponent("" + prodId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <RequestInit>{
+            method: "DELETE",
+            headers: {
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processDeleteProduct(_response);
+        });
+    }
+
+    protected processDeleteProduct(response: Response): Promise<void> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 204) {
+            return response.text().then((_responseText) => {
+            return;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<void>(<any>null);
+    }
+
+    /**
      * @param col (optional) Sorted column
      * @param dir (optional) Sorting direction
      * @param skip (optional) Number of elements to skip
@@ -1027,25 +1164,37 @@ export class Client {
     }
 }
 
-export enum ProductStatus {
-    ACTIVE = "ACTIVE",
-    INACTIVE = "INACTIVE",
-}
-
 export class Product implements IProduct {
+    /** Incremental ID of the entity */
     id!: number;
+    /** Date at which this entity has been created */
+    createdAt!: Date;
+    /** Date at which this entity has last been updated */
+    updatedAt!: Date;
+    /** If this entity has been soft-deleted, this is the date at which the entity has been deleted */
+    deletedAt?: Date;
+    /** Version number of this entity */
+    version!: number;
+    /** Dutch name of the product */
     nameDutch!: string;
+    /** English name of the product */
     nameEnglish!: string;
     /** Price is stored * 100 and as integer */
     targetPrice!: number;
+    /** Description of the product, only used within the application */
     description!: string;
+    /** Text that should be used on generated PDF files, in Dutch */
     contractTextDutch!: string;
+    /** Text that should be used on generated PDF files, in English */
     contractTextEnglish!: string;
-    deliverySpecificationDutch!: string;
-    deliverySpecificationEnglish!: string;
-    status!: ProductStatus;
+    /** Delivery attachment text used on the PDF file, in Dutch */
+    deliverySpecificationDutch?: string;
+    /** Delivery attachment text used on the PDF file, in English */
+    deliverySpecificationEnglish?: string;
+    /** All the product instances of this product, used in contracts and invoiced */
     instances!: ProductInstance[];
-    statusChanges!: Status[];
+    /** All activities regarding this product */
+    productActivities!: ProductActivity[];
 
     constructor(data?: IProduct) {
         if (data) {
@@ -1056,13 +1205,17 @@ export class Product implements IProduct {
         }
         if (!data) {
             this.instances = [];
-            this.statusChanges = [];
+            this.productActivities = [];
         }
     }
 
     init(_data?: any) {
         if (_data) {
             this.id = _data["id"];
+            this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
+            this.updatedAt = _data["updatedAt"] ? new Date(_data["updatedAt"].toString()) : <any>undefined;
+            this.deletedAt = _data["deletedAt"] ? new Date(_data["deletedAt"].toString()) : <any>undefined;
+            this.version = _data["version"];
             this.nameDutch = _data["nameDutch"];
             this.nameEnglish = _data["nameEnglish"];
             this.targetPrice = _data["targetPrice"];
@@ -1071,16 +1224,15 @@ export class Product implements IProduct {
             this.contractTextEnglish = _data["contractTextEnglish"];
             this.deliverySpecificationDutch = _data["deliverySpecificationDutch"];
             this.deliverySpecificationEnglish = _data["deliverySpecificationEnglish"];
-            this.status = _data["status"];
             if (Array.isArray(_data["instances"])) {
                 this.instances = [] as any;
                 for (let item of _data["instances"])
                     this.instances!.push(ProductInstance.fromJS(item));
             }
-            if (Array.isArray(_data["statusChanges"])) {
-                this.statusChanges = [] as any;
-                for (let item of _data["statusChanges"])
-                    this.statusChanges!.push(Status.fromJS(item));
+            if (Array.isArray(_data["productActivities"])) {
+                this.productActivities = [] as any;
+                for (let item of _data["productActivities"])
+                    this.productActivities!.push(ProductActivity.fromJS(item));
             }
         }
     }
@@ -1095,6 +1247,10 @@ export class Product implements IProduct {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["id"] = this.id;
+        data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
+        data["updatedAt"] = this.updatedAt ? this.updatedAt.toISOString() : <any>undefined;
+        data["deletedAt"] = this.deletedAt ? this.deletedAt.toISOString() : <any>undefined;
+        data["version"] = this.version;
         data["nameDutch"] = this.nameDutch;
         data["nameEnglish"] = this.nameEnglish;
         data["targetPrice"] = this.targetPrice;
@@ -1103,35 +1259,51 @@ export class Product implements IProduct {
         data["contractTextEnglish"] = this.contractTextEnglish;
         data["deliverySpecificationDutch"] = this.deliverySpecificationDutch;
         data["deliverySpecificationEnglish"] = this.deliverySpecificationEnglish;
-        data["status"] = this.status;
         if (Array.isArray(this.instances)) {
             data["instances"] = [];
             for (let item of this.instances)
                 data["instances"].push(item.toJSON());
         }
-        if (Array.isArray(this.statusChanges)) {
-            data["statusChanges"] = [];
-            for (let item of this.statusChanges)
-                data["statusChanges"].push(item.toJSON());
+        if (Array.isArray(this.productActivities)) {
+            data["productActivities"] = [];
+            for (let item of this.productActivities)
+                data["productActivities"].push(item.toJSON());
         }
         return data; 
     }
 }
 
 export interface IProduct {
+    /** Incremental ID of the entity */
     id: number;
+    /** Date at which this entity has been created */
+    createdAt: Date;
+    /** Date at which this entity has last been updated */
+    updatedAt: Date;
+    /** If this entity has been soft-deleted, this is the date at which the entity has been deleted */
+    deletedAt?: Date;
+    /** Version number of this entity */
+    version: number;
+    /** Dutch name of the product */
     nameDutch: string;
+    /** English name of the product */
     nameEnglish: string;
     /** Price is stored * 100 and as integer */
     targetPrice: number;
+    /** Description of the product, only used within the application */
     description: string;
+    /** Text that should be used on generated PDF files, in Dutch */
     contractTextDutch: string;
+    /** Text that should be used on generated PDF files, in English */
     contractTextEnglish: string;
-    deliverySpecificationDutch: string;
-    deliverySpecificationEnglish: string;
-    status: ProductStatus;
+    /** Delivery attachment text used on the PDF file, in Dutch */
+    deliverySpecificationDutch?: string;
+    /** Delivery attachment text used on the PDF file, in English */
+    deliverySpecificationEnglish?: string;
+    /** All the product instances of this product, used in contracts and invoiced */
     instances: ProductInstance[];
-    statusChanges: Status[];
+    /** All activities regarding this product */
+    productActivities: ProductActivity[];
 }
 
 export enum CompanyStatus {
@@ -1140,17 +1312,30 @@ export enum CompanyStatus {
 }
 
 export class Contract implements IContract {
+    /** Incremental ID of the entity */
     id!: number;
+    /** Date at which this entity has been created */
+    createdAt!: Date;
+    /** Date at which this entity has last been updated */
+    updatedAt!: Date;
+    /** If this entity has been soft-deleted, this is the date at which the entity has been deleted */
+    deletedAt?: Date;
+    /** Version number of this entity */
+    version!: number;
+    /** Title or name of this contract/collaboration */
     title!: string;
+    /** Comments regarding this contract, if there are any */
+    comments?: string;
     companyId!: number;
+    /** Company this contract has been closed with */
     company!: Company;
-    products!: Product[];
+    /** All products in the contract */
+    products!: ProductInstance[];
     contactId!: number;
+    /** The contact this contract has been closed with */
     contact!: Contact;
-    date!: Date;
-    poNumber!: string;
-    comments!: string;
-    statusChanges!: Status[];
+    /** All activities regarding this contract */
+    contractActivity!: ContractActivity[];
 
     constructor(data?: IContract) {
         if (data) {
@@ -1163,30 +1348,32 @@ export class Contract implements IContract {
             this.company = new Company();
             this.products = [];
             this.contact = new Contact();
-            this.statusChanges = [];
+            this.contractActivity = [];
         }
     }
 
     init(_data?: any) {
         if (_data) {
             this.id = _data["id"];
+            this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
+            this.updatedAt = _data["updatedAt"] ? new Date(_data["updatedAt"].toString()) : <any>undefined;
+            this.deletedAt = _data["deletedAt"] ? new Date(_data["deletedAt"].toString()) : <any>undefined;
+            this.version = _data["version"];
             this.title = _data["title"];
+            this.comments = _data["comments"];
             this.companyId = _data["companyId"];
             this.company = _data["company"] ? Company.fromJS(_data["company"]) : new Company();
             if (Array.isArray(_data["products"])) {
                 this.products = [] as any;
                 for (let item of _data["products"])
-                    this.products!.push(Product.fromJS(item));
+                    this.products!.push(ProductInstance.fromJS(item));
             }
             this.contactId = _data["contactId"];
             this.contact = _data["contact"] ? Contact.fromJS(_data["contact"]) : new Contact();
-            this.date = _data["date"] ? new Date(_data["date"].toString()) : <any>undefined;
-            this.poNumber = _data["poNumber"];
-            this.comments = _data["comments"];
-            if (Array.isArray(_data["statusChanges"])) {
-                this.statusChanges = [] as any;
-                for (let item of _data["statusChanges"])
-                    this.statusChanges!.push(Status.fromJS(item));
+            if (Array.isArray(_data["contractActivity"])) {
+                this.contractActivity = [] as any;
+                for (let item of _data["contractActivity"])
+                    this.contractActivity!.push(ContractActivity.fromJS(item));
             }
         }
     }
@@ -1201,7 +1388,12 @@ export class Contract implements IContract {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["id"] = this.id;
+        data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
+        data["updatedAt"] = this.updatedAt ? this.updatedAt.toISOString() : <any>undefined;
+        data["deletedAt"] = this.deletedAt ? this.deletedAt.toISOString() : <any>undefined;
+        data["version"] = this.version;
         data["title"] = this.title;
+        data["comments"] = this.comments;
         data["companyId"] = this.companyId;
         data["company"] = this.company ? this.company.toJSON() : <any>undefined;
         if (Array.isArray(this.products)) {
@@ -1211,43 +1403,69 @@ export class Contract implements IContract {
         }
         data["contactId"] = this.contactId;
         data["contact"] = this.contact ? this.contact.toJSON() : <any>undefined;
-        data["date"] = this.date ? this.date.toISOString() : <any>undefined;
-        data["poNumber"] = this.poNumber;
-        data["comments"] = this.comments;
-        if (Array.isArray(this.statusChanges)) {
-            data["statusChanges"] = [];
-            for (let item of this.statusChanges)
-                data["statusChanges"].push(item.toJSON());
+        if (Array.isArray(this.contractActivity)) {
+            data["contractActivity"] = [];
+            for (let item of this.contractActivity)
+                data["contractActivity"].push(item.toJSON());
         }
         return data; 
     }
 }
 
 export interface IContract {
+    /** Incremental ID of the entity */
     id: number;
+    /** Date at which this entity has been created */
+    createdAt: Date;
+    /** Date at which this entity has last been updated */
+    updatedAt: Date;
+    /** If this entity has been soft-deleted, this is the date at which the entity has been deleted */
+    deletedAt?: Date;
+    /** Version number of this entity */
+    version: number;
+    /** Title or name of this contract/collaboration */
     title: string;
+    /** Comments regarding this contract, if there are any */
+    comments?: string;
     companyId: number;
+    /** Company this contract has been closed with */
     company: Company;
-    products: Product[];
+    /** All products in the contract */
+    products: ProductInstance[];
     contactId: number;
+    /** The contact this contract has been closed with */
     contact: Contact;
-    date: Date;
-    poNumber: string;
-    comments: string;
-    statusChanges: Status[];
+    /** All activities regarding this contract */
+    contractActivity: ContractActivity[];
 }
 
 export class ProductInstance implements IProductInstance {
+    /** Incremental ID of the entity */
     id!: number;
+    /** Date at which this entity has been created */
+    createdAt!: Date;
+    /** Date at which this entity has last been updated */
+    updatedAt!: Date;
+    /** If this entity has been soft-deleted, this is the date at which the entity has been deleted */
+    deletedAt?: Date;
+    /** Version number of this entity */
+    version!: number;
     productId!: number;
+    /** The ID of the product, this entity is instanced from */
     product!: Product;
     contractId!: number;
+    /** Contract this product is used in */
     contract!: Contract;
-    invoiceId!: number;
-    invoice!: Invoice;
+    invoiceId?: number;
+    /** Invoice this product is used in, if it has already been invoiced */
+    invoice?: Invoice;
+    /** All activities regarding this product instance */
+    productInstanceActivities!: ProductActivity[];
+    /** Actual price of the product. Can be different from the default product price,
+e.g. for discounts */
     price!: number;
-    comment!: string;
-    status!: ProductInstanceStatus;
+    /** Any comments regarding this product instance */
+    comments?: string;
 
     constructor(data?: IProductInstance) {
         if (data) {
@@ -1259,22 +1477,30 @@ export class ProductInstance implements IProductInstance {
         if (!data) {
             this.product = new Product();
             this.contract = new Contract();
-            this.invoice = new Invoice();
+            this.productInstanceActivities = [];
         }
     }
 
     init(_data?: any) {
         if (_data) {
             this.id = _data["id"];
+            this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
+            this.updatedAt = _data["updatedAt"] ? new Date(_data["updatedAt"].toString()) : <any>undefined;
+            this.deletedAt = _data["deletedAt"] ? new Date(_data["deletedAt"].toString()) : <any>undefined;
+            this.version = _data["version"];
             this.productId = _data["productId"];
             this.product = _data["product"] ? Product.fromJS(_data["product"]) : new Product();
             this.contractId = _data["contractId"];
             this.contract = _data["contract"] ? Contract.fromJS(_data["contract"]) : new Contract();
             this.invoiceId = _data["invoiceId"];
-            this.invoice = _data["invoice"] ? Invoice.fromJS(_data["invoice"]) : new Invoice();
+            this.invoice = _data["invoice"] ? Invoice.fromJS(_data["invoice"]) : <any>undefined;
+            if (Array.isArray(_data["productInstanceActivities"])) {
+                this.productInstanceActivities = [] as any;
+                for (let item of _data["productInstanceActivities"])
+                    this.productInstanceActivities!.push(ProductActivity.fromJS(item));
+            }
             this.price = _data["price"];
-            this.comment = _data["comment"];
-            this.status = _data["status"];
+            this.comments = _data["comments"];
         }
     }
 
@@ -1288,45 +1514,93 @@ export class ProductInstance implements IProductInstance {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["id"] = this.id;
+        data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
+        data["updatedAt"] = this.updatedAt ? this.updatedAt.toISOString() : <any>undefined;
+        data["deletedAt"] = this.deletedAt ? this.deletedAt.toISOString() : <any>undefined;
+        data["version"] = this.version;
         data["productId"] = this.productId;
         data["product"] = this.product ? this.product.toJSON() : <any>undefined;
         data["contractId"] = this.contractId;
         data["contract"] = this.contract ? this.contract.toJSON() : <any>undefined;
         data["invoiceId"] = this.invoiceId;
         data["invoice"] = this.invoice ? this.invoice.toJSON() : <any>undefined;
+        if (Array.isArray(this.productInstanceActivities)) {
+            data["productInstanceActivities"] = [];
+            for (let item of this.productInstanceActivities)
+                data["productInstanceActivities"].push(item.toJSON());
+        }
         data["price"] = this.price;
-        data["comment"] = this.comment;
-        data["status"] = this.status;
+        data["comments"] = this.comments;
         return data; 
     }
 }
 
 export interface IProductInstance {
+    /** Incremental ID of the entity */
     id: number;
+    /** Date at which this entity has been created */
+    createdAt: Date;
+    /** Date at which this entity has last been updated */
+    updatedAt: Date;
+    /** If this entity has been soft-deleted, this is the date at which the entity has been deleted */
+    deletedAt?: Date;
+    /** Version number of this entity */
+    version: number;
     productId: number;
+    /** The ID of the product, this entity is instanced from */
     product: Product;
     contractId: number;
+    /** Contract this product is used in */
     contract: Contract;
-    invoiceId: number;
-    invoice: Invoice;
+    invoiceId?: number;
+    /** Invoice this product is used in, if it has already been invoiced */
+    invoice?: Invoice;
+    /** All activities regarding this product instance */
+    productInstanceActivities: ProductActivity[];
+    /** Actual price of the product. Can be different from the default product price,
+e.g. for discounts */
     price: number;
-    comment: string;
-    status: ProductInstanceStatus;
+    /** Any comments regarding this product instance */
+    comments?: string;
 }
 
 export class Company implements ICompany {
+    /** Incremental ID of the entity */
     id!: number;
+    /** Date at which this entity has been created */
+    createdAt!: Date;
+    /** Date at which this entity has last been updated */
+    updatedAt!: Date;
+    /** If this entity has been soft-deleted, this is the date at which the entity has been deleted */
+    deletedAt?: Date;
+    /** Version number of this entity */
+    version!: number;
+    /** Name of the company */
     name!: string;
-    description!: string;
-    phoneNumber!: string;
-    comments!: string;
+    /** Description of the company */
+    description?: string;
+    /** General phone number of the company */
+    phoneNumber?: string;
+    addressStreet!: string;
+    addressPostalCode!: string;
+    addressCity!: string;
+    addressCountry!: string;
+    invoiceAddressStreet?: string;
+    invoiceAddressPostalCode?: string;
+    invoiceAddressCity?: string;
+    invoiceAddressCountry?: string;
+    /** Status of the collaboration with this company */
     status!: CompanyStatus;
-    lastUpdated!: Date;
+    /** Optional end date of the collaboration with this company */
     endDate?: Date;
+    /** All contracts related to this company */
     contracts!: Contract[];
+    /** All invoices related to this company */
     invoices!: Invoice[];
+    /** All contact persons related to this company */
     contacts!: Contact[];
-    statusChanges!: Status[];
+    /** All updates / activities regarding this company */
+    activities!: CompanyActivity[];
 
     constructor(data?: ICompany) {
         if (data) {
@@ -1339,19 +1613,29 @@ export class Company implements ICompany {
             this.contracts = [];
             this.invoices = [];
             this.contacts = [];
-            this.statusChanges = [];
+            this.activities = [];
         }
     }
 
     init(_data?: any) {
         if (_data) {
             this.id = _data["id"];
+            this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
+            this.updatedAt = _data["updatedAt"] ? new Date(_data["updatedAt"].toString()) : <any>undefined;
+            this.deletedAt = _data["deletedAt"] ? new Date(_data["deletedAt"].toString()) : <any>undefined;
+            this.version = _data["version"];
             this.name = _data["name"];
             this.description = _data["description"];
             this.phoneNumber = _data["phoneNumber"];
-            this.comments = _data["comments"];
+            this.addressStreet = _data["addressStreet"];
+            this.addressPostalCode = _data["addressPostalCode"];
+            this.addressCity = _data["addressCity"];
+            this.addressCountry = _data["addressCountry"];
+            this.invoiceAddressStreet = _data["invoiceAddressStreet"];
+            this.invoiceAddressPostalCode = _data["invoiceAddressPostalCode"];
+            this.invoiceAddressCity = _data["invoiceAddressCity"];
+            this.invoiceAddressCountry = _data["invoiceAddressCountry"];
             this.status = _data["status"];
-            this.lastUpdated = _data["lastUpdated"] ? new Date(_data["lastUpdated"].toString()) : <any>undefined;
             this.endDate = _data["endDate"] ? new Date(_data["endDate"].toString()) : <any>undefined;
             if (Array.isArray(_data["contracts"])) {
                 this.contracts = [] as any;
@@ -1368,10 +1652,10 @@ export class Company implements ICompany {
                 for (let item of _data["contacts"])
                     this.contacts!.push(Contact.fromJS(item));
             }
-            if (Array.isArray(_data["statusChanges"])) {
-                this.statusChanges = [] as any;
-                for (let item of _data["statusChanges"])
-                    this.statusChanges!.push(Status.fromJS(item));
+            if (Array.isArray(_data["activities"])) {
+                this.activities = [] as any;
+                for (let item of _data["activities"])
+                    this.activities!.push(CompanyActivity.fromJS(item));
             }
         }
     }
@@ -1386,12 +1670,22 @@ export class Company implements ICompany {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["id"] = this.id;
+        data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
+        data["updatedAt"] = this.updatedAt ? this.updatedAt.toISOString() : <any>undefined;
+        data["deletedAt"] = this.deletedAt ? this.deletedAt.toISOString() : <any>undefined;
+        data["version"] = this.version;
         data["name"] = this.name;
         data["description"] = this.description;
         data["phoneNumber"] = this.phoneNumber;
-        data["comments"] = this.comments;
+        data["addressStreet"] = this.addressStreet;
+        data["addressPostalCode"] = this.addressPostalCode;
+        data["addressCity"] = this.addressCity;
+        data["addressCountry"] = this.addressCountry;
+        data["invoiceAddressStreet"] = this.invoiceAddressStreet;
+        data["invoiceAddressPostalCode"] = this.invoiceAddressPostalCode;
+        data["invoiceAddressCity"] = this.invoiceAddressCity;
+        data["invoiceAddressCountry"] = this.invoiceAddressCountry;
         data["status"] = this.status;
-        data["lastUpdated"] = this.lastUpdated ? this.lastUpdated.toISOString() : <any>undefined;
         data["endDate"] = this.endDate ? this.endDate.toISOString() : <any>undefined;
         if (Array.isArray(this.contracts)) {
             data["contracts"] = [];
@@ -1408,65 +1702,208 @@ export class Company implements ICompany {
             for (let item of this.contacts)
                 data["contacts"].push(item.toJSON());
         }
-        if (Array.isArray(this.statusChanges)) {
-            data["statusChanges"] = [];
-            for (let item of this.statusChanges)
-                data["statusChanges"].push(item.toJSON());
+        if (Array.isArray(this.activities)) {
+            data["activities"] = [];
+            for (let item of this.activities)
+                data["activities"].push(item.toJSON());
         }
         return data; 
     }
 }
 
 export interface ICompany {
+    /** Incremental ID of the entity */
     id: number;
+    /** Date at which this entity has been created */
+    createdAt: Date;
+    /** Date at which this entity has last been updated */
+    updatedAt: Date;
+    /** If this entity has been soft-deleted, this is the date at which the entity has been deleted */
+    deletedAt?: Date;
+    /** Version number of this entity */
+    version: number;
+    /** Name of the company */
     name: string;
-    description: string;
-    phoneNumber: string;
-    comments: string;
+    /** Description of the company */
+    description?: string;
+    /** General phone number of the company */
+    phoneNumber?: string;
+    addressStreet: string;
+    addressPostalCode: string;
+    addressCity: string;
+    addressCountry: string;
+    invoiceAddressStreet?: string;
+    invoiceAddressPostalCode?: string;
+    invoiceAddressCity?: string;
+    invoiceAddressCountry?: string;
+    /** Status of the collaboration with this company */
     status: CompanyStatus;
-    lastUpdated: Date;
+    /** Optional end date of the collaboration with this company */
     endDate?: Date;
+    /** All contracts related to this company */
     contracts: Contract[];
+    /** All invoices related to this company */
     invoices: Invoice[];
+    /** All contact persons related to this company */
     contacts: Contact[];
-    statusChanges: Status[];
+    /** All updates / activities regarding this company */
+    activities: CompanyActivity[];
 }
 
-export enum InvoiceStatus {
-    WAITING = "WAITING",
-    SENT = "SENT",
-    COLLECTED = "COLLECTED",
-    UNCOLLECTIBLE = "UNCOLLECTIBLE",
+export class Invoice implements IInvoice {
+    /** Incremental ID of the entity */
+    id!: number;
+    /** Date at which this entity has been created */
+    createdAt!: Date;
+    /** Date at which this entity has last been updated */
+    updatedAt!: Date;
+    /** If this entity has been soft-deleted, this is the date at which the entity has been deleted */
+    deletedAt?: Date;
+    /** Version number of this entity */
+    version!: number;
+    /** All products that have been invoiced */
+    products!: ProductInstance[];
+    /** PO number on the invoice, if needed */
+    poNumber?: string;
+    /** Any comments regarding this invoice */
+    comments?: string;
+    companyId!: number;
+    /** Company this invoice is directed to */
+    company!: Company;
+    /** All activities regarding this invoice */
+    invoiceActivities!: InvoiceActivity[];
+
+    constructor(data?: IInvoice) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+        if (!data) {
+            this.products = [];
+            this.company = new Company();
+            this.invoiceActivities = [];
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
+            this.updatedAt = _data["updatedAt"] ? new Date(_data["updatedAt"].toString()) : <any>undefined;
+            this.deletedAt = _data["deletedAt"] ? new Date(_data["deletedAt"].toString()) : <any>undefined;
+            this.version = _data["version"];
+            if (Array.isArray(_data["products"])) {
+                this.products = [] as any;
+                for (let item of _data["products"])
+                    this.products!.push(ProductInstance.fromJS(item));
+            }
+            this.poNumber = _data["poNumber"];
+            this.comments = _data["comments"];
+            this.companyId = _data["companyId"];
+            this.company = _data["company"] ? Company.fromJS(_data["company"]) : new Company();
+            if (Array.isArray(_data["invoiceActivities"])) {
+                this.invoiceActivities = [] as any;
+                for (let item of _data["invoiceActivities"])
+                    this.invoiceActivities!.push(InvoiceActivity.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): Invoice {
+        data = typeof data === 'object' ? data : {};
+        let result = new Invoice();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
+        data["updatedAt"] = this.updatedAt ? this.updatedAt.toISOString() : <any>undefined;
+        data["deletedAt"] = this.deletedAt ? this.deletedAt.toISOString() : <any>undefined;
+        data["version"] = this.version;
+        if (Array.isArray(this.products)) {
+            data["products"] = [];
+            for (let item of this.products)
+                data["products"].push(item.toJSON());
+        }
+        data["poNumber"] = this.poNumber;
+        data["comments"] = this.comments;
+        data["companyId"] = this.companyId;
+        data["company"] = this.company ? this.company.toJSON() : <any>undefined;
+        if (Array.isArray(this.invoiceActivities)) {
+            data["invoiceActivities"] = [];
+            for (let item of this.invoiceActivities)
+                data["invoiceActivities"].push(item.toJSON());
+        }
+        return data; 
+    }
 }
 
-export enum EntityType {
-    NULL = "NULL",
-    USER = "USER",
-    COMPANY = "COMPANY",
-    CONTRACT = "CONTRACT",
-    INVOICE = "INVOICE",
-    PRODUCT = "PRODUCT",
-    CONTACT = "CONTACT",
+export interface IInvoice {
+    /** Incremental ID of the entity */
+    id: number;
+    /** Date at which this entity has been created */
+    createdAt: Date;
+    /** Date at which this entity has last been updated */
+    updatedAt: Date;
+    /** If this entity has been soft-deleted, this is the date at which the entity has been deleted */
+    deletedAt?: Date;
+    /** Version number of this entity */
+    version: number;
+    /** All products that have been invoiced */
+    products: ProductInstance[];
+    /** PO number on the invoice, if needed */
+    poNumber?: string;
+    /** Any comments regarding this invoice */
+    comments?: string;
+    companyId: number;
+    /** Company this invoice is directed to */
+    company: Company;
+    /** All activities regarding this invoice */
+    invoiceActivities: InvoiceActivity[];
+}
+
+export enum ActivityType {
+    STATUS = "STATUS",
+    COMMENT = "COMMENT",
 }
 
 export enum Gender {
     MALE = "MALE",
     FEMALE = "FEMALE",
     OTHER = "OTHER",
-    UNKOWN = "UNKOWN",
+    UNKNOWN = "UNKNOWN",
 }
 
 export class User implements IUser {
+    /** Incremental ID of the entity */
     id!: number;
+    /** Date at which this entity has been created */
+    createdAt!: Date;
+    /** Date at which this entity has last been updated */
+    updatedAt!: Date;
+    /** If this entity has been soft-deleted, this is the date at which the entity has been deleted */
+    deletedAt?: Date;
+    /** Version number of this entity */
+    version!: number;
+    /** Gender of this user */
     gender!: Gender;
+    /** First name of this user */
     firstName!: string;
-    middleName!: string;
+    /** Middle name of this user, if he/she has any */
+    middleName?: string;
+    /** Last name of this user */
     lastName!: string;
+    /** Email address of the user */
     email!: string;
-    comment!: string;
+    /** Any comments regarding this user */
+    comment?: string;
+    /** The roles this user has */
     roles!: Role[];
-    statusChanges!: Status[];
-    madeChanges!: Status[];
 
     constructor(data?: IUser) {
         if (data) {
@@ -1477,14 +1914,16 @@ export class User implements IUser {
         }
         if (!data) {
             this.roles = [];
-            this.statusChanges = [];
-            this.madeChanges = [];
         }
     }
 
     init(_data?: any) {
         if (_data) {
             this.id = _data["id"];
+            this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
+            this.updatedAt = _data["updatedAt"] ? new Date(_data["updatedAt"].toString()) : <any>undefined;
+            this.deletedAt = _data["deletedAt"] ? new Date(_data["deletedAt"].toString()) : <any>undefined;
+            this.version = _data["version"];
             this.gender = _data["gender"];
             this.firstName = _data["firstName"];
             this.middleName = _data["middleName"];
@@ -1495,16 +1934,6 @@ export class User implements IUser {
                 this.roles = [] as any;
                 for (let item of _data["roles"])
                     this.roles!.push(Role.fromJS(item));
-            }
-            if (Array.isArray(_data["statusChanges"])) {
-                this.statusChanges = [] as any;
-                for (let item of _data["statusChanges"])
-                    this.statusChanges!.push(Status.fromJS(item));
-            }
-            if (Array.isArray(_data["madeChanges"])) {
-                this.madeChanges = [] as any;
-                for (let item of _data["madeChanges"])
-                    this.madeChanges!.push(Status.fromJS(item));
             }
         }
     }
@@ -1519,6 +1948,10 @@ export class User implements IUser {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["id"] = this.id;
+        data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
+        data["updatedAt"] = this.updatedAt ? this.updatedAt.toISOString() : <any>undefined;
+        data["deletedAt"] = this.deletedAt ? this.deletedAt.toISOString() : <any>undefined;
+        data["version"] = this.version;
         data["gender"] = this.gender;
         data["firstName"] = this.firstName;
         data["middleName"] = this.middleName;
@@ -1530,35 +1963,51 @@ export class User implements IUser {
             for (let item of this.roles)
                 data["roles"].push(item.toJSON());
         }
-        if (Array.isArray(this.statusChanges)) {
-            data["statusChanges"] = [];
-            for (let item of this.statusChanges)
-                data["statusChanges"].push(item.toJSON());
-        }
-        if (Array.isArray(this.madeChanges)) {
-            data["madeChanges"] = [];
-            for (let item of this.madeChanges)
-                data["madeChanges"].push(item.toJSON());
-        }
         return data; 
     }
 }
 
 export interface IUser {
+    /** Incremental ID of the entity */
     id: number;
+    /** Date at which this entity has been created */
+    createdAt: Date;
+    /** Date at which this entity has last been updated */
+    updatedAt: Date;
+    /** If this entity has been soft-deleted, this is the date at which the entity has been deleted */
+    deletedAt?: Date;
+    /** Version number of this entity */
+    version: number;
+    /** Gender of this user */
     gender: Gender;
+    /** First name of this user */
     firstName: string;
-    middleName: string;
+    /** Middle name of this user, if he/she has any */
+    middleName?: string;
+    /** Last name of this user */
     lastName: string;
+    /** Email address of the user */
     email: string;
-    comment: string;
+    /** Any comments regarding this user */
+    comment?: string;
+    /** The roles this user has */
     roles: Role[];
-    statusChanges: Status[];
-    madeChanges: Status[];
 }
 
 export class Role implements IRole {
+    /** Incremental ID of the entity */
+    id!: number;
+    /** Date at which this entity has been created */
+    createdAt!: Date;
+    /** Date at which this entity has last been updated */
+    updatedAt!: Date;
+    /** If this entity has been soft-deleted, this is the date at which the entity has been deleted */
+    deletedAt?: Date;
+    /** Version number of this entity */
+    version!: number;
+    /** Name of the role */
     name!: string;
+    /** All users having this role */
     users!: User[];
 
     constructor(data?: IRole) {
@@ -1575,6 +2024,11 @@ export class Role implements IRole {
 
     init(_data?: any) {
         if (_data) {
+            this.id = _data["id"];
+            this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
+            this.updatedAt = _data["updatedAt"] ? new Date(_data["updatedAt"].toString()) : <any>undefined;
+            this.deletedAt = _data["deletedAt"] ? new Date(_data["deletedAt"].toString()) : <any>undefined;
+            this.version = _data["version"];
             this.name = _data["name"];
             if (Array.isArray(_data["users"])) {
                 this.users = [] as any;
@@ -1593,6 +2047,11 @@ export class Role implements IRole {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
+        data["updatedAt"] = this.updatedAt ? this.updatedAt.toISOString() : <any>undefined;
+        data["deletedAt"] = this.deletedAt ? this.deletedAt.toISOString() : <any>undefined;
+        data["version"] = this.version;
         data["name"] = this.name;
         if (Array.isArray(this.users)) {
             data["users"] = [];
@@ -1604,31 +2063,49 @@ export class Role implements IRole {
 }
 
 export interface IRole {
+    /** Incremental ID of the entity */
+    id: number;
+    /** Date at which this entity has been created */
+    createdAt: Date;
+    /** Date at which this entity has last been updated */
+    updatedAt: Date;
+    /** If this entity has been soft-deleted, this is the date at which the entity has been deleted */
+    deletedAt?: Date;
+    /** Version number of this entity */
+    version: number;
+    /** Name of the role */
     name: string;
+    /** All users having this role */
     users: User[];
 }
 
-export class Status implements IStatus {
+export class InvoiceActivity implements IInvoiceActivity {
+    /** Incremental ID of the entity */
     id!: number;
-    title!: string;
-    comment!: string;
-    createdById!: number;
-    entityType!: EntityType;
+    /** Date at which this entity has been created */
+    createdAt!: Date;
+    /** Date at which this entity has last been updated */
+    updatedAt!: Date;
+    /** If this entity has been soft-deleted, this is the date at which the entity has been deleted */
+    deletedAt?: Date;
+    /** Version number of this entity */
+    version!: number;
+    /** Type of the activity (status or comment) */
+    type!: ActivityType;
+    /** Subtype of this activity, only used when the type = "STATUS" */
+    subType?: string;
+    /** Description of this activity */
+    description!: string;
+    /** User who created this activity */
     createdBy!: User;
-    companyId!: number;
-    company!: Company;
-    contractId!: number;
-    contract!: Contract;
     invoiceId!: number;
+    /** Invoice related to this activity */
     invoice!: Invoice;
-    userId!: number;
-    user!: User;
-    productId!: number;
-    product!: Product;
-    contactId!: number;
-    contact!: Contact;
+    relatedInvoiceId?: number;
+    /** If this activity should reference another invoice, it can be done here */
+    relatedInvoice?: Invoice;
 
-    constructor(data?: IStatus) {
+    constructor(data?: IInvoiceActivity) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -1637,41 +2114,31 @@ export class Status implements IStatus {
         }
         if (!data) {
             this.createdBy = new User();
-            this.company = new Company();
-            this.contract = new Contract();
             this.invoice = new Invoice();
-            this.user = new User();
-            this.product = new Product();
-            this.contact = new Contact();
         }
     }
 
     init(_data?: any) {
         if (_data) {
             this.id = _data["id"];
-            this.title = _data["title"];
-            this.comment = _data["comment"];
-            this.createdById = _data["createdById"];
-            this.entityType = _data["entityType"];
+            this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
+            this.updatedAt = _data["updatedAt"] ? new Date(_data["updatedAt"].toString()) : <any>undefined;
+            this.deletedAt = _data["deletedAt"] ? new Date(_data["deletedAt"].toString()) : <any>undefined;
+            this.version = _data["version"];
+            this.type = _data["type"];
+            this.subType = _data["subType"];
+            this.description = _data["description"];
             this.createdBy = _data["createdBy"] ? User.fromJS(_data["createdBy"]) : new User();
-            this.companyId = _data["companyId"];
-            this.company = _data["company"] ? Company.fromJS(_data["company"]) : new Company();
-            this.contractId = _data["contractId"];
-            this.contract = _data["contract"] ? Contract.fromJS(_data["contract"]) : new Contract();
             this.invoiceId = _data["invoiceId"];
             this.invoice = _data["invoice"] ? Invoice.fromJS(_data["invoice"]) : new Invoice();
-            this.userId = _data["userId"];
-            this.user = _data["user"] ? User.fromJS(_data["user"]) : new User();
-            this.productId = _data["productId"];
-            this.product = _data["product"] ? Product.fromJS(_data["product"]) : new Product();
-            this.contactId = _data["contactId"];
-            this.contact = _data["contact"] ? Contact.fromJS(_data["contact"]) : new Contact();
+            this.relatedInvoiceId = _data["relatedInvoiceId"];
+            this.relatedInvoice = _data["relatedInvoice"] ? Invoice.fromJS(_data["relatedInvoice"]) : <any>undefined;
         }
     }
 
-    static fromJS(data: any): Status {
+    static fromJS(data: any): InvoiceActivity {
         data = typeof data === 'object' ? data : {};
-        let result = new Status();
+        let result = new InvoiceActivity();
         result.init(data);
         return result;
     }
@@ -1679,145 +2146,88 @@ export class Status implements IStatus {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["id"] = this.id;
-        data["title"] = this.title;
-        data["comment"] = this.comment;
-        data["createdById"] = this.createdById;
-        data["entityType"] = this.entityType;
+        data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
+        data["updatedAt"] = this.updatedAt ? this.updatedAt.toISOString() : <any>undefined;
+        data["deletedAt"] = this.deletedAt ? this.deletedAt.toISOString() : <any>undefined;
+        data["version"] = this.version;
+        data["type"] = this.type;
+        data["subType"] = this.subType;
+        data["description"] = this.description;
         data["createdBy"] = this.createdBy ? this.createdBy.toJSON() : <any>undefined;
-        data["companyId"] = this.companyId;
-        data["company"] = this.company ? this.company.toJSON() : <any>undefined;
-        data["contractId"] = this.contractId;
-        data["contract"] = this.contract ? this.contract.toJSON() : <any>undefined;
         data["invoiceId"] = this.invoiceId;
         data["invoice"] = this.invoice ? this.invoice.toJSON() : <any>undefined;
-        data["userId"] = this.userId;
-        data["user"] = this.user ? this.user.toJSON() : <any>undefined;
-        data["productId"] = this.productId;
-        data["product"] = this.product ? this.product.toJSON() : <any>undefined;
-        data["contactId"] = this.contactId;
-        data["contact"] = this.contact ? this.contact.toJSON() : <any>undefined;
+        data["relatedInvoiceId"] = this.relatedInvoiceId;
+        data["relatedInvoice"] = this.relatedInvoice ? this.relatedInvoice.toJSON() : <any>undefined;
         return data; 
     }
 }
 
-export interface IStatus {
+export interface IInvoiceActivity {
+    /** Incremental ID of the entity */
     id: number;
-    title: string;
-    comment: string;
-    createdById: number;
-    entityType: EntityType;
+    /** Date at which this entity has been created */
+    createdAt: Date;
+    /** Date at which this entity has last been updated */
+    updatedAt: Date;
+    /** If this entity has been soft-deleted, this is the date at which the entity has been deleted */
+    deletedAt?: Date;
+    /** Version number of this entity */
+    version: number;
+    /** Type of the activity (status or comment) */
+    type: ActivityType;
+    /** Subtype of this activity, only used when the type = "STATUS" */
+    subType?: string;
+    /** Description of this activity */
+    description: string;
+    /** User who created this activity */
     createdBy: User;
-    companyId: number;
-    company: Company;
-    contractId: number;
-    contract: Contract;
     invoiceId: number;
+    /** Invoice related to this activity */
     invoice: Invoice;
-    userId: number;
-    user: User;
-    productId: number;
-    product: Product;
-    contactId: number;
-    contact: Contact;
+    relatedInvoiceId?: number;
+    /** If this activity should reference another invoice, it can be done here */
+    relatedInvoice?: Invoice;
 }
 
-export class Invoice implements IInvoice {
-    id!: number;
-    products!: ProductInstance[];
-    companyId!: number;
-    company!: Company;
-    price!: number;
-    comment!: string;
-    status!: InvoiceStatus;
-    statusChanges!: Status[];
-
-    constructor(data?: IInvoice) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-        if (!data) {
-            this.products = [];
-            this.company = new Company();
-            this.statusChanges = [];
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"];
-            if (Array.isArray(_data["products"])) {
-                this.products = [] as any;
-                for (let item of _data["products"])
-                    this.products!.push(ProductInstance.fromJS(item));
-            }
-            this.companyId = _data["companyId"];
-            this.company = _data["company"] ? Company.fromJS(_data["company"]) : new Company();
-            this.price = _data["price"];
-            this.comment = _data["comment"];
-            this.status = _data["status"];
-            if (Array.isArray(_data["statusChanges"])) {
-                this.statusChanges = [] as any;
-                for (let item of _data["statusChanges"])
-                    this.statusChanges!.push(Status.fromJS(item));
-            }
-        }
-    }
-
-    static fromJS(data: any): Invoice {
-        data = typeof data === 'object' ? data : {};
-        let result = new Invoice();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        if (Array.isArray(this.products)) {
-            data["products"] = [];
-            for (let item of this.products)
-                data["products"].push(item.toJSON());
-        }
-        data["companyId"] = this.companyId;
-        data["company"] = this.company ? this.company.toJSON() : <any>undefined;
-        data["price"] = this.price;
-        data["comment"] = this.comment;
-        data["status"] = this.status;
-        if (Array.isArray(this.statusChanges)) {
-            data["statusChanges"] = [];
-            for (let item of this.statusChanges)
-                data["statusChanges"].push(item.toJSON());
-        }
-        return data; 
-    }
-}
-
-export interface IInvoice {
-    id: number;
-    products: ProductInstance[];
-    companyId: number;
-    company: Company;
-    price: number;
-    comment: string;
-    status: InvoiceStatus;
-    statusChanges: Status[];
+export enum ContactFunction {
+    NORMAL = "NORMAL",
+    PRIMARY = "PRIMARY",
+    FINANCIAL = "FINANCIAL",
+    OLD = "OLD",
 }
 
 export class Contact implements IContact {
+    /** Incremental ID of the entity */
     id!: number;
+    /** Date at which this entity has been created */
+    createdAt!: Date;
+    /** Date at which this entity has last been updated */
+    updatedAt!: Date;
+    /** If this entity has been soft-deleted, this is the date at which the entity has been deleted */
+    deletedAt?: Date;
+    /** Version number of this entity */
+    version!: number;
+    /** The gender of this contact */
     gender!: Gender;
+    /** The first name of the contact */
     firstName!: string;
-    middleName!: string;
+    /** The middle name of the contact, if he/she has one */
+    middleName?: string;
+    /** The last name of the contact */
     lastName!: string;
-    email!: string;
-    comment!: string;
+    /** The (personal) email address of the contact */
+    email?: string;
+    /** The (personal) phone number of the contact */
+    telephone?: string;
+    /** Comments regarding the contact person, if there are any */
+    comments?: string;
+    /** Function of this contact person within the company, if known. Normal by default. */
+    function?: ContactFunction;
     companyId!: number;
+    /** Company this contact person works at */
     company!: Company;
+    /** All contracts that have been closed with this contact person */
     contracts!: Contract[];
-    statusChanges!: Status[];
 
     constructor(data?: IContact) {
         if (data) {
@@ -1829,30 +2239,30 @@ export class Contact implements IContact {
         if (!data) {
             this.company = new Company();
             this.contracts = [];
-            this.statusChanges = [];
         }
     }
 
     init(_data?: any) {
         if (_data) {
             this.id = _data["id"];
+            this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
+            this.updatedAt = _data["updatedAt"] ? new Date(_data["updatedAt"].toString()) : <any>undefined;
+            this.deletedAt = _data["deletedAt"] ? new Date(_data["deletedAt"].toString()) : <any>undefined;
+            this.version = _data["version"];
             this.gender = _data["gender"];
             this.firstName = _data["firstName"];
             this.middleName = _data["middleName"];
             this.lastName = _data["lastName"];
             this.email = _data["email"];
-            this.comment = _data["comment"];
+            this.telephone = _data["telephone"];
+            this.comments = _data["comments"];
+            this.function = _data["function"];
             this.companyId = _data["companyId"];
             this.company = _data["company"] ? Company.fromJS(_data["company"]) : new Company();
             if (Array.isArray(_data["contracts"])) {
                 this.contracts = [] as any;
                 for (let item of _data["contracts"])
                     this.contracts!.push(Contract.fromJS(item));
-            }
-            if (Array.isArray(_data["statusChanges"])) {
-                this.statusChanges = [] as any;
-                for (let item of _data["statusChanges"])
-                    this.statusChanges!.push(Status.fromJS(item));
             }
         }
     }
@@ -1867,12 +2277,18 @@ export class Contact implements IContact {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["id"] = this.id;
+        data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
+        data["updatedAt"] = this.updatedAt ? this.updatedAt.toISOString() : <any>undefined;
+        data["deletedAt"] = this.deletedAt ? this.deletedAt.toISOString() : <any>undefined;
+        data["version"] = this.version;
         data["gender"] = this.gender;
         data["firstName"] = this.firstName;
         data["middleName"] = this.middleName;
         data["lastName"] = this.lastName;
         data["email"] = this.email;
-        data["comment"] = this.comment;
+        data["telephone"] = this.telephone;
+        data["comments"] = this.comments;
+        data["function"] = this.function;
         data["companyId"] = this.companyId;
         data["company"] = this.company ? this.company.toJSON() : <any>undefined;
         if (Array.isArray(this.contracts)) {
@@ -1880,33 +2296,352 @@ export class Contact implements IContact {
             for (let item of this.contracts)
                 data["contracts"].push(item.toJSON());
         }
-        if (Array.isArray(this.statusChanges)) {
-            data["statusChanges"] = [];
-            for (let item of this.statusChanges)
-                data["statusChanges"].push(item.toJSON());
-        }
         return data; 
     }
 }
 
 export interface IContact {
+    /** Incremental ID of the entity */
     id: number;
+    /** Date at which this entity has been created */
+    createdAt: Date;
+    /** Date at which this entity has last been updated */
+    updatedAt: Date;
+    /** If this entity has been soft-deleted, this is the date at which the entity has been deleted */
+    deletedAt?: Date;
+    /** Version number of this entity */
+    version: number;
+    /** The gender of this contact */
     gender: Gender;
+    /** The first name of the contact */
     firstName: string;
-    middleName: string;
+    /** The middle name of the contact, if he/she has one */
+    middleName?: string;
+    /** The last name of the contact */
     lastName: string;
-    email: string;
-    comment: string;
+    /** The (personal) email address of the contact */
+    email?: string;
+    /** The (personal) phone number of the contact */
+    telephone?: string;
+    /** Comments regarding the contact person, if there are any */
+    comments?: string;
+    /** Function of this contact person within the company, if known. Normal by default. */
+    function?: ContactFunction;
     companyId: number;
+    /** Company this contact person works at */
     company: Company;
+    /** All contracts that have been closed with this contact person */
     contracts: Contract[];
-    statusChanges: Status[];
 }
 
-export enum ProductInstanceStatus {
-    WAITING = "WAITING",
-    DELIVERED = "DELIVERED",
-    NOT_DELIVERED = "NOT_DELIVERED",
+export class CompanyActivity implements ICompanyActivity {
+    /** Incremental ID of the entity */
+    id!: number;
+    /** Date at which this entity has been created */
+    createdAt!: Date;
+    /** Date at which this entity has last been updated */
+    updatedAt!: Date;
+    /** If this entity has been soft-deleted, this is the date at which the entity has been deleted */
+    deletedAt?: Date;
+    /** Version number of this entity */
+    version!: number;
+    /** Type of the activity (status or comment) */
+    type!: ActivityType;
+    /** Subtype of this activity, only used when the type = "STATUS" */
+    subType?: string;
+    /** Description of this activity */
+    description!: string;
+    /** User who created this activity */
+    createdBy!: User;
+    companyId!: number;
+    /** Company related to this activity */
+    company!: Company;
+
+    constructor(data?: ICompanyActivity) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+        if (!data) {
+            this.createdBy = new User();
+            this.company = new Company();
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
+            this.updatedAt = _data["updatedAt"] ? new Date(_data["updatedAt"].toString()) : <any>undefined;
+            this.deletedAt = _data["deletedAt"] ? new Date(_data["deletedAt"].toString()) : <any>undefined;
+            this.version = _data["version"];
+            this.type = _data["type"];
+            this.subType = _data["subType"];
+            this.description = _data["description"];
+            this.createdBy = _data["createdBy"] ? User.fromJS(_data["createdBy"]) : new User();
+            this.companyId = _data["companyId"];
+            this.company = _data["company"] ? Company.fromJS(_data["company"]) : new Company();
+        }
+    }
+
+    static fromJS(data: any): CompanyActivity {
+        data = typeof data === 'object' ? data : {};
+        let result = new CompanyActivity();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
+        data["updatedAt"] = this.updatedAt ? this.updatedAt.toISOString() : <any>undefined;
+        data["deletedAt"] = this.deletedAt ? this.deletedAt.toISOString() : <any>undefined;
+        data["version"] = this.version;
+        data["type"] = this.type;
+        data["subType"] = this.subType;
+        data["description"] = this.description;
+        data["createdBy"] = this.createdBy ? this.createdBy.toJSON() : <any>undefined;
+        data["companyId"] = this.companyId;
+        data["company"] = this.company ? this.company.toJSON() : <any>undefined;
+        return data; 
+    }
+}
+
+export interface ICompanyActivity {
+    /** Incremental ID of the entity */
+    id: number;
+    /** Date at which this entity has been created */
+    createdAt: Date;
+    /** Date at which this entity has last been updated */
+    updatedAt: Date;
+    /** If this entity has been soft-deleted, this is the date at which the entity has been deleted */
+    deletedAt?: Date;
+    /** Version number of this entity */
+    version: number;
+    /** Type of the activity (status or comment) */
+    type: ActivityType;
+    /** Subtype of this activity, only used when the type = "STATUS" */
+    subType?: string;
+    /** Description of this activity */
+    description: string;
+    /** User who created this activity */
+    createdBy: User;
+    companyId: number;
+    /** Company related to this activity */
+    company: Company;
+}
+
+export class ContractActivity implements IContractActivity {
+    /** Incremental ID of the entity */
+    id!: number;
+    /** Date at which this entity has been created */
+    createdAt!: Date;
+    /** Date at which this entity has last been updated */
+    updatedAt!: Date;
+    /** If this entity has been soft-deleted, this is the date at which the entity has been deleted */
+    deletedAt?: Date;
+    /** Version number of this entity */
+    version!: number;
+    /** Type of the activity (status or comment) */
+    type!: ActivityType;
+    /** Subtype of this activity, only used when the type = "STATUS" */
+    subType?: string;
+    /** Description of this activity */
+    description!: string;
+    /** User who created this activity */
+    createdBy!: User;
+    contractId!: number;
+    /** Contract related to this activity */
+    contract!: Contract;
+    relatedContractId?: number;
+    /** If this activity should reference another contract, it can be done here */
+    relatedContract?: Contract;
+
+    constructor(data?: IContractActivity) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+        if (!data) {
+            this.createdBy = new User();
+            this.contract = new Contract();
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
+            this.updatedAt = _data["updatedAt"] ? new Date(_data["updatedAt"].toString()) : <any>undefined;
+            this.deletedAt = _data["deletedAt"] ? new Date(_data["deletedAt"].toString()) : <any>undefined;
+            this.version = _data["version"];
+            this.type = _data["type"];
+            this.subType = _data["subType"];
+            this.description = _data["description"];
+            this.createdBy = _data["createdBy"] ? User.fromJS(_data["createdBy"]) : new User();
+            this.contractId = _data["contractId"];
+            this.contract = _data["contract"] ? Contract.fromJS(_data["contract"]) : new Contract();
+            this.relatedContractId = _data["relatedContractId"];
+            this.relatedContract = _data["relatedContract"] ? Contract.fromJS(_data["relatedContract"]) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): ContractActivity {
+        data = typeof data === 'object' ? data : {};
+        let result = new ContractActivity();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
+        data["updatedAt"] = this.updatedAt ? this.updatedAt.toISOString() : <any>undefined;
+        data["deletedAt"] = this.deletedAt ? this.deletedAt.toISOString() : <any>undefined;
+        data["version"] = this.version;
+        data["type"] = this.type;
+        data["subType"] = this.subType;
+        data["description"] = this.description;
+        data["createdBy"] = this.createdBy ? this.createdBy.toJSON() : <any>undefined;
+        data["contractId"] = this.contractId;
+        data["contract"] = this.contract ? this.contract.toJSON() : <any>undefined;
+        data["relatedContractId"] = this.relatedContractId;
+        data["relatedContract"] = this.relatedContract ? this.relatedContract.toJSON() : <any>undefined;
+        return data; 
+    }
+}
+
+export interface IContractActivity {
+    /** Incremental ID of the entity */
+    id: number;
+    /** Date at which this entity has been created */
+    createdAt: Date;
+    /** Date at which this entity has last been updated */
+    updatedAt: Date;
+    /** If this entity has been soft-deleted, this is the date at which the entity has been deleted */
+    deletedAt?: Date;
+    /** Version number of this entity */
+    version: number;
+    /** Type of the activity (status or comment) */
+    type: ActivityType;
+    /** Subtype of this activity, only used when the type = "STATUS" */
+    subType?: string;
+    /** Description of this activity */
+    description: string;
+    /** User who created this activity */
+    createdBy: User;
+    contractId: number;
+    /** Contract related to this activity */
+    contract: Contract;
+    relatedContractId?: number;
+    /** If this activity should reference another contract, it can be done here */
+    relatedContract?: Contract;
+}
+
+export class ProductActivity implements IProductActivity {
+    /** Incremental ID of the entity */
+    id!: number;
+    /** Date at which this entity has been created */
+    createdAt!: Date;
+    /** Date at which this entity has last been updated */
+    updatedAt!: Date;
+    /** If this entity has been soft-deleted, this is the date at which the entity has been deleted */
+    deletedAt?: Date;
+    /** Version number of this entity */
+    version!: number;
+    /** Type of the activity (status or comment) */
+    type!: ActivityType;
+    /** Subtype of this activity, only used when the type = "STATUS" */
+    subType?: string;
+    /** Description of this activity */
+    description!: string;
+    /** User who created this activity */
+    createdBy!: User;
+    productId!: number;
+    /** Product related to this activity */
+    product!: Product;
+
+    constructor(data?: IProductActivity) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+        if (!data) {
+            this.createdBy = new User();
+            this.product = new Product();
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
+            this.updatedAt = _data["updatedAt"] ? new Date(_data["updatedAt"].toString()) : <any>undefined;
+            this.deletedAt = _data["deletedAt"] ? new Date(_data["deletedAt"].toString()) : <any>undefined;
+            this.version = _data["version"];
+            this.type = _data["type"];
+            this.subType = _data["subType"];
+            this.description = _data["description"];
+            this.createdBy = _data["createdBy"] ? User.fromJS(_data["createdBy"]) : new User();
+            this.productId = _data["productId"];
+            this.product = _data["product"] ? Product.fromJS(_data["product"]) : new Product();
+        }
+    }
+
+    static fromJS(data: any): ProductActivity {
+        data = typeof data === 'object' ? data : {};
+        let result = new ProductActivity();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
+        data["updatedAt"] = this.updatedAt ? this.updatedAt.toISOString() : <any>undefined;
+        data["deletedAt"] = this.deletedAt ? this.deletedAt.toISOString() : <any>undefined;
+        data["version"] = this.version;
+        data["type"] = this.type;
+        data["subType"] = this.subType;
+        data["description"] = this.description;
+        data["createdBy"] = this.createdBy ? this.createdBy.toJSON() : <any>undefined;
+        data["productId"] = this.productId;
+        data["product"] = this.product ? this.product.toJSON() : <any>undefined;
+        return data; 
+    }
+}
+
+export interface IProductActivity {
+    /** Incremental ID of the entity */
+    id: number;
+    /** Date at which this entity has been created */
+    createdAt: Date;
+    /** Date at which this entity has last been updated */
+    updatedAt: Date;
+    /** If this entity has been soft-deleted, this is the date at which the entity has been deleted */
+    deletedAt?: Date;
+    /** Version number of this entity */
+    version: number;
+    /** Type of the activity (status or comment) */
+    type: ActivityType;
+    /** Subtype of this activity, only used when the type = "STATUS" */
+    subType?: string;
+    /** Description of this activity */
+    description: string;
+    /** User who created this activity */
+    createdBy: User;
+    productId: number;
+    /** Product related to this activity */
+    product: Product;
 }
 
 export class ProductListResponse implements IProductListResponse {
@@ -1964,7 +2699,7 @@ export class ApiError implements IApiError {
     name!: string;
     message!: string;
     stack?: string;
-    /** The status code of the error, as defined by HTTP status codes. */
+    /** The activity code of the error, as defined by HTTP activity codes. */
     statusCode!: number;
 
     constructor(data?: IApiError) {
@@ -2006,7 +2741,7 @@ export interface IApiError {
     name: string;
     message: string;
     stack?: string;
-    /** The status code of the error, as defined by HTTP status codes. */
+    /** The activity code of the error, as defined by HTTP activity codes. */
     statusCode: number;
 }
 
@@ -2056,11 +2791,10 @@ export class ProductParams implements IProductParams {
     nameEnglish!: string;
     targetPrice!: number;
     description!: string;
-    status!: ProductStatus;
     contractTextDutch!: string;
     contractTextEnglish!: string;
-    deliverySpecificationDutch!: string;
-    deliverySpecificationEnglish!: string;
+    deliverySpecificationDutch?: string;
+    deliverySpecificationEnglish?: string;
 
     constructor(data?: IProductParams) {
         if (data) {
@@ -2077,7 +2811,6 @@ export class ProductParams implements IProductParams {
             this.nameEnglish = _data["nameEnglish"];
             this.targetPrice = _data["targetPrice"];
             this.description = _data["description"];
-            this.status = _data["status"];
             this.contractTextDutch = _data["contractTextDutch"];
             this.contractTextEnglish = _data["contractTextEnglish"];
             this.deliverySpecificationDutch = _data["deliverySpecificationDutch"];
@@ -2098,7 +2831,6 @@ export class ProductParams implements IProductParams {
         data["nameEnglish"] = this.nameEnglish;
         data["targetPrice"] = this.targetPrice;
         data["description"] = this.description;
-        data["status"] = this.status;
         data["contractTextDutch"] = this.contractTextDutch;
         data["contractTextEnglish"] = this.contractTextEnglish;
         data["deliverySpecificationDutch"] = this.deliverySpecificationDutch;
@@ -2112,11 +2844,10 @@ export interface IProductParams {
     nameEnglish: string;
     targetPrice: number;
     description: string;
-    status: ProductStatus;
     contractTextDutch: string;
     contractTextEnglish: string;
-    deliverySpecificationDutch: string;
-    deliverySpecificationEnglish: string;
+    deliverySpecificationDutch?: string;
+    deliverySpecificationEnglish?: string;
 }
 
 /** Make all properties in T optional */
@@ -2125,7 +2856,6 @@ export class Partial_ProductParams implements IPartial_ProductParams {
     nameEnglish?: string;
     targetPrice?: number;
     description?: string;
-    status?: ProductStatus;
     contractTextDutch?: string;
     contractTextEnglish?: string;
     deliverySpecificationDutch?: string;
@@ -2146,7 +2876,6 @@ export class Partial_ProductParams implements IPartial_ProductParams {
             this.nameEnglish = _data["nameEnglish"];
             this.targetPrice = _data["targetPrice"];
             this.description = _data["description"];
-            this.status = _data["status"];
             this.contractTextDutch = _data["contractTextDutch"];
             this.contractTextEnglish = _data["contractTextEnglish"];
             this.deliverySpecificationDutch = _data["deliverySpecificationDutch"];
@@ -2167,7 +2896,6 @@ export class Partial_ProductParams implements IPartial_ProductParams {
         data["nameEnglish"] = this.nameEnglish;
         data["targetPrice"] = this.targetPrice;
         data["description"] = this.description;
-        data["status"] = this.status;
         data["contractTextDutch"] = this.contractTextDutch;
         data["contractTextEnglish"] = this.contractTextEnglish;
         data["deliverySpecificationDutch"] = this.deliverySpecificationDutch;
@@ -2182,7 +2910,6 @@ export interface IPartial_ProductParams {
     nameEnglish?: string;
     targetPrice?: number;
     description?: string;
-    status?: ProductStatus;
     contractTextDutch?: string;
     contractTextEnglish?: string;
     deliverySpecificationDutch?: string;
@@ -2242,10 +2969,17 @@ export interface ICompanyListResponse {
 
 export class CompanyParams implements ICompanyParams {
     name!: string;
-    description!: string;
-    phoneNumber!: string;
-    comments!: string;
-    status!: CompanyStatus;
+    description?: string;
+    phoneNumber?: string;
+    addressStreet!: string;
+    addressPostalCode!: string;
+    addressCity!: string;
+    addressCountry!: string;
+    invoiceAddressStreet?: string;
+    invoiceAddressPostalCode?: string;
+    invoiceAddressCity?: string;
+    invoiceAddressCountry?: string;
+    status?: CompanyStatus;
     endDate?: Date;
 
     constructor(data?: ICompanyParams) {
@@ -2262,7 +2996,14 @@ export class CompanyParams implements ICompanyParams {
             this.name = _data["name"];
             this.description = _data["description"];
             this.phoneNumber = _data["phoneNumber"];
-            this.comments = _data["comments"];
+            this.addressStreet = _data["addressStreet"];
+            this.addressPostalCode = _data["addressPostalCode"];
+            this.addressCity = _data["addressCity"];
+            this.addressCountry = _data["addressCountry"];
+            this.invoiceAddressStreet = _data["invoiceAddressStreet"];
+            this.invoiceAddressPostalCode = _data["invoiceAddressPostalCode"];
+            this.invoiceAddressCity = _data["invoiceAddressCity"];
+            this.invoiceAddressCountry = _data["invoiceAddressCountry"];
             this.status = _data["status"];
             this.endDate = _data["endDate"] ? new Date(_data["endDate"].toString()) : <any>undefined;
         }
@@ -2280,7 +3021,14 @@ export class CompanyParams implements ICompanyParams {
         data["name"] = this.name;
         data["description"] = this.description;
         data["phoneNumber"] = this.phoneNumber;
-        data["comments"] = this.comments;
+        data["addressStreet"] = this.addressStreet;
+        data["addressPostalCode"] = this.addressPostalCode;
+        data["addressCity"] = this.addressCity;
+        data["addressCountry"] = this.addressCountry;
+        data["invoiceAddressStreet"] = this.invoiceAddressStreet;
+        data["invoiceAddressPostalCode"] = this.invoiceAddressPostalCode;
+        data["invoiceAddressCity"] = this.invoiceAddressCity;
+        data["invoiceAddressCountry"] = this.invoiceAddressCountry;
         data["status"] = this.status;
         data["endDate"] = this.endDate ? this.endDate.toISOString() : <any>undefined;
         return data; 
@@ -2289,10 +3037,17 @@ export class CompanyParams implements ICompanyParams {
 
 export interface ICompanyParams {
     name: string;
-    description: string;
-    phoneNumber: string;
-    comments: string;
-    status: CompanyStatus;
+    description?: string;
+    phoneNumber?: string;
+    addressStreet: string;
+    addressPostalCode: string;
+    addressCity: string;
+    addressCountry: string;
+    invoiceAddressStreet?: string;
+    invoiceAddressPostalCode?: string;
+    invoiceAddressCity?: string;
+    invoiceAddressCountry?: string;
+    status?: CompanyStatus;
     endDate?: Date;
 }
 
@@ -2301,7 +3056,14 @@ export class Partial_CompanyParams implements IPartial_CompanyParams {
     name?: string;
     description?: string;
     phoneNumber?: string;
-    comments?: string;
+    addressStreet?: string;
+    addressPostalCode?: string;
+    addressCity?: string;
+    addressCountry?: string;
+    invoiceAddressStreet?: string;
+    invoiceAddressPostalCode?: string;
+    invoiceAddressCity?: string;
+    invoiceAddressCountry?: string;
     status?: CompanyStatus;
     endDate?: Date;
 
@@ -2319,7 +3081,14 @@ export class Partial_CompanyParams implements IPartial_CompanyParams {
             this.name = _data["name"];
             this.description = _data["description"];
             this.phoneNumber = _data["phoneNumber"];
-            this.comments = _data["comments"];
+            this.addressStreet = _data["addressStreet"];
+            this.addressPostalCode = _data["addressPostalCode"];
+            this.addressCity = _data["addressCity"];
+            this.addressCountry = _data["addressCountry"];
+            this.invoiceAddressStreet = _data["invoiceAddressStreet"];
+            this.invoiceAddressPostalCode = _data["invoiceAddressPostalCode"];
+            this.invoiceAddressCity = _data["invoiceAddressCity"];
+            this.invoiceAddressCountry = _data["invoiceAddressCountry"];
             this.status = _data["status"];
             this.endDate = _data["endDate"] ? new Date(_data["endDate"].toString()) : <any>undefined;
         }
@@ -2337,7 +3106,14 @@ export class Partial_CompanyParams implements IPartial_CompanyParams {
         data["name"] = this.name;
         data["description"] = this.description;
         data["phoneNumber"] = this.phoneNumber;
-        data["comments"] = this.comments;
+        data["addressStreet"] = this.addressStreet;
+        data["addressPostalCode"] = this.addressPostalCode;
+        data["addressCity"] = this.addressCity;
+        data["addressCountry"] = this.addressCountry;
+        data["invoiceAddressStreet"] = this.invoiceAddressStreet;
+        data["invoiceAddressPostalCode"] = this.invoiceAddressPostalCode;
+        data["invoiceAddressCity"] = this.invoiceAddressCity;
+        data["invoiceAddressCountry"] = this.invoiceAddressCountry;
         data["status"] = this.status;
         data["endDate"] = this.endDate ? this.endDate.toISOString() : <any>undefined;
         return data; 
@@ -2349,7 +3125,14 @@ export interface IPartial_CompanyParams {
     name?: string;
     description?: string;
     phoneNumber?: string;
-    comments?: string;
+    addressStreet?: string;
+    addressPostalCode?: string;
+    addressCity?: string;
+    addressCountry?: string;
+    invoiceAddressStreet?: string;
+    invoiceAddressPostalCode?: string;
+    invoiceAddressCity?: string;
+    invoiceAddressCountry?: string;
     status?: CompanyStatus;
     endDate?: Date;
 }
@@ -2408,9 +3191,8 @@ export interface IContractListResponse {
 export class ContractParams implements IContractParams {
     title!: string;
     companyId!: number;
-    date!: Date;
-    poNumber!: string;
-    comments!: string;
+    contactId!: number;
+    comments?: string;
 
     constructor(data?: IContractParams) {
         if (data) {
@@ -2425,8 +3207,7 @@ export class ContractParams implements IContractParams {
         if (_data) {
             this.title = _data["title"];
             this.companyId = _data["companyId"];
-            this.date = _data["date"] ? new Date(_data["date"].toString()) : <any>undefined;
-            this.poNumber = _data["poNumber"];
+            this.contactId = _data["contactId"];
             this.comments = _data["comments"];
         }
     }
@@ -2442,8 +3223,7 @@ export class ContractParams implements IContractParams {
         data = typeof data === 'object' ? data : {};
         data["title"] = this.title;
         data["companyId"] = this.companyId;
-        data["date"] = this.date ? this.date.toISOString() : <any>undefined;
-        data["poNumber"] = this.poNumber;
+        data["contactId"] = this.contactId;
         data["comments"] = this.comments;
         return data; 
     }
@@ -2452,17 +3232,15 @@ export class ContractParams implements IContractParams {
 export interface IContractParams {
     title: string;
     companyId: number;
-    date: Date;
-    poNumber: string;
-    comments: string;
+    contactId: number;
+    comments?: string;
 }
 
 /** Make all properties in T optional */
 export class Partial_ContractParams implements IPartial_ContractParams {
     title?: string;
     companyId?: number;
-    date?: Date;
-    poNumber?: string;
+    contactId?: number;
     comments?: string;
 
     constructor(data?: IPartial_ContractParams) {
@@ -2478,8 +3256,7 @@ export class Partial_ContractParams implements IPartial_ContractParams {
         if (_data) {
             this.title = _data["title"];
             this.companyId = _data["companyId"];
-            this.date = _data["date"] ? new Date(_data["date"].toString()) : <any>undefined;
-            this.poNumber = _data["poNumber"];
+            this.contactId = _data["contactId"];
             this.comments = _data["comments"];
         }
     }
@@ -2495,8 +3272,7 @@ export class Partial_ContractParams implements IPartial_ContractParams {
         data = typeof data === 'object' ? data : {};
         data["title"] = this.title;
         data["companyId"] = this.companyId;
-        data["date"] = this.date ? this.date.toISOString() : <any>undefined;
-        data["poNumber"] = this.poNumber;
+        data["contactId"] = this.contactId;
         data["comments"] = this.comments;
         return data; 
     }
@@ -2506,8 +3282,97 @@ export class Partial_ContractParams implements IPartial_ContractParams {
 export interface IPartial_ContractParams {
     title?: string;
     companyId?: number;
-    date?: Date;
-    poNumber?: string;
+    contactId?: number;
+    comments?: string;
+}
+
+export class ProductInstanceParams implements IProductInstanceParams {
+    productId!: number;
+    price!: number;
+    comments?: string;
+
+    constructor(data?: IProductInstanceParams) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.productId = _data["productId"];
+            this.price = _data["price"];
+            this.comments = _data["comments"];
+        }
+    }
+
+    static fromJS(data: any): ProductInstanceParams {
+        data = typeof data === 'object' ? data : {};
+        let result = new ProductInstanceParams();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["productId"] = this.productId;
+        data["price"] = this.price;
+        data["comments"] = this.comments;
+        return data; 
+    }
+}
+
+export interface IProductInstanceParams {
+    productId: number;
+    price: number;
+    comments?: string;
+}
+
+/** Make all properties in T optional */
+export class Partial_ProductInstanceParams implements IPartial_ProductInstanceParams {
+    productId?: number;
+    price?: number;
+    comments?: string;
+
+    constructor(data?: IPartial_ProductInstanceParams) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.productId = _data["productId"];
+            this.price = _data["price"];
+            this.comments = _data["comments"];
+        }
+    }
+
+    static fromJS(data: any): Partial_ProductInstanceParams {
+        data = typeof data === 'object' ? data : {};
+        let result = new Partial_ProductInstanceParams();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["productId"] = this.productId;
+        data["price"] = this.price;
+        data["comments"] = this.comments;
+        return data; 
+    }
+}
+
+/** Make all properties in T optional */
+export interface IPartial_ProductInstanceParams {
+    productId?: number;
+    price?: number;
     comments?: string;
 }
 
@@ -2563,10 +3428,10 @@ export interface IInvoiceListResponse {
 }
 
 export class InvoiceParams implements IInvoiceParams {
-    product!: ProductInstance[];
     companyId!: number;
-    price!: number;
-    comment!: string;
+    productInstances!: ProductInstance[];
+    poNumber?: string;
+    comments?: string;
 
     constructor(data?: IInvoiceParams) {
         if (data) {
@@ -2576,20 +3441,20 @@ export class InvoiceParams implements IInvoiceParams {
             }
         }
         if (!data) {
-            this.product = [];
+            this.productInstances = [];
         }
     }
 
     init(_data?: any) {
         if (_data) {
-            if (Array.isArray(_data["product"])) {
-                this.product = [] as any;
-                for (let item of _data["product"])
-                    this.product!.push(ProductInstance.fromJS(item));
-            }
             this.companyId = _data["companyId"];
-            this.price = _data["price"];
-            this.comment = _data["comment"];
+            if (Array.isArray(_data["productInstances"])) {
+                this.productInstances = [] as any;
+                for (let item of _data["productInstances"])
+                    this.productInstances!.push(ProductInstance.fromJS(item));
+            }
+            this.poNumber = _data["poNumber"];
+            this.comments = _data["comments"];
         }
     }
 
@@ -2602,31 +3467,31 @@ export class InvoiceParams implements IInvoiceParams {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        if (Array.isArray(this.product)) {
-            data["product"] = [];
-            for (let item of this.product)
-                data["product"].push(item.toJSON());
-        }
         data["companyId"] = this.companyId;
-        data["price"] = this.price;
-        data["comment"] = this.comment;
+        if (Array.isArray(this.productInstances)) {
+            data["productInstances"] = [];
+            for (let item of this.productInstances)
+                data["productInstances"].push(item.toJSON());
+        }
+        data["poNumber"] = this.poNumber;
+        data["comments"] = this.comments;
         return data; 
     }
 }
 
 export interface IInvoiceParams {
-    product: ProductInstance[];
     companyId: number;
-    price: number;
-    comment: string;
+    productInstances: ProductInstance[];
+    poNumber?: string;
+    comments?: string;
 }
 
 /** Make all properties in T optional */
 export class Partial_InvoiceParams implements IPartial_InvoiceParams {
-    product?: ProductInstance[];
     companyId?: number;
-    price?: number;
-    comment?: string;
+    productInstances?: ProductInstance[];
+    poNumber?: string;
+    comments?: string;
 
     constructor(data?: IPartial_InvoiceParams) {
         if (data) {
@@ -2639,14 +3504,14 @@ export class Partial_InvoiceParams implements IPartial_InvoiceParams {
 
     init(_data?: any) {
         if (_data) {
-            if (Array.isArray(_data["product"])) {
-                this.product = [] as any;
-                for (let item of _data["product"])
-                    this.product!.push(ProductInstance.fromJS(item));
-            }
             this.companyId = _data["companyId"];
-            this.price = _data["price"];
-            this.comment = _data["comment"];
+            if (Array.isArray(_data["productInstances"])) {
+                this.productInstances = [] as any;
+                for (let item of _data["productInstances"])
+                    this.productInstances!.push(ProductInstance.fromJS(item));
+            }
+            this.poNumber = _data["poNumber"];
+            this.comments = _data["comments"];
         }
     }
 
@@ -2659,24 +3524,24 @@ export class Partial_InvoiceParams implements IPartial_InvoiceParams {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        if (Array.isArray(this.product)) {
-            data["product"] = [];
-            for (let item of this.product)
-                data["product"].push(item.toJSON());
-        }
         data["companyId"] = this.companyId;
-        data["price"] = this.price;
-        data["comment"] = this.comment;
+        if (Array.isArray(this.productInstances)) {
+            data["productInstances"] = [];
+            for (let item of this.productInstances)
+                data["productInstances"].push(item.toJSON());
+        }
+        data["poNumber"] = this.poNumber;
+        data["comments"] = this.comments;
         return data; 
     }
 }
 
 /** Make all properties in T optional */
 export interface IPartial_InvoiceParams {
-    product?: ProductInstance[];
     companyId?: number;
-    price?: number;
-    comment?: string;
+    productInstances?: ProductInstance[];
+    poNumber?: string;
+    comments?: string;
 }
 
 export class ContactListResponse implements IContactListResponse {
@@ -2733,11 +3598,13 @@ export interface IContactListResponse {
 export class ContactParams implements IContactParams {
     gender!: Gender;
     firstName!: string;
-    middleName!: string;
+    middleName?: string;
     lastName!: string;
-    email!: string;
-    comment!: string;
+    email?: string;
+    telephone?: string;
+    comments?: string;
     companyId!: number;
+    function?: ContactFunction;
 
     constructor(data?: IContactParams) {
         if (data) {
@@ -2755,8 +3622,10 @@ export class ContactParams implements IContactParams {
             this.middleName = _data["middleName"];
             this.lastName = _data["lastName"];
             this.email = _data["email"];
-            this.comment = _data["comment"];
+            this.telephone = _data["telephone"];
+            this.comments = _data["comments"];
             this.companyId = _data["companyId"];
+            this.function = _data["function"];
         }
     }
 
@@ -2774,8 +3643,10 @@ export class ContactParams implements IContactParams {
         data["middleName"] = this.middleName;
         data["lastName"] = this.lastName;
         data["email"] = this.email;
-        data["comment"] = this.comment;
+        data["telephone"] = this.telephone;
+        data["comments"] = this.comments;
         data["companyId"] = this.companyId;
+        data["function"] = this.function;
         return data; 
     }
 }
@@ -2783,11 +3654,13 @@ export class ContactParams implements IContactParams {
 export interface IContactParams {
     gender: Gender;
     firstName: string;
-    middleName: string;
+    middleName?: string;
     lastName: string;
-    email: string;
-    comment: string;
+    email?: string;
+    telephone?: string;
+    comments?: string;
     companyId: number;
+    function?: ContactFunction;
 }
 
 /** Make all properties in T optional */
@@ -2797,8 +3670,10 @@ export class Partial_ContactParams implements IPartial_ContactParams {
     middleName?: string;
     lastName?: string;
     email?: string;
-    comment?: string;
+    telephone?: string;
+    comments?: string;
     companyId?: number;
+    function?: ContactFunction;
 
     constructor(data?: IPartial_ContactParams) {
         if (data) {
@@ -2816,8 +3691,10 @@ export class Partial_ContactParams implements IPartial_ContactParams {
             this.middleName = _data["middleName"];
             this.lastName = _data["lastName"];
             this.email = _data["email"];
-            this.comment = _data["comment"];
+            this.telephone = _data["telephone"];
+            this.comments = _data["comments"];
             this.companyId = _data["companyId"];
+            this.function = _data["function"];
         }
     }
 
@@ -2835,8 +3712,10 @@ export class Partial_ContactParams implements IPartial_ContactParams {
         data["middleName"] = this.middleName;
         data["lastName"] = this.lastName;
         data["email"] = this.email;
-        data["comment"] = this.comment;
+        data["telephone"] = this.telephone;
+        data["comments"] = this.comments;
         data["companyId"] = this.companyId;
+        data["function"] = this.function;
         return data; 
     }
 }
@@ -2848,8 +3727,10 @@ export interface IPartial_ContactParams {
     middleName?: string;
     lastName?: string;
     email?: string;
-    comment?: string;
+    telephone?: string;
+    comments?: string;
     companyId?: number;
+    function?: ContactFunction;
 }
 
 export enum Dir {
