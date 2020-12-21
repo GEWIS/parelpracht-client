@@ -2408,6 +2408,7 @@ export interface IContractListResponse {
 export class ContractParams implements IContractParams {
     title!: string;
     companyId!: number;
+    contactId!: number;
     date!: Date;
     poNumber!: string;
     comments!: string;
@@ -2425,6 +2426,7 @@ export class ContractParams implements IContractParams {
         if (_data) {
             this.title = _data["title"];
             this.companyId = _data["companyId"];
+            this.contactId = _data["contactId"];
             this.date = _data["date"] ? new Date(_data["date"].toString()) : <any>undefined;
             this.poNumber = _data["poNumber"];
             this.comments = _data["comments"];
@@ -2442,6 +2444,7 @@ export class ContractParams implements IContractParams {
         data = typeof data === 'object' ? data : {};
         data["title"] = this.title;
         data["companyId"] = this.companyId;
+        data["contactId"] = this.contactId;
         data["date"] = this.date ? this.date.toISOString() : <any>undefined;
         data["poNumber"] = this.poNumber;
         data["comments"] = this.comments;
@@ -2452,6 +2455,7 @@ export class ContractParams implements IContractParams {
 export interface IContractParams {
     title: string;
     companyId: number;
+    contactId: number;
     date: Date;
     poNumber: string;
     comments: string;
@@ -2461,6 +2465,7 @@ export interface IContractParams {
 export class Partial_ContractParams implements IPartial_ContractParams {
     title?: string;
     companyId?: number;
+    contactId?: number;
     date?: Date;
     poNumber?: string;
     comments?: string;
@@ -2478,6 +2483,7 @@ export class Partial_ContractParams implements IPartial_ContractParams {
         if (_data) {
             this.title = _data["title"];
             this.companyId = _data["companyId"];
+            this.contactId = _data["contactId"];
             this.date = _data["date"] ? new Date(_data["date"].toString()) : <any>undefined;
             this.poNumber = _data["poNumber"];
             this.comments = _data["comments"];
@@ -2495,6 +2501,7 @@ export class Partial_ContractParams implements IPartial_ContractParams {
         data = typeof data === 'object' ? data : {};
         data["title"] = this.title;
         data["companyId"] = this.companyId;
+        data["contactId"] = this.contactId;
         data["date"] = this.date ? this.date.toISOString() : <any>undefined;
         data["poNumber"] = this.poNumber;
         data["comments"] = this.comments;
@@ -2506,6 +2513,7 @@ export class Partial_ContractParams implements IPartial_ContractParams {
 export interface IPartial_ContractParams {
     title?: string;
     companyId?: number;
+    contactId?: number;
     date?: Date;
     poNumber?: string;
     comments?: string;
@@ -2563,7 +2571,6 @@ export interface IInvoiceListResponse {
 }
 
 export class InvoiceParams implements IInvoiceParams {
-    product!: ProductInstance[];
     companyId!: number;
     price!: number;
     comment!: string;
@@ -2575,18 +2582,10 @@ export class InvoiceParams implements IInvoiceParams {
                     (<any>this)[property] = (<any>data)[property];
             }
         }
-        if (!data) {
-            this.product = [];
-        }
     }
 
     init(_data?: any) {
         if (_data) {
-            if (Array.isArray(_data["product"])) {
-                this.product = [] as any;
-                for (let item of _data["product"])
-                    this.product!.push(ProductInstance.fromJS(item));
-            }
             this.companyId = _data["companyId"];
             this.price = _data["price"];
             this.comment = _data["comment"];
@@ -2602,11 +2601,6 @@ export class InvoiceParams implements IInvoiceParams {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        if (Array.isArray(this.product)) {
-            data["product"] = [];
-            for (let item of this.product)
-                data["product"].push(item.toJSON());
-        }
         data["companyId"] = this.companyId;
         data["price"] = this.price;
         data["comment"] = this.comment;
@@ -2615,7 +2609,6 @@ export class InvoiceParams implements IInvoiceParams {
 }
 
 export interface IInvoiceParams {
-    product: ProductInstance[];
     companyId: number;
     price: number;
     comment: string;
@@ -2623,7 +2616,6 @@ export interface IInvoiceParams {
 
 /** Make all properties in T optional */
 export class Partial_InvoiceParams implements IPartial_InvoiceParams {
-    product?: ProductInstance[];
     companyId?: number;
     price?: number;
     comment?: string;
@@ -2639,11 +2631,6 @@ export class Partial_InvoiceParams implements IPartial_InvoiceParams {
 
     init(_data?: any) {
         if (_data) {
-            if (Array.isArray(_data["product"])) {
-                this.product = [] as any;
-                for (let item of _data["product"])
-                    this.product!.push(ProductInstance.fromJS(item));
-            }
             this.companyId = _data["companyId"];
             this.price = _data["price"];
             this.comment = _data["comment"];
@@ -2659,11 +2646,6 @@ export class Partial_InvoiceParams implements IPartial_InvoiceParams {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        if (Array.isArray(this.product)) {
-            data["product"] = [];
-            for (let item of this.product)
-                data["product"].push(item.toJSON());
-        }
         data["companyId"] = this.companyId;
         data["price"] = this.price;
         data["comment"] = this.comment;
@@ -2673,7 +2655,6 @@ export class Partial_InvoiceParams implements IPartial_InvoiceParams {
 
 /** Make all properties in T optional */
 export interface IPartial_InvoiceParams {
-    product?: ProductInstance[];
     companyId?: number;
     price?: number;
     comment?: string;
