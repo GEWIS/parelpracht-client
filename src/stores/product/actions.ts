@@ -3,14 +3,14 @@ import type { Product, ProductParams } from '../../clients/server.generated';
 
 // Action types
 export enum ProductActionType {
-  Fetch = 'Products/Fetch',
+/*   Fetch = 'Products/Fetch',
   Set = 'Products/Set',
   Clear = 'Products/Clear',
   ChangeSort = 'Products/ChangeSort',
   NextPage = 'Products/NextPage',
   PrevPage = 'Products/PrevPage',
   SetTake = 'Products/SetTake',
-  Search = 'Products/Search',
+  Search = 'Products/Search', */
 
   FetchSingle = 'Products/FetchSingle',
   SetSingle = 'Products/SetSingle',
@@ -21,7 +21,7 @@ export enum ProductActionType {
 }
 
 // Actions
-export type ProductsFetchAction = Action<ProductActionType.Fetch>;
+/* export type ProductsFetchAction = Action<ProductActionType.Fetch>;
 
 export type ProductsSetAction = Action<ProductActionType.Set> & {
   products: Product[],
@@ -43,7 +43,7 @@ export type ProductsSearchAction = Action<ProductActionType.Search> & {
 };
 
 export type ProductsNextPageAction = Action<ProductActionType.NextPage>;
-export type ProductsPrevPageAction = Action<ProductActionType.PrevPage>;
+export type ProductsPrevPageAction = Action<ProductActionType.PrevPage>; */
 
 export type ProductsFetchSingleAction = Action<ProductActionType.FetchSingle> & {
   id: number,

@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import {
   Checkbox,
-  Form, Input, Label, Segment, TextArea,
+  Form, Input, Label, TextArea,
 } from 'semantic-ui-react';
 import { Product, ProductParams, ProductStatus } from '../clients/server.generated';
 import { formatPrice } from '../helpers/monetary';

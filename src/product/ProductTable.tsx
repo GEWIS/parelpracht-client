@@ -4,13 +4,11 @@ import { Dispatch } from 'redux';
 import { Table } from 'semantic-ui-react';
 import { Product } from '../clients/server.generated';
 import TablePagination from '../components/TablePagination';
-import {
-  fetchProducts as createFetchProducts, changeSortProducts,
-  setTakeProducts, prevPageProducts, nextPageProducts,
-} from '../stores/product/actionCreators';
-import { countFetchedProducts, countTotalProducts } from '../stores/product/selectors';
 import { RootState } from '../stores/store';
-import { fetchTable } from '../stores/tables/actionCreators';
+import {
+  changeSortTable, fetchTable, nextPageTable, prevPageTable, setTakeTable,
+} from '../stores/tables/actionCreators';
+import { countFetched, countTotal, getTable } from '../stores/tables/selectors';
 import { Tables } from '../stores/tables/tables';
 import { ProductRow } from './ProductRow';
 
@@ -18,8 +16,8 @@ interface Props {
   products: Product[];
   column: string;
   direction: 'ascending' | 'descending';
-  countTotal: number;
-  countFetched: number;
+  total: number;
+  fetched: number;
   skip: number;
   take: number;
 
@@ -32,7 +30,7 @@ interface Props {
 
 function ProductsTable({
   products, fetchProducts, column, direction, changeSort,
-  countTotal, countFetched, skip, take,
+  total, fetched, skip, take,
   prevPage, nextPage, setTake,
 }: Props) {
   useEffect(() => {
@@ -75,8 +73,8 @@ function ProductsTable({
         </Table.Body>
       </Table>
       <TablePagination
-        countTotal={countTotal}
-        countFetched={countFetched}
+        countTotal={total}
+        countFetched={fetched}
         skip={skip}
         take={take}
         nextPage={nextPage}
@@ -88,14 +86,15 @@ function ProductsTable({
 }
 
 const mapStateToProps = (state: RootState) => {
+  const productTable = getTable<Product>(state, Tables.Products);
   return {
-    countTotal: countTotalProducts(state),
-    countFetched: countFetchedProducts(state),
-    skip: state.product.listSkip,
-    take: state.product.listTake,
-    products: state.product.list,
-    column: state.product.listSortColumn,
-    direction: state.product.listSortDirection === 'ASC'
+    total: countTotal(state, Tables.Products),
+    fetched: countFetched(state, Tables.Products),
+    skip: productTable.skip,
+    take: productTable.take,
+    products: productTable.data,
+    column: productTable.sortColumn,
+    direction: productTable.sortDirection === 'ASC'
       ? 'ascending' : 'descending' as 'ascending' | 'descending',
   };
 };
@@ -103,19 +102,19 @@ const mapStateToProps = (state: RootState) => {
 const mapDispatchToProps = (dispatch: Dispatch) => ({
   fetchProducts: () => dispatch(fetchTable(Tables.Products)),
   changeSort: (column: string) => {
-    dispatch(changeSortProducts(column));
+    dispatch(changeSortTable(Tables.Products, column));
     dispatch(fetchTable(Tables.Products));
   },
   setTake: (take: number) => {
-    dispatch(setTakeProducts(take));
+    dispatch(setTakeTable(Tables.Products, take));
     dispatch(fetchTable(Tables.Products));
   },
   prevPage: () => {
-    dispatch(prevPageProducts());
+    dispatch(prevPageTable(Tables.Products));
     dispatch(fetchTable(Tables.Products));
   },
   nextPage: () => {
-    dispatch(nextPageProducts());
+    dispatch(nextPageTable(Tables.Products));
     dispatch(fetchTable(Tables.Products));
   },
 });

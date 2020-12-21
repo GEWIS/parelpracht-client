@@ -1,12 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
-import TimeAgo from 'javascript-time-ago';
-import { fetchProducts, searchProducts } from '../stores/product/actionCreators';
-import { countFetchedProducts, countTotalProducts, sortColumn } from '../stores/product/selectors';
+import { sortColumn } from '../stores/product/selectors';
 import ResourceStatus from '../stores/resourceStatus';
 import { RootState } from '../stores/store';
 import TableControls from '../components/TableControls';
+import { fetchTable, searchTable } from '../stores/tables/actionCreators';
+import { Tables } from '../stores/tables/tables';
+import { Product } from '../clients/server.generated';
+import { countFetched, countTotal, getTable } from '../stores/tables/selectors';
 
 interface Props {
   status: ResourceStatus;
@@ -35,20 +37,23 @@ function ProductTableControls(props: Props) {
   );
 }
 
-const mapStateToProps = (state: RootState) => ({
-  status: state.product.listStatus,
-  countFetched: countFetchedProducts(state),
-  countTotal: countTotalProducts(state),
-  column: sortColumn(state),
-  lastUpdated: state.product.listLastUpdated,
-  search: state.product.listSearch,
-});
+const mapStateToProps = (state: RootState) => {
+  const productTable = getTable<Product>(state, Tables.Products);
+  return {
+    status: productTable.status,
+    countFetched: countFetched(state, Tables.Products),
+    countTotal: countTotal(state, Tables.Products),
+    column: sortColumn(state),
+    lastUpdated: productTable.lastUpdated,
+    search: productTable.search,
+  };
+};
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
-  refresh: () => dispatch(fetchProducts()),
+  refresh: () => dispatch(fetchTable(Tables.Products)),
   setSearch: (search: string) => {
-    dispatch(searchProducts(search));
-    dispatch(fetchProducts());
+    dispatch(searchTable(Tables.Products, search));
+    dispatch(fetchTable(Tables.Products));
   },
 });
 

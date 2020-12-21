@@ -1,16 +1,15 @@
 import { Product, ProductParams } from '../../clients/server.generated';
 import {
-  ProductActionType, ProductsChangeSortAction, ProductsClearAction, ProductsClearSingleAction,
+  ProductActionType, ProductsClearSingleAction,
   ProductsCreateSingleAction,
   ProductsErrorSingleAction,
-  ProductsFetchAction, ProductsFetchSingleAction, ProductsNextPageAction,
-  ProductsPrevPageAction, ProductsSaveSingleAction,
-  ProductsSearchAction,
-  ProductsSetAction, ProductsSetSingleAction, ProductsSetTakeAction,
+  ProductsFetchSingleAction,
+  ProductsSaveSingleAction,
+  ProductsSetSingleAction,
 } from './actions';
 
 // Action creators
-export function fetchProducts(): ProductsFetchAction {
+/* export function fetchProducts(): ProductsFetchAction {
   return { type: ProductActionType.Fetch };
 }
 export function setProducts(products: Product[], count: number): ProductsSetAction {
@@ -39,7 +38,7 @@ export function nextPageProducts(): ProductsNextPageAction {
 
 export function prevPageProducts(): ProductsPrevPageAction {
   return { type: ProductActionType.PrevPage };
-}
+} */
 
 export function fetchSingleProduct(id: number): ProductsFetchSingleAction {
   return { type: ProductActionType.FetchSingle, id };

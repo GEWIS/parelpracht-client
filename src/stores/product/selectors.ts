@@ -1,15 +1,10 @@
+import { Product } from '../../clients/server.generated';
 import { RootState } from '../store';
-
-export function countFetchedProducts(state: RootState): number {
-  return state.product.list.length;
-}
-
-export function countTotalProducts(state: RootState): number {
-  return state.product.listCount;
-}
+import { getTable } from '../tables/selectors';
+import { Tables } from '../tables/tables';
 
 export function sortColumn(state: RootState): string {
-  const column = state.product.listSortColumn;
+  const column = getTable<Product>(state, Tables.Products).sortColumn;
   switch (column) {
     case 'id': return 'ID';
     case 'nameDutch': return 'Name (Dutch)';

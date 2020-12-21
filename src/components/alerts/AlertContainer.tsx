@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Container, Rail } from 'semantic-ui-react';
+import { Rail } from 'semantic-ui-react';
 import { AlertItemState } from '../../stores/alerts/reducer';
 import { RootState } from '../../stores/store';
 import AlertItem from './AlertItem';

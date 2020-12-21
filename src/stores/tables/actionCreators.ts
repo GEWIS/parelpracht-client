@@ -1,4 +1,5 @@
 import {
+  tableActionPattern,
   TableActionType, TableChangeSortAction,
   TableClearAction, TableFetchAction,
   TableNextPageAction, TablePrevPageAction,
@@ -6,38 +7,46 @@ import {
 } from './actions';
 import { Tables } from './tables';
 
-export function fetchTable<T>(table: T): TableFetchAction<T> {
-  return { type: { type: TableActionType.Fetch, table } };
+export function fetchTable<T extends Tables>(table: T): TableFetchAction<T> {
+  return { type: tableActionPattern(table, TableActionType.Fetch) };
 }
 
-export function setTable<T, R>(table: T, data: R[], count: number): TableSetAction<T, R> {
+export function setTable<T extends Tables, R>(
+  table: T, data: R[], count: number,
+): TableSetAction<T, R> {
   return {
-    type: { type: TableActionType.Set, table },
+    type: tableActionPattern(table, TableActionType.Set),
     data,
     count,
   };
 }
 
-export function clearTable<T>(table: T): TableClearAction<T> {
-  return { type: { type: TableActionType.Clear, table } };
+export function clearTable<T extends Tables>(table: T): TableClearAction<T> {
+  return { type: tableActionPattern(table, TableActionType.Clear) };
 }
 
-export function changeSortTable<T>(table: T, column: string): TableChangeSortAction<T> {
-  return { type: { type: TableActionType.ChangeSort, table }, column };
+export function changeSortTable<T extends Tables>(
+  table: T, column: string,
+): TableChangeSortAction<T> {
+  return { type: tableActionPattern(table, TableActionType.ChangeSort), column };
 }
 
-export function setTakeTable<T>(table: T, take: number): TableSetTakeAction<T> {
-  return { type: { type: TableActionType.SetTake, table }, take };
+export function setTakeTable<T extends Tables>(
+  table: T, take: number,
+): TableSetTakeAction<T> {
+  return { type: tableActionPattern(table, TableActionType.SetTake), take };
 }
 
-export function searchTable<T>(table: T, search: string): TableSearchAction<T> {
-  return { type: { type: TableActionType.Search, table }, search };
+export function searchTable<T extends Tables>(
+  table: T, search: string,
+): TableSearchAction<T> {
+  return { type: tableActionPattern(table, TableActionType.Search), search };
 }
 
-export function nextPageTable<T>(table: T): TableNextPageAction<T> {
-  return { type: { type: TableActionType.NextPage, table } };
+export function nextPageTable<T extends Tables>(table: T): TableNextPageAction<T> {
+  return { type: tableActionPattern(table, TableActionType.NextPage) };
 }
 
-export function prevPageTable<T>(table: T): TablePrevPageAction<T> {
-  return { type: { type: TableActionType.PrevPage, table } };
+export function prevPageTable<T extends Tables>(table: T): TablePrevPageAction<T> {
+  return { type: tableActionPattern(table, TableActionType.PrevPage) };
 }

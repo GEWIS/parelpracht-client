@@ -1,5 +1,4 @@
 import { Action } from 'redux';
-import { ActionPattern } from 'redux-saga/effects';
 import { Tables } from './tables';
 
 export enum TableActionType {
@@ -13,7 +12,8 @@ export enum TableActionType {
   Search = 'Table/Search',
 }
 
-type TableAction<A, T> = Action<{type: A, table: T}>;
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+type TableAction<A, T> = Action<string>;
 
 export type TableFetchAction<T> = TableAction<TableActionType.Fetch, T>;
 
@@ -44,8 +44,17 @@ export type TableActions<T extends Tables, R> =
   | TableChangeSortAction<T> | TableSetTakeAction<T> | TableSearchAction<T>
   | TableNextPageAction<T> | TablePrevPageAction<T>;
 
-export const tableAction = <T extends Tables>(
+export const tableActionPattern = <T extends Tables>(
   table: T, action: TableActionType,
-): ActionPattern<TableAction<any, T>> => {
-  return { type: action, table, toString: () => `${action}[${table}]` } as any;
+): string => {
+  return `${action}[${table}]`;
+};
+
+/** Kinda disgusting */
+export const tableExtractAction = (joined: string): { type: TableActionType, table: Tables } => {
+  const [type, table] = joined.split('[');
+  return {
+    type: type as TableActionType,
+    table: table.substring(0, table.length - 1) as Tables,
+  };
 };

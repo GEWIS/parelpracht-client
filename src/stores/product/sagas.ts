@@ -1,13 +1,17 @@
 import {
-  call, put, select, takeEvery, throttle,
+  call, put, select, throttle,
 } from 'redux-saga/effects';
-import { Client, Dir } from '../../clients/server.generated';
+import { Client, Dir, Product } from '../../clients/server.generated';
 import { takeEveryWithErrorHandling } from '../errorHandling';
-import type { RootState } from '../store';
-import { tableAction, TableActionType } from '../tables/actions';
+import { fetchTable, setTable } from '../tables/actionCreators';
+import { tableActionPattern, TableActionType } from '../tables/actions';
+import { getTable } from '../tables/selectors';
 import { Tables } from '../tables/tables';
+import { TableState } from '../tables/tableState';
 import {
-  setProducts, setSingleProduct, fetchProducts as createFetchProducts, errorSingleProduct,
+  /* setProducts,  */
+  setSingleProduct, /* fetchProducts as createFetchProducts, */
+  errorSingleProduct,
 } from './actionCreators';
 import {
   ProductActionType, ProductsCreateSingleAction, ProductsFetchSingleAction,
@@ -17,18 +21,18 @@ import {
 function* fetchProducts() {
   const client = new Client();
 
-  const state: RootState = yield select();
+  const state: TableState<Product> = yield select(getTable, Tables.Products);
   const {
-    listSortColumn, listSortDirection,
-    listTake, listSkip,
-    listSearch,
-  } = state.product;
+    sortColumn, sortDirection,
+    take, skip,
+    search,
+  } = state;
 
   const { list, count } = yield call(
-    [client, client.getProducts], listSortColumn, listSortDirection as Dir,
-    listSkip, listTake, listSearch,
+    [client, client.getProducts], sortColumn, sortDirection as Dir,
+    skip, take, search,
   );
-  yield put(setProducts(list, count));
+  yield put(setTable(Tables.Products, list, count));
 }
 
 function* fetchSingleProduct(action: ProductsFetchSingleAction) {
@@ -60,7 +64,7 @@ function* createSingleProduct(action: ProductsCreateSingleAction) {
   const client = new Client();
   const product = yield call([client, client.createProduct], action.product);
   yield put(setSingleProduct(product));
-  yield put(createFetchProducts());
+  yield put(fetchTable(Tables.Products));
 }
 
 function* errorCreateSingleProduct() {
@@ -79,7 +83,7 @@ export default [
   function* watchFetchProducts() {
     yield throttle(
       500,
-      tableAction(Tables.Products, TableActionType.Fetch),
+      tableActionPattern(Tables.Products, TableActionType.Fetch),
       fetchProducts,
     );
   },
