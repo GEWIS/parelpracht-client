@@ -6,6 +6,9 @@ import { Container, Icon, Menu } from 'semantic-ui-react';
 import ProductsPage from './pages/ProductsPage';
 import SingleProductPage from './pages/SingleProductPage';
 import ProductCreatePage from './pages/ProductCreatePage';
+import CompaniesPage from './pages/CompaniesPage';
+import SingleCompanyPage from './pages/SingleCompanyPage';
+import CompaniesCreatePage from './pages/CompaniesCreatePage';
 import AlertContainer from './components/alerts/AlertContainer';
 /* import SingleProductPage from './pages/SingleProductPage'; */
 
@@ -38,6 +41,7 @@ function Routes() {
       >
         <AlertContainer internal />
         <Switch>
+          {/* Product */}
           <Route path="/product" exact>
             <ProductsPage />
           </Route>
@@ -46,6 +50,15 @@ function Routes() {
             <ProductCreatePage />
           </Route>
           <Route path="/product/:productId" exact component={SingleProductPage} />
+          {/* Company */}
+          <Route path="/company" exact>
+            <CompaniesPage />
+          </Route>
+          <Route path="/company/new" exact>
+            <CompaniesPage />
+            <CompaniesCreatePage />
+          </Route>
+          <Route path="/company/:companyId" exact component={SingleCompanyPage} />
         </Switch>
       </Container>
 
