@@ -9,8 +9,7 @@ import { getTable } from '../tables/selectors';
 import { Tables } from '../tables/tables';
 import { TableState } from '../tables/tableState';
 import {
-  /* setProducts,  */
-  setSingleProduct, /* fetchProducts as createFetchProducts, */
+  setSingleProduct,
   errorSingleProduct,
 } from './actionCreators';
 import {
