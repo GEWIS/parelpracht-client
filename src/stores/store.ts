@@ -13,6 +13,7 @@ import contractReducer from './contract/reducer';
 
 import alertsSagas from './alerts/sagas';
 import productSagas from './product/sagas';
+import contactSagas from './contact/sagas';
 import companySagas from './company/sagas';
 import contractSagas from './contract/sagas';
 import invoiceSagas from './invoice/sagas';
@@ -23,6 +24,7 @@ const watchSagas = [
   ...alertsSagas,
   ...productSagas,
   ...companySagas,
+  ...contactSagas,
   ...invoiceSagas,
   ...contractSagas,
 ];
