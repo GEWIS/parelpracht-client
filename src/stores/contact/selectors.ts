@@ -1,11 +1,15 @@
-import { Contact } from '../../clients/server.generated';
+import { Contact, ContactSummary } from '../../clients/server.generated';
+import { formatContactName } from '../../helpers/contact';
 import { RootState } from '../store';
+import { getSummary } from '../summaries/selectors';
+import { SummaryCollections } from '../summaries/summaries';
 import { getTable } from '../tables/selectors';
 import { Tables } from '../tables/tables';
 
 export function sortColumn(state: RootState): string {
   const column = getTable<Contact>(state, Tables.Contacts).sortColumn;
   switch (column) {
+    case 'id': return 'ID';
     case 'CompanyId': return 'Company ID';
     case 'firstName': return 'First Name';
     case 'middleName': return 'Middle Name';
@@ -15,4 +19,12 @@ export function sortColumn(state: RootState): string {
     case 'comment': return 'Comment';
     default: return 'unknown';
   }
+}
+
+export function getContactName(state: RootState, id: number): string {
+  const contact = getSummary<ContactSummary>(
+    state, SummaryCollections.Contacts, id,
+  );
+  if (contact === undefined) return '...';
+  return formatContactName(contact.firstName, contact.middleName, contact.lastName);
 }

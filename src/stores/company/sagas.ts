@@ -1,9 +1,13 @@
 import {
-  call, put, select, takeEvery, throttle,
+  call, put, select, throttle,
 } from 'redux-saga/effects';
-import { Client, Company, Dir2 } from '../../clients/server.generated';
+import {
+  Client, Company, Dir2,
+} from '../../clients/server.generated';
 import { takeEveryWithErrorHandling } from '../errorHandling';
-import type { RootState } from '../store';
+import { setSummaries } from '../summaries/actionCreators';
+import { summariesActionPattern, SummariesActionType } from '../summaries/actions';
+import { SummaryCollections } from '../summaries/summaries';
 import { fetchTable, setTable } from '../tables/actionCreators';
 import { tableActionPattern, TableActionType } from '../tables/actions';
 import { getTable } from '../tables/selectors';
@@ -32,6 +36,12 @@ function* fetchCompanies() {
     skip, take, search,
   );
   yield put(setTable(Tables.Companies, list, count));
+}
+
+export function* fetchCompanySummaries() {
+  const client = new Client();
+  const summaries = yield call([client, client.getCompanySummaries]);
+  yield put(setSummaries(SummaryCollections.Companies, summaries));
 }
 
 function* fetchSingleCompany(action: CompaniesFetchSingleAction) {
@@ -84,6 +94,15 @@ export default [
       500,
       tableActionPattern(Tables.Companies, TableActionType.Fetch),
       fetchCompanies,
+    );
+  },
+  function* watchFetchCompanySummaries() {
+    yield takeEveryWithErrorHandling(
+      summariesActionPattern(
+        SummaryCollections.Companies,
+        SummariesActionType.Fetch,
+      ),
+      fetchCompanySummaries,
     );
   },
   function* watchFetchSingleCompany() {

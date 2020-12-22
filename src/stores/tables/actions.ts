@@ -47,14 +47,13 @@ export type TableActions<T extends Tables, R> =
 export const tableActionPattern = <T extends Tables>(
   table: T, action: TableActionType,
 ): string => {
-  return `${action}[${table}]`;
+  return `${action}::${table}`;
 };
 
-/** Kinda disgusting */
 export const tableExtractAction = (joined: string): { type: TableActionType, table: Tables } => {
-  const [type, table] = joined.split('[');
+  const [type, table] = joined.split('::');
   return {
     type: type as TableActionType,
-    table: table.substring(0, table.length - 1) as Tables,
+    table: table as Tables,
   };
 };

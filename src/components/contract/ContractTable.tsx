@@ -10,7 +10,7 @@ import {
 } from '../../stores/tables/actionCreators';
 import { countFetched, countTotal, getTable } from '../../stores/tables/selectors';
 import { Tables } from '../../stores/tables/tables';
-import { ContractRow } from './ContractRow';
+import ContractRow from './ContractRow';
 
 interface Props {
   contracts: Contract[];
@@ -48,17 +48,11 @@ function ContractsTable({
             >
               Title
             </Table.HeaderCell>
-            <Table.HeaderCell
-              sorted={column === 'companyId' ? direction : undefined}
-              onClick={() => changeSort('companyId')}
-            >
-              Company ID
+            <Table.HeaderCell>
+              Company
             </Table.HeaderCell>
-            <Table.HeaderCell
-              sorted={column === 'contactId' ? direction : undefined}
-              onClick={() => changeSort('contactId')}
-            >
-              Contact ID
+            <Table.HeaderCell>
+              Contact
             </Table.HeaderCell>
             <Table.HeaderCell
               sorted={column === 'date' ? direction : undefined}

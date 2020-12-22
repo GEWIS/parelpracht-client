@@ -2,7 +2,7 @@ import { applyMiddleware, combineReducers, createStore } from 'redux';
 import { createBrowserHistory } from 'history';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import createSagaMiddleware from 'redux-saga';
-import { all } from 'redux-saga/effects';
+import { all, fork } from 'redux-saga/effects';
 import { connectRouter, routerMiddleware, RouterState } from 'connected-react-router';
 
 import alertsReducer from './alerts/reducer';
@@ -13,11 +13,12 @@ import contractReducer from './contract/reducer';
 
 import alertsSagas from './alerts/sagas';
 import productSagas from './product/sagas';
-import contactSagas from './contact/sagas';
-import companySagas from './company/sagas';
+import contactSagas, { fetchContactSummaries } from './contact/sagas';
+import companySagas, { fetchCompanySummaries } from './company/sagas';
 import contractSagas from './contract/sagas';
 import invoiceSagas from './invoice/sagas';
 import { tablesReducer } from './tables/reducer';
+import { summariesReducer } from './summaries/reducer';
 
 // Import all watching sagas
 const watchSagas = [
@@ -37,6 +38,7 @@ const reducers = {
   company: companyReducer,
   contract: contractReducer,
   invoice: invoiceReducer,
+  summaries: summariesReducer,
 };
 
 export const history = createBrowserHistory();
@@ -53,6 +55,11 @@ export type RootState = {
 };
 
 function* rootSaga() {
+  // Fetch summaries at application start
+  yield fork(fetchCompanySummaries);
+  yield fork(fetchContactSummaries);
+
+  // Watch sagas
   yield all(watchSagas.map((saga) => saga()));
 }
 

@@ -10,7 +10,7 @@ import {
 } from '../../stores/tables/actionCreators';
 import { countFetched, countTotal, getTable } from '../../stores/tables/selectors';
 import { Tables } from '../../stores/tables/tables';
-import { ContactRow } from './ContactRow';
+import ContactRow from './ContactRow';
 
 interface Props {
   contacts: Contact[];
@@ -48,11 +48,8 @@ function ContactsTable({
             >
               Name
             </Table.HeaderCell>
-            <Table.HeaderCell
-              sorted={column === 'companyId' ? direction : undefined}
-              onClick={() => changeSort('companyId')}
-            >
-              Company ID because name is hard
+            <Table.HeaderCell>
+              Company
             </Table.HeaderCell>
             <Table.HeaderCell
               sorted={column === 'email' ? direction : undefined}
