@@ -41,7 +41,7 @@ function Routes() {
           </Menu.Item>
           <Menu.Item as={NavLink} to="/contact">
             <Icon name="address book" />
-            Contracts
+            Contacts
           </Menu.Item>
           <Menu.Item as={NavLink} to="/invoice">
             <Icon name="file alternate" />
@@ -93,7 +93,7 @@ function Routes() {
             <ContractsPage />
             <ContractsCreatePage />
           </Route>
-          <Route path="/contract/:companyId" exact component={SingleContractPage} />
+          <Route path="/contract/:contractId" exact component={SingleContractPage} />
         </Switch>
       </Container>
 

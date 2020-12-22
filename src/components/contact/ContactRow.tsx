@@ -2,7 +2,7 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { Table } from 'semantic-ui-react';
 import { Contact } from '../../clients/server.generated';
-import { formatContactName } from '../../helpers/monetary';
+import { formatContactName } from '../../helpers/contact';
 
 interface Props {
   contact: Contact;

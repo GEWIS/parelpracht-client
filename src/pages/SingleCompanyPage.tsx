@@ -12,6 +12,7 @@ import { RootState } from '../stores/store';
 import CompanyProps from '../components/company/CompanyProps';
 import ResourceStatus from '../stores/resourceStatus';
 import CompanySummary from '../components/company/CompanySummary';
+import CompanyContactList from '../components/company/CompanyContactList';
 
 interface Props extends RouteComponentProps<{ companyId: string }> {
   company: Company | undefined;
@@ -55,6 +56,11 @@ class SingleCompanyPage extends React.Component<Props> {
           <Grid.Column>
             <Segment>
               <CompanyProps company={company} />
+            </Segment>
+          </Grid.Column>
+          <Grid.Column>
+            <Segment secondary>
+              <CompanyContactList />
             </Segment>
           </Grid.Column>
         </Grid>

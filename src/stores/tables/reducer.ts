@@ -1,5 +1,7 @@
 import { combineReducers } from 'redux';
-import { Company, Product, Contract, Contact, Invoice } from '../../clients/server.generated';
+import {
+  Company, Product, Contract, Contact, Invoice,
+} from '../../clients/server.generated';
 import createTableReducer from './tableReducer';
 import { Tables } from './tables';
 import { TableState } from './tableState';
