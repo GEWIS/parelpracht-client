@@ -53,12 +53,12 @@ class SingleCompanyPage extends React.Component<Props> {
         />
         <CompanySummary />
         <Grid columns={2}>
-          <Grid.Column>
+          <Grid.Column width={10}>
             <Segment>
               <CompanyProps company={company} />
             </Segment>
           </Grid.Column>
-          <Grid.Column>
+          <Grid.Column width={6}>
             <Segment secondary>
               <CompanyContactList />
             </Segment>
