@@ -18,43 +18,40 @@ export class Client {
     }
 
     /**
-     * @return Ok
+     * @return No content
      */
-    getGreetName(name: string): Promise<string> {
-        let url_ = this.baseUrl + "/greet/{name}";
-        if (name === undefined || name === null)
-            throw new Error("The parameter 'name' must be defined.");
-        url_ = url_.replace("{name}", encodeURIComponent("" + name));
+    postSetup(body: SetupParams): Promise<void> {
+        let url_ = this.baseUrl + "/setup";
         url_ = url_.replace(/[?&]$/, "");
 
+        const content_ = JSON.stringify(body);
+
         let options_ = <RequestInit>{
-            method: "GET",
+            body: content_,
+            method: "POST",
             headers: {
-                "Accept": "application/json"
+                "Content-Type": "application/json",
             }
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processGetGreetName(_response);
+            return this.processPostSetup(_response);
         });
     }
 
-    protected processGetGreetName(response: Response): Promise<string> {
+    protected processPostSetup(response: Response): Promise<void> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
-        if (status === 200) {
+        if (status === 204) {
             return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = resultData200 !== undefined ? resultData200 : <any>null;
-            return result200;
+            return;
             });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<string>(<any>null);
+        return Promise.resolve<void>(<any>null);
     }
 
     /**
@@ -1246,6 +1243,52 @@ export class Client {
     }
 }
 
+export enum Gender {
+    MALE = "MALE",
+    FEMALE = "FEMALE",
+    OTHER = "OTHER",
+    UNKNOWN = "UNKNOWN",
+}
+
+export class SetupParams implements ISetupParams {
+    admin!: Admin;
+
+    constructor(data?: ISetupParams) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+        if (!data) {
+            this.admin = new Admin();
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.admin = _data["admin"] ? Admin.fromJS(_data["admin"]) : new Admin();
+        }
+    }
+
+    static fromJS(data: any): SetupParams {
+        data = typeof data === 'object' ? data : {};
+        let result = new SetupParams();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["admin"] = this.admin ? this.admin.toJSON() : <any>undefined;
+        return data; 
+    }
+}
+
+export interface ISetupParams {
+    admin: Admin;
+}
+
 export enum ProductStatus {
     ACTIVE = "ACTIVE",
     INACTIVE = "INACTIVE",
@@ -1963,13 +2006,6 @@ export interface IInvoice {
 export enum ActivityType {
     STATUS = "STATUS",
     COMMENT = "COMMENT",
-}
-
-export enum Gender {
-    MALE = "MALE",
-    FEMALE = "FEMALE",
-    OTHER = "OTHER",
-    UNKNOWN = "UNKNOWN",
 }
 
 export class User implements IUser {
@@ -3945,6 +3981,62 @@ export enum Dir4 {
 export enum Dir5 {
     ASC = "ASC",
     DESC = "DESC",
+}
+
+export class Admin implements IAdmin {
+    lastName!: string;
+    middleName!: string;
+    firstName!: string;
+    gender!: Gender;
+    password!: string;
+    email!: string;
+
+    constructor(data?: IAdmin) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.lastName = _data["lastName"];
+            this.middleName = _data["middleName"];
+            this.firstName = _data["firstName"];
+            this.gender = _data["gender"];
+            this.password = _data["password"];
+            this.email = _data["email"];
+        }
+    }
+
+    static fromJS(data: any): Admin {
+        data = typeof data === 'object' ? data : {};
+        let result = new Admin();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["lastName"] = this.lastName;
+        data["middleName"] = this.middleName;
+        data["firstName"] = this.firstName;
+        data["gender"] = this.gender;
+        data["password"] = this.password;
+        data["email"] = this.email;
+        return data; 
+    }
+}
+
+export interface IAdmin {
+    lastName: string;
+    middleName: string;
+    firstName: string;
+    gender: Gender;
+    password: string;
+    email: string;
 }
 
 export class ApiException extends Error {
