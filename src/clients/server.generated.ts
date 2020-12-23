@@ -120,6 +120,13 @@ export class Client {
             result200 = User.fromJS(resultData200);
             return result200;
             });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
@@ -215,6 +222,13 @@ export class Client {
             result200 = ProductListResponse.fromJS(resultData200);
             return result200;
             });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
@@ -263,6 +277,13 @@ export class Client {
             let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
             result400 = WrappedApiError.fromJS(resultData400);
             return throwException("A server side error occurred.", status, _responseText, _headers, result400);
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
             });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
@@ -365,6 +386,13 @@ export class Client {
             result400 = WrappedApiError.fromJS(resultData400);
             return throwException("A server side error occurred.", status, _responseText, _headers, result400);
             });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
@@ -427,6 +455,13 @@ export class Client {
             result200 = CompanyListResponse.fromJS(resultData200);
             return result200;
             });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
@@ -469,6 +504,13 @@ export class Client {
             result200 = Company.fromJS(resultData200);
             return result200;
             });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
@@ -510,6 +552,13 @@ export class Client {
             }
             return result200;
             });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
@@ -550,6 +599,13 @@ export class Client {
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
             result200 = Company.fromJS(resultData200);
             return result200;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
             });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
@@ -596,6 +652,13 @@ export class Client {
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
             result200 = Company.fromJS(resultData200);
             return result200;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
             });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
@@ -659,6 +722,13 @@ export class Client {
             result200 = ContractListResponse.fromJS(resultData200);
             return result200;
             });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
@@ -701,6 +771,13 @@ export class Client {
             result200 = Contract.fromJS(resultData200);
             return result200;
             });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
@@ -741,6 +818,13 @@ export class Client {
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
             result200 = Contract.fromJS(resultData200);
             return result200;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
             });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
@@ -788,6 +872,13 @@ export class Client {
             result200 = Contract.fromJS(resultData200);
             return result200;
             });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
@@ -833,6 +924,13 @@ export class Client {
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
             result200 = ProductInstance.fromJS(resultData200);
             return result200;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
             });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
@@ -884,6 +982,13 @@ export class Client {
             result200 = ProductInstance.fromJS(resultData200);
             return result200;
             });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
@@ -924,6 +1029,13 @@ export class Client {
         if (status === 204) {
             return response.text().then((_responseText) => {
             return;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
             });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
@@ -987,6 +1099,13 @@ export class Client {
             result200 = InvoiceListResponse.fromJS(resultData200);
             return result200;
             });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
@@ -1029,6 +1148,13 @@ export class Client {
             result200 = Invoice.fromJS(resultData200);
             return result200;
             });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
@@ -1069,6 +1195,13 @@ export class Client {
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
             result200 = Invoice.fromJS(resultData200);
             return result200;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
             });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
@@ -1115,6 +1248,13 @@ export class Client {
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
             result200 = Invoice.fromJS(resultData200);
             return result200;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
             });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
@@ -1178,6 +1318,13 @@ export class Client {
             result200 = ContactListResponse.fromJS(resultData200);
             return result200;
             });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
@@ -1220,6 +1367,13 @@ export class Client {
             result200 = Contact.fromJS(resultData200);
             return result200;
             });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
@@ -1261,6 +1415,13 @@ export class Client {
             }
             return result200;
             });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
@@ -1301,6 +1462,13 @@ export class Client {
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
             result200 = Contact.fromJS(resultData200);
             return result200;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
             });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
@@ -1348,6 +1516,13 @@ export class Client {
             result200 = Contact.fromJS(resultData200);
             return result200;
             });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
@@ -1357,9 +1532,9 @@ export class Client {
     }
 
     /**
-     * @return No content
+     * @return Ok
      */
-    login(body: LoginParams): Promise<void> {
+    login(body: LoginParams): Promise<Product> {
         let url_ = this.baseUrl + "/login";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -1370,6 +1545,7 @@ export class Client {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
+                "Accept": "application/json"
             }
         };
 
@@ -1378,19 +1554,33 @@ export class Client {
         });
     }
 
-    protected processLogin(response: Response): Promise<void> {
+    protected processLogin(response: Response): Promise<Product> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
-        if (status === 204) {
+        if (status === 200) {
             return response.text().then((_responseText) => {
-            return;
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = Product.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status === 204) {
+            return response.text().then((_responseText) => {
+            return throwException("No content", status, _responseText, _headers);
+            });
+        } else if (status === 400) {
+            return response.text().then((_responseText) => {
+            let result400: any = null;
+            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result400 = WrappedApiError.fromJS(resultData400);
+            return throwException("Bad Request", status, _responseText, _headers, result400);
             });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<void>(<any>null);
+        return Promise.resolve<Product>(<any>null);
     }
 }
 
@@ -1674,6 +1864,97 @@ export interface IRole {
     name: string;
     /** All users having this role */
     users: User[];
+}
+
+export class ApiError implements IApiError {
+    name!: string;
+    message!: string;
+    stack?: string;
+    /** The activity code of the error, as defined by HTTP activity codes. */
+    statusCode!: number;
+
+    constructor(data?: IApiError) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.name = _data["name"];
+            this.message = _data["message"];
+            this.stack = _data["stack"];
+            this.statusCode = _data["statusCode"];
+        }
+    }
+
+    static fromJS(data: any): ApiError {
+        data = typeof data === 'object' ? data : {};
+        let result = new ApiError();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["name"] = this.name;
+        data["message"] = this.message;
+        data["stack"] = this.stack;
+        data["statusCode"] = this.statusCode;
+        return data; 
+    }
+}
+
+export interface IApiError {
+    name: string;
+    message: string;
+    stack?: string;
+    /** The activity code of the error, as defined by HTTP activity codes. */
+    statusCode: number;
+}
+
+/** WrappedApiError represents the type returned by the server. */
+export class WrappedApiError implements IWrappedApiError {
+    error!: ApiError;
+
+    constructor(data?: IWrappedApiError) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+        if (!data) {
+            this.error = new ApiError();
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.error = _data["error"] ? ApiError.fromJS(_data["error"]) : new ApiError();
+        }
+    }
+
+    static fromJS(data: any): WrappedApiError {
+        data = typeof data === 'object' ? data : {};
+        let result = new WrappedApiError();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["error"] = this.error ? this.error.toJSON() : <any>undefined;
+        return data; 
+    }
+}
+
+/** WrappedApiError represents the type returned by the server. */
+export interface IWrappedApiError {
+    error: ApiError;
 }
 
 export enum ProductStatus {
@@ -3009,97 +3290,6 @@ export class ProductListResponse implements IProductListResponse {
 export interface IProductListResponse {
     list: Product[];
     count: number;
-}
-
-export class ApiError implements IApiError {
-    name!: string;
-    message!: string;
-    stack?: string;
-    /** The activity code of the error, as defined by HTTP activity codes. */
-    statusCode!: number;
-
-    constructor(data?: IApiError) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.name = _data["name"];
-            this.message = _data["message"];
-            this.stack = _data["stack"];
-            this.statusCode = _data["statusCode"];
-        }
-    }
-
-    static fromJS(data: any): ApiError {
-        data = typeof data === 'object' ? data : {};
-        let result = new ApiError();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["name"] = this.name;
-        data["message"] = this.message;
-        data["stack"] = this.stack;
-        data["statusCode"] = this.statusCode;
-        return data; 
-    }
-}
-
-export interface IApiError {
-    name: string;
-    message: string;
-    stack?: string;
-    /** The activity code of the error, as defined by HTTP activity codes. */
-    statusCode: number;
-}
-
-/** WrappedApiError represents the type returned by the server. */
-export class WrappedApiError implements IWrappedApiError {
-    error!: ApiError;
-
-    constructor(data?: IWrappedApiError) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-        if (!data) {
-            this.error = new ApiError();
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.error = _data["error"] ? ApiError.fromJS(_data["error"]) : new ApiError();
-        }
-    }
-
-    static fromJS(data: any): WrappedApiError {
-        data = typeof data === 'object' ? data : {};
-        let result = new WrappedApiError();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["error"] = this.error ? this.error.toJSON() : <any>undefined;
-        return data; 
-    }
-}
-
-/** WrappedApiError represents the type returned by the server. */
-export interface IWrappedApiError {
-    error: ApiError;
 }
 
 export class ProductParams implements IProductParams {

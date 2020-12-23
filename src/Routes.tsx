@@ -25,6 +25,7 @@ import Navigation from './components/navigation/Navigation';
 import { RootState } from './stores/store';
 import ResourceStatus from './stores/resourceStatus';
 import { AuthStatus, User } from './clients/server.generated';
+import LoginPage from './pages/LoginPage';
 
 interface Props extends RouteComponentProps {
   // eslint-disable-next-line react/no-unused-prop-types
@@ -54,7 +55,13 @@ function Routes(props: Props) {
         <Redirect to="/login" />
       );
     }
-    return <div>Test</div>;
+    return (
+      <Switch>
+        <Route path="/login" exact>
+          <LoginPage />
+        </Route>
+      </Switch>
+    );
   }
 
   return (
