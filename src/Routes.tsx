@@ -1,8 +1,12 @@
 import * as React from 'react';
 import {
-  withRouter, Switch, Route, NavLink,
+  withRouter, Switch, Route, NavLink, RouteComponentProps, Redirect,
 } from 'react-router-dom';
-import { Container, Icon, Menu } from 'semantic-ui-react';
+import {
+  Container, Dimmer, Header, Icon, Loader, Menu,
+} from 'semantic-ui-react';
+import { connect } from 'react-redux';
+import { Dispatch } from 'redux';
 import ProductsPage from './pages/ProductsPage';
 import SingleProductPage from './pages/SingleProductPage';
 import ProductCreatePage from './pages/ProductCreatePage';
@@ -17,38 +21,45 @@ import SingleInvoicePage from './pages/SingleInvoicePage';
 import ContractsPage from './pages/ContractsPage';
 import SingleContractPage from './pages/SingleContractPage';
 import ContractsCreatePage from './pages/ContractCreatePage';
+import Navigation from './components/navigation/Navigation';
+import { RootState } from './stores/store';
+import ResourceStatus from './stores/resourceStatus';
+import { AuthStatus, User } from './clients/server.generated';
 
-function Routes() {
+interface Props extends RouteComponentProps {
+  // eslint-disable-next-line react/no-unused-prop-types
+  authStatus: AuthStatus | undefined;
+  status: ResourceStatus;
+}
+
+function Routes(props: Props) {
+  if (props.status !== ResourceStatus.FETCHED || props.authStatus === undefined) {
+    return (
+      <Container>
+        <Dimmer active page inverted>
+
+          <Header as="h2" icon>
+            <Loader inline content="CRM" size="large" />
+            <Header.Subheader>Checking login information...</Header.Subheader>
+          </Header>
+        </Dimmer>
+      </Container>
+    );
+  }
+
+  if (!props.authStatus.authenticated) {
+    // TODO: refactor this filter to include more pages
+    if (props.location.pathname !== '/login') {
+      return (
+        <Redirect to="/login" />
+      );
+    }
+    return <div>Test</div>;
+  }
+
   return (
     <div>
-      {/* TODO: Refactor menu */}
-      <Menu fixed="top" inverted size="large">
-        <Container>
-          <Menu.Item as={NavLink} header to="/" exact>
-            CRM
-          </Menu.Item>
-          <Menu.Item as={NavLink} to="/product">
-            <Icon name="shopping bag" />
-            Products
-          </Menu.Item>
-          <Menu.Item as={NavLink} to="/company">
-            <Icon name="building" />
-            Companies
-          </Menu.Item>
-          <Menu.Item as={NavLink} to="/contract">
-            <Icon name="file alternate" />
-            Contracts
-          </Menu.Item>
-          <Menu.Item as={NavLink} to="/contact">
-            <Icon name="address book" />
-            Contacts
-          </Menu.Item>
-          <Menu.Item as={NavLink} to="/invoice">
-            <Icon name="file alternate" />
-            Invoices
-          </Menu.Item>
-        </Container>
-      </Menu>
+      <Navigation />
       <Container
         className="main"
         fluid
@@ -74,7 +85,7 @@ function Routes() {
           </Route>
           <Route path="/company/:companyId" exact component={SingleCompanyPage} />
 
-          {/* Contacts */ }
+          {/* Contacts */}
           <Route path="/contact" exact>
             <ContactsPage />
           </Route>
@@ -100,5 +111,18 @@ function Routes() {
     </div>
   );
 }
-const routesWithRouter = withRouter(Routes);
-export { routesWithRouter as Routes };
+
+const mapStateToProps = (state: RootState) => {
+  return {
+    authStatus: state.auth.authStatus,
+    status: state.auth.status,
+    profile: state.auth.profile,
+    profileStatus: state.auth.profileStatus,
+  };
+};
+
+const mapDispatchToProps = (dispatch: Dispatch) => ({
+
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Routes));

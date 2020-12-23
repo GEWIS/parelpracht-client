@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
 import {
-  Company, Product, Contract, Contact, Invoice,
+  CompanySummary, ContactSummary,
 } from '../../clients/server.generated';
 import { SummaryCollections } from './summaries';
 import createSummariesReducer from './summariesReducer';
@@ -8,8 +8,8 @@ import { SummaryBase, SummaryCollectionState } from './summariesState';
 
 export interface SummariesState {
   [SummaryCollections.Products]: SummaryCollectionState<SummaryBase>;
-  [SummaryCollections.Contacts]: SummaryCollectionState<SummaryBase>;
-  [SummaryCollections.Companies]: SummaryCollectionState<SummaryBase>;
+  [SummaryCollections.Contacts]: SummaryCollectionState<ContactSummary>;
+  [SummaryCollections.Companies]: SummaryCollectionState<CompanySummary>;
   [SummaryCollections.Contracts]: SummaryCollectionState<SummaryBase>;
   [SummaryCollections.Invoices]: SummaryCollectionState<SummaryBase>;
 }

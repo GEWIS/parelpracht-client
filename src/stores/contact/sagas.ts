@@ -46,7 +46,7 @@ export default [
   function* watchFetchContactSummaries() {
     yield takeEveryWithErrorHandling(
       summariesActionPattern(
-        SummaryCollections.Contracts,
+        SummaryCollections.Contacts,
         SummariesActionType.Fetch,
       ),
       fetchContactSummaries,

@@ -6,7 +6,7 @@ import './App.scss';
 import './Form.scss';
 
 import store, { history } from './stores/store';
-import { Routes } from './Routes';
+import Routes from './Routes';
 import { showAlert } from './stores/alerts/actionCreators';
 import AlertContainer from './components/alerts/AlertContainer';
 
