@@ -19,10 +19,8 @@ interface Props extends RouteComponentProps {
 }
 
 class ContractCreatePage extends React.Component<Props> {
-  public constructor(props: Props) {
-    super(props);
-
-    props.clearContract();
+  componentDidMount() {
+    this.props.clearContract();
   }
 
   componentDidUpdate(prevProps: Props) {

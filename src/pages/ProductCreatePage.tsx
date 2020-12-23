@@ -19,10 +19,8 @@ interface Props extends RouteComponentProps {
 }
 
 class ProductCreatePage extends React.Component<Props> {
-  public constructor(props: Props) {
-    super(props);
-
-    props.clearProduct();
+  componentDidMount() {
+    this.props.clearProduct();
   }
 
   componentDidUpdate(prevProps: Props) {

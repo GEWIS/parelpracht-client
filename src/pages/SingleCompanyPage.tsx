@@ -23,12 +23,11 @@ interface Props extends RouteComponentProps<{ companyId: string }> {
 }
 
 class SingleCompanyPage extends React.Component<Props> {
-  public constructor(props: Props) {
-    super(props);
-    const { companyId } = props.match.params;
+  componentDidMount() {
+    const { companyId } = this.props.match.params;
 
-    props.clearCompany();
-    props.fetchCompany(Number.parseInt(companyId, 10));
+    this.props.clearCompany();
+    this.props.fetchCompany(Number.parseInt(companyId, 10));
   }
 
   public render() {

@@ -22,12 +22,11 @@ interface Props extends RouteComponentProps<{ productId: string }> {
 }
 
 class SingleProductPage extends React.Component<Props> {
-  public constructor(props: Props) {
-    super(props);
-    const { productId } = props.match.params;
+  componentDidMount() {
+    const { productId } = this.props.match.params;
 
-    props.clearProduct();
-    props.fetchProduct(Number.parseInt(productId, 10));
+    this.props.clearProduct();
+    this.props.fetchProduct(Number.parseInt(productId, 10));
   }
 
   public render() {

@@ -22,12 +22,11 @@ interface Props extends RouteComponentProps<{ invoiceId: string }> {
 }
 
 class SingleInvoicePage extends React.Component<Props> {
-  public constructor(props: Props) {
-    super(props);
-    const { invoiceId } = props.match.params;
+  componentDidMount() {
+    const { invoiceId } = this.props.match.params;
 
-    props.clearInvoice();
-    props.fetchInvoice(Number.parseInt(invoiceId, 10));
+    this.props.clearInvoice();
+    this.props.fetchInvoice(Number.parseInt(invoiceId, 10));
   }
 
   public render() {
