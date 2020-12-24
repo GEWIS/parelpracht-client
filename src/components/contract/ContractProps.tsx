@@ -12,6 +12,8 @@ import { formatPrice } from '../../helpers/monetary';
 import { createSingleContract, saveSingleContract } from '../../stores/contract/actionCreators';
 import ResourceStatus from '../../stores/resourceStatus';
 import { RootState } from '../../stores/store';
+import CompanySelector from '../company/CompanySelector';
+import ContactSelector from '../contact/ContactSelector';
 import ContractPropsButtons from './ContractPropsButtons';
 
 interface Props {
@@ -29,9 +31,9 @@ interface State {
   editing: boolean;
 
   title: string;
-  companyId: string;
-  contactId: string;
   comments: string;
+  contactSelection: number;
+  companySelection: number;
 }
 
 class ContractProps extends React.Component<Props, State> {
@@ -56,8 +58,8 @@ class ContractProps extends React.Component<Props, State> {
     const { contract } = props;
     return {
       title: contract.title,
-      companyId: contract.companyId.toString(),
-      contactId: contract.companyId.toString(),
+      companySelection: contract.companyId,
+      contactSelection: contract.contactId,
       comments: contract.comments ?? '',
     };
   };
@@ -65,8 +67,8 @@ class ContractProps extends React.Component<Props, State> {
   toParams = (): ContractParams => {
     return new ContractParams({
       title: this.state.title,
-      companyId: parseInt(this.state.companyId, 10),
-      contactId: parseInt(this.state.contactId, 10),
+      companyId: this.state.companySelection,
+      contactId: this.state.contactSelection,
       comments: this.state.comments,
     });
   };
@@ -95,8 +97,8 @@ class ContractProps extends React.Component<Props, State> {
     const {
       editing,
       title,
-      companyId,
-      contactId,
+      companySelection,
+      contactSelection,
       comments,
     } = this.state;
 
@@ -128,26 +130,30 @@ class ContractProps extends React.Component<Props, State> {
           />
           <Form.Field
             disabled={!editing}
-            fluid
-            id="form-input-companyId"
-            control={Input}
-            label="Company ID"
-            value={companyId}
-            onChange={(e: ChangeEvent<HTMLInputElement>) => this.setState({
-              companyId: e.target.value,
-            })}
-          />
+          >
+            {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
+            <label htmlFor="form-company-selector">Company</label>
+            <CompanySelector
+              id="form-company-selector"
+              value={companySelection}
+              onChange={(val: number) => this.setState({
+                companySelection: val,
+              })}
+            />
+          </Form.Field>
           <Form.Field
             disabled={!editing}
-            fluid
-            id="form-input-contactId"
-            control={Input}
-            label="Contact ID"
-            value={contactId}
-            onChange={(e: ChangeEvent<HTMLInputElement>) => this.setState({
-              contactId: e.target.value,
-            })}
-          />
+          >
+            {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
+            <label htmlFor="form-contact-selector">Contact</label>
+            <ContactSelector
+              id="form-contact-selector"
+              value={contactSelection}
+              onChange={(val: number) => this.setState({
+                contactSelection: val,
+              })}
+            />
+          </Form.Field>
           <Form.Field
             disabled={!editing}
             fluid
