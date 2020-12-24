@@ -5,16 +5,18 @@ import createSagaMiddleware from 'redux-saga';
 import { all, fork } from 'redux-saga/effects';
 import { connectRouter, routerMiddleware, RouterState } from 'connected-react-router';
 
+import authReducer from './auth/reducer';
 import alertsReducer from './alerts/reducer';
 import productReducer from './product/reducer';
 import companyReducer from './company/reducer';
 import invoiceReducer from './invoice/reducer';
 import contractReducer from './contract/reducer';
 
+import authSagas, { fetchAuthStatus } from './auth/sagas';
 import alertsSagas from './alerts/sagas';
 import productSagas from './product/sagas';
-import contactSagas, { fetchContactSummaries } from './contact/sagas';
-import companySagas, { fetchCompanySummaries } from './company/sagas';
+import contactSagas from './contact/sagas';
+import companySagas from './company/sagas';
 import contractSagas from './contract/sagas';
 import invoiceSagas from './invoice/sagas';
 import { tablesReducer } from './tables/reducer';
@@ -22,6 +24,7 @@ import { summariesReducer } from './summaries/reducer';
 
 // Import all watching sagas
 const watchSagas = [
+  ...authSagas,
   ...alertsSagas,
   ...productSagas,
   ...companySagas,
@@ -32,6 +35,7 @@ const watchSagas = [
 
 // Set up root reducer
 const reducers = {
+  auth: authReducer,
   alerts: alertsReducer,
   product: productReducer,
   tables: tablesReducer,
@@ -55,9 +59,8 @@ export type RootState = {
 };
 
 function* rootSaga() {
-  // Fetch summaries at application start
-  yield fork(fetchCompanySummaries);
-  yield fork(fetchContactSummaries);
+  // Check authentication status at start
+  yield fork(fetchAuthStatus);
 
   // Watch sagas
   yield all(watchSagas.map((saga) => saga()));
