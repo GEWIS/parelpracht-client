@@ -1,4 +1,4 @@
-export enum Tables {
+export enum SummaryCollections {
   Products = 'Products',
   Companies = 'Companies',
   Contacts = 'Contacts',

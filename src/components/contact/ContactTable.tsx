@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import { Table } from 'semantic-ui-react';
-import { Contract } from '../../clients/server.generated';
+import { Contact } from '../../clients/server.generated';
 import TablePagination from '../TablePagination';
 import { RootState } from '../../stores/store';
 import {
@@ -10,10 +10,10 @@ import {
 } from '../../stores/tables/actionCreators';
 import { countFetched, countTotal, getTable } from '../../stores/tables/selectors';
 import { Tables } from '../../stores/tables/tables';
-import ContractRow from './ContractRow';
+import ContactRow from './ContactRow';
 
 interface Props {
-  contracts: Contract[];
+  contacts: Contact[];
   column: string;
   direction: 'ascending' | 'descending';
   total: number;
@@ -21,20 +21,20 @@ interface Props {
   skip: number;
   take: number;
 
-  fetchContracts: () => void;
+  fetchContacts: () => void;
   changeSort: (column: string) => void;
   setTake: (take: number) => void;
   prevPage: () => void;
   nextPage: () => void;
 }
 
-function ContractsTable({
-  contracts, fetchContracts, column, direction, changeSort,
+function ContactsTable({
+  contacts, fetchContacts, column, direction, changeSort,
   total, fetched, skip, take,
   prevPage, nextPage, setTake,
 }: Props) {
   useEffect(() => {
-    fetchContracts();
+    fetchContacts();
   }, []);
 
   return (
@@ -43,27 +43,24 @@ function ContractsTable({
         <Table.Header>
           <Table.Row>
             <Table.HeaderCell
-              sorted={column === 'title' ? direction : undefined}
-              onClick={() => changeSort('title')}
+              sorted={column === 'firstName' ? direction : undefined}
+              onClick={() => changeSort('firstName')}
             >
-              Title
+              Name
             </Table.HeaderCell>
             <Table.HeaderCell>
               Company
             </Table.HeaderCell>
-            <Table.HeaderCell>
-              Contact
-            </Table.HeaderCell>
             <Table.HeaderCell
-              sorted={column === 'date' ? direction : undefined}
-              onClick={() => changeSort('date')}
+              sorted={column === 'email' ? direction : undefined}
+              onClick={() => changeSort('email')}
             >
-              Date
+              E-mail
             </Table.HeaderCell>
           </Table.Row>
         </Table.Header>
         <Table.Body>
-          {contracts.map((x) => <ContractRow contract={x} key={x.id} />)}
+          {contacts.map((x) => <ContactRow contact={x} key={x.id} />)}
         </Table.Body>
       </Table>
       <TablePagination
@@ -80,37 +77,37 @@ function ContractsTable({
 }
 
 const mapStateToProps = (state: RootState) => {
-  const contractTable = getTable<Contract>(state, Tables.Contracts);
+  const contactTable = getTable<Contact>(state, Tables.Contacts);
   return {
-    total: countTotal(state, Tables.Contracts),
-    fetched: countFetched(state, Tables.Contracts),
-    skip: contractTable.skip,
-    take: contractTable.take,
-    contracts: contractTable.data,
-    column: contractTable.sortColumn,
-    direction: contractTable.sortDirection === 'ASC'
+    total: countTotal(state, Tables.Contacts),
+    fetched: countFetched(state, Tables.Contacts),
+    skip: contactTable.skip,
+    take: contactTable.take,
+    contacts: contactTable.data,
+    column: contactTable.sortColumn,
+    direction: contactTable.sortDirection === 'ASC'
       ? 'ascending' : 'descending' as 'ascending' | 'descending',
   };
 };
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
-  fetchContracts: () => dispatch(fetchTable(Tables.Contracts)),
+  fetchContacts: () => dispatch(fetchTable(Tables.Contacts)),
   changeSort: (column: string) => {
-    dispatch(changeSortTable(Tables.Contracts, column));
-    dispatch(fetchTable(Tables.Contracts));
+    dispatch(changeSortTable(Tables.Contacts, column));
+    dispatch(fetchTable(Tables.Contacts));
   },
   setTake: (take: number) => {
-    dispatch(setTakeTable(Tables.Contracts, take));
-    dispatch(fetchTable(Tables.Contracts));
+    dispatch(setTakeTable(Tables.Contacts, take));
+    dispatch(fetchTable(Tables.Contacts));
   },
   prevPage: () => {
-    dispatch(prevPageTable(Tables.Contracts));
-    dispatch(fetchTable(Tables.Contracts));
+    dispatch(prevPageTable(Tables.Contacts));
+    dispatch(fetchTable(Tables.Contacts));
   },
   nextPage: () => {
-    dispatch(nextPageTable(Tables.Contracts));
-    dispatch(fetchTable(Tables.Contracts));
+    dispatch(nextPageTable(Tables.Contacts));
+    dispatch(fetchTable(Tables.Contacts));
   },
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(ContractsTable);
+export default connect(mapStateToProps, mapDispatchToProps)(ContactsTable);

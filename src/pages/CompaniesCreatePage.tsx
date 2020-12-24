@@ -15,14 +15,12 @@ import AlertContainer from '../components/alerts/AlertContainer';
 interface Props extends RouteComponentProps {
   status: ResourceStatus;
 
-  // clearCompany: () => void;
+  clearCompany: () => void;
 }
 
 class CompaniesCreatePage extends React.Component<Props> {
-  public constructor(props: Props) {
-    super(props);
-
-    // props.clearCompany();
+  componentDidMount() {
+    this.props.clearCompany();
   }
 
   componentDidUpdate(prevProps: Props) {
@@ -72,8 +70,7 @@ const mapStateToProps = (state: RootState) => {
 };
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
-  fetchCompany: (id: number) => dispatch(fetchSingleCompany(id)),
-  clear: () => dispatch(clearSingleCompany()),
+  clearCompany: () => dispatch(clearSingleCompany()),
 });
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(CompaniesCreatePage));

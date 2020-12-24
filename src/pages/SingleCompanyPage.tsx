@@ -12,6 +12,7 @@ import { RootState } from '../stores/store';
 import CompanyProps from '../components/company/CompanyProps';
 import ResourceStatus from '../stores/resourceStatus';
 import CompanySummary from '../components/company/CompanySummary';
+import CompanyContactList from '../components/company/CompanyContactList';
 
 interface Props extends RouteComponentProps<{ companyId: string }> {
   company: Company | undefined;
@@ -22,12 +23,11 @@ interface Props extends RouteComponentProps<{ companyId: string }> {
 }
 
 class SingleCompanyPage extends React.Component<Props> {
-  public constructor(props: Props) {
-    super(props);
-    const { companyId } = props.match.params;
+  componentDidMount() {
+    const { companyId } = this.props.match.params;
 
-    props.clearCompany();
-    props.fetchCompany(Number.parseInt(companyId, 10));
+    this.props.clearCompany();
+    this.props.fetchCompany(Number.parseInt(companyId, 10));
   }
 
   public render() {
@@ -52,9 +52,14 @@ class SingleCompanyPage extends React.Component<Props> {
         />
         <CompanySummary />
         <Grid columns={2}>
-          <Grid.Column>
+          <Grid.Column width={10}>
             <Segment>
               <CompanyProps company={company} />
+            </Segment>
+          </Grid.Column>
+          <Grid.Column width={6}>
+            <Segment secondary>
+              <CompanyContactList />
             </Segment>
           </Grid.Column>
         </Grid>

@@ -22,12 +22,11 @@ interface Props extends RouteComponentProps<{ contractId: string }> {
 }
 
 class SingleContractPage extends React.Component<Props> {
-  public constructor(props: Props) {
-    super(props);
-    const { contractId } = props.match.params;
+  componentDidMount() {
+    const { contractId } = this.props.match.params;
 
-    props.clearContract();
-    props.fetchContract(Number.parseInt(contractId, 10));
+    this.props.clearContract();
+    this.props.fetchContract(Number.parseInt(contractId, 10));
   }
 
   public render() {
