@@ -1,12 +1,17 @@
 import { call, put } from 'redux-saga/effects';
-import { AuthStatus, Client, LoginParams } from '../../clients/server.generated';
+import {
+  AuthStatus, Client, LoginParams, ResetPasswordRequest,
+} from '../../clients/server.generated';
 import { takeEveryWithErrorHandling } from '../errorHandling';
 import { fetchSummaries } from '../summaries/actionCreators';
 import { SummaryCollections } from '../summaries/summaries';
 import {
-  authFetchProfile, authFetchStatus, authSetProfile, authSetStatus,
+  authFetchProfile, authFetchStatus, authRequestError,
+  authRequestSuccess, authSetProfile, authSetStatus,
 } from './actionCreators';
-import { AuthActionType, AuthLogin } from './actions';
+import {
+  AuthActionType, AuthForgotPassword, AuthLogin, AuthResetPassword,
+} from './actions';
 
 export function* fetchAuthStatus() {
   const client = new Client();
@@ -43,6 +48,28 @@ function* login(action: AuthLogin) {
   yield put(authFetchStatus());
 }
 
+function* forgotPassword(action: AuthForgotPassword) {
+  const client = new Client();
+
+  yield call([client, client.forgotPassword], action.email);
+
+  yield put(authRequestSuccess());
+}
+
+function* resetPassword(action: AuthResetPassword) {
+  const client = new Client();
+
+  yield call([client, client.resetPassword], new ResetPasswordRequest({
+    password: action.password, repeatPassword: action.passwordRepeat, token: action.token,
+  }));
+
+  yield put(authRequestSuccess());
+}
+
+function* errorResetPassword() {
+  yield put(authRequestError());
+}
+
 function* logout() {
   const client = new Client();
 
@@ -63,5 +90,15 @@ export default [
   },
   function* watchLogout() {
     yield takeEveryWithErrorHandling(AuthActionType.Logout, logout);
+  },
+
+  function* watchForgotPassword() {
+    yield takeEveryWithErrorHandling(AuthActionType.ForgotPassword, forgotPassword);
+  },
+  function* watchResetPassword() {
+    yield takeEveryWithErrorHandling(
+      AuthActionType.ResetPassword, resetPassword,
+      { onErrorSaga: errorResetPassword },
+    );
   },
 ];

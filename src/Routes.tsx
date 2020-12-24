@@ -7,6 +7,7 @@ import {
 } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
+import _ from 'lodash';
 import ProductsPage from './pages/ProductsPage';
 import SingleProductPage from './pages/SingleProductPage';
 import ProductCreatePage from './pages/ProductCreatePage';
@@ -26,6 +27,8 @@ import { RootState } from './stores/store';
 import ResourceStatus from './stores/resourceStatus';
 import { AuthStatus, User } from './clients/server.generated';
 import LoginPage from './pages/LoginPage';
+import ForgotPasswordPage from './pages/ForgotPasswordPage';
+import ResetPasswordPage from './pages/ResetPasswordPage';
 
 interface Props extends RouteComponentProps {
   // eslint-disable-next-line react/no-unused-prop-types
@@ -49,8 +52,7 @@ function Routes(props: Props) {
   }
 
   if (!props.authStatus.authenticated) {
-    // TODO: refactor this filter to include more pages
-    if (props.location.pathname !== '/login') {
+    if (_.find(['/login', 'forgot-password', '/reset-password'], props.location.pathname) !== undefined) {
       return (
         <Redirect to="/login" />
       );
@@ -59,6 +61,12 @@ function Routes(props: Props) {
       <Switch>
         <Route path="/login" exact>
           <LoginPage />
+        </Route>
+        <Route path="/forgot-password" exact>
+          <ForgotPasswordPage />
+        </Route>
+        <Route path="/reset-password" exact>
+          <ResetPasswordPage />
         </Route>
       </Switch>
     );

@@ -1,5 +1,8 @@
-import React, { ChangeEvent, useState } from 'react';
+import React, {
+  ChangeEvent, useEffect, useRef, useState,
+} from 'react';
 import { connect } from 'react-redux';
+import { NavLink } from 'react-router-dom';
 import { Dispatch } from 'redux';
 import {
   Button, Form, Header, Input,
@@ -11,29 +14,30 @@ interface Props {
   login: (email: string, password: string) => void,
 }
 
-interface State {
-  email: string;
-  password: string;
-}
-
 function LoginForm(props: Props) {
   const [email, changeEmail] = useState('');
   const [password, changePassword] = useState('');
 
+  const inputRef = useRef<Input>(null);
+  useEffect(() => {
+    inputRef.current!.focus();
+  }, []);
+
   return (
     <Form size="large">
-      <Header as="h2" icon="user">
-        CRM
-      </Header>
-      <Form.Field
-        id="form-input-email"
-        control={Input}
-        icon="user"
-        value={email}
-        iconPosition="left"
-        placeholder="Email address"
-        onChange={(e: ChangeEvent<HTMLInputElement>) => changeEmail(e.target.value)}
-      />
+      <Form.Field>
+        {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
+        <label htmlFor="form-input-email">Email address</label>
+        <Input
+          id="form-input-email"
+          control={Input}
+          icon="user"
+          value={email}
+          iconPosition="left"
+          onChange={(e: ChangeEvent<HTMLInputElement>) => changeEmail(e.target.value)}
+          ref={inputRef}
+        />
+      </Form.Field>
       <Form.Field
         id="form-input-password"
         control={Input}
@@ -41,7 +45,7 @@ function LoginForm(props: Props) {
         type="password"
         icon="lock"
         iconPosition="left"
-        placeholder="Password"
+        label="Password"
         onChange={(e: ChangeEvent<HTMLInputElement>) => changePassword(e.target.value)}
       />
       <Button

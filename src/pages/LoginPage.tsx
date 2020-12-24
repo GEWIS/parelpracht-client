@@ -1,7 +1,7 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import {
-  Container, Grid, Message, Segment,
+  Container, Grid, Header, Message, Segment,
 } from 'semantic-ui-react';
 import AlertContainer from '../components/alerts/AlertContainer';
 import LoginForm from '../components/auth/LoginForm';
@@ -13,6 +13,9 @@ function LoginPage() {
       <Container>
         <Grid textAlign="center" verticalAlign="middle" style={{ height: '100vh' }}>
           <Grid.Column width={6}>
+            <Header as="h1">
+              CRM
+            </Header>
             <Segment>
               <LoginForm />
             </Segment>

@@ -7,4 +7,6 @@ export interface AuthState {
 
   profile: User | undefined;
   profileStatus: ResourceStatus;
+
+  passwordRequest: ResourceStatus;
 }

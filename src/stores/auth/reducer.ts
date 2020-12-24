@@ -9,6 +9,8 @@ const initialState: AuthState = {
 
   profile: undefined,
   profileStatus: ResourceStatus.EMPTY,
+
+  passwordRequest: ResourceStatus.EMPTY,
 };
 
 type AuthAction = ReturnType<typeof actionCreators[keyof typeof actionCreators]>;
@@ -44,6 +46,27 @@ export default function authReducer(
         ...state,
         profile: undefined,
         profileStatus: ResourceStatus.EMPTY,
+      };
+    case AuthActionType.ResetPassword:
+    case AuthActionType.ForgotPassword:
+      return {
+        ...state,
+        passwordRequest: ResourceStatus.FETCHING,
+      };
+    case AuthActionType.RequestClear:
+      return {
+        ...state,
+        passwordRequest: ResourceStatus.EMPTY,
+      };
+    case AuthActionType.RequestSuccess:
+      return {
+        ...state,
+        passwordRequest: ResourceStatus.FETCHED,
+      };
+    case AuthActionType.RequestError:
+      return {
+        ...state,
+        passwordRequest: ResourceStatus.ERROR,
       };
     default:
       return state;

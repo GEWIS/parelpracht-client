@@ -1,7 +1,9 @@
 import { AuthStatus, User } from '../../clients/server.generated';
 import {
   AuthActionType, AuthFetchProfile, AuthFetchStatus,
-  AuthLogin, AuthLogout, AuthSetProfile, AuthSetStatus,
+  AuthForgotPassword,
+  AuthLogin, AuthLogout, AuthRequestClear, AuthRequestError, AuthRequestSuccess,
+  AuthResetPassword, AuthSetProfile, AuthSetStatus,
 } from './actions';
 
 export function authFetchStatus(): AuthFetchStatus {
@@ -26,4 +28,28 @@ export function authLogin(email: string, password: string): AuthLogin {
 
 export function authLogout(): AuthLogout {
   return { type: AuthActionType.Logout };
+}
+
+export function authForgotPassword(email: string): AuthForgotPassword {
+  return { type: AuthActionType.ForgotPassword, email };
+}
+
+export function authResetPassword(
+  password: string, passwordRepeat: string, token: string,
+): AuthResetPassword {
+  return {
+    type: AuthActionType.ResetPassword, password, passwordRepeat, token,
+  };
+}
+
+export function authRequestSuccess(): AuthRequestSuccess {
+  return { type: AuthActionType.RequestSuccess };
+}
+
+export function authRequestError(): AuthRequestError {
+  return { type: AuthActionType.RequestError };
+}
+
+export function authRequestClear(): AuthRequestClear {
+  return { type: AuthActionType.RequestClear };
 }
