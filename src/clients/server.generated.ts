@@ -483,6 +483,189 @@ export class Client {
     }
 
     /**
+     * @param id ID of the product
+     * @param body Parameters to create this status with
+     * @return Ok
+     */
+    addStatus(id: number, body: StatusParams): Promise<BaseActivity> {
+        let url_ = this.baseUrl + "/product/{id}/status";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ = <RequestInit>{
+            body: content_,
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processAddStatus(_response);
+        });
+    }
+
+    protected processAddStatus(response: Response): Promise<BaseActivity> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = BaseActivity.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<BaseActivity>(<any>null);
+    }
+
+    /**
+     * @param id ID of the product
+     * @param body Parameters to create this comment with
+     * @return Ok
+     */
+    addComment(id: number, body: CommentParams): Promise<BaseActivity> {
+        let url_ = this.baseUrl + "/product/{id}/comment";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ = <RequestInit>{
+            body: content_,
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processAddComment(_response);
+        });
+    }
+
+    protected processAddComment(response: Response): Promise<BaseActivity> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = BaseActivity.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<BaseActivity>(<any>null);
+    }
+
+    /**
+     * @param id ID of the product
+     * @param activityId ID of the activity
+     * @param body Update subset of parameter of comment activity
+     * @return Ok
+     */
+    updateActivity(id: number, activityId: number, body: Partial_UpdateActivityParams_): Promise<BaseActivity> {
+        let url_ = this.baseUrl + "/product/{id}/activity/{activityId}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        if (activityId === undefined || activityId === null)
+            throw new Error("The parameter 'activityId' must be defined.");
+        url_ = url_.replace("{activityId}", encodeURIComponent("" + activityId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ = <RequestInit>{
+            body: content_,
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processUpdateActivity(_response);
+        });
+    }
+
+    protected processUpdateActivity(response: Response): Promise<BaseActivity> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = BaseActivity.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<BaseActivity>(<any>null);
+    }
+
+    /**
+     * @param id ID of the product
+     * @param activityId ID of the activity
+     * @return No content
+     */
+    deleteActivity(id: number, activityId: number): Promise<void> {
+        let url_ = this.baseUrl + "/product/{id}/activity/{activityId}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        if (activityId === undefined || activityId === null)
+            throw new Error("The parameter 'activityId' must be defined.");
+        url_ = url_.replace("{activityId}", encodeURIComponent("" + activityId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <RequestInit>{
+            method: "DELETE",
+            headers: {
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processDeleteActivity(_response);
+        });
+    }
+
+    protected processDeleteActivity(response: Response): Promise<void> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 204) {
+            return response.text().then((_responseText) => {
+            return;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<void>(<any>null);
+    }
+
+    /**
      * @param col (optional) Sorted column
      * @param dir (optional) Sorting direction
      * @param skip (optional) Number of elements to skip
@@ -747,6 +930,189 @@ export class Client {
             });
         }
         return Promise.resolve<Company>(<any>null);
+    }
+
+    /**
+     * @param id ID of the company
+     * @param body Parameters to create this status with
+     * @return Ok
+     */
+    addStatus2(id: number, body: StatusParams): Promise<BaseActivity> {
+        let url_ = this.baseUrl + "/company/{id}/status";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ = <RequestInit>{
+            body: content_,
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processAddStatus2(_response);
+        });
+    }
+
+    protected processAddStatus2(response: Response): Promise<BaseActivity> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = BaseActivity.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<BaseActivity>(<any>null);
+    }
+
+    /**
+     * @param id ID of the company
+     * @param body Parameters to create this comment with
+     * @return Ok
+     */
+    addComment2(id: number, body: CommentParams): Promise<BaseActivity> {
+        let url_ = this.baseUrl + "/company/{id}/comment";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ = <RequestInit>{
+            body: content_,
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processAddComment2(_response);
+        });
+    }
+
+    protected processAddComment2(response: Response): Promise<BaseActivity> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = BaseActivity.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<BaseActivity>(<any>null);
+    }
+
+    /**
+     * @param id ID of the company
+     * @param activityId ID of the comment activity
+     * @param body Update subset of parameter of comment activity
+     * @return Ok
+     */
+    updateActivity2(id: number, activityId: number, body: Partial_UpdateActivityParams_): Promise<BaseActivity> {
+        let url_ = this.baseUrl + "/company/{id}/activity/{activityId}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        if (activityId === undefined || activityId === null)
+            throw new Error("The parameter 'activityId' must be defined.");
+        url_ = url_.replace("{activityId}", encodeURIComponent("" + activityId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ = <RequestInit>{
+            body: content_,
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processUpdateActivity2(_response);
+        });
+    }
+
+    protected processUpdateActivity2(response: Response): Promise<BaseActivity> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = BaseActivity.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<BaseActivity>(<any>null);
+    }
+
+    /**
+     * @param id ID of the company
+     * @param activityId ID of the comment activity
+     * @return No content
+     */
+    deleteActivity2(id: number, activityId: number): Promise<void> {
+        let url_ = this.baseUrl + "/company/{id}/activity/{activityId}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        if (activityId === undefined || activityId === null)
+            throw new Error("The parameter 'activityId' must be defined.");
+        url_ = url_.replace("{activityId}", encodeURIComponent("" + activityId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <RequestInit>{
+            method: "DELETE",
+            headers: {
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processDeleteActivity2(_response);
+        });
+    }
+
+    protected processDeleteActivity2(response: Response): Promise<void> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 204) {
+            return response.text().then((_responseText) => {
+            return;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<void>(<any>null);
     }
 
     /**
@@ -1127,6 +1493,388 @@ export class Client {
     }
 
     /**
+     * @param id ID of the contract
+     * @param prodId ID of the product instance
+     * @param body Parameters to create this status with
+     * @return Ok
+     */
+    addProductStatus(id: number, prodId: number, body: StatusParams): Promise<BaseActivity> {
+        let url_ = this.baseUrl + "/contract/{id}/product/{prodId}/status";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        if (prodId === undefined || prodId === null)
+            throw new Error("The parameter 'prodId' must be defined.");
+        url_ = url_.replace("{prodId}", encodeURIComponent("" + prodId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ = <RequestInit>{
+            body: content_,
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processAddProductStatus(_response);
+        });
+    }
+
+    protected processAddProductStatus(response: Response): Promise<BaseActivity> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = BaseActivity.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<BaseActivity>(<any>null);
+    }
+
+    /**
+     * @param id ID of the contract
+     * @param prodId ID of the product instance
+     * @param body Parameters to create this comment with
+     * @return Ok
+     */
+    addProductComment(id: number, prodId: number, body: CommentParams): Promise<BaseActivity> {
+        let url_ = this.baseUrl + "/contract/{id}/product/{prodId}/comment";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        if (prodId === undefined || prodId === null)
+            throw new Error("The parameter 'prodId' must be defined.");
+        url_ = url_.replace("{prodId}", encodeURIComponent("" + prodId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ = <RequestInit>{
+            body: content_,
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processAddProductComment(_response);
+        });
+    }
+
+    protected processAddProductComment(response: Response): Promise<BaseActivity> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = BaseActivity.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<BaseActivity>(<any>null);
+    }
+
+    /**
+     * @param id ID of the contract
+     * @param prodId ID of the product instance
+     * @param activityId ID of the activity
+     * @param body Update subset of parameter of the activity
+     * @return Ok
+     */
+    updateProductActivity(id: number, prodId: number, activityId: number, body: Partial_UpdateActivityParams_): Promise<BaseActivity> {
+        let url_ = this.baseUrl + "/contract/{id}/product/{prodId}/activity/{activityId}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        if (prodId === undefined || prodId === null)
+            throw new Error("The parameter 'prodId' must be defined.");
+        url_ = url_.replace("{prodId}", encodeURIComponent("" + prodId));
+        if (activityId === undefined || activityId === null)
+            throw new Error("The parameter 'activityId' must be defined.");
+        url_ = url_.replace("{activityId}", encodeURIComponent("" + activityId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ = <RequestInit>{
+            body: content_,
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processUpdateProductActivity(_response);
+        });
+    }
+
+    protected processUpdateProductActivity(response: Response): Promise<BaseActivity> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = BaseActivity.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<BaseActivity>(<any>null);
+    }
+
+    /**
+     * @param id ID of the contract
+     * @param prodId ID of the product instance
+     * @param activityId ID of the activity
+     * @return No content
+     */
+    deleteProductActivity(id: number, prodId: number, activityId: number): Promise<void> {
+        let url_ = this.baseUrl + "/contract/{id}/product/{prodId}/activity/{activityId}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        if (prodId === undefined || prodId === null)
+            throw new Error("The parameter 'prodId' must be defined.");
+        url_ = url_.replace("{prodId}", encodeURIComponent("" + prodId));
+        if (activityId === undefined || activityId === null)
+            throw new Error("The parameter 'activityId' must be defined.");
+        url_ = url_.replace("{activityId}", encodeURIComponent("" + activityId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <RequestInit>{
+            method: "DELETE",
+            headers: {
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processDeleteProductActivity(_response);
+        });
+    }
+
+    protected processDeleteProductActivity(response: Response): Promise<void> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 204) {
+            return response.text().then((_responseText) => {
+            return;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<void>(<any>null);
+    }
+
+    /**
+     * @param id ID of the contract
+     * @param body Parameters to create this status with
+     * @return Ok
+     */
+    addStatus3(id: number, body: StatusParams): Promise<BaseActivity> {
+        let url_ = this.baseUrl + "/contract/{id}/status";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ = <RequestInit>{
+            body: content_,
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processAddStatus3(_response);
+        });
+    }
+
+    protected processAddStatus3(response: Response): Promise<BaseActivity> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = BaseActivity.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<BaseActivity>(<any>null);
+    }
+
+    /**
+     * @param id ID of the contract
+     * @param body Parameters to create this comment with
+     * @return Ok
+     */
+    addComment3(id: number, body: CommentParams): Promise<BaseActivity> {
+        let url_ = this.baseUrl + "/contract/{id}/comment";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ = <RequestInit>{
+            body: content_,
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processAddComment3(_response);
+        });
+    }
+
+    protected processAddComment3(response: Response): Promise<BaseActivity> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = BaseActivity.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<BaseActivity>(<any>null);
+    }
+
+    /**
+     * @param id ID of the contract
+     * @param activityId ID of the activity
+     * @param body Update subset of parameter of the activity
+     * @return Ok
+     */
+    updateActivity3(id: number, activityId: number, body: Partial_UpdateActivityParams_): Promise<BaseActivity> {
+        let url_ = this.baseUrl + "/contract/{id}/activity/{activityId}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        if (activityId === undefined || activityId === null)
+            throw new Error("The parameter 'activityId' must be defined.");
+        url_ = url_.replace("{activityId}", encodeURIComponent("" + activityId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ = <RequestInit>{
+            body: content_,
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processUpdateActivity3(_response);
+        });
+    }
+
+    protected processUpdateActivity3(response: Response): Promise<BaseActivity> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = BaseActivity.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<BaseActivity>(<any>null);
+    }
+
+    /**
+     * @param id ID of the contract
+     * @param activityId ID of the activity
+     * @return No content
+     */
+    deleteActivity3(id: number, activityId: number): Promise<void> {
+        let url_ = this.baseUrl + "/contract/{id}/activity/{activityId}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        if (activityId === undefined || activityId === null)
+            throw new Error("The parameter 'activityId' must be defined.");
+        url_ = url_.replace("{activityId}", encodeURIComponent("" + activityId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <RequestInit>{
+            method: "DELETE",
+            headers: {
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processDeleteActivity3(_response);
+        });
+    }
+
+    protected processDeleteActivity3(response: Response): Promise<void> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 204) {
+            return response.text().then((_responseText) => {
+            return;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<void>(<any>null);
+    }
+
+    /**
      * @param col (optional) Sorted column
      * @param dir (optional) Sorting direction
      * @param skip (optional) Number of elements to skip
@@ -1343,6 +2091,189 @@ export class Client {
             });
         }
         return Promise.resolve<Invoice>(<any>null);
+    }
+
+    /**
+     * @param id ID of the invoice
+     * @param body Parameters to create this status with
+     * @return Ok
+     */
+    addStatus4(id: number, body: StatusParams): Promise<BaseActivity> {
+        let url_ = this.baseUrl + "/invoice/{id}/status";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ = <RequestInit>{
+            body: content_,
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processAddStatus4(_response);
+        });
+    }
+
+    protected processAddStatus4(response: Response): Promise<BaseActivity> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = BaseActivity.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<BaseActivity>(<any>null);
+    }
+
+    /**
+     * @param id ID of the invoice
+     * @param body Parameters to create this comment with
+     * @return Ok
+     */
+    addComment4(id: number, body: CommentParams): Promise<BaseActivity> {
+        let url_ = this.baseUrl + "/invoice/{id}/comment";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ = <RequestInit>{
+            body: content_,
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processAddComment4(_response);
+        });
+    }
+
+    protected processAddComment4(response: Response): Promise<BaseActivity> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = BaseActivity.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<BaseActivity>(<any>null);
+    }
+
+    /**
+     * @param id ID of the invoice
+     * @param activityId ID of the activity
+     * @param body Update subset of parameter of the activity
+     * @return Ok
+     */
+    updateActivity4(id: number, activityId: number, body: Partial_UpdateActivityParams_): Promise<BaseActivity> {
+        let url_ = this.baseUrl + "/invoice/{id}/activity/{activityId}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        if (activityId === undefined || activityId === null)
+            throw new Error("The parameter 'activityId' must be defined.");
+        url_ = url_.replace("{activityId}", encodeURIComponent("" + activityId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ = <RequestInit>{
+            body: content_,
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processUpdateActivity4(_response);
+        });
+    }
+
+    protected processUpdateActivity4(response: Response): Promise<BaseActivity> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = BaseActivity.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<BaseActivity>(<any>null);
+    }
+
+    /**
+     * @param id ID of the invoice
+     * @param activityId ID of the activity
+     * @return No content
+     */
+    deleteActivity4(id: number, activityId: number): Promise<void> {
+        let url_ = this.baseUrl + "/invoice/{id}/activity/{activityId}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        if (activityId === undefined || activityId === null)
+            throw new Error("The parameter 'activityId' must be defined.");
+        url_ = url_.replace("{activityId}", encodeURIComponent("" + activityId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <RequestInit>{
+            method: "DELETE",
+            headers: {
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processDeleteActivity4(_response);
+        });
+    }
+
+    protected processDeleteActivity4(response: Response): Promise<void> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 204) {
+            return response.text().then((_responseText) => {
+            return;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<void>(<any>null);
     }
 
     /**
@@ -2819,7 +3750,7 @@ export class InvoiceActivity implements IInvoiceActivity {
     /** Description of this activity */
     description!: string;
     /** User who created this activity */
-    createdBy!: User;
+    createdBy?: User;
     invoiceId!: number;
     /** Invoice related to this activity */
     invoice!: Invoice;
@@ -2835,7 +3766,6 @@ export class InvoiceActivity implements IInvoiceActivity {
             }
         }
         if (!data) {
-            this.createdBy = new User();
             this.invoice = new Invoice();
         }
     }
@@ -2850,7 +3780,7 @@ export class InvoiceActivity implements IInvoiceActivity {
             this.type = _data["type"];
             this.subType = _data["subType"];
             this.description = _data["description"];
-            this.createdBy = _data["createdBy"] ? User.fromJS(_data["createdBy"]) : new User();
+            this.createdBy = _data["createdBy"] ? User.fromJS(_data["createdBy"]) : <any>undefined;
             this.invoiceId = _data["invoiceId"];
             this.invoice = _data["invoice"] ? Invoice.fromJS(_data["invoice"]) : new Invoice();
             this.relatedInvoiceId = _data["relatedInvoiceId"];
@@ -2902,7 +3832,7 @@ export interface IInvoiceActivity {
     /** Description of this activity */
     description: string;
     /** User who created this activity */
-    createdBy: User;
+    createdBy?: User;
     invoiceId: number;
     /** Invoice related to this activity */
     invoice: Invoice;
@@ -3074,7 +4004,7 @@ export class CompanyActivity implements ICompanyActivity {
     /** Description of this activity */
     description!: string;
     /** User who created this activity */
-    createdBy!: User;
+    createdBy?: User;
     companyId!: number;
     /** Company related to this activity */
     company!: Company;
@@ -3087,7 +4017,6 @@ export class CompanyActivity implements ICompanyActivity {
             }
         }
         if (!data) {
-            this.createdBy = new User();
             this.company = new Company();
         }
     }
@@ -3102,7 +4031,7 @@ export class CompanyActivity implements ICompanyActivity {
             this.type = _data["type"];
             this.subType = _data["subType"];
             this.description = _data["description"];
-            this.createdBy = _data["createdBy"] ? User.fromJS(_data["createdBy"]) : new User();
+            this.createdBy = _data["createdBy"] ? User.fromJS(_data["createdBy"]) : <any>undefined;
             this.companyId = _data["companyId"];
             this.company = _data["company"] ? Company.fromJS(_data["company"]) : new Company();
         }
@@ -3150,7 +4079,7 @@ export interface ICompanyActivity {
     /** Description of this activity */
     description: string;
     /** User who created this activity */
-    createdBy: User;
+    createdBy?: User;
     companyId: number;
     /** Company related to this activity */
     company: Company;
@@ -3174,7 +4103,7 @@ export class ContractActivity implements IContractActivity {
     /** Description of this activity */
     description!: string;
     /** User who created this activity */
-    createdBy!: User;
+    createdBy?: User;
     contractId!: number;
     /** Contract related to this activity */
     contract!: Contract;
@@ -3190,7 +4119,6 @@ export class ContractActivity implements IContractActivity {
             }
         }
         if (!data) {
-            this.createdBy = new User();
             this.contract = new Contract();
         }
     }
@@ -3205,7 +4133,7 @@ export class ContractActivity implements IContractActivity {
             this.type = _data["type"];
             this.subType = _data["subType"];
             this.description = _data["description"];
-            this.createdBy = _data["createdBy"] ? User.fromJS(_data["createdBy"]) : new User();
+            this.createdBy = _data["createdBy"] ? User.fromJS(_data["createdBy"]) : <any>undefined;
             this.contractId = _data["contractId"];
             this.contract = _data["contract"] ? Contract.fromJS(_data["contract"]) : new Contract();
             this.relatedContractId = _data["relatedContractId"];
@@ -3257,7 +4185,7 @@ export interface IContractActivity {
     /** Description of this activity */
     description: string;
     /** User who created this activity */
-    createdBy: User;
+    createdBy?: User;
     contractId: number;
     /** Contract related to this activity */
     contract: Contract;
@@ -3284,7 +4212,7 @@ export class ProductActivity implements IProductActivity {
     /** Description of this activity */
     description!: string;
     /** User who created this activity */
-    createdBy!: User;
+    createdBy?: User;
     productId!: number;
     /** Product related to this activity */
     product!: Product;
@@ -3297,7 +4225,6 @@ export class ProductActivity implements IProductActivity {
             }
         }
         if (!data) {
-            this.createdBy = new User();
             this.product = new Product();
         }
     }
@@ -3312,7 +4239,7 @@ export class ProductActivity implements IProductActivity {
             this.type = _data["type"];
             this.subType = _data["subType"];
             this.description = _data["description"];
-            this.createdBy = _data["createdBy"] ? User.fromJS(_data["createdBy"]) : new User();
+            this.createdBy = _data["createdBy"] ? User.fromJS(_data["createdBy"]) : <any>undefined;
             this.productId = _data["productId"];
             this.product = _data["product"] ? Product.fromJS(_data["product"]) : new Product();
         }
@@ -3360,7 +4287,7 @@ export interface IProductActivity {
     /** Description of this activity */
     description: string;
     /** User who created this activity */
-    createdBy: User;
+    createdBy?: User;
     productId: number;
     /** Product related to this activity */
     product: Product;
@@ -3553,6 +4480,226 @@ export interface IPartial_ProductParams_ {
     contractTextEnglish?: string;
     deliverySpecificationDutch?: string;
     deliverySpecificationEnglish?: string;
+}
+
+export class BaseActivity implements IBaseActivity {
+    /** Incremental ID of the entity */
+    id!: number;
+    /** Date at which this entity has been created */
+    createdAt!: Date;
+    /** Date at which this entity has last been updated */
+    updatedAt!: Date;
+    /** If this entity has been soft-deleted, this is the date at which the entity has been deleted */
+    deletedAt?: Date;
+    /** Version number of this entity */
+    version!: number;
+    /** Type of the activity (status or comment) */
+    type!: ActivityType;
+    /** Subtype of this activity, only used when the type = "STATUS" */
+    subType?: string;
+    /** Description of this activity */
+    description!: string;
+    /** User who created this activity */
+    createdBy?: User;
+
+    constructor(data?: IBaseActivity) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
+            this.updatedAt = _data["updatedAt"] ? new Date(_data["updatedAt"].toString()) : <any>undefined;
+            this.deletedAt = _data["deletedAt"] ? new Date(_data["deletedAt"].toString()) : <any>undefined;
+            this.version = _data["version"];
+            this.type = _data["type"];
+            this.subType = _data["subType"];
+            this.description = _data["description"];
+            this.createdBy = _data["createdBy"] ? User.fromJS(_data["createdBy"]) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): BaseActivity {
+        data = typeof data === 'object' ? data : {};
+        let result = new BaseActivity();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
+        data["updatedAt"] = this.updatedAt ? this.updatedAt.toISOString() : <any>undefined;
+        data["deletedAt"] = this.deletedAt ? this.deletedAt.toISOString() : <any>undefined;
+        data["version"] = this.version;
+        data["type"] = this.type;
+        data["subType"] = this.subType;
+        data["description"] = this.description;
+        data["createdBy"] = this.createdBy ? this.createdBy.toJSON() : <any>undefined;
+        return data; 
+    }
+}
+
+export interface IBaseActivity {
+    /** Incremental ID of the entity */
+    id: number;
+    /** Date at which this entity has been created */
+    createdAt: Date;
+    /** Date at which this entity has last been updated */
+    updatedAt: Date;
+    /** If this entity has been soft-deleted, this is the date at which the entity has been deleted */
+    deletedAt?: Date;
+    /** Version number of this entity */
+    version: number;
+    /** Type of the activity (status or comment) */
+    type: ActivityType;
+    /** Subtype of this activity, only used when the type = "STATUS" */
+    subType?: string;
+    /** Description of this activity */
+    description: string;
+    /** User who created this activity */
+    createdBy?: User;
+}
+
+export class StatusParams implements IStatusParams {
+    description!: string;
+    relatedEntityId?: number;
+    createdById!: number;
+    subtype!: string;
+
+    constructor(data?: IStatusParams) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.description = _data["description"];
+            this.relatedEntityId = _data["relatedEntityId"];
+            this.createdById = _data["createdById"];
+            this.subtype = _data["subtype"];
+        }
+    }
+
+    static fromJS(data: any): StatusParams {
+        data = typeof data === 'object' ? data : {};
+        let result = new StatusParams();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["description"] = this.description;
+        data["relatedEntityId"] = this.relatedEntityId;
+        data["createdById"] = this.createdById;
+        data["subtype"] = this.subtype;
+        return data; 
+    }
+}
+
+export interface IStatusParams {
+    description: string;
+    relatedEntityId?: number;
+    createdById: number;
+    subtype: string;
+}
+
+export class CommentParams implements ICommentParams {
+    description!: string;
+    relatedEntityId?: number;
+    createdById!: number;
+
+    constructor(data?: ICommentParams) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.description = _data["description"];
+            this.relatedEntityId = _data["relatedEntityId"];
+            this.createdById = _data["createdById"];
+        }
+    }
+
+    static fromJS(data: any): CommentParams {
+        data = typeof data === 'object' ? data : {};
+        let result = new CommentParams();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["description"] = this.description;
+        data["relatedEntityId"] = this.relatedEntityId;
+        data["createdById"] = this.createdById;
+        return data; 
+    }
+}
+
+export interface ICommentParams {
+    description: string;
+    relatedEntityId?: number;
+    createdById: number;
+}
+
+/** Make all properties in T optional */
+export class Partial_UpdateActivityParams_ implements IPartial_UpdateActivityParams_ {
+    description?: string;
+    relatedEntityId?: number;
+
+    constructor(data?: IPartial_UpdateActivityParams_) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.description = _data["description"];
+            this.relatedEntityId = _data["relatedEntityId"];
+        }
+    }
+
+    static fromJS(data: any): Partial_UpdateActivityParams_ {
+        data = typeof data === 'object' ? data : {};
+        let result = new Partial_UpdateActivityParams_();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["description"] = this.description;
+        data["relatedEntityId"] = this.relatedEntityId;
+        return data; 
+    }
+}
+
+/** Make all properties in T optional */
+export interface IPartial_UpdateActivityParams_ {
+    description?: string;
+    relatedEntityId?: number;
 }
 
 export class CompanyListResponse implements ICompanyListResponse {
@@ -4279,6 +5426,7 @@ export class ContactSummary implements IContactSummary {
     firstName!: string;
     middleName!: string;
     lastName!: string;
+    companyName!: string;
 
     constructor(data?: IContactSummary) {
         if (data) {
@@ -4295,6 +5443,7 @@ export class ContactSummary implements IContactSummary {
             this.firstName = _data["firstName"];
             this.middleName = _data["middleName"];
             this.lastName = _data["lastName"];
+            this.companyName = _data["companyName"];
         }
     }
 
@@ -4311,6 +5460,7 @@ export class ContactSummary implements IContactSummary {
         data["firstName"] = this.firstName;
         data["middleName"] = this.middleName;
         data["lastName"] = this.lastName;
+        data["companyName"] = this.companyName;
         return data; 
     }
 }
@@ -4320,6 +5470,7 @@ export interface IContactSummary {
     firstName: string;
     middleName: string;
     lastName: string;
+    companyName: string;
 }
 
 export class ContactParams implements IContactParams {
@@ -4530,7 +5681,6 @@ export class Admin implements IAdmin {
     middleName!: string;
     firstName!: string;
     gender!: Gender;
-    password!: string;
     email!: string;
 
     constructor(data?: IAdmin) {
@@ -4548,7 +5698,6 @@ export class Admin implements IAdmin {
             this.middleName = _data["middleName"];
             this.firstName = _data["firstName"];
             this.gender = _data["gender"];
-            this.password = _data["password"];
             this.email = _data["email"];
         }
     }
@@ -4566,7 +5715,6 @@ export class Admin implements IAdmin {
         data["middleName"] = this.middleName;
         data["firstName"] = this.firstName;
         data["gender"] = this.gender;
-        data["password"] = this.password;
         data["email"] = this.email;
         return data; 
     }
@@ -4577,7 +5725,6 @@ export interface IAdmin {
     middleName: string;
     firstName: string;
     gender: Gender;
-    password: string;
     email: string;
 }
 
