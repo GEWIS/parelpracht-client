@@ -10,9 +10,10 @@ import ResourceStatus from '../../stores/resourceStatus';
 import { RootState } from '../../stores/store';
 
 interface Props {
-  token: string,
-  status: ResourceStatus,
-  resetPassword: (password: string, passwordRepeat: string, token: string) => void,
+  newUser: boolean;
+  token: string;
+  status: ResourceStatus;
+  resetPassword: (password: string, passwordRepeat: string, token: string) => void;
 }
 
 function ResetPasswordForm(props: Props) {
@@ -49,7 +50,7 @@ function ResetPasswordForm(props: Props) {
         onClick={() => props.resetPassword(password, passwordRepeat, props.token)}
         loading={props.status === ResourceStatus.FETCHING}
       >
-        Reset password
+        {props.newUser ? 'Set password' : 'Reset password'}
       </Button>
     </Form>
   );

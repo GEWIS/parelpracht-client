@@ -6,6 +6,7 @@ import {
   Button,
   Container, Grid, Header, Icon, Segment,
 } from 'semantic-ui-react';
+import jwt from 'jsonwebtoken';
 import queryString from 'query-string';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
@@ -15,7 +16,7 @@ import { RootState } from '../stores/store';
 import { authRequestClear } from '../stores/auth/actionCreators';
 import ResourceStatus from '../stores/resourceStatus';
 
-interface Props extends RouteComponentProps{
+interface Props extends RouteComponentProps {
   status: ResourceStatus;
 
   clearStatus: () => void;
@@ -26,6 +27,13 @@ function ResetPasswordPage(props: Props) {
   if (typeof token !== 'string') {
     return <Redirect to="/login" />;
   }
+
+  const payload = jwt.decode(token);
+  if (!(payload && typeof payload !== 'string')) {
+    return <Redirect to="/login" />;
+  }
+
+  const newUser = payload.type === 'PASSWORD_SET';
 
   useEffect(() => {
     props.clearStatus();
@@ -39,7 +47,7 @@ function ResetPasswordPage(props: Props) {
           <Grid textAlign="center" verticalAlign="middle" style={{ height: '100vh' }}>
             <Grid.Column width={6}>
               <Header as="h1">
-                Reset your password
+                {newUser ? 'Set your password' : 'Reset your password'}
               </Header>
               <Segment color="green" size="large">
                 <p>Password successfully changed!</p>
@@ -62,10 +70,10 @@ function ResetPasswordPage(props: Props) {
         <Grid textAlign="center" verticalAlign="middle" style={{ height: '100vh' }}>
           <Grid.Column width={6}>
             <Header as="h1">
-              Reset your password
+              {newUser ? 'Set your password' : 'Reset your password'}
             </Header>
             <Segment>
-              <ResetPasswordForm token={token} />
+              <ResetPasswordForm token={token} newUser={newUser} />
               <Button as={NavLink} to="/login" style={{ marginTop: '1em' }} basic>
                 <Icon name="arrow left" basic />
                 Back to login
