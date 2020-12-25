@@ -130,7 +130,6 @@ function Routes(props: Props) {
           <Route path="/contract/:contractId" exact component={SingleContractPage} />
         </Switch>
       </Container>
-
     </div>
   );
 }

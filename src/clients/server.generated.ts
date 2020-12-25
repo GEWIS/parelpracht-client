@@ -375,6 +375,54 @@ export class Client {
     }
 
     /**
+     * @return Ok
+     */
+    getProductSummaries(): Promise<ProductSummary[]> {
+        let url_ = this.baseUrl + "/product/compact";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <RequestInit>{
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processGetProductSummaries(_response);
+        });
+    }
+
+    protected processGetProductSummaries(response: Response): Promise<ProductSummary[]> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(ProductSummary.fromJS(item));
+            }
+            return result200;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<ProductSummary[]>(<any>null);
+    }
+
+    /**
      * @param id ID of product to retrieve
      * @return Ok
      */
@@ -1234,6 +1282,54 @@ export class Client {
     }
 
     /**
+     * @return Ok
+     */
+    getContractSummaries(): Promise<ContractSummary[]> {
+        let url_ = this.baseUrl + "/contract/compact";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <RequestInit>{
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processGetContractSummaries(_response);
+        });
+    }
+
+    protected processGetContractSummaries(response: Response): Promise<ContractSummary[]> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(ContractSummary.fromJS(item));
+            }
+            return result200;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<ContractSummary[]>(<any>null);
+    }
+
+    /**
      * @param id ID of contract to retrieve
      * @return Ok
      */
@@ -1990,6 +2086,54 @@ export class Client {
             });
         }
         return Promise.resolve<Invoice>(<any>null);
+    }
+
+    /**
+     * @return Ok
+     */
+    getInvoiceSummaries(): Promise<InvoiceSummary[]> {
+        let url_ = this.baseUrl + "/invoice/compact";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <RequestInit>{
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processGetInvoiceSummaries(_response);
+        });
+    }
+
+    protected processGetInvoiceSummaries(response: Response): Promise<InvoiceSummary[]> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(InvoiceSummary.fromJS(item));
+            }
+            return result200;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<InvoiceSummary[]>(<any>null);
     }
 
     /**
@@ -4344,6 +4488,54 @@ export interface IProductListResponse {
     count: number;
 }
 
+export class ProductSummary implements IProductSummary {
+    id!: number;
+    nameDutch!: string;
+    nameEnglish!: string;
+    targetPrice!: number;
+
+    constructor(data?: IProductSummary) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.nameDutch = _data["nameDutch"];
+            this.nameEnglish = _data["nameEnglish"];
+            this.targetPrice = _data["targetPrice"];
+        }
+    }
+
+    static fromJS(data: any): ProductSummary {
+        data = typeof data === 'object' ? data : {};
+        let result = new ProductSummary();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["nameDutch"] = this.nameDutch;
+        data["nameEnglish"] = this.nameEnglish;
+        data["targetPrice"] = this.targetPrice;
+        return data; 
+    }
+}
+
+export interface IProductSummary {
+    id: number;
+    nameDutch: string;
+    nameEnglish: string;
+    targetPrice: number;
+}
+
 export class ProductParams implements IProductParams {
     nameDutch!: string;
     nameEnglish!: string;
@@ -5014,6 +5206,46 @@ export interface IContractListResponse {
     count: number;
 }
 
+export class ContractSummary implements IContractSummary {
+    id!: number;
+    title!: string;
+
+    constructor(data?: IContractSummary) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.title = _data["title"];
+        }
+    }
+
+    static fromJS(data: any): ContractSummary {
+        data = typeof data === 'object' ? data : {};
+        let result = new ContractSummary();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["title"] = this.title;
+        return data; 
+    }
+}
+
+export interface IContractSummary {
+    id: number;
+    title: string;
+}
+
 export class ContractParams implements IContractParams {
     title!: string;
     companyId!: number;
@@ -5251,6 +5483,46 @@ export class InvoiceListResponse implements IInvoiceListResponse {
 export interface IInvoiceListResponse {
     list: Invoice[];
     count: number;
+}
+
+export class InvoiceSummary implements IInvoiceSummary {
+    id!: number;
+    companyName!: string;
+
+    constructor(data?: IInvoiceSummary) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.companyName = _data["companyName"];
+        }
+    }
+
+    static fromJS(data: any): InvoiceSummary {
+        data = typeof data === 'object' ? data : {};
+        let result = new InvoiceSummary();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["companyName"] = this.companyName;
+        return data; 
+    }
+}
+
+export interface IInvoiceSummary {
+    id: number;
+    companyName: string;
 }
 
 export class InvoiceParams implements IInvoiceParams {
