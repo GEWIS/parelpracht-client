@@ -8,7 +8,6 @@ import { connectRouter, routerMiddleware, RouterState } from 'connected-react-ro
 import authReducer from './auth/reducer';
 import alertsReducer from './alerts/reducer';
 import productReducer from './product/reducer';
-import companyReducer from './company/reducer';
 import invoiceReducer from './invoice/reducer';
 import contractReducer from './contract/reducer';
 
@@ -19,7 +18,9 @@ import contactSagas from './contact/sagas';
 import companySagas from './company/sagas';
 import contractSagas from './contract/sagas';
 import invoiceSagas from './invoice/sagas';
+
 import { tablesReducer } from './tables/reducer';
+import { singleEntitiesReducer } from './single/reducer';
 import { summariesReducer } from './summaries/reducer';
 
 // Import all watching sagas
@@ -39,10 +40,10 @@ const reducers = {
   alerts: alertsReducer,
   product: productReducer,
   tables: tablesReducer,
-  company: companyReducer,
   contract: contractReducer,
   invoice: invoiceReducer,
   summaries: summariesReducer,
+  single: singleEntitiesReducer,
 };
 
 export const history = createBrowserHistory();

@@ -3,6 +3,8 @@ import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import { Loader } from 'semantic-ui-react';
 import { Company } from '../../clients/server.generated';
+import { getSingle } from '../../stores/single/selectors';
+import { SingleEntities } from '../../stores/single/single';
 import { RootState } from '../../stores/store';
 import CompanyContact from './CompanyContact';
 
@@ -42,8 +44,8 @@ class CompanyContactList extends React.Component<Props, State> {
 
 const mapStateToProps = (state: RootState) => {
   return {
-    company: state.company.single,
-    status: state.company.singleStatus,
+    company: getSingle<Company>(state, SingleEntities.Company).data,
+    status: getSingle<Company>(state, SingleEntities.Company).status,
   };
 };
 
