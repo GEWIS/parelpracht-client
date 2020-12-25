@@ -1,14 +1,17 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { NavLink, RouteComponentProps, withRouter } from 'react-router-dom';
 import { Dispatch } from 'redux';
-import { Loader } from 'semantic-ui-react';
+import {
+  Button, Icon, Loader,
+} from 'semantic-ui-react';
 import { Company } from '../../clients/server.generated';
 import { getSingle } from '../../stores/single/selectors';
 import { SingleEntities } from '../../stores/single/single';
 import { RootState } from '../../stores/store';
 import CompanyContact from './CompanyContact';
 
-interface Props {
+interface Props extends RouteComponentProps {
   company: Company | undefined;
 }
 
@@ -33,7 +36,21 @@ class CompanyContactList extends React.Component<Props, State> {
     const { contacts } = company;
     return (
       <>
-        <h3>Contacts</h3>
+        <h3>
+          Contacts
+          <Button
+            icon
+            labelPosition="left"
+            floated="right"
+            style={{ marginTop: '-0.5em' }}
+            basic
+            as={NavLink}
+            to={`${this.props.location.pathname}/contact/new`}
+          >
+            <Icon name="plus" />
+            Add Contact
+          </Button>
+        </h3>
         {contacts.map((contact) => (
           <CompanyContact key={contact.id} contact={contact} />
         ))}
@@ -52,4 +69,4 @@ const mapStateToProps = (state: RootState) => {
 const mapDispatchToProps = (dispatch: Dispatch) => ({
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(CompanyContactList);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(CompanyContactList));

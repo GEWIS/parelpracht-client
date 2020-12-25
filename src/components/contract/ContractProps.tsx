@@ -12,7 +12,7 @@ import ResourceStatus from '../../stores/resourceStatus';
 import { RootState } from '../../stores/store';
 import CompanySelector from '../company/CompanySelector';
 import ContactSelector from '../contact/ContactSelector';
-import ContractPropsButtons from './ContractPropsButtons';
+import PropsButtons from '../PropsButtons';
 import { SingleEntities } from '../../stores/single/single';
 import { getSingle } from '../../stores/single/selectors';
 
@@ -107,7 +107,7 @@ class ContractProps extends React.Component<Props, State> {
         <h2>
           {this.props.create ? 'New Contract' : 'Details'}
 
-          <ContractPropsButtons
+          <PropsButtons
             editing={editing}
             status={this.props.status}
             cancel={this.cancel}

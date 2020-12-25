@@ -29,6 +29,7 @@ import { AuthStatus, User } from './clients/server.generated';
 import LoginPage from './pages/LoginPage';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
 import ResetPasswordPage from './pages/ResetPasswordPage';
+import ContactModal from './pages/ContactModal';
 
 interface Props extends RouteComponentProps {
   // eslint-disable-next-line react/no-unused-prop-types
@@ -99,6 +100,14 @@ function Routes(props: Props) {
             <CompaniesCreatePage />
           </Route>
           <Route path="/company/:companyId" exact component={SingleCompanyPage} />
+          <Route path="/company/:companyId/contact/new" exact>
+            <SingleCompanyPage />
+            <ContactModal create />
+          </Route>
+          <Route path="/company/:companyId/contact/:contactId" exact>
+            <SingleCompanyPage />
+            <ContactModal />
+          </Route>
 
           {/* Contacts */}
           <Route path="/contact" exact>

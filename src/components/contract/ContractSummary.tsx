@@ -23,7 +23,7 @@ function ContractSummary(props: Props) {
       && status !== ResourceStatus.ERROR)) {
     return (
       <>
-        <Header as="h1" attached="top" inverted>
+        <Header as="h1" attached="top" style={{ backgroundColor: '#eee' }}>
           <Icon name="shopping bag" />
           <Header.Content>
             <Header.Subheader>Contract</Header.Subheader>
