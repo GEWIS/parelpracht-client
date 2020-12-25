@@ -11,7 +11,7 @@ import { Company, CompanyParams, CompanyStatus } from '../../clients/server.gene
 import { createSingle, saveSingle } from '../../stores/single/actionCreators';
 import ResourceStatus from '../../stores/resourceStatus';
 import { RootState } from '../../stores/store';
-import CompanyPropsButtons from './CompanyPropsButtons';
+import PropsButtons from '../PropsButtons';
 import { getSingle } from '../../stores/single/selectors';
 import { SingleEntities } from '../../stores/single/single';
 
@@ -117,7 +117,7 @@ class CompanyProps extends React.Component<Props, State> {
         <h2>
           {this.props.create ? 'New Company' : 'Details'}
 
-          <CompanyPropsButtons
+          <PropsButtons
             editing={editing}
             status={this.props.status}
             cancel={this.cancel}

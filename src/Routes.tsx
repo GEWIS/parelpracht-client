@@ -1,12 +1,11 @@
 import * as React from 'react';
 import {
-  withRouter, Switch, Route, NavLink, RouteComponentProps, Redirect,
+  withRouter, Switch, Route, RouteComponentProps, Redirect,
 } from 'react-router-dom';
 import {
-  Container, Dimmer, Header, Icon, Loader, Menu,
+  Container, Dimmer, Header, Loader,
 } from 'semantic-ui-react';
 import { connect } from 'react-redux';
-import { Dispatch } from 'redux';
 import _ from 'lodash';
 import ProductsPage from './pages/ProductsPage';
 import SingleProductPage from './pages/SingleProductPage';
@@ -25,7 +24,7 @@ import ContractsCreatePage from './pages/ContractCreatePage';
 import Navigation from './components/navigation/Navigation';
 import { RootState } from './stores/store';
 import ResourceStatus from './stores/resourceStatus';
-import { AuthStatus, User } from './clients/server.generated';
+import { AuthStatus } from './clients/server.generated';
 import LoginPage from './pages/LoginPage';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
 import ResetPasswordPage from './pages/ResetPasswordPage';
@@ -145,7 +144,7 @@ const mapStateToProps = (state: RootState) => {
   };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch) => ({
+const mapDispatchToProps = () => ({
 
 });
 

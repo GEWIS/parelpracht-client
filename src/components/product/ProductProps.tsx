@@ -14,7 +14,7 @@ import { createSingle, saveSingle } from '../../stores/single/actionCreators';
 import { getSingle } from '../../stores/single/selectors';
 import { SingleEntities } from '../../stores/single/single';
 import { RootState } from '../../stores/store';
-import ProductPropsButtons from './ProductPropsButtons';
+import PropsButtons from '../PropsButtons';
 
 interface Props {
   create?: boolean;
@@ -123,7 +123,7 @@ class ProductProps extends React.Component<Props, State> {
         <h2>
           {this.props.create ? 'New Product' : 'Details'}
 
-          <ProductPropsButtons
+          <PropsButtons
             editing={editing}
             status={this.props.status}
             cancel={this.cancel}

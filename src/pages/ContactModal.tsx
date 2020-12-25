@@ -2,7 +2,7 @@ import * as React from 'react';
 import {
   Dimmer,
   Loader,
-  Modal, Placeholder, Segment,
+  Modal, Segment,
 } from 'semantic-ui-react';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';

@@ -1,22 +1,14 @@
-import React, {
-  ChangeEvent,
-} from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import {
-  Checkbox,
-  Form, Input, Label, TextArea,
-} from 'semantic-ui-react';
-import {
-  Company, Invoice, InvoiceParams, ProductInstance,
+  Invoice, InvoiceParams, ProductInstance,
 } from '../../clients/server.generated';
-import { formatPrice } from '../../helpers/monetary';
 import ResourceStatus from '../../stores/resourceStatus';
 import { createSingle, saveSingle } from '../../stores/single/actionCreators';
 import { getSingle } from '../../stores/single/selectors';
 import { SingleEntities } from '../../stores/single/single';
 import { RootState } from '../../stores/store';
-import InvoicePropsButtons from './InvoicePropsButtons';
 
 interface Props {
   create?: boolean;

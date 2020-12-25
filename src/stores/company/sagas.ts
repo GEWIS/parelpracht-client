@@ -14,7 +14,7 @@ import { getTable } from '../tables/selectors';
 import { Tables } from '../tables/tables';
 import { TableState } from '../tables/tableState';
 import {
-  setSingle, errorSingle, saveSingle,
+  setSingle, errorSingle,
 } from '../single/actionCreators';
 import {
   singleActionPattern, SingleActionType, SingleCreateAction, SingleFetchAction, SingleSaveAction,

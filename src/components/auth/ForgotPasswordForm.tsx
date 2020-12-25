@@ -1,9 +1,8 @@
 import React, { ChangeEvent, useState } from 'react';
 import { connect } from 'react-redux';
-import { NavLink } from 'react-router-dom';
 import { Dispatch } from 'redux';
 import {
-  Button, Form, Header, Icon, Input,
+  Button, Form, Header, Input,
 } from 'semantic-ui-react';
 import { authForgotPassword } from '../../stores/auth/actionCreators';
 import ResourceStatus from '../../stores/resourceStatus';

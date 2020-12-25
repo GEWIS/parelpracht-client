@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import { Table } from 'semantic-ui-react';
 import { Contract } from '../../clients/server.generated';
-import { formatPriceFull } from '../../helpers/monetary';
 import { getCompanyName } from '../../stores/company/selectors';
 import { getContactName } from '../../stores/contact/selectors';
 import { RootState } from '../../stores/store';

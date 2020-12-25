@@ -1,7 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { NavLink, RouteComponentProps, withRouter } from 'react-router-dom';
-import { Dispatch } from 'redux';
 import {
   Button, Icon, Loader,
 } from 'semantic-ui-react';
@@ -66,7 +65,7 @@ const mapStateToProps = (state: RootState) => {
   };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch) => ({
+const mapDispatchToProps = () => ({
 });
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(CompanyContactList));

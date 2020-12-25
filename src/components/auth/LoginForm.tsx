@@ -2,13 +2,11 @@ import React, {
   ChangeEvent, useEffect, useRef, useState,
 } from 'react';
 import { connect } from 'react-redux';
-import { NavLink } from 'react-router-dom';
 import { Dispatch } from 'redux';
 import {
-  Button, Form, Header, Input,
+  Button, Form, Input,
 } from 'semantic-ui-react';
 import { authLogin } from '../../stores/auth/actionCreators';
-import { RootState } from '../../stores/store';
 
 interface Props {
   login: (email: string, password: string) => void,
@@ -61,7 +59,7 @@ function LoginForm(props: Props) {
   );
 }
 
-const mapStateToProps = (state: RootState) => ({
+const mapStateToProps = () => ({
 
 });
 
