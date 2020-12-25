@@ -4,8 +4,9 @@ import {
   Grid, Header, Icon, Loader, Placeholder, Segment,
 } from 'semantic-ui-react';
 import { Invoice } from '../../clients/server.generated';
-import { formatPriceFull } from '../../helpers/monetary';
 import ResourceStatus from '../../stores/resourceStatus';
+import { getSingle } from '../../stores/single/selectors';
+import { SingleEntities } from '../../stores/single/single';
 import { RootState } from '../../stores/store';
 
 interface Props {
@@ -58,8 +59,8 @@ function InvoiceSummary(props: Props) {
 
 const mapStateToProps = (state: RootState) => {
   return {
-    invoice: state.invoice.single,
-    status: state.invoice.singleStatus,
+    invoice: getSingle<Invoice>(state, SingleEntities.Invoice).data,
+    status: getSingle<Invoice>(state, SingleEntities.Invoice).status,
   };
 };
 

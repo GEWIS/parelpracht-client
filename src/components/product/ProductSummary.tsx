@@ -6,6 +6,8 @@ import {
 import { Product } from '../../clients/server.generated';
 import { formatPriceFull } from '../../helpers/monetary';
 import ResourceStatus from '../../stores/resourceStatus';
+import { getSingle } from '../../stores/single/selectors';
+import { SingleEntities } from '../../stores/single/single';
 import { RootState } from '../../stores/store';
 
 interface Props {
@@ -65,8 +67,8 @@ function ProductSummary(props: Props) {
 
 const mapStateToProps = (state: RootState) => {
   return {
-    product: state.product.single,
-    status: state.product.singleStatus,
+    product: getSingle<Product>(state, SingleEntities.Product).data,
+    status: getSingle<Product>(state, SingleEntities.Product).status,
   };
 };
 

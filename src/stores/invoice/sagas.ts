@@ -1,21 +1,20 @@
 import {
   call, put, select, throttle,
 } from 'redux-saga/effects';
-import { Client, Dir4, Invoice } from '../../clients/server.generated';
+import {
+  Client, Dir4, Invoice, InvoiceParams,
+} from '../../clients/server.generated';
 import { takeEveryWithErrorHandling } from '../errorHandling';
+import { errorSingle, setSingle } from '../single/actionCreators';
+import {
+  singleActionPattern, SingleActionType, SingleCreateAction, SingleFetchAction, SingleSaveAction,
+} from '../single/actions';
+import { SingleEntities } from '../single/single';
 import { fetchTable, setTable } from '../tables/actionCreators';
 import { tableActionPattern, TableActionType } from '../tables/actions';
 import { getTable } from '../tables/selectors';
 import { Tables } from '../tables/tables';
 import { TableState } from '../tables/tableState';
-import {
-  setSingleInvoice,
-  errorSingleInvoice,
-} from './actionCreators';
-import {
-  InvoiceActionType, InvoicesCreateSingleAction, InvoicesFetchSingleAction,
-  InvoicesSaveSingleAction,
-} from './actions';
 
 function* fetchInvoices() {
   const client = new Client();
@@ -34,45 +33,49 @@ function* fetchInvoices() {
   yield put(setTable(Tables.Invoices, list, count));
 }
 
-function* fetchSingleInvoice(action: InvoicesFetchSingleAction) {
+function* fetchSingleInvoice(action: SingleFetchAction<SingleEntities.Invoice>) {
   const client = new Client();
   const invoice = yield call([client, client.getInvoice], action.id);
-  yield put(setSingleInvoice(invoice));
+  yield put(setSingle(SingleEntities.Invoice, invoice));
 }
 
-function* saveSingleInvoice(action: InvoicesSaveSingleAction) {
+function* saveSingleInvoice(
+  action: SingleSaveAction<SingleEntities.Invoice, InvoiceParams>,
+) {
   const client = new Client();
-  yield call([client, client.updateInvoice], action.id, action.invoice);
+  yield call([client, client.updateInvoice], action.id, action.data);
   const invoice = yield call([client, client.getInvoice], action.id);
-  yield put(setSingleInvoice(invoice));
+  yield put(setSingle(SingleEntities.Invoice, invoice));
 }
 
 function* errorSaveSingleInvoice() {
-  yield put(errorSingleInvoice());
+  yield put(errorSingle(SingleEntities.Invoice));
 }
 
 function* watchSaveSingleInvoice() {
   yield takeEveryWithErrorHandling(
-    InvoiceActionType.SaveSingle,
+    singleActionPattern(SingleEntities.Invoice, SingleActionType.Save),
     saveSingleInvoice,
     { onErrorSaga: errorSaveSingleInvoice },
   );
 }
 
-function* createSingleInvoice(action: InvoicesCreateSingleAction) {
+function* createSingleInvoice(
+  action: SingleCreateAction<SingleEntities.Invoice, InvoiceParams>,
+) {
   const client = new Client();
-  const invoice = yield call([client, client.createInvoice], action.invoice);
-  yield put(setSingleInvoice(invoice));
+  const invoice = yield call([client, client.createInvoice], action.data);
+  yield put(setSingle(SingleEntities.Invoice, invoice));
   yield put(fetchTable(Tables.Invoices));
 }
 
 function* errorCreateSingleInvoice() {
-  yield put(errorSingleInvoice());
+  yield put(errorSingle(SingleEntities.Invoice));
 }
 
 function* watchCreateSingleInvoice() {
   yield takeEveryWithErrorHandling(
-    InvoiceActionType.CreateSingle,
+    singleActionPattern(SingleEntities.Invoice, SingleActionType.Create),
     createSingleInvoice,
     { onErrorSaga: errorCreateSingleInvoice },
   );
@@ -87,7 +90,10 @@ export default [
     );
   },
   function* watchFetchSingleInvoice() {
-    yield takeEveryWithErrorHandling(InvoiceActionType.FetchSingle, fetchSingleInvoice);
+    yield takeEveryWithErrorHandling(
+      singleActionPattern(SingleEntities.Invoice, SingleActionType.Fetch),
+      fetchSingleInvoice,
+    );
   },
   watchSaveSingleInvoice,
   watchCreateSingleInvoice,

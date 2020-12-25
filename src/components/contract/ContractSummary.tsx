@@ -6,6 +6,8 @@ import {
 import { Contract } from '../../clients/server.generated';
 import { formatPriceFull } from '../../helpers/monetary';
 import ResourceStatus from '../../stores/resourceStatus';
+import { getSingle } from '../../stores/single/selectors';
+import { SingleEntities } from '../../stores/single/single';
 import { RootState } from '../../stores/store';
 
 interface Props {
@@ -65,8 +67,8 @@ function ContractSummary(props: Props) {
 
 const mapStateToProps = (state: RootState) => {
   return {
-    contract: state.contract.single,
-    status: state.contract.singleStatus,
+    contract: getSingle<Contract>(state, SingleEntities.Contract).data,
+    status: getSingle<Contract>(state, SingleEntities.Contract).status,
   };
 };
 

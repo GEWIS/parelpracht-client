@@ -7,9 +7,6 @@ import { connectRouter, routerMiddleware, RouterState } from 'connected-react-ro
 
 import authReducer from './auth/reducer';
 import alertsReducer from './alerts/reducer';
-import productReducer from './product/reducer';
-import invoiceReducer from './invoice/reducer';
-import contractReducer from './contract/reducer';
 
 import authSagas, { fetchAuthStatus } from './auth/sagas';
 import alertsSagas from './alerts/sagas';
@@ -38,10 +35,7 @@ const watchSagas = [
 const reducers = {
   auth: authReducer,
   alerts: alertsReducer,
-  product: productReducer,
   tables: tablesReducer,
-  contract: contractReducer,
-  invoice: invoiceReducer,
   summaries: summariesReducer,
   single: singleEntitiesReducer,
 };
