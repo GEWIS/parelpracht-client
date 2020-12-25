@@ -5,6 +5,8 @@ import {
 } from 'semantic-ui-react';
 import { Company } from '../../clients/server.generated';
 import ResourceStatus from '../../stores/resourceStatus';
+import { getSingle } from '../../stores/single/selectors';
+import { SingleEntities } from '../../stores/single/single';
 import { RootState } from '../../stores/store';
 
 interface Props {
@@ -64,8 +66,8 @@ function CompanySummary(props: Props) {
 
 const mapStateToProps = (state: RootState) => {
   return {
-    company: state.company.single,
-    status: state.company.singleStatus,
+    company: getSingle<Company>(state, SingleEntities.Company).data,
+    status: getSingle<Company>(state, SingleEntities.Company).status,
   };
 };
 

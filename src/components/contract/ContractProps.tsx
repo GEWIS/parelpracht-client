@@ -4,17 +4,17 @@ import React, {
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import {
-  Checkbox,
-  Form, Input, Label, TextArea,
+  Form, Input,
 } from 'semantic-ui-react';
 import { Contract, ContractParams } from '../../clients/server.generated';
-import { formatPrice } from '../../helpers/monetary';
-import { createSingleContract, saveSingleContract } from '../../stores/contract/actionCreators';
+import { createSingle, saveSingle } from '../../stores/single/actionCreators';
 import ResourceStatus from '../../stores/resourceStatus';
 import { RootState } from '../../stores/store';
 import CompanySelector from '../company/CompanySelector';
 import ContactSelector from '../contact/ContactSelector';
 import ContractPropsButtons from './ContractPropsButtons';
+import { SingleEntities } from '../../stores/single/single';
+import { getSingle } from '../../stores/single/selectors';
 
 interface Props {
   create?: boolean;
@@ -173,14 +173,18 @@ class ContractProps extends React.Component<Props, State> {
 
 const mapStateToProps = (state: RootState) => {
   return {
-    status: state.contract.singleStatus,
+    status: getSingle<Contract>(state, SingleEntities.Contract).status,
   };
 };
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
   saveContract: (id: number,
-    contract: ContractParams) => dispatch(saveSingleContract(id, contract)),
-  createContract: (contract: ContractParams) => dispatch(createSingleContract(contract)),
+    contract: ContractParams) => dispatch(
+    saveSingle(SingleEntities.Contract, id, contract),
+  ),
+  createContract: (contract: ContractParams) => dispatch(
+    createSingle(SingleEntities.Contract, contract),
+  ),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ContractProps);

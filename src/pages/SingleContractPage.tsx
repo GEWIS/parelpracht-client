@@ -7,11 +7,13 @@ import {
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import { Contract } from '../clients/server.generated';
-import { fetchSingleContract, clearSingleContract } from '../stores/contract/actionCreators';
+import { fetchSingle, clearSingle } from '../stores/single/actionCreators';
 import { RootState } from '../stores/store';
 import ContractProps from '../components/contract/ContractProps';
 import ResourceStatus from '../stores/resourceStatus';
 import ContractSummary from '../components/contract/ContractSummary';
+import { getSingle } from '../stores/single/selectors';
+import { SingleEntities } from '../stores/single/single';
 
 interface Props extends RouteComponentProps<{ contractId: string }> {
   contract: Contract | undefined;
@@ -64,14 +66,14 @@ class SingleContractPage extends React.Component<Props> {
 
 const mapStateToProps = (state: RootState) => {
   return {
-    contract: state.contract.single,
-    status: state.contract.singleStatus,
+    contract: getSingle<Contract>(state, SingleEntities.Contract).data,
+    status: getSingle<Contract>(state, SingleEntities.Contract).status,
   };
 };
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
-  fetchContract: (id: number) => dispatch(fetchSingleContract(id)),
-  clearContract: () => dispatch(clearSingleContract()),
+  fetchContract: (id: number) => dispatch(fetchSingle(SingleEntities.Contract, id)),
+  clearContract: () => dispatch(clearSingle(SingleEntities.Contract)),
 });
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(SingleContractPage));

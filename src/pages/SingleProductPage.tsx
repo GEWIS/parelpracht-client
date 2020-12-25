@@ -7,11 +7,13 @@ import {
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import { Product } from '../clients/server.generated';
-import { fetchSingleProduct, clearSingleProduct } from '../stores/product/actionCreators';
 import { RootState } from '../stores/store';
 import ProductProps from '../components/product/ProductProps';
 import ResourceStatus from '../stores/resourceStatus';
 import ProductSummary from '../components/product/ProductSummary';
+import { getSingle } from '../stores/single/selectors';
+import { SingleEntities } from '../stores/single/single';
+import { clearSingle, fetchSingle } from '../stores/single/actionCreators';
 
 interface Props extends RouteComponentProps<{ productId: string }> {
   product: Product | undefined;
@@ -64,14 +66,14 @@ class SingleProductPage extends React.Component<Props> {
 
 const mapStateToProps = (state: RootState) => {
   return {
-    product: state.product.single,
-    status: state.product.singleStatus,
+    product: getSingle<Product>(state, SingleEntities.Product).data,
+    status: getSingle<Product>(state, SingleEntities.Product).status,
   };
 };
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
-  fetchProduct: (id: number) => dispatch(fetchSingleProduct(id)),
-  clearProduct: () => dispatch(clearSingleProduct()),
+  fetchProduct: (id: number) => dispatch(fetchSingle(SingleEntities.Product, id)),
+  clearProduct: () => dispatch(clearSingle(SingleEntities.Product)),
 });
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(SingleProductPage));

@@ -11,8 +11,10 @@ import {
   Company, Invoice, InvoiceParams, ProductInstance,
 } from '../../clients/server.generated';
 import { formatPrice } from '../../helpers/monetary';
-import { createSingleInvoice } from '../../stores/invoice/actionCreators';
 import ResourceStatus from '../../stores/resourceStatus';
+import { createSingle, saveSingle } from '../../stores/single/actionCreators';
+import { getSingle } from '../../stores/single/selectors';
+import { SingleEntities } from '../../stores/single/single';
 import { RootState } from '../../stores/store';
 import InvoicePropsButtons from './InvoicePropsButtons';
 
@@ -109,13 +111,17 @@ class InvoiceProps extends React.Component<Props, State> {
 
 const mapStateToProps = (state: RootState) => {
   return {
-    status: state.invoice.singleStatus,
+    status: getSingle<Invoice>(state, SingleEntities.Invoice).status,
   };
 };
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
-  saveInvoice: (id: number, invoice: InvoiceParams) => dispatch(createSingleInvoice(invoice)),
-  createInvoice: (invoice: InvoiceParams) => dispatch(createSingleInvoice(invoice)),
+  saveInvoice: (id: number, invoice: InvoiceParams) => dispatch(
+    saveSingle(SingleEntities.Invoice, id, invoice),
+  ),
+  createInvoice: (invoice: InvoiceParams) => dispatch(
+    createSingle(SingleEntities.Invoice, invoice),
+  ),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(InvoiceProps);

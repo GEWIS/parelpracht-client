@@ -11,7 +11,9 @@ import { RootState } from '../stores/store';
 import ResourceStatus from '../stores/resourceStatus';
 import InvoiceSummary from '../components/invoice/InvoiceSummary';
 import InvoiceProps from '../components/invoice/InvoiceProps';
-import { clearSingleInvoice, fetchSingleInvoice } from '../stores/invoice/actionCreators';
+import { clearSingle, fetchSingle } from '../stores/single/actionCreators';
+import { SingleEntities } from '../stores/single/single';
+import { getSingle } from '../stores/single/selectors';
 
 interface Props extends RouteComponentProps<{ invoiceId: string }> {
   invoice: Invoice | undefined;
@@ -64,14 +66,14 @@ class SingleInvoicePage extends React.Component<Props> {
 
 const mapStateToProps = (state: RootState) => {
   return {
-    invoice: state.invoice.single,
-    status: state.invoice.singleStatus,
+    invoice: getSingle<Invoice>(state, SingleEntities.Invoice).data,
+    status: getSingle<Invoice>(state, SingleEntities.Invoice).status,
   };
 };
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
-  fetchInvoice: (id: number) => dispatch(fetchSingleInvoice(id)),
-  clearInvoice: () => dispatch(clearSingleInvoice()),
+  fetchInvoice: (id: number) => dispatch(fetchSingle(SingleEntities.Invoice, id)),
+  clearInvoice: () => dispatch(clearSingle(SingleEntities.Invoice)),
 });
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(SingleInvoicePage));

@@ -5,14 +5,15 @@ import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import {
   Checkbox,
-  Form, Input, Label, Segment, TextArea,
+  Form, Input, TextArea,
 } from 'semantic-ui-react';
-import companyReducer from '../../stores/company/reducer';
 import { Company, CompanyParams, CompanyStatus } from '../../clients/server.generated';
-import { createSingleCompany, saveSingleCompany } from '../../stores/company/actionCreators';
+import { createSingle, saveSingle } from '../../stores/single/actionCreators';
 import ResourceStatus from '../../stores/resourceStatus';
 import { RootState } from '../../stores/store';
 import CompanyPropsButtons from './CompanyPropsButtons';
+import { getSingle } from '../../stores/single/selectors';
+import { SingleEntities } from '../../stores/single/single';
 
 interface Props {
   create?: boolean;
@@ -188,13 +189,17 @@ class CompanyProps extends React.Component<Props, State> {
 
 const mapStateToProps = (state: RootState) => {
   return {
-    status: state.company.singleStatus,
+    status: getSingle<Company>(state, SingleEntities.Company).status,
   };
 };
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
-  saveCompany: (id: number, company: CompanyParams) => dispatch(saveSingleCompany(id, company)),
-  createCompany: (company: CompanyParams) => dispatch(createSingleCompany(company)),
+  saveCompany: (id: number, company: CompanyParams) => dispatch(
+    saveSingle(SingleEntities.Company, id, company),
+  ),
+  createCompany: (company: CompanyParams) => dispatch(
+    createSingle(SingleEntities.Company, company),
+  ),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(CompanyProps);

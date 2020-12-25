@@ -9,8 +9,10 @@ import {
 } from 'semantic-ui-react';
 import { Product, ProductParams, ProductStatus } from '../../clients/server.generated';
 import { formatPrice } from '../../helpers/monetary';
-import { createSingleProduct, saveSingleProduct } from '../../stores/product/actionCreators';
 import ResourceStatus from '../../stores/resourceStatus';
+import { createSingle, saveSingle } from '../../stores/single/actionCreators';
+import { getSingle } from '../../stores/single/selectors';
+import { SingleEntities } from '../../stores/single/single';
 import { RootState } from '../../stores/store';
 import ProductPropsButtons from './ProductPropsButtons';
 
@@ -264,13 +266,17 @@ class ProductProps extends React.Component<Props, State> {
 
 const mapStateToProps = (state: RootState) => {
   return {
-    status: state.product.singleStatus,
+    status: getSingle<Product>(state, SingleEntities.Product).status,
   };
 };
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
-  saveProduct: (id: number, product: ProductParams) => dispatch(saveSingleProduct(id, product)),
-  createProduct: (product: ProductParams) => dispatch(createSingleProduct(product)),
+  saveProduct: (id: number, product: ProductParams) => dispatch(
+    saveSingle(SingleEntities.Product, id, product),
+  ),
+  createProduct: (product: ProductParams) => dispatch(
+    createSingle(SingleEntities.Product, product),
+  ),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProductProps);

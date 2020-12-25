@@ -6,11 +6,13 @@ import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { Product, ProductStatus } from '../clients/server.generated';
-import { fetchSingleProduct, clearSingleProduct } from '../stores/product/actionCreators';
 import { RootState } from '../stores/store';
 import ProductProps from '../components/product/ProductProps';
 import ResourceStatus from '../stores/resourceStatus';
 import AlertContainer from '../components/alerts/AlertContainer';
+import { SingleEntities } from '../stores/single/single';
+import { getSingle } from '../stores/single/selectors';
+import { clearSingle, fetchSingle } from '../stores/single/actionCreators';
 
 interface Props extends RouteComponentProps {
   status: ResourceStatus;
@@ -64,13 +66,13 @@ class ProductCreatePage extends React.Component<Props> {
 
 const mapStateToProps = (state: RootState) => {
   return {
-    status: state.product.singleStatus,
+    status: getSingle<Product>(state, SingleEntities.Product).status,
   };
 };
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
-  fetchProduct: (id: number) => dispatch(fetchSingleProduct(id)),
-  clearProduct: () => dispatch(clearSingleProduct()),
+  fetchProduct: (id: number) => dispatch(fetchSingle(SingleEntities.Product, id)),
+  clearProduct: () => dispatch(clearSingle(SingleEntities.Product)),
 });
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ProductCreatePage));
