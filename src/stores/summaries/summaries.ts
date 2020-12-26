@@ -4,4 +4,5 @@ export enum SummaryCollections {
   Contacts = 'Contacts',
   Invoices = 'Invoices',
   Contracts = 'Contracts',
+  Users = 'Users',
 }
