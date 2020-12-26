@@ -2688,6 +2688,324 @@ export class Client {
     }
 
     /**
+     * @param col (optional) Sorted column
+     * @param dir (optional) Sorting direction
+     * @param skip (optional) Number of elements to skip
+     * @param take (optional) Amount of elements to request
+     * @param search (optional) String to filter on value of select columns
+     * @return Ok
+     */
+    getAllUsers(col: string | undefined, dir: Dir6 | undefined, skip: number | undefined, take: number | undefined, search: string | undefined): Promise<UserListResponse> {
+        let url_ = this.baseUrl + "/user?";
+        if (col === null)
+            throw new Error("The parameter 'col' cannot be null.");
+        else if (col !== undefined)
+            url_ += "col=" + encodeURIComponent("" + col) + "&";
+        if (dir === null)
+            throw new Error("The parameter 'dir' cannot be null.");
+        else if (dir !== undefined)
+            url_ += "dir=" + encodeURIComponent("" + dir) + "&";
+        if (skip === null)
+            throw new Error("The parameter 'skip' cannot be null.");
+        else if (skip !== undefined)
+            url_ += "skip=" + encodeURIComponent("" + skip) + "&";
+        if (take === null)
+            throw new Error("The parameter 'take' cannot be null.");
+        else if (take !== undefined)
+            url_ += "take=" + encodeURIComponent("" + take) + "&";
+        if (search === null)
+            throw new Error("The parameter 'search' cannot be null.");
+        else if (search !== undefined)
+            url_ += "search=" + encodeURIComponent("" + search) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <RequestInit>{
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processGetAllUsers(_response);
+        });
+    }
+
+    protected processGetAllUsers(response: Response): Promise<UserListResponse> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = UserListResponse.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<UserListResponse>(<any>null);
+    }
+
+    /**
+     * @param body Parameters to create user with
+     * @return Ok
+     */
+    createUser(body: UserParams): Promise<User> {
+        let url_ = this.baseUrl + "/user";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ = <RequestInit>{
+            body: content_,
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processCreateUser(_response);
+        });
+    }
+
+    protected processCreateUser(response: Response): Promise<User> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = User.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<User>(<any>null);
+    }
+
+    /**
+     * @return Ok
+     */
+    getUserSummaries(): Promise<UserSummary[]> {
+        let url_ = this.baseUrl + "/user/compact";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <RequestInit>{
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processGetUserSummaries(_response);
+        });
+    }
+
+    protected processGetUserSummaries(response: Response): Promise<UserSummary[]> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(UserSummary.fromJS(item));
+            }
+            return result200;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<UserSummary[]>(<any>null);
+    }
+
+    /**
+     * @param id ID of user to retrieve
+     * @return Ok
+     */
+    getUser(id: number): Promise<User> {
+        let url_ = this.baseUrl + "/user/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <RequestInit>{
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processGetUser(_response);
+        });
+    }
+
+    protected processGetUser(response: Response): Promise<User> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = User.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<User>(<any>null);
+    }
+
+    /**
+     * @param id ID of user to delete
+     * @return No content
+     */
+    deleteUser(id: number): Promise<void> {
+        let url_ = this.baseUrl + "/user/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <RequestInit>{
+            method: "DELETE",
+            headers: {
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processDeleteUser(_response);
+        });
+    }
+
+    protected processDeleteUser(response: Response): Promise<void> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 204) {
+            return response.text().then((_responseText) => {
+            return;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            });
+        } else if (status === 403) {
+            return response.text().then((_responseText) => {
+            let result403: any = null;
+            let resultData403 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result403 = WrappedApiError.fromJS(resultData403);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result403);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<void>(<any>null);
+    }
+
+    /**
+     * @param id ID of user to update
+     * @param body Update subset of parameter of user
+     * @return Ok
+     */
+    updateUser(id: number, body: Partial_UserParams_): Promise<User> {
+        let url_ = this.baseUrl + "/user/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ = <RequestInit>{
+            body: content_,
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processUpdateUser(_response);
+        });
+    }
+
+    protected processUpdateUser(response: Response): Promise<User> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = User.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<User>(<any>null);
+    }
+
+    /**
      * @return Ok
      */
     login(body: LoginParams): Promise<Product> {
@@ -2747,8 +3065,83 @@ export enum Gender {
     UNKNOWN = "UNKNOWN",
 }
 
+export enum Roles {
+    SIGNEE = "SIGNEE",
+    FINANCIAL = "FINANCIAL",
+    ADMIN = "ADMIN",
+    GENERAL = "GENERAL",
+}
+
+export class UserParams implements IUserParams {
+    email!: string;
+    firstName!: string;
+    middleName!: string;
+    lastName!: string;
+    gender!: Gender;
+    comment!: string;
+    roles?: Roles[];
+
+    constructor(data?: IUserParams) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.email = _data["email"];
+            this.firstName = _data["firstName"];
+            this.middleName = _data["middleName"];
+            this.lastName = _data["lastName"];
+            this.gender = _data["gender"];
+            this.comment = _data["comment"];
+            if (Array.isArray(_data["roles"])) {
+                this.roles = [] as any;
+                for (let item of _data["roles"])
+                    this.roles!.push(item);
+            }
+        }
+    }
+
+    static fromJS(data: any): UserParams {
+        data = typeof data === 'object' ? data : {};
+        let result = new UserParams();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["email"] = this.email;
+        data["firstName"] = this.firstName;
+        data["middleName"] = this.middleName;
+        data["lastName"] = this.lastName;
+        data["gender"] = this.gender;
+        data["comment"] = this.comment;
+        if (Array.isArray(this.roles)) {
+            data["roles"] = [];
+            for (let item of this.roles)
+                data["roles"].push(item);
+        }
+        return data; 
+    }
+}
+
+export interface IUserParams {
+    email: string;
+    firstName: string;
+    middleName: string;
+    lastName: string;
+    gender: Gender;
+    comment: string;
+    roles?: Roles[];
+}
+
 export class SetupParams implements ISetupParams {
-    admin!: Admin;
+    admin!: UserParams;
 
     constructor(data?: ISetupParams) {
         if (data) {
@@ -2758,13 +3151,13 @@ export class SetupParams implements ISetupParams {
             }
         }
         if (!data) {
-            this.admin = new Admin();
+            this.admin = new UserParams();
         }
     }
 
     init(_data?: any) {
         if (_data) {
-            this.admin = _data["admin"] ? Admin.fromJS(_data["admin"]) : new Admin();
+            this.admin = _data["admin"] ? UserParams.fromJS(_data["admin"]) : new UserParams();
         }
     }
 
@@ -2783,7 +3176,7 @@ export class SetupParams implements ISetupParams {
 }
 
 export interface ISetupParams {
-    admin: Admin;
+    admin: UserParams;
 }
 
 export class AuthStatus implements IAuthStatus {
@@ -2938,16 +3331,6 @@ export interface IUser {
 }
 
 export class Role implements IRole {
-    /** Incremental ID of the entity */
-    id!: number;
-    /** Date at which this entity has been created */
-    createdAt!: Date;
-    /** Date at which this entity has last been updated */
-    updatedAt!: Date;
-    /** If this entity has been soft-deleted, this is the date at which the entity has been deleted */
-    deletedAt?: Date;
-    /** Version number of this entity */
-    version!: number;
     /** Name of the role */
     name!: string;
     /** All users having this role */
@@ -2967,11 +3350,6 @@ export class Role implements IRole {
 
     init(_data?: any) {
         if (_data) {
-            this.id = _data["id"];
-            this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
-            this.updatedAt = _data["updatedAt"] ? new Date(_data["updatedAt"].toString()) : <any>undefined;
-            this.deletedAt = _data["deletedAt"] ? new Date(_data["deletedAt"].toString()) : <any>undefined;
-            this.version = _data["version"];
             this.name = _data["name"];
             if (Array.isArray(_data["users"])) {
                 this.users = [] as any;
@@ -2990,11 +3368,6 @@ export class Role implements IRole {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
-        data["updatedAt"] = this.updatedAt ? this.updatedAt.toISOString() : <any>undefined;
-        data["deletedAt"] = this.deletedAt ? this.deletedAt.toISOString() : <any>undefined;
-        data["version"] = this.version;
         data["name"] = this.name;
         if (Array.isArray(this.users)) {
             data["users"] = [];
@@ -3006,16 +3379,6 @@ export class Role implements IRole {
 }
 
 export interface IRole {
-    /** Incremental ID of the entity */
-    id: number;
-    /** Date at which this entity has been created */
-    createdAt: Date;
-    /** Date at which this entity has last been updated */
-    updatedAt: Date;
-    /** If this entity has been soft-deleted, this is the date at which the entity has been deleted */
-    deletedAt?: Date;
-    /** Version number of this entity */
-    version: number;
     /** Name of the role */
     name: string;
     /** All users having this role */
@@ -5748,13 +6111,13 @@ export interface IContactSummary {
 export class ContactParams implements IContactParams {
     gender!: Gender;
     firstName!: string;
-    middleName?: string;
+    middleName!: string;
     lastName!: string;
-    email?: string;
-    telephone?: string;
-    comments?: string;
+    email!: string;
+    telephone!: string;
+    comments!: string;
     companyId!: number;
-    function?: ContactFunction;
+    function!: ContactFunction;
 
     constructor(data?: IContactParams) {
         if (data) {
@@ -5804,13 +6167,13 @@ export class ContactParams implements IContactParams {
 export interface IContactParams {
     gender: Gender;
     firstName: string;
-    middleName?: string;
+    middleName: string;
     lastName: string;
-    email?: string;
-    telephone?: string;
-    comments?: string;
+    email: string;
+    telephone: string;
+    comments: string;
     companyId: number;
-    function?: ContactFunction;
+    function: ContactFunction;
 }
 
 /** Make all properties in T optional */
@@ -5883,6 +6246,179 @@ export interface IPartial_ContactParams_ {
     function?: ContactFunction;
 }
 
+export class UserListResponse implements IUserListResponse {
+    list!: User[];
+    count!: number;
+
+    constructor(data?: IUserListResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+        if (!data) {
+            this.list = [];
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["list"])) {
+                this.list = [] as any;
+                for (let item of _data["list"])
+                    this.list!.push(User.fromJS(item));
+            }
+            this.count = _data["count"];
+        }
+    }
+
+    static fromJS(data: any): UserListResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new UserListResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.list)) {
+            data["list"] = [];
+            for (let item of this.list)
+                data["list"].push(item.toJSON());
+        }
+        data["count"] = this.count;
+        return data; 
+    }
+}
+
+export interface IUserListResponse {
+    list: User[];
+    count: number;
+}
+
+export class UserSummary implements IUserSummary {
+    id!: number;
+    firstName!: string;
+    middleName!: string;
+    lastName!: string;
+    email!: string;
+
+    constructor(data?: IUserSummary) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.firstName = _data["firstName"];
+            this.middleName = _data["middleName"];
+            this.lastName = _data["lastName"];
+            this.email = _data["email"];
+        }
+    }
+
+    static fromJS(data: any): UserSummary {
+        data = typeof data === 'object' ? data : {};
+        let result = new UserSummary();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["firstName"] = this.firstName;
+        data["middleName"] = this.middleName;
+        data["lastName"] = this.lastName;
+        data["email"] = this.email;
+        return data; 
+    }
+}
+
+export interface IUserSummary {
+    id: number;
+    firstName: string;
+    middleName: string;
+    lastName: string;
+    email: string;
+}
+
+/** Make all properties in T optional */
+export class Partial_UserParams_ implements IPartial_UserParams_ {
+    email?: string;
+    firstName?: string;
+    middleName?: string;
+    lastName?: string;
+    gender?: Gender;
+    comment?: string;
+    roles?: Roles[];
+
+    constructor(data?: IPartial_UserParams_) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.email = _data["email"];
+            this.firstName = _data["firstName"];
+            this.middleName = _data["middleName"];
+            this.lastName = _data["lastName"];
+            this.gender = _data["gender"];
+            this.comment = _data["comment"];
+            if (Array.isArray(_data["roles"])) {
+                this.roles = [] as any;
+                for (let item of _data["roles"])
+                    this.roles!.push(item);
+            }
+        }
+    }
+
+    static fromJS(data: any): Partial_UserParams_ {
+        data = typeof data === 'object' ? data : {};
+        let result = new Partial_UserParams_();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["email"] = this.email;
+        data["firstName"] = this.firstName;
+        data["middleName"] = this.middleName;
+        data["lastName"] = this.lastName;
+        data["gender"] = this.gender;
+        data["comment"] = this.comment;
+        if (Array.isArray(this.roles)) {
+            data["roles"] = [];
+            for (let item of this.roles)
+                data["roles"].push(item);
+        }
+        return data; 
+    }
+}
+
+/** Make all properties in T optional */
+export interface IPartial_UserParams_ {
+    email?: string;
+    firstName?: string;
+    middleName?: string;
+    lastName?: string;
+    gender?: Gender;
+    comment?: string;
+    roles?: Roles[];
+}
+
 export class LoginParams implements ILoginParams {
     email?: string;
     password?: string;
@@ -5948,56 +6484,9 @@ export enum Dir5 {
     DESC = "DESC",
 }
 
-export class Admin implements IAdmin {
-    lastName!: string;
-    middleName!: string;
-    firstName!: string;
-    gender!: Gender;
-    email!: string;
-
-    constructor(data?: IAdmin) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.lastName = _data["lastName"];
-            this.middleName = _data["middleName"];
-            this.firstName = _data["firstName"];
-            this.gender = _data["gender"];
-            this.email = _data["email"];
-        }
-    }
-
-    static fromJS(data: any): Admin {
-        data = typeof data === 'object' ? data : {};
-        let result = new Admin();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["lastName"] = this.lastName;
-        data["middleName"] = this.middleName;
-        data["firstName"] = this.firstName;
-        data["gender"] = this.gender;
-        data["email"] = this.email;
-        return data; 
-    }
-}
-
-export interface IAdmin {
-    lastName: string;
-    middleName: string;
-    firstName: string;
-    gender: Gender;
-    email: string;
+export enum Dir6 {
+    ASC = "ASC",
+    DESC = "DESC",
 }
 
 export class ApiException extends Error {

@@ -4,4 +4,5 @@ export enum Tables {
   Contacts = 'Contacts',
   Invoices = 'Invoices',
   Contracts = 'Contracts',
+  Users = 'Users',
 }

@@ -1,17 +1,18 @@
 import { combineReducers } from 'redux';
 import {
-  CompanySummary, ContactSummary,
+  CompanySummary, ContactSummary, ContractSummary, InvoiceSummary, ProductSummary, UserSummary,
 } from '../../clients/server.generated';
 import { SummaryCollections } from './summaries';
 import createSummariesReducer from './summariesReducer';
 import { SummaryBase, SummaryCollectionState } from './summariesState';
 
 export interface SummariesState {
-  [SummaryCollections.Products]: SummaryCollectionState<SummaryBase>;
+  [SummaryCollections.Products]: SummaryCollectionState<ProductSummary>;
   [SummaryCollections.Contacts]: SummaryCollectionState<ContactSummary>;
   [SummaryCollections.Companies]: SummaryCollectionState<CompanySummary>;
-  [SummaryCollections.Contracts]: SummaryCollectionState<SummaryBase>;
-  [SummaryCollections.Invoices]: SummaryCollectionState<SummaryBase>;
+  [SummaryCollections.Contracts]: SummaryCollectionState<ContractSummary>;
+  [SummaryCollections.Invoices]: SummaryCollectionState<InvoiceSummary>;
+  [SummaryCollections.Users]: SummaryCollectionState<UserSummary>;
 }
 
 export const summariesReducer = combineReducers<SummariesState>({
@@ -20,4 +21,5 @@ export const summariesReducer = combineReducers<SummariesState>({
   [SummaryCollections.Companies]: createSummariesReducer(SummaryCollections.Companies),
   [SummaryCollections.Contracts]: createSummariesReducer(SummaryCollections.Contracts),
   [SummaryCollections.Invoices]: createSummariesReducer(SummaryCollections.Invoices),
+  [SummaryCollections.Users]: createSummariesReducer(SummaryCollections.Users),
 });

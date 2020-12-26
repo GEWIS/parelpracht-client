@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
 import {
-  Company, Product, Contract, Contact, Invoice,
+  Company, Product, Contract, Contact, Invoice, User,
 } from '../../clients/server.generated';
 import createSingleReducer from './singleReducer';
 import { SingleEntities } from './single';
@@ -12,6 +12,7 @@ export interface SingleEntitiesState {
   [SingleEntities.Company]: SingleEntityState<Company>;
   [SingleEntities.Contract]: SingleEntityState<Contract>;
   [SingleEntities.Invoice]: SingleEntityState<Invoice>;
+  [SingleEntities.User]: SingleEntityState<User>;
 }
 
 export const singleEntitiesReducer = combineReducers<SingleEntitiesState>({
@@ -20,4 +21,5 @@ export const singleEntitiesReducer = combineReducers<SingleEntitiesState>({
   [SingleEntities.Company]: createSingleReducer(SingleEntities.Company),
   [SingleEntities.Contract]: createSingleReducer(SingleEntities.Contract),
   [SingleEntities.Invoice]: createSingleReducer(SingleEntities.Invoice),
+  [SingleEntities.User]: createSingleReducer(SingleEntities.User),
 });

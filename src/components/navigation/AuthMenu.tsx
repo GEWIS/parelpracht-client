@@ -1,10 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { NavLink } from 'react-router-dom';
 import { Dispatch } from 'redux';
 import {
   Dropdown, Icon, Loader, Menu,
 } from 'semantic-ui-react';
-import { AuthStatus, User } from '../../clients/server.generated';
+import { AuthStatus, Roles, User } from '../../clients/server.generated';
 import { formatContactName } from '../../helpers/contact';
 import { authLogout } from '../../stores/auth/actionCreators';
 import ResourceStatus from '../../stores/resourceStatus';
@@ -35,6 +36,8 @@ function AuthMenu(props: Props) {
     props.profile.lastName,
   );
 
+  const isAdmin = props.profile.roles.find((r) => r.name === Roles.ADMIN) !== undefined;
+
   return (
     <Menu.Menu position="right">
       <Dropdown
@@ -48,6 +51,12 @@ function AuthMenu(props: Props) {
         className="icon"
       >
         <Dropdown.Menu>
+          {isAdmin ? (
+            <Dropdown.Item as={NavLink} to="/user">
+              <Icon name="users" />
+              Users
+            </Dropdown.Item>
+          ) : null}
           <Dropdown.Item onClick={props.logout}>
             <Icon name="sign-out" />
             Logout
