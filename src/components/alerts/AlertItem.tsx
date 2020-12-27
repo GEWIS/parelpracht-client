@@ -4,7 +4,6 @@ import { Dispatch } from 'redux';
 import { Message } from 'semantic-ui-react';
 import { hideAlert } from '../../stores/alerts/actionCreators';
 import { AlertItemState } from '../../stores/alerts/reducer';
-import { RootState } from '../../stores/store';
 
 interface Props {
   alert: AlertItemState;
@@ -23,7 +22,7 @@ function AlertItem(props: Props) {
   );
 }
 
-const mapStateToProps = (state: RootState) => ({
+const mapStateToProps = () => ({
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({

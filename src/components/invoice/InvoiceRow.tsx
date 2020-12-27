@@ -2,7 +2,6 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { Table } from 'semantic-ui-react';
 import { Invoice } from '../../clients/server.generated';
-import { formatPriceFull } from '../../helpers/monetary';
 
 interface Props {
   invoice: Invoice;

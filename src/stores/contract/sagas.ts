@@ -1,21 +1,20 @@
 import {
   call, put, select, throttle,
 } from 'redux-saga/effects';
-import { Client, Dir3, Contract } from '../../clients/server.generated';
+import {
+  Client, Dir3, Contract, ContractParams,
+} from '../../clients/server.generated';
 import { takeEveryWithErrorHandling } from '../errorHandling';
+import { errorSingle, setSingle } from '../single/actionCreators';
+import {
+  singleActionPattern, SingleActionType, SingleCreateAction, SingleFetchAction, SingleSaveAction,
+} from '../single/actions';
+import { SingleEntities } from '../single/single';
 import { fetchTable, setTable } from '../tables/actionCreators';
 import { tableActionPattern, TableActionType } from '../tables/actions';
 import { getTable } from '../tables/selectors';
 import { Tables } from '../tables/tables';
 import { TableState } from '../tables/tableState';
-import {
-  setSingleContract,
-  errorSingleContract,
-} from './actionCreators';
-import {
-  ContractActionType, ContractsCreateSingleAction, ContractsFetchSingleAction,
-  ContractsSaveSingleAction,
-} from './actions';
 
 function* fetchContracts() {
   const client = new Client();
@@ -34,45 +33,49 @@ function* fetchContracts() {
   yield put(setTable(Tables.Contracts, list, count));
 }
 
-function* fetchSingleContract(action: ContractsFetchSingleAction) {
+function* fetchSingleContract(action: SingleFetchAction<SingleEntities.Contract>) {
   const client = new Client();
   const contract = yield call([client, client.getContract], action.id);
-  yield put(setSingleContract(contract));
+  yield put(setSingle(SingleEntities.Contract, contract));
 }
 
-function* saveSingleContract(action: ContractsSaveSingleAction) {
+function* saveSingleContract(
+  action: SingleSaveAction<SingleEntities.Contract, ContractParams>,
+) {
   const client = new Client();
-  yield call([client, client.updateContract], action.id, action.contract);
+  yield call([client, client.updateContract], action.id, action.data);
   const contract = yield call([client, client.getContract], action.id);
-  yield put(setSingleContract(contract));
+  yield put(setSingle(SingleEntities.Contract, contract));
 }
 
 function* errorSaveSingleContract() {
-  yield put(errorSingleContract());
+  yield put(errorSingle(SingleEntities.Contract));
 }
 
 function* watchSaveSingleContract() {
   yield takeEveryWithErrorHandling(
-    ContractActionType.SaveSingle,
+    singleActionPattern(SingleEntities.Contract, SingleActionType.Save),
     saveSingleContract,
     { onErrorSaga: errorSaveSingleContract },
   );
 }
 
-function* createSingleContract(action: ContractsCreateSingleAction) {
+function* createSingleContract(
+  action: SingleCreateAction<SingleEntities.Contract, ContractParams>,
+) {
   const client = new Client();
-  const contract = yield call([client, client.createContract], action.contract);
-  yield put(setSingleContract(contract));
+  const contract = yield call([client, client.createContract], action.data);
+  yield put(setSingle(SingleEntities.Contract, contract));
   yield put(fetchTable(Tables.Contracts));
 }
 
 function* errorCreateSingleContract() {
-  yield put(errorSingleContract());
+  yield put(errorSingle(SingleEntities.Contract));
 }
 
 function* watchCreateSingleContract() {
   yield takeEveryWithErrorHandling(
-    ContractActionType.CreateSingle,
+    singleActionPattern(SingleEntities.Contract, SingleActionType.Create),
     createSingleContract,
     { onErrorSaga: errorCreateSingleContract },
   );
@@ -87,7 +90,10 @@ export default [
     );
   },
   function* watchFetchSingleContract() {
-    yield takeEveryWithErrorHandling(ContractActionType.FetchSingle, fetchSingleContract);
+    yield takeEveryWithErrorHandling(
+      singleActionPattern(SingleEntities.Contract, SingleActionType.Fetch),
+      fetchSingleContract,
+    );
   },
   watchSaveSingleContract,
   watchCreateSingleContract,

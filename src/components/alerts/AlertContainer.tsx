@@ -14,7 +14,11 @@ interface AlertsProps {
 class AlertContainer extends React.Component<AlertsProps> {
   public render() {
     return (
-      <Rail internal={this.props.internal} position="right">
+      <Rail
+        internal={this.props.internal}
+        position="right"
+        style={{ marginTop: this.props.internal ? '2em' : undefined }}
+      >
         {this.props.alerts.map((alert) => (
           <AlertItem
             key={alert.id}

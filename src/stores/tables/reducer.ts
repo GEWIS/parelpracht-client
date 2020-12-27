@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
 import {
-  Company, Product, Contract, Contact, Invoice,
+  Company, Product, Contract, Contact, Invoice, User,
 } from '../../clients/server.generated';
 import createTableReducer from './tableReducer';
 import { Tables } from './tables';
@@ -12,6 +12,7 @@ export interface TablesState {
   [Tables.Companies]: TableState<Company>;
   [Tables.Contracts]: TableState<Contract>;
   [Tables.Invoices]: TableState<Invoice>;
+  [Tables.Users]: TableState<User>;
 }
 
 export const tablesReducer = combineReducers<TablesState>({
@@ -20,4 +21,5 @@ export const tablesReducer = combineReducers<TablesState>({
   [Tables.Companies]: createTableReducer(Tables.Companies),
   [Tables.Contracts]: createTableReducer(Tables.Contracts),
   [Tables.Invoices]: createTableReducer(Tables.Invoices),
+  [Tables.Users]: createTableReducer(Tables.Users),
 });

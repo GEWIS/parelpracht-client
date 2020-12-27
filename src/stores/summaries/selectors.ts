@@ -10,6 +10,6 @@ export function getSummaryCollection<R extends SummaryBase>(
 
 export function getSummary<R extends SummaryBase>(
   state: RootState, summaryCollection: SummaryCollections, id: number,
-): R | undefined {
-  return state.summaries[summaryCollection].lookup[id] as R;
+): R {
+  return state.summaries[summaryCollection].lookup[id] as any as R;
 }

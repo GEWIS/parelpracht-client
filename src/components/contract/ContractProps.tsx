@@ -4,15 +4,17 @@ import React, {
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import {
-  Checkbox,
-  Form, Input, Label, TextArea,
+  Form, Input,
 } from 'semantic-ui-react';
 import { Contract, ContractParams } from '../../clients/server.generated';
-import { formatPrice } from '../../helpers/monetary';
-import { createSingleContract, saveSingleContract } from '../../stores/contract/actionCreators';
+import { createSingle, saveSingle } from '../../stores/single/actionCreators';
 import ResourceStatus from '../../stores/resourceStatus';
 import { RootState } from '../../stores/store';
-import ContractPropsButtons from './ContractPropsButtons';
+import CompanySelector from '../company/CompanySelector';
+import ContactSelector from '../contact/ContactSelector';
+import PropsButtons from '../PropsButtons';
+import { SingleEntities } from '../../stores/single/single';
+import { getSingle } from '../../stores/single/selectors';
 
 interface Props {
   create?: boolean;
@@ -29,9 +31,9 @@ interface State {
   editing: boolean;
 
   title: string;
-  companyId: string;
-  contactId: string;
   comments: string;
+  contactSelection: number;
+  companySelection: number;
 }
 
 class ContractProps extends React.Component<Props, State> {
@@ -56,8 +58,8 @@ class ContractProps extends React.Component<Props, State> {
     const { contract } = props;
     return {
       title: contract.title,
-      companyId: contract.companyId.toString(),
-      contactId: contract.companyId.toString(),
+      companySelection: contract.companyId,
+      contactSelection: contract.contactId,
       comments: contract.comments ?? '',
     };
   };
@@ -65,8 +67,8 @@ class ContractProps extends React.Component<Props, State> {
   toParams = (): ContractParams => {
     return new ContractParams({
       title: this.state.title,
-      companyId: parseInt(this.state.companyId, 10),
-      contactId: parseInt(this.state.contactId, 10),
+      companyId: this.state.companySelection,
+      contactId: this.state.contactSelection,
       comments: this.state.comments,
     });
   };
@@ -95,8 +97,8 @@ class ContractProps extends React.Component<Props, State> {
     const {
       editing,
       title,
-      companyId,
-      contactId,
+      companySelection,
+      contactSelection,
       comments,
     } = this.state;
 
@@ -105,7 +107,7 @@ class ContractProps extends React.Component<Props, State> {
         <h2>
           {this.props.create ? 'New Contract' : 'Details'}
 
-          <ContractPropsButtons
+          <PropsButtons
             editing={editing}
             status={this.props.status}
             cancel={this.cancel}
@@ -128,26 +130,30 @@ class ContractProps extends React.Component<Props, State> {
           />
           <Form.Field
             disabled={!editing}
-            fluid
-            id="form-input-companyId"
-            control={Input}
-            label="Company ID"
-            value={companyId}
-            onChange={(e: ChangeEvent<HTMLInputElement>) => this.setState({
-              companyId: e.target.value,
-            })}
-          />
+          >
+            {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
+            <label htmlFor="form-company-selector">Company</label>
+            <CompanySelector
+              id="form-company-selector"
+              value={companySelection}
+              onChange={(val: number) => this.setState({
+                companySelection: val,
+              })}
+            />
+          </Form.Field>
           <Form.Field
             disabled={!editing}
-            fluid
-            id="form-input-contactId"
-            control={Input}
-            label="Contact ID"
-            value={contactId}
-            onChange={(e: ChangeEvent<HTMLInputElement>) => this.setState({
-              contactId: e.target.value,
-            })}
-          />
+          >
+            {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
+            <label htmlFor="form-contact-selector">Contact</label>
+            <ContactSelector
+              id="form-contact-selector"
+              value={contactSelection}
+              onChange={(val: number) => this.setState({
+                contactSelection: val,
+              })}
+            />
+          </Form.Field>
           <Form.Field
             disabled={!editing}
             fluid
@@ -167,14 +173,18 @@ class ContractProps extends React.Component<Props, State> {
 
 const mapStateToProps = (state: RootState) => {
   return {
-    status: state.contract.singleStatus,
+    status: getSingle<Contract>(state, SingleEntities.Contract).status,
   };
 };
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
   saveContract: (id: number,
-    contract: ContractParams) => dispatch(saveSingleContract(id, contract)),
-  createContract: (contract: ContractParams) => dispatch(createSingleContract(contract)),
+    contract: ContractParams) => dispatch(
+    saveSingle(SingleEntities.Contract, id, contract),
+  ),
+  createContract: (contract: ContractParams) => dispatch(
+    createSingle(SingleEntities.Contract, contract),
+  ),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ContractProps);
