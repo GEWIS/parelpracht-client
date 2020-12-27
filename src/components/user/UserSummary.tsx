@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { connect } from 'react-redux';
+import { Redirect, RouteComponentProps, withRouter } from 'react-router-dom';
 import {
   Grid, Header, Icon, Loader, Placeholder, Segment,
 } from 'semantic-ui-react';
@@ -9,18 +10,33 @@ import ResourceStatus from '../../stores/resourceStatus';
 import { getSingle } from '../../stores/single/selectors';
 import { SingleEntities } from '../../stores/single/single';
 import { RootState } from '../../stores/store';
+import UserDeleteButton from './UserDeleteButton';
 
-interface Props {
+interface Props extends RouteComponentProps {
   user: User | undefined;
   status: ResourceStatus;
 }
 
+function usePrevious(value: any) {
+  const ref = useRef();
+  useEffect(() => {
+    ref.current = value;
+  });
+  return ref.current;
+}
+
 function UserSummary(props: Props) {
+  const prevStatus = usePrevious(props.status);
+
+  // Check if user was deleted
+  if (prevStatus === ResourceStatus.DELETING
+    && props.status === ResourceStatus.EMPTY) {
+    return (<Redirect to="/user" />);
+  }
+
   const { user, status } = props;
   if (user === undefined
-    || (status !== ResourceStatus.FETCHED
-      && status !== ResourceStatus.SAVING
-      && status !== ResourceStatus.ERROR)) {
+    || status === ResourceStatus.EMPTY || status === ResourceStatus.FETCHING) {
     return (
       <>
         <Header as="h1" attached="top" style={{ backgroundColor: '#eee' }}>
@@ -41,9 +57,10 @@ function UserSummary(props: Props) {
     <>
       <Header as="h1" attached="top" style={{ backgroundColor: '#eee' }}>
         <Icon name="user" />
-        <Header.Content>
+        <Header.Content style={{ width: '100%' }}>
           <Header.Subheader>User</Header.Subheader>
           {formatContactName(user.firstName, user.middleName, user.lastName)}
+          <UserDeleteButton floated="right" userId={user.id} />
         </Header.Content>
       </Header>
       <Segment attached="bottom">
@@ -73,4 +90,4 @@ const mapStateToProps = (state: RootState) => {
   };
 };
 
-export default connect(mapStateToProps)(UserSummary);
+export default withRouter(connect(mapStateToProps)(UserSummary));

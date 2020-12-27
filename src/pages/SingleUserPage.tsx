@@ -35,14 +35,6 @@ class SingleUserPage extends React.Component<Props> {
   public render() {
     const { user } = this.props;
 
-    if (user === undefined) {
-      return (
-        <Container style={{ paddingTop: '2em' }}>
-          <Loader content="Loading" active />
-        </Container>
-      );
-    }
-
     return (
       <Container style={{ paddingTop: '2em' }}>
         <Breadcrumb
@@ -51,7 +43,9 @@ class SingleUserPage extends React.Component<Props> {
             { key: 'Users', content: <NavLink to="/user">Users</NavLink> },
             {
               key: 'User',
-              content: formatContactName(user.firstName, user.middleName, user.lastName),
+              content: user
+                ? formatContactName(user.firstName, user.middleName, user.lastName)
+                : '',
               active: true,
             },
           ]}
@@ -59,9 +53,11 @@ class SingleUserPage extends React.Component<Props> {
         <UserSummary />
         <Grid columns={2}>
           <Grid.Column>
-            <Segment>
-              <UserProps user={user} />
-            </Segment>
+            {user ? (
+              <Segment>
+                <UserProps user={user} />
+              </Segment>
+            ) : <Segment placeholder />}
           </Grid.Column>
         </Grid>
       </Container>
