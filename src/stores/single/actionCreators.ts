@@ -1,6 +1,7 @@
 import {
   singleActionPattern,
-  SingleActionType, SingleClearAction, SingleCreateAction, SingleErrorAction, SingleFetchAction,
+  SingleActionType, SingleClearAction, SingleCreateAction,
+  SingleDeleteAction, SingleErrorAction, SingleFetchAction,
   SingleSaveAction,
   SingleSetAction,
 } from './actions';
@@ -20,6 +21,12 @@ export function saveSingle<S extends SingleEntities, RSave>(
   single: S, id: number, data: RSave,
 ): SingleSaveAction<S, RSave> {
   return { type: singleActionPattern(single, SingleActionType.Save), data, id };
+}
+
+export function deleteSingle<S extends SingleEntities>(
+  single: S, id: number,
+): SingleDeleteAction<S> {
+  return { type: singleActionPattern(single, SingleActionType.Delete), id };
 }
 
 export function createSingle<S extends SingleEntities, RCreate>(

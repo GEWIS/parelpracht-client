@@ -264,7 +264,7 @@ class UserProps extends React.Component<Props, State> {
               <Form.Field disabled={!editing}>
                 {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
                 <label htmlFor="form-check-role-admin">
-                  General
+                  Admin
                 </label>
                 <Checkbox
                   toggle
