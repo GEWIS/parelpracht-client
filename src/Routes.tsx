@@ -55,7 +55,12 @@ function Routes(props: Props) {
   }
 
   if (!props.authStatus.authenticated) {
-    if (_.find(['/login', 'forgot-password', '/reset-password'], props.location.pathname) !== undefined) {
+    const authPaths = ['/login', '/forgot-password', '/reset-password'];
+    const onAuthPath = authPaths.find(
+      (p) => props.location.pathname === p,
+    ) !== undefined;
+
+    if (!onAuthPath) {
       return (
         <Redirect to="/login" />
       );
