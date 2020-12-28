@@ -49,7 +49,7 @@ function InvoiceSummary(props: Props) {
         <Grid columns={4}>
           <Grid.Column>
             <h5>Company Name</h5>
-            <p>{invoice.company}</p>
+            <p>{invoice.company.name}</p>
           </Grid.Column>
         </Grid>
       </Segment>

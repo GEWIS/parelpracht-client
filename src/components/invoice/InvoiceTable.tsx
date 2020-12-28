@@ -10,7 +10,7 @@ import {
 } from '../../stores/tables/actionCreators';
 import { countFetched, countTotal, getTable } from '../../stores/tables/selectors';
 import { Tables } from '../../stores/tables/tables';
-import { InvoiceRow } from './InvoiceRow';
+import InvoiceRow from './InvoiceRow';
 
 interface Props {
   invoices: Invoice[];
@@ -43,10 +43,10 @@ function InvoicesTable({
         <Table.Header>
           <Table.Row>
             <Table.HeaderCell
-              sorted={column === 'companyId' ? direction : undefined}
-              onClick={() => changeSort('companyId')}
+              sorted={column === 'invoiceId' ? direction : undefined}
+              onClick={() => changeSort('invoiceId')}
             >
-              Company Id
+              Invoice Id
             </Table.HeaderCell>
             <Table.HeaderCell
               sorted={column === 'Company' ? direction : undefined}
@@ -55,10 +55,10 @@ function InvoicesTable({
               Company Name
             </Table.HeaderCell>
             <Table.HeaderCell
-              sorted={column === 'Price' ? direction : undefined}
-              onClick={() => changeSort('Price')}
+              sorted={column === 'Last updated' ? direction : undefined}
+              onClick={() => changeSort('Last updated')}
             >
-              Price
+              Last Updated
             </Table.HeaderCell>
           </Table.Row>
         </Table.Header>

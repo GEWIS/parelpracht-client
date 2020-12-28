@@ -120,8 +120,8 @@ function Routes(props: Props) {
           <Route path="/invoice" exact>
             <InvoicesPage />
           </Route>
+          <Route path="/invoice/:invoiceId" exact component={SingleInvoicePage} />
 
-          <Route path="/company/:invoiceId" exact component={SingleInvoicePage} />
           {/* Contracts */}
           <Route path="/contract" exact>
             <ContractsPage />
