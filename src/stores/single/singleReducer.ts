@@ -62,6 +62,12 @@ const createSingleReducer = <S extends SingleEntities, R, RSave, RCreate>(
           status: ResourceStatus.EMPTY,
         };
 
+      case SingleActionType.Delete:
+        return {
+          ...state,
+          status: ResourceStatus.DELETING,
+        };
+
       default:
         return state;
     }

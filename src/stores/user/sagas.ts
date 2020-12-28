@@ -5,10 +5,12 @@ import {
   Client, Dir6, User, UserParams,
 } from '../../clients/server.generated';
 import { takeEveryWithErrorHandling } from '../errorHandling';
-import { errorSingle, setSingle } from '../single/actionCreators';
+import { clearSingle, errorSingle, setSingle } from '../single/actionCreators';
 import {
-  singleActionPattern, SingleActionType, SingleCreateAction, SingleFetchAction, SingleSaveAction,
+  singleActionPattern, SingleActionType, SingleCreateAction,
+  SingleDeleteAction, SingleFetchAction, SingleSaveAction,
 } from '../single/actions';
+import { getSingle } from '../single/selectors';
 import { SingleEntities } from '../single/single';
 import { setSummaries } from '../summaries/actionCreators';
 import { summariesActionPattern, SummariesActionType } from '../summaries/actions';
@@ -46,6 +48,17 @@ function* fetchSingleUser(action: SingleFetchAction<SingleEntities.User>) {
   const client = new Client();
   const user = yield call([client, client.getUser], action.id);
   yield put(setSingle(SingleEntities.User, user));
+}
+
+function* deleteSingleUser(action: SingleDeleteAction<SingleEntities.User>) {
+  const client = new Client();
+  yield call([client, client.deleteUser], action.id);
+  yield put(clearSingle(SingleEntities.User));
+}
+
+function* errorDeleteSingleUser() {
+  const user = yield select(getSingle, SingleEntities.User);
+  yield put(setSingle(SingleEntities.User, user.data));
 }
 
 function* saveSingleUser(
@@ -105,6 +118,13 @@ export default [
         SummariesActionType.Fetch,
       ),
       fetchUserSummaries,
+    );
+  },
+  function* watchDeleteSingleUser() {
+    yield takeEveryWithErrorHandling(
+      singleActionPattern(SingleEntities.User, SingleActionType.Delete),
+      deleteSingleUser,
+      { onErrorSaga: errorDeleteSingleUser },
     );
   },
   function* watchFetchSingleUser() {
