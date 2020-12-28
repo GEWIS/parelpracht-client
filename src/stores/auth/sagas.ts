@@ -26,6 +26,10 @@ export function* fetchAuthStatus() {
     // Fetch the summaries
     yield put(fetchSummaries(SummaryCollections.Companies));
     yield put(fetchSummaries(SummaryCollections.Contacts));
+    yield put(fetchSummaries(SummaryCollections.Products));
+    yield put(fetchSummaries(SummaryCollections.Invoices));
+    yield put(fetchSummaries(SummaryCollections.Contracts));
+    yield put(fetchSummaries(SummaryCollections.Users));
   }
 }
 

@@ -15,6 +15,7 @@ import ContactSelector from '../contact/ContactSelector';
 import PropsButtons from '../PropsButtons';
 import { SingleEntities } from '../../stores/single/single';
 import { getSingle } from '../../stores/single/selectors';
+import UserSelector from '../user/UserSelector';
 
 interface Props {
   create?: boolean;
@@ -34,6 +35,7 @@ interface State {
   comments: string;
   contactSelection: number;
   companySelection: number;
+  assignedToSelection?: number;
 }
 
 class ContractProps extends React.Component<Props, State> {
@@ -61,6 +63,7 @@ class ContractProps extends React.Component<Props, State> {
       companySelection: contract.companyId,
       contactSelection: contract.contactId,
       comments: contract.comments ?? '',
+      assignedToSelection: contract.assignedToId,
     };
   };
 
@@ -70,6 +73,7 @@ class ContractProps extends React.Component<Props, State> {
       companyId: this.state.companySelection,
       contactId: this.state.contactSelection,
       comments: this.state.comments,
+      assignedToId: this.state.assignedToSelection,
     });
   };
 
@@ -99,6 +103,7 @@ class ContractProps extends React.Component<Props, State> {
       title,
       companySelection,
       contactSelection,
+      assignedToSelection,
       comments,
     } = this.state;
 
@@ -117,17 +122,34 @@ class ContractProps extends React.Component<Props, State> {
         </h2>
 
         <Form style={{ marginTop: '2em' }}>
-          <Form.Field
-            disabled={!editing}
-            id="form-input-title"
-            fluid
-            control={Input}
-            label="Title"
-            value={title}
-            onChange={(e: ChangeEvent<HTMLInputElement>) => this.setState({
-              title: e.target.value,
-            })}
-          />
+          <Form.Group widths="equal">
+            <Form.Field
+              disabled={!editing}
+              id="form-input-title"
+              fluid
+              control={Input}
+              label="Title"
+              value={title}
+              onChange={(e: ChangeEvent<HTMLInputElement>) => this.setState({
+                title: e.target.value,
+              })}
+            />
+            <Form.Field
+              disabled={!editing}
+            >
+              {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
+              <label htmlFor="form-assigned-to-selector">Assigned to</label>
+              <UserSelector
+                id="form-assigned-to-selector"
+                value={assignedToSelection}
+                onChange={(val: number | '') => this.setState({
+                  assignedToSelection: val === '' ? undefined : val,
+                })}
+                clearable
+              />
+            </Form.Field>
+          </Form.Group>
+
           <Form.Field
             disabled={!editing}
           >

@@ -105,7 +105,7 @@ export default [
         SummaryCollections.Products,
         SummariesActionType.Fetch,
       ),
-      fetchCompanySummaries,
+      fetchProductSummaries,
     );
   },
   function* watchFetchSingleProduct() {

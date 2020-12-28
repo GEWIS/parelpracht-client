@@ -105,7 +105,7 @@ export default [
         SummaryCollections.Contracts,
         SummariesActionType.Fetch,
       ),
-      fetchCompanySummaries,
+      fetchContractSummaries,
     );
   },
   function* watchFetchSingleContract() {
