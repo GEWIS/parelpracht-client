@@ -42,7 +42,7 @@ function InvoiceSummary(props: Props) {
         <Icon name="file alternate" />
         <Header.Content>
           <Header.Subheader>Invoice</Header.Subheader>
-          {invoice.companyId}
+          {invoice.id}
         </Header.Content>
       </Header>
       <Segment attached="bottom">
