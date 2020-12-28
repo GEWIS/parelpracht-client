@@ -73,6 +73,16 @@ function ResetPasswordPage(props: Props) {
               {newUser ? 'Set your password' : 'Reset your password'}
             </Header>
             <Segment>
+              <p>
+                Password requirements:
+                <ul>
+                  <li>Eight characters in length</li>
+                  <li>One lower case character</li>
+                  <li>One upper case character</li>
+                  <li>One number</li>
+                  <li>One symbol</li>
+                </ul>
+              </p>
               <ResetPasswordForm token={token} newUser={newUser} />
               <Button as={NavLink} to="/login" style={{ marginTop: '1em' }} basic>
                 <Icon name="arrow left" basic />
