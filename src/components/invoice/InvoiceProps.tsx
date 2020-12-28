@@ -23,7 +23,7 @@ interface Props {
 
 interface State {
   editing: boolean;
-  productInstances: ProductInstance[];
+  productInstanceIds: number[];
   comments: string | undefined;
   companyId: number;
 }
@@ -49,7 +49,7 @@ class InvoiceProps extends React.Component<Props, State> {
   extractState = (props: Props) => {
     const { invoice } = props;
     return {
-      productInstances: invoice.products,
+      productInstanceIds: invoice.products.map((p) => p.id),
       comments: invoice.comments,
       companyId: invoice.companyId,
     };
@@ -57,7 +57,7 @@ class InvoiceProps extends React.Component<Props, State> {
 
   toParams = (): InvoiceParams => {
     return new InvoiceParams({
-      productInstances: this.state.productInstances,
+      productInstanceIds: this.state.productInstanceIds,
       comments: this.state.comments,
       companyId: this.state.companyId,
     });
@@ -86,7 +86,7 @@ class InvoiceProps extends React.Component<Props, State> {
   render() {
     const {
       editing,
-      productInstances,
+      productInstanceIds,
       comments,
       companyId,
     } = this.state;
