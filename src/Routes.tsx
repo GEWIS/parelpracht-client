@@ -20,7 +20,7 @@ import SingleInvoicePage from './pages/SingleInvoicePage';
 /* import SingleProductPage from './pages/SingleProductPage'; */
 import ContractsPage from './pages/ContractsPage';
 import SingleContractPage from './pages/SingleContractPage';
-import ContractsCreatePage from './pages/ContractCreatePage';
+import ContractCreatePage from './pages/ContractCreatePage';
 import Navigation from './components/navigation/Navigation';
 import { RootState } from './stores/store';
 import ResourceStatus from './stores/resourceStatus';
@@ -93,6 +93,10 @@ function Routes(props: Props) {
             <ProductCreatePage />
           </Route>
           <Route path="/product/:productId" exact component={SingleProductPage} />
+          <Route path="/product/:productId/contract/new" exact>
+            <SingleProductPage />
+            <ContractCreatePage />
+          </Route>
           {/* Company */}
           <Route path="/company" exact>
             <CompaniesPage />
@@ -110,25 +114,33 @@ function Routes(props: Props) {
             <SingleCompanyPage />
             <ContactModal />
           </Route>
+          <Route path="/company/:companyId/contract/new" exact>
+            <SingleCompanyPage />
+            <ContractCreatePage />
+          </Route>
 
           {/* Contacts */}
           <Route path="/contact" exact>
             <ContactsPage />
+          </Route>
+          <Route path="/contact/:contactId" exact>
+            <ContactsPage />
+            <ContactModal />
           </Route>
 
           {/* Invoice */}
           <Route path="/invoice" exact>
             <InvoicesPage />
           </Route>
+          <Route path="/invoice/:invoiceId" exact component={SingleInvoicePage} />
 
-          <Route path="/company/:invoiceId" exact component={SingleInvoicePage} />
           {/* Contracts */}
           <Route path="/contract" exact>
             <ContractsPage />
           </Route>
           <Route path="/contract/new" exact>
             <ContractsPage />
-            <ContractsCreatePage />
+            <ContractCreatePage />
           </Route>
           <Route path="/contract/:contractId" exact component={SingleContractPage} />
           {/* Users */}

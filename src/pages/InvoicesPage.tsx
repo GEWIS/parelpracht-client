@@ -6,7 +6,7 @@ import {
 import InvoicesTable from '../components/invoice/InvoiceTable';
 import InvoiceTableControls from '../components/invoice/InvoiceTableControls';
 
-function InvoicesPage(/* props: RouteComponentProps */) {
+function InvoicesPage() {
   return (
     <>
       <Segment style={{ backgroundColor: '#eee' }} vertical basic>

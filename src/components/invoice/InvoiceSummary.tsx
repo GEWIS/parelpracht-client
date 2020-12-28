@@ -42,14 +42,14 @@ function InvoiceSummary(props: Props) {
         <Icon name="file alternate" />
         <Header.Content>
           <Header.Subheader>Invoice</Header.Subheader>
-          {invoice.companyId}
+          {invoice.id}
         </Header.Content>
       </Header>
       <Segment attached="bottom">
         <Grid columns={4}>
           <Grid.Column>
             <h5>Company Name</h5>
-            <p>{invoice.company}</p>
+            <p>{invoice.company.name}</p>
           </Grid.Column>
         </Grid>
       </Segment>

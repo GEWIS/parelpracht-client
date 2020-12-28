@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { ChangeEvent } from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
+import { Form, Input } from 'semantic-ui-react';
 import {
   Invoice, InvoiceParams, ProductInstance,
 } from '../../clients/server.generated';
+import { getCompanyName } from '../../stores/company/selectors';
 import ResourceStatus from '../../stores/resourceStatus';
 import { createSingle, saveSingle } from '../../stores/single/actionCreators';
 import { getSingle } from '../../stores/single/selectors';
@@ -17,12 +19,15 @@ interface Props {
   invoice: Invoice;
   status: ResourceStatus;
 
+  companyName: string;
+
   saveInvoice: (id: number, invoice: InvoiceParams) => void;
   createInvoice: (invoice: InvoiceParams) => void;
 }
 
 interface State {
   editing: boolean;
+
   productInstanceIds: number[];
   comments: string | undefined;
   companyId: number;
@@ -48,11 +53,12 @@ class InvoiceProps extends React.Component<Props, State> {
   }
 
   extractState = (props: Props) => {
-    const { invoice } = props;
+    const { invoice, companyName } = props;
     return {
       productInstanceIds: invoice.products.map((p) => p.id),
       comments: invoice.comments,
       companyId: invoice.companyId,
+      companyName,
       assignedToId: invoice.assignedToId,
     };
   };
@@ -66,26 +72,6 @@ class InvoiceProps extends React.Component<Props, State> {
     });
   };
 
-  edit = () => {
-    this.setState({ editing: true, ...this.extractState(this.props) });
-  };
-
-  cancel = () => {
-    if (!this.props.create) {
-      this.setState({ editing: false, ...this.extractState(this.props) });
-    } else if (this.props.onCancel) {
-      this.props.onCancel();
-    }
-  };
-
-  save = () => {
-    if (this.props.create) {
-      this.props.createInvoice(this.toParams());
-    } else {
-      this.props.saveInvoice(this.props.invoice.id, this.toParams());
-    }
-  };
-
   render() {
     const {
       editing,
@@ -94,20 +80,53 @@ class InvoiceProps extends React.Component<Props, State> {
       companyId,
       assignedToId,
     } = this.state;
+    const { companyName } = this.props;
 
     return (
       <>
         <h2>
-          hallllllllllllllooooooooooooooooooo invoices
+          {this.props.create ? 'New Invoice' : 'Details'}
         </h2>
+        <Form style={{ marginTop: '2em' }}>
+          <Form.Group widths="equal">
+            <Form.Field
+              disabled={!editing}
+              id="form-input-title"
+              fluid
+              control={Input}
+              label="Company"
+              value={companyName}
+            />
+            <Form.Field
+              disabled={!editing}
+              fluid
+              id="form-input-productIDs"
+              control={Input}
+              label="Products"
+              value={productInstanceIds}
+            />
+            <Form.Field
+              disabled={!editing}
+              fluid
+              id="form-input-comments"
+              control={Input}
+              label="comments"
+              value={comments}
+              onChange={(e: ChangeEvent<HTMLInputElement>) => this.setState({
+                comments: e.target.value,
+              })}
+            />
+          </Form.Group>
+        </Form>
       </>
     );
   }
 }
 
-const mapStateToProps = (state: RootState) => {
+const mapStateToProps = (state: RootState, props: {invoice: Invoice}) => {
   return {
     status: getSingle<Invoice>(state, SingleEntities.Invoice).status,
+    companyName: getCompanyName(state, props.invoice.companyId),
   };
 };
 

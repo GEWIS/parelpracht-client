@@ -32,7 +32,7 @@ class ContractCreatePage extends React.Component<Props> {
     }
   }
 
-  close = () => { this.props.history.push('/contract'); };
+  close = () => { this.props.history.goBack(); };
 
   public render() {
     const contract: Contract = {

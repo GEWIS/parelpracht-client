@@ -1,0 +1,22 @@
+.ui.contract-component {
+  div.name {
+    margin-left: 0.5em;
+    display: inline-block;
+  }
+
+  .attached.button, .attached.right.button {
+    box-shadow: 0 0 0 1px transparent inset !important;
+    padding: 1.5em;
+
+    i {
+      color: transparent;
+    }
+  }
+}
+
+.ui.contract-component:hover {
+  .attached.button > i{
+    color: inherit;
+  }
+}
+
