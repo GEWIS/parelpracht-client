@@ -32,7 +32,7 @@ class CompaniesCreatePage extends React.Component<Props> {
     }
   }
 
-  close = () => { this.props.history.push('/company'); };
+  close = () => { this.props.history.goBack(); };
 
   public render() {
     let company = new Company();

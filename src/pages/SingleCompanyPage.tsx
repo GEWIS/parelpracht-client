@@ -13,6 +13,7 @@ import CompanyProps from '../components/company/CompanyProps';
 import ResourceStatus from '../stores/resourceStatus';
 import CompanySummary from '../components/company/CompanySummary';
 import CompanyContactList from '../components/company/CompanyContactList';
+import ContractList from '../components/contract/ContractList';
 import { getSingle } from '../stores/single/selectors';
 import { SingleEntities } from '../stores/single/single';
 
@@ -62,6 +63,9 @@ class SingleCompanyPage extends React.Component<Props> {
           <Grid.Column width={6}>
             <Segment secondary>
               <CompanyContactList />
+            </Segment>
+            <Segment secondary>
+              <ContractList />
             </Segment>
           </Grid.Column>
         </Grid>

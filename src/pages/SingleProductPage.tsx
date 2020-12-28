@@ -11,6 +11,7 @@ import { RootState } from '../stores/store';
 import ProductProps from '../components/product/ProductProps';
 import ResourceStatus from '../stores/resourceStatus';
 import ProductSummary from '../components/product/ProductSummary';
+import ContractList from '../components/contract/ContractList';
 import { getSingle } from '../stores/single/selectors';
 import { SingleEntities } from '../stores/single/single';
 import { clearSingle, fetchSingle } from '../stores/single/actionCreators';
@@ -56,6 +57,11 @@ class SingleProductPage extends React.Component<Props> {
           <Grid.Column>
             <Segment>
               <ProductProps product={product} />
+            </Segment>
+          </Grid.Column>
+          <Grid.Column>
+            <Segment>
+              <ContractList />
             </Segment>
           </Grid.Column>
         </Grid>

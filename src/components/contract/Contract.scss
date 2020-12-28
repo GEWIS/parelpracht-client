@@ -1,4 +1,4 @@
-.ui.company-contact {
+.ui.contract-component {
   div.name {
     margin-left: 0.5em;
     display: inline-block;
@@ -14,8 +14,9 @@
   }
 }
 
-.ui.company-contact:hover {
+.ui.contract-component:hover {
   .attached.button > i{
     color: inherit;
   }
 }
+

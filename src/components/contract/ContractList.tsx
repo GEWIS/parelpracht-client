@@ -4,7 +4,7 @@ import { NavLink, RouteComponentProps, withRouter } from 'react-router-dom';
 import {
   Button, Icon, Loader,
 } from 'semantic-ui-react';
-import Contract from './Contract';
+import ContractComponent from './ContractComponent';
 import { Company } from '../../clients/server.generated';
 import { getSingle } from '../../stores/single/selectors';
 import { SingleEntities } from '../../stores/single/single';
@@ -32,7 +32,7 @@ class ContractList extends React.Component<Props, State> {
       );
     }
 
-    const { contacts } = company;
+    const { contracts } = company;
     return (
       <>
         <h3>
@@ -50,8 +50,8 @@ class ContractList extends React.Component<Props, State> {
             Add Contract
           </Button>
         </h3>
-        {contacts.map((contact) => (
-          <Contract key={contact.id} contact={contact} />
+        {contracts.map((contract) => (
+          <ContractComponent key={contract.id} contract={contract} />
         ))}
       </>
     );

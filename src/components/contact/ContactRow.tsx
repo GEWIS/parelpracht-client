@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { NavLink } from 'react-router-dom';
 import { Table } from 'semantic-ui-react';
 import { Contact } from '../../clients/server.generated';
 import { formatContactName } from '../../helpers/contact';
@@ -16,7 +17,9 @@ function ContactRow(props: Props) {
   return (
     <Table.Row>
       <Table.Cell>
-        {formatContactName(contact.firstName, contact.middleName, contact.lastName)}
+        <NavLink to={`/contact/${contact.id}`}>
+          {formatContactName(contact.firstName, contact.middleName, contact.lastName)}
+        </NavLink>
       </Table.Cell>
       <Table.Cell>
         {companyName}

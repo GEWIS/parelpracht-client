@@ -32,7 +32,7 @@ class ProductCreatePage extends React.Component<Props> {
     }
   }
 
-  close = () => { this.props.history.push('/product'); };
+  close = () => { this.props.history.goBack(); };
 
   public render() {
     const product: Product = {

@@ -1,12 +1,13 @@
 import * as React from 'react';
 import {
   Dimmer,
+  Header,
   Loader,
   Modal, Segment,
 } from 'semantic-ui-react';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
-import { RouteComponentProps, withRouter } from 'react-router-dom';
+import { NavLink, RouteComponentProps, withRouter } from 'react-router-dom';
 import { Contact, ContactFunction, Gender } from '../clients/server.generated';
 import { clearSingle, fetchSingle } from '../stores/single/actionCreators';
 import { RootState } from '../stores/store';
@@ -46,7 +47,7 @@ class CompaniesCreatePage extends React.Component<Props> {
   close = () => {
     const { companyId } = this.props.match.params;
     this.props.fetchCompany(parseInt(companyId, 10));
-    this.props.history.push(`/company/${companyId}`);
+    this.props.history.goBack();
   };
 
   public render() {
@@ -103,6 +104,20 @@ class CompaniesCreatePage extends React.Component<Props> {
             create={this.props.create}
             onCancel={() => { }}
           />
+          {
+            contact.contracts.length === 0 ? (
+              <p>This user has no contracts</p>
+            ) : (
+              <Segment>
+                <Header>Contracts:</Header>
+                <ul>
+                  {contact.contracts.map((contract) => {
+                    return <li><NavLink to={`/contract/${contract.id}`}>{contract.title}</NavLink></li>;
+                  })}
+                </ul>
+              </Segment>
+            )
+          }
         </Segment>
       </Modal>
     );
