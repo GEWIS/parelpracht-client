@@ -31,6 +31,7 @@ interface State {
   productInstanceIds: number[];
   comments: string | undefined;
   companyId: number;
+  assignedToId: number;
 }
 
 class InvoiceProps extends React.Component<Props, State> {
@@ -58,6 +59,7 @@ class InvoiceProps extends React.Component<Props, State> {
       comments: invoice.comments,
       companyId: invoice.companyId,
       companyName,
+      assignedToId: invoice.assignedToId,
     };
   };
 
@@ -66,6 +68,7 @@ class InvoiceProps extends React.Component<Props, State> {
       productInstanceIds: this.state.productInstanceIds,
       comments: this.state.comments,
       companyId: this.state.companyId,
+      assignedToId: this.state.assignedToId,
     });
   };
 
@@ -74,6 +77,8 @@ class InvoiceProps extends React.Component<Props, State> {
       editing,
       productInstanceIds,
       comments,
+      companyId,
+      assignedToId,
     } = this.state;
     const { companyName } = this.props;
 

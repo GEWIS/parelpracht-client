@@ -105,7 +105,7 @@ export default [
         SummaryCollections.Invoices,
         SummariesActionType.Fetch,
       ),
-      fetchCompanySummaries,
+      fetchInvoiceSummaries,
     );
   },
   function* watchFetchSingleInvoice() {

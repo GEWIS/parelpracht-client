@@ -105,7 +105,7 @@ class CompaniesCreatePage extends React.Component<Props> {
             onCancel={() => { }}
           />
           {
-            contact.contracts.length === 0 ? (
+            contact.contracts === undefined || contact.contracts.length === 0 ? (
               <p>This user has no contracts</p>
             ) : (
               <Segment>
