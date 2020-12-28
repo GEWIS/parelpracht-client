@@ -1,12 +1,12 @@
 import * as React from 'react';
-import { RouteComponentProps, withRouter } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import {
   Container, Grid, Header, Icon, Segment,
 } from 'semantic-ui-react';
 import InvoicesTable from '../components/invoice/InvoiceTable';
 import InvoiceTableControls from '../components/invoice/InvoiceTableControls';
 
-function InvoicesPage(props: RouteComponentProps) {
+function InvoicesPage(/* props: RouteComponentProps */) {
   return (
     <>
       <Segment style={{ backgroundColor: '#eee' }} vertical basic>

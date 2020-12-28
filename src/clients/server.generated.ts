@@ -55,6 +55,201 @@ export class Client {
     }
 
     /**
+     * @return Ok
+     */
+    getAuthStatus(): Promise<AuthStatus> {
+        let url_ = this.baseUrl + "/authStatus";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <RequestInit>{
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processGetAuthStatus(_response);
+        });
+    }
+
+    protected processGetAuthStatus(response: Response): Promise<AuthStatus> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = AuthStatus.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<AuthStatus>(<any>null);
+    }
+
+    /**
+     * @return Ok
+     */
+    getProfile(): Promise<User> {
+        let url_ = this.baseUrl + "/profile";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <RequestInit>{
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processGetProfile(_response);
+        });
+    }
+
+    protected processGetProfile(response: Response): Promise<User> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = User.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<User>(<any>null);
+    }
+
+    /**
+     * @return No content
+     */
+    logout(): Promise<void> {
+        let url_ = this.baseUrl + "/logout";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <RequestInit>{
+            method: "POST",
+            headers: {
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processLogout(_response);
+        });
+    }
+
+    protected processLogout(response: Response): Promise<void> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 204) {
+            return response.text().then((_responseText) => {
+            return;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<void>(<any>null);
+    }
+
+    /**
+     * @return No content
+     */
+    forgotPassword(email: string): Promise<void> {
+        let url_ = this.baseUrl + "/forgotPassword?";
+        if (email === undefined || email === null)
+            throw new Error("The parameter 'email' must be defined and cannot be null.");
+        else
+            url_ += "email=" + encodeURIComponent("" + email) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <RequestInit>{
+            method: "POST",
+            headers: {
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processForgotPassword(_response);
+        });
+    }
+
+    protected processForgotPassword(response: Response): Promise<void> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 204) {
+            return response.text().then((_responseText) => {
+            return;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<void>(<any>null);
+    }
+
+    /**
+     * @return No content
+     */
+    resetPassword(body: ResetPasswordRequest): Promise<void> {
+        let url_ = this.baseUrl + "/resetPassword";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ = <RequestInit>{
+            body: content_,
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processResetPassword(_response);
+        });
+    }
+
+    protected processResetPassword(response: Response): Promise<void> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 204) {
+            return response.text().then((_responseText) => {
+            return;
+            });
+        } else if (status === 400) {
+            return response.text().then((_responseText) => {
+            let result400: any = null;
+            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result400 = WrappedApiError.fromJS(resultData400);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result400);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<void>(<any>null);
+    }
+
+    /**
      * @param col (optional) Sorted column
      * @param dir (optional) Sorting direction
      * @param skip (optional) Number of elements to skip
@@ -108,6 +303,13 @@ export class Client {
             result200 = ProductListResponse.fromJS(resultData200);
             return result200;
             });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
@@ -157,12 +359,67 @@ export class Client {
             result400 = WrappedApiError.fromJS(resultData400);
             return throwException("A server side error occurred.", status, _responseText, _headers, result400);
             });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
         return Promise.resolve<Product>(<any>null);
+    }
+
+    /**
+     * @return Ok
+     */
+    getProductSummaries(): Promise<ProductSummary[]> {
+        let url_ = this.baseUrl + "/product/compact";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <RequestInit>{
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processGetProductSummaries(_response);
+        });
+    }
+
+    protected processGetProductSummaries(response: Response): Promise<ProductSummary[]> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(ProductSummary.fromJS(item));
+            }
+            return result200;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<ProductSummary[]>(<any>null);
     }
 
     /**
@@ -197,6 +454,13 @@ export class Client {
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
             result200 = Product.fromJS(resultData200);
             return result200;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
             });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
@@ -251,12 +515,202 @@ export class Client {
             result400 = WrappedApiError.fromJS(resultData400);
             return throwException("A server side error occurred.", status, _responseText, _headers, result400);
             });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
         return Promise.resolve<Product>(<any>null);
+    }
+
+    /**
+     * @param id ID of the product
+     * @param body Parameters to create this status with
+     * @return Ok
+     */
+    addStatus(id: number, body: StatusParams): Promise<BaseActivity> {
+        let url_ = this.baseUrl + "/product/{id}/status";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ = <RequestInit>{
+            body: content_,
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processAddStatus(_response);
+        });
+    }
+
+    protected processAddStatus(response: Response): Promise<BaseActivity> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = BaseActivity.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<BaseActivity>(<any>null);
+    }
+
+    /**
+     * @param id ID of the product
+     * @param body Parameters to create this comment with
+     * @return Ok
+     */
+    addComment(id: number, body: CommentParams): Promise<BaseActivity> {
+        let url_ = this.baseUrl + "/product/{id}/comment";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ = <RequestInit>{
+            body: content_,
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processAddComment(_response);
+        });
+    }
+
+    protected processAddComment(response: Response): Promise<BaseActivity> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = BaseActivity.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<BaseActivity>(<any>null);
+    }
+
+    /**
+     * @param id ID of the product
+     * @param activityId ID of the activity
+     * @param body Update subset of parameter of comment activity
+     * @return Ok
+     */
+    updateActivity(id: number, activityId: number, body: Partial_UpdateActivityParams_): Promise<BaseActivity> {
+        let url_ = this.baseUrl + "/product/{id}/activity/{activityId}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        if (activityId === undefined || activityId === null)
+            throw new Error("The parameter 'activityId' must be defined.");
+        url_ = url_.replace("{activityId}", encodeURIComponent("" + activityId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ = <RequestInit>{
+            body: content_,
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processUpdateActivity(_response);
+        });
+    }
+
+    protected processUpdateActivity(response: Response): Promise<BaseActivity> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = BaseActivity.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<BaseActivity>(<any>null);
+    }
+
+    /**
+     * @param id ID of the product
+     * @param activityId ID of the activity
+     * @return No content
+     */
+    deleteActivity(id: number, activityId: number): Promise<void> {
+        let url_ = this.baseUrl + "/product/{id}/activity/{activityId}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        if (activityId === undefined || activityId === null)
+            throw new Error("The parameter 'activityId' must be defined.");
+        url_ = url_.replace("{activityId}", encodeURIComponent("" + activityId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <RequestInit>{
+            method: "DELETE",
+            headers: {
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processDeleteActivity(_response);
+        });
+    }
+
+    protected processDeleteActivity(response: Response): Promise<void> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 204) {
+            return response.text().then((_responseText) => {
+            return;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<void>(<any>null);
     }
 
     /**
@@ -313,6 +767,13 @@ export class Client {
             result200 = CompanyListResponse.fromJS(resultData200);
             return result200;
             });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
@@ -355,6 +816,13 @@ export class Client {
             result200 = Company.fromJS(resultData200);
             return result200;
             });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
@@ -396,6 +864,13 @@ export class Client {
             }
             return result200;
             });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
@@ -436,6 +911,13 @@ export class Client {
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
             result200 = Company.fromJS(resultData200);
             return result200;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
             });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
@@ -483,12 +965,202 @@ export class Client {
             result200 = Company.fromJS(resultData200);
             return result200;
             });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
         return Promise.resolve<Company>(<any>null);
+    }
+
+    /**
+     * @param id ID of the company
+     * @param body Parameters to create this status with
+     * @return Ok
+     */
+    addStatus2(id: number, body: StatusParams): Promise<BaseActivity> {
+        let url_ = this.baseUrl + "/company/{id}/status";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ = <RequestInit>{
+            body: content_,
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processAddStatus2(_response);
+        });
+    }
+
+    protected processAddStatus2(response: Response): Promise<BaseActivity> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = BaseActivity.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<BaseActivity>(<any>null);
+    }
+
+    /**
+     * @param id ID of the company
+     * @param body Parameters to create this comment with
+     * @return Ok
+     */
+    addComment2(id: number, body: CommentParams): Promise<BaseActivity> {
+        let url_ = this.baseUrl + "/company/{id}/comment";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ = <RequestInit>{
+            body: content_,
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processAddComment2(_response);
+        });
+    }
+
+    protected processAddComment2(response: Response): Promise<BaseActivity> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = BaseActivity.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<BaseActivity>(<any>null);
+    }
+
+    /**
+     * @param id ID of the company
+     * @param activityId ID of the comment activity
+     * @param body Update subset of parameter of comment activity
+     * @return Ok
+     */
+    updateActivity2(id: number, activityId: number, body: Partial_UpdateActivityParams_): Promise<BaseActivity> {
+        let url_ = this.baseUrl + "/company/{id}/activity/{activityId}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        if (activityId === undefined || activityId === null)
+            throw new Error("The parameter 'activityId' must be defined.");
+        url_ = url_.replace("{activityId}", encodeURIComponent("" + activityId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ = <RequestInit>{
+            body: content_,
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processUpdateActivity2(_response);
+        });
+    }
+
+    protected processUpdateActivity2(response: Response): Promise<BaseActivity> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = BaseActivity.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<BaseActivity>(<any>null);
+    }
+
+    /**
+     * @param id ID of the company
+     * @param activityId ID of the comment activity
+     * @return No content
+     */
+    deleteActivity2(id: number, activityId: number): Promise<void> {
+        let url_ = this.baseUrl + "/company/{id}/activity/{activityId}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        if (activityId === undefined || activityId === null)
+            throw new Error("The parameter 'activityId' must be defined.");
+        url_ = url_.replace("{activityId}", encodeURIComponent("" + activityId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <RequestInit>{
+            method: "DELETE",
+            headers: {
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processDeleteActivity2(_response);
+        });
+    }
+
+    protected processDeleteActivity2(response: Response): Promise<void> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 204) {
+            return response.text().then((_responseText) => {
+            return;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<void>(<any>null);
     }
 
     /**
@@ -545,6 +1217,13 @@ export class Client {
             result200 = ContractListResponse.fromJS(resultData200);
             return result200;
             });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
@@ -587,12 +1266,67 @@ export class Client {
             result200 = Contract.fromJS(resultData200);
             return result200;
             });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
         return Promise.resolve<Contract>(<any>null);
+    }
+
+    /**
+     * @return Ok
+     */
+    getContractSummaries(): Promise<ContractSummary[]> {
+        let url_ = this.baseUrl + "/contract/compact";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <RequestInit>{
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processGetContractSummaries(_response);
+        });
+    }
+
+    protected processGetContractSummaries(response: Response): Promise<ContractSummary[]> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(ContractSummary.fromJS(item));
+            }
+            return result200;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<ContractSummary[]>(<any>null);
     }
 
     /**
@@ -627,6 +1361,13 @@ export class Client {
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
             result200 = Contract.fromJS(resultData200);
             return result200;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
             });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
@@ -674,6 +1415,13 @@ export class Client {
             result200 = Contract.fromJS(resultData200);
             return result200;
             });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
@@ -719,6 +1467,13 @@ export class Client {
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
             result200 = ProductInstance.fromJS(resultData200);
             return result200;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
             });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
@@ -770,6 +1525,13 @@ export class Client {
             result200 = ProductInstance.fromJS(resultData200);
             return result200;
             });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
@@ -805,6 +1567,395 @@ export class Client {
     }
 
     protected processDeleteProduct(response: Response): Promise<void> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 204) {
+            return response.text().then((_responseText) => {
+            return;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<void>(<any>null);
+    }
+
+    /**
+     * @param id ID of the contract
+     * @param prodId ID of the product instance
+     * @param body Parameters to create this status with
+     * @return Ok
+     */
+    addProductStatus(id: number, prodId: number, body: StatusParams): Promise<BaseActivity> {
+        let url_ = this.baseUrl + "/contract/{id}/product/{prodId}/status";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        if (prodId === undefined || prodId === null)
+            throw new Error("The parameter 'prodId' must be defined.");
+        url_ = url_.replace("{prodId}", encodeURIComponent("" + prodId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ = <RequestInit>{
+            body: content_,
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processAddProductStatus(_response);
+        });
+    }
+
+    protected processAddProductStatus(response: Response): Promise<BaseActivity> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = BaseActivity.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<BaseActivity>(<any>null);
+    }
+
+    /**
+     * @param id ID of the contract
+     * @param prodId ID of the product instance
+     * @param body Parameters to create this comment with
+     * @return Ok
+     */
+    addProductComment(id: number, prodId: number, body: CommentParams): Promise<BaseActivity> {
+        let url_ = this.baseUrl + "/contract/{id}/product/{prodId}/comment";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        if (prodId === undefined || prodId === null)
+            throw new Error("The parameter 'prodId' must be defined.");
+        url_ = url_.replace("{prodId}", encodeURIComponent("" + prodId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ = <RequestInit>{
+            body: content_,
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processAddProductComment(_response);
+        });
+    }
+
+    protected processAddProductComment(response: Response): Promise<BaseActivity> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = BaseActivity.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<BaseActivity>(<any>null);
+    }
+
+    /**
+     * @param id ID of the contract
+     * @param prodId ID of the product instance
+     * @param activityId ID of the activity
+     * @param body Update subset of parameter of the activity
+     * @return Ok
+     */
+    updateProductActivity(id: number, prodId: number, activityId: number, body: Partial_UpdateActivityParams_): Promise<BaseActivity> {
+        let url_ = this.baseUrl + "/contract/{id}/product/{prodId}/activity/{activityId}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        if (prodId === undefined || prodId === null)
+            throw new Error("The parameter 'prodId' must be defined.");
+        url_ = url_.replace("{prodId}", encodeURIComponent("" + prodId));
+        if (activityId === undefined || activityId === null)
+            throw new Error("The parameter 'activityId' must be defined.");
+        url_ = url_.replace("{activityId}", encodeURIComponent("" + activityId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ = <RequestInit>{
+            body: content_,
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processUpdateProductActivity(_response);
+        });
+    }
+
+    protected processUpdateProductActivity(response: Response): Promise<BaseActivity> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = BaseActivity.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<BaseActivity>(<any>null);
+    }
+
+    /**
+     * @param id ID of the contract
+     * @param prodId ID of the product instance
+     * @param activityId ID of the activity
+     * @return No content
+     */
+    deleteProductActivity(id: number, prodId: number, activityId: number): Promise<void> {
+        let url_ = this.baseUrl + "/contract/{id}/product/{prodId}/activity/{activityId}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        if (prodId === undefined || prodId === null)
+            throw new Error("The parameter 'prodId' must be defined.");
+        url_ = url_.replace("{prodId}", encodeURIComponent("" + prodId));
+        if (activityId === undefined || activityId === null)
+            throw new Error("The parameter 'activityId' must be defined.");
+        url_ = url_.replace("{activityId}", encodeURIComponent("" + activityId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <RequestInit>{
+            method: "DELETE",
+            headers: {
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processDeleteProductActivity(_response);
+        });
+    }
+
+    protected processDeleteProductActivity(response: Response): Promise<void> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 204) {
+            return response.text().then((_responseText) => {
+            return;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<void>(<any>null);
+    }
+
+    /**
+     * @param id ID of the contract
+     * @param body Parameters to create this status with
+     * @return Ok
+     */
+    addStatus3(id: number, body: StatusParams): Promise<BaseActivity> {
+        let url_ = this.baseUrl + "/contract/{id}/status";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ = <RequestInit>{
+            body: content_,
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processAddStatus3(_response);
+        });
+    }
+
+    protected processAddStatus3(response: Response): Promise<BaseActivity> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = BaseActivity.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<BaseActivity>(<any>null);
+    }
+
+    /**
+     * @param id ID of the contract
+     * @param body Parameters to create this comment with
+     * @return Ok
+     */
+    addComment3(id: number, body: CommentParams): Promise<BaseActivity> {
+        let url_ = this.baseUrl + "/contract/{id}/comment";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ = <RequestInit>{
+            body: content_,
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processAddComment3(_response);
+        });
+    }
+
+    protected processAddComment3(response: Response): Promise<BaseActivity> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = BaseActivity.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<BaseActivity>(<any>null);
+    }
+
+    /**
+     * @param id ID of the contract
+     * @param activityId ID of the activity
+     * @param body Update subset of parameter of the activity
+     * @return Ok
+     */
+    updateActivity3(id: number, activityId: number, body: Partial_UpdateActivityParams_): Promise<BaseActivity> {
+        let url_ = this.baseUrl + "/contract/{id}/activity/{activityId}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        if (activityId === undefined || activityId === null)
+            throw new Error("The parameter 'activityId' must be defined.");
+        url_ = url_.replace("{activityId}", encodeURIComponent("" + activityId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ = <RequestInit>{
+            body: content_,
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processUpdateActivity3(_response);
+        });
+    }
+
+    protected processUpdateActivity3(response: Response): Promise<BaseActivity> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = BaseActivity.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<BaseActivity>(<any>null);
+    }
+
+    /**
+     * @param id ID of the contract
+     * @param activityId ID of the activity
+     * @return No content
+     */
+    deleteActivity3(id: number, activityId: number): Promise<void> {
+        let url_ = this.baseUrl + "/contract/{id}/activity/{activityId}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        if (activityId === undefined || activityId === null)
+            throw new Error("The parameter 'activityId' must be defined.");
+        url_ = url_.replace("{activityId}", encodeURIComponent("" + activityId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <RequestInit>{
+            method: "DELETE",
+            headers: {
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processDeleteActivity3(_response);
+        });
+    }
+
+    protected processDeleteActivity3(response: Response): Promise<void> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 204) {
@@ -873,6 +2024,13 @@ export class Client {
             result200 = InvoiceListResponse.fromJS(resultData200);
             return result200;
             });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
@@ -915,12 +2073,67 @@ export class Client {
             result200 = Invoice.fromJS(resultData200);
             return result200;
             });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
         return Promise.resolve<Invoice>(<any>null);
+    }
+
+    /**
+     * @return Ok
+     */
+    getInvoiceSummaries(): Promise<InvoiceSummary[]> {
+        let url_ = this.baseUrl + "/invoice/compact";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <RequestInit>{
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processGetInvoiceSummaries(_response);
+        });
+    }
+
+    protected processGetInvoiceSummaries(response: Response): Promise<InvoiceSummary[]> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(InvoiceSummary.fromJS(item));
+            }
+            return result200;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<InvoiceSummary[]>(<any>null);
     }
 
     /**
@@ -955,6 +2168,13 @@ export class Client {
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
             result200 = Invoice.fromJS(resultData200);
             return result200;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
             });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
@@ -1002,12 +2222,202 @@ export class Client {
             result200 = Invoice.fromJS(resultData200);
             return result200;
             });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
         return Promise.resolve<Invoice>(<any>null);
+    }
+
+    /**
+     * @param id ID of the invoice
+     * @param body Parameters to create this status with
+     * @return Ok
+     */
+    addStatus4(id: number, body: StatusParams): Promise<BaseActivity> {
+        let url_ = this.baseUrl + "/invoice/{id}/status";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ = <RequestInit>{
+            body: content_,
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processAddStatus4(_response);
+        });
+    }
+
+    protected processAddStatus4(response: Response): Promise<BaseActivity> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = BaseActivity.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<BaseActivity>(<any>null);
+    }
+
+    /**
+     * @param id ID of the invoice
+     * @param body Parameters to create this comment with
+     * @return Ok
+     */
+    addComment4(id: number, body: CommentParams): Promise<BaseActivity> {
+        let url_ = this.baseUrl + "/invoice/{id}/comment";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ = <RequestInit>{
+            body: content_,
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processAddComment4(_response);
+        });
+    }
+
+    protected processAddComment4(response: Response): Promise<BaseActivity> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = BaseActivity.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<BaseActivity>(<any>null);
+    }
+
+    /**
+     * @param id ID of the invoice
+     * @param activityId ID of the activity
+     * @param body Update subset of parameter of the activity
+     * @return Ok
+     */
+    updateActivity4(id: number, activityId: number, body: Partial_UpdateActivityParams_): Promise<BaseActivity> {
+        let url_ = this.baseUrl + "/invoice/{id}/activity/{activityId}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        if (activityId === undefined || activityId === null)
+            throw new Error("The parameter 'activityId' must be defined.");
+        url_ = url_.replace("{activityId}", encodeURIComponent("" + activityId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ = <RequestInit>{
+            body: content_,
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processUpdateActivity4(_response);
+        });
+    }
+
+    protected processUpdateActivity4(response: Response): Promise<BaseActivity> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = BaseActivity.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<BaseActivity>(<any>null);
+    }
+
+    /**
+     * @param id ID of the invoice
+     * @param activityId ID of the activity
+     * @return No content
+     */
+    deleteActivity4(id: number, activityId: number): Promise<void> {
+        let url_ = this.baseUrl + "/invoice/{id}/activity/{activityId}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        if (activityId === undefined || activityId === null)
+            throw new Error("The parameter 'activityId' must be defined.");
+        url_ = url_.replace("{activityId}", encodeURIComponent("" + activityId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <RequestInit>{
+            method: "DELETE",
+            headers: {
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processDeleteActivity4(_response);
+        });
+    }
+
+    protected processDeleteActivity4(response: Response): Promise<void> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 204) {
+            return response.text().then((_responseText) => {
+            return;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<void>(<any>null);
     }
 
     /**
@@ -1064,6 +2474,13 @@ export class Client {
             result200 = ContactListResponse.fromJS(resultData200);
             return result200;
             });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
@@ -1106,6 +2523,13 @@ export class Client {
             result200 = Contact.fromJS(resultData200);
             return result200;
             });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
@@ -1147,6 +2571,13 @@ export class Client {
             }
             return result200;
             });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
@@ -1187,6 +2618,13 @@ export class Client {
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
             result200 = Contact.fromJS(resultData200);
             return result200;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
             });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
@@ -1234,12 +2672,389 @@ export class Client {
             result200 = Contact.fromJS(resultData200);
             return result200;
             });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
         return Promise.resolve<Contact>(<any>null);
+    }
+
+    /**
+     * @param col (optional) Sorted column
+     * @param dir (optional) Sorting direction
+     * @param skip (optional) Number of elements to skip
+     * @param take (optional) Amount of elements to request
+     * @param search (optional) String to filter on value of select columns
+     * @return Ok
+     */
+    getAllUsers(col: string | undefined, dir: Dir6 | undefined, skip: number | undefined, take: number | undefined, search: string | undefined): Promise<UserListResponse> {
+        let url_ = this.baseUrl + "/user?";
+        if (col === null)
+            throw new Error("The parameter 'col' cannot be null.");
+        else if (col !== undefined)
+            url_ += "col=" + encodeURIComponent("" + col) + "&";
+        if (dir === null)
+            throw new Error("The parameter 'dir' cannot be null.");
+        else if (dir !== undefined)
+            url_ += "dir=" + encodeURIComponent("" + dir) + "&";
+        if (skip === null)
+            throw new Error("The parameter 'skip' cannot be null.");
+        else if (skip !== undefined)
+            url_ += "skip=" + encodeURIComponent("" + skip) + "&";
+        if (take === null)
+            throw new Error("The parameter 'take' cannot be null.");
+        else if (take !== undefined)
+            url_ += "take=" + encodeURIComponent("" + take) + "&";
+        if (search === null)
+            throw new Error("The parameter 'search' cannot be null.");
+        else if (search !== undefined)
+            url_ += "search=" + encodeURIComponent("" + search) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <RequestInit>{
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processGetAllUsers(_response);
+        });
+    }
+
+    protected processGetAllUsers(response: Response): Promise<UserListResponse> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = UserListResponse.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<UserListResponse>(<any>null);
+    }
+
+    /**
+     * @param body Parameters to create user with
+     * @return Ok
+     */
+    createUser(body: UserParams): Promise<User> {
+        let url_ = this.baseUrl + "/user";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ = <RequestInit>{
+            body: content_,
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processCreateUser(_response);
+        });
+    }
+
+    protected processCreateUser(response: Response): Promise<User> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = User.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<User>(<any>null);
+    }
+
+    /**
+     * @return Ok
+     */
+    getUserSummaries(): Promise<UserSummary[]> {
+        let url_ = this.baseUrl + "/user/compact";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <RequestInit>{
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processGetUserSummaries(_response);
+        });
+    }
+
+    protected processGetUserSummaries(response: Response): Promise<UserSummary[]> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(UserSummary.fromJS(item));
+            }
+            return result200;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<UserSummary[]>(<any>null);
+    }
+
+    /**
+     * @param id ID of user to retrieve
+     * @return Ok
+     */
+    getUser(id: number): Promise<User> {
+        let url_ = this.baseUrl + "/user/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <RequestInit>{
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processGetUser(_response);
+        });
+    }
+
+    protected processGetUser(response: Response): Promise<User> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = User.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<User>(<any>null);
+    }
+
+    /**
+     * @param id ID of user to delete
+     * @return No content
+     */
+    deleteUser(id: number): Promise<void> {
+        let url_ = this.baseUrl + "/user/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <RequestInit>{
+            method: "DELETE",
+            headers: {
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processDeleteUser(_response);
+        });
+    }
+
+    protected processDeleteUser(response: Response): Promise<void> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 204) {
+            return response.text().then((_responseText) => {
+            return;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            });
+        } else if (status === 403) {
+            return response.text().then((_responseText) => {
+            let result403: any = null;
+            let resultData403 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result403 = WrappedApiError.fromJS(resultData403);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result403);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<void>(<any>null);
+    }
+
+    /**
+     * @param id ID of user to update
+     * @param body Update subset of parameter of user
+     * @return Ok
+     */
+    updateUser(id: number, body: Partial_UserParams_): Promise<User> {
+        let url_ = this.baseUrl + "/user/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ = <RequestInit>{
+            body: content_,
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processUpdateUser(_response);
+        });
+    }
+
+    protected processUpdateUser(response: Response): Promise<User> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = User.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<User>(<any>null);
+    }
+
+    /**
+     * @return Ok
+     */
+    login(body: LoginParams): Promise<Product> {
+        let url_ = this.baseUrl + "/login";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ = <RequestInit>{
+            body: content_,
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processLogin(_response);
+        });
+    }
+
+    protected processLogin(response: Response): Promise<Product> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = Product.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status === 204) {
+            return response.text().then((_responseText) => {
+            return throwException("No content", status, _responseText, _headers);
+            });
+        } else if (status === 400) {
+            return response.text().then((_responseText) => {
+            let result400: any = null;
+            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result400 = WrappedApiError.fromJS(resultData400);
+            return throwException("Bad Request", status, _responseText, _headers, result400);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<Product>(<any>null);
     }
 }
 
@@ -1250,8 +3065,83 @@ export enum Gender {
     UNKNOWN = "UNKNOWN",
 }
 
+export enum Roles {
+    SIGNEE = "SIGNEE",
+    FINANCIAL = "FINANCIAL",
+    ADMIN = "ADMIN",
+    GENERAL = "GENERAL",
+}
+
+export class UserParams implements IUserParams {
+    email!: string;
+    firstName!: string;
+    middleName!: string;
+    lastName!: string;
+    gender!: Gender;
+    comment!: string;
+    roles?: Roles[];
+
+    constructor(data?: IUserParams) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.email = _data["email"];
+            this.firstName = _data["firstName"];
+            this.middleName = _data["middleName"];
+            this.lastName = _data["lastName"];
+            this.gender = _data["gender"];
+            this.comment = _data["comment"];
+            if (Array.isArray(_data["roles"])) {
+                this.roles = [] as any;
+                for (let item of _data["roles"])
+                    this.roles!.push(item);
+            }
+        }
+    }
+
+    static fromJS(data: any): UserParams {
+        data = typeof data === 'object' ? data : {};
+        let result = new UserParams();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["email"] = this.email;
+        data["firstName"] = this.firstName;
+        data["middleName"] = this.middleName;
+        data["lastName"] = this.lastName;
+        data["gender"] = this.gender;
+        data["comment"] = this.comment;
+        if (Array.isArray(this.roles)) {
+            data["roles"] = [];
+            for (let item of this.roles)
+                data["roles"].push(item);
+        }
+        return data; 
+    }
+}
+
+export interface IUserParams {
+    email: string;
+    firstName: string;
+    middleName: string;
+    lastName: string;
+    gender: Gender;
+    comment: string;
+    roles?: Roles[];
+}
+
 export class SetupParams implements ISetupParams {
-    admin!: Admin;
+    admin!: UserParams;
 
     constructor(data?: ISetupParams) {
         if (data) {
@@ -1261,13 +3151,13 @@ export class SetupParams implements ISetupParams {
             }
         }
         if (!data) {
-            this.admin = new Admin();
+            this.admin = new UserParams();
         }
     }
 
     init(_data?: any) {
         if (_data) {
-            this.admin = _data["admin"] ? Admin.fromJS(_data["admin"]) : new Admin();
+            this.admin = _data["admin"] ? UserParams.fromJS(_data["admin"]) : new UserParams();
         }
     }
 
@@ -1286,7 +3176,348 @@ export class SetupParams implements ISetupParams {
 }
 
 export interface ISetupParams {
-    admin: Admin;
+    admin: UserParams;
+}
+
+export class AuthStatus implements IAuthStatus {
+    authenticated!: boolean;
+
+    constructor(data?: IAuthStatus) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.authenticated = _data["authenticated"];
+        }
+    }
+
+    static fromJS(data: any): AuthStatus {
+        data = typeof data === 'object' ? data : {};
+        let result = new AuthStatus();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["authenticated"] = this.authenticated;
+        return data; 
+    }
+}
+
+export interface IAuthStatus {
+    authenticated: boolean;
+}
+
+export class User implements IUser {
+    /** Incremental ID of the entity */
+    id!: number;
+    /** Date at which this entity has been created */
+    createdAt!: Date;
+    /** Date at which this entity has last been updated */
+    updatedAt!: Date;
+    /** If this entity has been soft-deleted, this is the date at which the entity has been deleted */
+    deletedAt?: Date;
+    /** Version number of this entity */
+    version!: number;
+    /** Gender of this user */
+    gender!: Gender;
+    /** First name of this user */
+    firstName!: string;
+    /** Middle name of this user, if he/she has any */
+    middleName!: string;
+    /** Last name of this user */
+    lastName!: string;
+    /** Email address of the user */
+    email!: string;
+    /** Any comments regarding this user */
+    comment!: string;
+    /** The roles this user has */
+    roles!: Role[];
+
+    constructor(data?: IUser) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+        if (!data) {
+            this.roles = [];
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
+            this.updatedAt = _data["updatedAt"] ? new Date(_data["updatedAt"].toString()) : <any>undefined;
+            this.deletedAt = _data["deletedAt"] ? new Date(_data["deletedAt"].toString()) : <any>undefined;
+            this.version = _data["version"];
+            this.gender = _data["gender"];
+            this.firstName = _data["firstName"];
+            this.middleName = _data["middleName"];
+            this.lastName = _data["lastName"];
+            this.email = _data["email"];
+            this.comment = _data["comment"];
+            if (Array.isArray(_data["roles"])) {
+                this.roles = [] as any;
+                for (let item of _data["roles"])
+                    this.roles!.push(Role.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): User {
+        data = typeof data === 'object' ? data : {};
+        let result = new User();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
+        data["updatedAt"] = this.updatedAt ? this.updatedAt.toISOString() : <any>undefined;
+        data["deletedAt"] = this.deletedAt ? this.deletedAt.toISOString() : <any>undefined;
+        data["version"] = this.version;
+        data["gender"] = this.gender;
+        data["firstName"] = this.firstName;
+        data["middleName"] = this.middleName;
+        data["lastName"] = this.lastName;
+        data["email"] = this.email;
+        data["comment"] = this.comment;
+        if (Array.isArray(this.roles)) {
+            data["roles"] = [];
+            for (let item of this.roles)
+                data["roles"].push(item.toJSON());
+        }
+        return data; 
+    }
+}
+
+export interface IUser {
+    /** Incremental ID of the entity */
+    id: number;
+    /** Date at which this entity has been created */
+    createdAt: Date;
+    /** Date at which this entity has last been updated */
+    updatedAt: Date;
+    /** If this entity has been soft-deleted, this is the date at which the entity has been deleted */
+    deletedAt?: Date;
+    /** Version number of this entity */
+    version: number;
+    /** Gender of this user */
+    gender: Gender;
+    /** First name of this user */
+    firstName: string;
+    /** Middle name of this user, if he/she has any */
+    middleName: string;
+    /** Last name of this user */
+    lastName: string;
+    /** Email address of the user */
+    email: string;
+    /** Any comments regarding this user */
+    comment: string;
+    /** The roles this user has */
+    roles: Role[];
+}
+
+export class Role implements IRole {
+    /** Name of the role */
+    name!: string;
+    /** All users having this role */
+    users!: User[];
+
+    constructor(data?: IRole) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+        if (!data) {
+            this.users = [];
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.name = _data["name"];
+            if (Array.isArray(_data["users"])) {
+                this.users = [] as any;
+                for (let item of _data["users"])
+                    this.users!.push(User.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): Role {
+        data = typeof data === 'object' ? data : {};
+        let result = new Role();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["name"] = this.name;
+        if (Array.isArray(this.users)) {
+            data["users"] = [];
+            for (let item of this.users)
+                data["users"].push(item.toJSON());
+        }
+        return data; 
+    }
+}
+
+export interface IRole {
+    /** Name of the role */
+    name: string;
+    /** All users having this role */
+    users: User[];
+}
+
+export class ApiError implements IApiError {
+    name!: string;
+    message!: string;
+    stack?: string;
+    /** The activity code of the error, as defined by HTTP activity codes. */
+    statusCode!: number;
+
+    constructor(data?: IApiError) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.name = _data["name"];
+            this.message = _data["message"];
+            this.stack = _data["stack"];
+            this.statusCode = _data["statusCode"];
+        }
+    }
+
+    static fromJS(data: any): ApiError {
+        data = typeof data === 'object' ? data : {};
+        let result = new ApiError();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["name"] = this.name;
+        data["message"] = this.message;
+        data["stack"] = this.stack;
+        data["statusCode"] = this.statusCode;
+        return data; 
+    }
+}
+
+export interface IApiError {
+    name: string;
+    message: string;
+    stack?: string;
+    /** The activity code of the error, as defined by HTTP activity codes. */
+    statusCode: number;
+}
+
+/** WrappedApiError represents the type returned by the server. */
+export class WrappedApiError implements IWrappedApiError {
+    error!: ApiError;
+
+    constructor(data?: IWrappedApiError) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+        if (!data) {
+            this.error = new ApiError();
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.error = _data["error"] ? ApiError.fromJS(_data["error"]) : new ApiError();
+        }
+    }
+
+    static fromJS(data: any): WrappedApiError {
+        data = typeof data === 'object' ? data : {};
+        let result = new WrappedApiError();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["error"] = this.error ? this.error.toJSON() : <any>undefined;
+        return data; 
+    }
+}
+
+/** WrappedApiError represents the type returned by the server. */
+export interface IWrappedApiError {
+    error: ApiError;
+}
+
+export class ResetPasswordRequest implements IResetPasswordRequest {
+    password!: string;
+    repeatPassword!: string;
+    token!: string;
+
+    constructor(data?: IResetPasswordRequest) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.password = _data["password"];
+            this.repeatPassword = _data["repeatPassword"];
+            this.token = _data["token"];
+        }
+    }
+
+    static fromJS(data: any): ResetPasswordRequest {
+        data = typeof data === 'object' ? data : {};
+        let result = new ResetPasswordRequest();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["password"] = this.password;
+        data["repeatPassword"] = this.repeatPassword;
+        data["token"] = this.token;
+        return data; 
+    }
+}
+
+export interface IResetPasswordRequest {
+    password: string;
+    repeatPassword: string;
+    token: string;
 }
 
 export enum ProductStatus {
@@ -2008,206 +4239,6 @@ export enum ActivityType {
     COMMENT = "COMMENT",
 }
 
-export class User implements IUser {
-    /** Incremental ID of the entity */
-    id!: number;
-    /** Date at which this entity has been created */
-    createdAt!: Date;
-    /** Date at which this entity has last been updated */
-    updatedAt!: Date;
-    /** If this entity has been soft-deleted, this is the date at which the entity has been deleted */
-    deletedAt?: Date;
-    /** Version number of this entity */
-    version!: number;
-    /** Gender of this user */
-    gender!: Gender;
-    /** First name of this user */
-    firstName!: string;
-    /** Middle name of this user, if he/she has any */
-    middleName?: string;
-    /** Last name of this user */
-    lastName!: string;
-    /** Email address of the user */
-    email!: string;
-    /** Any comments regarding this user */
-    comment?: string;
-    /** The roles this user has */
-    roles!: Role[];
-
-    constructor(data?: IUser) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-        if (!data) {
-            this.roles = [];
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"];
-            this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
-            this.updatedAt = _data["updatedAt"] ? new Date(_data["updatedAt"].toString()) : <any>undefined;
-            this.deletedAt = _data["deletedAt"] ? new Date(_data["deletedAt"].toString()) : <any>undefined;
-            this.version = _data["version"];
-            this.gender = _data["gender"];
-            this.firstName = _data["firstName"];
-            this.middleName = _data["middleName"];
-            this.lastName = _data["lastName"];
-            this.email = _data["email"];
-            this.comment = _data["comment"];
-            if (Array.isArray(_data["roles"])) {
-                this.roles = [] as any;
-                for (let item of _data["roles"])
-                    this.roles!.push(Role.fromJS(item));
-            }
-        }
-    }
-
-    static fromJS(data: any): User {
-        data = typeof data === 'object' ? data : {};
-        let result = new User();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
-        data["updatedAt"] = this.updatedAt ? this.updatedAt.toISOString() : <any>undefined;
-        data["deletedAt"] = this.deletedAt ? this.deletedAt.toISOString() : <any>undefined;
-        data["version"] = this.version;
-        data["gender"] = this.gender;
-        data["firstName"] = this.firstName;
-        data["middleName"] = this.middleName;
-        data["lastName"] = this.lastName;
-        data["email"] = this.email;
-        data["comment"] = this.comment;
-        if (Array.isArray(this.roles)) {
-            data["roles"] = [];
-            for (let item of this.roles)
-                data["roles"].push(item.toJSON());
-        }
-        return data; 
-    }
-}
-
-export interface IUser {
-    /** Incremental ID of the entity */
-    id: number;
-    /** Date at which this entity has been created */
-    createdAt: Date;
-    /** Date at which this entity has last been updated */
-    updatedAt: Date;
-    /** If this entity has been soft-deleted, this is the date at which the entity has been deleted */
-    deletedAt?: Date;
-    /** Version number of this entity */
-    version: number;
-    /** Gender of this user */
-    gender: Gender;
-    /** First name of this user */
-    firstName: string;
-    /** Middle name of this user, if he/she has any */
-    middleName?: string;
-    /** Last name of this user */
-    lastName: string;
-    /** Email address of the user */
-    email: string;
-    /** Any comments regarding this user */
-    comment?: string;
-    /** The roles this user has */
-    roles: Role[];
-}
-
-export class Role implements IRole {
-    /** Incremental ID of the entity */
-    id!: number;
-    /** Date at which this entity has been created */
-    createdAt!: Date;
-    /** Date at which this entity has last been updated */
-    updatedAt!: Date;
-    /** If this entity has been soft-deleted, this is the date at which the entity has been deleted */
-    deletedAt?: Date;
-    /** Version number of this entity */
-    version!: number;
-    /** Name of the role */
-    name!: string;
-    /** All users having this role */
-    users!: User[];
-
-    constructor(data?: IRole) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-        if (!data) {
-            this.users = [];
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"];
-            this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
-            this.updatedAt = _data["updatedAt"] ? new Date(_data["updatedAt"].toString()) : <any>undefined;
-            this.deletedAt = _data["deletedAt"] ? new Date(_data["deletedAt"].toString()) : <any>undefined;
-            this.version = _data["version"];
-            this.name = _data["name"];
-            if (Array.isArray(_data["users"])) {
-                this.users = [] as any;
-                for (let item of _data["users"])
-                    this.users!.push(User.fromJS(item));
-            }
-        }
-    }
-
-    static fromJS(data: any): Role {
-        data = typeof data === 'object' ? data : {};
-        let result = new Role();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
-        data["updatedAt"] = this.updatedAt ? this.updatedAt.toISOString() : <any>undefined;
-        data["deletedAt"] = this.deletedAt ? this.deletedAt.toISOString() : <any>undefined;
-        data["version"] = this.version;
-        data["name"] = this.name;
-        if (Array.isArray(this.users)) {
-            data["users"] = [];
-            for (let item of this.users)
-                data["users"].push(item.toJSON());
-        }
-        return data; 
-    }
-}
-
-export interface IRole {
-    /** Incremental ID of the entity */
-    id: number;
-    /** Date at which this entity has been created */
-    createdAt: Date;
-    /** Date at which this entity has last been updated */
-    updatedAt: Date;
-    /** If this entity has been soft-deleted, this is the date at which the entity has been deleted */
-    deletedAt?: Date;
-    /** Version number of this entity */
-    version: number;
-    /** Name of the role */
-    name: string;
-    /** All users having this role */
-    users: User[];
-}
-
 export class InvoiceActivity implements IInvoiceActivity {
     /** Incremental ID of the entity */
     id!: number;
@@ -2226,7 +4257,7 @@ export class InvoiceActivity implements IInvoiceActivity {
     /** Description of this activity */
     description!: string;
     /** User who created this activity */
-    createdBy!: User;
+    createdBy?: User;
     invoiceId!: number;
     /** Invoice related to this activity */
     invoice!: Invoice;
@@ -2242,7 +4273,6 @@ export class InvoiceActivity implements IInvoiceActivity {
             }
         }
         if (!data) {
-            this.createdBy = new User();
             this.invoice = new Invoice();
         }
     }
@@ -2257,7 +4287,7 @@ export class InvoiceActivity implements IInvoiceActivity {
             this.type = _data["type"];
             this.subType = _data["subType"];
             this.description = _data["description"];
-            this.createdBy = _data["createdBy"] ? User.fromJS(_data["createdBy"]) : new User();
+            this.createdBy = _data["createdBy"] ? User.fromJS(_data["createdBy"]) : <any>undefined;
             this.invoiceId = _data["invoiceId"];
             this.invoice = _data["invoice"] ? Invoice.fromJS(_data["invoice"]) : new Invoice();
             this.relatedInvoiceId = _data["relatedInvoiceId"];
@@ -2309,7 +4339,7 @@ export interface IInvoiceActivity {
     /** Description of this activity */
     description: string;
     /** User who created this activity */
-    createdBy: User;
+    createdBy?: User;
     invoiceId: number;
     /** Invoice related to this activity */
     invoice: Invoice;
@@ -2481,7 +4511,7 @@ export class CompanyActivity implements ICompanyActivity {
     /** Description of this activity */
     description!: string;
     /** User who created this activity */
-    createdBy!: User;
+    createdBy?: User;
     companyId!: number;
     /** Company related to this activity */
     company!: Company;
@@ -2494,7 +4524,6 @@ export class CompanyActivity implements ICompanyActivity {
             }
         }
         if (!data) {
-            this.createdBy = new User();
             this.company = new Company();
         }
     }
@@ -2509,7 +4538,7 @@ export class CompanyActivity implements ICompanyActivity {
             this.type = _data["type"];
             this.subType = _data["subType"];
             this.description = _data["description"];
-            this.createdBy = _data["createdBy"] ? User.fromJS(_data["createdBy"]) : new User();
+            this.createdBy = _data["createdBy"] ? User.fromJS(_data["createdBy"]) : <any>undefined;
             this.companyId = _data["companyId"];
             this.company = _data["company"] ? Company.fromJS(_data["company"]) : new Company();
         }
@@ -2557,7 +4586,7 @@ export interface ICompanyActivity {
     /** Description of this activity */
     description: string;
     /** User who created this activity */
-    createdBy: User;
+    createdBy?: User;
     companyId: number;
     /** Company related to this activity */
     company: Company;
@@ -2581,7 +4610,7 @@ export class ContractActivity implements IContractActivity {
     /** Description of this activity */
     description!: string;
     /** User who created this activity */
-    createdBy!: User;
+    createdBy?: User;
     contractId!: number;
     /** Contract related to this activity */
     contract!: Contract;
@@ -2597,7 +4626,6 @@ export class ContractActivity implements IContractActivity {
             }
         }
         if (!data) {
-            this.createdBy = new User();
             this.contract = new Contract();
         }
     }
@@ -2612,7 +4640,7 @@ export class ContractActivity implements IContractActivity {
             this.type = _data["type"];
             this.subType = _data["subType"];
             this.description = _data["description"];
-            this.createdBy = _data["createdBy"] ? User.fromJS(_data["createdBy"]) : new User();
+            this.createdBy = _data["createdBy"] ? User.fromJS(_data["createdBy"]) : <any>undefined;
             this.contractId = _data["contractId"];
             this.contract = _data["contract"] ? Contract.fromJS(_data["contract"]) : new Contract();
             this.relatedContractId = _data["relatedContractId"];
@@ -2664,7 +4692,7 @@ export interface IContractActivity {
     /** Description of this activity */
     description: string;
     /** User who created this activity */
-    createdBy: User;
+    createdBy?: User;
     contractId: number;
     /** Contract related to this activity */
     contract: Contract;
@@ -2691,7 +4719,7 @@ export class ProductActivity implements IProductActivity {
     /** Description of this activity */
     description!: string;
     /** User who created this activity */
-    createdBy!: User;
+    createdBy?: User;
     productId!: number;
     /** Product related to this activity */
     product!: Product;
@@ -2704,7 +4732,6 @@ export class ProductActivity implements IProductActivity {
             }
         }
         if (!data) {
-            this.createdBy = new User();
             this.product = new Product();
         }
     }
@@ -2719,7 +4746,7 @@ export class ProductActivity implements IProductActivity {
             this.type = _data["type"];
             this.subType = _data["subType"];
             this.description = _data["description"];
-            this.createdBy = _data["createdBy"] ? User.fromJS(_data["createdBy"]) : new User();
+            this.createdBy = _data["createdBy"] ? User.fromJS(_data["createdBy"]) : <any>undefined;
             this.productId = _data["productId"];
             this.product = _data["product"] ? Product.fromJS(_data["product"]) : new Product();
         }
@@ -2767,7 +4794,7 @@ export interface IProductActivity {
     /** Description of this activity */
     description: string;
     /** User who created this activity */
-    createdBy: User;
+    createdBy?: User;
     productId: number;
     /** Product related to this activity */
     product: Product;
@@ -2824,14 +4851,13 @@ export interface IProductListResponse {
     count: number;
 }
 
-export class ApiError implements IApiError {
-    name!: string;
-    message!: string;
-    stack?: string;
-    /** The activity code of the error, as defined by HTTP activity codes. */
-    statusCode!: number;
+export class ProductSummary implements IProductSummary {
+    id!: number;
+    nameDutch!: string;
+    nameEnglish!: string;
+    targetPrice!: number;
 
-    constructor(data?: IApiError) {
+    constructor(data?: IProductSummary) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -2842,77 +4868,35 @@ export class ApiError implements IApiError {
 
     init(_data?: any) {
         if (_data) {
-            this.name = _data["name"];
-            this.message = _data["message"];
-            this.stack = _data["stack"];
-            this.statusCode = _data["statusCode"];
+            this.id = _data["id"];
+            this.nameDutch = _data["nameDutch"];
+            this.nameEnglish = _data["nameEnglish"];
+            this.targetPrice = _data["targetPrice"];
         }
     }
 
-    static fromJS(data: any): ApiError {
+    static fromJS(data: any): ProductSummary {
         data = typeof data === 'object' ? data : {};
-        let result = new ApiError();
+        let result = new ProductSummary();
         result.init(data);
         return result;
     }
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["name"] = this.name;
-        data["message"] = this.message;
-        data["stack"] = this.stack;
-        data["statusCode"] = this.statusCode;
+        data["id"] = this.id;
+        data["nameDutch"] = this.nameDutch;
+        data["nameEnglish"] = this.nameEnglish;
+        data["targetPrice"] = this.targetPrice;
         return data; 
     }
 }
 
-export interface IApiError {
-    name: string;
-    message: string;
-    stack?: string;
-    /** The activity code of the error, as defined by HTTP activity codes. */
-    statusCode: number;
-}
-
-/** WrappedApiError represents the type returned by the server. */
-export class WrappedApiError implements IWrappedApiError {
-    error!: ApiError;
-
-    constructor(data?: IWrappedApiError) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-        if (!data) {
-            this.error = new ApiError();
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.error = _data["error"] ? ApiError.fromJS(_data["error"]) : new ApiError();
-        }
-    }
-
-    static fromJS(data: any): WrappedApiError {
-        data = typeof data === 'object' ? data : {};
-        let result = new WrappedApiError();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["error"] = this.error ? this.error.toJSON() : <any>undefined;
-        return data; 
-    }
-}
-
-/** WrappedApiError represents the type returned by the server. */
-export interface IWrappedApiError {
-    error: ApiError;
+export interface IProductSummary {
+    id: number;
+    nameDutch: string;
+    nameEnglish: string;
+    targetPrice: number;
 }
 
 export class ProductParams implements IProductParams {
@@ -3051,6 +5035,226 @@ export interface IPartial_ProductParams_ {
     contractTextEnglish?: string;
     deliverySpecificationDutch?: string;
     deliverySpecificationEnglish?: string;
+}
+
+export class BaseActivity implements IBaseActivity {
+    /** Incremental ID of the entity */
+    id!: number;
+    /** Date at which this entity has been created */
+    createdAt!: Date;
+    /** Date at which this entity has last been updated */
+    updatedAt!: Date;
+    /** If this entity has been soft-deleted, this is the date at which the entity has been deleted */
+    deletedAt?: Date;
+    /** Version number of this entity */
+    version!: number;
+    /** Type of the activity (status or comment) */
+    type!: ActivityType;
+    /** Subtype of this activity, only used when the type = "STATUS" */
+    subType?: string;
+    /** Description of this activity */
+    description!: string;
+    /** User who created this activity */
+    createdBy?: User;
+
+    constructor(data?: IBaseActivity) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
+            this.updatedAt = _data["updatedAt"] ? new Date(_data["updatedAt"].toString()) : <any>undefined;
+            this.deletedAt = _data["deletedAt"] ? new Date(_data["deletedAt"].toString()) : <any>undefined;
+            this.version = _data["version"];
+            this.type = _data["type"];
+            this.subType = _data["subType"];
+            this.description = _data["description"];
+            this.createdBy = _data["createdBy"] ? User.fromJS(_data["createdBy"]) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): BaseActivity {
+        data = typeof data === 'object' ? data : {};
+        let result = new BaseActivity();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
+        data["updatedAt"] = this.updatedAt ? this.updatedAt.toISOString() : <any>undefined;
+        data["deletedAt"] = this.deletedAt ? this.deletedAt.toISOString() : <any>undefined;
+        data["version"] = this.version;
+        data["type"] = this.type;
+        data["subType"] = this.subType;
+        data["description"] = this.description;
+        data["createdBy"] = this.createdBy ? this.createdBy.toJSON() : <any>undefined;
+        return data; 
+    }
+}
+
+export interface IBaseActivity {
+    /** Incremental ID of the entity */
+    id: number;
+    /** Date at which this entity has been created */
+    createdAt: Date;
+    /** Date at which this entity has last been updated */
+    updatedAt: Date;
+    /** If this entity has been soft-deleted, this is the date at which the entity has been deleted */
+    deletedAt?: Date;
+    /** Version number of this entity */
+    version: number;
+    /** Type of the activity (status or comment) */
+    type: ActivityType;
+    /** Subtype of this activity, only used when the type = "STATUS" */
+    subType?: string;
+    /** Description of this activity */
+    description: string;
+    /** User who created this activity */
+    createdBy?: User;
+}
+
+export class StatusParams implements IStatusParams {
+    description!: string;
+    relatedEntityId?: number;
+    createdById!: number;
+    subtype!: string;
+
+    constructor(data?: IStatusParams) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.description = _data["description"];
+            this.relatedEntityId = _data["relatedEntityId"];
+            this.createdById = _data["createdById"];
+            this.subtype = _data["subtype"];
+        }
+    }
+
+    static fromJS(data: any): StatusParams {
+        data = typeof data === 'object' ? data : {};
+        let result = new StatusParams();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["description"] = this.description;
+        data["relatedEntityId"] = this.relatedEntityId;
+        data["createdById"] = this.createdById;
+        data["subtype"] = this.subtype;
+        return data; 
+    }
+}
+
+export interface IStatusParams {
+    description: string;
+    relatedEntityId?: number;
+    createdById: number;
+    subtype: string;
+}
+
+export class CommentParams implements ICommentParams {
+    description!: string;
+    relatedEntityId?: number;
+    createdById!: number;
+
+    constructor(data?: ICommentParams) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.description = _data["description"];
+            this.relatedEntityId = _data["relatedEntityId"];
+            this.createdById = _data["createdById"];
+        }
+    }
+
+    static fromJS(data: any): CommentParams {
+        data = typeof data === 'object' ? data : {};
+        let result = new CommentParams();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["description"] = this.description;
+        data["relatedEntityId"] = this.relatedEntityId;
+        data["createdById"] = this.createdById;
+        return data; 
+    }
+}
+
+export interface ICommentParams {
+    description: string;
+    relatedEntityId?: number;
+    createdById: number;
+}
+
+/** Make all properties in T optional */
+export class Partial_UpdateActivityParams_ implements IPartial_UpdateActivityParams_ {
+    description?: string;
+    relatedEntityId?: number;
+
+    constructor(data?: IPartial_UpdateActivityParams_) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.description = _data["description"];
+            this.relatedEntityId = _data["relatedEntityId"];
+        }
+    }
+
+    static fromJS(data: any): Partial_UpdateActivityParams_ {
+        data = typeof data === 'object' ? data : {};
+        let result = new Partial_UpdateActivityParams_();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["description"] = this.description;
+        data["relatedEntityId"] = this.relatedEntityId;
+        return data; 
+    }
+}
+
+/** Make all properties in T optional */
+export interface IPartial_UpdateActivityParams_ {
+    description?: string;
+    relatedEntityId?: number;
 }
 
 export class CompanyListResponse implements ICompanyListResponse {
@@ -3365,6 +5569,46 @@ export interface IContractListResponse {
     count: number;
 }
 
+export class ContractSummary implements IContractSummary {
+    id!: number;
+    title!: string;
+
+    constructor(data?: IContractSummary) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.title = _data["title"];
+        }
+    }
+
+    static fromJS(data: any): ContractSummary {
+        data = typeof data === 'object' ? data : {};
+        let result = new ContractSummary();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["title"] = this.title;
+        return data; 
+    }
+}
+
+export interface IContractSummary {
+    id: number;
+    title: string;
+}
+
 export class ContractParams implements IContractParams {
     title!: string;
     companyId!: number;
@@ -3604,6 +5848,46 @@ export interface IInvoiceListResponse {
     count: number;
 }
 
+export class InvoiceSummary implements IInvoiceSummary {
+    id!: number;
+    companyName!: string;
+
+    constructor(data?: IInvoiceSummary) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.companyName = _data["companyName"];
+        }
+    }
+
+    static fromJS(data: any): InvoiceSummary {
+        data = typeof data === 'object' ? data : {};
+        let result = new InvoiceSummary();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["companyName"] = this.companyName;
+        return data; 
+    }
+}
+
+export interface IInvoiceSummary {
+    id: number;
+    companyName: string;
+}
+
 export class InvoiceParams implements IInvoiceParams {
     companyId!: number;
     productInstances!: ProductInstance[];
@@ -3777,6 +6061,7 @@ export class ContactSummary implements IContactSummary {
     firstName!: string;
     middleName!: string;
     lastName!: string;
+    companyName!: string;
 
     constructor(data?: IContactSummary) {
         if (data) {
@@ -3793,6 +6078,7 @@ export class ContactSummary implements IContactSummary {
             this.firstName = _data["firstName"];
             this.middleName = _data["middleName"];
             this.lastName = _data["lastName"];
+            this.companyName = _data["companyName"];
         }
     }
 
@@ -3809,6 +6095,7 @@ export class ContactSummary implements IContactSummary {
         data["firstName"] = this.firstName;
         data["middleName"] = this.middleName;
         data["lastName"] = this.lastName;
+        data["companyName"] = this.companyName;
         return data; 
     }
 }
@@ -3818,18 +6105,19 @@ export interface IContactSummary {
     firstName: string;
     middleName: string;
     lastName: string;
+    companyName: string;
 }
 
 export class ContactParams implements IContactParams {
     gender!: Gender;
     firstName!: string;
-    middleName?: string;
+    middleName!: string;
     lastName!: string;
-    email?: string;
-    telephone?: string;
-    comments?: string;
+    email!: string;
+    telephone!: string;
+    comments!: string;
     companyId!: number;
-    function?: ContactFunction;
+    function!: ContactFunction;
 
     constructor(data?: IContactParams) {
         if (data) {
@@ -3879,13 +6167,13 @@ export class ContactParams implements IContactParams {
 export interface IContactParams {
     gender: Gender;
     firstName: string;
-    middleName?: string;
+    middleName: string;
     lastName: string;
-    email?: string;
-    telephone?: string;
-    comments?: string;
+    email: string;
+    telephone: string;
+    comments: string;
     companyId: number;
-    function?: ContactFunction;
+    function: ContactFunction;
 }
 
 /** Make all properties in T optional */
@@ -3958,6 +6246,219 @@ export interface IPartial_ContactParams_ {
     function?: ContactFunction;
 }
 
+export class UserListResponse implements IUserListResponse {
+    list!: User[];
+    count!: number;
+
+    constructor(data?: IUserListResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+        if (!data) {
+            this.list = [];
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["list"])) {
+                this.list = [] as any;
+                for (let item of _data["list"])
+                    this.list!.push(User.fromJS(item));
+            }
+            this.count = _data["count"];
+        }
+    }
+
+    static fromJS(data: any): UserListResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new UserListResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.list)) {
+            data["list"] = [];
+            for (let item of this.list)
+                data["list"].push(item.toJSON());
+        }
+        data["count"] = this.count;
+        return data; 
+    }
+}
+
+export interface IUserListResponse {
+    list: User[];
+    count: number;
+}
+
+export class UserSummary implements IUserSummary {
+    id!: number;
+    firstName!: string;
+    middleName!: string;
+    lastName!: string;
+    email!: string;
+
+    constructor(data?: IUserSummary) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.firstName = _data["firstName"];
+            this.middleName = _data["middleName"];
+            this.lastName = _data["lastName"];
+            this.email = _data["email"];
+        }
+    }
+
+    static fromJS(data: any): UserSummary {
+        data = typeof data === 'object' ? data : {};
+        let result = new UserSummary();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["firstName"] = this.firstName;
+        data["middleName"] = this.middleName;
+        data["lastName"] = this.lastName;
+        data["email"] = this.email;
+        return data; 
+    }
+}
+
+export interface IUserSummary {
+    id: number;
+    firstName: string;
+    middleName: string;
+    lastName: string;
+    email: string;
+}
+
+/** Make all properties in T optional */
+export class Partial_UserParams_ implements IPartial_UserParams_ {
+    email?: string;
+    firstName?: string;
+    middleName?: string;
+    lastName?: string;
+    gender?: Gender;
+    comment?: string;
+    roles?: Roles[];
+
+    constructor(data?: IPartial_UserParams_) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.email = _data["email"];
+            this.firstName = _data["firstName"];
+            this.middleName = _data["middleName"];
+            this.lastName = _data["lastName"];
+            this.gender = _data["gender"];
+            this.comment = _data["comment"];
+            if (Array.isArray(_data["roles"])) {
+                this.roles = [] as any;
+                for (let item of _data["roles"])
+                    this.roles!.push(item);
+            }
+        }
+    }
+
+    static fromJS(data: any): Partial_UserParams_ {
+        data = typeof data === 'object' ? data : {};
+        let result = new Partial_UserParams_();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["email"] = this.email;
+        data["firstName"] = this.firstName;
+        data["middleName"] = this.middleName;
+        data["lastName"] = this.lastName;
+        data["gender"] = this.gender;
+        data["comment"] = this.comment;
+        if (Array.isArray(this.roles)) {
+            data["roles"] = [];
+            for (let item of this.roles)
+                data["roles"].push(item);
+        }
+        return data; 
+    }
+}
+
+/** Make all properties in T optional */
+export interface IPartial_UserParams_ {
+    email?: string;
+    firstName?: string;
+    middleName?: string;
+    lastName?: string;
+    gender?: Gender;
+    comment?: string;
+    roles?: Roles[];
+}
+
+export class LoginParams implements ILoginParams {
+    email?: string;
+    password?: string;
+
+    constructor(data?: ILoginParams) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.email = _data["email"];
+            this.password = _data["password"];
+        }
+    }
+
+    static fromJS(data: any): LoginParams {
+        data = typeof data === 'object' ? data : {};
+        let result = new LoginParams();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["email"] = this.email;
+        data["password"] = this.password;
+        return data; 
+    }
+}
+
+export interface ILoginParams {
+    email?: string;
+    password?: string;
+}
+
 export enum Dir {
     ASC = "ASC",
     DESC = "DESC",
@@ -3983,60 +6484,9 @@ export enum Dir5 {
     DESC = "DESC",
 }
 
-export class Admin implements IAdmin {
-    lastName!: string;
-    middleName!: string;
-    firstName!: string;
-    gender!: Gender;
-    password!: string;
-    email!: string;
-
-    constructor(data?: IAdmin) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.lastName = _data["lastName"];
-            this.middleName = _data["middleName"];
-            this.firstName = _data["firstName"];
-            this.gender = _data["gender"];
-            this.password = _data["password"];
-            this.email = _data["email"];
-        }
-    }
-
-    static fromJS(data: any): Admin {
-        data = typeof data === 'object' ? data : {};
-        let result = new Admin();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["lastName"] = this.lastName;
-        data["middleName"] = this.middleName;
-        data["firstName"] = this.firstName;
-        data["gender"] = this.gender;
-        data["password"] = this.password;
-        data["email"] = this.email;
-        return data; 
-    }
-}
-
-export interface IAdmin {
-    lastName: string;
-    middleName: string;
-    firstName: string;
-    gender: Gender;
-    password: string;
-    email: string;
+export enum Dir6 {
+    ASC = "ASC",
+    DESC = "DESC",
 }
 
 export class ApiException extends Error {

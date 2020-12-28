@@ -17,5 +17,13 @@ form.ui.form {
     textarea {
       resize: none;
     }
+
+    .dropdown {
+      border: none;
+
+      .icon {
+        opacity: 0;
+      }
+    }
   }
 }

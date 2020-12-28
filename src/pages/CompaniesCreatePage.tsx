@@ -6,11 +6,13 @@ import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { Company, CompanyStatus } from '../clients/server.generated';
-import { fetchSingleCompany, clearSingleCompany } from '../stores/company/actionCreators';
+import { clearSingle } from '../stores/single/actionCreators';
 import { RootState } from '../stores/store';
 import CompanyProps from '../components/company/CompanyProps';
 import ResourceStatus from '../stores/resourceStatus';
 import AlertContainer from '../components/alerts/AlertContainer';
+import { getSingle } from '../stores/single/selectors';
+import { SingleEntities } from '../stores/single/single';
 
 interface Props extends RouteComponentProps {
   status: ResourceStatus;
@@ -65,12 +67,12 @@ class CompaniesCreatePage extends React.Component<Props> {
 
 const mapStateToProps = (state: RootState) => {
   return {
-    status: state.company.singleStatus,
+    status: getSingle<Company>(state, SingleEntities.Company).status,
   };
 };
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
-  clearCompany: () => dispatch(clearSingleCompany()),
+  clearCompany: () => dispatch(clearSingle(SingleEntities.Company)),
 });
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(CompaniesCreatePage));

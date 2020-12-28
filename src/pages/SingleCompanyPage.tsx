@@ -7,12 +7,14 @@ import {
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import { Company } from '../clients/server.generated';
-import { fetchSingleCompany, clearSingleCompany } from '../stores/company/actionCreators';
+import { fetchSingle, clearSingle } from '../stores/single/actionCreators';
 import { RootState } from '../stores/store';
 import CompanyProps from '../components/company/CompanyProps';
 import ResourceStatus from '../stores/resourceStatus';
 import CompanySummary from '../components/company/CompanySummary';
 import CompanyContactList from '../components/company/CompanyContactList';
+import { getSingle } from '../stores/single/selectors';
+import { SingleEntities } from '../stores/single/single';
 
 interface Props extends RouteComponentProps<{ companyId: string }> {
   company: Company | undefined;
@@ -70,14 +72,14 @@ class SingleCompanyPage extends React.Component<Props> {
 
 const mapStateToProps = (state: RootState) => {
   return {
-    company: state.company.single,
-    status: state.company.singleStatus,
+    company: getSingle<Company>(state, SingleEntities.Company).data,
+    status: getSingle<Company>(state, SingleEntities.Company).status,
   };
 };
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
-  fetchCompany: (id: number) => dispatch(fetchSingleCompany(id)),
-  clearCompany: () => dispatch(clearSingleCompany()),
+  fetchCompany: (id: number) => dispatch(fetchSingle(SingleEntities.Company, id)),
+  clearCompany: () => dispatch(clearSingle(SingleEntities.Company)),
 });
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(SingleCompanyPage));

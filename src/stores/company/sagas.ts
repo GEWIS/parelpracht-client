@@ -2,7 +2,7 @@ import {
   call, put, select, throttle,
 } from 'redux-saga/effects';
 import {
-  Client, Company, Dir2,
+  Client, Company, CompanyParams, Dir2,
 } from '../../clients/server.generated';
 import { takeEveryWithErrorHandling } from '../errorHandling';
 import { setSummaries } from '../summaries/actionCreators';
@@ -14,12 +14,12 @@ import { getTable } from '../tables/selectors';
 import { Tables } from '../tables/tables';
 import { TableState } from '../tables/tableState';
 import {
-  setSingleCompany, errorSingleCompany,
-} from './actionCreators';
+  setSingle, errorSingle,
+} from '../single/actionCreators';
 import {
-  CompanyActionType, CompaniesCreateSingleAction, CompaniesFetchSingleAction,
-  CompaniesSaveSingleAction,
-} from './actions';
+  singleActionPattern, SingleActionType, SingleCreateAction, SingleFetchAction, SingleSaveAction,
+} from '../single/actions';
+import { SingleEntities } from '../single/single';
 
 function* fetchCompanies() {
   const client = new Client();
@@ -44,45 +44,49 @@ export function* fetchCompanySummaries() {
   yield put(setSummaries(SummaryCollections.Companies, summaries));
 }
 
-function* fetchSingleCompany(action: CompaniesFetchSingleAction) {
+function* fetchSingleCompany(action: SingleFetchAction<SingleEntities.Company>) {
   const client = new Client();
   const company = yield call([client, client.getCompany], action.id);
-  yield put(setSingleCompany(company));
+  yield put(setSingle(SingleEntities.Company, company));
 }
 
-function* saveSingleCompany(action: CompaniesSaveSingleAction) {
+function* saveSingleCompany(
+  action: SingleSaveAction<SingleEntities.Company, CompanyParams>,
+) {
   const client = new Client();
-  yield call([client, client.updateCompany], action.id, action.company);
+  yield call([client, client.updateCompany], action.id, action.data);
   const company = yield call([client, client.getCompany], action.id);
-  yield put(setSingleCompany(company));
+  yield put(setSingle(SingleEntities.Company, company));
 }
 
 function* errorSaveSingleCompany() {
-  yield put(errorSingleCompany());
+  yield put(errorSingle(SingleEntities.Company));
 }
 
 function* watchSaveSingleCompany() {
   yield takeEveryWithErrorHandling(
-    CompanyActionType.SaveSingle,
+    singleActionPattern(SingleEntities.Company, SingleActionType.Save),
     saveSingleCompany,
     { onErrorSaga: errorSaveSingleCompany },
   );
 }
 
-function* createSingleCompany(action: CompaniesCreateSingleAction) {
+function* createSingleCompany(
+  action: SingleCreateAction<SingleEntities.Company, CompanyParams>,
+) {
   const client = new Client();
-  const company = yield call([client, client.createCompany], action.company);
-  yield put(setSingleCompany(company));
+  const company = yield call([client, client.createCompany], action.data);
+  yield put(setSingle(SingleEntities.Company, company));
   yield put(fetchTable(Tables.Companies));
 }
 
 function* errorCreateSingleCompany() {
-  yield put(errorSingleCompany());
+  yield put(errorSingle(SingleEntities.Company));
 }
 
 function* watchCreateSingleCompany() {
   yield takeEveryWithErrorHandling(
-    CompanyActionType.CreateSingle,
+    singleActionPattern(SingleEntities.Company, SingleActionType.Create),
     createSingleCompany,
     { onErrorSaga: errorCreateSingleCompany },
   );
@@ -106,7 +110,10 @@ export default [
     );
   },
   function* watchFetchSingleCompany() {
-    yield takeEveryWithErrorHandling(CompanyActionType.FetchSingle, fetchSingleCompany);
+    yield takeEveryWithErrorHandling(
+      singleActionPattern(SingleEntities.Company, SingleActionType.Fetch),
+      fetchSingleCompany,
+    );
   },
   watchSaveSingleCompany,
   watchCreateSingleCompany,

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, Icon } from 'semantic-ui-react';
-import ResourceStatus from '../../stores/resourceStatus';
+import ResourceStatus from '../stores/resourceStatus';
 
 interface Props {
   editing: boolean;
@@ -11,7 +11,7 @@ interface Props {
   save: () => void;
 }
 
-function ProductPropsButtons(props: Props) {
+function PropsButtons(props: Props) {
   const {
     editing, status, cancel, edit, save,
   } = props;
@@ -65,4 +65,4 @@ function ProductPropsButtons(props: Props) {
   }
 }
 
-export default ProductPropsButtons;
+export default PropsButtons;
