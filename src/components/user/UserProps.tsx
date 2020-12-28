@@ -43,6 +43,7 @@ interface State {
   roleGeneral: boolean;
   roleSignee: boolean;
   roleFinancial: boolean;
+  roleAudit: boolean;
   roleAdmin: boolean;
 }
 
@@ -77,6 +78,7 @@ class UserProps extends React.Component<Props, State> {
       roleGeneral: user.roles.find((r) => r.name === Roles.GENERAL) !== undefined,
       roleSignee: user.roles.find((r) => r.name === Roles.SIGNEE) !== undefined,
       roleFinancial: user.roles.find((r) => r.name === Roles.FINANCIAL) !== undefined,
+      roleAudit: user.roles.find((r) => r.name === Roles.AUDIT) !== undefined,
       roleAdmin: user.roles.find((r) => r.name === Roles.ADMIN) !== undefined,
     };
   };
@@ -94,6 +96,7 @@ class UserProps extends React.Component<Props, State> {
         this.state.roleGeneral ? Roles.GENERAL : undefined,
         this.state.roleSignee ? Roles.SIGNEE : undefined,
         this.state.roleFinancial ? Roles.FINANCIAL : undefined,
+        this.state.roleAudit ? Roles.AUDIT : undefined,
         this.state.roleAdmin ? Roles.ADMIN : undefined,
       ]),
     });
@@ -129,7 +132,7 @@ class UserProps extends React.Component<Props, State> {
       email,
       comment,
 
-      roleGeneral, roleSignee, roleAdmin, roleFinancial,
+      roleGeneral, roleSignee, roleAdmin, roleAudit, roleFinancial,
     } = this.state;
 
     return (
@@ -258,6 +261,20 @@ class UserProps extends React.Component<Props, State> {
                   checked={roleGeneral}
                   onChange={(e, data) => this.setState({
                     roleGeneral: data.checked!,
+                  })}
+                />
+              </Form.Field>
+              <Form.Field disabled={!editing}>
+                {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
+                <label htmlFor="form-check-role-audit">
+                  Audit
+                </label>
+                <Checkbox
+                  toggle
+                  id="form-check-role-audit"
+                  checked={roleAudit}
+                  onChange={(e, data) => this.setState({
+                    roleAudit: data.checked!,
                   })}
                 />
               </Form.Field>
