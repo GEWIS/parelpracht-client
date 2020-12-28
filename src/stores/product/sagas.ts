@@ -4,12 +4,16 @@ import {
 import {
   Client, Dir, Product, ProductParams,
 } from '../../clients/server.generated';
+import { fetchCompanySummaries } from '../company/sagas';
 import { takeEveryWithErrorHandling } from '../errorHandling';
 import { errorSingle, setSingle } from '../single/actionCreators';
 import {
   singleActionPattern, SingleActionType, SingleCreateAction, SingleFetchAction, SingleSaveAction,
 } from '../single/actions';
 import { SingleEntities } from '../single/single';
+import { setSummaries } from '../summaries/actionCreators';
+import { summariesActionPattern, SummariesActionType } from '../summaries/actions';
+import { SummaryCollections } from '../summaries/summaries';
 import { fetchTable, setTable } from '../tables/actionCreators';
 import { tableActionPattern, TableActionType } from '../tables/actions';
 import { getTable } from '../tables/selectors';
@@ -31,6 +35,12 @@ function* fetchProducts() {
     skip, take, search,
   );
   yield put(setTable(Tables.Products, list, count));
+}
+
+export function* fetchProductSummaries() {
+  const client = new Client();
+  const summaries = yield call([client, client.getProductSummaries]);
+  yield put(setSummaries(SummaryCollections.Products, summaries));
 }
 
 function* fetchSingleProduct(action: SingleFetchAction<SingleEntities.Product>) {
@@ -87,6 +97,15 @@ export default [
       500,
       tableActionPattern(Tables.Products, TableActionType.Fetch),
       fetchProducts,
+    );
+  },
+  function* watchFetchProductSummaries() {
+    yield takeEveryWithErrorHandling(
+      summariesActionPattern(
+        SummaryCollections.Products,
+        SummariesActionType.Fetch,
+      ),
+      fetchCompanySummaries,
     );
   },
   function* watchFetchSingleProduct() {

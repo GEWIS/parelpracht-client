@@ -4,12 +4,16 @@ import {
 import {
   Client, Dir4, Invoice, InvoiceParams,
 } from '../../clients/server.generated';
+import { fetchCompanySummaries } from '../company/sagas';
 import { takeEveryWithErrorHandling } from '../errorHandling';
 import { errorSingle, setSingle } from '../single/actionCreators';
 import {
   singleActionPattern, SingleActionType, SingleCreateAction, SingleFetchAction, SingleSaveAction,
 } from '../single/actions';
 import { SingleEntities } from '../single/single';
+import { setSummaries } from '../summaries/actionCreators';
+import { summariesActionPattern, SummariesActionType } from '../summaries/actions';
+import { SummaryCollections } from '../summaries/summaries';
 import { fetchTable, setTable } from '../tables/actionCreators';
 import { tableActionPattern, TableActionType } from '../tables/actions';
 import { getTable } from '../tables/selectors';
@@ -31,6 +35,12 @@ function* fetchInvoices() {
     skip, take, search,
   );
   yield put(setTable(Tables.Invoices, list, count));
+}
+
+export function* fetchInvoiceSummaries() {
+  const client = new Client();
+  const summaries = yield call([client, client.getInvoiceSummaries]);
+  yield put(setSummaries(SummaryCollections.Invoices, summaries));
 }
 
 function* fetchSingleInvoice(action: SingleFetchAction<SingleEntities.Invoice>) {
@@ -87,6 +97,15 @@ export default [
       500,
       tableActionPattern(Tables.Invoices, TableActionType.Fetch),
       fetchInvoices,
+    );
+  },
+  function* watchFetchInvoiceSummaries() {
+    yield takeEveryWithErrorHandling(
+      summariesActionPattern(
+        SummaryCollections.Invoices,
+        SummariesActionType.Fetch,
+      ),
+      fetchCompanySummaries,
     );
   },
   function* watchFetchSingleInvoice() {

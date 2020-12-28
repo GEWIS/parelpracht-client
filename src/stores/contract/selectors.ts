@@ -1,5 +1,7 @@
-import { Contract } from '../../clients/server.generated';
+import { Contract, ContractSummary } from '../../clients/server.generated';
 import { RootState } from '../store';
+import { getSummary } from '../summaries/selectors';
+import { SummaryCollections } from '../summaries/summaries';
 import { getTable } from '../tables/selectors';
 import { Tables } from '../tables/tables';
 
@@ -12,4 +14,9 @@ export function sortColumn(state: RootState): string {
     case 'poNumber': return 'PO Number';
     default: return 'unknown';
   }
+}
+export function getContract(state: RootState, id: number): string {
+  return getSummary<ContractSummary>(
+    state, SummaryCollections.Contracts, id,
+  )?.title ?? '...';
 }

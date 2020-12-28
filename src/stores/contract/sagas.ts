@@ -4,12 +4,16 @@ import {
 import {
   Client, Dir3, Contract, ContractParams,
 } from '../../clients/server.generated';
+import { fetchCompanySummaries } from '../company/sagas';
 import { takeEveryWithErrorHandling } from '../errorHandling';
 import { errorSingle, setSingle } from '../single/actionCreators';
 import {
   singleActionPattern, SingleActionType, SingleCreateAction, SingleFetchAction, SingleSaveAction,
 } from '../single/actions';
 import { SingleEntities } from '../single/single';
+import { setSummaries } from '../summaries/actionCreators';
+import { summariesActionPattern, SummariesActionType } from '../summaries/actions';
+import { SummaryCollections } from '../summaries/summaries';
 import { fetchTable, setTable } from '../tables/actionCreators';
 import { tableActionPattern, TableActionType } from '../tables/actions';
 import { getTable } from '../tables/selectors';
@@ -31,6 +35,12 @@ function* fetchContracts() {
     skip, take, search,
   );
   yield put(setTable(Tables.Contracts, list, count));
+}
+
+export function* fetchContractSummaries() {
+  const client = new Client();
+  const summaries = yield call([client, client.getContractSummaries]);
+  yield put(setSummaries(SummaryCollections.Contracts, summaries));
 }
 
 function* fetchSingleContract(action: SingleFetchAction<SingleEntities.Contract>) {
@@ -87,6 +97,15 @@ export default [
       500,
       tableActionPattern(Tables.Contracts, TableActionType.Fetch),
       fetchContracts,
+    );
+  },
+  function* watchFetchContractSummaries() {
+    yield takeEveryWithErrorHandling(
+      summariesActionPattern(
+        SummaryCollections.Contracts,
+        SummariesActionType.Fetch,
+      ),
+      fetchCompanySummaries,
     );
   },
   function* watchFetchSingleContract() {
