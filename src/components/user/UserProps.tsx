@@ -39,6 +39,7 @@ interface State {
   gender: Gender;
   email: string;
   comment: string;
+  function: string;
 
   roleGeneral: boolean;
   roleSignee: boolean;
@@ -71,6 +72,7 @@ class UserProps extends React.Component<Props, State> {
       firstName: user.firstName,
       middleName: user.middleName,
       lastName: user.lastName,
+      function: user.function,
       gender: user.gender,
       email: user.email,
       comment: user.comment ?? '',
@@ -91,6 +93,7 @@ class UserProps extends React.Component<Props, State> {
       gender: this.state.gender,
       email: this.state.email,
       comment: this.state.comment,
+      function: this.state.function,
 
       roles: _.compact([
         this.state.roleGeneral ? Roles.GENERAL : undefined,

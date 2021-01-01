@@ -42,6 +42,7 @@ class ProductCreatePage extends React.Component<Props> {
       targetPrice: 0,
       status: ProductStatus.ACTIVE,
       description: '',
+      categoryId: 1,
       contractTextDutch: '',
       contractTextEnglish: '',
       deliverySpecificationDutch: '',
