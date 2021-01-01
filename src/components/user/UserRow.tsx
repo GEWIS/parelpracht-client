@@ -17,6 +17,7 @@ function UserRow(props: Props) {
     roleGeneral: user.roles.find((r) => r.name === Roles.GENERAL) !== undefined,
     roleSignee: user.roles.find((r) => r.name === Roles.SIGNEE) !== undefined,
     roleFinancial: user.roles.find((r) => r.name === Roles.FINANCIAL) !== undefined,
+    roleAudit: user.roles.find((r) => r.name === Roles.AUDIT) !== undefined,
     roleAdmin: user.roles.find((r) => r.name === Roles.ADMIN) !== undefined,
   };
 
@@ -46,6 +47,12 @@ function UserRow(props: Props) {
         <Checkbox
           toggle
           checked={permissions.roleGeneral}
+        />
+      </Table.Cell>
+      <Table.Cell textAlign="center">
+        <Checkbox
+          toggle
+          checked={permissions.roleAudit}
         />
       </Table.Cell>
       <Table.Cell textAlign="center">

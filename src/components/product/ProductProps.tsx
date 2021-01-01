@@ -35,6 +35,7 @@ interface State {
   targetPrice: string;
   status: ProductStatus;
   description: string;
+  categoryId: number;
   contractTextDutch: string;
   contractTextEnglish: string;
   deliverySpecDutch: string | undefined;
@@ -67,6 +68,7 @@ class ProductProps extends React.Component<Props, State> {
       targetPrice: formatPrice(product.targetPrice),
       status: product.status,
       description: product.description,
+      categoryId: product.categoryId,
       contractTextDutch: product.contractTextDutch,
       contractTextEnglish: product.contractTextEnglish,
       deliverySpecDutch: product.deliverySpecificationDutch,
@@ -81,6 +83,7 @@ class ProductProps extends React.Component<Props, State> {
       targetPrice: Math.round(Number.parseFloat(this.state.targetPrice) * 100),
       status: this.state.status,
       description: this.state.description,
+      categoryId: this.state.categoryId,
       contractTextDutch: this.state.contractTextDutch,
       contractTextEnglish: this.state.contractTextEnglish,
       deliverySpecificationEnglish: this.state.deliverySpecEnglish,

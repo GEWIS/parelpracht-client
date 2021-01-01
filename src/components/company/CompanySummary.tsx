@@ -49,7 +49,7 @@ function CompanySummary(props: Props) {
         <Grid columns={4}>
           <Grid.Column>
             <h5>Description</h5>
-            <p>{company.description}</p>
+            <p>{company.comments}</p>
           </Grid.Column>
           <Grid.Column>
             <h5>Status</h5>

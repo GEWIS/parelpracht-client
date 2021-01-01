@@ -60,7 +60,7 @@ class CompanyProps extends React.Component<Props, State> {
     const { company } = props;
     return {
       name: company.name,
-      description: company.description,
+      description: company.comments,
       phoneNumber: company.phoneNumber,
       status: company.status,
       addressStreet: company.addressStreet,

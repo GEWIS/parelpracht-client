@@ -64,6 +64,9 @@ function UsersTable({
               General
             </Table.HeaderCell>
             <Table.HeaderCell width={2}>
+              Audit
+            </Table.HeaderCell>
+            <Table.HeaderCell width={2}>
               Admin
             </Table.HeaderCell>
           </Table.Row>
