@@ -24,6 +24,7 @@ interface Props extends SelfProps {
   filterOn: boolean;
 
   setFilter: (values: string[]) => void;
+  clearFilter: () => void;
   refresh: () => void;
 }
 
@@ -74,7 +75,8 @@ function ColumnFilter(props: Props) {
         />
       </Modal.Content>
       <Modal.Actions>
-        <Button primary onClick={close}>Close</Button>
+        <Button onClick={() => { props.clearFilter(); close(); }}>Clear</Button>
+        <Button primary onClick={close}>Confirm</Button>
       </Modal.Actions>
     </Modal>
   );
@@ -89,6 +91,10 @@ const mapDispatchToProps = (dispatch: Dispatch, props: SelfProps) => ({
   setFilter: (values: string[]) => dispatch(setFilterTable(
     props.table,
     { column: props.column, values },
+  )),
+  clearFilter: () => dispatch(setFilterTable(
+    props.table,
+    { column: props.column, values: [] },
   )),
   refresh: () => dispatch(fetchTable(props.table)),
 });
