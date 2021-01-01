@@ -2,7 +2,7 @@ import {
   call, put, select, throttle,
 } from 'redux-saga/effects';
 import {
-  Client, Dir5, Contact, ContactParams,
+  Client, Contact, ContactParams, ListOrFilter, ListParams, ListSorting, SortDirection,
 } from '../../clients/server.generated';
 import { takeEveryWithErrorHandling } from '../errorHandling';
 import { errorSingle, setSingle } from '../single/actionCreators';
@@ -26,12 +26,21 @@ function* fetchContacts() {
   const {
     sortColumn, sortDirection,
     take, skip,
-    search,
+    search, filters,
   } = state;
 
   const { list, count } = yield call(
-    [client, client.getAllContacts], sortColumn, sortDirection as Dir5,
-    skip, take, search,
+    [client, client.getAllContacts],
+    new ListParams({
+      sorting: new ListSorting({
+        column: sortColumn,
+        direction: sortDirection as SortDirection,
+      }),
+      filters: filters.map((f) => new ListOrFilter(f)),
+      skip,
+      take,
+      search,
+    }),
   );
   yield put(setTable(Tables.Contacts, list, count));
 }

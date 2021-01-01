@@ -2,7 +2,7 @@ import {
   call, put, select, throttle,
 } from 'redux-saga/effects';
 import {
-  Client, Dir6, User, UserParams,
+  Client, ListOrFilter, ListParams, ListSorting, SortDirection, User, UserParams,
 } from '../../clients/server.generated';
 import { takeEveryWithErrorHandling } from '../errorHandling';
 import { clearSingle, errorSingle, setSingle } from '../single/actionCreators';
@@ -28,12 +28,21 @@ function* fetchUsers() {
   const {
     sortColumn, sortDirection,
     take, skip,
-    search,
+    search, filters,
   } = state;
 
   const { list, count } = yield call(
-    [client, client.getAllUsers], sortColumn, sortDirection as Dir6,
-    skip, take, search,
+    [client, client.getAllUsers],
+    new ListParams({
+      sorting: new ListSorting({
+        column: sortColumn,
+        direction: sortDirection as SortDirection,
+      }),
+      filters: filters.map((f) => new ListOrFilter(f)),
+      skip,
+      take,
+      search,
+    }),
   );
   yield put(setTable(Tables.Users, list, count));
 }

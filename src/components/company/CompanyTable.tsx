@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
-import { Table } from 'semantic-ui-react';
+import { Button, Table } from 'semantic-ui-react';
 import { Company } from '../../clients/server.generated';
 import TablePagination from '../TablePagination';
 import { RootState } from '../../stores/store';
@@ -11,6 +11,7 @@ import {
 import { countFetched, countTotal, getTable } from '../../stores/tables/selectors';
 import { Tables } from '../../stores/tables/tables';
 import { CompanyRow } from './CompanyRow';
+import CompanyStatusFilter from './filters/CompanyStatusFilter';
 
 interface Props {
   companies: Company[];
@@ -53,6 +54,7 @@ function CompaniesTable({
               onClick={() => changeSort('status')}
             >
               Status
+              <CompanyStatusFilter />
             </Table.HeaderCell>
           </Table.Row>
         </Table.Header>

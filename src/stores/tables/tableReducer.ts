@@ -3,7 +3,7 @@ import { TableState } from './tableState';
 import {
   TableActions, TableActionType, TableChangeSortAction,
   tableExtractAction,
-  TableSearchAction, TableSetAction, TableSetTakeAction,
+  TableSearchAction, TableSetAction, TableSetFilterAction, TableSetTakeAction,
 } from './actions';
 import { Tables } from './tables';
 
@@ -18,6 +18,7 @@ const initialState = {
   skip: 0,
   take: 10,
   search: '',
+  filters: [],
 };
 
 const createTableReducer = <T extends Tables, R>(t: Tables) => {
@@ -121,6 +122,38 @@ const createTableReducer = <T extends Tables, R>(t: Tables) => {
           skip: 0,
           sortColumn: a.column,
           sortDirection: 'ASC',
+        };
+      }
+
+      case TableActionType.SetFilter: {
+        const a = action as TableSetFilterAction<T>;
+
+        // Remove filter
+        if (a.values.length === 0) {
+          return {
+            ...state,
+            skip: 0,
+            filters: state.filters.filter((f) => f.column !== a.column),
+          };
+        }
+
+        const filterIndex = state.filters.findIndex((f) => f.column === a.column);
+        // Update filter
+        if (filterIndex >= 0) {
+          const newFilters = state.filters.filter((f) => f.column !== a.column);
+          newFilters.push({ column: a.column, values: a.values });
+          return {
+            ...state,
+            skip: 0,
+            filters: newFilters,
+          };
+        }
+
+        // Add filter
+        return {
+          ...state,
+          skip: 0,
+          filters: [...state.filters, { column: a.column, values: a.values }],
         };
       }
       default:

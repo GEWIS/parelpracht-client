@@ -2,7 +2,7 @@ import {
   call, put, select, throttle,
 } from 'redux-saga/effects';
 import {
-  Client, Company, CompanyParams, Dir2,
+  Client, Company, CompanyParams, ListOrFilter, ListParams, ListSorting, SortDirection,
 } from '../../clients/server.generated';
 import { takeEveryWithErrorHandling } from '../errorHandling';
 import { setSummaries } from '../summaries/actionCreators';
@@ -28,12 +28,21 @@ function* fetchCompanies() {
   const {
     sortColumn, sortDirection,
     take, skip,
-    search,
+    search, filters,
   } = state;
 
   const { list, count } = yield call(
-    [client, client.getAllCompanies], sortColumn, sortDirection as Dir2,
-    skip, take, search,
+    [client, client.getAllCompanies],
+    new ListParams({
+      sorting: new ListSorting({
+        column: sortColumn,
+        direction: sortDirection as SortDirection,
+      }),
+      filters: filters.map((f) => new ListOrFilter(f)),
+      skip,
+      take,
+      search,
+    }),
   );
   yield put(setTable(Tables.Companies, list, count));
 }

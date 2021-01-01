@@ -11,4 +11,11 @@ export interface TableState<R> {
   skip: number;
   take: number;
   search: string;
+
+  filters: ListFilter[],
+}
+
+export interface ListFilter {
+  column: string;
+  values: any[];
 }

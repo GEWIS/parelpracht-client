@@ -4,3 +4,7 @@
   height: calc(100vh - 43px);
   overflow-y: auto;
 }
+
+.ui.table.fixed tr > th {
+  overflow: visible;
+}

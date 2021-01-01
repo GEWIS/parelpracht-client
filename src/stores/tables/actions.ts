@@ -1,4 +1,5 @@
 import { Action } from 'redux';
+import { ListOrFilter } from '../../clients/server.generated';
 import { Tables } from './tables';
 
 export enum TableActionType {
@@ -10,6 +11,7 @@ export enum TableActionType {
   PrevPage = 'Table/PrevPage',
   SetTake = 'Table/SetTake',
   Search = 'Table/Search',
+  SetFilter = 'Table/SetFilter',
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -39,10 +41,15 @@ export type TableSearchAction<T> = TableAction<TableActionType.Search, T> & {
 export type TableNextPageAction<T> = TableAction<TableActionType.NextPage, T>;
 export type TablePrevPageAction<T> = TableAction<TableActionType.PrevPage, T>;
 
+export type TableSetFilterAction<T> = TableAction<TableActionType.SetFilter, T> & {
+  column: string;
+  values: any[];
+};
+
 export type TableActions<T extends Tables, R> =
   TableFetchAction<T> | TableSetAction<T, R> | TableClearAction<T>
   | TableChangeSortAction<T> | TableSetTakeAction<T> | TableSearchAction<T>
-  | TableNextPageAction<T> | TablePrevPageAction<T>;
+  | TableNextPageAction<T> | TablePrevPageAction<T> | TableSetFilterAction<T>;
 
 export const tableActionPattern = <T extends Tables>(
   table: T, action: TableActionType,
