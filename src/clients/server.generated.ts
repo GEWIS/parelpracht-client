@@ -250,40 +250,20 @@ export class Client {
     }
 
     /**
-     * @param col (optional) Sorted column
-     * @param dir (optional) Sorting direction
-     * @param skip (optional) Number of elements to skip
-     * @param take (optional) Amount of elements to request
-     * @param search (optional) String to filter on value of select columns
+     * @param body List parameters to sort and filter the list
      * @return Ok
      */
-    getAllProducts(col: string | undefined, dir: Dir | undefined, skip: number | undefined, take: number | undefined, search: string | undefined): Promise<ProductListResponse> {
-        let url_ = this.baseUrl + "/product?";
-        if (col === null)
-            throw new Error("The parameter 'col' cannot be null.");
-        else if (col !== undefined)
-            url_ += "col=" + encodeURIComponent("" + col) + "&";
-        if (dir === null)
-            throw new Error("The parameter 'dir' cannot be null.");
-        else if (dir !== undefined)
-            url_ += "dir=" + encodeURIComponent("" + dir) + "&";
-        if (skip === null)
-            throw new Error("The parameter 'skip' cannot be null.");
-        else if (skip !== undefined)
-            url_ += "skip=" + encodeURIComponent("" + skip) + "&";
-        if (take === null)
-            throw new Error("The parameter 'take' cannot be null.");
-        else if (take !== undefined)
-            url_ += "take=" + encodeURIComponent("" + take) + "&";
-        if (search === null)
-            throw new Error("The parameter 'search' cannot be null.");
-        else if (search !== undefined)
-            url_ += "search=" + encodeURIComponent("" + search) + "&";
+    getAllProducts(body: ListParams): Promise<ProductListResponse> {
+        let url_ = this.baseUrl + "/product/table";
         url_ = url_.replace(/[?&]$/, "");
 
+        const content_ = JSON.stringify(body);
+
         let options_ = <RequestInit>{
-            method: "GET",
+            body: content_,
+            method: "POST",
             headers: {
+                "Content-Type": "application/json",
                 "Accept": "application/json"
             }
         };
@@ -316,62 +296,6 @@ export class Client {
             });
         }
         return Promise.resolve<ProductListResponse>(<any>null);
-    }
-
-    /**
-     * @param body Parameters to create product with
-     * @return Ok
-     */
-    createProduct(body: ProductParams): Promise<Product> {
-        let url_ = this.baseUrl + "/product";
-        url_ = url_.replace(/[?&]$/, "");
-
-        const content_ = JSON.stringify(body);
-
-        let options_ = <RequestInit>{
-            body: content_,
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "Accept": "application/json"
-            }
-        };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processCreateProduct(_response);
-        });
-    }
-
-    protected processCreateProduct(response: Response): Promise<Product> {
-        const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
-        if (status === 200) {
-            return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = Product.fromJS(resultData200);
-            return result200;
-            });
-        } else if (status === 400) {
-            return response.text().then((_responseText) => {
-            let result400: any = null;
-            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result400 = WrappedApiError.fromJS(resultData400);
-            return throwException("A server side error occurred.", status, _responseText, _headers, result400);
-            });
-        } else if (status === 401) {
-            return response.text().then((_responseText) => {
-            let result401: any = null;
-            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result401 = WrappedApiError.fromJS(resultData401);
-            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            });
-        }
-        return Promise.resolve<Product>(<any>null);
     }
 
     /**
@@ -499,6 +423,62 @@ export class Client {
     }
 
     protected processUpdateProduct(response: Response): Promise<Product> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = Product.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status === 400) {
+            return response.text().then((_responseText) => {
+            let result400: any = null;
+            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result400 = WrappedApiError.fromJS(resultData400);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result400);
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<Product>(<any>null);
+    }
+
+    /**
+     * @param body Parameters to create product with
+     * @return Ok
+     */
+    createProduct(body: ProductParams): Promise<Product> {
+        let url_ = this.baseUrl + "/product";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ = <RequestInit>{
+            body: content_,
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processCreateProduct(_response);
+        });
+    }
+
+    protected processCreateProduct(response: Response): Promise<Product> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -903,40 +883,20 @@ export class Client {
     }
 
     /**
-     * @param col (optional) Sorted column
-     * @param dir (optional) Sorting direction
-     * @param skip (optional) Number of elements to skip
-     * @param take (optional) Amount of elements to request
-     * @param search (optional) String to filter on value of select columns
+     * @param body List parameters to sort and filter the list
      * @return Ok
      */
-    getAllCompanies(col: string | undefined, dir: Dir2 | undefined, skip: number | undefined, take: number | undefined, search: string | undefined): Promise<CompanyListResponse> {
-        let url_ = this.baseUrl + "/company?";
-        if (col === null)
-            throw new Error("The parameter 'col' cannot be null.");
-        else if (col !== undefined)
-            url_ += "col=" + encodeURIComponent("" + col) + "&";
-        if (dir === null)
-            throw new Error("The parameter 'dir' cannot be null.");
-        else if (dir !== undefined)
-            url_ += "dir=" + encodeURIComponent("" + dir) + "&";
-        if (skip === null)
-            throw new Error("The parameter 'skip' cannot be null.");
-        else if (skip !== undefined)
-            url_ += "skip=" + encodeURIComponent("" + skip) + "&";
-        if (take === null)
-            throw new Error("The parameter 'take' cannot be null.");
-        else if (take !== undefined)
-            url_ += "take=" + encodeURIComponent("" + take) + "&";
-        if (search === null)
-            throw new Error("The parameter 'search' cannot be null.");
-        else if (search !== undefined)
-            url_ += "search=" + encodeURIComponent("" + search) + "&";
+    getAllCompanies(body: ListParams): Promise<CompanyListResponse> {
+        let url_ = this.baseUrl + "/company/table";
         url_ = url_.replace(/[?&]$/, "");
 
+        const content_ = JSON.stringify(body);
+
         let options_ = <RequestInit>{
-            method: "GET",
+            body: content_,
+            method: "POST",
             headers: {
+                "Content-Type": "application/json",
                 "Accept": "application/json"
             }
         };
@@ -969,55 +929,6 @@ export class Client {
             });
         }
         return Promise.resolve<CompanyListResponse>(<any>null);
-    }
-
-    /**
-     * @param body Parameters to create company with
-     * @return Ok
-     */
-    createCompany(body: CompanyParams): Promise<Company> {
-        let url_ = this.baseUrl + "/company";
-        url_ = url_.replace(/[?&]$/, "");
-
-        const content_ = JSON.stringify(body);
-
-        let options_ = <RequestInit>{
-            body: content_,
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "Accept": "application/json"
-            }
-        };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processCreateCompany(_response);
-        });
-    }
-
-    protected processCreateCompany(response: Response): Promise<Company> {
-        const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
-        if (status === 200) {
-            return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = Company.fromJS(resultData200);
-            return result200;
-            });
-        } else if (status === 401) {
-            return response.text().then((_responseText) => {
-            let result401: any = null;
-            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result401 = WrappedApiError.fromJS(resultData401);
-            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            });
-        }
-        return Promise.resolve<Company>(<any>null);
     }
 
     /**
@@ -1145,6 +1056,55 @@ export class Client {
     }
 
     protected processUpdateCompany(response: Response): Promise<Company> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = Company.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<Company>(<any>null);
+    }
+
+    /**
+     * @param body Parameters to create company with
+     * @return Ok
+     */
+    createCompany(body: CompanyParams): Promise<Company> {
+        let url_ = this.baseUrl + "/company";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ = <RequestInit>{
+            body: content_,
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processCreateCompany(_response);
+        });
+    }
+
+    protected processCreateCompany(response: Response): Promise<Company> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -1432,40 +1392,20 @@ export class Client {
     }
 
     /**
-     * @param col (optional) Sorted column
-     * @param dir (optional) Sorting direction
-     * @param skip (optional) Number of elements to skip
-     * @param take (optional) Amount of elements to request
-     * @param search (optional) String to filter on value of select columns
+     * @param body List parameters to sort and filter the list
      * @return Ok
      */
-    getAllContracts(col: string | undefined, dir: Dir3 | undefined, skip: number | undefined, take: number | undefined, search: string | undefined): Promise<ContractListResponse> {
-        let url_ = this.baseUrl + "/contract?";
-        if (col === null)
-            throw new Error("The parameter 'col' cannot be null.");
-        else if (col !== undefined)
-            url_ += "col=" + encodeURIComponent("" + col) + "&";
-        if (dir === null)
-            throw new Error("The parameter 'dir' cannot be null.");
-        else if (dir !== undefined)
-            url_ += "dir=" + encodeURIComponent("" + dir) + "&";
-        if (skip === null)
-            throw new Error("The parameter 'skip' cannot be null.");
-        else if (skip !== undefined)
-            url_ += "skip=" + encodeURIComponent("" + skip) + "&";
-        if (take === null)
-            throw new Error("The parameter 'take' cannot be null.");
-        else if (take !== undefined)
-            url_ += "take=" + encodeURIComponent("" + take) + "&";
-        if (search === null)
-            throw new Error("The parameter 'search' cannot be null.");
-        else if (search !== undefined)
-            url_ += "search=" + encodeURIComponent("" + search) + "&";
+    getAllContracts(body: ListParams): Promise<ContractListResponse> {
+        let url_ = this.baseUrl + "/contract/table";
         url_ = url_.replace(/[?&]$/, "");
 
+        const content_ = JSON.stringify(body);
+
         let options_ = <RequestInit>{
-            method: "GET",
+            body: content_,
+            method: "POST",
             headers: {
+                "Content-Type": "application/json",
                 "Accept": "application/json"
             }
         };
@@ -1498,55 +1438,6 @@ export class Client {
             });
         }
         return Promise.resolve<ContractListResponse>(<any>null);
-    }
-
-    /**
-     * @param body Parameters to create contract with
-     * @return Ok
-     */
-    createContract(body: ContractParams): Promise<Contract> {
-        let url_ = this.baseUrl + "/contract";
-        url_ = url_.replace(/[?&]$/, "");
-
-        const content_ = JSON.stringify(body);
-
-        let options_ = <RequestInit>{
-            body: content_,
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "Accept": "application/json"
-            }
-        };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processCreateContract(_response);
-        });
-    }
-
-    protected processCreateContract(response: Response): Promise<Contract> {
-        const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
-        if (status === 200) {
-            return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = Contract.fromJS(resultData200);
-            return result200;
-            });
-        } else if (status === 401) {
-            return response.text().then((_responseText) => {
-            let result401: any = null;
-            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result401 = WrappedApiError.fromJS(resultData401);
-            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            });
-        }
-        return Promise.resolve<Contract>(<any>null);
     }
 
     /**
@@ -1674,6 +1565,55 @@ export class Client {
     }
 
     protected processUpdateContract(response: Response): Promise<Contract> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = Contract.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<Contract>(<any>null);
+    }
+
+    /**
+     * @param body Parameters to create contract with
+     * @return Ok
+     */
+    createContract(body: ContractParams): Promise<Contract> {
+        let url_ = this.baseUrl + "/contract";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ = <RequestInit>{
+            body: content_,
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processCreateContract(_response);
+        });
+    }
+
+    protected processCreateContract(response: Response): Promise<Contract> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -2562,40 +2502,20 @@ export class Client {
     }
 
     /**
-     * @param col (optional) Sorted column
-     * @param dir (optional) Sorting direction
-     * @param skip (optional) Number of elements to skip
-     * @param take (optional) Amount of elements to request
-     * @param search (optional) String to filter on value of select columns
+     * @param body List parameters to sort and filter the list
      * @return Ok
      */
-    getAllInvoices(col: string | undefined, dir: Dir4 | undefined, skip: number | undefined, take: number | undefined, search: string | undefined): Promise<InvoiceListResponse> {
-        let url_ = this.baseUrl + "/invoice?";
-        if (col === null)
-            throw new Error("The parameter 'col' cannot be null.");
-        else if (col !== undefined)
-            url_ += "col=" + encodeURIComponent("" + col) + "&";
-        if (dir === null)
-            throw new Error("The parameter 'dir' cannot be null.");
-        else if (dir !== undefined)
-            url_ += "dir=" + encodeURIComponent("" + dir) + "&";
-        if (skip === null)
-            throw new Error("The parameter 'skip' cannot be null.");
-        else if (skip !== undefined)
-            url_ += "skip=" + encodeURIComponent("" + skip) + "&";
-        if (take === null)
-            throw new Error("The parameter 'take' cannot be null.");
-        else if (take !== undefined)
-            url_ += "take=" + encodeURIComponent("" + take) + "&";
-        if (search === null)
-            throw new Error("The parameter 'search' cannot be null.");
-        else if (search !== undefined)
-            url_ += "search=" + encodeURIComponent("" + search) + "&";
+    getAllInvoices(body: ListParams): Promise<InvoiceListResponse> {
+        let url_ = this.baseUrl + "/invoice/table";
         url_ = url_.replace(/[?&]$/, "");
 
+        const content_ = JSON.stringify(body);
+
         let options_ = <RequestInit>{
-            method: "GET",
+            body: content_,
+            method: "POST",
             headers: {
+                "Content-Type": "application/json",
                 "Accept": "application/json"
             }
         };
@@ -2628,55 +2548,6 @@ export class Client {
             });
         }
         return Promise.resolve<InvoiceListResponse>(<any>null);
-    }
-
-    /**
-     * @param body Parameters to create invoice with
-     * @return Ok
-     */
-    createInvoice(body: InvoiceParams): Promise<Invoice> {
-        let url_ = this.baseUrl + "/invoice";
-        url_ = url_.replace(/[?&]$/, "");
-
-        const content_ = JSON.stringify(body);
-
-        let options_ = <RequestInit>{
-            body: content_,
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "Accept": "application/json"
-            }
-        };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processCreateInvoice(_response);
-        });
-    }
-
-    protected processCreateInvoice(response: Response): Promise<Invoice> {
-        const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
-        if (status === 200) {
-            return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = Invoice.fromJS(resultData200);
-            return result200;
-            });
-        } else if (status === 401) {
-            return response.text().then((_responseText) => {
-            let result401: any = null;
-            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result401 = WrappedApiError.fromJS(resultData401);
-            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            });
-        }
-        return Promise.resolve<Invoice>(<any>null);
     }
 
     /**
@@ -2804,6 +2675,55 @@ export class Client {
     }
 
     protected processUpdateInvoice(response: Response): Promise<Invoice> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = Invoice.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<Invoice>(<any>null);
+    }
+
+    /**
+     * @param body Parameters to create invoice with
+     * @return Ok
+     */
+    createInvoice(body: InvoiceParams): Promise<Invoice> {
+        let url_ = this.baseUrl + "/invoice";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ = <RequestInit>{
+            body: content_,
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processCreateInvoice(_response);
+        });
+    }
+
+    protected processCreateInvoice(response: Response): Promise<Invoice> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -3408,40 +3328,20 @@ export class Client {
     }
 
     /**
-     * @param col (optional) Sorted column
-     * @param dir (optional) Sorting direction
-     * @param skip (optional) Number of elements to skip
-     * @param take (optional) Amount of elements to request
-     * @param search (optional) String to filter on value of select columns
+     * @param body List parameters to sort and filter the list
      * @return Ok
      */
-    getAllContacts(col: string | undefined, dir: Dir5 | undefined, skip: number | undefined, take: number | undefined, search: string | undefined): Promise<ContactListResponse> {
-        let url_ = this.baseUrl + "/contact?";
-        if (col === null)
-            throw new Error("The parameter 'col' cannot be null.");
-        else if (col !== undefined)
-            url_ += "col=" + encodeURIComponent("" + col) + "&";
-        if (dir === null)
-            throw new Error("The parameter 'dir' cannot be null.");
-        else if (dir !== undefined)
-            url_ += "dir=" + encodeURIComponent("" + dir) + "&";
-        if (skip === null)
-            throw new Error("The parameter 'skip' cannot be null.");
-        else if (skip !== undefined)
-            url_ += "skip=" + encodeURIComponent("" + skip) + "&";
-        if (take === null)
-            throw new Error("The parameter 'take' cannot be null.");
-        else if (take !== undefined)
-            url_ += "take=" + encodeURIComponent("" + take) + "&";
-        if (search === null)
-            throw new Error("The parameter 'search' cannot be null.");
-        else if (search !== undefined)
-            url_ += "search=" + encodeURIComponent("" + search) + "&";
+    getAllContacts(body: ListParams): Promise<ContactListResponse> {
+        let url_ = this.baseUrl + "/contact/table";
         url_ = url_.replace(/[?&]$/, "");
 
+        const content_ = JSON.stringify(body);
+
         let options_ = <RequestInit>{
-            method: "GET",
+            body: content_,
+            method: "POST",
             headers: {
+                "Content-Type": "application/json",
                 "Accept": "application/json"
             }
         };
@@ -3474,55 +3374,6 @@ export class Client {
             });
         }
         return Promise.resolve<ContactListResponse>(<any>null);
-    }
-
-    /**
-     * @param body Parameters to create contact with
-     * @return Ok
-     */
-    createContact(body: ContactParams): Promise<Contact> {
-        let url_ = this.baseUrl + "/contact";
-        url_ = url_.replace(/[?&]$/, "");
-
-        const content_ = JSON.stringify(body);
-
-        let options_ = <RequestInit>{
-            body: content_,
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "Accept": "application/json"
-            }
-        };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processCreateContact(_response);
-        });
-    }
-
-    protected processCreateContact(response: Response): Promise<Contact> {
-        const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
-        if (status === 200) {
-            return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = Contact.fromJS(resultData200);
-            return result200;
-            });
-        } else if (status === 401) {
-            return response.text().then((_responseText) => {
-            let result401: any = null;
-            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result401 = WrappedApiError.fromJS(resultData401);
-            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            });
-        }
-        return Promise.resolve<Contact>(<any>null);
     }
 
     /**
@@ -3675,40 +3526,69 @@ export class Client {
     }
 
     /**
-     * @param col (optional) Sorted column
-     * @param dir (optional) Sorting direction
-     * @param skip (optional) Number of elements to skip
-     * @param take (optional) Amount of elements to request
-     * @param search (optional) String to filter on value of select columns
+     * @param body Parameters to create contact with
      * @return Ok
      */
-    getAllUsers(col: string | undefined, dir: Dir6 | undefined, skip: number | undefined, take: number | undefined, search: string | undefined): Promise<UserListResponse> {
-        let url_ = this.baseUrl + "/user?";
-        if (col === null)
-            throw new Error("The parameter 'col' cannot be null.");
-        else if (col !== undefined)
-            url_ += "col=" + encodeURIComponent("" + col) + "&";
-        if (dir === null)
-            throw new Error("The parameter 'dir' cannot be null.");
-        else if (dir !== undefined)
-            url_ += "dir=" + encodeURIComponent("" + dir) + "&";
-        if (skip === null)
-            throw new Error("The parameter 'skip' cannot be null.");
-        else if (skip !== undefined)
-            url_ += "skip=" + encodeURIComponent("" + skip) + "&";
-        if (take === null)
-            throw new Error("The parameter 'take' cannot be null.");
-        else if (take !== undefined)
-            url_ += "take=" + encodeURIComponent("" + take) + "&";
-        if (search === null)
-            throw new Error("The parameter 'search' cannot be null.");
-        else if (search !== undefined)
-            url_ += "search=" + encodeURIComponent("" + search) + "&";
+    createContact(body: ContactParams): Promise<Contact> {
+        let url_ = this.baseUrl + "/contact";
         url_ = url_.replace(/[?&]$/, "");
 
+        const content_ = JSON.stringify(body);
+
         let options_ = <RequestInit>{
-            method: "GET",
+            body: content_,
+            method: "POST",
             headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processCreateContact(_response);
+        });
+    }
+
+    protected processCreateContact(response: Response): Promise<Contact> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = Contact.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<Contact>(<any>null);
+    }
+
+    /**
+     * @param body List parameters to sort and filter the list
+     * @return Ok
+     */
+    getAllUsers(body: ListParams): Promise<UserListResponse> {
+        let url_ = this.baseUrl + "/user/table";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ = <RequestInit>{
+            body: content_,
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
                 "Accept": "application/json"
             }
         };
@@ -3741,55 +3621,6 @@ export class Client {
             });
         }
         return Promise.resolve<UserListResponse>(<any>null);
-    }
-
-    /**
-     * @param body Parameters to create user with
-     * @return Ok
-     */
-    createUser(body: UserParams): Promise<User> {
-        let url_ = this.baseUrl + "/user";
-        url_ = url_.replace(/[?&]$/, "");
-
-        const content_ = JSON.stringify(body);
-
-        let options_ = <RequestInit>{
-            body: content_,
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "Accept": "application/json"
-            }
-        };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processCreateUser(_response);
-        });
-    }
-
-    protected processCreateUser(response: Response): Promise<User> {
-        const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
-        if (status === 200) {
-            return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = User.fromJS(resultData200);
-            return result200;
-            });
-        } else if (status === 401) {
-            return response.text().then((_responseText) => {
-            let result401: any = null;
-            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result401 = WrappedApiError.fromJS(resultData401);
-            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            });
-        }
-        return Promise.resolve<User>(<any>null);
     }
 
     /**
@@ -3993,6 +3824,55 @@ export class Client {
     }
 
     /**
+     * @param body Parameters to create user with
+     * @return Ok
+     */
+    createUser(body: UserParams): Promise<User> {
+        let url_ = this.baseUrl + "/user";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ = <RequestInit>{
+            body: content_,
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processCreateUser(_response);
+        });
+    }
+
+    protected processCreateUser(response: Response): Promise<User> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = User.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<User>(<any>null);
+    }
+
+    /**
      * @param col (optional) Sorted column
      * @param dir (optional) Sorting direction
      * @param skip (optional) Number of elements to skip
@@ -4000,7 +3880,7 @@ export class Client {
      * @param search (optional) String to filter on value of select columns
      * @return Ok
      */
-    getAllCategories(col: string | undefined, dir: Dir7 | undefined, skip: number | undefined, take: number | undefined, search: string | undefined): Promise<CategoryListResponse> {
+    getAllCategories(col: string | undefined, dir: Dir | undefined, skip: number | undefined, take: number | undefined, search: string | undefined): Promise<CategoryListResponse> {
         let url_ = this.baseUrl + "/category?";
         if (col === null)
             throw new Error("The parameter 'col' cannot be null.");
@@ -6622,6 +6502,162 @@ export interface IProductListResponse {
     count: number;
 }
 
+export enum SortDirection {
+    ASC = "ASC",
+    DESC = "DESC",
+}
+
+export class ListSorting implements IListSorting {
+    column!: string;
+    direction!: SortDirection;
+
+    constructor(data?: IListSorting) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.column = _data["column"];
+            this.direction = _data["direction"];
+        }
+    }
+
+    static fromJS(data: any): ListSorting {
+        data = typeof data === 'object' ? data : {};
+        let result = new ListSorting();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["column"] = this.column;
+        data["direction"] = this.direction;
+        return data; 
+    }
+}
+
+export interface IListSorting {
+    column: string;
+    direction: SortDirection;
+}
+
+export class ListOrFilter implements IListOrFilter {
+    column!: string;
+    values!: any[];
+
+    constructor(data?: IListOrFilter) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+        if (!data) {
+            this.values = [];
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.column = _data["column"];
+            if (Array.isArray(_data["values"])) {
+                this.values = [] as any;
+                for (let item of _data["values"])
+                    this.values!.push(item);
+            }
+        }
+    }
+
+    static fromJS(data: any): ListOrFilter {
+        data = typeof data === 'object' ? data : {};
+        let result = new ListOrFilter();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["column"] = this.column;
+        if (Array.isArray(this.values)) {
+            data["values"] = [];
+            for (let item of this.values)
+                data["values"].push(item);
+        }
+        return data; 
+    }
+}
+
+export interface IListOrFilter {
+    column: string;
+    values: any[];
+}
+
+export class ListParams implements IListParams {
+    sorting?: ListSorting;
+    skip?: number;
+    take?: number;
+    search?: string;
+    filters?: ListOrFilter[];
+
+    constructor(data?: IListParams) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.sorting = _data["sorting"] ? ListSorting.fromJS(_data["sorting"]) : <any>undefined;
+            this.skip = _data["skip"];
+            this.take = _data["take"];
+            this.search = _data["search"];
+            if (Array.isArray(_data["filters"])) {
+                this.filters = [] as any;
+                for (let item of _data["filters"])
+                    this.filters!.push(ListOrFilter.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): ListParams {
+        data = typeof data === 'object' ? data : {};
+        let result = new ListParams();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["sorting"] = this.sorting ? this.sorting.toJSON() : <any>undefined;
+        data["skip"] = this.skip;
+        data["take"] = this.take;
+        data["search"] = this.search;
+        if (Array.isArray(this.filters)) {
+            data["filters"] = [];
+            for (let item of this.filters)
+                data["filters"].push(item.toJSON());
+        }
+        return data; 
+    }
+}
+
+export interface IListParams {
+    sorting?: ListSorting;
+    skip?: number;
+    take?: number;
+    search?: string;
+    filters?: ListOrFilter[];
+}
+
 export class ProductSummary implements IProductSummary {
     id!: number;
     nameDutch!: string;
@@ -8773,26 +8809,6 @@ export interface ILoginParams {
     password?: string;
 }
 
-export enum Dir {
-    ASC = "ASC",
-    DESC = "DESC",
-}
-
-export enum Dir2 {
-    ASC = "ASC",
-    DESC = "DESC",
-}
-
-export enum Dir3 {
-    ASC = "ASC",
-    DESC = "DESC",
-}
-
-export enum Dir4 {
-    ASC = "ASC",
-    DESC = "DESC",
-}
-
 export class Body implements IBody {
     productId!: number;
 
@@ -8829,17 +8845,7 @@ export interface IBody {
     productId: number;
 }
 
-export enum Dir5 {
-    ASC = "ASC",
-    DESC = "DESC",
-}
-
-export enum Dir6 {
-    ASC = "ASC",
-    DESC = "DESC",
-}
-
-export enum Dir7 {
+export enum Dir {
     ASC = "ASC",
     DESC = "DESC",
 }

@@ -2,9 +2,8 @@ import {
   call, put, select, throttle,
 } from 'redux-saga/effects';
 import {
-  Client, Dir4, Invoice, InvoiceParams,
+  Client, Invoice, InvoiceParams, ListOrFilter, ListParams, ListSorting, SortDirection,
 } from '../../clients/server.generated';
-import { fetchCompanySummaries } from '../company/sagas';
 import { takeEveryWithErrorHandling } from '../errorHandling';
 import { errorSingle, setSingle } from '../single/actionCreators';
 import {
@@ -27,12 +26,21 @@ function* fetchInvoices() {
   const {
     sortColumn, sortDirection,
     take, skip,
-    search,
+    search, filters,
   } = state;
 
   const { list, count } = yield call(
-    [client, client.getAllInvoices], sortColumn, sortDirection as Dir4,
-    skip, take, search,
+    [client, client.getAllInvoices],
+    new ListParams({
+      sorting: new ListSorting({
+        column: sortColumn,
+        direction: sortDirection as SortDirection,
+      }),
+      filters: filters.map((f) => new ListOrFilter(f)),
+      skip,
+      take,
+      search,
+    }),
   );
   yield put(setTable(Tables.Invoices, list, count));
 }

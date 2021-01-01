@@ -1,9 +1,10 @@
+import { ListOrFilter } from '../../clients/server.generated';
 import {
   tableActionPattern,
   TableActionType, TableChangeSortAction,
   TableClearAction, TableFetchAction,
   TableNextPageAction, TablePrevPageAction,
-  TableSearchAction, TableSetAction, TableSetTakeAction,
+  TableSearchAction, TableSetAction, TableSetFilterAction, TableSetTakeAction,
 } from './actions';
 import { Tables } from './tables';
 
@@ -49,4 +50,10 @@ export function nextPageTable<T extends Tables>(table: T): TableNextPageAction<T
 
 export function prevPageTable<T extends Tables>(table: T): TablePrevPageAction<T> {
   return { type: tableActionPattern(table, TableActionType.PrevPage) };
+}
+
+export function setFilterTable<T extends Tables>(
+  table: T, filter: {column: string, values: any[]},
+): TableSetFilterAction<T> {
+  return { type: tableActionPattern(table, TableActionType.SetFilter), ...filter };
 }
