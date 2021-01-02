@@ -181,7 +181,7 @@ class ContractProps extends React.Component<Props, State> {
             fluid
             id="form-input-comments"
             control={Input}
-            label="comments"
+            label="Comments"
             value={comments}
             onChange={(e: ChangeEvent<HTMLInputElement>) => this.setState({
               comments: e.target.value,
