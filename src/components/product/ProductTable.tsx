@@ -12,7 +12,6 @@ import { countFetched, countTotal, getTable } from '../../stores/tables/selector
 import { Tables } from '../../stores/tables/tables';
 import { ProductRow } from './ProductRow';
 import ProductStatusFilter from './filters/ProductStatusFilter';
-import ContactCompanyFilter from '../contact/filters/ContactCompanyFilter';
 
 interface Props {
   products: Product[];
