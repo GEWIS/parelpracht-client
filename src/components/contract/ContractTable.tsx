@@ -12,6 +12,7 @@ import { countFetched, countTotal, getTable } from '../../stores/tables/selector
 import { Tables } from '../../stores/tables/tables';
 import ContractRow from './ContractRow';
 import ContractCompanyFilter from './filters/ContractCompanyFilter';
+import ContractContactFilter from './filters/ContractContactFilter';
 
 interface Props {
   contracts: Contract[];
@@ -55,6 +56,7 @@ function ContractsTable({
             </Table.HeaderCell>
             <Table.HeaderCell>
               Contact
+              <ContractContactFilter />
             </Table.HeaderCell>
             <Table.HeaderCell
               sorted={column === 'date' ? direction : undefined}
