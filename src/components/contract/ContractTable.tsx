@@ -62,7 +62,7 @@ function ContractsTable({
               sorted={column === 'date' ? direction : undefined}
               onClick={() => changeSort('date')}
             >
-              Date
+              Last Update
             </Table.HeaderCell>
           </Table.Row>
         </Table.Header>

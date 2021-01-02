@@ -67,6 +67,7 @@ class CompanyProps extends React.Component<Props, State> {
       addressPostalCode: company.addressPostalCode,
       addressCity: company.addressCity,
       addressCountry: company.addressCountry,
+      updatedAt: company.updatedAt,
     };
   };
 
@@ -110,6 +111,10 @@ class CompanyProps extends React.Component<Props, State> {
       comments,
       phoneNumber,
       status,
+      addressStreet,
+      addressPostalCode,
+      addressCity,
+      addressCountry,
     } = this.state;
 
     return (
@@ -141,7 +146,7 @@ class CompanyProps extends React.Component<Props, State> {
             />
             <Form.Field disabled={!editing}>
               {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-              <label htmlFor="form-input-description">
+              <label htmlFor="form-input-comments">
                 Comments
               </label>
               <TextArea
@@ -155,7 +160,7 @@ class CompanyProps extends React.Component<Props, State> {
           <Form.Group widths="equal">
             <Form.Field
               disabled={!editing}
-              id="form-input-phonenumber"
+              id="form-input-phone-number"
               fluid
               control={Input}
               label="Telephone Number"
@@ -164,12 +169,13 @@ class CompanyProps extends React.Component<Props, State> {
                 phoneNumber: e.target.value,
               })}
             />
-            <Form.Field disabled={!editing}>
+            <Form.Field>
               {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
               <label htmlFor="form-check-status">
                 Status
               </label>
               <Checkbox
+                disabled={!editing}
                 toggle
                 id="form-check-status"
                 label={status === CompanyStatus.ACTIVE ? 'Active' : 'Inactive'}
@@ -178,6 +184,61 @@ class CompanyProps extends React.Component<Props, State> {
                   status:
                     data.checked ? CompanyStatus.ACTIVE : CompanyStatus.INACTIVE,
                 })}
+              />
+            </Form.Field>
+          </Form.Group>
+          <h2>
+            Address Information
+          </h2>
+          <Form.Group widths="equal">
+            <Form.Field disabled={!editing}>
+              {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
+              <label htmlFor="form-input-address-street">
+                Street and number
+              </label>
+              <TextArea
+                id="form-input-address-street"
+                value={addressStreet}
+                onChange={(e) => this.setState({ addressStreet: e.target.value })}
+                placeholder="Street and number"
+              />
+            </Form.Field>
+            <Form.Field disabled={!editing}>
+              {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
+              <label htmlFor="form-input-address-city">
+                City
+              </label>
+              <TextArea
+                id="form-input-address-city"
+                value={addressCity}
+                onChange={(e) => this.setState({ addressCity: e.target.value })}
+                placeholder="City"
+              />
+            </Form.Field>
+          </Form.Group>
+          <Form.Group widths="equal">
+            <Form.Field disabled={!editing}>
+              {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
+              <label htmlFor="form-input-address-postal-code">
+                Postal Code
+              </label>
+              <TextArea
+                id="form-input-address-postal-code"
+                value={addressPostalCode}
+                onChange={(e) => this.setState({ addressPostalCode: e.target.value })}
+                placeholder="Postal Code"
+              />
+            </Form.Field>
+            <Form.Field disabled={!editing}>
+              {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
+              <label htmlFor="form-input-address-country">
+                Country
+              </label>
+              <TextArea
+                id="form-input-address-country"
+                value={addressCountry}
+                onChange={(e) => this.setState({ addressCountry: e.target.value })}
+                placeholder="Country"
               />
             </Form.Field>
           </Form.Group>

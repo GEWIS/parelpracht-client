@@ -6,6 +6,7 @@ import { Contract } from '../../clients/server.generated';
 import { getCompanyName } from '../../stores/company/selectors';
 import { getContactName } from '../../stores/contact/selectors';
 import { RootState } from '../../stores/store';
+import { formatLastUpdate } from '../../helpers/lastUpdate';
 
 interface Props {
   contract: Contract;
@@ -30,7 +31,7 @@ function ContractRow(props: Props) {
         {contactName}
       </Table.Cell>
       <Table.Cell>
-        { }
+        {formatLastUpdate(contract.updatedAt)}
       </Table.Cell>
     </Table.Row>
   );

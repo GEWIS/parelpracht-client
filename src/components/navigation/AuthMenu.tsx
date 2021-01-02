@@ -32,7 +32,7 @@ function AuthMenu(props: Props) {
   }
   const name = formatContactName(
     props.profile.firstName,
-    props.profile.middleName,
+    props.profile.lastNamePreposition,
     props.profile.lastName,
   );
 

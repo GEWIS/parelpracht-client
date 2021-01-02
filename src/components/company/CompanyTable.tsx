@@ -56,6 +56,12 @@ function CompaniesTable({
               Status
               <CompanyStatusFilter />
             </Table.HeaderCell>
+            <Table.HeaderCell
+              sorted={column === 'updatedAt' ? direction : undefined}
+              onClick={() => changeSort('updatedAt')}
+            >
+              Last Update
+            </Table.HeaderCell>
           </Table.Row>
         </Table.Header>
         <Table.Body>

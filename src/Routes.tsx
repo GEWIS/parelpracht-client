@@ -32,6 +32,7 @@ import ContactModal from './pages/ContactModal';
 import UsersPage from './pages/UsersPage';
 import SingleUserPage from './pages/SingleUserPage';
 import UserCreatePage from './pages/UserCreatePage';
+import ProductInstanceModal from './pages/ProductInstanceModal';
 import ContractGenerateModal from './pages/ContractGenerateModal';
 
 interface Props extends RouteComponentProps {
@@ -148,8 +149,14 @@ function Routes(props: Props) {
             <ContractsPage />
             <ContractCreatePage />
           </Route>
-          <Route path="/contract/:contractId" exact>
+          <Route path="/contract/:contractId" exact component={SingleContractPage} />
+          <Route path="/contract/:contractId/product/new" exact>
             <SingleContractPage />
+            <ProductInstanceModal create />
+          </Route>
+          <Route path="/contract/:contractId/product/:productInstanceId" exact>
+            <SingleContractPage />
+            <ProductInstanceModal />
           </Route>
           {/* Users */}
           <Route path="/user" exact>

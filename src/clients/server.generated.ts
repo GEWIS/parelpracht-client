@@ -4210,11 +4210,11 @@ export enum Roles {
 export class UserParams implements IUserParams {
     email!: string;
     firstName!: string;
-    middleName!: string;
+    lastNamePreposition?: string;
     lastName!: string;
     function!: string;
     gender!: Gender;
-    comment!: string;
+    comment?: string;
     roles?: Roles[];
 
     constructor(data?: IUserParams) {
@@ -4230,7 +4230,7 @@ export class UserParams implements IUserParams {
         if (_data) {
             this.email = _data["email"];
             this.firstName = _data["firstName"];
-            this.middleName = _data["middleName"];
+            this.lastNamePreposition = _data["lastNamePreposition"];
             this.lastName = _data["lastName"];
             this.function = _data["function"];
             this.gender = _data["gender"];
@@ -4254,7 +4254,7 @@ export class UserParams implements IUserParams {
         data = typeof data === 'object' ? data : {};
         data["email"] = this.email;
         data["firstName"] = this.firstName;
-        data["middleName"] = this.middleName;
+        data["lastNamePreposition"] = this.lastNamePreposition;
         data["lastName"] = this.lastName;
         data["function"] = this.function;
         data["gender"] = this.gender;
@@ -4271,11 +4271,11 @@ export class UserParams implements IUserParams {
 export interface IUserParams {
     email: string;
     firstName: string;
-    middleName: string;
+    lastNamePreposition?: string;
     lastName: string;
     function: string;
     gender: Gender;
-    comment: string;
+    comment?: string;
     roles?: Roles[];
 }
 
@@ -4370,7 +4370,7 @@ export class User implements IUser {
     /** First name of this user */
     firstName!: string;
     /** Middle name of this user, if he/she has any */
-    middleName!: string;
+    lastNamePreposition!: string;
     /** Last name of this user */
     lastName!: string;
     /** Email address of the user */
@@ -4403,7 +4403,7 @@ export class User implements IUser {
             this.version = _data["version"];
             this.gender = _data["gender"];
             this.firstName = _data["firstName"];
-            this.middleName = _data["middleName"];
+            this.lastNamePreposition = _data["lastNamePreposition"];
             this.lastName = _data["lastName"];
             this.email = _data["email"];
             this.comment = _data["comment"];
@@ -4432,7 +4432,7 @@ export class User implements IUser {
         data["version"] = this.version;
         data["gender"] = this.gender;
         data["firstName"] = this.firstName;
-        data["middleName"] = this.middleName;
+        data["lastNamePreposition"] = this.lastNamePreposition;
         data["lastName"] = this.lastName;
         data["email"] = this.email;
         data["comment"] = this.comment;
@@ -4462,7 +4462,7 @@ export interface IUser {
     /** First name of this user */
     firstName: string;
     /** Middle name of this user, if he/she has any */
-    middleName: string;
+    lastNamePreposition: string;
     /** Last name of this user */
     lastName: string;
     /** Email address of the user */
@@ -5124,6 +5124,8 @@ or a different price that is not a discount */
     discount!: number;
     /** Any comments regarding this product instance */
     comments?: string;
+    /** Subtype of this activity, only used when the type = "STATUS" */
+    subType?: ProductInstanceStatus;
 
     constructor(data?: IProductInstance) {
         if (data) {
@@ -5160,6 +5162,7 @@ or a different price that is not a discount */
             this.basePrice = _data["basePrice"];
             this.discount = _data["discount"];
             this.comments = _data["comments"];
+            this.subType = _data["subType"];
         }
     }
 
@@ -5191,6 +5194,7 @@ or a different price that is not a discount */
         data["basePrice"] = this.basePrice;
         data["discount"] = this.discount;
         data["comments"] = this.comments;
+        data["subType"] = this.subType;
         return data; 
     }
 }
@@ -5224,6 +5228,8 @@ or a different price that is not a discount */
     discount: number;
     /** Any comments regarding this product instance */
     comments?: string;
+    /** Subtype of this activity, only used when the type = "STATUS" */
+    subType?: ProductInstanceStatus;
 }
 
 export class Company implements ICompany {
@@ -5812,7 +5818,7 @@ export class Contact implements IContact {
     /** The first name of the contact */
     firstName!: string;
     /** The middle name of the contact, if he/she has one */
-    middleName!: string;
+    lastNamePreposition!: string;
     /** The last name of the contact */
     lastName!: string;
     /** The (personal) email address of the contact */
@@ -5851,7 +5857,7 @@ export class Contact implements IContact {
             this.version = _data["version"];
             this.gender = _data["gender"];
             this.firstName = _data["firstName"];
-            this.middleName = _data["middleName"];
+            this.lastNamePreposition = _data["lastNamePreposition"];
             this.lastName = _data["lastName"];
             this.email = _data["email"];
             this.telephone = _data["telephone"];
@@ -5883,7 +5889,7 @@ export class Contact implements IContact {
         data["version"] = this.version;
         data["gender"] = this.gender;
         data["firstName"] = this.firstName;
-        data["middleName"] = this.middleName;
+        data["lastNamePreposition"] = this.lastNamePreposition;
         data["lastName"] = this.lastName;
         data["email"] = this.email;
         data["telephone"] = this.telephone;
@@ -5916,7 +5922,7 @@ export interface IContact {
     /** The first name of the contact */
     firstName: string;
     /** The middle name of the contact, if he/she has one */
-    middleName: string;
+    lastNamePreposition: string;
     /** The last name of the contact */
     lastName: string;
     /** The (personal) email address of the contact */
@@ -6347,6 +6353,13 @@ export interface IProductActivity {
     product: Product;
 }
 
+export enum ProductInstanceStatus {
+    NOTDELIVERED = "NOTDELIVERED",
+    DELIVERED = "DELIVERED",
+    CANCELLED = "CANCELLED",
+    DEFERRED = "DEFERRED",
+}
+
 export class ProductFile implements IProductFile {
     /** Incremental ID of the entity */
     id!: number;
@@ -6711,7 +6724,7 @@ export class ProductParams implements IProductParams {
     nameEnglish!: string;
     targetPrice!: number;
     status!: ProductStatus;
-    description!: string;
+    description?: string;
     categoryId!: number;
     contractTextDutch!: string;
     contractTextEnglish!: string;
@@ -6770,7 +6783,7 @@ export interface IProductParams {
     nameEnglish: string;
     targetPrice: number;
     status: ProductStatus;
-    description: string;
+    description?: string;
     categoryId: number;
     contractTextDutch: string;
     contractTextEnglish: string;
@@ -7237,7 +7250,7 @@ export interface ICompanySummary {
 
 export class CompanyParams implements ICompanyParams {
     name!: string;
-    description?: string;
+    comments?: string;
     phoneNumber?: string;
     addressStreet!: string;
     addressPostalCode!: string;
@@ -7262,7 +7275,7 @@ export class CompanyParams implements ICompanyParams {
     init(_data?: any) {
         if (_data) {
             this.name = _data["name"];
-            this.description = _data["description"];
+            this.comments = _data["comments"];
             this.phoneNumber = _data["phoneNumber"];
             this.addressStreet = _data["addressStreet"];
             this.addressPostalCode = _data["addressPostalCode"];
@@ -7287,7 +7300,7 @@ export class CompanyParams implements ICompanyParams {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["name"] = this.name;
-        data["description"] = this.description;
+        data["comments"] = this.comments;
         data["phoneNumber"] = this.phoneNumber;
         data["addressStreet"] = this.addressStreet;
         data["addressPostalCode"] = this.addressPostalCode;
@@ -7305,7 +7318,7 @@ export class CompanyParams implements ICompanyParams {
 
 export interface ICompanyParams {
     name: string;
-    description?: string;
+    comments?: string;
     phoneNumber?: string;
     addressStreet: string;
     addressPostalCode: string;
@@ -7322,7 +7335,7 @@ export interface ICompanyParams {
 /** Make all properties in T optional */
 export class Partial_CompanyParams implements IPartial_CompanyParams {
     name?: string;
-    description?: string;
+    comments?: string;
     phoneNumber?: string;
     addressStreet?: string;
     addressPostalCode?: string;
@@ -7347,7 +7360,7 @@ export class Partial_CompanyParams implements IPartial_CompanyParams {
     init(_data?: any) {
         if (_data) {
             this.name = _data["name"];
-            this.description = _data["description"];
+            this.comments = _data["comments"];
             this.phoneNumber = _data["phoneNumber"];
             this.addressStreet = _data["addressStreet"];
             this.addressPostalCode = _data["addressPostalCode"];
@@ -7372,7 +7385,7 @@ export class Partial_CompanyParams implements IPartial_CompanyParams {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["name"] = this.name;
-        data["description"] = this.description;
+        data["comments"] = this.comments;
         data["phoneNumber"] = this.phoneNumber;
         data["addressStreet"] = this.addressStreet;
         data["addressPostalCode"] = this.addressPostalCode;
@@ -7391,7 +7404,7 @@ export class Partial_CompanyParams implements IPartial_CompanyParams {
 /** Make all properties in T optional */
 export interface IPartial_CompanyParams {
     name?: string;
-    description?: string;
+    comments?: string;
     phoneNumber?: string;
     addressStreet?: string;
     addressPostalCode?: string;
@@ -7698,13 +7711,6 @@ export interface IPartial_ProductInstanceParams {
     basePrice?: number;
     discount?: number;
     comments?: string;
-}
-
-export enum ProductInstanceStatus {
-    NOTDELIVERED = "NOTDELIVERED",
-    DELIVERED = "DELIVERED",
-    CANCELLED = "CANCELLED",
-    DEFERRED = "DEFERRED",
 }
 
 export class ProductInstanceStatusParams implements IProductInstanceStatusParams {
@@ -8240,7 +8246,7 @@ export interface IContactListResponse {
 export class ContactSummary implements IContactSummary {
     id!: number;
     firstName!: string;
-    middleName!: string;
+    lastNamePreposition!: string;
     lastName!: string;
     companyName!: string;
 
@@ -8257,7 +8263,7 @@ export class ContactSummary implements IContactSummary {
         if (_data) {
             this.id = _data["id"];
             this.firstName = _data["firstName"];
-            this.middleName = _data["middleName"];
+            this.lastNamePreposition = _data["lastNamePreposition"];
             this.lastName = _data["lastName"];
             this.companyName = _data["companyName"];
         }
@@ -8274,7 +8280,7 @@ export class ContactSummary implements IContactSummary {
         data = typeof data === 'object' ? data : {};
         data["id"] = this.id;
         data["firstName"] = this.firstName;
-        data["middleName"] = this.middleName;
+        data["lastNamePreposition"] = this.lastNamePreposition;
         data["lastName"] = this.lastName;
         data["companyName"] = this.companyName;
         return data; 
@@ -8284,7 +8290,7 @@ export class ContactSummary implements IContactSummary {
 export interface IContactSummary {
     id: number;
     firstName: string;
-    middleName: string;
+    lastNamePreposition: string;
     lastName: string;
     companyName: string;
 }
@@ -8292,11 +8298,11 @@ export interface IContactSummary {
 export class ContactParams implements IContactParams {
     gender!: Gender;
     firstName!: string;
-    middleName!: string;
+    lastNamePreposition?: string;
     lastName!: string;
     email!: string;
-    telephone!: string;
-    comments!: string;
+    telephone?: string;
+    comments?: string;
     companyId!: number;
     function!: ContactFunction;
 
@@ -8313,7 +8319,7 @@ export class ContactParams implements IContactParams {
         if (_data) {
             this.gender = _data["gender"];
             this.firstName = _data["firstName"];
-            this.middleName = _data["middleName"];
+            this.lastNamePreposition = _data["lastNamePreposition"];
             this.lastName = _data["lastName"];
             this.email = _data["email"];
             this.telephone = _data["telephone"];
@@ -8334,7 +8340,7 @@ export class ContactParams implements IContactParams {
         data = typeof data === 'object' ? data : {};
         data["gender"] = this.gender;
         data["firstName"] = this.firstName;
-        data["middleName"] = this.middleName;
+        data["lastNamePreposition"] = this.lastNamePreposition;
         data["lastName"] = this.lastName;
         data["email"] = this.email;
         data["telephone"] = this.telephone;
@@ -8348,11 +8354,11 @@ export class ContactParams implements IContactParams {
 export interface IContactParams {
     gender: Gender;
     firstName: string;
-    middleName: string;
+    lastNamePreposition?: string;
     lastName: string;
     email: string;
-    telephone: string;
-    comments: string;
+    telephone?: string;
+    comments?: string;
     companyId: number;
     function: ContactFunction;
 }
@@ -8361,7 +8367,7 @@ export interface IContactParams {
 export class Partial_ContactParams implements IPartial_ContactParams {
     gender?: Gender;
     firstName?: string;
-    middleName?: string;
+    lastNamePreposition?: string;
     lastName?: string;
     email?: string;
     telephone?: string;
@@ -8382,7 +8388,7 @@ export class Partial_ContactParams implements IPartial_ContactParams {
         if (_data) {
             this.gender = _data["gender"];
             this.firstName = _data["firstName"];
-            this.middleName = _data["middleName"];
+            this.lastNamePreposition = _data["lastNamePreposition"];
             this.lastName = _data["lastName"];
             this.email = _data["email"];
             this.telephone = _data["telephone"];
@@ -8403,7 +8409,7 @@ export class Partial_ContactParams implements IPartial_ContactParams {
         data = typeof data === 'object' ? data : {};
         data["gender"] = this.gender;
         data["firstName"] = this.firstName;
-        data["middleName"] = this.middleName;
+        data["lastNamePreposition"] = this.lastNamePreposition;
         data["lastName"] = this.lastName;
         data["email"] = this.email;
         data["telephone"] = this.telephone;
@@ -8418,7 +8424,7 @@ export class Partial_ContactParams implements IPartial_ContactParams {
 export interface IPartial_ContactParams {
     gender?: Gender;
     firstName?: string;
-    middleName?: string;
+    lastNamePreposition?: string;
     lastName?: string;
     email?: string;
     telephone?: string;
@@ -8481,7 +8487,7 @@ export interface IUserListResponse {
 export class UserSummary implements IUserSummary {
     id!: number;
     firstName!: string;
-    middleName!: string;
+    lastNamePreposition!: string;
     lastName!: string;
     email!: string;
 
@@ -8498,7 +8504,7 @@ export class UserSummary implements IUserSummary {
         if (_data) {
             this.id = _data["id"];
             this.firstName = _data["firstName"];
-            this.middleName = _data["middleName"];
+            this.lastNamePreposition = _data["lastNamePreposition"];
             this.lastName = _data["lastName"];
             this.email = _data["email"];
         }
@@ -8515,7 +8521,7 @@ export class UserSummary implements IUserSummary {
         data = typeof data === 'object' ? data : {};
         data["id"] = this.id;
         data["firstName"] = this.firstName;
-        data["middleName"] = this.middleName;
+        data["lastNamePreposition"] = this.lastNamePreposition;
         data["lastName"] = this.lastName;
         data["email"] = this.email;
         return data; 
@@ -8525,7 +8531,7 @@ export class UserSummary implements IUserSummary {
 export interface IUserSummary {
     id: number;
     firstName: string;
-    middleName: string;
+    lastNamePreposition: string;
     lastName: string;
     email: string;
 }
@@ -8534,7 +8540,7 @@ export interface IUserSummary {
 export class Partial_UserParams implements IPartial_UserParams {
     email?: string;
     firstName?: string;
-    middleName?: string;
+    lastNamePreposition?: string;
     lastName?: string;
     function?: string;
     gender?: Gender;
@@ -8554,7 +8560,7 @@ export class Partial_UserParams implements IPartial_UserParams {
         if (_data) {
             this.email = _data["email"];
             this.firstName = _data["firstName"];
-            this.middleName = _data["middleName"];
+            this.lastNamePreposition = _data["lastNamePreposition"];
             this.lastName = _data["lastName"];
             this.function = _data["function"];
             this.gender = _data["gender"];
@@ -8578,7 +8584,7 @@ export class Partial_UserParams implements IPartial_UserParams {
         data = typeof data === 'object' ? data : {};
         data["email"] = this.email;
         data["firstName"] = this.firstName;
-        data["middleName"] = this.middleName;
+        data["lastNamePreposition"] = this.lastNamePreposition;
         data["lastName"] = this.lastName;
         data["function"] = this.function;
         data["gender"] = this.gender;
@@ -8596,7 +8602,7 @@ export class Partial_UserParams implements IPartial_UserParams {
 export interface IPartial_UserParams {
     email?: string;
     firstName?: string;
-    middleName?: string;
+    lastNamePreposition?: string;
     lastName?: string;
     function?: string;
     gender?: Gender;

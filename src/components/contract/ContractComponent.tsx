@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 import { Contract } from '../../clients/server.generated';
 import { getCompanyName } from '../../stores/company/selectors';
 import { getContactName } from '../../stores/contact/selectors';
-import './Contract.scss';
+import './ContractComponent.scss';
 import { RootState } from '../../stores/store';
 
 interface Props extends RouteComponentProps {

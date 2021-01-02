@@ -2,30 +2,29 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Dropdown, DropdownProps } from 'semantic-ui-react';
-import { ContactSummary } from '../../clients/server.generated';
-import { formatContactName } from '../../helpers/contact';
+import { ProductSummary } from '../../clients/server.generated';
 import { RootState } from '../../stores/store';
 
 interface Props {
   value: number;
-  options: ContactSummary[];
+  options: ProductSummary[];
   onChange: (value: number | number[]) => void;
 }
 
-function ContactSelector(props: Props & DropdownProps) {
+function ProductSelector(props: Props & DropdownProps) {
   const {
     value, onChange, options, ...rest
   } = props;
   const dropdownOptions = props.options.map((x) => ({
     key: x.id,
-    text: formatContactName(x.firstName, x.lastNamePreposition, x.lastName),
-    description: x.companyName,
+    text: x.nameDutch,
+    description: x.nameEnglish,
     value: x.id,
   }));
 
   return (
     <Dropdown
-      placeholder="Contact"
+      placeholder="Product"
       search
       selection
       {...rest}
@@ -37,7 +36,7 @@ function ContactSelector(props: Props & DropdownProps) {
 }
 
 const mapStateToProps = (state: RootState) => ({
-  options: state.summaries.Contacts.options,
+  options: state.summaries.Products.options,
 });
 
-export default connect(mapStateToProps)(ContactSelector);
+export default connect(mapStateToProps)(ProductSelector);

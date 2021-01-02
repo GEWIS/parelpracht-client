@@ -34,7 +34,7 @@ interface State {
   editing: boolean;
 
   firstName: string;
-  middleName: string;
+  lastNamePreposition: string;
   lastName: string;
   gender: Gender;
   email: string;
@@ -70,7 +70,7 @@ class UserProps extends React.Component<Props, State> {
     const { user } = props;
     return {
       firstName: user.firstName,
-      middleName: user.middleName,
+      lastNamePreposition: user.lastNamePreposition,
       lastName: user.lastName,
       function: user.function,
       gender: user.gender,
@@ -88,7 +88,7 @@ class UserProps extends React.Component<Props, State> {
   toParams = (): UserParams => {
     return new UserParams({
       firstName: this.state.firstName,
-      middleName: this.state.middleName,
+      lastNamePreposition: this.state.lastNamePreposition,
       lastName: this.state.lastName,
       gender: this.state.gender,
       email: this.state.email,
@@ -129,7 +129,7 @@ class UserProps extends React.Component<Props, State> {
     const {
       editing,
       firstName,
-      middleName,
+      lastNamePreposition,
       lastName,
       gender,
       email,
@@ -172,9 +172,9 @@ class UserProps extends React.Component<Props, State> {
               fluid
               control={Input}
               label="Middle Name"
-              value={middleName}
+              value={lastNamePreposition}
               onChange={(e: ChangeEvent<HTMLInputElement>) => this.setState({
-                middleName: e.target.value,
+                lastNamePreposition: e.target.value,
               })}
               width={4}
             />

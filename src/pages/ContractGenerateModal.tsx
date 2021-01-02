@@ -21,7 +21,7 @@ interface Props {
   contractId: number;
 }
 
-function SingleContractPage(props: Props) {
+function GenerateContract(props: Props) {
   const [isOpen, setOpen] = useState(false);
 
   const [name, changeName] = useState('');
@@ -56,13 +56,17 @@ function SingleContractPage(props: Props) {
       open={isOpen}
       dimmer="blurring"
       size="tiny"
-      trigger={<Button> Generate </Button>}
+      trigger={<Button primary> Generate File </Button>}
     >
       <Segment attached="bottom">
         <AlertContainer />
         <h2>
           Generate file
-          <Button onClick={save}>
+          <Button
+            primary
+            onClick={save}
+            floated="right"
+          >
             Generate
           </Button>
         </h2>
@@ -177,4 +181,4 @@ function SingleContractPage(props: Props) {
   );
 }
 
-export default SingleContractPage;
+export default GenerateContract;

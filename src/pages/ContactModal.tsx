@@ -27,7 +27,7 @@ interface Props extends RouteComponentProps<{ companyId: string, contactId?: str
   fetchCompany: (id: number) => void;
 }
 
-class CompaniesCreatePage extends React.Component<Props> {
+class ContactModal extends React.Component<Props> {
   componentDidMount() {
     this.props.clearContact();
 
@@ -137,4 +137,4 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   fetchCompany: (id: number) => dispatch(fetchSingle(SingleEntities.Company, id)),
 });
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(CompaniesCreatePage));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ContactModal));

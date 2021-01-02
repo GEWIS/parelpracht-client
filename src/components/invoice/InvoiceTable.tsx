@@ -60,7 +60,7 @@ function InvoicesTable({
               sorted={column === 'Last updated' ? direction : undefined}
               onClick={() => changeSort('Last updated')}
             >
-              Last Updated
+              Last Update
             </Table.HeaderCell>
           </Table.Row>
         </Table.Header>
