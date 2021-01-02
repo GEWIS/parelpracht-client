@@ -44,7 +44,7 @@ class SingleUserPage extends React.Component<Props> {
             {
               key: 'User',
               content: user
-                ? formatContactName(user.firstName, user.middleName, user.lastName)
+                ? formatContactName(user.firstName, user.lastNamePreposition, user.lastName)
                 : '',
               active: true,
             },

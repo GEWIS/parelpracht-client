@@ -15,6 +15,7 @@ import ContractSummary from '../components/contract/ContractSummary';
 import ContractProductList from '../components/contract/ContractProductList';
 import { getSingle } from '../stores/single/selectors';
 import { SingleEntities } from '../stores/single/single';
+import ContractGenerateModal from './ContractGenerateModal';
 
 interface Props extends RouteComponentProps<{ contractId: string }> {
   contract: Contract | undefined;

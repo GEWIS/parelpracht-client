@@ -38,7 +38,7 @@ class UserCreatePage extends React.Component<Props> {
     const user: User = {
       id: 0,
       firstName: '',
-      middleName: '',
+      lastNamePreposition: '',
       lastName: '',
       email: '',
       gender: Gender.UNKNOWN,

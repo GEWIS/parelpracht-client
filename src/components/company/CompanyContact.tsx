@@ -37,7 +37,7 @@ class CompanyContact extends React.Component<Props> {
               <Header.Subheader>
                 {formatContactName(
                   contact.firstName,
-                  contact.middleName,
+                  contact.lastNamePreposition,
                   contact.lastName,
                 )}
               </Header.Subheader>
