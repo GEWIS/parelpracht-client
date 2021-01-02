@@ -12,6 +12,7 @@ import { RootState } from '../stores/store';
 import ContractProps from '../components/contract/ContractProps';
 import ResourceStatus from '../stores/resourceStatus';
 import ContractSummary from '../components/contract/ContractSummary';
+import ContractProductList from '../components/contract/ContractProductList';
 import { getSingle } from '../stores/single/selectors';
 import { SingleEntities } from '../stores/single/single';
 
@@ -56,6 +57,11 @@ class SingleContractPage extends React.Component<Props> {
           <Grid.Column>
             <Segment>
               <ContractProps contract={contract} />
+            </Segment>
+          </Grid.Column>
+          <Grid.Column>
+            <Segment secondary>
+              <ContractProductList />
             </Segment>
           </Grid.Column>
         </Grid>
