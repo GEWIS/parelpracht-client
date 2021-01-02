@@ -5,6 +5,7 @@ import { Table } from 'semantic-ui-react';
 import { Invoice } from '../../clients/server.generated';
 import { getCompanyName } from '../../stores/company/selectors';
 import { RootState } from '../../stores/store';
+import { formatLastUpdate } from '../../helpers/lastUpdate';
 
 interface Props {
   invoice: Invoice;
@@ -27,11 +28,8 @@ function InvoiceRow(props: Props) {
         </NavLink>
       </Table.Cell>
       <Table.Cell>
-        {invoice.updatedAt.toLocaleString()}
+        {formatLastUpdate(invoice.updatedAt)}
       </Table.Cell>
-      {/* <Table.Cell>
-        {invoice.status === InvoiceStatus.ACTIVE ? 'Active' : 'Inactive'}
-      </Table.Cell> */}
     </Table.Row>
   );
 }
