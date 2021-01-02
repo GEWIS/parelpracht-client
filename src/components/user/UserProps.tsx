@@ -225,12 +225,13 @@ class UserProps extends React.Component<Props, State> {
           <Segment>
             <h3>Permissions</h3>
             <Form.Group widths="equal">
-              <Form.Field disabled={!editing}>
+              <Form.Field>
                 {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
                 <label htmlFor="form-check-role-signee">
                   Signee
                 </label>
                 <Checkbox
+                  disabled={!editing}
                   toggle
                   id="form-check-role-signee"
                   checked={roleSignee}
@@ -239,12 +240,13 @@ class UserProps extends React.Component<Props, State> {
                   })}
                 />
               </Form.Field>
-              <Form.Field disabled={!editing}>
+              <Form.Field>
                 {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
                 <label htmlFor="form-check-role-financial">
                   Financial
                 </label>
                 <Checkbox
+                  disabled={!editing}
                   toggle
                   id="form-check-role-financial"
                   checked={roleFinancial}
@@ -253,12 +255,13 @@ class UserProps extends React.Component<Props, State> {
                   })}
                 />
               </Form.Field>
-              <Form.Field disabled={!editing}>
+              <Form.Field>
                 {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
                 <label htmlFor="form-check-role-general">
                   General
                 </label>
                 <Checkbox
+                  disabled={!editing}
                   toggle
                   id="form-check-role-general"
                   checked={roleGeneral}
@@ -267,12 +270,13 @@ class UserProps extends React.Component<Props, State> {
                   })}
                 />
               </Form.Field>
-              <Form.Field disabled={!editing}>
+              <Form.Field>
                 {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
                 <label htmlFor="form-check-role-audit">
                   Audit
                 </label>
                 <Checkbox
+                  disabled={!editing}
                   toggle
                   id="form-check-role-audit"
                   checked={roleAudit}
@@ -281,12 +285,13 @@ class UserProps extends React.Component<Props, State> {
                   })}
                 />
               </Form.Field>
-              <Form.Field disabled={!editing}>
+              <Form.Field>
                 {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
                 <label htmlFor="form-check-role-admin">
                   Admin
                 </label>
                 <Checkbox
+                  disabled={!editing}
                   toggle
                   id="form-check-role-admin"
                   checked={roleAdmin}
