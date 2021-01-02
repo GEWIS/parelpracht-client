@@ -32,6 +32,7 @@ import ContactModal from './pages/ContactModal';
 import UsersPage from './pages/UsersPage';
 import SingleUserPage from './pages/SingleUserPage';
 import UserCreatePage from './pages/UserCreatePage';
+import ContractGenerateModal from './pages/ContractGenerateModal';
 
 interface Props extends RouteComponentProps {
   // eslint-disable-next-line react/no-unused-prop-types
@@ -147,7 +148,9 @@ function Routes(props: Props) {
             <ContractsPage />
             <ContractCreatePage />
           </Route>
-          <Route path="/contract/:contractId" exact component={SingleContractPage} />
+          <Route path="/contract/:contractId" exact>
+            <SingleContractPage />
+          </Route>
           {/* Users */}
           <Route path="/user" exact>
             <UsersPage />

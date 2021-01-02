@@ -14,6 +14,7 @@ import ResourceStatus from '../stores/resourceStatus';
 import ContractSummary from '../components/contract/ContractSummary';
 import { getSingle } from '../stores/single/selectors';
 import { SingleEntities } from '../stores/single/single';
+import ContractGenerateModal from './ContractGenerateModal';
 
 interface Props extends RouteComponentProps<{ contractId: string }> {
   contract: Contract | undefined;
@@ -54,6 +55,7 @@ class SingleContractPage extends React.Component<Props> {
         <ContractSummary />
         <Grid columns={2}>
           <Grid.Column>
+            <ContractGenerateModal contractId={contract.id} />
             <Segment>
               <ContractProps contract={contract} />
             </Segment>
