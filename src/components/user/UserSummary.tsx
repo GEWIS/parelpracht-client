@@ -5,7 +5,7 @@ import {
   Grid, Header, Icon, Loader, Placeholder, Segment,
 } from 'semantic-ui-react';
 import { User } from '../../clients/server.generated';
-import { formatContactName } from '../../helpers/contact';
+import { formatContactName, formatGender } from '../../helpers/contact';
 import ResourceStatus from '../../stores/resourceStatus';
 import { getSingle } from '../../stores/single/selectors';
 import { SingleEntities } from '../../stores/single/single';
@@ -75,7 +75,7 @@ function UserSummary(props: Props) {
           </Grid.Column>
           <Grid.Column>
             <h5>Gender</h5>
-            <p>{user.gender}</p>
+            <p>{formatGender(user.gender)}</p>
           </Grid.Column>
         </Grid>
       </Segment>
