@@ -37,12 +37,12 @@ class CompaniesCreatePage extends React.Component<Props> {
     }
   }
 
-  /* componentDidUpdate(prevProps: Props) {
+  componentDidUpdate(prevProps: Props) {
     if (prevProps.status === ResourceStatus.SAVING
       && this.props.status === ResourceStatus.FETCHED) {
       this.close();
     }
-  } */
+  }
 
   close = () => {
     const { companyId } = this.props.match.params;
