@@ -7237,7 +7237,7 @@ export interface ICompanySummary {
 
 export class CompanyParams implements ICompanyParams {
     name!: string;
-    description?: string;
+    comments?: string;
     phoneNumber?: string;
     addressStreet!: string;
     addressPostalCode!: string;
@@ -7262,7 +7262,7 @@ export class CompanyParams implements ICompanyParams {
     init(_data?: any) {
         if (_data) {
             this.name = _data["name"];
-            this.description = _data["description"];
+            this.comments = _data["comments"];
             this.phoneNumber = _data["phoneNumber"];
             this.addressStreet = _data["addressStreet"];
             this.addressPostalCode = _data["addressPostalCode"];
@@ -7287,7 +7287,7 @@ export class CompanyParams implements ICompanyParams {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["name"] = this.name;
-        data["description"] = this.description;
+        data["comments"] = this.comments;
         data["phoneNumber"] = this.phoneNumber;
         data["addressStreet"] = this.addressStreet;
         data["addressPostalCode"] = this.addressPostalCode;
@@ -7305,7 +7305,7 @@ export class CompanyParams implements ICompanyParams {
 
 export interface ICompanyParams {
     name: string;
-    description?: string;
+    comments?: string;
     phoneNumber?: string;
     addressStreet: string;
     addressPostalCode: string;
@@ -7322,7 +7322,7 @@ export interface ICompanyParams {
 /** Make all properties in T optional */
 export class Partial_CompanyParams implements IPartial_CompanyParams {
     name?: string;
-    description?: string;
+    comments?: string;
     phoneNumber?: string;
     addressStreet?: string;
     addressPostalCode?: string;
@@ -7347,7 +7347,7 @@ export class Partial_CompanyParams implements IPartial_CompanyParams {
     init(_data?: any) {
         if (_data) {
             this.name = _data["name"];
-            this.description = _data["description"];
+            this.comments = _data["comments"];
             this.phoneNumber = _data["phoneNumber"];
             this.addressStreet = _data["addressStreet"];
             this.addressPostalCode = _data["addressPostalCode"];
@@ -7372,7 +7372,7 @@ export class Partial_CompanyParams implements IPartial_CompanyParams {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["name"] = this.name;
-        data["description"] = this.description;
+        data["comments"] = this.comments;
         data["phoneNumber"] = this.phoneNumber;
         data["addressStreet"] = this.addressStreet;
         data["addressPostalCode"] = this.addressPostalCode;
@@ -7391,7 +7391,7 @@ export class Partial_CompanyParams implements IPartial_CompanyParams {
 /** Make all properties in T optional */
 export interface IPartial_CompanyParams {
     name?: string;
-    description?: string;
+    comments?: string;
     phoneNumber?: string;
     addressStreet?: string;
     addressPostalCode?: string;

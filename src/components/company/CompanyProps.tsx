@@ -29,7 +29,7 @@ interface Props {
 interface State {
   editing: boolean;
   name: string;
-  description: string | undefined;
+  comments: string | undefined;
   phoneNumber: string | undefined;
   status: CompanyStatus;
   addressStreet: string;
@@ -60,7 +60,7 @@ class CompanyProps extends React.Component<Props, State> {
     const { company } = props;
     return {
       name: company.name,
-      description: company.comments,
+      comments: company.comments,
       phoneNumber: company.phoneNumber,
       status: company.status,
       addressStreet: company.addressStreet,
@@ -73,7 +73,7 @@ class CompanyProps extends React.Component<Props, State> {
   toParams = (): CompanyParams => {
     return new CompanyParams({
       name: this.state.name,
-      description: this.state.description,
+      comments: this.state.comments,
       phoneNumber: this.state.phoneNumber,
       status: this.state.status,
       addressStreet: this.state.addressStreet,
@@ -107,7 +107,7 @@ class CompanyProps extends React.Component<Props, State> {
     const {
       editing,
       name,
-      description,
+      comments,
       phoneNumber,
       status,
     } = this.state;
@@ -142,13 +142,13 @@ class CompanyProps extends React.Component<Props, State> {
             <Form.Field disabled={!editing}>
               {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
               <label htmlFor="form-input-description">
-                Description
+                Comments
               </label>
               <TextArea
-                id="form-input-description"
-                value={description}
-                onChange={(e) => this.setState({ description: e.target.value })}
-                placeholder="Description"
+                id="form-input-comments"
+                value={comments}
+                onChange={(e) => this.setState({ comments: e.target.value })}
+                placeholder="Comments"
               />
             </Form.Field>
           </Form.Group>
@@ -158,7 +158,7 @@ class CompanyProps extends React.Component<Props, State> {
               id="form-input-phonenumber"
               fluid
               control={Input}
-              label="phoneNumber"
+              label="Telephone Number"
               value={phoneNumber}
               onChange={(e: ChangeEvent<HTMLInputElement>) => this.setState({
                 phoneNumber: e.target.value,
