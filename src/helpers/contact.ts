@@ -1,4 +1,4 @@
-import { ContactFunction } from '../clients/server.generated';
+import { ContactFunction, Gender } from '../clients/server.generated';
 
 export function formatContactName(fName: string, mName: string, lName: string): string {
   let contactName: string = '';
@@ -17,5 +17,15 @@ export function formatFunction(func: ContactFunction) {
     case ContactFunction.FINANCIAL: return 'Financial contact';
     case ContactFunction.OLD: return 'Old contact';
     default: return 'Unknown function';
+  }
+}
+
+export function formatGender(gender: Gender) {
+  switch (gender) {
+    case Gender.MALE: return 'Male';
+    case Gender.FEMALE: return 'Female';
+    case Gender.OTHER: return 'Other gender';
+    case Gender.UNKNOWN: return 'Unknown gender';
+    default: return 'Unknown gender';
   }
 }
