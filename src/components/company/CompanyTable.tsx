@@ -60,7 +60,7 @@ function CompaniesTable({
               sorted={column === 'updatedAt' ? direction : undefined}
               onClick={() => changeSort('updatedAt')}
             >
-              Last update
+              Last Update
             </Table.HeaderCell>
           </Table.Row>
         </Table.Header>
