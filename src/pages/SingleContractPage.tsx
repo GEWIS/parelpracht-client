@@ -56,7 +56,6 @@ class SingleContractPage extends React.Component<Props> {
         <ContractSummary />
         <Grid columns={2}>
           <Grid.Column>
-            <ContractGenerateModal contractId={contract.id} />
             <Segment>
               <ContractProps contract={contract} />
             </Segment>

@@ -57,7 +57,7 @@ class ContactModal extends React.Component<Props> {
       contact = {
         id: 0,
         firstName: '',
-        middleName: '',
+        lastNamePreposition: '',
         lastName: '',
         gender: Gender.UNKNOWN,
         email: '',
