@@ -14,6 +14,7 @@ import ResourceStatus from '../stores/resourceStatus';
 import ContractSummary from '../components/contract/ContractSummary';
 import { getSingle } from '../stores/single/selectors';
 import { SingleEntities } from '../stores/single/single';
+import FilesList from '../components/Files/FilesList';
 
 interface Props extends RouteComponentProps<{ contractId: string }> {
   contract: Contract | undefined;
@@ -56,6 +57,11 @@ class SingleContractPage extends React.Component<Props> {
           <Grid.Column>
             <Segment>
               <ContractProps contract={contract} />
+            </Segment>
+          </Grid.Column>
+          <Grid.Column>
+            <Segment>
+              <FilesList files={contract.files} />
             </Segment>
           </Grid.Column>
         </Grid>
