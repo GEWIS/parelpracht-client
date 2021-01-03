@@ -139,6 +139,7 @@ class ContactProps extends React.Component<Props, State> {
           <Form.Group>
             <Form.Field
               disabled={!editing}
+              required
               id="form-input-first-name"
               fluid
               control={Input}
@@ -163,6 +164,7 @@ class ContactProps extends React.Component<Props, State> {
             />
             <Form.Field
               disabled={!editing}
+              required
               id="form-input-last-name"
               fluid
               control={Input}
@@ -175,7 +177,7 @@ class ContactProps extends React.Component<Props, State> {
             />
           </Form.Group>
           <Form.Group widths="equal">
-            <Form.Field fluid disabled={!editing}>
+            <Form.Field required fluid disabled={!editing}>
               {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
               <label htmlFor="form-input-gender">Gender</label>
               <Dropdown
@@ -193,7 +195,7 @@ class ContactProps extends React.Component<Props, State> {
                 })}
               />
             </Form.Field>
-            <Form.Field fluid disabled={!editing}>
+            <Form.Field required fluid disabled={!editing}>
               {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
               <label htmlFor="form-input-function">Function</label>
               <Dropdown

@@ -125,6 +125,7 @@ class ContractProps extends React.Component<Props, State> {
           <Form.Group widths="equal">
             <Form.Field
               disabled={!editing}
+              required
               id="form-input-title"
               fluid
               control={Input}
@@ -136,6 +137,7 @@ class ContractProps extends React.Component<Props, State> {
             />
             <Form.Field
               disabled={!editing}
+              required
             >
               {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
               <label htmlFor="form-assigned-to-selector">Assigned to</label>
@@ -152,6 +154,7 @@ class ContractProps extends React.Component<Props, State> {
 
           <Form.Field
             disabled={!editing}
+            required
           >
             {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
             <label htmlFor="form-company-selector">Company</label>
@@ -165,6 +168,7 @@ class ContractProps extends React.Component<Props, State> {
           </Form.Field>
           <Form.Field
             disabled={!editing}
+            required
           >
             {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
             <label htmlFor="form-contact-selector">Contact</label>
