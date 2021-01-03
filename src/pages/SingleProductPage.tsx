@@ -62,10 +62,10 @@ class SingleProductPage extends React.Component<Props> {
             </Segment>
           </Grid.Column>
           <Grid.Column>
-            <Segment>
+            <Segment secondary>
               <ContractList />
             </Segment>
-            <Segment>
+            <Segment secondary>
               <ActivitiesList activities={product.activities as GeneralActivity[]} />
             </Segment>
           </Grid.Column>

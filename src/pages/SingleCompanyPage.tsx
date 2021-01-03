@@ -69,7 +69,7 @@ class SingleCompanyPage extends React.Component<Props> {
             <Segment secondary>
               <ContractList />
             </Segment>
-            <Segment>
+            <Segment secondary>
               <ActivitiesList activities={company.activities as GeneralActivity[]} />
             </Segment>
           </Grid.Column>
