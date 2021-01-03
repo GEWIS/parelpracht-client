@@ -15,6 +15,7 @@ import ContractList from '../components/contract/ContractList';
 import { getSingle } from '../stores/single/selectors';
 import { SingleEntities } from '../stores/single/single';
 import { clearSingle, fetchSingle } from '../stores/single/actionCreators';
+import ActivitiesList from '../components/activities/ActivitiesList';
 
 interface Props extends RouteComponentProps<{ productId: string }> {
   product: Product | undefined;
@@ -62,6 +63,9 @@ class SingleProductPage extends React.Component<Props> {
           <Grid.Column>
             <Segment>
               <ContractList />
+            </Segment>
+            <Segment>
+              <ActivitiesList activities={product.activities} />
             </Segment>
           </Grid.Column>
         </Grid>
