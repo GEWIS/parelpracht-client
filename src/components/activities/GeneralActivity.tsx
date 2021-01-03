@@ -20,14 +20,19 @@ export class GeneralActivity {
 
   /** Version number of this entity */
   readonly version!: number;
+
   /** Type of the activity (status or comment) */
   type!: ActivityType;
 
   /** Description of this activity */
   description!: string;
 
+  /** Id of the creator of the activity */
   createdById!: number;
 
   /** User who created this activity */
   createdBy!: User;
+
+  /** Status of the contract/invoice/product instance */
+  subType?: string;
 }
