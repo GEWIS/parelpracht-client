@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 import './Activity.scss';
 import { RootState } from '../../stores/store';
 import { getUserName } from '../../stores/user/selectors';
-import { formatActivityType, formatActivityDate } from '../../helpers/activity';
+import { formatActivityType, formatActivityDate, formatContractStatus } from '../../helpers/activity';
 import { GeneralActivity } from './GeneralActivity';
 
 interface Props extends RouteComponentProps {
@@ -19,6 +19,33 @@ interface Props extends RouteComponentProps {
 class ActivityComponent extends React.Component<Props> {
   public render() {
     const { activity, userName } = this.props;
+    if (activity.type === 'STATUS') {
+      return (
+        <Segment.Group
+          horizontal
+          className="activity-component"
+          style={{ margin: 0, marginTop: '0.2em' }}
+        >
+          <Segment
+            as={Button}
+            textAlign="left"
+          >
+            <Header>
+              <Icon name="list alternate outline" size="large" />
+              <Header.Content>
+                {formatActivityType(activity.type)}
+                <Header.Subheader>
+                  {formatContractStatus(activity.subType)}
+                </Header.Subheader>
+                <Header.Subheader>
+                  {formatActivityDate(activity.createdAt, userName)}
+                </Header.Subheader>
+              </Header.Content>
+            </Header>
+          </Segment>
+        </Segment.Group>
+      );
+    }
     return (
       <Segment.Group
         horizontal
