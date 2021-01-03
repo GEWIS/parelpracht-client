@@ -5,7 +5,7 @@ export function formatActivityType(activityType: ActivityType): string {
   if (activityType === 'COMMENT') {
     return 'Comment';
   }
-  return 'Status';
+  return 'Status changed to: ';
 }
 
 export function formatActivityDate(date: Date, userName: string): string {
@@ -13,14 +13,16 @@ export function formatActivityDate(date: Date, userName: string): string {
   return `${dateString} by ${userName}`;
 }
 
-export function formatContractStatus(status: string | undefined): string {
+export function formatStatus(status: string | undefined): string {
   switch (status) {
-    case ContractStatus.CREATED: return 'Created';
-    case ContractStatus.PROPOSED: return 'Proposed';
-    case ContractStatus.SENT: return 'Sent';
-    case ContractStatus.CONFIRMED: return 'Confirmed';
-    case ContractStatus.FINISHED: return 'Finished';
-    case ContractStatus.CANCELLED: return 'Cancelled';
+    case 'CREATED': return 'Created';
+    case 'PROPOSED': return 'Proposed';
+    case 'SENT': return 'Sent';
+    case 'CONFIRMED': return 'Confirmed';
+    case 'FINISHED': return 'Finished';
+    case 'CANCELLED': return 'Cancelled';
+    case 'PAID': return 'Paid';
+    case 'IRRECOVERABLE': return 'Irrecoverable';
     default: return 'Unknown';
   }
 }

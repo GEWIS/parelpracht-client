@@ -2,7 +2,7 @@ import * as React from 'react';
 import { NavLink, RouteComponentProps, withRouter } from 'react-router-dom';
 import {
   Breadcrumb,
-  Container, Grid, Loader, Segment,
+  Container, Grid, GridColumn, Loader, Segment,
 } from 'semantic-ui-react';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
@@ -14,6 +14,8 @@ import InvoiceProps from '../components/invoice/InvoiceProps';
 import { clearSingle, fetchSingle } from '../stores/single/actionCreators';
 import { SingleEntities } from '../stores/single/single';
 import { getSingle } from '../stores/single/selectors';
+import ActivitiesList from '../components/activities/ActivitiesList';
+import { GeneralActivity } from '../components/activities/GeneralActivity';
 
 interface Props extends RouteComponentProps<{ invoiceId: string }> {
   invoice: Invoice | undefined;
@@ -58,6 +60,11 @@ class SingleInvoicePage extends React.Component<Props> {
               <InvoiceProps invoice={invoice} />
             </Segment>
           </Grid.Column>
+          <GridColumn>
+            <Segment secondary>
+              <ActivitiesList activities={invoice.activities as GeneralActivity[]} />
+            </Segment>
+          </GridColumn>
         </Grid>
       </Container>
     );

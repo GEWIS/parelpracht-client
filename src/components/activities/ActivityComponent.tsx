@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 import './Activity.scss';
 import { RootState } from '../../stores/store';
 import { getUserName } from '../../stores/user/selectors';
-import { formatActivityType, formatActivityDate, formatContractStatus } from '../../helpers/activity';
+import { formatActivityType, formatActivityDate, formatStatus } from '../../helpers/activity';
 import { GeneralActivity } from './GeneralActivity';
 
 interface Props extends RouteComponentProps {
@@ -34,9 +34,7 @@ class ActivityComponent extends React.Component<Props> {
               <Icon name="list alternate outline" size="large" />
               <Header.Content>
                 {formatActivityType(activity.type)}
-                <Header.Subheader>
-                  {formatContractStatus(activity.subType)}
-                </Header.Subheader>
+                {formatStatus(activity.subType)}
                 <Header.Subheader>
                   {formatActivityDate(activity.createdAt, userName)}
                 </Header.Subheader>
