@@ -1,0 +1,1490 @@
+[
+    {
+        "key":"af",
+        "value":"af",
+        "flag":"af",
+        "text":"Afghanistan"
+    },
+    {
+        "key":"ax",
+        "value":"ax",
+        "flag":"ax",
+        "text":"Åland"
+    },
+    {
+        "key":"al",
+        "value":"al",
+        "flag":"al",
+        "text":"The Republic of Albania"
+    },
+    {
+        "key":"dz",
+        "value":"dz",
+        "flag":"dz",
+        "text":"The Peoples Democratic Republic of Algeria"
+    },
+    {
+        "key":"as",
+        "value":"as",
+        "flag":"as",
+        "text":"The Territory of American Samoa"
+    },
+    {
+        "key":"ad",
+        "value":"ad",
+        "flag":"ad",
+        "text":"The Principality of Andorra"
+    },
+    {
+        "key":"ao",
+        "value":"ao",
+        "flag":"ao",
+        "text":"The Republic of Angola"
+    },
+    {
+        "key":"ai",
+        "value":"ai",
+        "flag":"ai",
+        "text":"Anguilla"
+    },
+    {
+        "key":"aq",
+        "value":"aq",
+        "flag":"aq",
+        "text":"All land and ice shelves south of the 60th parallel south"
+    },
+    {
+        "key":"ag",
+        "value":"ag",
+        "flag":"ag",
+        "text":"Antigua and Barbuda"
+    },
+    {
+        "key":"ar",
+        "value":"ar",
+        "flag":"ar",
+        "text":"The Argentine Republic"
+    },
+    {
+        "key":"am",
+        "value":"am",
+        "flag":"am",
+        "text":"The Republic of Armenia"
+    },
+    {
+        "key":"aw",
+        "value":"aw",
+        "flag":"aw",
+        "text":"Aruba"
+    },
+    {
+        "key":"au",
+        "value":"au",
+        "flag":"au",
+        "text":"The Commonwealth of Australia"
+    },
+    {
+        "key":"at",
+        "value":"at",
+        "flag":"at",
+        "text":"The Republic of Austria"
+    },
+    {
+        "key":"az",
+        "value":"az",
+        "flag":"az",
+        "text":"The Republic of Azerbaijan"
+    },
+    {
+        "key":"bs",
+        "value":"bs",
+        "flag":"bs",
+        "text":"The Commonwealth of The Bahamas"
+    },
+    {
+        "key":"bh",
+        "value":"bh",
+        "flag":"bh",
+        "text":"The Kingdom of Bahrain"
+    },
+    {
+        "key":"bd",
+        "value":"bd",
+        "flag":"bd",
+        "text":"The Peoples Republic of Bangladesh"
+    },
+    {
+        "key":"bb",
+        "value":"bb",
+        "flag":"bb",
+        "text":"Barbados"
+    },
+    {
+        "key":"by",
+        "value":"by",
+        "flag":"by",
+        "text":"The Republic of Belarus"
+    },
+    {
+        "key":"be",
+        "value":"be",
+        "flag":"be",
+        "text":"The Kingdom of Belgium"
+    },
+    {
+        "key":"bz",
+        "value":"bz",
+        "flag":"bz",
+        "text":"Belize"
+    },
+    {
+        "key":"bj",
+        "value":"bj",
+        "flag":"bj",
+        "text":"The Republic of Benin"
+    },
+    {
+        "key":"bm",
+        "value":"bm",
+        "flag":"bm",
+        "text":"Bermuda"
+    },
+    {
+        "key":"bt",
+        "value":"bt",
+        "flag":"bt",
+        "text":"The Kingdom of Bhutan"
+    },
+    {
+        "key":"bo",
+        "value":"bo",
+        "flag":"bo",
+        "text":"The Plurinational State of Bolivia"
+    },
+    {
+        "key":"bq",
+        "value":"bq",
+        "flag":"bq",
+        "text":"Bonaire, Sint Eustatius and Saba"
+    },
+    {
+        "key":"ba",
+        "value":"ba",
+        "flag":"ba",
+        "text":"Bosnia and Herzegovina"
+    },
+    {
+        "key":"bw",
+        "value":"bw",
+        "flag":"bw",
+        "text":"The Republic of Botswana"
+    },
+    {
+        "key":"bv",
+        "value":"bv",
+        "flag":"bv",
+        "text":"Bouvet Island"
+    },
+    {
+        "key":"br",
+        "value":"br",
+        "flag":"br",
+        "text":"The Federative Republic of Brazil"
+    },
+    {
+        "key":"io",
+        "value":"io",
+        "flag":"io",
+        "text":"The British Indian Ocean Territory"
+    },
+    {
+        "key":"bn",
+        "value":"bn",
+        "flag":"bn",
+        "text":"The Nation of Brunei, the Abode of Peace"
+    },
+    {
+        "key":"bg",
+        "value":"bg",
+        "flag":"bg",
+        "text":"The Republic of Bulgaria"
+    },
+    {
+        "key":"bf",
+        "value":"bf",
+        "flag":"bf",
+        "text":"Burkina Faso"
+    },
+    {
+        "key":"bi",
+        "value":"bi",
+        "flag":"bi",
+        "text":"The Republic of Burundi"
+    },
+    {
+        "key":"cv",
+        "value":"cv",
+        "flag":"cv",
+        "text":"The Republic of Cabo Verde"
+    },
+    {
+        "key":"kh",
+        "value":"kh",
+        "flag":"kh",
+        "text":"The Kingdom of Cambodia"
+    },
+    {
+        "key":"cm",
+        "value":"cm",
+        "flag":"cm",
+        "text":"The Republic of Cameroon"
+    },
+    {
+        "key":"ca",
+        "value":"ca",
+        "flag":"ca",
+        "text":"Canada"
+    },
+    {
+        "key":"ky",
+        "value":"ky",
+        "flag":"ky",
+        "text":"The Cayman Islands"
+    },
+    {
+        "key":"cf",
+        "value":"cf",
+        "flag":"cf",
+        "text":"The Central African Republic"
+    },
+    {
+        "key":"td",
+        "value":"td",
+        "flag":"td",
+        "text":"The Republic of Chad"
+    },
+    {
+        "key":"cl",
+        "value":"cl",
+        "flag":"cl",
+        "text":"The Republic of Chile"
+    },
+    {
+        "key":"cn",
+        "value":"cn",
+        "flag":"cn",
+        "text":"The Peoples Republic of China"
+    },
+    {
+        "key":"cx",
+        "value":"cx",
+        "flag":"cx",
+        "text":"The Territory of Christmas Island"
+    },
+    {
+        "key":"cc",
+        "value":"cc",
+        "flag":"cc",
+        "text":"The Territory of Cocos (Keeling) Islands"
+    },
+    {
+        "key":"co",
+        "value":"co",
+        "flag":"co",
+        "text":"The Republic of Colombia"
+    },
+    {
+        "key":"km",
+        "value":"km",
+        "flag":"km",
+        "text":"The Union of the Comoros"
+    },
+    {
+        "key":"cd",
+        "value":"cd",
+        "flag":"cd",
+        "text":"The Democratic Republic of the Congo"
+    },
+    {
+        "key":"cg",
+        "value":"cg",
+        "flag":"cg",
+        "text":"The Republic of the Congo"
+    },
+    {
+        "key":"ck",
+        "value":"ck",
+        "flag":"ck",
+        "text":"The Cook Islands"
+    },
+    {
+        "key":"cr",
+        "value":"cr",
+        "flag":"cr",
+        "text":"The Republic of Costa Rica"
+    },
+    {
+        "key":"ci",
+        "value":"ci",
+        "flag":"ci",
+        "text":"The Republic of Côte dIvoire"
+    },
+    {
+        "key":"hr",
+        "value":"hr",
+        "flag":"hr",
+        "text":"The Republic of Croatia"
+    },
+    {
+        "key":"cu",
+        "value":"cu",
+        "flag":"cu",
+        "text":"The Republic of Cuba"
+    },
+    {
+        "key":"cw",
+        "value":"cw",
+        "flag":"cw",
+        "text":"The Country of Curaçao"
+    },
+    {
+        "key":"cy",
+        "value":"cy",
+        "flag":"cy",
+        "text":"The Republic of Cyprus"
+    },
+    {
+        "key":"cz",
+        "value":"cz",
+        "flag":"cz",
+        "text":"The Czech Republic"
+    },
+    {
+        "key":"dk",
+        "value":"dk",
+        "flag":"dk",
+        "text":"The Kingdom of Denmark"
+    },
+    {
+        "key":"dj",
+        "value":"dj",
+        "flag":"dj",
+        "text":"The Republic of Djibouti"
+    },
+    {
+        "key":"dm",
+        "value":"dm",
+        "flag":"dm",
+        "text":"The Commonwealth of Dominica"
+    },
+    {
+        "key":"do",
+        "value":"do",
+        "flag":"do",
+        "text":"The Dominican Republic"
+    },
+    {
+        "key":"ec",
+        "value":"ec",
+        "flag":"ec",
+        "text":"The Republic of Ecuador"
+    },
+    {
+        "key":"eg",
+        "value":"eg",
+        "flag":"eg",
+        "text":"The Arab Republic of Egypt"
+    },
+    {
+        "key":"sv",
+        "value":"sv",
+        "flag":"sv",
+        "text":"The Republic of El Salvador"
+    },
+    {
+        "key":"gq",
+        "value":"gq",
+        "flag":"gq",
+        "text":"The Republic of Equatorial Guinea"
+    },
+    {
+        "key":"er",
+        "value":"er",
+        "flag":"er",
+        "text":"The State of Eritrea"
+    },
+    {
+        "key":"ee",
+        "value":"ee",
+        "flag":"ee",
+        "text":"The Republic of Estonia"
+    },
+    {
+        "key":"sz",
+        "value":"sz",
+        "flag":"sz",
+        "text":"The Kingdom of Eswatini"
+    },
+    {
+        "key":"et",
+        "value":"et",
+        "flag":"et",
+        "text":"The Federal Democratic Republic of Ethiopia"
+    },
+    {
+        "key":"fk",
+        "value":"fk",
+        "flag":"fk",
+        "text":"The Falkland Islands"
+    },
+    {
+        "key":"fo",
+        "value":"fo",
+        "flag":"fo",
+        "text":"The Faroe Islands"
+    },
+    {
+        "key":"fj",
+        "value":"fj",
+        "flag":"fj",
+        "text":"The Republic of Fiji"
+    },
+    {
+        "key":"fi",
+        "value":"fi",
+        "flag":"fi",
+        "text":"The Republic of Finland"
+    },
+    {
+        "key":"fr",
+        "value":"fr",
+        "flag":"fr",
+        "text":"The French Republic"
+    },
+    {
+        "key":"gf",
+        "value":"gf",
+        "flag":"gf",
+        "text":"Guyane"
+    },
+    {
+        "key":"pf",
+        "value":"pf",
+        "flag":"pf",
+        "text":"French Polynesia"
+    },
+    {
+        "key":"tf",
+        "value":"tf",
+        "flag":"tf",
+        "text":"The French Southern and Antarctic Lands"
+    },
+    {
+        "key":"ga",
+        "value":"ga",
+        "flag":"ga",
+        "text":"The Gabonese Republic"
+    },
+    {
+        "key":"gm",
+        "value":"gm",
+        "flag":"gm",
+        "text":"The Republic of The Gambia"
+    },
+    {
+        "key":"ge",
+        "value":"ge",
+        "flag":"ge",
+        "text":"Georgia"
+    },
+    {
+        "key":"de",
+        "value":"de",
+        "flag":"de",
+        "text":"The Federal Republic of Germany"
+    },
+    {
+        "key":"gh",
+        "value":"gh",
+        "flag":"gh",
+        "text":"The Republic of Ghana"
+    },
+    {
+        "key":"gi",
+        "value":"gi",
+        "flag":"gi",
+        "text":"Gibraltar"
+    },
+    {
+        "key":"gr",
+        "value":"gr",
+        "flag":"gr",
+        "text":"The Hellenic Republic"
+    },
+    {
+        "key":"gl",
+        "value":"gl",
+        "flag":"gl",
+        "text":"Kalaallit Nunaat"
+    },
+    {
+        "key":"gd",
+        "value":"gd",
+        "flag":"gd",
+        "text":"Grenada"
+    },
+    {
+        "key":"gp",
+        "value":"gp",
+        "flag":"gp",
+        "text":"Guadeloupe"
+    },
+    {
+        "key":"gu",
+        "value":"gu",
+        "flag":"gu",
+        "text":"The Territory of Guam"
+    },
+    {
+        "key":"gt",
+        "value":"gt",
+        "flag":"gt",
+        "text":"The Republic of Guatemala"
+    },
+    {
+        "key":"gg",
+        "value":"gg",
+        "flag":"gg",
+        "text":"The Bailiwick of Guernsey"
+    },
+    {
+        "key":"gn",
+        "value":"gn",
+        "flag":"gn",
+        "text":"The Republic of Guinea"
+    },
+    {
+        "key":"gw",
+        "value":"gw",
+        "flag":"gw",
+        "text":"The Republic of Guinea-Bissau"
+    },
+    {
+        "key":"gy",
+        "value":"gy",
+        "flag":"gy",
+        "text":"The Co-operative Republic of Guyana"
+    },
+    {
+        "key":"ht",
+        "value":"ht",
+        "flag":"ht",
+        "text":"The Republic of Haiti"
+    },
+    {
+        "key":"hm",
+        "value":"hm",
+        "flag":"hm",
+        "text":"The Territory of Heard Island and McDonald Islands"
+    },
+    {
+        "key":"va",
+        "value":"va",
+        "flag":"va",
+        "text":"The Holy See"
+    },
+    {
+        "key":"hn",
+        "value":"hn",
+        "flag":"hn",
+        "text":"The Republic of Honduras"
+    },
+    {
+        "key":"hk",
+        "value":"hk",
+        "flag":"hk",
+        "text":"The Hong Kong Special Administrative Region of China[10]"
+    },
+    {
+        "key":"hu",
+        "value":"hu",
+        "flag":"hu",
+        "text":"Hungary"
+    },
+    {
+        "key":"is",
+        "value":"is",
+        "flag":"is",
+        "text":"Iceland"
+    },
+    {
+        "key":"in",
+        "value":"in",
+        "flag":"in",
+        "text":"The Republic of India"
+    },
+    {
+        "key":"id",
+        "value":"id",
+        "flag":"id",
+        "text":"The Republic of Indonesia"
+    },
+    {
+        "key":"ir",
+        "value":"ir",
+        "flag":"ir",
+        "text":"The Islamic Republic of Iran"
+    },
+    {
+        "key":"iq",
+        "value":"iq",
+        "flag":"iq",
+        "text":"The Republic of Iraq"
+    },
+    {
+        "key":"ie",
+        "value":"ie",
+        "flag":"ie",
+        "text":"Ireland"
+    },
+    {
+        "key":"im",
+        "value":"im",
+        "flag":"im",
+        "text":"The Isle of Man"
+    },
+    {
+        "key":"il",
+        "value":"il",
+        "flag":"il",
+        "text":"The State of Israel"
+    },
+    {
+        "key":"it",
+        "value":"it",
+        "flag":"it",
+        "text":"The Italian Republic"
+    },
+    {
+        "key":"jm",
+        "value":"jm",
+        "flag":"jm",
+        "text":"Jamaica"
+    },
+    {
+        "key":"jp",
+        "value":"jp",
+        "flag":"jp",
+        "text":"Japan"
+    },
+    {
+        "key":"je",
+        "value":"je",
+        "flag":"je",
+        "text":"The Bailiwick of Jersey"
+    },
+    {
+        "key":"jo",
+        "value":"jo",
+        "flag":"jo",
+        "text":"The Hashemite Kingdom of Jordan"
+    },
+    {
+        "key":"kz",
+        "value":"kz",
+        "flag":"kz",
+        "text":"The Republic of Kazakhstan"
+    },
+    {
+        "key":"ke",
+        "value":"ke",
+        "flag":"ke",
+        "text":"The Republic of Kenya"
+    },
+    {
+        "key":"ki",
+        "value":"ki",
+        "flag":"ki",
+        "text":"The Republic of Kiribati"
+    },
+    {
+        "key":"kp",
+        "value":"kp",
+        "flag":"kp",
+        "text":"The Democratic Peoples Republic of Korea"
+    },
+    {
+        "key":"kr",
+        "value":"kr",
+        "flag":"kr",
+        "text":"The Republic of Korea"
+    },
+    {
+        "key":"kw",
+        "value":"kw",
+        "flag":"kw",
+        "text":"The State of Kuwait"
+    },
+    {
+        "key":"kg",
+        "value":"kg",
+        "flag":"kg",
+        "text":"The Kyrgyz Republic"
+    },
+    {
+        "key":"la",
+        "value":"la",
+        "flag":"la",
+        "text":"The Lao Peoples Democratic Republic"
+    },
+    {
+        "key":"lv",
+        "value":"lv",
+        "flag":"lv",
+        "text":"The Republic of Latvia"
+    },
+    {
+        "key":"lb",
+        "value":"lb",
+        "flag":"lb",
+        "text":"The Lebanese Republic"
+    },
+    {
+        "key":"ls",
+        "value":"ls",
+        "flag":"ls",
+        "text":"The Kingdom of Lesotho"
+    },
+    {
+        "key":"lr",
+        "value":"lr",
+        "flag":"lr",
+        "text":"The Republic of Liberia"
+    },
+    {
+        "key":"ly",
+        "value":"ly",
+        "flag":"ly",
+        "text":"The State of Libya"
+    },
+    {
+        "key":"li",
+        "value":"li",
+        "flag":"li",
+        "text":"The Principality of Liechtenstein"
+    },
+    {
+        "key":"lt",
+        "value":"lt",
+        "flag":"lt",
+        "text":"The Republic of Lithuania"
+    },
+    {
+        "key":"lu",
+        "value":"lu",
+        "flag":"lu",
+        "text":"The Grand Duchy of Luxembourg"
+    },
+    {
+        "key":"mo",
+        "value":"mo",
+        "flag":"mo",
+        "text":"Macao Special Administrative Region of China[11]"
+    },
+    {
+        "key":"mk",
+        "value":"mk",
+        "flag":"mk",
+        "text":"Republic of North Macedonia[12]"
+    },
+    {
+        "key":"mg",
+        "value":"mg",
+        "flag":"mg",
+        "text":"The Republic of Madagascar"
+    },
+    {
+        "key":"mw",
+        "value":"mw",
+        "flag":"mw",
+        "text":"The Republic of Malawi"
+    },
+    {
+        "key":"my",
+        "value":"my",
+        "flag":"my",
+        "text":"Malaysia"
+    },
+    {
+        "key":"mv",
+        "value":"mv",
+        "flag":"mv",
+        "text":"The Republic of Maldives"
+    },
+    {
+        "key":"ml",
+        "value":"ml",
+        "flag":"ml",
+        "text":"The Republic of Mali"
+    },
+    {
+        "key":"mt",
+        "value":"mt",
+        "flag":"mt",
+        "text":"The Republic of Malta"
+    },
+    {
+        "key":"mh",
+        "value":"mh",
+        "flag":"mh",
+        "text":"The Republic of the Marshall Islands"
+    },
+    {
+        "key":"mq",
+        "value":"mq",
+        "flag":"mq",
+        "text":"Martinique"
+    },
+    {
+        "key":"mr",
+        "value":"mr",
+        "flag":"mr",
+        "text":"The Islamic Republic of Mauritania"
+    },
+    {
+        "key":"mu",
+        "value":"mu",
+        "flag":"mu",
+        "text":"The Republic of Mauritius"
+    },
+    {
+        "key":"yt",
+        "value":"yt",
+        "flag":"yt",
+        "text":"The Department of Mayotte"
+    },
+    {
+        "key":"mx",
+        "value":"mx",
+        "flag":"mx",
+        "text":"The United Mexican States"
+    },
+    {
+        "key":"fm",
+        "value":"fm",
+        "flag":"fm",
+        "text":"The Federated States of Micronesia"
+    },
+    {
+        "key":"md",
+        "value":"md",
+        "flag":"md",
+        "text":"The Republic of Moldova"
+    },
+    {
+        "key":"mc",
+        "value":"mc",
+        "flag":"mc",
+        "text":"The Principality of Monaco"
+    },
+    {
+        "key":"mn",
+        "value":"mn",
+        "flag":"mn",
+        "text":"The State of Mongolia"
+    },
+    {
+        "key":"me",
+        "value":"me",
+        "flag":"me",
+        "text":"Montenegro"
+    },
+    {
+        "key":"ms",
+        "value":"ms",
+        "flag":"ms",
+        "text":"Montserrat"
+    },
+    {
+        "key":"ma",
+        "value":"ma",
+        "flag":"ma",
+        "text":"The Kingdom of Morocco"
+    },
+    {
+        "key":"mz",
+        "value":"mz",
+        "flag":"mz",
+        "text":"The Republic of Mozambique"
+    },
+    {
+        "key":"mm",
+        "value":"mm",
+        "flag":"mm",
+        "text":"The Republic of the Union of Myanmar"
+    },
+    {
+        "key":"na",
+        "value":"na",
+        "flag":"na",
+        "text":"The Republic of Namibia"
+    },
+    {
+        "key":"nr",
+        "value":"nr",
+        "flag":"nr",
+        "text":"The Republic of Nauru"
+    },
+    {
+        "key":"np",
+        "value":"np",
+        "flag":"np",
+        "text":"The Federal Democratic Republic of Nepal"
+    },
+    {
+        "key":"nl",
+        "value":"nl",
+        "flag":"nl",
+        "text":"The Netherlands"
+    },
+    {
+        "key":"nc",
+        "value":"nc",
+        "flag":"nc",
+        "text":"New Caledonia"
+    },
+    {
+        "key":"nz",
+        "value":"nz",
+        "flag":"nz",
+        "text":"New Zealand"
+    },
+    {
+        "key":"ni",
+        "value":"ni",
+        "flag":"ni",
+        "text":"The Republic of Nicaragua"
+    },
+    {
+        "key":"ne",
+        "value":"ne",
+        "flag":"ne",
+        "text":"The Republic of the Niger"
+    },
+    {
+        "key":"ng",
+        "value":"ng",
+        "flag":"ng",
+        "text":"The Federal Republic of Nigeria"
+    },
+    {
+        "key":"nu",
+        "value":"nu",
+        "flag":"nu",
+        "text":"Niue"
+    },
+    {
+        "key":"nf",
+        "value":"nf",
+        "flag":"nf",
+        "text":"The Territory of Norfolk Island"
+    },
+    {
+        "key":"mp",
+        "value":"mp",
+        "flag":"mp",
+        "text":"The Commonwealth of the Northern Mariana Islands"
+    },
+    {
+        "key":"no",
+        "value":"no",
+        "flag":"no",
+        "text":"The Kingdom of Norway"
+    },
+    {
+        "key":"om",
+        "value":"om",
+        "flag":"om",
+        "text":"The Sultanate of Oman"
+    },
+    {
+        "key":"pk",
+        "value":"pk",
+        "flag":"pk",
+        "text":"The Islamic Republic of Pakistan"
+    },
+    {
+        "key":"pw",
+        "value":"pw",
+        "flag":"pw",
+        "text":"The Republic of Palau"
+    },
+    {
+        "key":"ps",
+        "value":"ps",
+        "flag":"ps",
+        "text":"The State of Palestine"
+    },
+    {
+        "key":"pa",
+        "value":"pa",
+        "flag":"pa",
+        "text":"The Republic of Panamá"
+    },
+    {
+        "key":"pg",
+        "value":"pg",
+        "flag":"pg",
+        "text":"The Independent State of Papua New Guinea"
+    },
+    {
+        "key":"py",
+        "value":"py",
+        "flag":"py",
+        "text":"The Republic of Paraguay"
+    },
+    {
+        "key":"pe",
+        "value":"pe",
+        "flag":"pe",
+        "text":"The Republic of Perú"
+    },
+    {
+        "key":"ph",
+        "value":"ph",
+        "flag":"ph",
+        "text":"The Republic of the Philippines"
+    },
+    {
+        "key":"pn",
+        "value":"pn",
+        "flag":"pn",
+        "text":"The Pitcairn, Henderson, Ducie and Oeno Islands"
+    },
+    {
+        "key":"pl",
+        "value":"pl",
+        "flag":"pl",
+        "text":"The Republic of Poland"
+    },
+    {
+        "key":"pt",
+        "value":"pt",
+        "flag":"pt",
+        "text":"The Portuguese Republic"
+    },
+    {
+        "key":"pr",
+        "value":"pr",
+        "flag":"pr",
+        "text":"The Commonwealth of Puerto Rico"
+    },
+    {
+        "key":"qa",
+        "value":"qa",
+        "flag":"qa",
+        "text":"The State of Qatar"
+    },
+    {
+        "key":"re",
+        "value":"re",
+        "flag":"re",
+        "text":"Réunion"
+    },
+    {
+        "key":"ro",
+        "value":"ro",
+        "flag":"ro",
+        "text":"Romania"
+    },
+    {
+        "key":"ru",
+        "value":"ru",
+        "flag":"ru",
+        "text":"The Russian Federation"
+    },
+    {
+        "key":"rw",
+        "value":"rw",
+        "flag":"rw",
+        "text":"The Republic of Rwanda"
+    },
+    {
+        "key":"bl",
+        "value":"bl",
+        "flag":"bl",
+        "text":"The Collectivity of Saint-Barthélemy"
+    },
+    {
+        "key":"sh",
+        "value":"sh",
+        "flag":"sh",
+        "text":"Saint Helena, Ascension and Tristan da Cunha"
+    },
+    {
+        "key":"kn",
+        "value":"kn",
+        "flag":"kn",
+        "text":"Saint Kitts and Nevis"
+    },
+    {
+        "key":"lc",
+        "value":"lc",
+        "flag":"lc",
+        "text":"Saint Lucia"
+    },
+    {
+        "key":"mf",
+        "value":"mf",
+        "flag":"mf",
+        "text":"The Collectivity of Saint-Martin"
+    },
+    {
+        "key":"pm",
+        "value":"pm",
+        "flag":"pm",
+        "text":"The Overseas Collectivity of Saint-Pierre and Miquelon"
+    },
+    {
+        "key":"vc",
+        "value":"vc",
+        "flag":"vc",
+        "text":"Saint Vincent and the Grenadines"
+    },
+    {
+        "key":"ws",
+        "value":"ws",
+        "flag":"ws",
+        "text":"The Independent State of Samoa"
+    },
+    {
+        "key":"sm",
+        "value":"sm",
+        "flag":"sm",
+        "text":"The Republic of San Marino"
+    },
+    {
+        "key":"st",
+        "value":"st",
+        "flag":"st",
+        "text":"The Democratic Republic of São Tomé and Príncipe"
+    },
+    {
+        "key":"sa",
+        "value":"sa",
+        "flag":"sa",
+        "text":"The Kingdom of Saudi Arabia"
+    },
+    {
+        "key":"sn",
+        "value":"sn",
+        "flag":"sn",
+        "text":"The Republic of Senegal"
+    },
+    {
+        "key":"rs",
+        "value":"rs",
+        "flag":"rs",
+        "text":"The Republic of Serbia"
+    },
+    {
+        "key":"sc",
+        "value":"sc",
+        "flag":"sc",
+        "text":"The Republic of Seychelles"
+    },
+    {
+        "key":"sl",
+        "value":"sl",
+        "flag":"sl",
+        "text":"The Republic of Sierra Leone"
+    },
+    {
+        "key":"sg",
+        "value":"sg",
+        "flag":"sg",
+        "text":"The Republic of Singapore"
+    },
+    {
+        "key":"sx",
+        "value":"sx",
+        "flag":"sx",
+        "text":"Sint Maarten"
+    },
+    {
+        "key":"sk",
+        "value":"sk",
+        "flag":"sk",
+        "text":"The Slovak Republic"
+    },
+    {
+        "key":"si",
+        "value":"si",
+        "flag":"si",
+        "text":"The Republic of Slovenia"
+    },
+    {
+        "key":"sb",
+        "value":"sb",
+        "flag":"sb",
+        "text":"The Solomon Islands"
+    },
+    {
+        "key":"so",
+        "value":"so",
+        "flag":"so",
+        "text":"The Federal Republic of Somalia"
+    },
+    {
+        "key":"za",
+        "value":"za",
+        "flag":"za",
+        "text":"The Republic of South Africa"
+    },
+    {
+        "key":"gs",
+        "value":"gs",
+        "flag":"gs",
+        "text":"South Georgia and the South Sandwich Islands"
+    },
+    {
+        "key":"ss",
+        "value":"ss",
+        "flag":"ss",
+        "text":"The Republic of South Sudan"
+    },
+    {
+        "key":"es",
+        "value":"es",
+        "flag":"es",
+        "text":"The Kingdom of Spain"
+    },
+    {
+        "key":"lk",
+        "value":"lk",
+        "flag":"lk",
+        "text":"The Democratic Socialist Republic of Sri Lanka"
+    },
+    {
+        "key":"sd",
+        "value":"sd",
+        "flag":"sd",
+        "text":"The Republic of the Sudan"
+    },
+    {
+        "key":"sr",
+        "value":"sr",
+        "flag":"sr",
+        "text":"The Republic of Suriname"
+    },
+    {
+        "key":"sj",
+        "value":"sj",
+        "flag":"sj",
+        "text":"Svalbard and Jan Mayen"
+    },
+    {
+        "key":"se",
+        "value":"se",
+        "flag":"se",
+        "text":"The Kingdom of Sweden"
+    },
+    {
+        "key":"ch",
+        "value":"ch",
+        "flag":"ch",
+        "text":"The Swiss Confederation"
+    },
+    {
+        "key":"sy",
+        "value":"sy",
+        "flag":"sy",
+        "text":"The Syrian Arab Republic"
+    },
+    {
+        "key":"tw",
+        "value":"tw",
+        "flag":"tw",
+        "text":"The Republic of China"
+    },
+    {
+        "key":"tj",
+        "value":"tj",
+        "flag":"tj",
+        "text":"The Republic of Tajikistan"
+    },
+    {
+        "key":"tz",
+        "value":"tz",
+        "flag":"tz",
+        "text":"The United Republic of Tanzania"
+    },
+    {
+        "key":"th",
+        "value":"th",
+        "flag":"th",
+        "text":"The Kingdom of Thailand"
+    },
+    {
+        "key":"tl",
+        "value":"tl",
+        "flag":"tl",
+        "text":"The Democratic Republic of Timor-Leste"
+    },
+    {
+        "key":"tg",
+        "value":"tg",
+        "flag":"tg",
+        "text":"The Togolese Republic"
+    },
+    {
+        "key":"tk",
+        "value":"tk",
+        "flag":"tk",
+        "text":"Tokelau"
+    },
+    {
+        "key":"to",
+        "value":"to",
+        "flag":"to",
+        "text":"The Kingdom of Tonga"
+    },
+    {
+        "key":"tt",
+        "value":"tt",
+        "flag":"tt",
+        "text":"The Republic of Trinidad and Tobago"
+    },
+    {
+        "key":"tn",
+        "value":"tn",
+        "flag":"tn",
+        "text":"The Republic of Tunisia"
+    },
+    {
+        "key":"tr",
+        "value":"tr",
+        "flag":"tr",
+        "text":"The Republic of Turkey"
+    },
+    {
+        "key":"tc",
+        "value":"tc",
+        "flag":"tc",
+        "text":"The Turks and Caicos Islands"
+    },
+    {
+        "key":"tv",
+        "value":"tv",
+        "flag":"tv",
+        "text":"Tuvalu"
+    },
+    {
+        "key":"ug",
+        "value":"ug",
+        "flag":"ug",
+        "text":"The Republic of Uganda"
+    },
+    {
+        "key":"ua",
+        "value":"ua",
+        "flag":"ua",
+        "text":"Ukraine"
+    },
+    {
+        "key":"ae",
+        "value":"ae",
+        "flag":"ae",
+        "text":"The United Arab Emirates"
+    },
+    {
+        "key":"gb",
+        "value":"gb",
+        "flag":"gb",
+        "text":"The United Kingdom of Great Britain and Northern Ireland"
+    },
+    {
+        "key":"um",
+        "value":"um",
+        "flag":"um",
+        "text":"Baker Island, Howland Island, Jarvis Island, Johnston Atoll, Kingman Reef, Midway Atoll, Navassa Island, Palmyra Atoll, and Wake Island"
+    },
+    {
+        "key":"us",
+        "value":"us",
+        "flag":"us",
+        "text":"The United States of America"
+    },
+    {
+        "key":"uy",
+        "value":"uy",
+        "flag":"uy",
+        "text":"The Oriental Republic of Uruguay"
+    },
+    {
+        "key":"uz",
+        "value":"uz",
+        "flag":"uz",
+        "text":"The Republic of Uzbekistan"
+    },
+    {
+        "key":"vu",
+        "value":"vu",
+        "flag":"vu",
+        "text":"The Republic of Vanuatu"
+    },
+    {
+        "key":"ve",
+        "value":"ve",
+        "flag":"ve",
+        "text":"The Bolivarian Republic of Venezuela"
+    },
+    {
+        "key":"vn",
+        "value":"vn",
+        "flag":"vn",
+        "text":"The Socialist Republic of Viet Nam"
+    },
+    {
+        "key":"vg",
+        "value":"vg",
+        "flag":"vg",
+        "text":"The Virgin Islands"
+    },
+    {
+        "key":"vi",
+        "value":"vi",
+        "flag":"vi",
+        "text":"The Virgin Islands of the United States"
+    },
+    {
+        "key":"wf",
+        "value":"wf",
+        "flag":"wf",
+        "text":"The Territory of the Wallis and Futuna Islands"
+    },
+    {
+        "key":"eh",
+        "value":"eh",
+        "flag":"eh",
+        "text":"The Sahrawi Arab Democratic Republic"
+    },
+    {
+        "key":"ye",
+        "value":"ye",
+        "flag":"ye",
+        "text":"The Republic of Yemen"
+    },
+    {
+        "key":"zm",
+        "value":"zm",
+        "flag":"zm",
+        "text":"The Republic of Zambia"
+    },
+    {
+        "key":"zw",
+        "value":"zw",
+        "flag":"zw",
+        "text":"The Republic of Zimbabwe"
+    }
+]
