@@ -2,12 +2,12 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Loader } from 'semantic-ui-react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
-import { ProductActivity } from '../../clients/server.generated';
 import { RootState } from '../../stores/store';
 import ActivityComponent from './ActivityComponent';
+import { GeneralActivity } from './GeneralActivity';
 
 interface Props extends RouteComponentProps {
-  activities: ProductActivity[] | undefined;
+  activities: GeneralActivity[];
 }
 
 interface State {
@@ -47,7 +47,7 @@ class ActivitiesList extends React.Component<Props, State> {
           Activities
         </h3>
         {activities.map((activity) => (
-          <ActivityComponent activity={activity} />
+          <ActivityComponent activity={activity as GeneralActivity} />
         ))}
       </>
     );

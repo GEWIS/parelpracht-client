@@ -16,6 +16,8 @@ import CompanyContactList from '../components/company/CompanyContactList';
 import ContractList from '../components/contract/ContractList';
 import { getSingle } from '../stores/single/selectors';
 import { SingleEntities } from '../stores/single/single';
+import ActivitiesList from '../components/activities/ActivitiesList';
+import { GeneralActivity } from '../components/activities/GeneralActivity';
 
 interface Props extends RouteComponentProps<{ companyId: string }> {
   company: Company | undefined;
@@ -66,6 +68,9 @@ class SingleCompanyPage extends React.Component<Props> {
             </Segment>
             <Segment secondary>
               <ContractList />
+            </Segment>
+            <Segment>
+              <ActivitiesList activities={company.activities as GeneralActivity[]} />
             </Segment>
           </Grid.Column>
         </Grid>

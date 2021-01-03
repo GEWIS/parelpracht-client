@@ -16,6 +16,7 @@ import { getSingle } from '../stores/single/selectors';
 import { SingleEntities } from '../stores/single/single';
 import { clearSingle, fetchSingle } from '../stores/single/actionCreators';
 import ActivitiesList from '../components/activities/ActivitiesList';
+import { GeneralActivity } from '../components/activities/GeneralActivity';
 
 interface Props extends RouteComponentProps<{ productId: string }> {
   product: Product | undefined;
@@ -65,7 +66,7 @@ class SingleProductPage extends React.Component<Props> {
               <ContractList />
             </Segment>
             <Segment>
-              <ActivitiesList activities={product.activities} />
+              <ActivitiesList activities={product.activities as GeneralActivity[]} />
             </Segment>
           </Grid.Column>
         </Grid>

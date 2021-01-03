@@ -4,14 +4,14 @@ import {
   Button, Header, Icon, Segment,
 } from 'semantic-ui-react';
 import { connect } from 'react-redux';
-import { ActivityType, ProductActivity, User } from '../../clients/server.generated';
 import './Activity.scss';
 import { RootState } from '../../stores/store';
 import { getUserName } from '../../stores/user/selectors';
 import { formatActivityType, formatActivityDate } from '../../helpers/activity';
+import { GeneralActivity } from './GeneralActivity';
 
 interface Props extends RouteComponentProps {
-  activity: ProductActivity;
+  activity: GeneralActivity;
 
   userName: string;
 }
@@ -47,7 +47,7 @@ class ActivityComponent extends React.Component<Props> {
   }
 }
 
-const mapStateToProps = (state: RootState, props: { activity: ProductActivity }) => {
+const mapStateToProps = (state: RootState, props: { activity: GeneralActivity }) => {
   return {
     userName: getUserName(state, props.activity.createdById),
   };
