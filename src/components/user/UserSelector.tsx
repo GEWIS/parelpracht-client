@@ -10,16 +10,18 @@ interface Props {
   value: number;
   options: UserSummary[];
   onChange: (value: number | number[]) => void;
+  // eslint-disable-next-line react/require-default-props
+  hideEmail?: boolean;
 }
 
 function UserSelector(props: Props & DropdownProps) {
   const {
-    value, onChange, options, ...rest
+    value, onChange, options, hideEmail, ...rest
   } = props;
   const dropdownOptions = props.options.map((x) => ({
     key: x.id,
-    text: formatContactName(x.firstName, x.middleName, x.lastName),
-    description: x.email,
+    text: formatContactName(x.firstName, x.lastNamePreposition, x.lastName),
+    description: hideEmail ? undefined : x.email,
     value: x.id,
   }));
 

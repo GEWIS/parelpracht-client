@@ -33,7 +33,7 @@ interface State {
   editing: boolean;
 
   firstName: string;
-  middleName: string;
+  lastNamePreposition: string;
   lastName: string;
   gender: Gender;
   email: string;
@@ -64,7 +64,7 @@ class ContactProps extends React.Component<Props, State> {
     const { contact } = props;
     return {
       firstName: contact.firstName,
-      middleName: contact.middleName,
+      lastNamePreposition: contact.lastNamePreposition,
       lastName: contact.lastName,
       gender: contact.gender,
       email: contact.email,
@@ -77,7 +77,7 @@ class ContactProps extends React.Component<Props, State> {
   toParams = (): ContactParams => {
     return new ContactParams({
       firstName: this.state.firstName,
-      middleName: this.state.middleName,
+      lastNamePreposition: this.state.lastNamePreposition,
       lastName: this.state.lastName,
       gender: this.state.gender,
       email: this.state.email,
@@ -112,7 +112,7 @@ class ContactProps extends React.Component<Props, State> {
     const {
       editing,
       firstName,
-      middleName,
+      lastNamePreposition,
       lastName,
       gender,
       email,
@@ -155,9 +155,9 @@ class ContactProps extends React.Component<Props, State> {
               fluid
               control={Input}
               label="Middle Name"
-              value={middleName}
+              value={lastNamePreposition}
               onChange={(e: ChangeEvent<HTMLInputElement>) => this.setState({
-                middleName: e.target.value,
+                lastNamePreposition: e.target.value,
               })}
               width={4}
             />

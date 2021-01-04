@@ -33,6 +33,7 @@ import UsersPage from './pages/UsersPage';
 import SingleUserPage from './pages/SingleUserPage';
 import UserCreatePage from './pages/UserCreatePage';
 import ProductInstanceModal from './pages/ProductInstanceModal';
+import ContractGenerateModal from './pages/ContractGenerateModal';
 
 interface Props extends RouteComponentProps {
   // eslint-disable-next-line react/no-unused-prop-types

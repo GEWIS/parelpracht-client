@@ -18,7 +18,7 @@ function ContactRow(props: Props) {
     <Table.Row>
       <Table.Cell>
         <NavLink to={`/contact/${contact.id}`}>
-          {formatContactName(contact.firstName, contact.middleName, contact.lastName)}
+          {formatContactName(contact.firstName, contact.lastNamePreposition, contact.lastName)}
         </NavLink>
       </Table.Cell>
       <Table.Cell>
