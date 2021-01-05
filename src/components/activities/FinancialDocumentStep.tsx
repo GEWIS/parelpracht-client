@@ -9,6 +9,9 @@ import {
   statusApplied,
 } from '../../helpers/activity';
 
+/**
+ * Definition of used variables
+ */
 interface Props extends RouteComponentProps {
   lastStatusActivity: GeneralActivity;
   status: string;
@@ -30,12 +33,20 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
     const {
       lastStatusActivity, status, cancelled, allStatusActivities, documentType,
     } = this.props;
+
+    /**
+     * Activity with the status update that has been last been completed last.
+     * Null if not completed.
+     */
     const statusCompletedActivity: GeneralActivity | null = getStatusActivity(
       allStatusActivities,
       status,
     );
+    // check if the document has been cancelled
     if (cancelled) {
+      // if it has been cancelled, then we check if the status has been completed
       if (statusApplied(status, lastStatusActivity)) {
+        // if the status has been completed
         if (statusCompletedActivity != null) {
           return (
             <Step completed disabled>
@@ -50,6 +61,7 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
             </Step>
           );
         }
+        // if the status has been completed but it was not logged
         if (statusCompletedActivity != null) {
           return (
             <Step completed disabled>
@@ -65,6 +77,7 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
           );
         }
       }
+      // if the status has not been completed and cancelled
       return (
         <Step disabled>
           <Icon color="red" name="close" />
@@ -81,7 +94,9 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
       );
     }
 
+    // the document has not been cancelled and the status updated is not logged
     if (statusCompletedActivity == null) {
+      // the logging of this status has not been put in the CRM system
       if (statusApplied(status, lastStatusActivity)) {
         return (
           <Step completed>
@@ -96,6 +111,7 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
           </Step>
         );
       }
+      // the status of the document has not been reached yet
       return (
         <Step>
           <Step.Content>
@@ -112,6 +128,7 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
         </Step>
       );
     }
+    // the status has been completed and logged.
     return (
       <Step completed>
         <Step.Content>
