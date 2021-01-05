@@ -5,6 +5,7 @@ import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { RootState } from '../../stores/store';
 import { GeneralActivity } from './GeneralActivity';
 import {
+  formatStatus,
   getStatusActivity,
   statusApplied,
 } from '../../helpers/activity';
@@ -45,7 +46,7 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
     // check if the document has been cancelled
     if (cancelled) {
       // if it has been cancelled, then we check if the status has been completed
-      if (statusApplied(status, lastStatusActivity)) {
+      if (statusApplied(status, lastStatusActivity, documentType)) {
         // if the status has been completed
         if (statusCompletedActivity != null) {
           return (
@@ -97,7 +98,7 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
     // the document has not been cancelled and the status updated is not logged
     if (statusCompletedActivity == null) {
       // the logging of this status has not been put in the CRM system
-      if (statusApplied(status, lastStatusActivity)) {
+      if (statusApplied(status, lastStatusActivity, documentType)) {
         return (
           <Step completed>
             <Step.Content>
@@ -106,6 +107,22 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
               </Step.Title>
               <Step.Description>
                 Not logged.
+              </Step.Description>
+            </Step.Content>
+          </Step>
+        );
+      }
+      console.log(lastStatusActivity.subType);
+      if (lastStatusActivity.subType === 'IRRECOVERABLE') {
+        return (
+          <Step disabled>
+            <Icon color="red" name="close" />
+            <Step.Content>
+              <Step.Title>
+                {formatStatus(lastStatusActivity.subType)}
+              </Step.Title>
+              <Step.Description>
+                {lastStatusActivity.description}
               </Step.Description>
             </Step.Content>
           </Step>

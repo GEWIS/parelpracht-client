@@ -4,9 +4,14 @@ import { formatLastUpdate } from './lastUpdate';
 /**
  * Format the status of the document.
  */
-export function formatDocumentStatusTitle(cancelled: boolean, documentType: string): string {
-  if (cancelled) {
+export function formatDocumentStatusTitle(
+  lastActivity: GeneralActivity,
+  documentType: string,
+): string {
+  if (lastActivity.subType === 'CANCELLED') {
     return `${documentType} has been cancelled.`;
+  } if (lastActivity.subType === 'IRRECOVERABLE') {
+    return `${documentType} is irrecoverable.`;
   }
   return `${documentType} status`;
 }
@@ -62,16 +67,42 @@ export function getAllStatusActivities(activities: GeneralActivity[]): GeneralAc
 /**
  * Get all the contract statuses that applied to a certain status.
  */
-export function getCompletedContractStatuses(status: string): string[] {
+export function getCompletedContractStatuses(status: string, type: string): string[] {
+  if (type === 'Invoice') {
+    switch (status) {
+      case 'CREATED':
+        return ['Created'];
+      case 'SENT':
+        return ['Created', 'Sent'];
+      case 'PAID':
+        return ['Created', 'Sent', 'Paid'];
+      case 'IRRECOVERABLE':
+        return ['Created', 'Sent', 'Irrecoverable'];
+      case 'CANCELLED':
+        return ['Cancelled'];
+      case 'ALL':
+        return ['Created', 'Sent', 'Paid'];
+      default:
+        return [];
+    }
+  }
   switch (status) {
-    case 'CREATED': return ['Created'];
-    case 'PROPOSED': return ['Created', 'Proposed'];
-    case 'SENT': return ['Created', 'Proposed', 'Sent'];
-    case 'CONFIRMED': return ['Created', 'Proposed', 'Sent', 'Confirmed'];
-    case 'FINISHED': return ['Created', 'Proposed', 'Sent', 'Confirmed', 'Finished'];
-    case 'CANCELLED': return ['Cancelled'];
-    case 'ALL': return ['Created', 'Proposed', 'Sent', 'Confirmed', 'Finished'];
-    default: return [];
+    case 'CREATED':
+      return ['Created'];
+    case 'PROPOSED':
+      return ['Created', 'Proposed'];
+    case 'SENT':
+      return ['Created', 'Proposed', 'Sent'];
+    case 'CONFIRMED':
+      return ['Created', 'Proposed', 'Sent', 'Confirmed'];
+    case 'FINISHED':
+      return ['Created', 'Proposed', 'Sent', 'Confirmed', 'Finished'];
+    case 'CANCELLED':
+      return ['Cancelled'];
+    case 'ALL':
+      return ['Created', 'Proposed', 'Sent', 'Confirmed', 'Finished'];
+    default:
+      return [];
   }
 }
 
@@ -93,16 +124,20 @@ export function getStatusActivity(
 
 /**
  * Check if the status has applied to a document.
- * @return true if status applied and false if it did not apply
+ * @return boolean true if status applied and false if it did not apply
  */
 export function statusApplied(
   status: string,
   lastStatusActivity: GeneralActivity,
+  documentType: string,
 ): boolean {
   if (lastStatusActivity.subType == null) {
     return false;
   }
-  const completedStatuses = getCompletedContractStatuses(lastStatusActivity.subType.toUpperCase());
+  const completedStatuses = getCompletedContractStatuses(
+    lastStatusActivity.subType.toUpperCase(),
+    documentType,
+  );
   for (let i = 0; i < completedStatuses.length; i++) {
     if (completedStatuses[i].toUpperCase() === status.toUpperCase()) {
       return true;

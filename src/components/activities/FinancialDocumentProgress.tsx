@@ -28,7 +28,7 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
 
   public render() {
     const { activities, documentType } = this.props;
-    const allContractStatuses = getCompletedContractStatuses('ALL');
+    const allContractStatuses = getCompletedContractStatuses('ALL', documentType);
     const allStatusActivities = getAllStatusActivities(activities);
     const lastStatusActivity = getLastStatus(allStatusActivities);
     const canceledDocument = allStatusActivities[allStatusActivities.length - 1].subType === 'CANCELLED';
@@ -48,7 +48,10 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
     return (
       <>
         <h3>
-          {formatDocumentStatusTitle(canceledDocument, documentType)}
+          {formatDocumentStatusTitle(
+            allStatusActivities[allStatusActivities.length - 1],
+            documentType,
+          )}
         </h3>
         <Step.Group ordered stackable="tablet" widths={5} fluid>
           {allContractStatuses.map((currentStatus) => (
