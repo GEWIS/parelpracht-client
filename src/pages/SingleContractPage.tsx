@@ -17,6 +17,7 @@ import { getSingle } from '../stores/single/selectors';
 import { SingleEntities } from '../stores/single/single';
 import ActivitiesList from '../components/activities/ActivitiesList';
 import { GeneralActivity } from '../components/activities/GeneralActivity';
+import FinancialDocumentProgress from '../components/activities/FinancialDocumentProgress';
 
 interface Props extends RouteComponentProps<{ contractId: string }> {
   contract: Contract | undefined;
@@ -55,20 +56,30 @@ class SingleContractPage extends React.Component<Props> {
           ]}
         />
         <ContractSummary />
-        <Grid columns={2}>
-          <Grid.Column>
-            <Segment>
-              <ContractProps contract={contract} />
-            </Segment>
-          </Grid.Column>
-          <Grid.Column>
+        <Grid columns={2} rows={2}>
+          <Grid.Row>
             <Segment secondary>
-              <ContractProductList />
+              <FinancialDocumentProgress
+                activities={contract.activities as GeneralActivity[]}
+                documentType="Contract"
+              />
             </Segment>
-            <Segment secondary>
-              <ActivitiesList activities={contract.activities as GeneralActivity[]} />
-            </Segment>
-          </Grid.Column>
+          </Grid.Row>
+          <Grid.Row>
+            <Grid.Column>
+              <Segment secondary>
+                <ContractProps contract={contract} />
+              </Segment>
+            </Grid.Column>
+            <Grid.Column>
+              <Segment secondary>
+                <ContractProductList />
+              </Segment>
+              <Segment secondary>
+                <ActivitiesList activities={contract.activities as GeneralActivity[]} />
+              </Segment>
+            </Grid.Column>
+          </Grid.Row>
         </Grid>
       </Container>
     );
