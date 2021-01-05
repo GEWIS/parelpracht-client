@@ -5,17 +5,14 @@ import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { RootState } from '../../stores/store';
 import { GeneralActivity } from './GeneralActivity';
 import {
-  formatActivityDate,
-  formatStatus,
   getStatusActivity,
   statusApplied,
 } from '../../helpers/activity';
-import { getUserName } from '../../stores/user/selectors';
 
 interface Props extends RouteComponentProps {
   lastStatusActivity: GeneralActivity;
   status: string;
-  userName: string;
+  cancelled: boolean;
   allStatusActivities: GeneralActivity[];
   documentType: string;
 }
@@ -31,12 +28,58 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
 
   public render() {
     const {
-      lastStatusActivity, status, userName, allStatusActivities, documentType,
+      lastStatusActivity, status, cancelled, allStatusActivities, documentType,
     } = this.props;
     const statusCompletedActivity: GeneralActivity | null = getStatusActivity(
       allStatusActivities,
       status,
     );
+    if (cancelled) {
+      if (statusApplied(status, lastStatusActivity)) {
+        if (statusCompletedActivity != null) {
+          return (
+            <Step completed disabled>
+              <Step.Content>
+                <Step.Title>
+                  {status}
+                </Step.Title>
+                <Step.Description>
+                  {statusCompletedActivity.description}
+                </Step.Description>
+              </Step.Content>
+            </Step>
+          );
+        }
+        if (statusCompletedActivity != null) {
+          return (
+            <Step completed disabled>
+              <Step.Content>
+                <Step.Title>
+                  {status}
+                </Step.Title>
+                <Step.Description>
+                  Not logged.
+                </Step.Description>
+              </Step.Content>
+            </Step>
+          );
+        }
+      }
+      return (
+        <Step disabled>
+          <Icon color="red" name="close" />
+          <Step.Content>
+            <Step.Title>
+              {status}
+            </Step.Title>
+            <Step.Description>
+              {documentType}
+              &nbsp;cancelled.
+            </Step.Description>
+          </Step.Content>
+        </Step>
+      );
+    }
 
     if (statusCompletedActivity == null) {
       if (statusApplied(status, lastStatusActivity)) {
@@ -47,14 +90,14 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
                 {status}
               </Step.Title>
               <Step.Description>
-                Information was not logged.
+                Not logged.
               </Step.Description>
             </Step.Content>
           </Step>
         );
       }
       return (
-        <Step circle>
+        <Step>
           <Step.Content>
             <Step.Title>
               {status}
@@ -76,7 +119,7 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
             {status}
           </Step.Title>
           <Step.Description>
-            {formatActivityDate(statusCompletedActivity.createdAt, userName)}
+            {statusCompletedActivity.description}
           </Step.Description>
         </Step.Content>
       </Step>
@@ -84,9 +127,8 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
   }
 }
 
-const mapStateToProps = (state: RootState, props: { lastStatusActivity: GeneralActivity }) => {
+const mapStateToProps = (state: RootState) => {
   return {
-    userName: getUserName(state, props.lastStatusActivity.createdById),
   };
 };
 

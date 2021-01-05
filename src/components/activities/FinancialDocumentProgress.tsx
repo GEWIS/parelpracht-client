@@ -5,7 +5,12 @@ import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { RootState } from '../../stores/store';
 import { GeneralActivity } from './GeneralActivity';
 import FinancialDocumentStep from './FinancialDocumentStep';
-import { getAllStatusActivities, getCompletedContractStatuses } from '../../helpers/activity';
+import {
+  formatDocumentStatusTitle,
+  getAllStatusActivities,
+  getCompletedContractStatuses,
+  getLastStatus,
+} from '../../helpers/activity';
 
 interface Props extends RouteComponentProps {
   activities: GeneralActivity[];
@@ -25,8 +30,8 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
     const { activities, documentType } = this.props;
     const allContractStatuses = getCompletedContractStatuses('ALL');
     const allStatusActivities = getAllStatusActivities(activities);
-    const lastStatusActivity = allStatusActivities[allStatusActivities.length - 1];
-
+    const lastStatusActivity = getLastStatus(allStatusActivities);
+    const canceledDocument = allStatusActivities[allStatusActivities.length - 1].subType === 'CANCELLED';
     if (activities.length === 0) {
       return (
         <>
@@ -43,16 +48,16 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
     return (
       <>
         <h3>
-          {documentType}
-          &nbsp;Status
+          {formatDocumentStatusTitle(canceledDocument, documentType)}
         </h3>
-        <Step.Group ordered widths={5}>
+        <Step.Group ordered stackable="tablet" widths={5} fluid>
           {allContractStatuses.map((currentStatus) => (
             <FinancialDocumentStep
               lastStatusActivity={lastStatusActivity}
               status={currentStatus}
               allStatusActivities={allStatusActivities}
               documentType={documentType}
+              cancelled={canceledDocument}
             />
           ))}
         </Step.Group>

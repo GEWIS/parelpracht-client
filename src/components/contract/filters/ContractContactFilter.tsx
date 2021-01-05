@@ -19,7 +19,13 @@ function ContractContactFilter(props: Props) {
       columnName="Contact"
       table={Tables.Contracts}
       options={props.options.map((o) => ({
-        value: o.id, key: o.id, text: formatContactName(o.firstName, o.lastNamePreposition, o.lastName),
+        value: o.id,
+        key: o.id,
+        text: formatContactName(
+          o.firstName,
+          o.lastNamePreposition,
+          o.lastName,
+        ),
       }))}
     />
   );

@@ -1,6 +1,13 @@
 import { ActivityType, GeneralActivity } from '../components/activities/GeneralActivity';
 import { formatLastUpdate } from './lastUpdate';
 
+export function formatDocumentStatusTitle(cancelled: boolean, documentType: string): string {
+  if (cancelled) {
+    return `${documentType} has been cancelled.`;
+  }
+  return `${documentType} status`;
+}
+
 export function formatActivityType(activityType: ActivityType): string {
   if (activityType === 'COMMENT') {
     return 'Comment';
@@ -71,9 +78,16 @@ export function statusApplied(
   }
   const completedStatuses = getCompletedContractStatuses(lastStatusActivity.subType.toUpperCase());
   for (let i = 0; i < completedStatuses.length; i++) {
-    if (completedStatuses[i] === status) {
+    if (completedStatuses[i].toUpperCase() === status.toUpperCase()) {
       return true;
     }
   }
   return false;
+}
+
+export function getLastStatus(allStatusActivities: GeneralActivity[]): GeneralActivity {
+  if (allStatusActivities[allStatusActivities.length - 1].subType !== 'CANCELLED') {
+    return allStatusActivities[allStatusActivities.length - 1];
+  }
+  return allStatusActivities[allStatusActivities.length - 2];
 }
