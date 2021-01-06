@@ -51,6 +51,7 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
         if (statusCompletedActivity != null) {
           return (
             <Step completed disabled>
+              <Icon />
               <Step.Content>
                 <Step.Title>
                   {status}
@@ -66,6 +67,7 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
         if (statusCompletedActivity != null) {
           return (
             <Step completed disabled>
+              <Icon />
               <Step.Content>
                 <Step.Title>
                   {status}
@@ -101,6 +103,7 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
       if (statusApplied(status, lastStatusActivity, documentType)) {
         return (
           <Step completed>
+            <Icon />
             <Step.Content>
               <Step.Title>
                 {status}
@@ -148,6 +151,7 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
     // the status has been completed and logged.
     return (
       <Step completed>
+        <Icon />
         <Step.Content>
           <Step.Title>
             {status}

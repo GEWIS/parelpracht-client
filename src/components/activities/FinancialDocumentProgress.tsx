@@ -53,7 +53,7 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
             documentType,
           )}
         </h3>
-        <Step.Group ordered stackable="tablet" widths={5} fluid>
+        <Step.Group stackable="tablet" widths={5} fluid>
           {allContractStatuses.map((currentStatus) => (
             <FinancialDocumentStep
               lastStatusActivity={lastStatusActivity}
