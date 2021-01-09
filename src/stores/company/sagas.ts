@@ -15,7 +15,8 @@ import { Tables } from '../tables/tables';
 import { TableState } from '../tables/tableState';
 import { clearSingle, errorSingle, setSingle } from '../single/actionCreators';
 import {
-  singleActionPattern, SingleActionType, SingleCreateAction, SingleFetchAction, SingleSaveAction,
+  singleActionPattern, SingleActionType, SingleCreateAction, SingleDeleteAction,
+  SingleFetchAction, SingleSaveAction,
 } from '../single/actions';
 import { SingleEntities } from '../single/single';
 

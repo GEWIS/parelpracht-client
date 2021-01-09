@@ -62,7 +62,10 @@ class ContactModal extends React.Component<Props> {
 
   close = () => {
     const { companyId } = this.props.match.params;
-    this.props.fetchCompany(parseInt(companyId, 10));
+    // If the modal is not opened on a company page, we cannot refresh the company information
+    if (companyId !== undefined) {
+      this.props.fetchCompany(parseInt(companyId, 10));
+    }
     this.props.history.goBack();
   };
 
