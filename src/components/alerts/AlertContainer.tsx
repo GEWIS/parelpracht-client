@@ -17,7 +17,10 @@ class AlertContainer extends React.Component<AlertsProps> {
       <Rail
         internal={this.props.internal}
         position="right"
-        style={{ marginTop: this.props.internal ? '2em' : undefined }}
+        style={{
+          marginTop: this.props.internal ? '2em' : undefined,
+          zIndex: '3939',
+        }}
       >
         {this.props.alerts.map((alert) => (
           <AlertItem

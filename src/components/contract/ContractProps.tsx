@@ -1,13 +1,9 @@
-import React, {
-  ChangeEvent,
-} from 'react';
+import React, { ChangeEvent } from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
-import {
-  Form, Input,
-} from 'semantic-ui-react';
+import { Form, Input } from 'semantic-ui-react';
 import { Contract, ContractParams } from '../../clients/server.generated';
-import { createSingle, saveSingle } from '../../stores/single/actionCreators';
+import { createSingle, deleteSingle, saveSingle } from '../../stores/single/actionCreators';
 import ResourceStatus from '../../stores/resourceStatus';
 import { RootState } from '../../stores/store';
 import CompanySelector from '../company/CompanySelector';
@@ -16,6 +12,7 @@ import PropsButtons from '../PropsButtons';
 import { SingleEntities } from '../../stores/single/single';
 import { getSingle } from '../../stores/single/selectors';
 import UserSelector from '../user/UserSelector';
+import { DeleteEntity } from '../DeleteButton';
 
 interface Props {
   create?: boolean;
@@ -26,6 +23,7 @@ interface Props {
 
   saveContract: (id: number, contract: ContractParams) => void;
   createContract: (contract: ContractParams) => void;
+  deleteContract: (id: number) => void;
 }
 
 interface State {
@@ -97,6 +95,12 @@ class ContractProps extends React.Component<Props, State> {
     }
   };
 
+  remove = () => {
+    if (!this.props.create && this.props.deleteContract) {
+      this.props.deleteContract(this.props.contract.id);
+    }
+  };
+
   render() {
     const {
       editing,
@@ -114,10 +118,13 @@ class ContractProps extends React.Component<Props, State> {
 
           <PropsButtons
             editing={editing}
+            canDelete
+            entity={DeleteEntity.CONTRACT}
             status={this.props.status}
             cancel={this.cancel}
             edit={this.edit}
             save={this.save}
+            remove={this.remove}
           />
         </h2>
 
@@ -206,6 +213,9 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   ),
   createContract: (contract: ContractParams) => dispatch(
     createSingle(SingleEntities.Contract, contract),
+  ),
+  deleteContract: (id: number) => dispatch(
+    deleteSingle(SingleEntities.Contract, id),
   ),
 });
 
