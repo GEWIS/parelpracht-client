@@ -2,7 +2,7 @@ import React, { ChangeEvent } from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import { Form, Input } from 'semantic-ui-react';
-import { Contract, ContractParams } from '../../clients/server.generated';
+import { ActivityType, Contract, ContractParams } from '../../clients/server.generated';
 import { createSingle, deleteSingle, saveSingle } from '../../stores/single/actionCreators';
 import ResourceStatus from '../../stores/resourceStatus';
 import { RootState } from '../../stores/store';
@@ -101,6 +101,21 @@ class ContractProps extends React.Component<Props, State> {
     }
   };
 
+  deleteButtonActive() {
+    // If we create a contract, do not show the button
+    if (this.props.create) {
+      return undefined;
+    }
+    // If we violate any preconditions, disable the button
+    if (this.props.contract.activities.filter((a) => a.type === ActivityType.STATUS).length > 1
+      && this.props.contract.products.length > 0
+    ) {
+      return false;
+    }
+    // Otherwise, enable the button
+    return true;
+  }
+
   render() {
     const {
       editing,
@@ -118,7 +133,7 @@ class ContractProps extends React.Component<Props, State> {
 
           <PropsButtons
             editing={editing}
-            canDelete
+            canDelete={this.deleteButtonActive()}
             entity={DeleteEntity.CONTRACT}
             status={this.props.status}
             cancel={this.cancel}
