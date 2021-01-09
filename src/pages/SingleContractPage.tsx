@@ -1,13 +1,12 @@
 import * as React from 'react';
 import { NavLink, RouteComponentProps, withRouter } from 'react-router-dom';
 import {
-  Breadcrumb,
-  Container, Grid, Loader, Segment,
+  Breadcrumb, Container, Grid, Loader, Segment,
 } from 'semantic-ui-react';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import { Contract } from '../clients/server.generated';
-import { fetchSingle, clearSingle } from '../stores/single/actionCreators';
+import { clearSingle, fetchSingle } from '../stores/single/actionCreators';
 import { RootState } from '../stores/store';
 import ContractProps from '../components/contract/ContractProps';
 import ResourceStatus from '../stores/resourceStatus';
@@ -18,6 +17,8 @@ import { SingleEntities } from '../stores/single/single';
 import ActivitiesList from '../components/activities/ActivitiesList';
 import { GeneralActivity } from '../components/activities/GeneralActivity';
 import FinancialDocumentProgress from '../components/activities/FinancialDocumentProgress';
+import { showTransientAlert } from '../stores/alerts/actionCreators';
+import { TransientAlert } from '../stores/alerts/actions';
 
 interface Props extends RouteComponentProps<{ contractId: string }> {
   contract: Contract | undefined;
@@ -25,6 +26,7 @@ interface Props extends RouteComponentProps<{ contractId: string }> {
 
   fetchContract: (id: number) => void;
   clearContract: () => void;
+  showTransientAlert: (alert: TransientAlert) => void;
 }
 
 class SingleContractPage extends React.Component<Props> {
@@ -33,6 +35,19 @@ class SingleContractPage extends React.Component<Props> {
 
     this.props.clearContract();
     this.props.fetchContract(Number.parseInt(contractId, 10));
+  }
+
+  public componentDidUpdate(prevProps: Readonly<Props>) {
+    if (this.props.status === ResourceStatus.EMPTY
+      && prevProps.status === ResourceStatus.DELETING
+    ) {
+      this.props.history.push('/contract');
+      this.props.showTransientAlert({
+        title: 'Success',
+        message: `Contract ${prevProps.contract?.title} successfully deleted`,
+        type: 'success',
+      });
+    }
   }
 
   public render() {
@@ -96,6 +111,7 @@ const mapStateToProps = (state: RootState) => {
 const mapDispatchToProps = (dispatch: Dispatch) => ({
   fetchContract: (id: number) => dispatch(fetchSingle(SingleEntities.Contract, id)),
   clearContract: () => dispatch(clearSingle(SingleEntities.Contract)),
+  showTransientAlert: (alert: TransientAlert) => dispatch(showTransientAlert(alert)),
 });
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(SingleContractPage));

@@ -15,6 +15,10 @@ function AlertItem(props: Props) {
     <Message
       onDismiss={() => props.onHide(props.alert.id)}
       error={props.alert.type === 'error'}
+      success={props.alert.type === 'success'}
+      info={props.alert.type === 'info'}
+      warning={props.alert.type === 'warning'}
+      style={{ zIndex: '3939' }}
     >
       <Message.Header>{props.alert.title}</Message.Header>
       {props.alert.message}

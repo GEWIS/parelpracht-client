@@ -1,14 +1,11 @@
-import React, {
-  ChangeEvent,
-} from 'react';
+import React, { ChangeEvent } from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import {
-  Checkbox,
-  Form, Input, TextArea,
+  Checkbox, Form, Input, TextArea,
 } from 'semantic-ui-react';
 import { Company, CompanyParams, CompanyStatus } from '../../clients/server.generated';
-import { createSingle, saveSingle } from '../../stores/single/actionCreators';
+import { createSingle, deleteSingle, saveSingle } from '../../stores/single/actionCreators';
 import ResourceStatus from '../../stores/resourceStatus';
 import { RootState } from '../../stores/store';
 import PropsButtons from '../PropsButtons';
@@ -24,6 +21,7 @@ interface Props {
 
   saveCompany: (id: number, company: CompanyParams) => void;
   createCompany: (company: CompanyParams) => void;
+  deleteCompany: (id: number) => void;
 }
 
 interface State {
@@ -104,6 +102,21 @@ class CompanyProps extends React.Component<Props, State> {
     }
   };
 
+  remove = () => {
+    if (!this.props.create && this.props.deleteCompany) {
+      this.props.deleteCompany(this.props.company.id);
+    }
+  };
+
+  deleteButtonActive() {
+    if (this.props.create) {
+      return undefined;
+    }
+    return !(this.props.company.contacts.length > 0
+      || this.props.company.invoices.length > 0
+      || this.props.company.contacts.length > 0);
+  }
+
   render() {
     const {
       editing,
@@ -124,10 +137,13 @@ class CompanyProps extends React.Component<Props, State> {
 
           <PropsButtons
             editing={editing}
+            canDelete={this.deleteButtonActive()}
+            entity={SingleEntities.Company}
             status={this.props.status}
             cancel={this.cancel}
             edit={this.edit}
             save={this.save}
+            remove={this.remove}
           />
         </h2>
 
@@ -260,6 +276,9 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   ),
   createCompany: (company: CompanyParams) => dispatch(
     createSingle(SingleEntities.Company, company),
+  ),
+  deleteCompany: (id: number) => dispatch(
+    deleteSingle(SingleEntities.Company, id),
   ),
 });
 

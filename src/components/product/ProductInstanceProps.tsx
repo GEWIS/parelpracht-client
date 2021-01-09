@@ -1,19 +1,16 @@
-import React, {
-  ChangeEvent,
-} from 'react';
+import React, { ChangeEvent } from 'react';
 import { connect } from 'react-redux';
 import {
   Form, Input, Label, TextArea,
 } from 'semantic-ui-react';
-import {
-  ProductInstanceParams, ProductInstance, ProductSummary,
-} from '../../clients/server.generated';
+import { ProductInstance, ProductInstanceParams, ProductSummary } from '../../clients/server.generated';
 import ResourceStatus from '../../stores/resourceStatus';
 import { RootState } from '../../stores/store';
 import { getSummary } from '../../stores/summaries/selectors';
 import { SummaryCollections } from '../../stores/summaries/summaries';
 import PropsButtons from '../PropsButtons';
 import ProductSelector from './ProductSelector';
+import { SingleEntities } from '../../stores/single/single';
 
 interface Props {
   create?: boolean;
@@ -109,10 +106,13 @@ class ProductInstanceProps extends React.Component<Props, State> {
 
           <PropsButtons
             editing={editing}
+            canDelete={undefined}
+            entity={SingleEntities.Product}
             status={this.props.status}
             cancel={this.cancel}
             edit={this.edit}
             save={this.save}
+            remove={() => {}}
           />
         </h2>
 

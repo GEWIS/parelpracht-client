@@ -2,12 +2,25 @@ import {
   call, put, select, throttle,
 } from 'redux-saga/effects';
 import {
-  Client, Contract, ContractParams, ListOrFilter, ListParams, ListSorting, SortDirection,
+  Client,
+  Contract,
+  ContractParams,
+  ListOrFilter,
+  ListParams,
+  ListSorting,
+  SortDirection,
 } from '../../clients/server.generated';
 import { takeEveryWithErrorHandling } from '../errorHandling';
-import { errorSingle, setSingle } from '../single/actionCreators';
 import {
-  singleActionPattern, SingleActionType, SingleCreateAction, SingleFetchAction, SingleSaveAction,
+  clearSingle, errorSingle, setSingle,
+} from '../single/actionCreators';
+import {
+  singleActionPattern,
+  SingleActionType,
+  SingleCreateAction,
+  SingleDeleteAction,
+  SingleFetchAction,
+  SingleSaveAction,
 } from '../single/actions';
 import { SingleEntities } from '../single/single';
 import { setSummaries } from '../summaries/actionCreators';
@@ -91,6 +104,23 @@ function* errorCreateSingleContract() {
   yield put(errorSingle(SingleEntities.Contract));
 }
 
+function* deleteSingleContract(action: SingleDeleteAction<SingleEntities.Contract>) {
+  const client = new Client();
+  yield call([client, client.deleteContract], action.id);
+  yield put(clearSingle(SingleEntities.Contract));
+}
+
+function* errorDeleteSingleContract() {
+  yield put(errorSingle(SingleEntities.Contract));
+}
+
+function* watchDeleteSingleContract() {
+  yield takeEveryWithErrorHandling(
+    singleActionPattern(SingleEntities.Contract, SingleActionType.Delete),
+    deleteSingleContract, { onErrorSaga: errorDeleteSingleContract },
+  );
+}
+
 function* watchCreateSingleContract() {
   yield takeEveryWithErrorHandling(
     singleActionPattern(SingleEntities.Contract, SingleActionType.Create),
@@ -124,4 +154,5 @@ export default [
   },
   watchSaveSingleContract,
   watchCreateSingleContract,
+  watchDeleteSingleContract,
 ];
