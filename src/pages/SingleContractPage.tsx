@@ -44,7 +44,7 @@ class SingleContractPage extends React.Component<Props> {
       this.props.history.push('/contract');
       this.props.showTransientAlert({
         title: 'Success',
-        message: 'Contract successfully deleted',
+        message: `Contract ${prevProps.contract?.title} successfully deleted`,
         type: 'success',
       });
     }

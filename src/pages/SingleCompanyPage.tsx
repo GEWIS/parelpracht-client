@@ -18,6 +18,8 @@ import { getSingle } from '../stores/single/selectors';
 import { SingleEntities } from '../stores/single/single';
 import ActivitiesList from '../components/activities/ActivitiesList';
 import { GeneralActivity } from '../components/activities/GeneralActivity';
+import { TransientAlert } from '../stores/alerts/actions';
+import { showTransientAlert } from '../stores/alerts/actionCreators';
 
 interface Props extends RouteComponentProps<{ companyId: string }> {
   company: Company | undefined;
@@ -25,6 +27,7 @@ interface Props extends RouteComponentProps<{ companyId: string }> {
 
   fetchCompany: (id: number) => void;
   clearCompany: () => void;
+  showTransientAlert: (alert: TransientAlert) => void;
 }
 
 class SingleCompanyPage extends React.Component<Props> {
@@ -33,6 +36,19 @@ class SingleCompanyPage extends React.Component<Props> {
 
     this.props.clearCompany();
     this.props.fetchCompany(Number.parseInt(companyId, 10));
+  }
+
+  componentDidUpdate(prevProps: Readonly<Props>) {
+    if (this.props.status === ResourceStatus.EMPTY
+      && prevProps.status === ResourceStatus.DELETING
+    ) {
+      this.props.history.push('/company');
+      this.props.showTransientAlert({
+        title: 'Success',
+        message: `Company ${prevProps.company?.name} successfully deleted`,
+        type: 'success',
+      });
+    }
   }
 
   public render() {
@@ -89,6 +105,7 @@ const mapStateToProps = (state: RootState) => {
 const mapDispatchToProps = (dispatch: Dispatch) => ({
   fetchCompany: (id: number) => dispatch(fetchSingle(SingleEntities.Company, id)),
   clearCompany: () => dispatch(clearSingle(SingleEntities.Company)),
+  showTransientAlert: (alert: TransientAlert) => dispatch(showTransientAlert(alert)),
 });
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(SingleCompanyPage));

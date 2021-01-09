@@ -1,18 +1,14 @@
-import React, {
-  ChangeEvent,
-} from 'react';
+import React, { ChangeEvent } from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import {
-  Checkbox,
-  Dropdown,
-  Form, Input, Segment, TextArea,
+  Checkbox, Dropdown, Form, Input, Segment, TextArea,
 } from 'semantic-ui-react';
 import _ from 'lodash';
 import {
   User, UserParams, Gender, Roles,
 } from '../../clients/server.generated';
-import { createSingle, saveSingle } from '../../stores/single/actionCreators';
+import { createSingle, deleteSingle, saveSingle } from '../../stores/single/actionCreators';
 import ResourceStatus from '../../stores/resourceStatus';
 import { RootState } from '../../stores/store';
 import PropsButtons from '../PropsButtons';
@@ -28,6 +24,7 @@ interface Props {
 
   saveUser: (id: number, user: UserParams) => void;
   createUser: (user: UserParams) => void;
+  deleteUser: (id: number) => void;
 }
 
 interface State {
@@ -125,6 +122,19 @@ class UserProps extends React.Component<Props, State> {
     }
   };
 
+  remove = () => {
+    if (!this.props.create) {
+      this.props.deleteUser(this.props.user.id);
+    }
+  };
+
+  deleteButtonActive = () => {
+    if (this.props.create) {
+      return undefined;
+    }
+    return !(this.props.user.roles.length > 0);
+  };
+
   render() {
     const {
       editing,
@@ -145,10 +155,13 @@ class UserProps extends React.Component<Props, State> {
 
           <PropsButtons
             editing={editing}
+            canDelete={this.deleteButtonActive()}
+            entity={SingleEntities.User}
             status={this.props.status}
             cancel={this.cancel}
             edit={this.edit}
             save={this.save}
+            remove={this.remove}
           />
         </h2>
 
@@ -335,6 +348,9 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   ),
   createUser: (user: UserParams) => dispatch(
     createSingle(SingleEntities.User, user),
+  ),
+  deleteUser: (id: number) => dispatch(
+    deleteSingle(SingleEntities.User, id),
   ),
 });
 

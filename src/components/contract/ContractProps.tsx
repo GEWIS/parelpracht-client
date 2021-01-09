@@ -12,7 +12,6 @@ import PropsButtons from '../PropsButtons';
 import { SingleEntities } from '../../stores/single/single';
 import { getSingle } from '../../stores/single/selectors';
 import UserSelector from '../user/UserSelector';
-import { DeleteEntity } from '../DeleteButton';
 
 interface Props {
   create?: boolean;
@@ -96,25 +95,20 @@ class ContractProps extends React.Component<Props, State> {
   };
 
   remove = () => {
-    if (!this.props.create && this.props.deleteContract) {
+    if (!this.props.create) {
       this.props.deleteContract(this.props.contract.id);
     }
   };
 
-  deleteButtonActive() {
+  deleteButtonActive = () => {
     // If we create a contract, do not show the button
     if (this.props.create) {
       return undefined;
     }
     // If we violate any preconditions, disable the button
-    if (this.props.contract.activities.filter((a) => a.type === ActivityType.STATUS).length > 1
-      && this.props.contract.products.length > 0
-    ) {
-      return false;
-    }
-    // Otherwise, enable the button
-    return true;
-  }
+    return !(this.props.contract.activities.filter((a) => a.type === ActivityType.STATUS).length > 1
+      || this.props.contract.products.length > 0);
+  };
 
   render() {
     const {
@@ -134,7 +128,7 @@ class ContractProps extends React.Component<Props, State> {
           <PropsButtons
             editing={editing}
             canDelete={this.deleteButtonActive()}
-            entity={DeleteEntity.CONTRACT}
+            entity={SingleEntities.Contract}
             status={this.props.status}
             cancel={this.cancel}
             edit={this.edit}

@@ -1,24 +1,13 @@
 import { Button, Popup } from 'semantic-ui-react';
 import React from 'react';
 import ResourceStatus from '../stores/resourceStatus';
-
-export enum DeleteEntity {
-  CONTRACT = 'contract',
-  INVOICE = 'invoice',
-  PRODUCT = 'product',
-  COMPANY = 'company',
-  CONTACT = 'contact',
-}
+import { SingleEntities } from '../stores/single/single';
 
 interface DeleteProps {
-  // eslint-disable-next-line react/require-default-props
-  canDelete?: boolean | undefined;
-  // eslint-disable-next-line react/require-default-props
-  entity?: DeleteEntity;
-  // eslint-disable-next-line react/require-default-props
-  remove?: () => void;
-  // eslint-disable-next-line react/require-default-props
-  status?: ResourceStatus;
+  canDelete: boolean | undefined;
+  entity: SingleEntities;
+  remove: () => void;
+  status: ResourceStatus;
 }
 
 function DeleteButton(props: DeleteProps) {
@@ -45,30 +34,33 @@ function DeleteButton(props: DeleteProps) {
           >
             Delete
             {' '}
-            {entity}
+            {entity.toLowerCase()}
           </Button>
         )}
-        header={`Are you sure you want to delete this ${entity}?`}
+        header={`Are you sure you want to delete this ${entity.toLowerCase()}?`}
       />
     );
   }
   if (canDelete === false) {
     let deleteError: string;
     switch (entity) {
-      case DeleteEntity.CONTRACT:
+      case SingleEntities.Contract:
         deleteError = 'it has a different status than "Created" or has products attached to it';
         break;
-      case DeleteEntity.INVOICE:
+      case SingleEntities.Invoice:
         deleteError = 'it has a different status than "Created" or has products attached to it';
         break;
-      case DeleteEntity.COMPANY:
-        deleteError = 'this company has contracts and/or invoices';
+      case SingleEntities.Company:
+        deleteError = 'this company has contracts, invoices and/or contacts';
         break;
-      case DeleteEntity.CONTACT:
+      case SingleEntities.Contact:
         deleteError = 'this contact has contracts';
         break;
-      case DeleteEntity.PRODUCT:
+      case SingleEntities.Product:
         deleteError = 'this product is used in contracts and/or invoices';
+        break;
+      case SingleEntities.User:
+        deleteError = 'this user still has active roles';
         break;
       default:
         throw new Error(`${entity} is not a valid DeleteEntity`);
@@ -86,7 +78,7 @@ function DeleteButton(props: DeleteProps) {
         )}
         on="hover"
         mouseEnterDelay={500}
-        content={`You cannot delete this ${entity}, because ${deleteError}`}
+        content={`You cannot delete this ${entity}, because ${deleteError}.`}
       />
     );
   }

@@ -1,16 +1,13 @@
-import React, {
-  ChangeEvent,
-} from 'react';
+import React, { ChangeEvent } from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import {
-  Checkbox,
-  Form, Input, Label, TextArea,
+  Checkbox, Form, Input, Label, TextArea,
 } from 'semantic-ui-react';
 import { Product, ProductParams, ProductStatus } from '../../clients/server.generated';
 import { formatPrice } from '../../helpers/monetary';
 import ResourceStatus from '../../stores/resourceStatus';
-import { createSingle, saveSingle } from '../../stores/single/actionCreators';
+import { createSingle, deleteSingle, saveSingle } from '../../stores/single/actionCreators';
 import { getSingle } from '../../stores/single/selectors';
 import { SingleEntities } from '../../stores/single/single';
 import { RootState } from '../../stores/store';
@@ -25,6 +22,7 @@ interface Props {
 
   saveProduct: (id: number, product: ProductParams) => void;
   createProduct: (product: ProductParams) => void;
+  deleteProduct: (id: number) => void;
 }
 
 interface State {
@@ -111,6 +109,19 @@ class ProductProps extends React.Component<Props, State> {
     }
   };
 
+  remove = () => {
+    if (!this.props.create) {
+      this.props.deleteProduct(this.props.product.id);
+    }
+  };
+
+  deleteButtonActive = () => {
+    if (this.props.create) {
+      return undefined;
+    }
+    return !(this.props.product.instances.length > 0 || this.props.product.files.length > 0);
+  };
+
   render() {
     const {
       editing,
@@ -128,10 +139,13 @@ class ProductProps extends React.Component<Props, State> {
 
           <PropsButtons
             editing={editing}
+            canDelete={this.deleteButtonActive()}
+            entity={SingleEntities.Product}
             status={this.props.status}
             cancel={this.cancel}
             edit={this.edit}
             save={this.save}
+            remove={this.remove}
           />
         </h2>
 
@@ -279,6 +293,9 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   ),
   createProduct: (product: ProductParams) => dispatch(
     createSingle(SingleEntities.Product, product),
+  ),
+  deleteProduct: (id: number) => dispatch(
+    deleteSingle(SingleEntities.Product, id),
   ),
 });
 

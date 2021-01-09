@@ -1,21 +1,19 @@
 import React from 'react';
 import { Button, Icon } from 'semantic-ui-react';
 import ResourceStatus from '../stores/resourceStatus';
-import DeleteButton, { DeleteEntity } from './DeleteButton';
+import DeleteButton from './DeleteButton';
+import { SingleEntities } from '../stores/single/single';
 
 interface Props {
   editing: boolean;
-  // eslint-disable-next-line react/require-default-props
-  canDelete?: boolean | undefined;
-  // eslint-disable-next-line react/require-default-props
-  entity?: DeleteEntity;
+  canDelete: boolean | undefined;
+  entity: SingleEntities;
   status: ResourceStatus;
 
   cancel: () => void;
   edit: () => void;
   save: () => void;
-  // eslint-disable-next-line react/require-default-props
-  remove?: () => void;
+  remove: () => void;
 }
 
 function PropsButtons(props: Props) {

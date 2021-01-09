@@ -5,9 +5,10 @@ import {
   Client, Contact, ContactParams, ListOrFilter, ListParams, ListSorting, SortDirection,
 } from '../../clients/server.generated';
 import { takeEveryWithErrorHandling } from '../errorHandling';
-import { errorSingle, setSingle } from '../single/actionCreators';
+import { clearSingle, errorSingle, setSingle } from '../single/actionCreators';
 import {
-  singleActionPattern, SingleActionType, SingleCreateAction, SingleFetchAction, SingleSaveAction,
+  singleActionPattern, SingleActionType, SingleCreateAction, SingleDeleteAction,
+  SingleFetchAction, SingleSaveAction,
 } from '../single/actions';
 import { SingleEntities } from '../single/single';
 import { setSummaries } from '../summaries/actionCreators';
@@ -99,6 +100,23 @@ function* watchCreateSingleContact() {
   );
 }
 
+function* deleteSingleContact(action: SingleDeleteAction<SingleEntities.Contact>) {
+  const client = new Client();
+  yield call([client, client.deleteContact], action.id);
+  yield put(clearSingle(SingleEntities.Contact));
+}
+
+function* errorDeleteSingleContact() {
+  yield put(errorSingle(SingleEntities.Contact));
+}
+
+function* watchDeleteSingleContact() {
+  yield takeEveryWithErrorHandling(
+    singleActionPattern(SingleEntities.Contact, SingleActionType.Delete),
+    deleteSingleContact, { onErrorSaga: errorDeleteSingleContact },
+  );
+}
+
 export default [
   function* watchFetchContacts() {
     yield throttle(
@@ -124,4 +142,5 @@ export default [
   },
   watchSaveSingleContact,
   watchCreateSingleContact,
+  watchDeleteSingleContact,
 ];

@@ -16,6 +16,8 @@ import ResourceStatus from '../stores/resourceStatus';
 import AlertContainer from '../components/alerts/AlertContainer';
 import { getSingle } from '../stores/single/selectors';
 import { SingleEntities } from '../stores/single/single';
+import { TransientAlert } from '../stores/alerts/actions';
+import { showTransientAlert } from '../stores/alerts/actionCreators';
 
 interface Props extends RouteComponentProps<{ companyId: string, contactId?: string }> {
   create?: boolean;
@@ -25,6 +27,7 @@ interface Props extends RouteComponentProps<{ companyId: string, contactId?: str
   clearContact: () => void;
   fetchContact: (id: number) => void;
   fetchCompany: (id: number) => void;
+  showTransientAlert: (alert: TransientAlert) => void;
 }
 
 class ContactModal extends React.Component<Props> {
@@ -38,9 +41,22 @@ class ContactModal extends React.Component<Props> {
   }
 
   componentDidUpdate(prevProps: Props) {
-    if (prevProps.status === ResourceStatus.SAVING
-      && this.props.status === ResourceStatus.FETCHED) {
+    if (this.props.status === ResourceStatus.FETCHED
+      && prevProps.status === ResourceStatus.SAVING
+    ) {
       this.close();
+    }
+
+    if (this.props.status === ResourceStatus.EMPTY
+      && prevProps.status === ResourceStatus.DELETING
+    ) {
+      this.close();
+      // TODO: Fix alert not showing up, because it seems to get dismissed when closing the modal
+      this.props.showTransientAlert({
+        title: 'Success',
+        message: `Contact ${prevProps.contact?.firstName} successfully deleted`,
+        type: 'success',
+      });
     }
   }
 
@@ -135,6 +151,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   clearContact: () => dispatch(clearSingle(SingleEntities.Contact)),
   fetchContact: (id: number) => dispatch(fetchSingle(SingleEntities.Contact, id)),
   fetchCompany: (id: number) => dispatch(fetchSingle(SingleEntities.Company, id)),
+  showTransientAlert: (alert: TransientAlert) => dispatch(showTransientAlert(alert)),
 });
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ContactModal));
