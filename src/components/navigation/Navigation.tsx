@@ -8,7 +8,7 @@ function Navigation() {
     <Menu fixed="top" inverted size="large">
       <Container>
         <Menu.Item as={NavLink} header to="/" exact>
-          CRM
+          ParelPracht
         </Menu.Item>
         <Menu.Item as={NavLink} to="/product">
           <Icon name="shopping bag" />

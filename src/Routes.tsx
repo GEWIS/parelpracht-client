@@ -33,6 +33,7 @@ import UsersPage from './pages/UsersPage';
 import SingleUserPage from './pages/SingleUserPage';
 import UserCreatePage from './pages/UserCreatePage';
 import ProductInstanceModal from './pages/ProductInstanceModal';
+import Footer from './components/navigation/Footer';
 
 interface Props extends RouteComponentProps {
   // eslint-disable-next-line react/no-unused-prop-types
@@ -47,7 +48,7 @@ function Routes(props: Props) {
         <Dimmer active page inverted>
 
           <Header as="h2" icon>
-            <Loader inline content="CRM" size="large" />
+            <Loader inline content="ParelPracht" size="large" />
             <Header.Subheader>Checking login information...</Header.Subheader>
           </Header>
         </Dimmer>
@@ -70,12 +71,15 @@ function Routes(props: Props) {
       <Switch>
         <Route path="/login" exact>
           <LoginPage />
+          <Footer />
         </Route>
         <Route path="/forgot-password" exact>
           <ForgotPasswordPage />
+          <Footer />
         </Route>
         <Route path="/reset-password" exact>
           <ResetPasswordPage />
+          <Footer />
         </Route>
       </Switch>
     );
@@ -168,6 +172,7 @@ function Routes(props: Props) {
           <Route path="/user/:userId" exact component={SingleUserPage} />
         </Switch>
       </Container>
+      <Footer />
     </div>
   );
 }

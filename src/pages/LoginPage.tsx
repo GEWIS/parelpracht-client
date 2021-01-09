@@ -14,7 +14,7 @@ function LoginPage() {
         <Grid textAlign="center" verticalAlign="middle" style={{ height: '100vh' }}>
           <Grid.Column width={6}>
             <Header as="h1">
-              CRM
+              ParelPracht
             </Header>
             <Segment>
               <LoginForm />
