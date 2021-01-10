@@ -5,7 +5,7 @@ import AuthMenu from './AuthMenu';
 
 function Navigation() {
   return (
-    <Menu fixed="top" inverted size="large">
+    <Menu fixed="top" inverted size="large" className="main-menu">
       <Container>
         <Menu.Item as={NavLink} header to="/" exact>
           ParelPracht
