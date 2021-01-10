@@ -5,10 +5,10 @@ import AuthMenu from './AuthMenu';
 
 function Navigation() {
   return (
-    <Menu fixed="top" inverted size="large">
+    <Menu fixed="top" inverted size="large" className="main-menu">
       <Container>
         <Menu.Item as={NavLink} header to="/" exact>
-          CRM
+          ParelPracht
         </Menu.Item>
         <Menu.Item as={NavLink} to="/product">
           <Icon name="shopping bag" />
