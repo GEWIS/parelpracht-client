@@ -34,6 +34,7 @@ import SingleUserPage from './pages/SingleUserPage';
 import UserCreatePage from './pages/UserCreatePage';
 import ProductInstanceModal from './pages/ProductInstanceModal';
 import Footer from './components/navigation/Footer';
+import DashboardPage from './pages/DashboardPage';
 
 interface Props extends RouteComponentProps {
   // eslint-disable-next-line react/no-unused-prop-types
@@ -94,6 +95,9 @@ function Routes(props: Props) {
       >
         <AlertContainer internal />
         <Switch>
+          <Route path="/" exact>
+            <DashboardPage />
+          </Route>
           {/* Product */}
           <Route path="/product" exact>
             <ProductsPage />
