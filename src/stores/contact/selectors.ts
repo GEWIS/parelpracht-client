@@ -12,7 +12,7 @@ export function sortColumn(state: RootState): string {
     case 'id': return 'ID';
     case 'CompanyId': return 'Company ID';
     case 'firstName': return 'First Name';
-    case 'middleName': return 'Middle Name';
+    case 'lastNamePreposition': return 'Middle Name';
     case 'lastName': return 'Last Name';
     case 'gender': return 'Gender';
     case 'email': return 'E-mail';
@@ -26,5 +26,5 @@ export function getContactName(state: RootState, id: number): string {
     state, SummaryCollections.Contacts, id,
   );
   if (contact === undefined) return '...';
-  return formatContactName(contact.firstName, contact.middleName, contact.lastName);
+  return formatContactName(contact.firstName, contact.lastNamePreposition, contact.lastName);
 }

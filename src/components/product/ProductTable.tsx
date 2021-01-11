@@ -11,6 +11,7 @@ import {
 import { countFetched, countTotal, getTable } from '../../stores/tables/selectors';
 import { Tables } from '../../stores/tables/tables';
 import { ProductRow } from './ProductRow';
+import ProductStatusFilter from './filters/ProductStatusFilter';
 
 interface Props {
   products: Product[];
@@ -65,6 +66,7 @@ function ProductsTable({
               onClick={() => changeSort('status')}
             >
               Status
+              <ProductStatusFilter />
             </Table.HeaderCell>
           </Table.Row>
         </Table.Header>

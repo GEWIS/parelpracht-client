@@ -2,6 +2,7 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { Table } from 'semantic-ui-react';
 import { Company, CompanyStatus } from '../../clients/server.generated';
+import { formatLastUpdate } from '../../helpers/lastUpdate';
 
 interface Props {
   company: Company;
@@ -18,6 +19,9 @@ export function CompanyRow(props: Props) {
       </Table.Cell>
       <Table.Cell>
         {company.status === CompanyStatus.ACTIVE ? 'Active' : 'Inactive'}
+      </Table.Cell>
+      <Table.Cell>
+        {formatLastUpdate(company.updatedAt)}
       </Table.Cell>
     </Table.Row>
   );

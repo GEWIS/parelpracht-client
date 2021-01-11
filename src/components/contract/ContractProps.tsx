@@ -1,13 +1,9 @@
-import React, {
-  ChangeEvent,
-} from 'react';
+import React, { ChangeEvent } from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
-import {
-  Form, Input,
-} from 'semantic-ui-react';
-import { Contract, ContractParams } from '../../clients/server.generated';
-import { createSingle, saveSingle } from '../../stores/single/actionCreators';
+import { Form, Input } from 'semantic-ui-react';
+import { ActivityType, Contract, ContractParams } from '../../clients/server.generated';
+import { createSingle, deleteSingle, saveSingle } from '../../stores/single/actionCreators';
 import ResourceStatus from '../../stores/resourceStatus';
 import { RootState } from '../../stores/store';
 import CompanySelector from '../company/CompanySelector';
@@ -26,6 +22,7 @@ interface Props {
 
   saveContract: (id: number, contract: ContractParams) => void;
   createContract: (contract: ContractParams) => void;
+  deleteContract: (id: number) => void;
 }
 
 interface State {
@@ -97,6 +94,22 @@ class ContractProps extends React.Component<Props, State> {
     }
   };
 
+  remove = () => {
+    if (!this.props.create) {
+      this.props.deleteContract(this.props.contract.id);
+    }
+  };
+
+  deleteButtonActive = () => {
+    // If we create a contract, do not show the button
+    if (this.props.create) {
+      return undefined;
+    }
+    // If we violate any preconditions, disable the button
+    return !(this.props.contract.activities.filter((a) => a.type === ActivityType.STATUS).length > 1
+      || this.props.contract.products.length > 0);
+  };
+
   render() {
     const {
       editing,
@@ -114,10 +127,13 @@ class ContractProps extends React.Component<Props, State> {
 
           <PropsButtons
             editing={editing}
+            canDelete={this.deleteButtonActive()}
+            entity={SingleEntities.Contract}
             status={this.props.status}
             cancel={this.cancel}
             edit={this.edit}
             save={this.save}
+            remove={this.remove}
           />
         </h2>
 
@@ -181,7 +197,7 @@ class ContractProps extends React.Component<Props, State> {
             fluid
             id="form-input-comments"
             control={Input}
-            label="comments"
+            label="Comments"
             value={comments}
             onChange={(e: ChangeEvent<HTMLInputElement>) => this.setState({
               comments: e.target.value,
@@ -206,6 +222,9 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   ),
   createContract: (contract: ContractParams) => dispatch(
     createSingle(SingleEntities.Contract, contract),
+  ),
+  deleteContract: (id: number) => dispatch(
+    deleteSingle(SingleEntities.Contract, id),
   ),
 });
 

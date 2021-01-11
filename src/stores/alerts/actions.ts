@@ -8,7 +8,7 @@ export enum ActionTypeNames {
 
 export interface Alert {
   title: string;
-  type: 'error' | 'warning' | 'info';
+  type: 'error' | 'warning' | 'info' | 'success';
   message: any;
 }
 

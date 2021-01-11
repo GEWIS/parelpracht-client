@@ -18,7 +18,7 @@ function ContactSelector(props: Props & DropdownProps) {
   } = props;
   const dropdownOptions = props.options.map((x) => ({
     key: x.id,
-    text: formatContactName(x.firstName, x.middleName, x.lastName),
+    text: formatContactName(x.firstName, x.lastNamePreposition, x.lastName),
     description: x.companyName,
     value: x.id,
   }));

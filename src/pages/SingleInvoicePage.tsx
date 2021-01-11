@@ -14,6 +14,9 @@ import InvoiceProps from '../components/invoice/InvoiceProps';
 import { clearSingle, fetchSingle } from '../stores/single/actionCreators';
 import { SingleEntities } from '../stores/single/single';
 import { getSingle } from '../stores/single/selectors';
+import ActivitiesList from '../components/activities/ActivitiesList';
+import { GeneralActivity } from '../components/activities/GeneralActivity';
+import FinancialDocumentProgress from '../components/activities/FinancialDocumentProgress';
 
 interface Props extends RouteComponentProps<{ invoiceId: string }> {
   invoice: Invoice | undefined;
@@ -52,12 +55,27 @@ class SingleInvoicePage extends React.Component<Props> {
           ]}
         />
         <InvoiceSummary />
-        <Grid columns={2}>
-          <Grid.Column>
-            <Segment>
-              <InvoiceProps invoice={invoice} />
+        <Grid rows={2}>
+          <Grid.Row centered columns={1} style={{ paddingLeft: '1em', paddingRight: '1em' }}>
+            <Segment secondary>
+              <FinancialDocumentProgress
+                activities={invoice.activities as GeneralActivity[]}
+                documentType="Invoice"
+              />
             </Segment>
-          </Grid.Column>
+          </Grid.Row>
+          <Grid.Row columns={2}>
+            <Grid.Column>
+              <Segment>
+                <InvoiceProps invoice={invoice} />
+              </Segment>
+            </Grid.Column>
+            <Grid.Column>
+              <Segment secondary>
+                <ActivitiesList activities={invoice.activities as GeneralActivity[]} />
+              </Segment>
+            </Grid.Column>
+          </Grid.Row>
         </Grid>
       </Container>
     );

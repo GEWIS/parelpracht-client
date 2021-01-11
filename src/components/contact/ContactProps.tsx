@@ -1,16 +1,13 @@
-import React, {
-  ChangeEvent,
-} from 'react';
+import React, { ChangeEvent } from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import {
-  Dropdown,
-  Form, Input, TextArea,
+  Dropdown, Form, Input, TextArea,
 } from 'semantic-ui-react';
 import {
   Contact, ContactFunction, ContactParams, Gender,
 } from '../../clients/server.generated';
-import { createSingle, saveSingle } from '../../stores/single/actionCreators';
+import { createSingle, deleteSingle, saveSingle } from '../../stores/single/actionCreators';
 import ResourceStatus from '../../stores/resourceStatus';
 import { RootState } from '../../stores/store';
 import PropsButtons from '../PropsButtons';
@@ -27,13 +24,14 @@ interface Props {
 
   saveContact: (id: number, contact: ContactParams) => void;
   createContact: (contact: ContactParams) => void;
+  deleteContact: (id: number) => void;
 }
 
 interface State {
   editing: boolean;
 
   firstName: string;
-  middleName: string;
+  lastNamePreposition: string;
   lastName: string;
   gender: Gender;
   email: string;
@@ -64,7 +62,7 @@ class ContactProps extends React.Component<Props, State> {
     const { contact } = props;
     return {
       firstName: contact.firstName,
-      middleName: contact.middleName,
+      lastNamePreposition: contact.lastNamePreposition,
       lastName: contact.lastName,
       gender: contact.gender,
       email: contact.email,
@@ -77,7 +75,7 @@ class ContactProps extends React.Component<Props, State> {
   toParams = (): ContactParams => {
     return new ContactParams({
       firstName: this.state.firstName,
-      middleName: this.state.middleName,
+      lastNamePreposition: this.state.lastNamePreposition,
       lastName: this.state.lastName,
       gender: this.state.gender,
       email: this.state.email,
@@ -108,11 +106,24 @@ class ContactProps extends React.Component<Props, State> {
     }
   };
 
+  remove = () => {
+    if (!this.props.create) {
+      this.props.deleteContact(this.props.contact.id);
+    }
+  };
+
+  deleteButtonActive() {
+    if (this.props.create) {
+      return undefined;
+    }
+    return !(this.props.contact.contracts.length > 0);
+  }
+
   render() {
     const {
       editing,
       firstName,
-      middleName,
+      lastNamePreposition,
       lastName,
       gender,
       email,
@@ -128,10 +139,13 @@ class ContactProps extends React.Component<Props, State> {
 
           <PropsButtons
             editing={editing}
+            canDelete={this.deleteButtonActive()}
+            entity={SingleEntities.Contact}
             status={this.props.status}
             cancel={this.cancel}
             edit={this.edit}
             save={this.save}
+            remove={this.remove}
           />
         </h2>
 
@@ -155,9 +169,9 @@ class ContactProps extends React.Component<Props, State> {
               fluid
               control={Input}
               label="Middle Name"
-              value={middleName}
+              value={lastNamePreposition}
               onChange={(e: ChangeEvent<HTMLInputElement>) => this.setState({
-                middleName: e.target.value,
+                lastNamePreposition: e.target.value,
               })}
               width={4}
             />
@@ -267,6 +281,9 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   ),
   createContact: (contact: ContactParams) => dispatch(
     createSingle(SingleEntities.Contact, contact),
+  ),
+  deleteContact: (id: number) => dispatch(
+    deleteSingle(SingleEntities.Contact, id),
   ),
 });
 

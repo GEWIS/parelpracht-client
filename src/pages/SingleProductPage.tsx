@@ -15,6 +15,10 @@ import ContractList from '../components/contract/ContractList';
 import { getSingle } from '../stores/single/selectors';
 import { SingleEntities } from '../stores/single/single';
 import { clearSingle, fetchSingle } from '../stores/single/actionCreators';
+import ActivitiesList from '../components/activities/ActivitiesList';
+import { GeneralActivity } from '../components/activities/GeneralActivity';
+import { TransientAlert } from '../stores/alerts/actions';
+import { showTransientAlert } from '../stores/alerts/actionCreators';
 
 interface Props extends RouteComponentProps<{ productId: string }> {
   product: Product | undefined;
@@ -22,6 +26,7 @@ interface Props extends RouteComponentProps<{ productId: string }> {
 
   fetchProduct: (id: number) => void;
   clearProduct: () => void;
+  showTransientAlert: (alert: TransientAlert) => void;
 }
 
 class SingleProductPage extends React.Component<Props> {
@@ -30,6 +35,19 @@ class SingleProductPage extends React.Component<Props> {
 
     this.props.clearProduct();
     this.props.fetchProduct(Number.parseInt(productId, 10));
+  }
+
+  componentDidUpdate(prevProps: Readonly<Props>) {
+    if (this.props.status === ResourceStatus.EMPTY
+      && prevProps.status === ResourceStatus.DELETING
+    ) {
+      this.props.history.push('/product');
+      this.props.showTransientAlert({
+        title: 'Success',
+        message: `Product ${prevProps.product?.nameEnglish} successfully deleted`,
+        type: 'success',
+      });
+    }
   }
 
   public render() {
@@ -60,8 +78,11 @@ class SingleProductPage extends React.Component<Props> {
             </Segment>
           </Grid.Column>
           <Grid.Column>
-            <Segment>
+            <Segment secondary>
               <ContractList />
+            </Segment>
+            <Segment secondary>
+              <ActivitiesList activities={product.activities as GeneralActivity[]} />
             </Segment>
           </Grid.Column>
         </Grid>
@@ -80,6 +101,7 @@ const mapStateToProps = (state: RootState) => {
 const mapDispatchToProps = (dispatch: Dispatch) => ({
   fetchProduct: (id: number) => dispatch(fetchSingle(SingleEntities.Product, id)),
   clearProduct: () => dispatch(clearSingle(SingleEntities.Product)),
+  showTransientAlert: (alert: TransientAlert) => dispatch(showTransientAlert(alert)),
 });
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(SingleProductPage));

@@ -13,11 +13,10 @@ import { tableActionPattern, TableActionType } from '../tables/actions';
 import { getTable } from '../tables/selectors';
 import { Tables } from '../tables/tables';
 import { TableState } from '../tables/tableState';
+import { clearSingle, errorSingle, setSingle } from '../single/actionCreators';
 import {
-  setSingle, errorSingle,
-} from '../single/actionCreators';
-import {
-  singleActionPattern, SingleActionType, SingleCreateAction, SingleFetchAction, SingleSaveAction,
+  singleActionPattern, SingleActionType, SingleCreateAction, SingleDeleteAction,
+  SingleFetchAction, SingleSaveAction,
 } from '../single/actions';
 import { SingleEntities } from '../single/single';
 
@@ -101,6 +100,23 @@ function* watchCreateSingleCompany() {
   );
 }
 
+function* deleteSingleCompany(action: SingleDeleteAction<SingleEntities.Company>) {
+  const client = new Client();
+  yield call([client, client.deleteCompany], action.id);
+  yield put(clearSingle(SingleEntities.Company));
+}
+
+function* errorDeleteSingleCompany() {
+  yield put(errorSingle(SingleEntities.Company));
+}
+
+function* watchDeleteSingleCompany() {
+  yield takeEveryWithErrorHandling(
+    singleActionPattern(SingleEntities.Company, SingleActionType.Delete),
+    deleteSingleCompany, { onErrorSaga: errorDeleteSingleCompany },
+  );
+}
+
 export default [
   function* watchFetchCompanies() {
     yield throttle(
@@ -126,4 +142,5 @@ export default [
   },
   watchSaveSingleCompany,
   watchCreateSingleCompany,
+  watchDeleteSingleCompany,
 ];

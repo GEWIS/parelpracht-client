@@ -5,9 +5,10 @@ import {
   Client, ListOrFilter, ListParams, ListSorting, Product, ProductParams, SortDirection,
 } from '../../clients/server.generated';
 import { takeEveryWithErrorHandling } from '../errorHandling';
-import { errorSingle, setSingle } from '../single/actionCreators';
+import { clearSingle, errorSingle, setSingle } from '../single/actionCreators';
 import {
-  singleActionPattern, SingleActionType, SingleCreateAction, SingleFetchAction, SingleSaveAction,
+  singleActionPattern, SingleActionType, SingleCreateAction, SingleDeleteAction,
+  SingleFetchAction, SingleSaveAction,
 } from '../single/actions';
 import { SingleEntities } from '../single/single';
 import { setSummaries } from '../summaries/actionCreators';
@@ -99,6 +100,23 @@ function* watchCreateSingleProduct() {
   );
 }
 
+function* deleteSingleProduct(action: SingleDeleteAction<SingleEntities.Product>) {
+  const client = new Client();
+  yield call([client, client.deleteProduct], action.id);
+  yield put(clearSingle(SingleEntities.Product));
+}
+
+function* errorDeleteSingleProduct() {
+  yield put(errorSingle(SingleEntities.Product));
+}
+
+function* watchDeleteSingleProduct() {
+  yield takeEveryWithErrorHandling(
+    singleActionPattern(SingleEntities.Product, SingleActionType.Delete),
+    deleteSingleProduct, { onErrorSaga: errorDeleteSingleProduct },
+  );
+}
+
 export default [
   function* watchFetchProducts() {
     yield throttle(
@@ -124,4 +142,5 @@ export default [
   },
   watchSaveSingleProduct,
   watchCreateSingleProduct,
+  watchDeleteSingleProduct,
 ];

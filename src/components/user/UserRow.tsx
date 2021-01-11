@@ -25,7 +25,7 @@ function UserRow(props: Props) {
     <Table.Row>
       <Table.Cell>
         <NavLink to={`/user/${user.id}`}>
-          {formatContactName(user.firstName, user.middleName, user.lastName)}
+          {formatContactName(user.firstName, user.lastNamePreposition, user.lastName)}
         </NavLink>
       </Table.Cell>
       <Table.Cell>
@@ -33,30 +33,35 @@ function UserRow(props: Props) {
       </Table.Cell>
       <Table.Cell textAlign="center">
         <Checkbox
+          disabled
           toggle
           checked={permissions.roleSignee}
         />
       </Table.Cell>
       <Table.Cell textAlign="center">
         <Checkbox
+          disabled
           toggle
           checked={permissions.roleFinancial}
         />
       </Table.Cell>
       <Table.Cell textAlign="center">
         <Checkbox
+          disabled
           toggle
           checked={permissions.roleGeneral}
         />
       </Table.Cell>
       <Table.Cell textAlign="center">
         <Checkbox
+          disabled
           toggle
           checked={permissions.roleAudit}
         />
       </Table.Cell>
       <Table.Cell textAlign="center">
         <Checkbox
+          disabled
           toggle
           checked={permissions.roleAdmin}
         />

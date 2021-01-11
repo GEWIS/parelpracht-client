@@ -59,7 +59,7 @@ function UserSummary(props: Props) {
         <Icon name="user" />
         <Header.Content style={{ width: '100%' }}>
           <Header.Subheader>User</Header.Subheader>
-          {formatContactName(user.firstName, user.middleName, user.lastName)}
+          {formatContactName(user.firstName, user.lastNamePreposition, user.lastName)}
           <UserDeleteButton floated="right" userId={user.id} />
         </Header.Content>
       </Header>
@@ -67,7 +67,7 @@ function UserSummary(props: Props) {
         <Grid columns={4}>
           <Grid.Column>
             <h5>Name</h5>
-            <p>{formatContactName(user.firstName, user.middleName, user.lastName)}</p>
+            <p>{formatContactName(user.firstName, user.lastNamePreposition, user.lastName)}</p>
           </Grid.Column>
           <Grid.Column>
             <h5>Email</h5>

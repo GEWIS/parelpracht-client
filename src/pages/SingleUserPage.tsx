@@ -1,8 +1,7 @@
 import * as React from 'react';
 import { NavLink, RouteComponentProps, withRouter } from 'react-router-dom';
 import {
-  Breadcrumb,
-  Container, Grid, Loader, Segment,
+  Breadcrumb, Container, Grid, Segment,
 } from 'semantic-ui-react';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
@@ -15,6 +14,8 @@ import UserSummary from '../components/user/UserSummary';
 import { getSingle } from '../stores/single/selectors';
 import { SingleEntities } from '../stores/single/single';
 import { formatContactName } from '../helpers/contact';
+import { TransientAlert } from '../stores/alerts/actions';
+import { showTransientAlert } from '../stores/alerts/actionCreators';
 
 interface Props extends RouteComponentProps<{ userId: string }> {
   user: User | undefined;
@@ -22,6 +23,7 @@ interface Props extends RouteComponentProps<{ userId: string }> {
 
   fetchUser: (id: number) => void;
   clearUser: () => void;
+  showTransientAlert: (alert: TransientAlert) => void;
 }
 
 class SingleUserPage extends React.Component<Props> {
@@ -30,6 +32,19 @@ class SingleUserPage extends React.Component<Props> {
 
     this.props.clearUser();
     this.props.fetchUser(Number.parseInt(userId, 10));
+  }
+
+  componentDidUpdate(prevProps: Readonly<Props>) {
+    if (this.props.status === ResourceStatus.EMPTY
+      && prevProps.status === ResourceStatus.DELETING
+    ) {
+      this.props.history.push('/company');
+      this.props.showTransientAlert({
+        title: 'Success',
+        message: `User ${prevProps.user?.firstName} successfully deleted`,
+        type: 'success',
+      });
+    }
   }
 
   public render() {
@@ -44,7 +59,7 @@ class SingleUserPage extends React.Component<Props> {
             {
               key: 'User',
               content: user
-                ? formatContactName(user.firstName, user.middleName, user.lastName)
+                ? formatContactName(user.firstName, user.lastNamePreposition, user.lastName)
                 : '',
               active: true,
             },
@@ -75,6 +90,7 @@ const mapStateToProps = (state: RootState) => {
 const mapDispatchToProps = (dispatch: Dispatch) => ({
   fetchUser: (id: number) => dispatch(fetchSingle(SingleEntities.User, id)),
   clearUser: () => dispatch(clearSingle(SingleEntities.User)),
+  showTransientAlert: (alert: TransientAlert) => dispatch(showTransientAlert(alert)),
 });
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(SingleUserPage));

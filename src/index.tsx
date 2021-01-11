@@ -5,7 +5,7 @@ import en from 'javascript-time-ago/locale/en';
 import './index.scss';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import 'semantic-ui-css/semantic.min.css';
+import 'semantic-ui-less/semantic.less';
 
 TimeAgo.addLocale(en);
 TimeAgo.setDefaultLocale('en-US');

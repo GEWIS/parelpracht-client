@@ -1,18 +1,14 @@
-import React, {
-  ChangeEvent,
-} from 'react';
+import React, { ChangeEvent } from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import {
-  Checkbox,
-  Dropdown,
-  Form, Input, Segment, TextArea,
+  Checkbox, Dropdown, Form, Input, Segment, TextArea,
 } from 'semantic-ui-react';
 import _ from 'lodash';
 import {
   User, UserParams, Gender, Roles,
 } from '../../clients/server.generated';
-import { createSingle, saveSingle } from '../../stores/single/actionCreators';
+import { createSingle, deleteSingle, saveSingle } from '../../stores/single/actionCreators';
 import ResourceStatus from '../../stores/resourceStatus';
 import { RootState } from '../../stores/store';
 import PropsButtons from '../PropsButtons';
@@ -28,13 +24,14 @@ interface Props {
 
   saveUser: (id: number, user: UserParams) => void;
   createUser: (user: UserParams) => void;
+  deleteUser: (id: number) => void;
 }
 
 interface State {
   editing: boolean;
 
   firstName: string;
-  middleName: string;
+  lastNamePreposition: string;
   lastName: string;
   gender: Gender;
   email: string;
@@ -70,7 +67,7 @@ class UserProps extends React.Component<Props, State> {
     const { user } = props;
     return {
       firstName: user.firstName,
-      middleName: user.middleName,
+      lastNamePreposition: user.lastNamePreposition,
       lastName: user.lastName,
       function: user.function,
       gender: user.gender,
@@ -88,7 +85,7 @@ class UserProps extends React.Component<Props, State> {
   toParams = (): UserParams => {
     return new UserParams({
       firstName: this.state.firstName,
-      middleName: this.state.middleName,
+      lastNamePreposition: this.state.lastNamePreposition,
       lastName: this.state.lastName,
       gender: this.state.gender,
       email: this.state.email,
@@ -125,11 +122,24 @@ class UserProps extends React.Component<Props, State> {
     }
   };
 
+  remove = () => {
+    if (!this.props.create) {
+      this.props.deleteUser(this.props.user.id);
+    }
+  };
+
+  deleteButtonActive = () => {
+    if (this.props.create) {
+      return undefined;
+    }
+    return !(this.props.user.roles.length > 0);
+  };
+
   render() {
     const {
       editing,
       firstName,
-      middleName,
+      lastNamePreposition,
       lastName,
       gender,
       email,
@@ -145,10 +155,13 @@ class UserProps extends React.Component<Props, State> {
 
           <PropsButtons
             editing={editing}
+            canDelete={this.deleteButtonActive()}
+            entity={SingleEntities.User}
             status={this.props.status}
             cancel={this.cancel}
             edit={this.edit}
             save={this.save}
+            remove={this.remove}
           />
         </h2>
 
@@ -172,9 +185,9 @@ class UserProps extends React.Component<Props, State> {
               fluid
               control={Input}
               label="Middle Name"
-              value={middleName}
+              value={lastNamePreposition}
               onChange={(e: ChangeEvent<HTMLInputElement>) => this.setState({
-                middleName: e.target.value,
+                lastNamePreposition: e.target.value,
               })}
               width={4}
             />
@@ -225,12 +238,13 @@ class UserProps extends React.Component<Props, State> {
           <Segment>
             <h3>Permissions</h3>
             <Form.Group widths="equal">
-              <Form.Field disabled={!editing}>
+              <Form.Field>
                 {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
                 <label htmlFor="form-check-role-signee">
                   Signee
                 </label>
                 <Checkbox
+                  disabled={!editing}
                   toggle
                   id="form-check-role-signee"
                   checked={roleSignee}
@@ -239,12 +253,13 @@ class UserProps extends React.Component<Props, State> {
                   })}
                 />
               </Form.Field>
-              <Form.Field disabled={!editing}>
+              <Form.Field>
                 {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
                 <label htmlFor="form-check-role-financial">
                   Financial
                 </label>
                 <Checkbox
+                  disabled={!editing}
                   toggle
                   id="form-check-role-financial"
                   checked={roleFinancial}
@@ -253,12 +268,13 @@ class UserProps extends React.Component<Props, State> {
                   })}
                 />
               </Form.Field>
-              <Form.Field disabled={!editing}>
+              <Form.Field>
                 {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
                 <label htmlFor="form-check-role-general">
                   General
                 </label>
                 <Checkbox
+                  disabled={!editing}
                   toggle
                   id="form-check-role-general"
                   checked={roleGeneral}
@@ -267,12 +283,13 @@ class UserProps extends React.Component<Props, State> {
                   })}
                 />
               </Form.Field>
-              <Form.Field disabled={!editing}>
+              <Form.Field>
                 {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
                 <label htmlFor="form-check-role-audit">
                   Audit
                 </label>
                 <Checkbox
+                  disabled={!editing}
                   toggle
                   id="form-check-role-audit"
                   checked={roleAudit}
@@ -281,12 +298,13 @@ class UserProps extends React.Component<Props, State> {
                   })}
                 />
               </Form.Field>
-              <Form.Field disabled={!editing}>
+              <Form.Field>
                 {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
                 <label htmlFor="form-check-role-admin">
                   Admin
                 </label>
                 <Checkbox
+                  disabled={!editing}
                   toggle
                   id="form-check-role-admin"
                   checked={roleAdmin}
@@ -330,6 +348,9 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   ),
   createUser: (user: UserParams) => dispatch(
     createSingle(SingleEntities.User, user),
+  ),
+  deleteUser: (id: number) => dispatch(
+    deleteSingle(SingleEntities.User, id),
   ),
 });
 

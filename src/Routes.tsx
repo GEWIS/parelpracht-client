@@ -32,6 +32,9 @@ import ContactModal from './pages/ContactModal';
 import UsersPage from './pages/UsersPage';
 import SingleUserPage from './pages/SingleUserPage';
 import UserCreatePage from './pages/UserCreatePage';
+import ProductInstanceModal from './pages/ProductInstanceModal';
+import Footer from './components/navigation/Footer';
+import DashboardPage from './pages/DashboardPage';
 
 interface Props extends RouteComponentProps {
   // eslint-disable-next-line react/no-unused-prop-types
@@ -46,7 +49,7 @@ function Routes(props: Props) {
         <Dimmer active page inverted>
 
           <Header as="h2" icon>
-            <Loader inline content="CRM" size="large" />
+            <Loader inline content="ParelPracht" size="large" />
             <Header.Subheader>Checking login information...</Header.Subheader>
           </Header>
         </Dimmer>
@@ -69,12 +72,15 @@ function Routes(props: Props) {
       <Switch>
         <Route path="/login" exact>
           <LoginPage />
+          <Footer />
         </Route>
         <Route path="/forgot-password" exact>
           <ForgotPasswordPage />
+          <Footer />
         </Route>
         <Route path="/reset-password" exact>
           <ResetPasswordPage />
+          <Footer />
         </Route>
       </Switch>
     );
@@ -89,6 +95,9 @@ function Routes(props: Props) {
       >
         <AlertContainer internal />
         <Switch>
+          <Route path="/" exact>
+            <DashboardPage />
+          </Route>
           {/* Product */}
           <Route path="/product" exact>
             <ProductsPage />
@@ -148,6 +157,14 @@ function Routes(props: Props) {
             <ContractCreatePage />
           </Route>
           <Route path="/contract/:contractId" exact component={SingleContractPage} />
+          <Route path="/contract/:contractId/product/new" exact>
+            <SingleContractPage />
+            <ProductInstanceModal create />
+          </Route>
+          <Route path="/contract/:contractId/product/:productInstanceId" exact>
+            <SingleContractPage />
+            <ProductInstanceModal />
+          </Route>
           {/* Users */}
           <Route path="/user" exact>
             <UsersPage />
@@ -159,6 +176,7 @@ function Routes(props: Props) {
           <Route path="/user/:userId" exact component={SingleUserPage} />
         </Switch>
       </Container>
+      <Footer />
     </div>
   );
 }
