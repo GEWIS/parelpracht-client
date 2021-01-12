@@ -2,6 +2,7 @@ import React, { ChangeEvent } from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import { Form, Input } from 'semantic-ui-react';
+import validator from 'validator';
 import { ActivityType, Contract, ContractParams } from '../../clients/server.generated';
 import { createSingle, deleteSingle, saveSingle } from '../../stores/single/actionCreators';
 import ResourceStatus from '../../stores/resourceStatus';
@@ -149,6 +150,9 @@ class ContractProps extends React.Component<Props, State> {
               onChange={(e: ChangeEvent<HTMLInputElement>) => this.setState({
                 title: e.target.value,
               })}
+              error={
+                validator.isEmpty(title)
+              }
             />
             <Form.Field
               disabled={!editing}
@@ -165,7 +169,6 @@ class ContractProps extends React.Component<Props, State> {
               />
             </Form.Field>
           </Form.Group>
-
           <Form.Field
             disabled={!editing}
           >

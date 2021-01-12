@@ -4,6 +4,7 @@ import { Dispatch } from 'redux';
 import {
   Checkbox, Form, Input, Label, TextArea,
 } from 'semantic-ui-react';
+import validator from 'validator';
 import { Product, ProductParams, ProductStatus } from '../../clients/server.generated';
 import { formatPrice } from '../../helpers/monetary';
 import ResourceStatus from '../../stores/resourceStatus';
@@ -157,10 +158,14 @@ class ProductProps extends React.Component<Props, State> {
               fluid
               control={Input}
               label="Name (Dutch)"
+              placeholder="Name (Dutch)"
               value={nameDutch}
               onChange={(e: ChangeEvent<HTMLInputElement>) => this.setState({
                 nameDutch: e.target.value,
               })}
+              error={
+                validator.isEmpty(nameDutch)
+              }
             />
             <Form.Field
               disabled={!editing}
@@ -168,10 +173,14 @@ class ProductProps extends React.Component<Props, State> {
               id="form-input-english-name"
               control={Input}
               label="Name (English)"
+              placeholder="Name (English)"
               value={nameEnglish}
               onChange={(e: ChangeEvent<HTMLInputElement>) => this.setState({
                 nameEnglish: e.target.value,
               })}
+              error={
+                validator.isEmpty(nameEnglish)
+              }
             />
           </Form.Group>
           <Form.Group widths="equal">
@@ -210,16 +219,16 @@ class ProductProps extends React.Component<Props, State> {
           <Form.Field disabled={!editing}>
             {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
             <label htmlFor="form-input-description">
-              Description
+              Comments (internal)
             </label>
             <TextArea
               id="form-input-description"
               value={description}
               onChange={(e) => this.setState({ description: e.target.value })}
-              placeholder="Description"
+              placeholder="Comments"
             />
           </Form.Field>
-          <Form.Field disabled={!editing}>
+          <Form.Field disabled={!editing} error={validator.isEmpty(contractTextDutch)}>
             {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
             <label htmlFor="form-input-contract-text-dutch">
               Contract Text (Dutch)
@@ -233,7 +242,7 @@ class ProductProps extends React.Component<Props, State> {
               placeholder="Contract Text (Dutch)"
             />
           </Form.Field>
-          <Form.Field disabled={!editing}>
+          <Form.Field disabled={!editing} error={validator.isEmpty(contractTextEnglish)}>
             {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
             <label htmlFor="form-input-contract-text-english">
               Contract Text (English)

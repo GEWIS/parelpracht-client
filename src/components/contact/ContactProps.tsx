@@ -4,6 +4,7 @@ import { Dispatch } from 'redux';
 import {
   Dropdown, Form, Input, TextArea,
 } from 'semantic-ui-react';
+import validator from 'validator';
 import {
   Contact, ContactFunction, ContactParams, Gender,
 } from '../../clients/server.generated';
@@ -162,6 +163,9 @@ class ContactProps extends React.Component<Props, State> {
                 firstName: e.target.value,
               })}
               width={6}
+              error={
+                validator.isEmpty(firstName)
+              }
             />
             <Form.Field
               disabled={!editing}
@@ -186,6 +190,9 @@ class ContactProps extends React.Component<Props, State> {
                 lastName: e.target.value,
               })}
               width={6}
+              error={
+                validator.isEmpty(firstName)
+              }
             />
           </Form.Group>
           <Form.Group widths="equal">
@@ -235,6 +242,9 @@ class ContactProps extends React.Component<Props, State> {
               onChange={(e: ChangeEvent<HTMLInputElement>) => this.setState({
                 email: e.target.value,
               })}
+              error={
+                !validator.isEmail(email)
+              }
             />
             <Form.Field
               disabled={!editing}
@@ -246,6 +256,9 @@ class ContactProps extends React.Component<Props, State> {
               onChange={(e: ChangeEvent<HTMLInputElement>) => this.setState({
                 telephone: e.target.value,
               })}
+              error={
+                !validator.isEmpty(telephone!) && !validator.isMobilePhone(telephone!)
+              }
             />
           </Form.Group>
           <Form.Field disabled={!editing}>
