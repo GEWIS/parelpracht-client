@@ -9,6 +9,7 @@ import SingleFile, { GeneralFile } from './SingleFile';
 
 interface Props extends RouteComponentProps {
   files: GeneralFile[];
+  entityId: number;
 }
 
 interface State {
@@ -21,7 +22,7 @@ class FilesList extends React.Component<Props, State> {
   }
 
   public render() {
-    const { files } = this.props;
+    const { files, entityId } = this.props;
     return (
       <>
         <h3>
@@ -40,7 +41,7 @@ class FilesList extends React.Component<Props, State> {
           </Button>
         </h3>
         {files.map((file) => (
-          <SingleFile key={file.id} file={file} create={false} />
+          <SingleFile key={file.id} file={file} create={false} entityId={entityId} />
         ))}
         <SingleFile create />
       </>

@@ -95,7 +95,7 @@ class SingleContractPage extends React.Component<Props> {
                 <ActivitiesList activities={contract.activities as GeneralActivity[]} />
               </Segment>
               <Segment secondary>
-                <FilesList files={contract.files} />
+                <FilesList files={contract.files} entityId={contract.id} />
               </Segment>
             </Grid.Column>
           </Grid.Row>

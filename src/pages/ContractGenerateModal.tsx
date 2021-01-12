@@ -16,6 +16,7 @@ import { SingleEntities } from '../stores/single/single';
 import { RootState } from '../stores/store';
 import UserSelector from '../components/user/UserSelector';
 import PropsButtons from '../components/PropsButtons';
+import { FilesClient } from '../clients/filesClient';
 
 interface Props {
   contractId: number;
@@ -32,10 +33,12 @@ function GenerateContract(props: Props) {
   const [saveToDisk, changeSaveToDisk] = useState(false);
   const [signee1Id, changeSignee1] = useState(0);
   const [signee2Id, changeSignee2] = useState(0);
+  const [loading, changeLoading] = useState(false);
 
   const save = async () => {
-    const client = new Client();
-    await client.generateFile(props.contractId, new GenerateContractParams({
+    changeLoading(true);
+    const client = new FilesClient();
+    await client.generateContractFile(props.contractId, new GenerateContractParams({
       name,
       language,
       contentType,
@@ -46,6 +49,7 @@ function GenerateContract(props: Props) {
       signee2Id,
     }));
     setOpen(false);
+    changeLoading(false);
   };
 
   return (
@@ -56,7 +60,7 @@ function GenerateContract(props: Props) {
       open={isOpen}
       dimmer="blurring"
       size="tiny"
-      trigger={<Button primary> Generate File </Button>}
+      trigger={<Button primary loading={loading}> Generate File </Button>}
     >
       <Segment attached="bottom">
         <AlertContainer />
@@ -66,6 +70,7 @@ function GenerateContract(props: Props) {
             primary
             onClick={save}
             floated="right"
+            loading={loading}
           >
             Generate
           </Button>

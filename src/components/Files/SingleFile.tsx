@@ -6,15 +6,28 @@ import {
 import {
   ContractFile, InvoiceFile, ProductFile,
 } from '../../clients/server.generated';
+// eslint-disable-next-line import/no-cycle
+import { FilesClient } from '../../clients/filesClient';
 
 export type GeneralFile = ContractFile | ProductFile | InvoiceFile;
 
 interface Props extends RouteComponentProps {
   file?: GeneralFile;
   create: boolean;
+
+  entityId?: number;
 }
 
 class SingleFile extends React.Component<Props> {
+  private async getFile() {
+    const {
+      entityId, file,
+    } = this.props;
+
+    const client = new FilesClient();
+    await client.getContractFile(entityId!, file!);
+  }
+
   public render() {
     if (this.props.create) {
       return (
@@ -63,11 +76,7 @@ class SingleFile extends React.Component<Props> {
           icon="download"
           attached="right"
           basic
-          onClick={() => {
-            window.location.replace(
-              `/api${this.props.location.pathname}/file/${file.id}`,
-            );
-          }}
+          onClick={() => this.getFile()}
         />
       </Segment.Group>
     );
