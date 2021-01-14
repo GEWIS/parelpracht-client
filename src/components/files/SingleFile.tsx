@@ -57,11 +57,11 @@ class SingleFile extends React.Component<Props, State> {
 
   private async getFile() {
     const {
-      entityId, file,
+      entityId, file, entity,
     } = this.props;
 
     const client = new FilesClient();
-    await client.getContractFile(entityId, file!);
+    await client.getFile(entityId, file.id, entity);
   }
 
   private toFormDataParams = (): FormData => {
@@ -102,7 +102,9 @@ class SingleFile extends React.Component<Props, State> {
 
     if (this.props.create) {
       const client = new FilesClient();
-      const result = await client.uploadContractFile(this.props.entityId, this.toFormDataParams());
+      const result = await client.uploadFile(
+        this.props.entityId, this.toFormDataParams(), this.props.entity,
+      );
       if (result) {
         this.props.fetchEntity(this.props.entityId);
         if (this.props.closeCreate) this.props.closeCreate();
@@ -132,6 +134,7 @@ class SingleFile extends React.Component<Props, State> {
             <Input
               fluid={false}
               id={`form-file-${file.id}-name`}
+              placeholder="Name"
               onChange={(e) => this.setState({ fileName: e.target.value })}
             />
           </Table.Cell>
@@ -163,12 +166,12 @@ class SingleFile extends React.Component<Props, State> {
       return (
         <Table.Row>
           <Table.Cell collapsing>
+            <Icon name="file pdf" />
             <Input
-              icon="file pdf"
-              iconPosition="left"
               id={`form-file-${file.id}-name`}
               value={this.state.fileName}
               fluid={false}
+              placeholder="Name"
               onChange={(e) => this.setState({ fileName: e.target.value })}
             />
           </Table.Cell>

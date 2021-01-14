@@ -15,7 +15,7 @@ interface Props {
   fetchContract: (id: number) => void;
 }
 
-function GenerateContract(props: Props) {
+function GenerateContractModal(props: Props) {
   const [isOpen, setOpen] = useState(false);
 
   const [name, changeName] = useState('');
@@ -173,6 +173,7 @@ function GenerateContract(props: Props) {
           <Form.Group>
             <Form.Field
               label="Signee 1"
+              placeholder="Signee 1"
               control={UserSelector}
               value={signee1Id}
               onChange={(id: number) => changeSignee1(id)}
@@ -180,6 +181,7 @@ function GenerateContract(props: Props) {
             />
             <Form.Field
               label="Signee 2"
+              placeholder="Signee 2"
               control={UserSelector}
               value={signee2Id}
               onChange={(id: number) => changeSignee2(id)}
@@ -192,4 +194,4 @@ function GenerateContract(props: Props) {
   );
 }
 
-export default GenerateContract;
+export default GenerateContractModal;

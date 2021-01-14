@@ -20,7 +20,7 @@ import FinancialDocumentProgress from '../components/activities/FinancialDocumen
 import { showTransientAlert } from '../stores/alerts/actionCreators';
 import { TransientAlert } from '../stores/alerts/actions';
 import FilesList from '../components/files/FilesList';
-import ContractGenerateModal from '../components/files/ContractGenerateModal';
+import GenerateContractModal from '../components/files/GenerateContractModal';
 
 interface Props extends RouteComponentProps<{ contractId: string }> {
   contract: Contract | undefined;
@@ -102,7 +102,7 @@ class SingleContractPage extends React.Component<Props> {
                   entity={SingleEntities.Contract}
                   fetchEntity={fetchContract}
                   generateModal={(
-                    <ContractGenerateModal
+                    <GenerateContractModal
                       contractId={contract.id}
                       fetchContract={fetchContract}
                     />

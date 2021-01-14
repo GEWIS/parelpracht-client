@@ -1,8 +1,7 @@
 import * as React from 'react';
 import { NavLink, RouteComponentProps, withRouter } from 'react-router-dom';
 import {
-  Breadcrumb,
-  Container, Grid, Loader, Segment,
+  Breadcrumb, Container, Grid, Loader, Segment,
 } from 'semantic-ui-react';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
@@ -19,6 +18,7 @@ import ActivitiesList from '../components/activities/ActivitiesList';
 import { GeneralActivity } from '../components/activities/GeneralActivity';
 import { TransientAlert } from '../stores/alerts/actions';
 import { showTransientAlert } from '../stores/alerts/actionCreators';
+import FilesList from '../components/files/FilesList';
 
 interface Props extends RouteComponentProps<{ productId: string }> {
   product: Product | undefined;
@@ -51,7 +51,7 @@ class SingleProductPage extends React.Component<Props> {
   }
 
   public render() {
-    const { product } = this.props;
+    const { product, fetchProduct, status } = this.props;
 
     if (product === undefined) {
       return (
@@ -83,6 +83,15 @@ class SingleProductPage extends React.Component<Props> {
             </Segment>
             <Segment secondary>
               <ActivitiesList activities={product.activities as GeneralActivity[]} />
+            </Segment>
+            <Segment secondary>
+              <FilesList
+                files={product.files}
+                entityId={product.id}
+                entity={SingleEntities.Product}
+                fetchEntity={fetchProduct}
+                status={status}
+              />
             </Segment>
           </Grid.Column>
         </Grid>

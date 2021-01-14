@@ -2,13 +2,14 @@ import {
   call, put, select, throttle,
 } from 'redux-saga/effects';
 import {
-  Client, Invoice, InvoiceParams, ListOrFilter, ListParams, ListSorting, SortDirection,
+  Client, Invoice, InvoiceParams, ListOrFilter, ListParams, ListSorting, Partial_FileParams,
+  SortDirection,
 } from '../../clients/server.generated';
 import { takeEveryWithErrorHandling } from '../errorHandling';
 import { clearSingle, errorSingle, setSingle } from '../single/actionCreators';
 import {
   singleActionPattern, SingleActionType, SingleCreateAction, SingleDeleteAction,
-  SingleFetchAction, SingleSaveAction,
+  SingleDeleteFileAction, SingleFetchAction, SingleSaveAction, SingleSaveFileAction,
 } from '../single/actions';
 import { SingleEntities } from '../single/single';
 import { setSummaries } from '../summaries/actionCreators';
@@ -117,6 +118,44 @@ function* watchDeleteSingleInvoice() {
   );
 }
 
+function* saveSingleInvoiceFile(
+  action: SingleSaveFileAction<SingleEntities.Invoice, Partial_FileParams>,
+) {
+  const client = new Client();
+  yield call([client, client.updateInvoiceFile], action.id, action.fileId, action.data);
+  const invoice = yield call([client, client.getInvoice], action.id);
+  yield put(setSingle(SingleEntities.Invoice, invoice));
+}
+
+function* errorSaveSingleInvoiceFile() {
+  yield put(errorSingle(SingleEntities.Invoice));
+}
+
+function* watchSaveSingleInvoiceFile() {
+  yield takeEveryWithErrorHandling(
+    singleActionPattern(SingleEntities.Invoice, SingleActionType.SaveFile),
+    saveSingleInvoiceFile, { onErrorSaga: errorSaveSingleInvoiceFile },
+  );
+}
+
+function* deleteSingleInvoiceFile(action: SingleDeleteFileAction<SingleEntities.Invoice>) {
+  const client = new Client();
+  yield call([client, client.deleteInvoiceFile], action.id, action.fileId);
+  const invoice = yield call([client, client.getInvoice], action.id);
+  yield put(setSingle(SingleEntities.Invoice, invoice));
+}
+
+function* errorDeleteSingleInvoiceFile() {
+  yield put(errorSingle(SingleEntities.Invoice));
+}
+
+function* watchDeleteSingleInvoiceFile() {
+  yield takeEveryWithErrorHandling(
+    singleActionPattern(SingleEntities.Invoice, SingleActionType.DeleteFile),
+    deleteSingleInvoiceFile, { onErrorSaga: errorDeleteSingleInvoiceFile },
+  );
+}
+
 export default [
   function* watchFetchInvoices() {
     yield throttle(
@@ -143,4 +182,6 @@ export default [
   watchSaveSingleInvoice,
   watchCreateSingleInvoice,
   watchDeleteSingleInvoice,
+  watchSaveSingleInvoiceFile,
+  watchDeleteSingleInvoiceFile,
 ];
