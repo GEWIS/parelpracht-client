@@ -35,6 +35,7 @@ import UserCreatePage from './pages/UserCreatePage';
 import ProductInstanceModal from './pages/ProductInstanceModal';
 import Footer from './components/navigation/Footer';
 import DashboardPage from './pages/DashboardPage';
+import NotFound from './pages/NotFound';
 
 interface Props extends RouteComponentProps {
   // eslint-disable-next-line react/no-unused-prop-types
@@ -174,6 +175,7 @@ function Routes(props: Props) {
             <UserCreatePage />
           </Route>
           <Route path="/user/:userId" exact component={SingleUserPage} />
+          <Route path="" component={NotFound} />
         </Switch>
       </Container>
       <Footer />
