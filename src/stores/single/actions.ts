@@ -6,7 +6,9 @@ export enum SingleActionType {
   Fetch = 'Single/Fetch',
   Set = 'Single/Set',
   Save = 'Single/Save',
+  SaveFile = 'Single/SaveFile',
   Delete = 'Single/Delete',
+  DeleteFile = 'Single/DeleteFile',
   Error = 'Single/Error',
   Create = 'Single/Create',
   Clear = 'Single/Clear',
@@ -28,8 +30,19 @@ export type SingleSaveAction<S, RSave> = SingleAction<SingleActionType.Save, S> 
   data: RSave,
 };
 
+export type SingleSaveFileAction<S, RSave> = SingleAction<SingleActionType.SaveFile, S> & {
+  id: number,
+  fileId: number,
+  data: RSave,
+};
+
 export type SingleDeleteAction<S> = SingleAction<SingleActionType.Delete, S> & {
   id: number,
+};
+
+export type SingleDeleteFileAction<S> = SingleAction<SingleActionType.DeleteFile, S> & {
+  id: number,
+  fileId: number,
 };
 
 export type SingleErrorAction<S> = SingleAction<SingleActionType.Error, S>;

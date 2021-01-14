@@ -19,7 +19,8 @@ import { GeneralActivity } from '../components/activities/GeneralActivity';
 import FinancialDocumentProgress from '../components/activities/FinancialDocumentProgress';
 import { showTransientAlert } from '../stores/alerts/actionCreators';
 import { TransientAlert } from '../stores/alerts/actions';
-import FilesList from '../components/Files/FilesList';
+import FilesList from '../components/files/FilesList';
+import ContractGenerateModal from '../components/files/ContractGenerateModal';
 
 interface Props extends RouteComponentProps<{ contractId: string }> {
   contract: Contract | undefined;
@@ -52,7 +53,7 @@ class SingleContractPage extends React.Component<Props> {
   }
 
   public render() {
-    const { contract } = this.props;
+    const { contract, fetchContract, status } = this.props;
 
     if (contract === undefined) {
       return (
@@ -95,7 +96,19 @@ class SingleContractPage extends React.Component<Props> {
                 <ActivitiesList activities={contract.activities as GeneralActivity[]} />
               </Segment>
               <Segment secondary>
-                <FilesList files={contract.files} entityId={contract.id} />
+                <FilesList
+                  files={contract.files}
+                  entityId={contract.id}
+                  entity={SingleEntities.Contract}
+                  fetchEntity={fetchContract}
+                  generateModal={(
+                    <ContractGenerateModal
+                      contractId={contract.id}
+                      fetchContract={fetchContract}
+                    />
+                  )}
+                  status={status}
+                />
               </Segment>
             </Grid.Column>
           </Grid.Row>

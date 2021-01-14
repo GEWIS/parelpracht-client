@@ -1,25 +1,18 @@
 import React, { ChangeEvent, useState } from 'react';
-import { RouteComponentProps, withRouter } from 'react-router-dom';
-import { Dispatch } from 'redux';
-import { connect } from 'react-redux';
 import {
   Button,
-  Dimmer, Dropdown, Form, Input, Loader, Modal, Segment,
+  Dropdown, Form, Icon, Input, Modal, Segment,
 } from 'semantic-ui-react';
 import {
-  ContractFile, Language, ContractType, ReturnFileType, Contract, Client, GenerateContractParams,
-} from '../clients/server.generated';
-import AlertContainer from '../components/alerts/AlertContainer';
-import ResourceStatus from '../stores/resourceStatus';
-import { getSingle } from '../stores/single/selectors';
-import { SingleEntities } from '../stores/single/single';
-import { RootState } from '../stores/store';
-import UserSelector from '../components/user/UserSelector';
-import PropsButtons from '../components/PropsButtons';
-import { FilesClient } from '../clients/filesClient';
+  Language, ContractType, ReturnFileType, GenerateContractParams,
+} from '../../clients/server.generated';
+import AlertContainer from '../alerts/AlertContainer';
+import UserSelector from '../user/UserSelector';
+import { FilesClient } from '../../clients/filesClient';
 
 interface Props {
   contractId: number;
+  fetchContract: (id: number) => void;
 }
 
 function GenerateContract(props: Props) {
@@ -50,6 +43,7 @@ function GenerateContract(props: Props) {
     }));
     setOpen(false);
     changeLoading(false);
+    props.fetchContract(props.contractId);
   };
 
   return (
@@ -60,7 +54,19 @@ function GenerateContract(props: Props) {
       open={isOpen}
       dimmer="blurring"
       size="tiny"
-      trigger={<Button primary loading={loading}> Generate File </Button>}
+      trigger={(
+        <Button
+          icon
+          loading={loading}
+          labelPosition="left"
+          floated="right"
+          style={{ marginTop: '-0.5em' }}
+          basic
+        >
+          <Icon name="plus" />
+          Generate File
+        </Button>
+      )}
     >
       <Segment attached="bottom">
         <AlertContainer />

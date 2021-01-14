@@ -1,7 +1,6 @@
 import FileSaver from 'file-saver';
-import { FileParameter, GenerateContractParams, ProductFile } from './server.generated';
-// eslint-disable-next-line import/no-cycle
-import { GeneralFile } from '../components/Files/SingleFile';
+import { GenerateContractParams } from './server.generated';
+import { GeneralFile } from '../components/files/GeneralFile';
 
 export class FilesClient {
   private readonly http: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> };
@@ -36,14 +35,12 @@ export class FilesClient {
     });
   }
 
-  async processGetGeneralFile(response: Response) {
+  private async processGetGeneralFile(response: Response) {
     const { status } = response;
     const headers: any = {};
     if (response.headers && response.headers.forEach) {
       response.headers.forEach((v: any, k: any) => { headers[k] = v; });
     }
-
-    console.log(headers);
 
     let filename = '';
     if (headers['content-disposition'] && headers['content-disposition'].indexOf('attachment') !== -1) {
@@ -59,27 +56,33 @@ export class FilesClient {
     }
   }
 
-  postUploadProductFile(productId: number, file: FileParameter, name: string) {
-    let url = `${this.baseUrl}/product/${productId}/file/upload`;
+  private async postUploadGeneralFile(
+    templateUrl: string, entityId: number, file: FormData,
+  ): Promise<Boolean> {
+    let url = templateUrl;
+    if (entityId === undefined || entityId === null) throw new Error("The parameter 'id' must be defined.");
+    url = url.replace('{id}', encodeURIComponent(`${entityId}`));
     url = url.replace(/[?&]$/, '');
 
-    const content = new FormData();
     if (file === null || file === undefined) throw new Error("The parameter 'file' cannot be null.");
-    else content.append('file', file.data, file.fileName ? file.fileName : 'file');
-    if (name === null || name === undefined) throw new Error("The parameter 'name' cannot be null.");
-    else content.append('name', name.toString());
 
     const options = <RequestInit>{
-      body: content,
+      body: file,
       method: 'POST',
-      headers: {
-        Accept: 'application/json',
-      },
     };
 
-    /* return this.http.fetch(url, options).then((response: Response) => {
-      // return this.processUploadFile(response);
-    }); */
+    return this.http.fetch(url, options).then((response: Response) => {
+      return this.processUploadFile(response);
+    });
+  }
+
+  private processUploadFile(response: Response): boolean {
+    return response.status === 200;
+  }
+
+  async uploadContractFile(contractId: number, file: FormData): Promise<Boolean> {
+    const url = `${this.baseUrl}/contract/{id}/file/upload`;
+    return this.postUploadGeneralFile(url, contractId, file);
   }
 
   generateContractFile(contractId: number, body: GenerateContractParams): Promise<void> {

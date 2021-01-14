@@ -4,7 +4,6 @@ import {
   Grid, Header, Icon, Loader, Placeholder, Segment,
 } from 'semantic-ui-react';
 import { Contract } from '../../clients/server.generated';
-import ContractGenerateModal from '../../pages/ContractGenerateModal';
 import { getCompanyName } from '../../stores/company/selectors';
 import ResourceStatus from '../../stores/resourceStatus';
 import { getSingle } from '../../stores/single/selectors';
@@ -54,7 +53,6 @@ function ContractSummary(props: Props) {
         <Header.Content>
           <Header.Subheader>Contract</Header.Subheader>
           {contract.title}
-          <ContractGenerateModal contractId={contract.id} />
         </Header.Content>
       </Header>
       <Segment attached="bottom">
