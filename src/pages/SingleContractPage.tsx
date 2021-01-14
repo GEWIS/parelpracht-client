@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { NavLink, RouteComponentProps, withRouter } from 'react-router-dom';
 import {
-  Breadcrumb, Container, Grid, Loader, Segment,
+  Breadcrumb, Container, Grid, Loader, Segment, Tab,
 } from 'semantic-ui-react';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
@@ -63,6 +63,45 @@ class SingleContractPage extends React.Component<Props> {
       );
     }
 
+    const panes = [
+      {
+        menuItem: 'Products',
+        render: () => (
+          <Tab.Pane>
+            <ContractProductList />
+          </Tab.Pane>
+        ),
+      },
+      {
+        menuItem: 'Files',
+        render: () => (
+          <Tab.Pane>
+            <FilesList
+              files={contract.files}
+              entityId={contract.id}
+              entity={SingleEntities.Contract}
+              fetchEntity={fetchContract}
+              generateModal={(
+                <GenerateContractModal
+                  contractId={contract.id}
+                  fetchContract={fetchContract}
+                />
+              )}
+              status={status}
+            />
+          </Tab.Pane>
+        ),
+      },
+      {
+        menuItem: 'Activities',
+        render: () => (
+          <Tab.Pane>
+            <ActivitiesList activities={contract.activities as GeneralActivity[]} />
+          </Tab.Pane>
+        ),
+      },
+    ];
+
     return (
       <Container style={{ paddingTop: '2em' }}>
         <Breadcrumb
@@ -83,32 +122,12 @@ class SingleContractPage extends React.Component<Props> {
             </Segment>
           </Grid.Row>
           <Grid.Row columns={2}>
-            <Grid.Column>
+            <Grid.Column width={10}>
+              <Tab panes={panes} menu={{ pointing: true, inverted: true }} />
+            </Grid.Column>
+            <Grid.Column width={6}>
               <Segment secondary>
                 <ContractProps contract={contract} />
-              </Segment>
-            </Grid.Column>
-            <Grid.Column>
-              <Segment secondary>
-                <ContractProductList />
-              </Segment>
-              <Segment secondary>
-                <ActivitiesList activities={contract.activities as GeneralActivity[]} />
-              </Segment>
-              <Segment secondary>
-                <FilesList
-                  files={contract.files}
-                  entityId={contract.id}
-                  entity={SingleEntities.Contract}
-                  fetchEntity={fetchContract}
-                  generateModal={(
-                    <GenerateContractModal
-                      contractId={contract.id}
-                      fetchContract={fetchContract}
-                    />
-                  )}
-                  status={status}
-                />
               </Segment>
             </Grid.Column>
           </Grid.Row>
