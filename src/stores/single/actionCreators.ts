@@ -1,8 +1,14 @@
 import {
   singleActionPattern,
-  SingleActionType, SingleClearAction, SingleCreateAction,
-  SingleDeleteAction, SingleErrorAction, SingleFetchAction,
+  SingleActionType,
+  SingleClearAction,
+  SingleCreateAction,
+  SingleDeleteAction,
+  SingleDeleteFileAction,
+  SingleErrorAction,
+  SingleFetchAction,
   SingleSaveAction,
+  SingleSaveFileAction,
   SingleSetAction,
 } from './actions';
 import { SingleEntities } from './single';
@@ -23,10 +29,24 @@ export function saveSingle<S extends SingleEntities, RSave>(
   return { type: singleActionPattern(single, SingleActionType.Save), data, id };
 }
 
+export function saveSingleFile<S extends SingleEntities, RSave>(
+  single: S, id: number, fileId: number, data: RSave,
+): SingleSaveFileAction<S, RSave> {
+  return {
+    type: singleActionPattern(single, SingleActionType.SaveFile), data, id, fileId,
+  };
+}
+
 export function deleteSingle<S extends SingleEntities>(
   single: S, id: number,
 ): SingleDeleteAction<S> {
   return { type: singleActionPattern(single, SingleActionType.Delete), id };
+}
+
+export function deleteFileSingle<S extends SingleEntities>(
+  single: S, id: number, fileId: number,
+): SingleDeleteFileAction<S> {
+  return { type: singleActionPattern(single, SingleActionType.DeleteFile), id, fileId };
 }
 
 export function createSingle<S extends SingleEntities, RCreate>(

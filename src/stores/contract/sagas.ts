@@ -8,19 +8,20 @@ import {
   ListOrFilter,
   ListParams,
   ListSorting,
+  Partial_FileParams,
   SortDirection,
 } from '../../clients/server.generated';
 import { takeEveryWithErrorHandling } from '../errorHandling';
-import {
-  clearSingle, errorSingle, setSingle,
-} from '../single/actionCreators';
+import { clearSingle, errorSingle, setSingle } from '../single/actionCreators';
 import {
   singleActionPattern,
   SingleActionType,
   SingleCreateAction,
   SingleDeleteAction,
+  SingleDeleteFileAction,
   SingleFetchAction,
   SingleSaveAction,
+  SingleSaveFileAction,
 } from '../single/actions';
 import { SingleEntities } from '../single/single';
 import { setSummaries } from '../summaries/actionCreators';
@@ -129,6 +130,44 @@ function* watchCreateSingleContract() {
   );
 }
 
+function* saveSingleContractFile(
+  action: SingleSaveFileAction<SingleEntities.Contract, Partial_FileParams>,
+) {
+  const client = new Client();
+  yield call([client, client.updateContractFile], action.id, action.fileId, action.data);
+  const contract = yield call([client, client.getContract], action.id);
+  yield put(setSingle(SingleEntities.Contract, contract));
+}
+
+function* errorSaveSingleContractFile() {
+  yield put(errorSingle(SingleEntities.Contract));
+}
+
+function* watchSaveSingleContractFile() {
+  yield takeEveryWithErrorHandling(
+    singleActionPattern(SingleEntities.Contract, SingleActionType.SaveFile),
+    saveSingleContractFile, { onErrorSaga: errorSaveSingleContractFile },
+  );
+}
+
+function* deleteSingleContractFile(action: SingleDeleteFileAction<SingleEntities.Contract>) {
+  const client = new Client();
+  yield call([client, client.deleteContractFile], action.id, action.fileId);
+  const contract = yield call([client, client.getContract], action.id);
+  yield put(setSingle(SingleEntities.Contract, contract));
+}
+
+function* errorDeleteSingleContractFile() {
+  yield put(errorSingle(SingleEntities.Contract));
+}
+
+function* watchDeleteSingleContractFile() {
+  yield takeEveryWithErrorHandling(
+    singleActionPattern(SingleEntities.Contract, SingleActionType.DeleteFile),
+    deleteSingleContractFile, { onErrorSaga: errorDeleteSingleContractFile },
+  );
+}
+
 export default [
   function* watchFetchContracts() {
     yield throttle(
@@ -155,4 +194,6 @@ export default [
   watchSaveSingleContract,
   watchCreateSingleContract,
   watchDeleteSingleContract,
+  watchSaveSingleContractFile,
+  watchDeleteSingleContractFile,
 ];

@@ -559,7 +559,7 @@ export class Client {
      * @param name The name of the new file, as seen in the UI
      * @return Ok
      */
-    uploadFile(file: FileParameter, name: string): Promise<ProductFile> {
+    uploadProductFile(file: FileParameter, name: string): Promise<ProductFile> {
         let url_ = this.baseUrl + "/product/{id}/file/upload";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -582,11 +582,11 @@ export class Client {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processUploadFile(_response);
+            return this.processUploadProductFile(_response);
         });
     }
 
-    protected processUploadFile(response: Response): Promise<ProductFile> {
+    protected processUploadProductFile(response: Response): Promise<ProductFile> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -616,7 +616,7 @@ export class Client {
      * @param fileId ID of the file
      * @return Ok
      */
-    getFile(id: number, fileId: number): Promise<any> {
+    getProductFile(id: number, fileId: number): Promise<any> {
         let url_ = this.baseUrl + "/product/{id}/file/{fileId}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -634,11 +634,11 @@ export class Client {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processGetFile(_response);
+            return this.processGetProductFile(_response);
         });
     }
 
-    protected processGetFile(response: Response): Promise<any> {
+    protected processGetProductFile(response: Response): Promise<any> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -669,7 +669,7 @@ export class Client {
      * @param body Update subset of the parameters of the file
      * @return Ok
      */
-    updateFile(id: number, fileId: number, body: Partial_FileParams): Promise<BaseFile> {
+    updateProductFile(id: number, fileId: number, body: Partial_FileParams): Promise<BaseFile> {
         let url_ = this.baseUrl + "/product/{id}/file/{fileId}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -691,11 +691,11 @@ export class Client {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processUpdateFile(_response);
+            return this.processUpdateProductFile(_response);
         });
     }
 
-    protected processUpdateFile(response: Response): Promise<BaseFile> {
+    protected processUpdateProductFile(response: Response): Promise<BaseFile> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -725,7 +725,7 @@ export class Client {
      * @param fileId ID of the file
      * @return No content
      */
-    deleteFile(id: number, fileId: number): Promise<void> {
+    deleteProductFile(id: number, fileId: number): Promise<void> {
         let url_ = this.baseUrl + "/product/{id}/file/{fileId}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -742,11 +742,11 @@ export class Client {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processDeleteFile(_response);
+            return this.processDeleteProductFile(_response);
         });
     }
 
-    protected processDeleteFile(response: Response): Promise<void> {
+    protected processDeleteProductFile(response: Response): Promise<void> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 204) {
@@ -2160,7 +2160,7 @@ export class Client {
      * @param body Parameters to create this file with
      * @return Ok
      */
-    generateFile(id: number, body: GenerateContractParams): Promise<any> {
+    generateConractFile(id: number, body: GenerateContractParams): Promise<any> {
         let url_ = this.baseUrl + "/contract/{id}/file/generate";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -2179,11 +2179,11 @@ export class Client {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processGenerateFile(_response);
+            return this.processGenerateConractFile(_response);
         });
     }
 
-    protected processGenerateFile(response: Response): Promise<any> {
+    protected processGenerateConractFile(response: Response): Promise<any> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -2213,7 +2213,7 @@ export class Client {
      * @param name The name of the new file, as seen in the UI
      * @return Ok
      */
-    uploadFile2(file: FileParameter, name: string): Promise<ContractFile> {
+    uploadContractFile(file: FileParameter, name: string): Promise<ContractFile> {
         let url_ = this.baseUrl + "/contract/{id}/file/upload";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -2236,11 +2236,11 @@ export class Client {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processUploadFile2(_response);
+            return this.processUploadContractFile(_response);
         });
     }
 
-    protected processUploadFile2(response: Response): Promise<ContractFile> {
+    protected processUploadContractFile(response: Response): Promise<ContractFile> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -2270,7 +2270,7 @@ export class Client {
      * @param fileId ID of the file
      * @return Ok
      */
-    getFile2(id: number, fileId: number): Promise<any> {
+    getContractFile(id: number, fileId: number): Promise<any> {
         let url_ = this.baseUrl + "/contract/{id}/file/{fileId}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -2288,11 +2288,11 @@ export class Client {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processGetFile2(_response);
+            return this.processGetContractFile(_response);
         });
     }
 
-    protected processGetFile2(response: Response): Promise<any> {
+    protected processGetContractFile(response: Response): Promise<any> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -2323,7 +2323,7 @@ export class Client {
      * @param body Update subset of the parameters of the file
      * @return Ok
      */
-    updateFile2(id: number, fileId: number, body: Partial_FileParams): Promise<BaseFile> {
+    updateContractFile(id: number, fileId: number, body: Partial_FileParams): Promise<BaseFile> {
         let url_ = this.baseUrl + "/contract/{id}/file/{fileId}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -2345,11 +2345,11 @@ export class Client {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processUpdateFile2(_response);
+            return this.processUpdateContractFile(_response);
         });
     }
 
-    protected processUpdateFile2(response: Response): Promise<BaseFile> {
+    protected processUpdateContractFile(response: Response): Promise<BaseFile> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -2379,7 +2379,7 @@ export class Client {
      * @param fileId ID of the file
      * @return No content
      */
-    deleteFile2(id: number, fileId: number): Promise<void> {
+    deleteContractFile(id: number, fileId: number): Promise<void> {
         let url_ = this.baseUrl + "/contract/{id}/file/{fileId}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -2396,11 +2396,11 @@ export class Client {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processDeleteFile2(_response);
+            return this.processDeleteContractFile(_response);
         });
     }
 
-    protected processDeleteFile2(response: Response): Promise<void> {
+    protected processDeleteContractFile(response: Response): Promise<void> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 204) {
@@ -3030,7 +3030,7 @@ export class Client {
      * @param body Parameters to create this file with
      * @return Ok
      */
-    generateFile2(id: number, body: GenerateInvoiceParams): Promise<any> {
+    generateInvoiceFile(id: number, body: GenerateInvoiceParams): Promise<any> {
         let url_ = this.baseUrl + "/invoice/{id}/file/generate";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -3049,11 +3049,11 @@ export class Client {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processGenerateFile2(_response);
+            return this.processGenerateInvoiceFile(_response);
         });
     }
 
-    protected processGenerateFile2(response: Response): Promise<any> {
+    protected processGenerateInvoiceFile(response: Response): Promise<any> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -3083,7 +3083,7 @@ export class Client {
      * @param name The name of the new file, as seen in the UI
      * @return Ok
      */
-    uploadFile3(file: FileParameter, name: string): Promise<InvoiceFile> {
+    uploadInvoiceFile(file: FileParameter, name: string): Promise<InvoiceFile> {
         let url_ = this.baseUrl + "/invoice/{id}/file/upload";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -3106,11 +3106,11 @@ export class Client {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processUploadFile3(_response);
+            return this.processUploadInvoiceFile(_response);
         });
     }
 
-    protected processUploadFile3(response: Response): Promise<InvoiceFile> {
+    protected processUploadInvoiceFile(response: Response): Promise<InvoiceFile> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -3140,7 +3140,7 @@ export class Client {
      * @param fileId ID of the file
      * @return Ok
      */
-    getFile3(id: number, fileId: number): Promise<any> {
+    getInvoiceFile(id: number, fileId: number): Promise<any> {
         let url_ = this.baseUrl + "/invoice/{id}/file/{fileId}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -3158,11 +3158,11 @@ export class Client {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processGetFile3(_response);
+            return this.processGetInvoiceFile(_response);
         });
     }
 
-    protected processGetFile3(response: Response): Promise<any> {
+    protected processGetInvoiceFile(response: Response): Promise<any> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -3193,7 +3193,7 @@ export class Client {
      * @param body Update subset of the parameters of the file
      * @return Ok
      */
-    updateFile3(id: number, fileId: number, body: Partial_FileParams): Promise<BaseFile> {
+    updateInvoiceFile(id: number, fileId: number, body: Partial_FileParams): Promise<BaseFile> {
         let url_ = this.baseUrl + "/invoice/{id}/file/{fileId}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -3215,11 +3215,11 @@ export class Client {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processUpdateFile3(_response);
+            return this.processUpdateInvoiceFile(_response);
         });
     }
 
-    protected processUpdateFile3(response: Response): Promise<BaseFile> {
+    protected processUpdateInvoiceFile(response: Response): Promise<BaseFile> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -3249,7 +3249,7 @@ export class Client {
      * @param fileId ID of the file
      * @return No content
      */
-    deleteFile3(id: number, fileId: number): Promise<void> {
+    deleteInvoiceFile(id: number, fileId: number): Promise<void> {
         let url_ = this.baseUrl + "/invoice/{id}/file/{fileId}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -3266,11 +3266,11 @@ export class Client {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processDeleteFile3(_response);
+            return this.processDeleteInvoiceFile(_response);
         });
     }
 
-    protected processDeleteFile3(response: Response): Promise<void> {
+    protected processDeleteInvoiceFile(response: Response): Promise<void> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 204) {

@@ -17,6 +17,8 @@ import { getSingle } from '../stores/single/selectors';
 import ActivitiesList from '../components/activities/ActivitiesList';
 import { GeneralActivity } from '../components/activities/GeneralActivity';
 import FinancialDocumentProgress from '../components/activities/FinancialDocumentProgress';
+import FilesList from '../components/files/FilesList';
+import GenerateInvoiceModal from '../components/files/GenerateInvoiceModal';
 
 interface Props extends RouteComponentProps<{ invoiceId: string }> {
   invoice: Invoice | undefined;
@@ -35,7 +37,7 @@ class SingleInvoicePage extends React.Component<Props> {
   }
 
   public render() {
-    const { invoice } = this.props;
+    const { invoice, fetchInvoice, status } = this.props;
 
     if (invoice === undefined) {
       return (
@@ -73,6 +75,21 @@ class SingleInvoicePage extends React.Component<Props> {
             <Grid.Column>
               <Segment secondary>
                 <ActivitiesList activities={invoice.activities as GeneralActivity[]} />
+              </Segment>
+              <Segment secondary>
+                <FilesList
+                  files={invoice.files}
+                  entityId={invoice.id}
+                  entity={SingleEntities.Invoice}
+                  fetchEntity={fetchInvoice}
+                  generateModal={(
+                    <GenerateInvoiceModal
+                      invoiceId={invoice.id}
+                      fetchInvoice={fetchInvoice}
+                    />
+                  )}
+                  status={status}
+                />
               </Segment>
             </Grid.Column>
           </Grid.Row>

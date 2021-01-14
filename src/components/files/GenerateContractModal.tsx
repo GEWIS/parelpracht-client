@@ -1,27 +1,21 @@
 import React, { ChangeEvent, useState } from 'react';
-import { RouteComponentProps, withRouter } from 'react-router-dom';
-import { Dispatch } from 'redux';
-import { connect } from 'react-redux';
 import {
   Button,
-  Dimmer, Dropdown, Form, Input, Loader, Modal, Segment,
+  Dropdown, Form, Icon, Input, Modal, Segment,
 } from 'semantic-ui-react';
 import {
-  ContractFile, Language, ContractType, ReturnFileType, Contract, Client, GenerateContractParams,
-} from '../clients/server.generated';
-import AlertContainer from '../components/alerts/AlertContainer';
-import ResourceStatus from '../stores/resourceStatus';
-import { getSingle } from '../stores/single/selectors';
-import { SingleEntities } from '../stores/single/single';
-import { RootState } from '../stores/store';
-import UserSelector from '../components/user/UserSelector';
-import PropsButtons from '../components/PropsButtons';
+  Language, ContractType, ReturnFileType, GenerateContractParams,
+} from '../../clients/server.generated';
+import AlertContainer from '../alerts/AlertContainer';
+import UserSelector from '../user/UserSelector';
+import { FilesClient } from '../../clients/filesClient';
 
 interface Props {
   contractId: number;
+  fetchContract: (id: number) => void;
 }
 
-function GenerateContract(props: Props) {
+function GenerateContractModal(props: Props) {
   const [isOpen, setOpen] = useState(false);
 
   const [name, changeName] = useState('');
@@ -32,10 +26,12 @@ function GenerateContract(props: Props) {
   const [saveToDisk, changeSaveToDisk] = useState(false);
   const [signee1Id, changeSignee1] = useState(0);
   const [signee2Id, changeSignee2] = useState(0);
+  const [loading, changeLoading] = useState(false);
 
   const save = async () => {
-    const client = new Client();
-    await client.generateFile(props.contractId, new GenerateContractParams({
+    changeLoading(true);
+    const client = new FilesClient();
+    await client.generateContractFile(props.contractId, new GenerateContractParams({
       name,
       language,
       contentType,
@@ -46,6 +42,8 @@ function GenerateContract(props: Props) {
       signee2Id,
     }));
     setOpen(false);
+    changeLoading(false);
+    props.fetchContract(props.contractId);
   };
 
   return (
@@ -56,7 +54,19 @@ function GenerateContract(props: Props) {
       open={isOpen}
       dimmer="blurring"
       size="tiny"
-      trigger={<Button primary> Generate File </Button>}
+      trigger={(
+        <Button
+          icon
+          loading={loading}
+          labelPosition="left"
+          floated="right"
+          style={{ marginTop: '-0.5em' }}
+          basic
+        >
+          <Icon name="plus" />
+          Generate File
+        </Button>
+      )}
     >
       <Segment attached="bottom">
         <AlertContainer />
@@ -66,6 +76,7 @@ function GenerateContract(props: Props) {
             primary
             onClick={save}
             floated="right"
+            loading={loading}
           >
             Generate
           </Button>
@@ -162,6 +173,7 @@ function GenerateContract(props: Props) {
           <Form.Group>
             <Form.Field
               label="Signee 1"
+              placeholder="Signee 1"
               control={UserSelector}
               value={signee1Id}
               onChange={(id: number) => changeSignee1(id)}
@@ -169,6 +181,7 @@ function GenerateContract(props: Props) {
             />
             <Form.Field
               label="Signee 2"
+              placeholder="Signee 2"
               control={UserSelector}
               value={signee2Id}
               onChange={(id: number) => changeSignee2(id)}
@@ -181,4 +194,4 @@ function GenerateContract(props: Props) {
   );
 }
 
-export default GenerateContract;
+export default GenerateContractModal;
