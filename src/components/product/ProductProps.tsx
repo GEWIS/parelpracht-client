@@ -153,6 +153,7 @@ class ProductProps extends React.Component<Props, State> {
           <Form.Group widths="equal">
             <Form.Field
               disabled={!editing}
+              required
               id="form-input-dutch-name"
               fluid
               control={Input}
@@ -164,6 +165,7 @@ class ProductProps extends React.Component<Props, State> {
             />
             <Form.Field
               disabled={!editing}
+              required
               fluid
               id="form-input-english-name"
               control={Input}
@@ -175,7 +177,10 @@ class ProductProps extends React.Component<Props, State> {
             />
           </Form.Group>
           <Form.Group widths="equal">
-            <Form.Field disabled={!editing}>
+            <Form.Field
+              disabled={!editing}
+              required
+            >
               {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
               <label htmlFor="form-input-target-price">
                 Target Price
@@ -190,7 +195,9 @@ class ProductProps extends React.Component<Props, State> {
                 <input />
               </Input>
             </Form.Field>
-            <Form.Field disabled={!editing}>
+            <Form.Field
+              disabled={!editing}
+            >
               {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
               <label htmlFor="form-check-status">
                 Status
@@ -207,7 +214,10 @@ class ProductProps extends React.Component<Props, State> {
               />
             </Form.Field>
           </Form.Group>
-          <Form.Field disabled={!editing}>
+          <Form.Field
+            disabled={!editing}
+            required
+          >
             {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
             <label htmlFor="form-input-description">
               Description
@@ -219,7 +229,10 @@ class ProductProps extends React.Component<Props, State> {
               placeholder="Description"
             />
           </Form.Field>
-          <Form.Field disabled={!editing}>
+          <Form.Field
+            disabled={!editing}
+            required
+          >
             {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
             <label htmlFor="form-input-contract-text-dutch">
               Contract Text (Dutch)
@@ -233,7 +246,10 @@ class ProductProps extends React.Component<Props, State> {
               placeholder="Contract Text (Dutch)"
             />
           </Form.Field>
-          <Form.Field disabled={!editing}>
+          <Form.Field
+            disabled={!editing}
+            required
+          >
             {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
             <label htmlFor="form-input-contract-text-english">
               Contract Text (English)

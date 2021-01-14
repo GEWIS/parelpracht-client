@@ -169,6 +169,7 @@ class CompanyProps extends React.Component<Props, State> {
         <Form style={{ marginTop: '2em' }}>
           <Form.Group widths="equal">
             <Form.Field
+              required
               disabled={!editing}
               id="form-input-name"
               fluid
@@ -227,7 +228,10 @@ class CompanyProps extends React.Component<Props, State> {
             Address Information
           </h2>
           <Form.Group widths="equal">
-            <Form.Field disabled={!editing}>
+            <Form.Field
+              disabled={!editing}
+              required
+            >
               {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
               <label htmlFor="form-input-address-street">
                 Street and number
@@ -239,7 +243,10 @@ class CompanyProps extends React.Component<Props, State> {
                 placeholder="Street and number"
               />
             </Form.Field>
-            <Form.Field disabled={!editing}>
+            <Form.Field
+              disabled={!editing}
+              required
+            >
               {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
               <label htmlFor="form-input-address-city">
                 City
@@ -253,7 +260,10 @@ class CompanyProps extends React.Component<Props, State> {
             </Form.Field>
           </Form.Group>
           <Form.Group widths="equal">
-            <Form.Field disabled={!editing}>
+            <Form.Field
+              disabled={!editing}
+              required
+            >
               {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
               <label htmlFor="form-input-address-postal-code">
                 Postal Code
@@ -265,7 +275,10 @@ class CompanyProps extends React.Component<Props, State> {
                 placeholder="Postal Code"
               />
             </Form.Field>
-            <Form.Field disabled={!editing}>
+            <Form.Field
+              disabled={!editing}
+              required
+            >
               {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
               <label htmlFor="form-input-address-country">
                 Country
