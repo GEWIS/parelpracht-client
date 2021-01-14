@@ -84,7 +84,7 @@ class FilesList extends React.Component<Props, State> {
           </Button>
           {generateModal}
         </h3>
-        <Table singleLine compact>
+        <Table compact>
           <Table.Body>
             {createRow}
             {files

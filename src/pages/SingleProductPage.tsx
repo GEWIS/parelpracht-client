@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { NavLink, RouteComponentProps, withRouter } from 'react-router-dom';
 import {
-  Breadcrumb, Container, Grid, Loader, Segment,
+  Breadcrumb, Container, Grid, Loader, Segment, Tab,
 } from 'semantic-ui-react';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
@@ -61,6 +61,39 @@ class SingleProductPage extends React.Component<Props> {
       );
     }
 
+    const panes = [
+      {
+        menuItem: 'Contracts',
+        render: () => (
+          <Tab.Pane>
+            <ContractList />
+          </Tab.Pane>
+        ),
+      },
+      {
+        menuItem: 'Files',
+        render: () => (
+          <Tab.Pane>
+            <FilesList
+              files={product.files}
+              entityId={product.id}
+              entity={SingleEntities.Product}
+              fetchEntity={fetchProduct}
+              status={status}
+            />
+          </Tab.Pane>
+        ),
+      },
+      {
+        menuItem: 'Activities',
+        render: () => (
+          <Tab.Pane>
+            <ActivitiesList activities={product.activities as GeneralActivity[]} />
+          </Tab.Pane>
+        ),
+      },
+    ];
+
     return (
       <Container style={{ paddingTop: '2em' }}>
         <Breadcrumb
@@ -72,26 +105,12 @@ class SingleProductPage extends React.Component<Props> {
         />
         <ProductSummary />
         <Grid columns={2}>
-          <Grid.Column>
-            <Segment>
-              <ProductProps product={product} />
-            </Segment>
+          <Grid.Column width={10}>
+            <Tab panes={panes} menu={{ pointing: true, inverted: true }} />
           </Grid.Column>
-          <Grid.Column>
+          <Grid.Column width={6}>
             <Segment secondary>
-              <ContractList />
-            </Segment>
-            <Segment secondary>
-              <ActivitiesList activities={product.activities as GeneralActivity[]} />
-            </Segment>
-            <Segment secondary>
-              <FilesList
-                files={product.files}
-                entityId={product.id}
-                entity={SingleEntities.Product}
-                fetchEntity={fetchProduct}
-                status={status}
-              />
+              <ProductProps product={product} />
             </Segment>
           </Grid.Column>
         </Grid>
