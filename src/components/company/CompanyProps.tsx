@@ -170,6 +170,7 @@ class CompanyProps extends React.Component<Props, State> {
         <Form style={{ marginTop: '2em' }}>
           <Form.Group widths="equal">
             <Form.Field
+              required
               disabled={!editing}
               id="form-input-name"
               placeholder="Name"
@@ -237,6 +238,7 @@ class CompanyProps extends React.Component<Props, State> {
           <Form.Group widths="equal">
             <Form.Field
               disabled={!editing}
+              required
               error={
                 validator.isEmpty(addressStreet)
               }
@@ -252,7 +254,7 @@ class CompanyProps extends React.Component<Props, State> {
                 placeholder="Street and number"
               />
             </Form.Field>
-            <Form.Field disabled={!editing} error={validator.isEmpty(addressCity)}>
+            <Form.Field disabled={!editing} required error={validator.isEmpty(addressCity)}>
               {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
               <label htmlFor="form-input-address-city">
                 City
@@ -268,6 +270,7 @@ class CompanyProps extends React.Component<Props, State> {
           <Form.Group widths="equal">
             <Form.Field
               disabled={!editing}
+              required
               error={
                 !validator.isPostalCode(addressPostalCode, 'any')
               }
@@ -283,7 +286,10 @@ class CompanyProps extends React.Component<Props, State> {
                 placeholder="Postal Code"
               />
             </Form.Field>
-            <Form.Field disabled={!editing}>
+            <Form.Field
+              disabled={!editing}
+              required
+            >
               {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
               <label htmlFor="form-input-address-country">
                 Country
