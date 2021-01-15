@@ -1,16 +1,13 @@
-import React, {
-  ChangeEvent,
-} from 'react';
+import React, { ChangeEvent } from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import {
-  Dropdown,
-  Form, Input, TextArea,
+  Dropdown, Form, Input, TextArea,
 } from 'semantic-ui-react';
 import {
   Contact, ContactFunction, ContactParams, Gender,
 } from '../../clients/server.generated';
-import { createSingle, saveSingle } from '../../stores/single/actionCreators';
+import { createSingle, deleteSingle, saveSingle } from '../../stores/single/actionCreators';
 import ResourceStatus from '../../stores/resourceStatus';
 import { RootState } from '../../stores/store';
 import PropsButtons from '../PropsButtons';
@@ -27,6 +24,7 @@ interface Props {
 
   saveContact: (id: number, contact: ContactParams) => void;
   createContact: (contact: ContactParams) => void;
+  deleteContact: (id: number) => void;
 }
 
 interface State {
@@ -108,6 +106,19 @@ class ContactProps extends React.Component<Props, State> {
     }
   };
 
+  remove = () => {
+    if (!this.props.create) {
+      this.props.deleteContact(this.props.contact.id);
+    }
+  };
+
+  deleteButtonActive() {
+    if (this.props.create) {
+      return undefined;
+    }
+    return !(this.props.contact.contracts.length > 0);
+  }
+
   render() {
     const {
       editing,
@@ -128,10 +139,13 @@ class ContactProps extends React.Component<Props, State> {
 
           <PropsButtons
             editing={editing}
+            canDelete={this.deleteButtonActive()}
+            entity={SingleEntities.Contact}
             status={this.props.status}
             cancel={this.cancel}
             edit={this.edit}
             save={this.save}
+            remove={this.remove}
           />
         </h2>
 
@@ -267,6 +281,9 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   ),
   createContact: (contact: ContactParams) => dispatch(
     createSingle(SingleEntities.Contact, contact),
+  ),
+  deleteContact: (id: number) => dispatch(
+    deleteSingle(SingleEntities.Contact, id),
   ),
 });
 

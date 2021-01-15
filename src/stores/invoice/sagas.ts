@@ -5,9 +5,10 @@ import {
   Client, Invoice, InvoiceParams, ListOrFilter, ListParams, ListSorting, SortDirection,
 } from '../../clients/server.generated';
 import { takeEveryWithErrorHandling } from '../errorHandling';
-import { errorSingle, setSingle } from '../single/actionCreators';
+import { clearSingle, errorSingle, setSingle } from '../single/actionCreators';
 import {
-  singleActionPattern, SingleActionType, SingleCreateAction, SingleFetchAction, SingleSaveAction,
+  singleActionPattern, SingleActionType, SingleCreateAction, SingleDeleteAction,
+  SingleFetchAction, SingleSaveAction,
 } from '../single/actions';
 import { SingleEntities } from '../single/single';
 import { setSummaries } from '../summaries/actionCreators';
@@ -99,6 +100,23 @@ function* watchCreateSingleInvoice() {
   );
 }
 
+function* deleteSingleInvoice(action: SingleDeleteAction<SingleEntities.Invoice>) {
+  const client = new Client();
+  yield call([client, client.deleteInvoice], action.id);
+  yield put(clearSingle(SingleEntities.Invoice));
+}
+
+function* errorDeleteSingleInvoice() {
+  yield put(errorSingle(SingleEntities.Invoice));
+}
+
+function* watchDeleteSingleInvoice() {
+  yield takeEveryWithErrorHandling(
+    singleActionPattern(SingleEntities.Invoice, SingleActionType.Delete),
+    deleteSingleInvoice, { onErrorSaga: errorDeleteSingleInvoice },
+  );
+}
+
 export default [
   function* watchFetchInvoices() {
     yield throttle(
@@ -124,4 +142,5 @@ export default [
   },
   watchSaveSingleInvoice,
   watchCreateSingleInvoice,
+  watchDeleteSingleInvoice,
 ];
