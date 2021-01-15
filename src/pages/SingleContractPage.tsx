@@ -88,12 +88,14 @@ class SingleContractPage extends React.Component<Props> {
             </Grid.Column>
             <Grid.Column>
               <Segment secondary>
-                <ContractProductList />
-              </Segment>
-              <Segment secondary>
                 <ActivitiesList activities={contract.activities as GeneralActivity[]} />
               </Segment>
             </Grid.Column>
+          </Grid.Row>
+          <Grid.Row columns={1}>
+            <Segment secondary>
+              <ContractProductList />
+            </Segment>
           </Grid.Row>
         </Grid>
       </Container>

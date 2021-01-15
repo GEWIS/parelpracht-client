@@ -4,36 +4,36 @@ import { NavLink, RouteComponentProps, withRouter } from 'react-router-dom';
 import {
   Button, Icon, Loader, Table,
 } from 'semantic-ui-react';
-import ContractProductComponent from './ContractProductComponent';
-import { Contract } from '../../clients/server.generated';
+import InvoiceProductComponent from './InvoiceProductComponent';
+import { Invoice } from '../../clients/server.generated';
 import { getSingle } from '../../stores/single/selectors';
 import { SingleEntities } from '../../stores/single/single';
 import { RootState } from '../../stores/store';
 import { formatPrice } from '../../helpers/monetary';
 
 interface Props extends RouteComponentProps {
-  contract: Contract | undefined;
+  invoice: Invoice | undefined;
 }
 
 interface State {
 
 }
 
-class ContractProductList extends React.Component<Props, State> {
+class InvoiceProductList extends React.Component<Props, State> {
   public constructor(props: Props) {
     super(props);
   }
 
   public render() {
-    const { contract } = this.props;
+    const { invoice } = this.props;
 
-    if (contract === undefined) {
+    if (invoice === undefined) {
       return (
         <Loader content="Loading" active />
       );
     }
 
-    const { products } = contract;
+    const { products } = invoice;
     let priceSum = 0;
     let discountAmount = 0;
     let discountSum = 0;
@@ -53,37 +53,23 @@ class ContractProductList extends React.Component<Props, State> {
         <Table celled striped>
           <Table.Header>
             <Table.Row>
-              <Table.HeaderCell colSpan="5">Products</Table.HeaderCell>
-              <Table.HeaderCell colSpan="1">
-                <Button
-                  icon
-                  labelPosition="left"
-                  floated="right"
-                  style={{ marginTop: '-0.5em' }}
-                  basic
-                  as={NavLink}
-                  to={`${this.props.location.pathname}/product/new`}
-                />
-              </Table.HeaderCell>
+              <Table.HeaderCell colSpan="4">Products</Table.HeaderCell>
             </Table.Row>
             <Table.Row>
-              <Table.HeaderCell>Select</Table.HeaderCell>
               <Table.HeaderCell>Title</Table.HeaderCell>
               <Table.HeaderCell>Base Price</Table.HeaderCell>
               <Table.HeaderCell>Discount</Table.HeaderCell>
               <Table.HeaderCell>Discounted Price</Table.HeaderCell>
-              <Table.HeaderCell>Status</Table.HeaderCell>
             </Table.Row>
 
           </Table.Header>
           <Table.Body>
             {products.map((product) => (
-              <ContractProductComponent key={product.id} productInstance={product} />
+              <InvoiceProductComponent key={product.id} productInstance={product} />
             ))}
           </Table.Body>
           <Table.Footer>
             <Table.Row>
-              <Table.HeaderCell />
               <Table.HeaderCell> Totals: </Table.HeaderCell>
               <Table.HeaderCell>
                 {' €'}
@@ -105,7 +91,6 @@ class ContractProductList extends React.Component<Props, State> {
                 {formatPrice(discountedPriceSum)}
                 {' '}
               </Table.HeaderCell>
-              <Table.HeaderCell />
             </Table.Row>
           </Table.Footer>
         </Table>
@@ -116,12 +101,12 @@ class ContractProductList extends React.Component<Props, State> {
 
 const mapStateToProps = (state: RootState) => {
   return {
-    contract: getSingle<Contract>(state, SingleEntities.Contract).data,
-    status: getSingle<Contract>(state, SingleEntities.Contract).status,
+    invoice: getSingle<Invoice>(state, SingleEntities.Invoice).data,
+    status: getSingle<Invoice>(state, SingleEntities.Invoice).status,
   };
 };
 
 const mapDispatchToProps = () => ({
 });
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ContractProductList));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(InvoiceProductList));

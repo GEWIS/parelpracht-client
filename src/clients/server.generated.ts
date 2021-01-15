@@ -5336,7 +5336,7 @@ export class ProductInstance implements IProductInstance {
     /** Invoice this product is used in, if it has already been invoiced */
     invoice?: Invoice;
     /** All activities regarding this product instance */
-    activities!: ProductActivity[];
+    activities!: ProductInstanceActivity[];
     /** Actual price of the product, should be a copy from the product price upon creation,
 or a different price that is not a discount */
     basePrice!: number;
@@ -5344,8 +5344,6 @@ or a different price that is not a discount */
     discount!: number;
     /** Any comments regarding this product instance */
     comments?: string;
-    /** Subtype of this activity, only used when the type = "STATUS" */
-    subType?: ProductInstanceStatus;
 
     constructor(data?: IProductInstance) {
         if (data) {
@@ -5377,12 +5375,11 @@ or a different price that is not a discount */
             if (Array.isArray(_data["activities"])) {
                 this.activities = [] as any;
                 for (let item of _data["activities"])
-                    this.activities!.push(ProductActivity.fromJS(item));
+                    this.activities!.push(ProductInstanceActivity.fromJS(item));
             }
             this.basePrice = _data["basePrice"];
             this.discount = _data["discount"];
             this.comments = _data["comments"];
-            this.subType = _data["subType"];
         }
     }
 
@@ -5414,7 +5411,6 @@ or a different price that is not a discount */
         data["basePrice"] = this.basePrice;
         data["discount"] = this.discount;
         data["comments"] = this.comments;
-        data["subType"] = this.subType;
         return data; 
     }
 }
@@ -5440,7 +5436,7 @@ export interface IProductInstance {
     /** Invoice this product is used in, if it has already been invoiced */
     invoice?: Invoice;
     /** All activities regarding this product instance */
-    activities: ProductActivity[];
+    activities: ProductInstanceActivity[];
     /** Actual price of the product, should be a copy from the product price upon creation,
 or a different price that is not a discount */
     basePrice: number;
@@ -5448,8 +5444,6 @@ or a different price that is not a discount */
     discount: number;
     /** Any comments regarding this product instance */
     comments?: string;
-    /** Subtype of this activity, only used when the type = "STATUS" */
-    subType?: ProductInstanceStatus;
 }
 
 export class Company implements ICompany {
@@ -6475,6 +6469,117 @@ export interface IContractFile {
     contract: Contract;
 }
 
+export enum ProductInstanceStatus {
+    NOTDELIVERED = "NOTDELIVERED",
+    DELIVERED = "DELIVERED",
+    CANCELLED = "CANCELLED",
+    DEFERRED = "DEFERRED",
+}
+
+export class ProductInstanceActivity implements IProductInstanceActivity {
+    /** Incremental ID of the entity */
+    id!: number;
+    /** Date at which this entity has been created */
+    createdAt!: Date;
+    /** Date at which this entity has last been updated */
+    updatedAt!: Date;
+    /** If this entity has been soft-deleted, this is the date at which the entity has been deleted */
+    deletedAt?: Date;
+    /** Version number of this entity */
+    version!: number;
+    /** Type of the activity (status or comment) */
+    type!: ActivityType;
+    /** Description of this activity */
+    description!: string;
+    createdById!: number;
+    /** User who created this activity */
+    createdBy!: User;
+    productInstanceId!: number;
+    /** ProductInstance related to this activity */
+    productInstance!: ProductInstance;
+    /** Subtype of this activity, only used when the type = "STATUS" */
+    subType?: ProductInstanceStatus;
+
+    constructor(data?: IProductInstanceActivity) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+        if (!data) {
+            this.createdBy = new User();
+            this.productInstance = new ProductInstance();
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
+            this.updatedAt = _data["updatedAt"] ? new Date(_data["updatedAt"].toString()) : <any>undefined;
+            this.deletedAt = _data["deletedAt"] ? new Date(_data["deletedAt"].toString()) : <any>undefined;
+            this.version = _data["version"];
+            this.type = _data["type"];
+            this.description = _data["description"];
+            this.createdById = _data["createdById"];
+            this.createdBy = _data["createdBy"] ? User.fromJS(_data["createdBy"]) : new User();
+            this.productInstanceId = _data["productInstanceId"];
+            this.productInstance = _data["productInstance"] ? ProductInstance.fromJS(_data["productInstance"]) : new ProductInstance();
+            this.subType = _data["subType"];
+        }
+    }
+
+    static fromJS(data: any): ProductInstanceActivity {
+        data = typeof data === 'object' ? data : {};
+        let result = new ProductInstanceActivity();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
+        data["updatedAt"] = this.updatedAt ? this.updatedAt.toISOString() : <any>undefined;
+        data["deletedAt"] = this.deletedAt ? this.deletedAt.toISOString() : <any>undefined;
+        data["version"] = this.version;
+        data["type"] = this.type;
+        data["description"] = this.description;
+        data["createdById"] = this.createdById;
+        data["createdBy"] = this.createdBy ? this.createdBy.toJSON() : <any>undefined;
+        data["productInstanceId"] = this.productInstanceId;
+        data["productInstance"] = this.productInstance ? this.productInstance.toJSON() : <any>undefined;
+        data["subType"] = this.subType;
+        return data; 
+    }
+}
+
+export interface IProductInstanceActivity {
+    /** Incremental ID of the entity */
+    id: number;
+    /** Date at which this entity has been created */
+    createdAt: Date;
+    /** Date at which this entity has last been updated */
+    updatedAt: Date;
+    /** If this entity has been soft-deleted, this is the date at which the entity has been deleted */
+    deletedAt?: Date;
+    /** Version number of this entity */
+    version: number;
+    /** Type of the activity (status or comment) */
+    type: ActivityType;
+    /** Description of this activity */
+    description: string;
+    createdById: number;
+    /** User who created this activity */
+    createdBy: User;
+    productInstanceId: number;
+    /** ProductInstance related to this activity */
+    productInstance: ProductInstance;
+    /** Subtype of this activity, only used when the type = "STATUS" */
+    subType?: ProductInstanceStatus;
+}
+
 export class ProductActivity implements IProductActivity {
     /** Incremental ID of the entity */
     id!: number;
@@ -6571,13 +6676,6 @@ export interface IProductActivity {
     productId: number;
     /** Product related to this activity */
     product: Product;
-}
-
-export enum ProductInstanceStatus {
-    NOTDELIVERED = "NOTDELIVERED",
-    DELIVERED = "DELIVERED",
-    CANCELLED = "CANCELLED",
-    DEFERRED = "DEFERRED",
 }
 
 export class ProductFile implements IProductFile {

@@ -17,6 +17,7 @@ import { getSingle } from '../stores/single/selectors';
 import ActivitiesList from '../components/activities/ActivitiesList';
 import { GeneralActivity } from '../components/activities/GeneralActivity';
 import FinancialDocumentProgress from '../components/activities/FinancialDocumentProgress';
+import InvoiceProductList from '../components/invoice/InvoiceProductList';
 
 interface Props extends RouteComponentProps<{ invoiceId: string }> {
   invoice: Invoice | undefined;
@@ -75,6 +76,9 @@ class SingleInvoicePage extends React.Component<Props> {
                 <ActivitiesList activities={invoice.activities as GeneralActivity[]} />
               </Segment>
             </Grid.Column>
+            <Segment secondary>
+              <InvoiceProductList />
+            </Segment>
           </Grid.Row>
         </Grid>
       </Container>

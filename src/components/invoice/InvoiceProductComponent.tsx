@@ -1,14 +1,12 @@
 import React from 'react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
-import {
-  Button, Checkbox, Grid, Header, Icon, Segment, Table,
-} from 'semantic-ui-react';
+import { Icon, Table } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import { ActivityType, ProductInstance } from '../../clients/server.generated';
-import './ContractComponent.scss';
+// import './ContractComponent.scss';
 import { RootState } from '../../stores/store';
 import { getProductName } from '../../stores/product/selectors';
-import { formatPrice, formatPriceDiscount, formatPriceFull } from '../../helpers/monetary';
+import { formatPriceDiscount, formatPriceFull } from '../../helpers/monetary';
 
 interface Props extends RouteComponentProps {
   productInstance: ProductInstance;
@@ -16,32 +14,19 @@ interface Props extends RouteComponentProps {
   productName: string;
 }
 
-function showRecentStatus(productInstance: ProductInstance) {
-  console.log(productInstance.activities.filter((a) => {
-    if (a.type === ActivityType.STATUS) return a;
-    return null;
-  }));
-  return 'temp';
-}
-
-class ContractProductComponent extends React.Component<Props> {
+class InvoiceProductComponent extends React.Component<Props> {
   public render() {
     const {
       productInstance, productName,
     } = this.props;
     return (
-      <Table.Row>
+      <Table.Row onClick={() => {
+        this.props.history.push(
+          `${this.props.location.pathname}/product/${productInstance.id}`,
+        );
+      }}
+      >
         <Table.Cell collapsing>
-          <Checkbox />
-        </Table.Cell>
-        <Table.Cell
-          onClick={() => {
-            this.props.history.push(
-              `${this.props.location.pathname}/product/${productInstance.id}`,
-            );
-          }}
-          collapsing
-        >
           <Icon name="list alternate outline" />
           {' '}
           {productName}
@@ -59,9 +44,6 @@ class ContractProductComponent extends React.Component<Props> {
           {formatPriceFull(productInstance.basePrice - productInstance.discount)}
           {' '}
         </Table.Cell>
-        <Table.Cell>
-          {showRecentStatus(productInstance)}
-        </Table.Cell>
       </Table.Row>
     );
   }
@@ -73,4 +55,4 @@ const mapStateToProps = (state: RootState, props: { productInstance: ProductInst
   };
 };
 
-export default withRouter(connect(mapStateToProps)(ContractProductComponent));
+export default withRouter(connect(mapStateToProps)(InvoiceProductComponent));
