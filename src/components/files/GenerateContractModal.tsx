@@ -1,6 +1,6 @@
 import React, { ChangeEvent, useState } from 'react';
 import {
-  Button,
+  Button, Checkbox,
   Dropdown, Form, Icon, Input, Modal, Segment,
 } from 'semantic-ui-react';
 import {
@@ -82,14 +82,45 @@ function GenerateContractModal(props: Props) {
           </Button>
         </h2>
         <Form style={{ marginTop: '2em' }}>
-          <Form.Group>
+          <Form.Group widths="equal">
             <Form.Field
               label="Name"
               control={Input}
               value={name}
               onChange={(e: ChangeEvent<HTMLInputElement>) => changeName(e.target.value)}
-              width={7}
             />
+            <Form.Field>
+              {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
+              <label htmlFor="form-input-Content-Type">Content Type</label>
+              <Dropdown
+                id="form-input-Content-Type"
+                selection
+                placeholder="Content Type"
+                value={contentType}
+                options={[
+                  { key: 0, text: 'Contract', value: ContractType.CONTRACT },
+                  { key: 1, text: 'Proposal', value: ContractType.PROPOSAL },
+                ]}
+                onChange={(e, data) => changeContentType(data.value as ContractType)}
+              />
+            </Form.Field>
+          </Form.Group>
+          <Form.Group widths="equal">
+            <Form.Field>
+              {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
+              <label htmlFor="form-input-File-Type">File Type</label>
+              <Dropdown
+                id="form-input-File-Type"
+                selection
+                placeholder="File Type"
+                value={fileType}
+                options={[
+                  { key: 0, text: 'PDF', value: ReturnFileType.PDF },
+                  { key: 1, text: 'TEX', value: ReturnFileType.TEX },
+                ]}
+                onChange={(e, data) => changeFileType(data.value as ReturnFileType)}
+              />
+            </Form.Field>
             <Form.Field>
               {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
               <label htmlFor="form-input-language">Language</label>
@@ -106,71 +137,7 @@ function GenerateContractModal(props: Props) {
               />
             </Form.Field>
           </Form.Group>
-          <Form.Group>
-            <Form.Field>
-              {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-              <label htmlFor="form-input-Content-Type">Content Type</label>
-              <Dropdown
-                id="form-input-Content-Type"
-                selection
-                placeholder="Content Type"
-                value={contentType}
-                options={[
-                  { key: 0, text: 'Contract', value: ContractType.CONTRACT },
-                  { key: 1, text: 'Proposal', value: ContractType.PROPOSAL },
-                ]}
-                onChange={(e, data) => changeContentType(data.value as ContractType)}
-              />
-            </Form.Field>
-            <Form.Field>
-              {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-              <label htmlFor="form-input-File-Type">File Type</label>
-              <Dropdown
-                id="form-input-File-Type"
-                selection
-                placeholder="File Type"
-                value={fileType}
-                options={[
-                  { key: 0, text: 'PDF', value: ReturnFileType.PDF },
-                  { key: 1, text: 'TEX', value: ReturnFileType.TEX },
-                ]}
-                onChange={(e, data) => changeFileType(data.value as ReturnFileType)}
-              />
-            </Form.Field>
-          </Form.Group>
-          <Form.Group>
-            <Form.Field>
-              {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-              <label htmlFor="form-input-Discount">Show Discount</label>
-              <Dropdown
-                id="form-input-Discount"
-                selection
-                placeholder="Show Discount"
-                value={showDiscountPercentages}
-                options={[
-                  { key: 0, text: 'True', value: true },
-                  { key: 1, text: 'False', value: false },
-                ]}
-                onChange={(e, data) => changeDiscount(data.value as boolean)}
-              />
-            </Form.Field>
-            <Form.Field>
-              {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-              <label htmlFor="form-input-SaveToDisk">Save To Disk</label>
-              <Dropdown
-                id="form-input-SaveToDisk"
-                selection
-                placeholder="Save To Disk"
-                value={saveToDisk}
-                options={[
-                  { key: 0, text: 'True', value: true },
-                  { key: 1, text: 'False', value: false },
-                ]}
-                onChange={(e, data) => changeSaveToDisk(data.value as boolean)}
-              />
-            </Form.Field>
-          </Form.Group>
-          <Form.Group>
+          <Form.Group widths="equal">
             <Form.Field
               label="Signee 1"
               placeholder="Signee 1"
@@ -187,6 +154,30 @@ function GenerateContractModal(props: Props) {
               onChange={(id: number) => changeSignee2(id)}
               hideEmail
             />
+          </Form.Group>
+          <Form.Group>
+            <Form.Field>
+              {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
+              <label htmlFor="form-input-Discount">Show Discount</label>
+              <Checkbox
+                toggle
+                defaultChecked
+                id="form-input-Discount"
+                checked={showDiscountPercentages}
+                onChange={(e, data) => changeDiscount(data.checked as boolean)}
+              />
+            </Form.Field>
+            <Form.Field>
+              {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
+              <label htmlFor="form-input-SaveToDisk">Save To Disk</label>
+              <Checkbox
+                id="form-input-SaveToDisk"
+                toggle
+                defaultChecked
+                checked={saveToDisk}
+                onChange={(e, data) => changeSaveToDisk(data.checked as boolean)}
+              />
+            </Form.Field>
           </Form.Group>
         </Form>
       </Segment>

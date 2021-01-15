@@ -2,10 +2,11 @@ import React, { ChangeEvent } from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import {
-  Checkbox, Form, Input, Label, TextArea,
+  Checkbox, Dropdown, Form, Input, Label, TextArea,
 } from 'semantic-ui-react';
 import validator from 'validator';
 import { Product, ProductParams, ProductStatus } from '../../clients/server.generated';
+import ProductCategorySelector from './ProductCategorySelector';
 import { formatPrice } from '../../helpers/monetary';
 import ResourceStatus from '../../stores/resourceStatus';
 import { createSingle, deleteSingle, saveSingle } from '../../stores/single/actionCreators';
@@ -129,6 +130,7 @@ class ProductProps extends React.Component<Props, State> {
       nameDutch, nameEnglish,
       targetPrice, status,
       description,
+      categoryId,
       contractTextDutch, contractTextEnglish,
       deliverySpecDutch, deliverySpecEnglish,
     } = this.state;
@@ -223,6 +225,22 @@ class ProductProps extends React.Component<Props, State> {
               />
             </Form.Field>
           </Form.Group>
+          <Form.Field
+            disabled={!editing}
+            required
+          >
+            {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
+            <label htmlFor="form-input-category">
+              Product category
+            </label>
+            <ProductCategorySelector
+              id="form-input-category"
+              value={categoryId}
+              onChange={(val: number) => this.setState({
+                categoryId: val,
+              })}
+            />
+          </Form.Field>
           <Form.Field
             disabled={!editing}
             required
