@@ -773,7 +773,7 @@ export class Client {
      * @param body Parameters to create this comment with
      * @return Ok
      */
-    addComment(id: number, body: ActivityParams): Promise<BaseActivity> {
+    addProductComment(id: number, body: ActivityParams): Promise<BaseActivity> {
         let url_ = this.baseUrl + "/product/{id}/comment";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -792,11 +792,11 @@ export class Client {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processAddComment(_response);
+            return this.processAddProductComment(_response);
         });
     }
 
-    protected processAddComment(response: Response): Promise<BaseActivity> {
+    protected processAddProductComment(response: Response): Promise<BaseActivity> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -827,7 +827,7 @@ export class Client {
      * @param body Update subset of parameter of comment activity
      * @return Ok
      */
-    updateActivity(id: number, activityId: number, body: Partial_ActivityParams): Promise<BaseActivity> {
+    updateProductActivity(id: number, activityId: number, body: Partial_ActivityParams): Promise<BaseActivity> {
         let url_ = this.baseUrl + "/product/{id}/activity/{activityId}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -849,11 +849,11 @@ export class Client {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processUpdateActivity(_response);
+            return this.processUpdateProductActivity(_response);
         });
     }
 
-    protected processUpdateActivity(response: Response): Promise<BaseActivity> {
+    protected processUpdateProductActivity(response: Response): Promise<BaseActivity> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -883,7 +883,7 @@ export class Client {
      * @param activityId ID of the activity
      * @return No content
      */
-    deleteActivity(id: number, activityId: number): Promise<void> {
+    deleteProductActivity(id: number, activityId: number): Promise<void> {
         let url_ = this.baseUrl + "/product/{id}/activity/{activityId}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -900,11 +900,11 @@ export class Client {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processDeleteActivity(_response);
+            return this.processDeleteProductActivity(_response);
         });
     }
 
-    protected processDeleteActivity(response: Response): Promise<void> {
+    protected processDeleteProductActivity(response: Response): Promise<void> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 204) {
@@ -1326,7 +1326,7 @@ export class Client {
      * @param body Parameters to create this comment with
      * @return Ok
      */
-    addComment2(id: number, body: ActivityParams): Promise<BaseActivity> {
+    addCompanyComment(id: number, body: ActivityParams): Promise<BaseActivity> {
         let url_ = this.baseUrl + "/company/{id}/comment";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -1345,11 +1345,11 @@ export class Client {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processAddComment2(_response);
+            return this.processAddCompanyComment(_response);
         });
     }
 
-    protected processAddComment2(response: Response): Promise<BaseActivity> {
+    protected processAddCompanyComment(response: Response): Promise<BaseActivity> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -1380,7 +1380,7 @@ export class Client {
      * @param body Update subset of parameter of comment activity
      * @return Ok
      */
-    updateActivity2(id: number, activityId: number, body: Partial_ActivityParams): Promise<BaseActivity> {
+    updateCompanyActivity(id: number, activityId: number, body: Partial_ActivityParams): Promise<BaseActivity> {
         let url_ = this.baseUrl + "/company/{id}/activity/{activityId}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -1402,11 +1402,11 @@ export class Client {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processUpdateActivity2(_response);
+            return this.processUpdateCompanyActivity(_response);
         });
     }
 
-    protected processUpdateActivity2(response: Response): Promise<BaseActivity> {
+    protected processUpdateCompanyActivity(response: Response): Promise<BaseActivity> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -1436,7 +1436,7 @@ export class Client {
      * @param activityId ID of the comment activity
      * @return No content
      */
-    deleteActivity2(id: number, activityId: number): Promise<void> {
+    deleteCompanyActivity(id: number, activityId: number): Promise<void> {
         let url_ = this.baseUrl + "/company/{id}/activity/{activityId}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -1453,11 +1453,11 @@ export class Client {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processDeleteActivity2(_response);
+            return this.processDeleteCompanyActivity(_response);
         });
     }
 
-    protected processDeleteActivity2(response: Response): Promise<void> {
+    protected processDeleteCompanyActivity(response: Response): Promise<void> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 204) {
@@ -1775,7 +1775,7 @@ export class Client {
      * @param body - Create subset of product
      * @return Ok
      */
-    addProduct(id: number, body: ProductInstanceParams): Promise<ProductInstance> {
+    addProductInstance(id: number, body: ProductInstanceParams): Promise<ProductInstance> {
         let url_ = this.baseUrl + "/contract/{id}/product";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -1794,11 +1794,11 @@ export class Client {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processAddProduct(_response);
+            return this.processAddProductInstance(_response);
         });
     }
 
-    protected processAddProduct(response: Response): Promise<ProductInstance> {
+    protected processAddProductInstance(response: Response): Promise<ProductInstance> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -1829,7 +1829,7 @@ export class Client {
      * @param body Update subset of product instance
      * @return Ok
      */
-    updateProduct2(id: number, prodId: number, body: Partial_ProductInstanceParams): Promise<ProductInstance> {
+    updateProductInstance(id: number, prodId: number, body: Partial_ProductInstanceParams): Promise<ProductInstance> {
         let url_ = this.baseUrl + "/contract/{id}/product/{prodId}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -1851,11 +1851,11 @@ export class Client {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processUpdateProduct2(_response);
+            return this.processUpdateProductInstance(_response);
         });
     }
 
-    protected processUpdateProduct2(response: Response): Promise<ProductInstance> {
+    protected processUpdateProductInstance(response: Response): Promise<ProductInstance> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -1885,7 +1885,7 @@ export class Client {
      * @param prodId ID of the product instance
      * @return No content
      */
-    deleteProduct2(id: number, prodId: number): Promise<void> {
+    deleteProductInstance(id: number, prodId: number): Promise<void> {
         let url_ = this.baseUrl + "/contract/{id}/product/{prodId}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -1902,11 +1902,11 @@ export class Client {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processDeleteProduct2(_response);
+            return this.processDeleteProductInstance(_response);
         });
     }
 
-    protected processDeleteProduct2(response: Response): Promise<void> {
+    protected processDeleteProductInstance(response: Response): Promise<void> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 204) {
@@ -1934,7 +1934,7 @@ export class Client {
      * @param body Parameters to create this status with
      * @return Ok
      */
-    addProductStatus(id: number, prodId: number, body: ProductInstanceStatusParams): Promise<BaseActivity> {
+    addProductInstanceStatus(id: number, prodId: number, body: ProductInstanceStatusParams): Promise<BaseActivity> {
         let url_ = this.baseUrl + "/contract/{id}/product/{prodId}/status";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -1956,11 +1956,11 @@ export class Client {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processAddProductStatus(_response);
+            return this.processAddProductInstanceStatus(_response);
         });
     }
 
-    protected processAddProductStatus(response: Response): Promise<BaseActivity> {
+    protected processAddProductInstanceStatus(response: Response): Promise<BaseActivity> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -1991,7 +1991,7 @@ export class Client {
      * @param body Parameters to create this comment with
      * @return Ok
      */
-    addProductComment(id: number, prodId: number, body: ActivityParams): Promise<BaseActivity> {
+    addProductInstanceComment(id: number, prodId: number, body: ActivityParams): Promise<BaseActivity> {
         let url_ = this.baseUrl + "/contract/{id}/product/{prodId}/comment";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -2013,11 +2013,11 @@ export class Client {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processAddProductComment(_response);
+            return this.processAddProductInstanceComment(_response);
         });
     }
 
-    protected processAddProductComment(response: Response): Promise<BaseActivity> {
+    protected processAddProductInstanceComment(response: Response): Promise<BaseActivity> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -2049,7 +2049,7 @@ export class Client {
      * @param body Update subset of parameter of the activity
      * @return Ok
      */
-    updateProductActivity(id: number, prodId: number, activityId: number, body: Partial_ActivityParams): Promise<BaseActivity> {
+    updateProductInstanceActivity(id: number, prodId: number, activityId: number, body: Partial_ActivityParams): Promise<BaseActivity> {
         let url_ = this.baseUrl + "/contract/{id}/product/{prodId}/activity/{activityId}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -2074,11 +2074,11 @@ export class Client {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processUpdateProductActivity(_response);
+            return this.processUpdateProductInstanceActivity(_response);
         });
     }
 
-    protected processUpdateProductActivity(response: Response): Promise<BaseActivity> {
+    protected processUpdateProductInstanceActivity(response: Response): Promise<BaseActivity> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -2109,7 +2109,7 @@ export class Client {
      * @param activityId ID of the activity
      * @return No content
      */
-    deleteProductActivity(id: number, prodId: number, activityId: number): Promise<void> {
+    deleteProductInstanceActivity(id: number, prodId: number, activityId: number): Promise<void> {
         let url_ = this.baseUrl + "/contract/{id}/product/{prodId}/activity/{activityId}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -2129,11 +2129,11 @@ export class Client {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processDeleteProductActivity(_response);
+            return this.processDeleteProductInstanceActivity(_response);
         });
     }
 
-    protected processDeleteProductActivity(response: Response): Promise<void> {
+    protected processDeleteProductInstanceActivity(response: Response): Promise<void> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 204) {
@@ -2160,7 +2160,7 @@ export class Client {
      * @param body Parameters to create this file with
      * @return Ok
      */
-    generateConractFile(id: number, body: GenerateContractParams): Promise<any> {
+    generateContractFile(id: number, body: GenerateContractParams): Promise<any> {
         let url_ = this.baseUrl + "/contract/{id}/file/generate";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -2179,11 +2179,11 @@ export class Client {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processGenerateConractFile(_response);
+            return this.processGenerateContractFile(_response);
         });
     }
 
-    protected processGenerateConractFile(response: Response): Promise<any> {
+    protected processGenerateContractFile(response: Response): Promise<any> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -2427,7 +2427,7 @@ export class Client {
      * @param body Parameters to create this status with
      * @return Ok
      */
-    addStatus(id: number, body: ContractStatusParams): Promise<BaseActivity> {
+    addContractStatus(id: number, body: ContractStatusParams): Promise<BaseActivity> {
         let url_ = this.baseUrl + "/contract/{id}/status";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -2446,11 +2446,11 @@ export class Client {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processAddStatus(_response);
+            return this.processAddContractStatus(_response);
         });
     }
 
-    protected processAddStatus(response: Response): Promise<BaseActivity> {
+    protected processAddContractStatus(response: Response): Promise<BaseActivity> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -2480,7 +2480,7 @@ export class Client {
      * @param body Parameters to create this comment with
      * @return Ok
      */
-    addComment3(id: number, body: ActivityParams): Promise<BaseActivity> {
+    addContractComment(id: number, body: ActivityParams): Promise<BaseActivity> {
         let url_ = this.baseUrl + "/contract/{id}/comment";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -2499,11 +2499,11 @@ export class Client {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processAddComment3(_response);
+            return this.processAddContractComment(_response);
         });
     }
 
-    protected processAddComment3(response: Response): Promise<BaseActivity> {
+    protected processAddContractComment(response: Response): Promise<BaseActivity> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -2534,7 +2534,7 @@ export class Client {
      * @param body Update subset of parameter of the activity
      * @return Ok
      */
-    updateActivity3(id: number, activityId: number, body: Partial_ActivityParams): Promise<BaseActivity> {
+    updateContractActivity(id: number, activityId: number, body: Partial_ActivityParams): Promise<BaseActivity> {
         let url_ = this.baseUrl + "/contract/{id}/activity/{activityId}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -2556,11 +2556,11 @@ export class Client {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processUpdateActivity3(_response);
+            return this.processUpdateContractActivity(_response);
         });
     }
 
-    protected processUpdateActivity3(response: Response): Promise<BaseActivity> {
+    protected processUpdateContractActivity(response: Response): Promise<BaseActivity> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -2590,7 +2590,7 @@ export class Client {
      * @param activityId ID of the activity
      * @return No content
      */
-    deleteActivity3(id: number, activityId: number): Promise<void> {
+    deleteContractActivity(id: number, activityId: number): Promise<void> {
         let url_ = this.baseUrl + "/contract/{id}/activity/{activityId}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -2607,11 +2607,11 @@ export class Client {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processDeleteActivity3(_response);
+            return this.processDeleteContractActivity(_response);
         });
     }
 
-    protected processDeleteActivity3(response: Response): Promise<void> {
+    protected processDeleteContractActivity(response: Response): Promise<void> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 204) {
@@ -2929,7 +2929,7 @@ export class Client {
      * @param body - Create subset of product
      * @return Ok
      */
-    addProduct2(id: number, body: Body): Promise<ProductInstance> {
+    addProduct(id: number, body: Body): Promise<ProductInstance> {
         let url_ = this.baseUrl + "/invoice/{id}/product";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -2948,11 +2948,11 @@ export class Client {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processAddProduct2(_response);
+            return this.processAddProduct(_response);
         });
     }
 
-    protected processAddProduct2(response: Response): Promise<ProductInstance> {
+    protected processAddProduct(response: Response): Promise<ProductInstance> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -2982,7 +2982,7 @@ export class Client {
      * @param prodId ID of the product instance
      * @return No content
      */
-    deleteProduct3(id: number, prodId: number): Promise<void> {
+    deleteProduct2(id: number, prodId: number): Promise<void> {
         let url_ = this.baseUrl + "/invoice/{id}/product/{prodId}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -2999,11 +2999,11 @@ export class Client {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processDeleteProduct3(_response);
+            return this.processDeleteProduct2(_response);
         });
     }
 
-    protected processDeleteProduct3(response: Response): Promise<void> {
+    protected processDeleteProduct2(response: Response): Promise<void> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 204) {
@@ -3297,7 +3297,7 @@ export class Client {
      * @param body Parameters to create this status with
      * @return Ok
      */
-    addStatus2(id: number, body: InvoiceStatusParams): Promise<BaseActivity> {
+    addInvoiceStatus(id: number, body: InvoiceStatusParams): Promise<BaseActivity> {
         let url_ = this.baseUrl + "/invoice/{id}/status";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -3316,11 +3316,11 @@ export class Client {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processAddStatus2(_response);
+            return this.processAddInvoiceStatus(_response);
         });
     }
 
-    protected processAddStatus2(response: Response): Promise<BaseActivity> {
+    protected processAddInvoiceStatus(response: Response): Promise<BaseActivity> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -3350,7 +3350,7 @@ export class Client {
      * @param body Parameters to create this comment with
      * @return Ok
      */
-    addComment4(id: number, body: ActivityParams): Promise<BaseActivity> {
+    addInvoiceComment(id: number, body: ActivityParams): Promise<BaseActivity> {
         let url_ = this.baseUrl + "/invoice/{id}/comment";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -3369,11 +3369,11 @@ export class Client {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processAddComment4(_response);
+            return this.processAddInvoiceComment(_response);
         });
     }
 
-    protected processAddComment4(response: Response): Promise<BaseActivity> {
+    protected processAddInvoiceComment(response: Response): Promise<BaseActivity> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -3404,7 +3404,7 @@ export class Client {
      * @param body Update subset of parameter of the activity
      * @return Ok
      */
-    updateActivity4(id: number, activityId: number, body: Partial_ActivityParams): Promise<BaseActivity> {
+    updateInvoiceActivity(id: number, activityId: number, body: Partial_ActivityParams): Promise<BaseActivity> {
         let url_ = this.baseUrl + "/invoice/{id}/activity/{activityId}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -3426,11 +3426,11 @@ export class Client {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processUpdateActivity4(_response);
+            return this.processUpdateInvoiceActivity(_response);
         });
     }
 
-    protected processUpdateActivity4(response: Response): Promise<BaseActivity> {
+    protected processUpdateInvoiceActivity(response: Response): Promise<BaseActivity> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -3460,7 +3460,7 @@ export class Client {
      * @param activityId ID of the activity
      * @return No content
      */
-    deleteActivity4(id: number, activityId: number): Promise<void> {
+    deleteInvoiceActivity(id: number, activityId: number): Promise<void> {
         let url_ = this.baseUrl + "/invoice/{id}/activity/{activityId}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -3477,11 +3477,11 @@ export class Client {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processDeleteActivity4(_response);
+            return this.processDeleteInvoiceActivity(_response);
         });
     }
 
-    protected processDeleteActivity4(response: Response): Promise<void> {
+    protected processDeleteInvoiceActivity(response: Response): Promise<void> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 204) {
