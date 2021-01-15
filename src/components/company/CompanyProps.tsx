@@ -6,6 +6,7 @@ import {
   Dropdown,
   Form, Input, TextArea,
 } from 'semantic-ui-react';
+import validator from 'validator';
 import { Company, CompanyParams, CompanyStatus } from '../../clients/server.generated';
 import { createSingle, deleteSingle, saveSingle } from '../../stores/single/actionCreators';
 import ResourceStatus from '../../stores/resourceStatus';
@@ -169,8 +170,10 @@ class CompanyProps extends React.Component<Props, State> {
         <Form style={{ marginTop: '2em' }}>
           <Form.Group widths="equal">
             <Form.Field
+              required
               disabled={!editing}
               id="form-input-name"
+              placeholder="Name"
               fluid
               control={Input}
               label="Name"
@@ -178,6 +181,9 @@ class CompanyProps extends React.Component<Props, State> {
               onChange={(e: ChangeEvent<HTMLInputElement>) => this.setState({
                 name: e.target.value,
               })}
+              error={
+                validator.isEmpty(name)
+              }
             />
             <Form.Field
               disabled={!editing}
@@ -185,12 +191,15 @@ class CompanyProps extends React.Component<Props, State> {
               fluid
               control={Input}
               label="Telephone Number"
+              placeholder="Telephone Number"
               value={phoneNumber}
               onChange={(e: ChangeEvent<HTMLInputElement>) => this.setState({
                 phoneNumber: e.target.value,
               })}
+              error={
+                !validator.isEmpty(phoneNumber!) && !validator.isMobilePhone(phoneNumber!)
+              }
             />
-
           </Form.Group>
           <Form.Group widths="equal">
             <Form.Field disabled={!editing}>
@@ -227,7 +236,13 @@ class CompanyProps extends React.Component<Props, State> {
             Address Information
           </h2>
           <Form.Group widths="equal">
-            <Form.Field disabled={!editing}>
+            <Form.Field
+              disabled={!editing}
+              required
+              error={
+                validator.isEmpty(addressStreet)
+              }
+            >
               {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
               <label htmlFor="form-input-address-street">
                 Street and number
@@ -239,7 +254,7 @@ class CompanyProps extends React.Component<Props, State> {
                 placeholder="Street and number"
               />
             </Form.Field>
-            <Form.Field disabled={!editing}>
+            <Form.Field disabled={!editing} required error={validator.isEmpty(addressCity)}>
               {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
               <label htmlFor="form-input-address-city">
                 City
@@ -253,7 +268,13 @@ class CompanyProps extends React.Component<Props, State> {
             </Form.Field>
           </Form.Group>
           <Form.Group widths="equal">
-            <Form.Field disabled={!editing}>
+            <Form.Field
+              disabled={!editing}
+              required
+              error={
+                !validator.isPostalCode(addressPostalCode, 'any')
+              }
+            >
               {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
               <label htmlFor="form-input-address-postal-code">
                 Postal Code
@@ -265,7 +286,10 @@ class CompanyProps extends React.Component<Props, State> {
                 placeholder="Postal Code"
               />
             </Form.Field>
-            <Form.Field disabled={!editing}>
+            <Form.Field
+              disabled={!editing}
+              required
+            >
               {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
               <label htmlFor="form-input-address-country">
                 Country
@@ -314,7 +338,9 @@ class CompanyProps extends React.Component<Props, State> {
             </Form.Field>
           </Form.Group>
           <Form.Group widths="equal">
-            <Form.Field disabled={!editing}>
+            <Form.Field
+              disabled={!editing}
+            >
               {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
               <label htmlFor="form-input-invoice-address-postal-code">
                 Postal Code
