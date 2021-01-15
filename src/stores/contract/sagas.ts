@@ -2,9 +2,11 @@ import {
   call, put, select, throttle,
 } from 'redux-saga/effects';
 import {
+  ActivityParams,
   Client,
   Contract,
   ContractParams,
+  ContractStatusParams,
   ListOrFilter,
   ListParams,
   ListSorting,
@@ -16,11 +18,12 @@ import { clearSingle, errorSingle, setSingle } from '../single/actionCreators';
 import {
   singleActionPattern,
   SingleActionType,
-  SingleCreateAction,
-  SingleDeleteAction,
+  SingleCreateAction, SingleCreateCommentAction,
+  SingleCreateStatusAction,
+  SingleDeleteAction, SingleDeleteActivityAction,
   SingleDeleteFileAction,
   SingleFetchAction,
-  SingleSaveAction,
+  SingleSaveAction, SingleSaveActivityAction,
   SingleSaveFileAction,
 } from '../single/actions';
 import { SingleEntities } from '../single/single';
@@ -168,6 +171,86 @@ function* watchDeleteSingleContractFile() {
   );
 }
 
+function* createSingleContractStatus(
+  action: SingleCreateStatusAction<SingleEntities.Contract, ContractStatusParams>,
+) {
+  const client = new Client();
+  yield call([client, client.addContractStatus], action.id, action.data);
+  const contract = yield call([client, client.getContract], action.id);
+  yield put(setSingle(SingleEntities.Contract, contract));
+}
+
+function* errorCreateSingleContractStatus() {
+  yield put(errorSingle(SingleEntities.Contract));
+}
+
+function* watchCreateSingleContractStatus() {
+  yield takeEveryWithErrorHandling(
+    singleActionPattern(SingleEntities.Contract, SingleActionType.CreateStatus),
+    createSingleContractStatus, { onErrorSaga: errorCreateSingleContractStatus },
+  );
+}
+
+function* createSingleContractComment(
+  action: SingleCreateCommentAction<SingleEntities.Contract, ActivityParams>,
+) {
+  const client = new Client();
+  yield call([client, client.addContractComment], action.id, action.data);
+  const contract = yield call([client, client.getContract], action.id);
+  yield put(setSingle(SingleEntities.Contract, contract));
+}
+
+function* errorCreateSingleContractComment() {
+  yield put(errorSingle(SingleEntities.Contract));
+}
+
+function* watchCreateSingleContractComment() {
+  yield takeEveryWithErrorHandling(
+    singleActionPattern(SingleEntities.Contract, SingleActionType.CreateComment),
+    createSingleContractComment, { onErrorSaga: errorCreateSingleContractComment },
+  );
+}
+
+function* saveSingleContractActivity(
+  action: SingleSaveActivityAction<SingleEntities.Contract, ActivityParams>,
+) {
+  const client = new Client();
+  yield call([client, client.updateContractActivity], action.id, action.activityId, action.data);
+  const contract = yield call([client, client.getContract], action.id);
+  yield put(setSingle(SingleEntities.Contract, contract));
+}
+
+function* errorSaveSingleContractActivity() {
+  yield put(errorSingle(SingleEntities.Contract));
+}
+
+function* watchSaveSingleContractActivity() {
+  yield takeEveryWithErrorHandling(
+    singleActionPattern(SingleEntities.Contract, SingleActionType.SaveActivity),
+    saveSingleContractActivity, { onErrorSaga: errorSaveSingleContractActivity },
+  );
+}
+
+function* deleteSingleContractActivity(
+  action: SingleDeleteActivityAction<SingleEntities.Contract>,
+) {
+  const client = new Client();
+  yield call([client, client.deleteContractActivity], action.id, action.activityId);
+  const contract = yield call([client, client.getContract], action.id);
+  yield put(setSingle(SingleEntities.Contract, contract));
+}
+
+function* errorDeleteSingleContractActivity() {
+  yield put(errorSingle(SingleEntities.Contract));
+}
+
+function* watchDeleteSingleContractActivity() {
+  yield takeEveryWithErrorHandling(
+    singleActionPattern(SingleEntities.Contract, SingleActionType.DeleteActivity),
+    deleteSingleContractActivity, { onErrorSaga: errorDeleteSingleContractActivity },
+  );
+}
+
 export default [
   function* watchFetchContracts() {
     yield throttle(
@@ -196,4 +279,8 @@ export default [
   watchDeleteSingleContract,
   watchSaveSingleContractFile,
   watchDeleteSingleContractFile,
+  watchCreateSingleContractStatus,
+  watchCreateSingleContractComment,
+  watchSaveSingleContractActivity,
+  watchDeleteSingleContractActivity,
 ];
