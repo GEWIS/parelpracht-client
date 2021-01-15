@@ -2,6 +2,7 @@ import {
   call, put, select, throttle,
 } from 'redux-saga/effects';
 import {
+  ActivityParams,
   Client, Company, CompanyParams, ListOrFilter, ListParams, ListSorting, SortDirection,
 } from '../../clients/server.generated';
 import { takeEveryWithErrorHandling } from '../errorHandling';
@@ -15,8 +16,15 @@ import { Tables } from '../tables/tables';
 import { TableState } from '../tables/tableState';
 import { clearSingle, errorSingle, setSingle } from '../single/actionCreators';
 import {
-  singleActionPattern, SingleActionType, SingleCreateAction, SingleDeleteAction,
-  SingleFetchAction, SingleSaveAction,
+  singleActionPattern,
+  SingleActionType,
+  SingleCreateAction,
+  SingleCreateCommentAction,
+  SingleDeleteAction,
+  SingleDeleteActivityAction,
+  SingleFetchAction,
+  SingleSaveAction,
+  SingleSaveActivityAction,
 } from '../single/actions';
 import { SingleEntities } from '../single/single';
 
@@ -117,6 +125,66 @@ function* watchDeleteSingleCompany() {
   );
 }
 
+function* createSingleCompanyComment(
+  action: SingleCreateCommentAction<SingleEntities.Company, ActivityParams>,
+) {
+  const client = new Client();
+  yield call([client, client.addCompanyComment], action.id, action.data);
+  const company = yield call([client, client.getCompany], action.id);
+  yield put(setSingle(SingleEntities.Company, company));
+}
+
+function* errorCreateSingleCompanyComment() {
+  yield put(errorSingle(SingleEntities.Company));
+}
+
+function* watchCreateSingleCompanyComment() {
+  yield takeEveryWithErrorHandling(
+    singleActionPattern(SingleEntities.Company, SingleActionType.CreateComment),
+    createSingleCompanyComment, { onErrorSaga: errorCreateSingleCompanyComment },
+  );
+}
+
+function* saveSingleCompanyActivity(
+  action: SingleSaveActivityAction<SingleEntities.Company, ActivityParams>,
+) {
+  const client = new Client();
+  yield call([client, client.updateCompanyActivity], action.id, action.activityId, action.data);
+  const company = yield call([client, client.getCompany], action.id);
+  yield put(setSingle(SingleEntities.Company, company));
+}
+
+function* errorSaveSingleCompanyActivity() {
+  yield put(errorSingle(SingleEntities.Company));
+}
+
+function* watchSaveSingleCompanyActivity() {
+  yield takeEveryWithErrorHandling(
+    singleActionPattern(SingleEntities.Company, SingleActionType.SaveActivity),
+    saveSingleCompanyActivity, { onErrorSaga: errorSaveSingleCompanyActivity },
+  );
+}
+
+function* deleteSingleCompanyActivity(
+  action: SingleDeleteActivityAction<SingleEntities.Company>,
+) {
+  const client = new Client();
+  yield call([client, client.deleteCompanyActivity], action.id, action.activityId);
+  const company = yield call([client, client.getCompany], action.id);
+  yield put(setSingle(SingleEntities.Company, company));
+}
+
+function* errorDeleteSingleCompanyActivity() {
+  yield put(errorSingle(SingleEntities.Company));
+}
+
+function* watchDeleteSingleCompanyActivity() {
+  yield takeEveryWithErrorHandling(
+    singleActionPattern(SingleEntities.Company, SingleActionType.DeleteActivity),
+    deleteSingleCompanyActivity, { onErrorSaga: errorDeleteSingleCompanyActivity },
+  );
+}
+
 export default [
   function* watchFetchCompanies() {
     yield throttle(
@@ -143,4 +211,7 @@ export default [
   watchSaveSingleCompany,
   watchCreateSingleCompany,
   watchDeleteSingleCompany,
+  watchCreateSingleCompanyComment,
+  watchSaveSingleCompanyActivity,
+  watchDeleteSingleCompanyActivity,
 ];

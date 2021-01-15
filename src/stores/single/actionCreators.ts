@@ -2,12 +2,12 @@ import {
   singleActionPattern,
   SingleActionType,
   SingleClearAction,
-  SingleCreateAction,
-  SingleDeleteAction,
+  SingleCreateAction, SingleCreateCommentAction, SingleCreateStatusAction,
+  SingleDeleteAction, SingleDeleteActivityAction,
   SingleDeleteFileAction,
   SingleErrorAction,
   SingleFetchAction,
-  SingleSaveAction,
+  SingleSaveAction, SingleSaveActivityAction,
   SingleSaveFileAction,
   SingleSetAction,
 } from './actions';
@@ -53,6 +53,36 @@ export function createSingle<S extends SingleEntities, RCreate>(
   single: S, data: RCreate,
 ): SingleCreateAction<S, RCreate> {
   return { type: singleActionPattern(single, SingleActionType.Create), data };
+}
+
+export function createSingleStatus<S extends SingleEntities, RSave>(
+  single: S, id: number, data: RSave,
+): SingleCreateStatusAction<S, RSave> {
+  return {
+    type: singleActionPattern(single, SingleActionType.CreateStatus), id, data,
+  };
+}
+
+export function createSingleComment<S extends SingleEntities, RSave>(
+  single: S, id: number, data: RSave,
+): SingleCreateCommentAction<S, RSave> {
+  return {
+    type: singleActionPattern(single, SingleActionType.CreateComment), id, data,
+  };
+}
+
+export function saveSingleActivity<S extends SingleEntities, RSave>(
+  single: S, id: number, activityId: number, data: RSave,
+): SingleSaveActivityAction<S, RSave> {
+  return {
+    type: singleActionPattern(single, SingleActionType.SaveActivity), data, id, activityId,
+  };
+}
+
+export function deleteActivitySingle<S extends SingleEntities>(
+  single: S, id: number, activityId: number,
+): SingleDeleteActivityAction<S> {
+  return { type: singleActionPattern(single, SingleActionType.DeleteActivity), id, activityId };
 }
 
 export function clearSingle<S extends SingleEntities>(single: S): SingleClearAction<S> {

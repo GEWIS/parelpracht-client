@@ -2,14 +2,22 @@ import {
   call, put, select, throttle,
 } from 'redux-saga/effects';
 import {
-  Client, Invoice, InvoiceParams, ListOrFilter, ListParams, ListSorting, Partial_FileParams,
-  SortDirection,
+  ActivityParams, Client, InvoiceStatusParams, Invoice, InvoiceParams, ListOrFilter, ListParams,
+  ListSorting, Partial_FileParams, SortDirection,
 } from '../../clients/server.generated';
 import { takeEveryWithErrorHandling } from '../errorHandling';
 import { clearSingle, errorSingle, setSingle } from '../single/actionCreators';
 import {
-  singleActionPattern, SingleActionType, SingleCreateAction, SingleDeleteAction,
-  SingleDeleteFileAction, SingleFetchAction, SingleSaveAction, SingleSaveFileAction,
+  singleActionPattern,
+  SingleActionType,
+  SingleCreateAction,
+  SingleCreateCommentAction,
+  SingleCreateStatusAction,
+  SingleDeleteAction, SingleDeleteActivityAction,
+  SingleDeleteFileAction,
+  SingleFetchAction,
+  SingleSaveAction, SingleSaveActivityAction,
+  SingleSaveFileAction,
 } from '../single/actions';
 import { SingleEntities } from '../single/single';
 import { setSummaries } from '../summaries/actionCreators';
@@ -156,6 +164,86 @@ function* watchDeleteSingleInvoiceFile() {
   );
 }
 
+function* createSingleInvoiceStatus(
+  action: SingleCreateStatusAction<SingleEntities.Invoice, InvoiceStatusParams>,
+) {
+  const client = new Client();
+  yield call([client, client.addInvoiceStatus], action.id, action.data);
+  const invoice = yield call([client, client.getInvoice], action.id);
+  yield put(setSingle(SingleEntities.Invoice, invoice));
+}
+
+function* errorCreateSingleInvoiceStatus() {
+  yield put(errorSingle(SingleEntities.Invoice));
+}
+
+function* watchCreateSingleInvoiceStatus() {
+  yield takeEveryWithErrorHandling(
+    singleActionPattern(SingleEntities.Invoice, SingleActionType.CreateStatus),
+    createSingleInvoiceStatus, { onErrorSaga: errorCreateSingleInvoiceStatus },
+  );
+}
+
+function* createSingleInvoiceComment(
+  action: SingleCreateCommentAction<SingleEntities.Invoice, ActivityParams>,
+) {
+  const client = new Client();
+  yield call([client, client.addInvoiceComment], action.id, action.data);
+  const invoice = yield call([client, client.getInvoice], action.id);
+  yield put(setSingle(SingleEntities.Invoice, invoice));
+}
+
+function* errorCreateSingleInvoiceComment() {
+  yield put(errorSingle(SingleEntities.Invoice));
+}
+
+function* watchCreateSingleInvoiceComment() {
+  yield takeEveryWithErrorHandling(
+    singleActionPattern(SingleEntities.Invoice, SingleActionType.CreateComment),
+    createSingleInvoiceComment, { onErrorSaga: errorCreateSingleInvoiceComment },
+  );
+}
+
+function* saveSingleInvoiceActivity(
+  action: SingleSaveActivityAction<SingleEntities.Invoice, ActivityParams>,
+) {
+  const client = new Client();
+  yield call([client, client.updateInvoiceActivity], action.id, action.activityId, action.data);
+  const invoice = yield call([client, client.getInvoice], action.id);
+  yield put(setSingle(SingleEntities.Invoice, invoice));
+}
+
+function* errorSaveSingleInvoiceActivity() {
+  yield put(errorSingle(SingleEntities.Invoice));
+}
+
+function* watchSaveSingleInvoiceActivity() {
+  yield takeEveryWithErrorHandling(
+    singleActionPattern(SingleEntities.Invoice, SingleActionType.SaveActivity),
+    saveSingleInvoiceActivity, { onErrorSaga: errorSaveSingleInvoiceActivity },
+  );
+}
+
+function* deleteSingleInvoiceActivity(
+  action: SingleDeleteActivityAction<SingleEntities.Invoice>,
+) {
+  const client = new Client();
+  yield call([client, client.deleteInvoiceActivity], action.id, action.activityId);
+  const invoice = yield call([client, client.getInvoice], action.id);
+  yield put(setSingle(SingleEntities.Invoice, invoice));
+}
+
+function* errorDeleteSingleInvoiceActivity() {
+  yield put(errorSingle(SingleEntities.Invoice));
+}
+
+function* watchDeleteSingleInvoiceActivity() {
+  yield takeEveryWithErrorHandling(
+    singleActionPattern(SingleEntities.Invoice, SingleActionType.DeleteActivity),
+    deleteSingleInvoiceActivity, { onErrorSaga: errorDeleteSingleInvoiceActivity },
+  );
+}
+
 export default [
   function* watchFetchInvoices() {
     yield throttle(
@@ -184,4 +272,8 @@ export default [
   watchDeleteSingleInvoice,
   watchSaveSingleInvoiceFile,
   watchDeleteSingleInvoiceFile,
+  watchCreateSingleInvoiceStatus,
+  watchCreateSingleInvoiceComment,
+  watchSaveSingleInvoiceActivity,
+  watchDeleteSingleInvoiceActivity,
 ];
