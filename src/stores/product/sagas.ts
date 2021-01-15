@@ -2,14 +2,24 @@ import {
   call, put, select, throttle,
 } from 'redux-saga/effects';
 import {
+  ActivityParams,
   Client, ListOrFilter, ListParams, ListSorting, Partial_FileParams, Product, ProductParams,
   SortDirection,
 } from '../../clients/server.generated';
 import { takeEveryWithErrorHandling } from '../errorHandling';
 import { clearSingle, errorSingle, setSingle } from '../single/actionCreators';
 import {
-  singleActionPattern, SingleActionType, SingleCreateAction, SingleDeleteAction,
-  SingleDeleteFileAction, SingleFetchAction, SingleSaveAction, SingleSaveFileAction,
+  singleActionPattern,
+  SingleActionType,
+  SingleCreateAction,
+  SingleCreateCommentAction,
+  SingleDeleteAction,
+  SingleDeleteActivityAction,
+  SingleDeleteFileAction,
+  SingleFetchAction,
+  SingleSaveAction,
+  SingleSaveActivityAction,
+  SingleSaveFileAction,
 } from '../single/actions';
 import { SingleEntities } from '../single/single';
 import { setSummaries } from '../summaries/actionCreators';
@@ -156,6 +166,66 @@ function* watchDeleteSingleProductFile() {
   );
 }
 
+function* createSingleProductComment(
+  action: SingleCreateCommentAction<SingleEntities.Product, ActivityParams>,
+) {
+  const client = new Client();
+  yield call([client, client.addProductComment], action.id, action.data);
+  const product = yield call([client, client.getProduct], action.id);
+  yield put(setSingle(SingleEntities.Product, product));
+}
+
+function* errorCreateSingleProductComment() {
+  yield put(errorSingle(SingleEntities.Product));
+}
+
+function* watchCreateSingleProductComment() {
+  yield takeEveryWithErrorHandling(
+    singleActionPattern(SingleEntities.Product, SingleActionType.CreateComment),
+    createSingleProductComment, { onErrorSaga: errorCreateSingleProductComment },
+  );
+}
+
+function* saveSingleProductActivity(
+  action: SingleSaveActivityAction<SingleEntities.Product, ActivityParams>,
+) {
+  const client = new Client();
+  yield call([client, client.updateProductActivity], action.id, action.activityId, action.data);
+  const product = yield call([client, client.getProduct], action.id);
+  yield put(setSingle(SingleEntities.Product, product));
+}
+
+function* errorSaveSingleProductActivity() {
+  yield put(errorSingle(SingleEntities.Product));
+}
+
+function* watchSaveSingleProductActivity() {
+  yield takeEveryWithErrorHandling(
+    singleActionPattern(SingleEntities.Product, SingleActionType.SaveActivity),
+    saveSingleProductActivity, { onErrorSaga: errorSaveSingleProductActivity },
+  );
+}
+
+function* deleteSingleProductActivity(
+  action: SingleDeleteActivityAction<SingleEntities.Product>,
+) {
+  const client = new Client();
+  yield call([client, client.deleteProductActivity], action.id, action.activityId);
+  const product = yield call([client, client.getProduct], action.id);
+  yield put(setSingle(SingleEntities.Product, product));
+}
+
+function* errorDeleteSingleProductActivity() {
+  yield put(errorSingle(SingleEntities.Product));
+}
+
+function* watchDeleteSingleProductActivity() {
+  yield takeEveryWithErrorHandling(
+    singleActionPattern(SingleEntities.Product, SingleActionType.DeleteActivity),
+    deleteSingleProductActivity, { onErrorSaga: errorDeleteSingleProductActivity },
+  );
+}
+
 export default [
   function* watchFetchProducts() {
     yield throttle(
@@ -184,4 +254,7 @@ export default [
   watchDeleteSingleProduct,
   watchSaveSingleProductFile,
   watchDeleteSingleProductFile,
+  watchCreateSingleProductComment,
+  watchSaveSingleProductActivity,
+  watchDeleteSingleProductActivity,
 ];
