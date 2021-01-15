@@ -1,8 +1,7 @@
 import ResourceStatus from '../resourceStatus';
 import { TableState } from './tableState';
 import {
-  TableActions, TableActionType, TableChangeSortAction,
-  tableExtractAction,
+  TableActions, TableActionType, TableChangeSortAction, tableExtractAction,
   TableSearchAction, TableSetAction, TableSetFilterAction, TableSetTakeAction,
 } from './actions';
 import { Tables } from './tables';

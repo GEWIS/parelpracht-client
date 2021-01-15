@@ -1,7 +1,7 @@
 export enum SummaryCollections {
   Products = 'Products',
   Companies = 'Companies',
-  ProductCategory = 'ProductCategory',
+  ProductCategories = 'ProductCategories',
   Contacts = 'Contacts',
   Invoices = 'Invoices',
   Contracts = 'Contracts',

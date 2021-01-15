@@ -36,7 +36,7 @@ function ProductCategorySelector(props: Props & DropdownProps) {
 }
 
 const mapStateToProps = (state: RootState) => ({
-  options: state.summaries.ProductCategory.options,
+  options: state.summaries.ProductCategories.options,
 });
 
 export default connect(mapStateToProps)(ProductCategorySelector);
