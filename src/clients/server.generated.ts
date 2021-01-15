@@ -4093,40 +4093,20 @@ export class Client {
     }
 
     /**
-     * @param col (optional) Sorted column
-     * @param dir (optional) Sorting direction
-     * @param skip (optional) Number of elements to skip
-     * @param take (optional) Amount of elements to request
-     * @param search (optional) String to filter on value of select columns
+     * @param body List parameters to sort and filter the list
      * @return Ok
      */
-    getAllCategories(col: string | undefined, dir: Dir | undefined, skip: number | undefined, take: number | undefined, search: string | undefined): Promise<CategoryListResponse> {
-        let url_ = this.baseUrl + "/category?";
-        if (col === null)
-            throw new Error("The parameter 'col' cannot be null.");
-        else if (col !== undefined)
-            url_ += "col=" + encodeURIComponent("" + col) + "&";
-        if (dir === null)
-            throw new Error("The parameter 'dir' cannot be null.");
-        else if (dir !== undefined)
-            url_ += "dir=" + encodeURIComponent("" + dir) + "&";
-        if (skip === null)
-            throw new Error("The parameter 'skip' cannot be null.");
-        else if (skip !== undefined)
-            url_ += "skip=" + encodeURIComponent("" + skip) + "&";
-        if (take === null)
-            throw new Error("The parameter 'take' cannot be null.");
-        else if (take !== undefined)
-            url_ += "take=" + encodeURIComponent("" + take) + "&";
-        if (search === null)
-            throw new Error("The parameter 'search' cannot be null.");
-        else if (search !== undefined)
-            url_ += "search=" + encodeURIComponent("" + search) + "&";
+    getAllCategories(body: ListParams): Promise<CategoryListResponse> {
+        let url_ = this.baseUrl + "/category/table";
         url_ = url_.replace(/[?&]$/, "");
 
+        const content_ = JSON.stringify(body);
+
         let options_ = <RequestInit>{
-            method: "GET",
+            body: content_,
+            method: "POST",
             headers: {
+                "Content-Type": "application/json",
                 "Accept": "application/json"
             }
         };
@@ -4159,6 +4139,54 @@ export class Client {
             });
         }
         return Promise.resolve<CategoryListResponse>(<any>null);
+    }
+
+    /**
+     * @return Ok
+     */
+    getCategorySummaries(): Promise<CategorySummary[]> {
+        let url_ = this.baseUrl + "/category/compact";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <RequestInit>{
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processGetCategorySummaries(_response);
+        });
+    }
+
+    protected processGetCategorySummaries(response: Response): Promise<CategorySummary[]> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(CategorySummary.fromJS(item));
+            }
+            return result200;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<CategorySummary[]>(<any>null);
     }
 
     /**
@@ -4208,54 +4236,6 @@ export class Client {
             });
         }
         return Promise.resolve<ProductCategory>(<any>null);
-    }
-
-    /**
-     * @return Ok
-     */
-    getCategorySummaries(): Promise<CategorySummary[]> {
-        let url_ = this.baseUrl + "/category/compact";
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_ = <RequestInit>{
-            method: "GET",
-            headers: {
-                "Accept": "application/json"
-            }
-        };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processGetCategorySummaries(_response);
-        });
-    }
-
-    protected processGetCategorySummaries(response: Response): Promise<CategorySummary[]> {
-        const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
-        if (status === 200) {
-            return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            if (Array.isArray(resultData200)) {
-                result200 = [] as any;
-                for (let item of resultData200)
-                    result200!.push(CategorySummary.fromJS(item));
-            }
-            return result200;
-            });
-        } else if (status === 401) {
-            return response.text().then((_responseText) => {
-            let result401: any = null;
-            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result401 = WrappedApiError.fromJS(resultData401);
-            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            });
-        }
-        return Promise.resolve<CategorySummary[]>(<any>null);
     }
 
     /**
@@ -4357,6 +4337,50 @@ export class Client {
             });
         }
         return Promise.resolve<ProductCategory>(<any>null);
+    }
+
+    /**
+     * @param id ID of the category
+     * @return No content
+     */
+    deleteCategory(id: number): Promise<void> {
+        let url_ = this.baseUrl + "/category/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <RequestInit>{
+            method: "DELETE",
+            headers: {
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processDeleteCategory(_response);
+        });
+    }
+
+    protected processDeleteCategory(response: Response): Promise<void> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 204) {
+            return response.text().then((_responseText) => {
+            return;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<void>(<any>null);
     }
 
     /**
@@ -9069,11 +9093,6 @@ export class Body implements IBody {
 
 export interface IBody {
     productId: number;
-}
-
-export enum Dir {
-    ASC = "ASC",
-    DESC = "DESC",
 }
 
 export interface FileParameter {
