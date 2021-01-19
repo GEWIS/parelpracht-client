@@ -36,7 +36,8 @@ import ProductInstanceModal from './pages/ProductInstanceModal';
 import Footer from './components/navigation/Footer';
 import DashboardPage from './pages/DashboardPage';
 import NotFound from './pages/NotFound';
-import StatusModal from './pages/ContractStatusModal';
+import ContractStatusModal from './pages/ContractStatusModal';
+import InvoiceStatusModal from './pages/InvoiceStatusModal';
 
 interface Props extends RouteComponentProps {
   // eslint-disable-next-line react/no-unused-prop-types
@@ -149,6 +150,10 @@ function Routes(props: Props) {
             <InvoicesPage />
           </Route>
           <Route path="/invoice/:invoiceId" exact component={SingleInvoicePage} />
+          <Route path="/invoice/:invoiceId/status/:statusName" exact>
+            <SingleInvoicePage />
+            <InvoiceStatusModal create />
+          </Route>
 
           {/* Contracts */}
           <Route path="/contract" exact>
@@ -169,7 +174,7 @@ function Routes(props: Props) {
           </Route>
           <Route path="/contract/:contractId/status/:statusName" exact>
             <SingleContractPage />
-            <StatusModal create />
+            <ContractStatusModal create />
           </Route>
 
           {/* Users */}
