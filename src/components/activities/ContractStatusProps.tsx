@@ -7,7 +7,6 @@ import { RootState } from '../../stores/store';
 import PropsButtons from '../PropsButtons';
 import { SingleEntities } from '../../stores/single/single';
 import { formatStatus } from '../../helpers/activity';
-import { fetchSingle } from '../../stores/single/actionCreators';
 
 interface Props {
   create?: boolean;
