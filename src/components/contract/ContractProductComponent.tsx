@@ -14,25 +14,34 @@ interface Props extends RouteComponentProps {
   productInstance: ProductInstance;
 
   productName: string;
+
+  selectFunction: (id: number) => void;
 }
 
 function showRecentStatus(productInstance: ProductInstance) {
-  console.log(productInstance.activities.filter((a) => {
+  const statusArray = productInstance.activities.filter((a) => {
     if (a.type === ActivityType.STATUS) return a;
     return null;
-  }));
-  return 'temp';
+  });
+
+  // eslint-disable-next-line no-nested-ternary
+  // eslint-disable-next-line
+  return statusArray.sort((a, b) => (a.updatedAt > b.updatedAt ? -1 : a.updatedAt < b.updatedAt ? 1 : 0))[0].subType!;
 }
 
 class ContractProductComponent extends React.Component<Props> {
   public render() {
     const {
-      productInstance, productName,
+      productInstance, productName, selectFunction,
     } = this.props;
     return (
       <Table.Row>
         <Table.Cell collapsing>
-          <Checkbox />
+          <Checkbox
+            onClick={() => {
+              selectFunction(productInstance.id);
+            }}
+          />
         </Table.Cell>
         <Table.Cell
           onClick={() => {

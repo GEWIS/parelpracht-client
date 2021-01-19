@@ -33,6 +33,7 @@ import UsersPage from './pages/UsersPage';
 import SingleUserPage from './pages/SingleUserPage';
 import UserCreatePage from './pages/UserCreatePage';
 import ContractProductInstanceModal from './pages/ContractProductInstanceModal';
+import ContractInvoiceModal from './pages/ContractInvoiceModal';
 import InvoiceProductInstanceModal from './pages/InvoiceProductInstanceModal';
 import Footer from './components/navigation/Footer';
 import DashboardPage from './pages/DashboardPage';
@@ -169,6 +170,10 @@ function Routes(props: Props) {
           <Route path="/contract/:contractId/product/:productInstanceId" exact>
             <SingleContractPage />
             <ContractProductInstanceModal />
+          </Route>
+          <Route path="/contract/:contractId/invoice" exact>
+            <SingleContractPage />
+            <ContractInvoiceModal />
           </Route>
           {/* Users */}
           <Route path="/user" exact>

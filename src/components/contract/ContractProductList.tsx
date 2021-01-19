@@ -4,6 +4,7 @@ import { NavLink, RouteComponentProps, withRouter } from 'react-router-dom';
 import {
   Button, Icon, Loader, Table,
 } from 'semantic-ui-react';
+import _ from 'lodash';
 import ContractProductComponent from './ContractProductComponent';
 import { Contract } from '../../clients/server.generated';
 import { getSingle } from '../../stores/single/selectors';
@@ -16,16 +17,26 @@ interface Props extends RouteComponentProps {
 }
 
 interface State {
-
+  selected: number[];
 }
 
 class ContractProductList extends React.Component<Props, State> {
   public constructor(props: Props) {
     super(props);
+
+    this.state = {
+      selected: [],
+    };
   }
+
+  selectProduct = (id: number) => {
+    const { selected } = this.state;
+    this.setState({ selected: _.xor(selected, [id]) });
+  };
 
   public render() {
     const { contract } = this.props;
+    const { selected } = this.state;
 
     if (contract === undefined) {
       return (
@@ -50,22 +61,39 @@ class ContractProductList extends React.Component<Props, State> {
 
     return (
       <>
+        <h2>
+          Products
+          <Button
+            icon
+            labelPosition="left"
+            floated="right"
+            style={{ marginTop: '-0.5em' }}
+            basic
+            as={NavLink}
+            to={`${this.props.location.pathname}/product/new`}
+          >
+            Add Product
+          </Button>
+          <Button
+            icon
+            labelPosition="left"
+            floated="right"
+            style={{ marginTop: '-0.5em' }}
+            basic
+            as={NavLink}
+            to={`${this.props.location.pathname}/invoice`}
+            disabled={selected.length === 0}
+          >
+            Add
+            {' '}
+            {(selected.length)}
+            {' '}
+            products to Invoice
+          </Button>
+
+        </h2>
         <Table celled striped>
           <Table.Header>
-            <Table.Row>
-              <Table.HeaderCell colSpan="5">Products</Table.HeaderCell>
-              <Table.HeaderCell colSpan="1">
-                <Button
-                  icon
-                  labelPosition="left"
-                  floated="right"
-                  style={{ marginTop: '-0.5em' }}
-                  basic
-                  as={NavLink}
-                  to={`${this.props.location.pathname}/product/new`}
-                />
-              </Table.HeaderCell>
-            </Table.Row>
             <Table.Row>
               <Table.HeaderCell>Select</Table.HeaderCell>
               <Table.HeaderCell>Title</Table.HeaderCell>
@@ -78,7 +106,11 @@ class ContractProductList extends React.Component<Props, State> {
           </Table.Header>
           <Table.Body>
             {products.map((product) => (
-              <ContractProductComponent key={product.id} productInstance={product} />
+              <ContractProductComponent
+                key={product.id}
+                productInstance={product}
+                selectFunction={this.selectProduct}
+              />
             ))}
           </Table.Body>
           <Table.Footer>
