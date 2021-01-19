@@ -88,7 +88,9 @@ class InvoiceStatusModal extends React.Component<Props> {
             invoiceId={parseInt(invoiceId, 10)}
             resourceStatus={this.props.resourceStatus}
             create={this.props.create}
-            onCancel={() => { }}
+            onCancel={() => {
+              this.props.history.goBack();
+            }}
             addInvoiceStatus={this.addInvoiceStatus}
           />
         </Segment>

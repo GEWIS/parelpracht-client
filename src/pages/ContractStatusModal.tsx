@@ -88,7 +88,9 @@ class ContractStatusModal extends React.Component<Props> {
             contractId={parseInt(contractId, 10)}
             resourceStatus={this.props.resourceStatus}
             create={this.props.create}
-            onCancel={() => { }}
+            onCancel={() => {
+              this.props.history.goBack();
+            }}
             addContractStatus={this.addContractStatus}
           />
         </Segment>
