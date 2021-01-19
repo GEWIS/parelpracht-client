@@ -6,6 +6,6 @@
 .ui.steps .link.step:hover,
 .ui.steps a.step:hover::after,
 .ui.steps a.step:hover {
-  color: #4183C4;
+  color: @linkColor;
   background-color: lightgrey;
 }
