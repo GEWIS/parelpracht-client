@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Button, Step } from 'semantic-ui-react';
+import { Button, Icon, Step } from 'semantic-ui-react';
 import { NavLink, RouteComponentProps, withRouter } from 'react-router-dom';
 import { RootState } from '../../stores/store';
 import { GeneralActivity } from './GeneralActivity';
@@ -57,9 +57,13 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
             floated="right"
             as={NavLink}
             to={`/${documentType.toLowerCase()}/${documentId}/status/cancelled`}
-          >
-            Cancel
-          </Button>
+            labelPosition="left"
+            icon="close"
+            content="Cancel"
+          />
+          {/*  <Icon name="close" /> */}
+          {/*  Cancel */}
+          {/* </Button> */}
         </h3>
         <Step.Group stackable="tablet" widths={5} fluid>
           {allContractStatuses.map((currentStatus) => (

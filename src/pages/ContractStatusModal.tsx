@@ -89,7 +89,7 @@ class ContractStatusModal extends React.Component<Props> {
             resourceStatus={this.props.resourceStatus}
             create={this.props.create}
             onCancel={() => {
-              this.props.history.goBack();
+              this.close();
             }}
             addContractStatus={this.addContractStatus}
           />
