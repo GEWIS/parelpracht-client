@@ -24,12 +24,10 @@ export function* fetchAuthStatus() {
     yield put(authFetchProfile());
 
     // Fetch the summaries
-    yield put(fetchSummaries(SummaryCollections.Companies));
-    yield put(fetchSummaries(SummaryCollections.Contacts));
-    yield put(fetchSummaries(SummaryCollections.Products));
-    yield put(fetchSummaries(SummaryCollections.Invoices));
-    yield put(fetchSummaries(SummaryCollections.Contracts));
-    yield put(fetchSummaries(SummaryCollections.Users));
+    const summaries = Object.values(SummaryCollections);
+    for (let i = 0; i < summaries.length; i++) {
+      yield put(fetchSummaries(summaries[i]));
+    }
   }
 }
 
