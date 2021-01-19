@@ -137,7 +137,7 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
       if (nextStatus.includes(status)) {
         return (
           <Step
-            active
+            className="clickable"
             as={NavLink}
             to={`/${documentType.toLowerCase()}/${documentId}/status/${status.toLowerCase()}`}
           >
