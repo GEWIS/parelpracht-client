@@ -1,5 +1,35 @@
 import { ActivityType, GeneralActivity } from '../components/activities/GeneralActivity';
 import { formatLastUpdate } from './lastUpdate';
+import { ContractStatus, InvoiceStatus } from '../clients/server.generated';
+
+/**
+ * Get the status type of a string
+ */
+export function getContractStatus(statusString: string): ContractStatus {
+  switch (statusString) {
+    case 'CREATED': return ContractStatus.CREATED;
+    case 'PROPOSED': return ContractStatus.PROPOSED;
+    case 'SENT': return ContractStatus.SENT;
+    case 'CONFIRMED': return ContractStatus.CONFIRMED;
+    case 'FINISHED': return ContractStatus.FINISHED;
+    case 'CANCELLED': return ContractStatus.CANCELLED;
+    default: return ContractStatus.CREATED;
+  }
+}
+
+/**
+ * Get the status type of a string
+ */
+export function getInvoiceStatus(statusString: string): InvoiceStatus {
+  switch (statusString) {
+    case 'CREATED': return InvoiceStatus.CREATED;
+    case 'SENT': return InvoiceStatus.SENT;
+    case 'PAID': return InvoiceStatus.PAID;
+    case 'CANCELLED': return InvoiceStatus.CANCELLED;
+    case 'IRRECOVERABLE': return InvoiceStatus.IRRECOVERABLE;
+    default: return InvoiceStatus.CREATED;
+  }
+}
 
 /**
  * Format the status of the document.
@@ -120,6 +150,39 @@ export function getStatusActivity(
     }
   }
   return null;
+}
+
+/**
+ * Return the status that can be completed next in array. Note that PROPOSED
+ * status can be skipped, so we have an array with PROPOSED and the status after that
+ */
+export function getNextStatus(
+  currentStatusActivity: GeneralActivity,
+  documentType: string,
+): string[] {
+  const currentStatus = currentStatusActivity.subType;
+  if (currentStatus == null) {
+    return [];
+  }
+  // fetch all possible statuses
+  const allStatuses = getCompletedContractStatuses('ALL', documentType);
+  const result: string[] = [];
+  // loop over all statuses
+  for (let i = 0; i < allStatuses.length; i++) {
+    // check if the status is the current status
+    if (allStatuses[i].toUpperCase() === currentStatus) {
+      // next item does exist
+      if (typeof allStatuses[i + 1] !== 'undefined') {
+        result.push(allStatuses[i + 1]);
+        if (result[0].toUpperCase() === 'PROPOSED') {
+          result.push(allStatuses[i + 2]);
+        }
+      }
+      // if the next status does not exist
+      return result;
+    }
+  }
+  return result;
 }
 
 /**
