@@ -11,8 +11,8 @@ import {
 import { countFetched, countTotal, getTable } from '../../stores/tables/selectors';
 import { Tables } from '../../stores/tables/tables';
 import ContractRow from './ContractRow';
-import ContractCompanyFilter from './filters/ContractCompanyFilter';
-import ContractContactFilter from './filters/ContractContactFilter';
+import ContractContactFilter from '../tablefilters/ContractContactFilter';
+import CompanyFilter from '../tablefilters/CompanyFilter';
 
 interface Props {
   contracts: Contract[];
@@ -52,7 +52,7 @@ function ContractsTable({
             </Table.HeaderCell>
             <Table.HeaderCell>
               Company
-              <ContractCompanyFilter />
+              <CompanyFilter table={Tables.Contracts} />
             </Table.HeaderCell>
             <Table.HeaderCell>
               Contact

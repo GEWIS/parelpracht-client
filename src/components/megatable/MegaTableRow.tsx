@@ -13,14 +13,12 @@ interface Props {
   products: ProductSummary[];
 }
 
-function ContractExtensiveRow(props: Props) {
+function MegaTableRow(props: Props) {
   const { company, products } = props;
 
   const productMap: Record<number, string> = {};
   // eslint-disable-next-line array-callback-return
   products.map((p) => { productMap[p.id] = p.nameEnglish; });
-
-  console.log(productMap);
 
   const getNrOfProducts = () => {
     let count = 0;
@@ -93,4 +91,4 @@ const mapStateToProps = (state: RootState) => ({
   products: state.summaries.Products.options,
 });
 
-export default connect(mapStateToProps)(ContractExtensiveRow);
+export default connect(mapStateToProps)(MegaTableRow);

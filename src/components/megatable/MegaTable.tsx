@@ -3,7 +3,7 @@ import { Table } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import { ETCompany } from '../../helpers/extensiveTableObjects';
-import ContractExtensiveRow from './ContractExtensiveRow';
+import ContractExtensiveRow from './MegaTableRow';
 import { RootState } from '../../stores/store';
 import { countFetched, countTotal, getTable } from '../../stores/tables/selectors';
 import { Tables } from '../../stores/tables/tables';
@@ -32,7 +32,7 @@ interface Props {
   nextPage: () => void;
 }
 
-function ContractTableExtensive({
+function MegaTable({
   companies, fetchContracts, column, direction, changeSort,
   total, fetched, skip, take,
   prevPage, nextPage, setTake,
@@ -72,10 +72,10 @@ function ContractTableExtensive({
 }
 
 const mapStateToProps = (state: RootState) => {
-  const contractTable = getTable<ETCompany>(state, Tables.ETContracts);
+  const contractTable = getTable<ETCompany>(state, Tables.ETCompanies);
   return {
-    total: countTotal(state, Tables.ETContracts),
-    fetched: countFetched(state, Tables.ETContracts),
+    total: countTotal(state, Tables.ETCompanies),
+    fetched: countFetched(state, Tables.ETCompanies),
     skip: contractTable.skip,
     take: contractTable.take,
     companies: contractTable.data,
@@ -86,23 +86,23 @@ const mapStateToProps = (state: RootState) => {
 };
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
-  fetchContracts: () => dispatch(fetchTable(Tables.ETContracts)),
+  fetchContracts: () => dispatch(fetchTable(Tables.ETCompanies)),
   changeSort: (column: string) => {
-    dispatch(changeSortTable(Tables.ETContracts, column));
-    dispatch(fetchTable(Tables.ETContracts));
+    dispatch(changeSortTable(Tables.ETCompanies, column));
+    dispatch(fetchTable(Tables.ETCompanies));
   },
   setTake: (take: number) => {
-    dispatch(setTakeTable(Tables.ETContracts, take));
-    dispatch(fetchTable(Tables.ETContracts));
+    dispatch(setTakeTable(Tables.ETCompanies, take));
+    dispatch(fetchTable(Tables.ETCompanies));
   },
   prevPage: () => {
-    dispatch(prevPageTable(Tables.ETContracts));
-    dispatch(fetchTable(Tables.ETContracts));
+    dispatch(prevPageTable(Tables.ETCompanies));
+    dispatch(fetchTable(Tables.ETCompanies));
   },
   nextPage: () => {
-    dispatch(nextPageTable(Tables.ETContracts));
-    dispatch(fetchTable(Tables.ETContracts));
+    dispatch(nextPageTable(Tables.ETCompanies));
+    dispatch(fetchTable(Tables.ETCompanies));
   },
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(ContractTableExtensive);
+export default connect(mapStateToProps, mapDispatchToProps)(MegaTable);

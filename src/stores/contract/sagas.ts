@@ -72,7 +72,7 @@ export function* fetchContractSummaries() {
 function* fetchContractsExtensive() {
   const client = new Client();
 
-  const state: TableState<ETCompany> = yield select(getTable, Tables.ETContracts);
+  const state: TableState<ETCompany> = yield select(getTable, Tables.ETCompanies);
   const {
     sortColumn, sortDirection,
     take, skip,
@@ -92,7 +92,7 @@ function* fetchContractsExtensive() {
       search,
     }),
   );
-  yield put(setTable(Tables.ETContracts, list, count));
+  yield put(setTable(Tables.ETCompanies, list, count));
 }
 
 function* fetchSingleContract(action: SingleFetchAction<SingleEntities.Contract>) {
@@ -298,7 +298,7 @@ export default [
   function* watchFetchContractsExtensive() {
     yield throttle(
       500,
-      tableActionPattern(Tables.ETContracts, TableActionType.Fetch),
+      tableActionPattern(Tables.ETCompanies, TableActionType.Fetch),
       fetchContractsExtensive,
     );
   },

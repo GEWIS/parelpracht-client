@@ -22,7 +22,7 @@ interface Props {
   setSearch: (search: string) => void;
 }
 
-function ContractTableExtensiveControls(props: Props) {
+function MegaTableControls(props: Props) {
   return (
     <TableControls
       status={props.status}
@@ -38,11 +38,11 @@ function ContractTableExtensiveControls(props: Props) {
 }
 
 const mapStateToProps = (state: RootState) => {
-  const contractTable = getTable<ETCompany>(state, Tables.ETContracts);
+  const contractTable = getTable<ETCompany>(state, Tables.ETCompanies);
   return {
     status: contractTable.status,
-    countFetched: countFetched(state, Tables.ETContracts),
-    countTotal: countTotal(state, Tables.ETContracts),
+    countFetched: countFetched(state, Tables.ETCompanies),
+    countTotal: countTotal(state, Tables.ETCompanies),
     column: sortColumn(state),
     lastUpdated: contractTable.lastUpdated,
     search: contractTable.search,
@@ -50,11 +50,11 @@ const mapStateToProps = (state: RootState) => {
 };
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
-  refresh: () => dispatch(fetchTable(Tables.ETContracts)),
+  refresh: () => dispatch(fetchTable(Tables.ETCompanies)),
   setSearch: (search: string) => {
-    dispatch(searchTable(Tables.ETContracts, search));
-    dispatch(fetchTable(Tables.ETContracts));
+    dispatch(searchTable(Tables.ETCompanies, search));
+    dispatch(fetchTable(Tables.ETCompanies));
   },
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(ContractTableExtensiveControls);
+export default connect(mapStateToProps, mapDispatchToProps)(MegaTableControls);

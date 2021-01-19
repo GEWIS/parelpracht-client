@@ -1,12 +1,12 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { ContactSummary } from '../../../clients/server.generated';
-import { RootState } from '../../../stores/store';
-import { getSummaryCollection } from '../../../stores/summaries/selectors';
-import { SummaryCollections } from '../../../stores/summaries/summaries';
-import { Tables } from '../../../stores/tables/tables';
-import ColumnFilter from '../../ColumnFilter';
-import { formatContactName } from '../../../helpers/contact';
+import { ContactSummary } from '../../clients/server.generated';
+import { RootState } from '../../stores/store';
+import { getSummaryCollection } from '../../stores/summaries/selectors';
+import { SummaryCollections } from '../../stores/summaries/summaries';
+import { Tables } from '../../stores/tables/tables';
+import ColumnFilter from '../ColumnFilter';
+import { formatContactName } from '../../helpers/contact';
 
 interface Props {
   options: ContactSummary[],
