@@ -13,6 +13,7 @@ import {
 } from '../../helpers/activity';
 
 interface Props extends RouteComponentProps {
+  documentId: number;
   activities: GeneralActivity[];
   documentType: string;
 }
@@ -27,7 +28,7 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
   }
 
   public render() {
-    const { activities, documentType } = this.props;
+    const { activities, documentType, documentId } = this.props;
     const allContractStatuses = getCompletedContractStatuses('ALL', documentType);
     const allStatusActivities = getAllStatusActivities(activities);
     const lastStatusActivity = getLastStatus(allStatusActivities);
@@ -56,6 +57,7 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
         <Step.Group stackable="tablet" widths={5} fluid>
           {allContractStatuses.map((currentStatus) => (
             <FinancialDocumentStep
+              documentId={documentId}
               lastStatusActivity={lastStatusActivity}
               status={currentStatus}
               allStatusActivities={allStatusActivities}

@@ -93,6 +93,7 @@ class SingleInvoicePage extends React.Component<Props> {
           <Grid.Row centered columns={1} style={{ paddingLeft: '1em', paddingRight: '1em' }}>
             <Segment secondary>
               <FinancialDocumentProgress
+                documentId={invoice.id}
                 activities={invoice.activities as GeneralActivity[]}
                 documentType="Invoice"
               />
