@@ -1,11 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Step, Icon } from 'semantic-ui-react';
-import { RouteComponentProps, withRouter } from 'react-router-dom';
+import { Step, Icon, Button } from 'semantic-ui-react';
+import { NavLink, RouteComponentProps, withRouter } from 'react-router-dom';
 import { RootState } from '../../stores/store';
 import { GeneralActivity } from './GeneralActivity';
 import {
-  formatStatus,
+  formatStatus, getNextStatus,
   getStatusActivity,
   statusApplied,
 } from '../../helpers/activity';
@@ -14,6 +14,7 @@ import {
  * Definition of used variables
  */
 interface Props extends RouteComponentProps {
+  documentId: number;
   lastStatusActivity: GeneralActivity;
   status: string;
   cancelled: boolean;
@@ -32,7 +33,7 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
 
   public render() {
     const {
-      lastStatusActivity, status, cancelled, allStatusActivities, documentType,
+      documentId, lastStatusActivity, status, cancelled, allStatusActivities, documentType,
     } = this.props;
 
     /**
@@ -43,6 +44,7 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
       allStatusActivities,
       status,
     );
+    const nextStatus: string[] = getNextStatus(lastStatusActivity, documentType);
     // check if the document has been cancelled
     if (cancelled) {
       // if it has been cancelled, then we check if the status has been completed
@@ -115,7 +117,7 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
           </Step>
         );
       }
-      console.log(lastStatusActivity.subType);
+      // the invoice is irrecoverable
       if (lastStatusActivity.subType === 'IRRECOVERABLE') {
         return (
           <Step disabled>
@@ -131,7 +133,23 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
           </Step>
         );
       }
-      // the status of the document has not been reached yet
+      // the status of the document has not been reached yet and can be completed
+      if (nextStatus.includes(status)) {
+        return (
+          <Step
+            active
+            as={NavLink}
+            to={`/${documentType.toLowerCase()}/${documentId}/status/${status.toLowerCase()}`}
+          >
+            <Step.Content>
+              <Step.Title>
+                {status}
+              </Step.Title>
+            </Step.Content>
+          </Step>
+        );
+      }
+      // the status of the document has not been reached yet and cannot be completed yet
       return (
         <Step>
           <Step.Content>
