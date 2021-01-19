@@ -3,6 +3,8 @@ import { RouteComponentProps, withRouter } from 'react-router-dom';
 import {
   Button, Container, Grid, Header, Icon, Segment,
 } from 'semantic-ui-react';
+import ContractTableExtensive from '../components/contract/ContractTableExtensive';
+import ContractTableExtensiveControls from '../components/contract/ContractTableExtensiveControls';
 
 function Insights(props: RouteComponentProps) {
   return (
@@ -21,9 +23,14 @@ function Insights(props: RouteComponentProps) {
             </Grid.Column>
             <Grid.Column />
           </Grid>
+
+          <ContractTableExtensiveControls />
+
         </Container>
       </Segment>
-      <Container />
+      <Container>
+        <ContractTableExtensive />
+      </Container>
     </>
   );
 }
