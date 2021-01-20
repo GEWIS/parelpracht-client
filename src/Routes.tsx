@@ -97,6 +97,9 @@ function Routes(props: Props) {
       >
         <AlertContainer internal />
         <Switch>
+          <Route path="/login" exact>
+            <Redirect to="/" />
+          </Route>
           <Route path="/" exact>
             <DashboardPage />
           </Route>
