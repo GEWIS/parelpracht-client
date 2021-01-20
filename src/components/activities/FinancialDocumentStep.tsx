@@ -5,7 +5,7 @@ import { NavLink, RouteComponentProps, withRouter } from 'react-router-dom';
 import { RootState } from '../../stores/store';
 import { GeneralActivity } from './GeneralActivity';
 import {
-  formatStatus, getNextStatus,
+  formatStatus, getCompletedDocumentStatuses, getNextStatus,
   getStatusActivity,
   statusApplied,
 } from '../../helpers/activity';
@@ -66,7 +66,10 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
           );
         }
         // if the status has been completed but it was not logged
-        if (statusCompletedActivity != null) {
+        if (getCompletedDocumentStatuses(
+          lastStatusActivity.subType,
+          documentType,
+        ).includes(status)) {
           return (
             <Step completed disabled>
               <Icon />
