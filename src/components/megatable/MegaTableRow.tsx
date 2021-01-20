@@ -81,9 +81,9 @@ function MegaTableRow(props: Props) {
   }
 
   return (
-    <>
+    <Table.Body>
       {result}
-    </>
+    </Table.Body>
   );
 }
 

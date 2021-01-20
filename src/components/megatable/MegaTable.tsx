@@ -15,6 +15,10 @@ import {
   setTakeTable,
 } from '../../stores/tables/actionCreators';
 import TablePagination from '../TablePagination';
+import CompanyFilter from '../tablefilters/CompanyFilter';
+import ProductFilter from '../tablefilters/ProductFilter';
+import ProductInstanceStatusFilter from '../tablefilters/ProductInstanceStatusFilter';
+import ProductInstanceInvoicedFilter from '../tablefilters/ProductInstanceInvoicedFilter';
 
 interface Props {
   companies: ETCompany[];
@@ -42,21 +46,31 @@ function MegaTable({
   }, []);
   return (
     <>
-      <Table>
+      <Table className="rowspanStriped" compact>
         <Table.Header>
           <Table.Row>
-            <Table.HeaderCell>Company</Table.HeaderCell>
+            <Table.HeaderCell>
+              Company
+              <CompanyFilter table={Tables.ETCompanies} />
+            </Table.HeaderCell>
             <Table.HeaderCell>Contract</Table.HeaderCell>
-            <Table.HeaderCell>Product</Table.HeaderCell>
-            <Table.HeaderCell>Status</Table.HeaderCell>
-            <Table.HeaderCell>Invoiced</Table.HeaderCell>
+            <Table.HeaderCell>
+              Product
+              <ProductFilter />
+            </Table.HeaderCell>
+            <Table.HeaderCell>
+              Status
+              <ProductInstanceStatusFilter />
+            </Table.HeaderCell>
+            <Table.HeaderCell>
+              Invoiced
+              <ProductInstanceInvoicedFilter />
+            </Table.HeaderCell>
             <Table.HeaderCell>Price</Table.HeaderCell>
             <Table.HeaderCell>Details</Table.HeaderCell>
           </Table.Row>
         </Table.Header>
-        <Table.Body>
-          {companies.map((c) => <ContractExtensiveRow company={c} key={c.id} />)}
-        </Table.Body>
+        {companies.map((c) => <ContractExtensiveRow company={c} key={c.id} />)}
       </Table>
       <TablePagination
         countTotal={total}
