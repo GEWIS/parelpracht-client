@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Loader } from 'semantic-ui-react';
-import { RouteComponentProps, withRouter } from 'react-router-dom';
+import { Button, Loader } from 'semantic-ui-react';
+import { NavLink, RouteComponentProps, withRouter } from 'react-router-dom';
 import { RootState } from '../../stores/store';
 import ActivityComponent from './ActivityComponent';
 import { GeneralActivity } from './GeneralActivity';
@@ -45,6 +45,14 @@ class ActivitiesList extends React.Component<Props, State> {
       <>
         <h3>
           Activities
+          {/* <Button */}
+          {/*  floated="right" */}
+          {/*  as={NavLink} */}
+          {/*  to={`/${activities[0].type.toLowerCase()}/${activities[0]}/comment`} */}
+          {/*  labelPosition="left" */}
+          {/*  icon="close" */}
+          {/*  content="Cancel" */}
+          {/* /> */}
         </h3>
         {activities.map((activity) => (
           <ActivityComponent activity={activity as GeneralActivity} />
