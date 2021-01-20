@@ -5,12 +5,14 @@ import {
 import createTableReducer from './tableReducer';
 import { Tables } from './tables';
 import { TableState } from './tableState';
+import { ETCompany } from '../../helpers/extensiveTableObjects';
 
 export interface TablesState {
   [Tables.Products]: TableState<Product>;
   [Tables.Contacts]: TableState<Contact>;
   [Tables.Companies]: TableState<Company>;
   [Tables.Contracts]: TableState<Contract>;
+  [Tables.ETCompanies]: TableState<ETCompany>;
   [Tables.Invoices]: TableState<Invoice>;
   [Tables.Users]: TableState<User>;
 }
@@ -20,6 +22,7 @@ export const tablesReducer = combineReducers<TablesState>({
   [Tables.Contacts]: createTableReducer(Tables.Contacts),
   [Tables.Companies]: createTableReducer(Tables.Companies),
   [Tables.Contracts]: createTableReducer(Tables.Contracts),
+  [Tables.ETCompanies]: createTableReducer(Tables.ETCompanies),
   [Tables.Invoices]: createTableReducer(Tables.Invoices),
   [Tables.Users]: createTableReducer(Tables.Users),
 });

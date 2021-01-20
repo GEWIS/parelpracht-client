@@ -11,7 +11,7 @@ import {
 import { countFetched, countTotal, getTable } from '../../stores/tables/selectors';
 import { Tables } from '../../stores/tables/tables';
 import InvoiceRow from './InvoiceRow';
-import InvoiceCompanyFilter from './filters/InvoiceCompanyFilter';
+import CompanyFilter from '../tablefilters/CompanyFilter';
 
 interface Props {
   invoices: Invoice[];
@@ -54,7 +54,7 @@ function InvoicesTable({
               onClick={() => changeSort('Company')}
             >
               Company Name
-              <InvoiceCompanyFilter />
+              <CompanyFilter table={Tables.Invoices} />
             </Table.HeaderCell>
             <Table.HeaderCell
               sorted={column === 'Last updated' ? direction : undefined}

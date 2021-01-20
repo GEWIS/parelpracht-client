@@ -11,7 +11,7 @@ import {
 import { countFetched, countTotal, getTable } from '../../stores/tables/selectors';
 import { Tables } from '../../stores/tables/tables';
 import { CompanyRow } from './CompanyRow';
-import CompanyStatusFilter from './filters/CompanyStatusFilter';
+import CompanyStatusFilter from '../tablefilters/CompanyStatusFilter';
 
 interface Props {
   companies: Company[];

@@ -20,6 +20,8 @@ interface SelfProps {
 }
 
 interface Props extends SelfProps {
+  multiple?: boolean;
+
   filter: ListFilter;
   filterOn: boolean;
 
@@ -64,13 +66,19 @@ function ColumnFilter(props: Props) {
         <Dropdown
           placeholder={`Select ${props.columnName}...`}
           selection
-          multiple
+          multiple={props.multiple}
           search
           button
           clearable
           fluid
-          value={props.filter.values}
-          onChange={(e, data) => props.setFilter(data.value as string[])}
+          value={props.multiple ? props.filter.values : props.filter.values[0]}
+          onChange={(e, data) => {
+            if (props.multiple) {
+              props.setFilter(data.value as string[]);
+            } else {
+              props.setFilter([data.value as string]);
+            }
+          }}
           options={props.options}
         />
       </Modal.Content>
@@ -98,5 +106,9 @@ const mapDispatchToProps = (dispatch: Dispatch, props: SelfProps) => ({
   )),
   refresh: () => dispatch(fetchTable(props.table)),
 });
+
+ColumnFilter.defaultProps = {
+  multiple: true,
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(ColumnFilter);

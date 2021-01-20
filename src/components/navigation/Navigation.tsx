@@ -30,6 +30,10 @@ function Navigation() {
           <Icon name="file alternate" />
           Invoices
         </Menu.Item>
+        <Menu.Item as={NavLink} to="/insights">
+          <Icon name="line graph" />
+          Insights
+        </Menu.Item>
         <AuthMenu />
       </Container>
     </Menu>
