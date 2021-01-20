@@ -97,7 +97,10 @@ export function getAllStatusActivities(activities: GeneralActivity[]): GeneralAc
 /**
  * Get all the contract statuses that applied to a certain status.
  */
-export function getCompletedContractStatuses(status: string, type: string): string[] {
+export function getCompletedDocumentStatuses(status: string | undefined, type: string): string[] {
+  if (status === undefined) {
+    return [];
+  }
   if (type === 'Invoice') {
     switch (status) {
       case 'CREATED':
@@ -165,7 +168,7 @@ export function getNextStatus(
     return [];
   }
   // fetch all possible statuses
-  const allStatuses = getCompletedContractStatuses('ALL', documentType);
+  const allStatuses = getCompletedDocumentStatuses('ALL', documentType);
   const result: string[] = [];
   // loop over all statuses
   for (let i = 0; i < allStatuses.length; i++) {
@@ -197,7 +200,7 @@ export function statusApplied(
   if (lastStatusActivity.subType == null) {
     return false;
   }
-  const completedStatuses = getCompletedContractStatuses(
+  const completedStatuses = getCompletedDocumentStatuses(
     lastStatusActivity.subType.toUpperCase(),
     documentType,
   );

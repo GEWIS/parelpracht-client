@@ -8,7 +8,7 @@ import FinancialDocumentStep from './FinancialDocumentStep';
 import {
   formatDocumentStatusTitle,
   getAllStatusActivities,
-  getCompletedContractStatuses,
+  getCompletedDocumentStatuses,
   getLastStatus,
 } from '../../helpers/activity';
 
@@ -29,10 +29,10 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
 
   public render() {
     const { activities, documentType, documentId } = this.props;
-    const allContractStatuses = getCompletedContractStatuses('ALL', documentType);
+    const allDocumentStatuses = getCompletedDocumentStatuses('ALL', documentType);
     const allStatusActivities = getAllStatusActivities(activities);
     const lastStatusActivity = getLastStatus(allStatusActivities);
-    const canceledDocument = allStatusActivities[allStatusActivities.length - 1].subType === 'CANCELLED';
+    const cancelledDocument = allStatusActivities[allStatusActivities.length - 1].subType === 'CANCELLED';
     if (activities.length === 0) {
       return (
         <>
@@ -46,6 +46,41 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
       );
     }
 
+    if (!cancelledDocument) {
+      return (
+        <>
+          <h3>
+            {formatDocumentStatusTitle(
+              allStatusActivities[allStatusActivities.length - 1],
+              documentType,
+            )}
+            <Button
+              floated="right"
+              as={NavLink}
+              to={`/${documentType.toLowerCase()}/${documentId}/status/cancelled`}
+              labelPosition="left"
+              icon="close"
+              content="Cancel"
+            />
+            {/*  <Icon name="close" /> */}
+            {/*  Cancel */}
+            {/* </Button> */}
+          </h3>
+          <Step.Group stackable="tablet" widths={5} fluid>
+            {allDocumentStatuses.map((currentStatus) => (
+              <FinancialDocumentStep
+                documentId={documentId}
+                lastStatusActivity={lastStatusActivity}
+                status={currentStatus}
+                allStatusActivities={allStatusActivities}
+                documentType={documentType}
+                cancelled={cancelledDocument}
+              />
+            ))}
+          </Step.Group>
+        </>
+      );
+    }
     return (
       <>
         <h3>
@@ -53,27 +88,16 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
             allStatusActivities[allStatusActivities.length - 1],
             documentType,
           )}
-          <Button
-            floated="right"
-            as={NavLink}
-            to={`/${documentType.toLowerCase()}/${documentId}/status/cancelled`}
-            labelPosition="left"
-            icon="close"
-            content="Cancel"
-          />
-          {/*  <Icon name="close" /> */}
-          {/*  Cancel */}
-          {/* </Button> */}
         </h3>
         <Step.Group stackable="tablet" widths={5} fluid>
-          {allContractStatuses.map((currentStatus) => (
+          {allDocumentStatuses.map((currentStatus) => (
             <FinancialDocumentStep
               documentId={documentId}
               lastStatusActivity={lastStatusActivity}
               status={currentStatus}
               allStatusActivities={allStatusActivities}
               documentType={documentType}
-              cancelled={canceledDocument}
+              cancelled={cancelledDocument}
             />
           ))}
         </Step.Group>
