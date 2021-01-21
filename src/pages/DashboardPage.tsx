@@ -6,6 +6,8 @@ import {
 import { connect } from 'react-redux';
 import { AuthStatus, User } from '../clients/server.generated';
 import { RootState } from '../stores/store';
+import DashboardInvoices from '../components/dashboard/DashboardInvoices';
+import DashboardContracts from '../components/dashboard/DashboardContracts';
 
 interface Props extends RouteComponentProps {
   // eslint-disable-next-line react/no-unused-prop-types
@@ -37,6 +39,18 @@ function DashboardPage(props: Props) {
         </Container>
       </Segment>
       <Container />
+
+      <Container style={{ marginTop: '2em' }}>
+        <Grid>
+          <Grid.Row columns={2}>
+            <Grid.Column width={10} />
+            <Grid.Column width={6}>
+              <DashboardContracts />
+              <DashboardInvoices />
+            </Grid.Column>
+          </Grid.Row>
+        </Grid>
+      </Container>
     </>
   );
 }

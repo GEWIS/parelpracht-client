@@ -1,5 +1,5 @@
 import { ActivityType, GeneralActivity } from '../components/activities/GeneralActivity';
-import { formatLastUpdate } from './lastUpdate';
+import { formatLastUpdate } from './timestamp';
 
 /**
  * Format the status of the document.

@@ -1626,6 +1626,54 @@ export class Client {
     }
 
     /**
+     * @return Ok
+     */
+    getRecentContracts(): Promise<RecentContract[]> {
+        let url_ = this.baseUrl + "/contract/recent";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <RequestInit>{
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processGetRecentContracts(_response);
+        });
+    }
+
+    protected processGetRecentContracts(response: Response): Promise<RecentContract[]> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(RecentContract.fromJS(item));
+            }
+            return result200;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<RecentContract[]>(<any>null);
+    }
+
+    /**
      * @param id ID of contract to retrieve
      * @return Ok
      */
@@ -2777,6 +2825,54 @@ export class Client {
             });
         }
         return Promise.resolve<InvoiceSummary[]>(<any>null);
+    }
+
+    /**
+     * @return Ok
+     */
+    getExpiredInvoices(): Promise<ExpiredInvoice[]> {
+        let url_ = this.baseUrl + "/invoice/expired";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <RequestInit>{
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processGetExpiredInvoices(_response);
+        });
+    }
+
+    protected processGetExpiredInvoices(response: Response): Promise<ExpiredInvoice[]> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(ExpiredInvoice.fromJS(item));
+            }
+            return result200;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<ExpiredInvoice[]>(<any>null);
     }
 
     /**
@@ -7802,6 +7898,82 @@ export interface IContractSummary {
     title: string;
 }
 
+export class RecentContract implements IRecentContract {
+    id!: number;
+    title!: string;
+    companyId!: number;
+    assignedToId!: number;
+    contactId!: number;
+    createdAt!: Date;
+    updatedAt!: Date;
+    type!: ActivityType;
+    description!: string;
+    createdById!: number;
+    subType!: ContractStatus;
+
+    constructor(data?: IRecentContract) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.title = _data["title"];
+            this.companyId = _data["companyId"];
+            this.assignedToId = _data["assignedToId"];
+            this.contactId = _data["contactId"];
+            this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
+            this.updatedAt = _data["updatedAt"] ? new Date(_data["updatedAt"].toString()) : <any>undefined;
+            this.type = _data["type"];
+            this.description = _data["description"];
+            this.createdById = _data["createdById"];
+            this.subType = _data["subType"];
+        }
+    }
+
+    static fromJS(data: any): RecentContract {
+        data = typeof data === 'object' ? data : {};
+        let result = new RecentContract();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["title"] = this.title;
+        data["companyId"] = this.companyId;
+        data["assignedToId"] = this.assignedToId;
+        data["contactId"] = this.contactId;
+        data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
+        data["updatedAt"] = this.updatedAt ? this.updatedAt.toISOString() : <any>undefined;
+        data["type"] = this.type;
+        data["description"] = this.description;
+        data["createdById"] = this.createdById;
+        data["subType"] = this.subType;
+        return data; 
+    }
+}
+
+export interface IRecentContract {
+    id: number;
+    title: string;
+    companyId: number;
+    assignedToId: number;
+    contactId: number;
+    createdAt: Date;
+    updatedAt: Date;
+    type: ActivityType;
+    description: string;
+    createdById: number;
+    subType: ContractStatus;
+}
+
 export class ContractParams implements IContractParams {
     title!: string;
     companyId!: number;
@@ -8254,6 +8426,70 @@ export class InvoiceSummary implements IInvoiceSummary {
 export interface IInvoiceSummary {
     id: number;
     companyName: string;
+}
+
+export class ExpiredInvoice implements IExpiredInvoice {
+    id!: number;
+    version!: number;
+    startDate!: Date;
+    companyId!: number;
+    createdAt!: Date;
+    updatedAt!: Date;
+    createdById!: number;
+    value!: number;
+
+    constructor(data?: IExpiredInvoice) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.version = _data["version"];
+            this.startDate = _data["startDate"] ? new Date(_data["startDate"].toString()) : <any>undefined;
+            this.companyId = _data["companyId"];
+            this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
+            this.updatedAt = _data["updatedAt"] ? new Date(_data["updatedAt"].toString()) : <any>undefined;
+            this.createdById = _data["createdById"];
+            this.value = _data["value"];
+        }
+    }
+
+    static fromJS(data: any): ExpiredInvoice {
+        data = typeof data === 'object' ? data : {};
+        let result = new ExpiredInvoice();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["version"] = this.version;
+        data["startDate"] = this.startDate ? this.startDate.toISOString() : <any>undefined;
+        data["companyId"] = this.companyId;
+        data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
+        data["updatedAt"] = this.updatedAt ? this.updatedAt.toISOString() : <any>undefined;
+        data["createdById"] = this.createdById;
+        data["value"] = this.value;
+        return data; 
+    }
+}
+
+export interface IExpiredInvoice {
+    id: number;
+    version: number;
+    startDate: Date;
+    companyId: number;
+    createdAt: Date;
+    updatedAt: Date;
+    createdById: number;
+    value: number;
 }
 
 export class InvoiceParams implements IInvoiceParams {

@@ -1,21 +1,26 @@
 import React from 'react';
 import { Table } from 'semantic-ui-react';
 import { NavLink } from 'react-router-dom';
-import { Invoice } from '../../clients/server.generated';
+import { connect } from 'react-redux';
+import { ExpiredInvoice } from '../../clients/server.generated';
 import { formatPriceFull } from '../../helpers/monetary';
+import { RootState } from '../../stores/store';
+import { formatTimestampToDate } from '../../helpers/timestamp';
+import { getCompanyName } from '../../stores/company/selectors';
 
 interface Props {
-  invoice: Invoice;
+  invoice: ExpiredInvoice,
+  company: string;
 }
 
 function DashboardInvoicesRow(props: Props) {
-  const { invoice } = props;
+  const { invoice, company } = props;
 
-  const totalPrice = (): number => {
-    return invoice.products
-      .map((p) => p.basePrice - p.discount)
-      .reduce((a, b) => a + b, 0);
-  };
+  // const totalPrice = (): number => {
+  //   return invoice.products
+  //     .map((p) => p.basePrice - p.discount)
+  //     .reduce((a, b) => a + b, 0);
+  // };
 
   return (
     <Table.Row>
@@ -26,16 +31,22 @@ function DashboardInvoicesRow(props: Props) {
         </NavLink>
       </Table.Cell>
       <Table.Cell>
-        {invoice.company.name}
+        <NavLink to={`/company/${invoice.companyId}`}>
+          {company}
+        </NavLink>
       </Table.Cell>
       <Table.Cell>
-        {formatPriceFull(totalPrice())}
+        {formatTimestampToDate(invoice.startDate)}
       </Table.Cell>
       <Table.Cell>
-        2020
+        {formatPriceFull(invoice.value)}
       </Table.Cell>
     </Table.Row>
   );
 }
 
-export default DashboardInvoicesRow;
+const mapStateToProps = (state: RootState, props: { invoice: ExpiredInvoice }) => ({
+  company: getCompanyName(state, props.invoice.companyId),
+});
+
+export default connect(mapStateToProps)(DashboardInvoicesRow);
