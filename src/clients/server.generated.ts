@@ -927,6 +927,54 @@ export class Client {
     }
 
     /**
+     * @param year Financial year of the overview
+     * @return Ok
+     */
+    getDashboardProductInstanceStatistics(year: number): Promise<DashboardProductInstanceStats> {
+        let url_ = this.baseUrl + "/product/stats/statuses/{year}";
+        if (year === undefined || year === null)
+            throw new Error("The parameter 'year' must be defined.");
+        url_ = url_.replace("{year}", encodeURIComponent("" + year));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <RequestInit>{
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processGetDashboardProductInstanceStatistics(_response);
+        });
+    }
+
+    protected processGetDashboardProductInstanceStatistics(response: Response): Promise<DashboardProductInstanceStats> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = DashboardProductInstanceStats.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<DashboardProductInstanceStats>(<any>null);
+    }
+
+    /**
      * @param body List parameters to sort and filter the list
      * @return Ok
      */
@@ -7544,6 +7592,149 @@ export class Partial_ActivityParams implements IPartial_ActivityParams {
 /** Make all properties in T optional */
 export interface IPartial_ActivityParams {
     description?: string;
+}
+
+export class AnalysisResult implements IAnalysisResult {
+    amount!: number;
+    nrOfProducts!: number;
+
+    constructor(data?: IAnalysisResult) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.amount = _data["amount"];
+            this.nrOfProducts = _data["nrOfProducts"];
+        }
+    }
+
+    static fromJS(data: any): AnalysisResult {
+        data = typeof data === 'object' ? data : {};
+        let result = new AnalysisResult();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["amount"] = this.amount;
+        data["nrOfProducts"] = this.nrOfProducts;
+        return data; 
+    }
+}
+
+export interface IAnalysisResult {
+    amount: number;
+    nrOfProducts: number;
+}
+
+export class InvoicedAmounts implements IInvoicedAmounts {
+    delivered!: AnalysisResult;
+    notDelivered!: AnalysisResult;
+
+    constructor(data?: IInvoicedAmounts) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+        if (!data) {
+            this.delivered = new AnalysisResult();
+            this.notDelivered = new AnalysisResult();
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.delivered = _data["delivered"] ? AnalysisResult.fromJS(_data["delivered"]) : new AnalysisResult();
+            this.notDelivered = _data["notDelivered"] ? AnalysisResult.fromJS(_data["notDelivered"]) : new AnalysisResult();
+        }
+    }
+
+    static fromJS(data: any): InvoicedAmounts {
+        data = typeof data === 'object' ? data : {};
+        let result = new InvoicedAmounts();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["delivered"] = this.delivered ? this.delivered.toJSON() : <any>undefined;
+        data["notDelivered"] = this.notDelivered ? this.notDelivered.toJSON() : <any>undefined;
+        return data; 
+    }
+}
+
+export interface IInvoicedAmounts {
+    delivered: AnalysisResult;
+    notDelivered: AnalysisResult;
+}
+
+export class DashboardProductInstanceStats implements IDashboardProductInstanceStats {
+    suggested!: AnalysisResult;
+    contracted!: AnalysisResult;
+    delivered!: AnalysisResult;
+    invoiced!: InvoicedAmounts;
+    paid!: AnalysisResult;
+
+    constructor(data?: IDashboardProductInstanceStats) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+        if (!data) {
+            this.suggested = new AnalysisResult();
+            this.contracted = new AnalysisResult();
+            this.delivered = new AnalysisResult();
+            this.invoiced = new InvoicedAmounts();
+            this.paid = new AnalysisResult();
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.suggested = _data["suggested"] ? AnalysisResult.fromJS(_data["suggested"]) : new AnalysisResult();
+            this.contracted = _data["contracted"] ? AnalysisResult.fromJS(_data["contracted"]) : new AnalysisResult();
+            this.delivered = _data["delivered"] ? AnalysisResult.fromJS(_data["delivered"]) : new AnalysisResult();
+            this.invoiced = _data["invoiced"] ? InvoicedAmounts.fromJS(_data["invoiced"]) : new InvoicedAmounts();
+            this.paid = _data["paid"] ? AnalysisResult.fromJS(_data["paid"]) : new AnalysisResult();
+        }
+    }
+
+    static fromJS(data: any): DashboardProductInstanceStats {
+        data = typeof data === 'object' ? data : {};
+        let result = new DashboardProductInstanceStats();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["suggested"] = this.suggested ? this.suggested.toJSON() : <any>undefined;
+        data["contracted"] = this.contracted ? this.contracted.toJSON() : <any>undefined;
+        data["delivered"] = this.delivered ? this.delivered.toJSON() : <any>undefined;
+        data["invoiced"] = this.invoiced ? this.invoiced.toJSON() : <any>undefined;
+        data["paid"] = this.paid ? this.paid.toJSON() : <any>undefined;
+        return data; 
+    }
+}
+
+export interface IDashboardProductInstanceStats {
+    suggested: AnalysisResult;
+    contracted: AnalysisResult;
+    delivered: AnalysisResult;
+    invoiced: InvoicedAmounts;
+    paid: AnalysisResult;
 }
 
 export class CompanyListResponse implements ICompanyListResponse {

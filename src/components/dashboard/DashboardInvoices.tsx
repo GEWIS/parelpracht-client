@@ -38,7 +38,7 @@ class DashboardInvoices extends Component<Props, State> {
         <h3>Expired invoices</h3>
         <Table striped compact>
           <Table.Body>
-            {invoices.map((i) => <DashboardInvoicesRow invoice={i} />)}
+            {invoices.map((i) => <DashboardInvoicesRow invoice={i} key={i.id} />)}
           </Table.Body>
         </Table>
       </Segment>
