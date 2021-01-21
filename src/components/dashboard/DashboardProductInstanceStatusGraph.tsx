@@ -1,5 +1,7 @@
 import React from 'react';
-import { Popup, Segment, Table } from 'semantic-ui-react';
+import {
+  Dropdown, Grid, Popup, Segment, Table,
+} from 'semantic-ui-react';
 import { Bar } from 'react-chartjs-2';
 import { Client, DashboardProductInstanceStats } from '../../clients/server.generated';
 import { dateToFinancialYear } from '../../helpers/timestamp';
@@ -25,8 +27,13 @@ class DashboardProductInstanceStatusGraph extends React.Component<Props, State> 
 
   async componentDidMount() {
     const { financialYear } = this.state;
+    await this.updateGraph(financialYear);
+  }
+
+  async updateGraph(year: number) {
+    this.setState({ loading: true });
     const client = new Client();
-    const data = await client.getDashboardProductInstanceStatistics(2021);
+    const data = await client.getDashboardProductInstanceStatistics(year);
     this.setState({
       data,
       loading: false,
@@ -61,12 +68,44 @@ class DashboardProductInstanceStatusGraph extends React.Component<Props, State> 
     };
   }
 
+  async changeFinancialYear(value: number) {
+    this.setState({ financialYear: value, loading: true });
+    await this.updateGraph(value);
+  }
+
+  createDropdownOptions() {
+    const { data } = this.state;
+    const financialYears = data?.financialYears || [];
+    const result: object[] = [];
+    financialYears.forEach((y: number) => {
+      result.push({
+        key: y, value: y, text: y.toString(),
+      });
+    });
+    return result;
+  }
+
   render() {
-    const { loading, data } = this.state;
+    const { loading, data, financialYear } = this.state;
     const chartData = this.createBarChartDataObject();
     return (
       <Segment loading={loading}>
-        <h3 style={{ marginBottom: '2em' }}>Contracted products</h3>
+        <Grid style={{ marginBottom: '1em' }}>
+          <Grid.Row columns={2}>
+            <Grid.Column textAlign="left">
+              <h3>Financial Overview</h3>
+            </Grid.Column>
+            <Grid.Column textAlign="right" verticalAlign="bottom" style={{ fontSize: '1.2em' }}>
+              <Dropdown
+                options={this.createDropdownOptions()}
+                basic
+                value={financialYear}
+                float="right"
+                onChange={(value, d) => this.changeFinancialYear(d.value as number)}
+              />
+            </Grid.Column>
+          </Grid.Row>
+        </Grid>
         <div>
           <Bar
             data={chartData}

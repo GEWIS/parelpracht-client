@@ -7684,6 +7684,7 @@ export class DashboardProductInstanceStats implements IDashboardProductInstanceS
     delivered!: AnalysisResult;
     invoiced!: InvoicedAmounts;
     paid!: AnalysisResult;
+    financialYears!: number[];
 
     constructor(data?: IDashboardProductInstanceStats) {
         if (data) {
@@ -7698,6 +7699,7 @@ export class DashboardProductInstanceStats implements IDashboardProductInstanceS
             this.delivered = new AnalysisResult();
             this.invoiced = new InvoicedAmounts();
             this.paid = new AnalysisResult();
+            this.financialYears = [];
         }
     }
 
@@ -7708,6 +7710,11 @@ export class DashboardProductInstanceStats implements IDashboardProductInstanceS
             this.delivered = _data["delivered"] ? AnalysisResult.fromJS(_data["delivered"]) : new AnalysisResult();
             this.invoiced = _data["invoiced"] ? InvoicedAmounts.fromJS(_data["invoiced"]) : new InvoicedAmounts();
             this.paid = _data["paid"] ? AnalysisResult.fromJS(_data["paid"]) : new AnalysisResult();
+            if (Array.isArray(_data["financialYears"])) {
+                this.financialYears = [] as any;
+                for (let item of _data["financialYears"])
+                    this.financialYears!.push(item);
+            }
         }
     }
 
@@ -7725,6 +7732,11 @@ export class DashboardProductInstanceStats implements IDashboardProductInstanceS
         data["delivered"] = this.delivered ? this.delivered.toJSON() : <any>undefined;
         data["invoiced"] = this.invoiced ? this.invoiced.toJSON() : <any>undefined;
         data["paid"] = this.paid ? this.paid.toJSON() : <any>undefined;
+        if (Array.isArray(this.financialYears)) {
+            data["financialYears"] = [];
+            for (let item of this.financialYears)
+                data["financialYears"].push(item);
+        }
         return data; 
     }
 }
@@ -7735,6 +7747,7 @@ export interface IDashboardProductInstanceStats {
     delivered: AnalysisResult;
     invoiced: InvoicedAmounts;
     paid: AnalysisResult;
+    financialYears: number[];
 }
 
 export class CompanyListResponse implements ICompanyListResponse {
