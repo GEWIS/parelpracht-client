@@ -141,10 +141,6 @@ class ProductCategoryProps extends React.Component<Props, State> {
               }
             />
           </Form.Group>
-          <h2>
-            Products
-          </h2>
-          {/* TODO: add dropdown to add products */}
         </Form>
       </>
     );

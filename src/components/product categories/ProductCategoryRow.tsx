@@ -16,9 +16,6 @@ function ProductCategoryRow(props: Props) {
           { category.name }
         </NavLink>
       </Table.Cell>
-      <Table.Cell>
-        { category.products }
-      </Table.Cell>
     </Table.Row>
   );
 }
