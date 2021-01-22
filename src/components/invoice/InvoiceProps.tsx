@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import { Form, Input } from 'semantic-ui-react';
 import {
-  Invoice, InvoiceParams, ProductInstance,
+  Invoice, InvoiceParams,
 } from '../../clients/server.generated';
 import { getCompanyName } from '../../stores/company/selectors';
 import ResourceStatus from '../../stores/resourceStatus';
@@ -77,8 +77,6 @@ class InvoiceProps extends React.Component<Props, State> {
       editing,
       productInstanceIds,
       comments,
-      companyId,
-      assignedToId,
     } = this.state;
     const { companyName } = this.props;
 

@@ -96,7 +96,11 @@ class SingleContractPage extends React.Component<Props> {
         menuItem: 'Activities',
         render: () => (
           <Tab.Pane>
-            <ActivitiesList activities={contract.activities as GeneralActivity[]} />
+            <ActivitiesList
+              activities={contract.activities as GeneralActivity[]}
+              componentId={contract.id}
+              componentType={SingleEntities.Contract}
+            />
           </Tab.Pane>
         ),
       },
@@ -116,8 +120,9 @@ class SingleContractPage extends React.Component<Props> {
           <Grid.Row centered columns={1} style={{ paddingLeft: '1em', paddingRight: '1em' }}>
             <Segment secondary>
               <FinancialDocumentProgress
+                documentId={contract.id}
                 activities={contract.activities as GeneralActivity[]}
-                documentType="Contract"
+                documentType={SingleEntities.Contract}
               />
             </Segment>
           </Grid.Row>

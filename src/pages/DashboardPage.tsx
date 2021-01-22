@@ -1,10 +1,10 @@
 import React from 'react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import {
-  Button, Container, Grid, Header, Icon, Segment,
+  Container, Grid, Header, Icon, Segment,
 } from 'semantic-ui-react';
 import { connect } from 'react-redux';
-import { AuthStatus, User } from '../clients/server.generated';
+import { User } from '../clients/server.generated';
 import { RootState } from '../stores/store';
 import DashboardInvoices from '../components/dashboard/DashboardInvoices';
 import DashboardContracts from '../components/dashboard/DashboardContracts';

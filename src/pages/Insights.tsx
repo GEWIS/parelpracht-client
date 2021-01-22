@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import {
-  Button, Container, Grid, Header, Icon, Segment,
+  Container, Grid, Header, Icon, Segment,
 } from 'semantic-ui-react';
 import ContractTableExtensive from '../components/megatable/MegaTable';
 import ContractTableExtensiveControls from '../components/megatable/MegaTableControls';

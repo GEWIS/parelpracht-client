@@ -88,7 +88,11 @@ class SingleProductPage extends React.Component<Props> {
         menuItem: 'Activities',
         render: () => (
           <Tab.Pane>
-            <ActivitiesList activities={product.activities as GeneralActivity[]} />
+            <ActivitiesList
+              activities={product.activities as GeneralActivity[]}
+              componentId={product.id}
+              componentType="Product"
+            />
           </Tab.Pane>
         ),
       },

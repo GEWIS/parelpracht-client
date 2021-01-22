@@ -1,5 +1,6 @@
 export enum SingleEntities {
   Product = 'Product',
+  ProductCategory = 'ProductCategory',
   Company = 'Company',
   Contact = 'Contact',
   Invoice = 'Invoice',
