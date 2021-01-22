@@ -10,7 +10,7 @@ import {
 } from '../../stores/tables/actionCreators';
 import { countFetched, countTotal, getTable } from '../../stores/tables/selectors';
 import { Tables } from '../../stores/tables/tables';
-import { ProductCategoryRow } from './ProductCategoryRow';
+import ProductCategoryRow from './ProductCategoryRow';
 
 interface Props {
   categories: ProductCategory[];
