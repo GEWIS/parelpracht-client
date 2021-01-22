@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Button, Icon, Step } from 'semantic-ui-react';
 import { NavLink, RouteComponentProps, withRouter } from 'react-router-dom';
+import { Dispatch } from 'redux';
 import { RootState } from '../../stores/store';
 import { GeneralActivity } from './GeneralActivity';
 import FinancialDocumentStep from './FinancialDocumentStep';
@@ -11,24 +12,37 @@ import {
   getCompletedDocumentStatuses,
   getLastStatus,
 } from '../../helpers/activity';
+import DocumentStatusModal from './DocumentStatusModal';
+import { fetchSingle } from '../../stores/single/actionCreators';
+import { SingleEntities } from '../../stores/single/single';
 
 interface Props extends RouteComponentProps {
   documentId: number;
   activities: GeneralActivity[];
-  documentType: string;
+  documentType: SingleEntities;
 }
 
 interface State {
-
+  cancelModalOpen: boolean;
 }
 
 class FinancialDocumentProgress extends React.Component<Props, State> {
   public constructor(props: Props) {
     super(props);
+    this.state = {
+      cancelModalOpen: false,
+    };
   }
+
+  closeCancelModal = () => {
+    this.setState({
+      cancelModalOpen: false,
+    });
+  };
 
   public render() {
     const { activities, documentType, documentId } = this.props;
+    const { cancelModalOpen } = this.state;
     const allDocumentStatuses = getCompletedDocumentStatuses('ALL', documentType);
     const allStatusActivities = getAllStatusActivities(activities);
     const lastStatusActivity = getLastStatus(allStatusActivities);
@@ -56,11 +70,14 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
             )}
             <Button
               floated="right"
-              as={NavLink}
-              to={`/${documentType.toLowerCase()}/${documentId}/status/cancelled`}
               labelPosition="left"
               icon="close"
-              content="Cancel"
+              onClick={() => {
+                this.setState({
+                  cancelModalOpen: true,
+                });
+              }}
+              content={`Cancel ${documentType.toLowerCase()}`}
             />
             {/*  <Icon name="close" /> */}
             {/*  Cancel */}
@@ -78,6 +95,13 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
               />
             ))}
           </Step.Group>
+          <DocumentStatusModal
+            open={cancelModalOpen}
+            documentId={documentId}
+            documentType={documentType}
+            documentStatus="CANCELLED"
+            close={this.closeCancelModal}
+          />
         </>
       );
     }
@@ -106,7 +130,7 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
   }
 }
 
-const mapStateToProps = (state: RootState) => {
+const mapStateToProps = () => {
   return {
   };
 };

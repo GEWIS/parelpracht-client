@@ -9,6 +9,9 @@ import {
   getStatusActivity,
   statusApplied,
 } from '../../helpers/activity';
+import DocumentStatusModal from './DocumentStatusModal';
+import { Client, ContractStatusParams, InvoiceStatusParams } from '../../clients/server.generated';
+import { SingleEntities } from '../../stores/single/single';
 
 /**
  * Definition of used variables
@@ -19,23 +22,37 @@ interface Props extends RouteComponentProps {
   status: string;
   cancelled: boolean;
   allStatusActivities: GeneralActivity[];
-  documentType: string;
+  documentType: SingleEntities;
 }
 
 interface State {
-
+  stepModalOpen: boolean;
 }
 
 class FinancialDocumentProgress extends React.Component<Props, State> {
   public constructor(props: Props) {
     super(props);
+    this.state = {
+      stepModalOpen: false,
+    };
   }
+
+  closeStepModal = () => {
+    this.setState({
+      stepModalOpen: false,
+    });
+  };
 
   public render() {
     const {
-      documentId, lastStatusActivity, status, cancelled, allStatusActivities, documentType,
+      documentId,
+      lastStatusActivity,
+      status,
+      cancelled,
+      allStatusActivities,
+      documentType,
     } = this.props;
-
+    const { stepModalOpen } = this.state;
     /**
      * Activity with the status update that has been last been completed last.
      * Null if not completed.
@@ -139,17 +156,29 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
       // the status of the document has not been reached yet and can be completed
       if (nextStatus.includes(status)) {
         return (
-          <Step
-            className="clickable"
-            as={NavLink}
-            to={`/${documentType.toLowerCase()}/${documentId}/status/${status.toLowerCase()}`}
-          >
-            <Step.Content>
-              <Step.Title>
-                {status}
-              </Step.Title>
-            </Step.Content>
-          </Step>
+          <>
+            <Step
+              className="clickable"
+              onClick={() => {
+                this.setState({
+                  stepModalOpen: true,
+                });
+              }}
+            >
+              <Step.Content>
+                <Step.Title>
+                  {status}
+                </Step.Title>
+              </Step.Content>
+            </Step>
+            <DocumentStatusModal
+              open={stepModalOpen}
+              documentId={documentId}
+              documentType={documentType}
+              documentStatus={status}
+              close={this.closeStepModal}
+            />
+          </>
         );
       }
       // the status of the document has not been reached yet and cannot be completed yet

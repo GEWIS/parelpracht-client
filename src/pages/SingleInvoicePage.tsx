@@ -73,7 +73,11 @@ class SingleInvoicePage extends React.Component<Props> {
         menuItem: 'Activities',
         render: () => (
           <Tab.Pane>
-            <ActivitiesList activities={invoice.activities as GeneralActivity[]} />
+            <ActivitiesList
+              activities={invoice.activities as GeneralActivity[]}
+              componentId={invoice.id}
+              componentType={SingleEntities.Invoice}
+            />
           </Tab.Pane>
         ),
       },
@@ -95,7 +99,7 @@ class SingleInvoicePage extends React.Component<Props> {
               <FinancialDocumentProgress
                 documentId={invoice.id}
                 activities={invoice.activities as GeneralActivity[]}
-                documentType="Invoice"
+                documentType={SingleEntities.Invoice}
               />
             </Segment>
           </Grid.Row>

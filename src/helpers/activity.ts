@@ -5,22 +5,28 @@ import { ContractStatus, InvoiceStatus } from '../clients/server.generated';
 /**
  * Get the status type of a string
  */
-export function getContractStatus(statusString: string): ContractStatus {
-  switch (statusString) {
-    case 'CREATED': return ContractStatus.CREATED;
-    case 'PROPOSED': return ContractStatus.PROPOSED;
-    case 'SENT': return ContractStatus.SENT;
-    case 'CONFIRMED': return ContractStatus.CONFIRMED;
-    case 'FINISHED': return ContractStatus.FINISHED;
-    case 'CANCELLED': return ContractStatus.CANCELLED;
-    default: return ContractStatus.CREATED;
+export function getDocumentStatus(
+  statusString: string,
+  documentType: string,
+): ContractStatus | InvoiceStatus {
+  if (documentType.toLowerCase() === 'contract') {
+    switch (statusString) {
+      case 'CREATED':
+        return ContractStatus.CREATED;
+      case 'PROPOSED':
+        return ContractStatus.PROPOSED;
+      case 'SENT':
+        return ContractStatus.SENT;
+      case 'CONFIRMED':
+        return ContractStatus.CONFIRMED;
+      case 'FINISHED':
+        return ContractStatus.FINISHED;
+      case 'CANCELLED':
+        return ContractStatus.CANCELLED;
+      default:
+        return ContractStatus.CREATED;
+    }
   }
-}
-
-/**
- * Get the status type of a string
- */
-export function getInvoiceStatus(statusString: string): InvoiceStatus {
   switch (statusString) {
     case 'CREATED': return InvoiceStatus.CREATED;
     case 'SENT': return InvoiceStatus.SENT;
