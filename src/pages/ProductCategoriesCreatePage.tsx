@@ -39,12 +39,12 @@ class ProductCategoriesCreatePage extends React.Component<Props> {
     category = {
       id: 0,
       name: '',
-      version: 1,
       products: [],
     } as any as ProductCategory;
 
     return (
       <Modal
+        size="tiny"
         onClose={this.close}
         open
         dimmer="blurring"
