@@ -10,7 +10,7 @@ import {
 } from '../../stores/tables/actionCreators';
 import { countFetched, countTotal, getTable } from '../../stores/tables/selectors';
 import { Tables } from '../../stores/tables/tables';
-import { ProductRow } from './ProductRow';
+import ProductRow from './ProductRow';
 import ProductStatusFilter from '../tablefilters/ProductStatusFilter';
 
 interface Props {
@@ -67,6 +67,12 @@ function ProductsTable({
             >
               Status
               <ProductStatusFilter />
+            </Table.HeaderCell>
+            <Table.HeaderCell
+              sorted={column === 'category' ? direction : undefined}
+              onClick={() => changeSort('category')}
+            >
+              Category
             </Table.HeaderCell>
           </Table.Row>
         </Table.Header>
