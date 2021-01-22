@@ -1,107 +1,136 @@
 import * as React from 'react';
 import {
+  Button,
   Dimmer,
+  Dropdown,
+  Icon,
   Loader,
   Modal, Segment,
 } from 'semantic-ui-react';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
-import { RouteComponentProps, withRouter } from 'react-router-dom';
+import { NavLink, RouteComponentProps, withRouter } from 'react-router-dom';
 import {
-  Client, Contract, ProductInstance, ProductInstanceParams, ProductInstanceStatus,
+  Body,
+  Client, Contract, Invoice, InvoiceParams, InvoiceStatus, InvoiceSummary,
 } from '../clients/server.generated';
 import { fetchSingle } from '../stores/single/actionCreators';
 import { RootState } from '../stores/store';
-import ProductInstanceProps from '../components/product/ProductInstanceProps';
+import InvoiceProps from '../components/invoice/InvoiceProps';
 import ResourceStatus from '../stores/resourceStatus';
 import AlertContainer from '../components/alerts/AlertContainer';
 import { getSingle } from '../stores/single/selectors';
 import { SingleEntities } from '../stores/single/single';
+import { SummaryCollections } from '../stores/summaries/summaries';
+import { getSummaryCollection } from '../stores/summaries/selectors';
 
-interface SelfProps extends RouteComponentProps<{contractId: string, productInstanceId?: string}> {
-  create?: boolean;
+interface SelfProps extends RouteComponentProps<{contractId: string}> {
 }
 
 interface Props extends SelfProps {
-  productInstance: ProductInstance | undefined;
+  productInstanceIds: number[];
+  companyId: number;
+  invoices: InvoiceSummary[];
   status: ResourceStatus;
   fetchContract: (id: number) => void;
 }
 
-class ContractInvoiceModal extends React.Component<Props> {
-  close = () => {
+interface State {
+  open: boolean;
+  selectedInvoice: number | undefined;
+}
+
+class ContractInvoiceModal extends React.Component<Props, State> {
+  public constructor(props: Props) {
+    super(props);
     const { contractId } = this.props.match.params;
-    this.props.fetchContract(parseInt(contractId, 10));
-    this.props.history.goBack();
-  };
+    this.state = {
+      open: false,
+      selectedInvoice: undefined,
+    };
+  }
 
-  saveProductInstance = async (productInstance: ProductInstanceParams) => {
+  save = async () => {
     const client = new Client();
-    await client.updateProduct2(parseInt(this.props.match.params.contractId!, 10),
-      parseInt(this.props.match.params.productInstanceId!, 10), productInstance);
-    this.close();
-  };
-
-  createProductInstance = async (productInstance: ProductInstanceParams) => {
-    const client = new Client();
-    await client.addProduct(parseInt(this.props.match.params.contractId!, 10), productInstance);
-    this.close();
+    if (this.state.selectedInvoice === -1) {
+      const invoice = await client.createInvoice(new InvoiceParams({
+        companyId: this.props.companyId,
+        productInstanceIds: this.props.productInstanceIds,
+      }));
+      this.props.history.push(`/invoice/${invoice.id}`);
+    } else if (this.state.selectedInvoice !== undefined) {
+      await Promise.all(this.props.productInstanceIds.map((x) => {
+        return client.addProduct2(this.state.selectedInvoice!, new Body({ productId: x }));
+      }));
+      this.props.history.push(`/invoice/${this.state.selectedInvoice}`);
+    }
   };
 
   public render() {
-    let productInstance: ProductInstance | undefined;
-    if (this.props.create) {
-      const { contractId } = this.props.match.params;
-      productInstance = {
-        id: 0,
-        contractId: parseInt(contractId, 10),
-        productId: 0,
-        basePrice: 0,
-        discount: 0,
-        comments: '',
-        status: ProductInstanceStatus.NOTDELIVERED,
-      } as any as ProductInstance;
-    } else {
-      productInstance = this.props.productInstance;
-    }
+    const {
+      invoices,
+    } = this.props;
+    const { selectedInvoice } = this.state;
+    const dropdownOptions = [{ key: -1, text: 'Add to new invoice', value: -1 }, ...invoices.map((x) => ({
+      key: x.id,
+      text: x.id.toString(),
+      description: x.companyName,
+      value: x.id,
+    }))];
 
-    if (productInstance === undefined) {
-      return (
-        <Modal
-          onClose={this.close}
-          closeIcon
-          open
-          dimmer="blurring"
-          size="tiny"
-        >
-          <Segment placeholder attached="bottom">
-            <AlertContainer />
-            <Dimmer active inverted>
-              <Loader />
-            </Dimmer>
-          </Segment>
-        </Modal>
-      );
-    }
+    dropdownOptions.push();
+
+    const dropdown = (
+      <Dropdown
+        placeholder="Invoice"
+        search
+        selection
+        options={dropdownOptions}
+        value={selectedInvoice}
+        onChange={(e, data) => this.setState({ selectedInvoice: data.value as any })}
+      />
+    );
+
+    const trigger = (
+      <Button
+        icon
+        labelPosition="left"
+        floated="right"
+        style={{ marginTop: '-0.5em' }}
+        basic
+        disabled={this.props.productInstanceIds.length === 0}
+      >
+        Add
+        {' '}
+        {(this.props.productInstanceIds.length)}
+        {' '}
+        products to Invoice
+      </Button>
+    );
 
     return (
       <Modal
-        onClose={this.close}
-        open
+        onClose={() => { this.setState({ open: false }); }}
+        onOpen={() => { this.setState({ open: true }); }}
         closeIcon
+        open={this.state.open}
         dimmer="blurring"
         size="tiny"
+        trigger={trigger}
       >
         <Segment attached="bottom">
           <AlertContainer />
-          <ProductInstanceProps
-            productInstance={productInstance}
-            status={this.props.status}
-            create={this.props.create}
-            onCancel={() => { }}
-            saveProductInstance={this.saveProductInstance}
-            createProductInstance={this.createProductInstance}
-          />
+          {dropdown}
+          <Button
+            icon
+            labelPosition="left"
+            color="green"
+            floated="right"
+            onClick={this.save}
+          >
+            <Icon name="save" />
+            Save
+          </Button>
         </Segment>
       </Modal>
     );
@@ -110,11 +139,7 @@ class ContractInvoiceModal extends React.Component<Props> {
 
 const mapStateToProps = (state: RootState, props: SelfProps) => {
   return {
-    productInstance: !props.create
-      ? getSingle<Contract>(state, SingleEntities.Contract).data?.products.find(
-        (p) => p.id === parseInt(props.match.params.productInstanceId!, 10),
-      )
-      : undefined,
+    invoices: getSummaryCollection<InvoiceSummary>(state, SummaryCollections.Invoices).options,
     status: getSingle<Contract>(state, SingleEntities.Contract).status,
   };
 };

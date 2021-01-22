@@ -171,10 +171,6 @@ function Routes(props: Props) {
             <SingleContractPage />
             <ContractProductInstanceModal />
           </Route>
-          <Route path="/contract/:contractId/invoice" exact>
-            <SingleContractPage />
-            <ContractInvoiceModal />
-          </Route>
           {/* Users */}
           <Route path="/user" exact>
             <UsersPage />

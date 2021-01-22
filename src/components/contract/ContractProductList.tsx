@@ -11,6 +11,7 @@ import { getSingle } from '../../stores/single/selectors';
 import { SingleEntities } from '../../stores/single/single';
 import { RootState } from '../../stores/store';
 import { formatPrice } from '../../helpers/monetary';
+import ContractInvoiceModal from '../../pages/ContractInvoiceModal';
 
 interface Props extends RouteComponentProps {
   contract: Contract | undefined;
@@ -74,22 +75,10 @@ class ContractProductList extends React.Component<Props, State> {
           >
             Add Product
           </Button>
-          <Button
-            icon
-            labelPosition="left"
-            floated="right"
-            style={{ marginTop: '-0.5em' }}
-            basic
-            as={NavLink}
-            to={`${this.props.location.pathname}/invoice`}
-            disabled={selected.length === 0}
-          >
-            Add
-            {' '}
-            {(selected.length)}
-            {' '}
-            products to Invoice
-          </Button>
+          <ContractInvoiceModal
+            productInstanceIds={selected}
+            companyId={contract.companyId}
+          />
 
         </h2>
         <Table celled striped>
