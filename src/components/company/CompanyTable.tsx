@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
-import { Button, Table } from 'semantic-ui-react';
+import { Table } from 'semantic-ui-react';
 import { Company } from '../../clients/server.generated';
 import TablePagination from '../TablePagination';
 import { RootState } from '../../stores/store';

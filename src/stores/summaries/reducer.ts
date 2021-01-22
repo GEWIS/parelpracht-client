@@ -2,11 +2,11 @@ import { combineReducers } from 'redux';
 import {
   CategorySummary,
   CompanySummary, ContactSummary, ContractSummary,
-  InvoiceSummary, ProductCategory, ProductSummary, UserSummary,
+  InvoiceSummary, ProductSummary, UserSummary,
 } from '../../clients/server.generated';
 import { SummaryCollections } from './summaries';
 import createSummariesReducer from './summariesReducer';
-import { SummaryBase, SummaryCollectionState } from './summariesState';
+import { SummaryCollectionState } from './summariesState';
 
 export interface SummariesState {
   [SummaryCollections.Products]: SummaryCollectionState<ProductSummary>;

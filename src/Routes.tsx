@@ -6,7 +6,6 @@ import {
   Container, Dimmer, Header, Loader,
 } from 'semantic-ui-react';
 import { connect } from 'react-redux';
-import _ from 'lodash';
 import ProductsPage from './pages/ProductsPage';
 import SingleProductPage from './pages/SingleProductPage';
 import ProductCreatePage from './pages/ProductCreatePage';

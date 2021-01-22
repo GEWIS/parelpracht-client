@@ -8,7 +8,7 @@ import { ProductInstance } from '../../clients/server.generated';
 import './ContractComponent.scss';
 import { RootState } from '../../stores/store';
 import { getProductName } from '../../stores/product/selectors';
-import { formatPrice, formatPriceDiscount, formatPriceFull } from '../../helpers/monetary';
+import { formatPriceDiscount, formatPriceFull } from '../../helpers/monetary';
 
 interface Props extends RouteComponentProps {
   productInstance: ProductInstance;

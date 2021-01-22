@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import React from 'react';
-import { CategorySummary, ProductSummary } from '../../clients/server.generated';
+import { CategorySummary } from '../../clients/server.generated';
 import ColumnFilter from '../ColumnFilter';
 import { RootState } from '../../stores/store';
 import { getSummaryCollection } from '../../stores/summaries/selectors';
