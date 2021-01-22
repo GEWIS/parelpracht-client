@@ -37,6 +37,9 @@ import Footer from './components/navigation/Footer';
 import DashboardPage from './pages/DashboardPage';
 import NotFound from './pages/NotFound';
 import Insights from './pages/Insights';
+import ProductCategoriesPage from './pages/ProductCategoriesPage';
+import ProductCategoriesCreatePage from './pages/ProductCategoriesCreatePage';
+import ProductCategoryModal from './pages/ProductCategoryModal';
 
 interface Props extends RouteComponentProps {
   // eslint-disable-next-line react/no-unused-prop-types
@@ -115,6 +118,18 @@ function Routes(props: Props) {
           <Route path="/product/:productId/contract/new" exact>
             <SingleProductPage />
             <ContractCreatePage />
+          </Route>
+          {/* Product Categories */}
+          <Route path="/category" exact>
+            <ProductCategoriesPage />
+          </Route>
+          <Route path="/category/new" exact>
+            <ProductCategoriesPage />
+            <ProductCategoriesCreatePage />
+          </Route>
+          <Route path="/category/:categoryId" exact>
+            <ProductCategoriesPage />
+            <ProductCategoryModal />
           </Route>
           {/* Company */}
           <Route path="/company" exact>
