@@ -14,6 +14,7 @@ import PropsButtons from '../PropsButtons';
 import { SingleEntities } from '../../stores/single/single';
 import { formatStatus } from '../../helpers/activity';
 import { createSingleStatus } from '../../stores/single/actionCreators';
+import { DocumentStatus } from './DocumentStatus';
 
 interface Props {
   create?: boolean;
@@ -23,7 +24,7 @@ interface Props {
   resourceStatus: ResourceStatus;
   documentId: number;
   documentType: SingleEntities;
-  documentStatus: ContractStatus | InvoiceStatus;
+  documentStatus: DocumentStatus;
 
   close: () => void;
 }
@@ -63,14 +64,14 @@ class DocumentStatusProps extends React.Component<Props, State> {
   toInvoiceParams = (): InvoiceStatusParams => {
     return new InvoiceStatusParams({
       description: this.state.description,
-      subType: this.props.documentStatus as InvoiceStatus,
+      subType: this.props.documentStatus as any as InvoiceStatus,
     });
   };
 
   toContractParams = (): ContractStatusParams => {
     return new ContractStatusParams({
       description: this.state.description,
-      subType: this.props.documentStatus as ContractStatus,
+      subType: this.props.documentStatus as any as ContractStatus,
     });
   };
 
@@ -85,17 +86,9 @@ class DocumentStatusProps extends React.Component<Props, State> {
     this.props.close();
   };
 
-  saveInvoice = () => {
+  saveDocument = () => {
     this.props.createSingleStatus(
-      SingleEntities.Invoice,
-      this.props.documentId,
-      this.toInvoiceParams(),
-    );
-  };
-
-  saveContract = () => {
-    this.props.createSingleStatus(
-      SingleEntities.Contract,
+      this.props.documentType,
       this.props.documentId,
       this.toInvoiceParams(),
     );
@@ -108,45 +101,6 @@ class DocumentStatusProps extends React.Component<Props, State> {
     } = this.state;
     const { documentStatus, documentType } = this.props;
 
-    if (documentType === SingleEntities.Invoice) {
-      return (
-        <>
-          <h2>
-            {this.props.create ? `Post ${formatStatus(documentStatus)} Status`
-              : `${formatStatus(documentStatus)} Details} `}
-
-            <PropsButtons
-              editing={editing}
-              canDelete={undefined}
-              entity={SingleEntities.Invoice}
-              status={this.props.resourceStatus}
-              cancel={this.cancel}
-              edit={this.edit}
-              save={this.saveInvoice}
-              remove={() => {
-              }}
-            />
-          </h2>
-
-          <Form style={{ marginTop: '2em' }}>
-            <Form.Field disabled={!editing}>
-              {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-              <label htmlFor="form-input-description">
-                Comments
-              </label>
-              <TextArea
-                id="form-delivery-spec-english"
-                value={description}
-                onChange={
-                  (e) => this.setState({ description: e.target.value })
-                }
-                placeholder="Comments"
-              />
-            </Form.Field>
-          </Form>
-        </>
-      );
-    }
     return (
       <>
         <h2>
@@ -156,11 +110,11 @@ class DocumentStatusProps extends React.Component<Props, State> {
           <PropsButtons
             editing={editing}
             canDelete={undefined}
-            entity={SingleEntities.Contract}
+            entity={documentType}
             status={this.props.resourceStatus}
             cancel={this.cancel}
             edit={this.edit}
-            save={this.saveContract}
+            save={this.saveDocument}
             remove={() => {
             }}
           />
@@ -176,8 +130,8 @@ class DocumentStatusProps extends React.Component<Props, State> {
               id="form-delivery-spec-english"
               value={description}
               onChange={
-                  (e) => this.setState({ description: e.target.value })
-                }
+                (e) => this.setState({ description: e.target.value })
+              }
               placeholder="Comments"
             />
           </Form.Field>

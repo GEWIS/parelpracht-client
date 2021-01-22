@@ -1,20 +1,18 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Button, Icon, Step } from 'semantic-ui-react';
-import { NavLink, RouteComponentProps, withRouter } from 'react-router-dom';
-import { Dispatch } from 'redux';
-import { RootState } from '../../stores/store';
+import { Button, Step } from 'semantic-ui-react';
+import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { GeneralActivity } from './GeneralActivity';
 import FinancialDocumentStep from './FinancialDocumentStep';
 import {
   formatDocumentStatusTitle,
+  getAllDocumentStatuses,
   getAllStatusActivities,
-  getCompletedDocumentStatuses,
   getLastStatus,
 } from '../../helpers/activity';
 import DocumentStatusModal from './DocumentStatusModal';
-import { fetchSingle } from '../../stores/single/actionCreators';
 import { SingleEntities } from '../../stores/single/single';
+import { DocumentStatus } from './DocumentStatus';
 
 interface Props extends RouteComponentProps {
   documentId: number;
@@ -43,7 +41,7 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
   public render() {
     const { activities, documentType, documentId } = this.props;
     const { cancelModalOpen } = this.state;
-    const allDocumentStatuses = getCompletedDocumentStatuses('ALL', documentType);
+    const allDocumentStatuses = getAllDocumentStatuses(documentType);
     const allStatusActivities = getAllStatusActivities(activities);
     const lastStatusActivity = getLastStatus(allStatusActivities);
     const cancelledDocument = allStatusActivities[allStatusActivities.length - 1].subType === 'CANCELLED';
@@ -79,9 +77,6 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
               }}
               content={`Cancel ${documentType.toLowerCase()}`}
             />
-            {/*  <Icon name="close" /> */}
-            {/*  Cancel */}
-            {/* </Button> */}
           </h3>
           <Step.Group stackable="tablet" widths={5} fluid>
             {allDocumentStatuses.map((currentStatus) => (
@@ -99,7 +94,7 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
             open={cancelModalOpen}
             documentId={documentId}
             documentType={documentType}
-            documentStatus="CANCELLED"
+            documentStatus={DocumentStatus.CANCELLED}
             close={this.closeCancelModal}
           />
         </>

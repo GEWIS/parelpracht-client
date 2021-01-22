@@ -20,8 +20,8 @@ import ResourceStatus from '../../stores/resourceStatus';
 import AlertContainer from '../alerts/AlertContainer';
 import { getSingle } from '../../stores/single/selectors';
 import { SingleEntities } from '../../stores/single/single';
-import { getDocumentStatus } from '../../helpers/activity';
 import DocumentStatusProps from './DocumentStatusProps';
+import { DocumentStatus } from './DocumentStatus';
 
 interface Props extends RouteComponentProps {
   resourceStatus: ResourceStatus;
@@ -32,7 +32,7 @@ interface Props extends RouteComponentProps {
   open: boolean;
   documentId: number;
   documentType: SingleEntities;
-  documentStatus: string;
+  documentStatus: DocumentStatus;
 }
 
 class DocumentStatusModal extends React.Component<Props> {
@@ -48,20 +48,16 @@ class DocumentStatusModal extends React.Component<Props> {
       open,
       close,
     } = this.props;
-    const documentSubType: ContractStatus | InvoiceStatus = getDocumentStatus(
-      documentStatus.toUpperCase(),
-      documentType,
-    );
     let documentStatusParams: InvoiceStatusParams | ContractStatusParams | undefined;
     if (documentType === SingleEntities.Contract) {
       documentStatusParams = {
         description: '',
-        subType: documentSubType as ContractStatus,
+        subType: documentStatus as any as ContractStatus,
       } as any as ContractStatusParams;
     } else {
       documentStatusParams = {
         description: '',
-        subType: documentSubType as InvoiceStatus,
+        subType: documentStatus as any as InvoiceStatus,
       } as any as InvoiceStatusParams;
     }
 
@@ -98,7 +94,7 @@ class DocumentStatusModal extends React.Component<Props> {
             documentStatusParams={documentStatusParams}
             documentId={documentId}
             documentType={documentType}
-            documentStatus={documentSubType}
+            documentStatus={documentStatus}
             resourceStatus={this.props.resourceStatus}
             create
             close={close}
