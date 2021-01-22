@@ -189,6 +189,7 @@ function Routes(props: Props) {
           <Route path="/insights" exact>
             <Insights />
           </Route>
+
           {/* Users */}
           <Route path="/user" exact>
             <UsersPage />

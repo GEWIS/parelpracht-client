@@ -1,37 +1,50 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Step } from 'semantic-ui-react';
+import { Button, Step } from 'semantic-ui-react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
-import { RootState } from '../../stores/store';
 import { GeneralActivity } from './GeneralActivity';
 import FinancialDocumentStep from './FinancialDocumentStep';
 import {
   formatDocumentStatusTitle,
+  getAllDocumentStatuses,
   getAllStatusActivities,
-  getCompletedContractStatuses,
   getLastStatus,
 } from '../../helpers/activity';
+import DocumentStatusModal from './DocumentStatusModal';
+import { SingleEntities } from '../../stores/single/single';
+import { DocumentStatus } from './DocumentStatus';
 
 interface Props extends RouteComponentProps {
+  documentId: number;
   activities: GeneralActivity[];
-  documentType: string;
+  documentType: SingleEntities;
 }
 
 interface State {
-
+  cancelModalOpen: boolean;
 }
 
 class FinancialDocumentProgress extends React.Component<Props, State> {
   public constructor(props: Props) {
     super(props);
+    this.state = {
+      cancelModalOpen: false,
+    };
   }
 
+  closeCancelModal = () => {
+    this.setState({
+      cancelModalOpen: false,
+    });
+  };
+
   public render() {
-    const { activities, documentType } = this.props;
-    const allContractStatuses = getCompletedContractStatuses('ALL', documentType);
+    const { activities, documentType, documentId } = this.props;
+    const { cancelModalOpen } = this.state;
+    const allDocumentStatuses = getAllDocumentStatuses(documentType);
     const allStatusActivities = getAllStatusActivities(activities);
     const lastStatusActivity = getLastStatus(allStatusActivities);
-    const canceledDocument = allStatusActivities[allStatusActivities.length - 1].subType === 'CANCELLED';
+    const cancelledDocument = allStatusActivities[allStatusActivities.length - 1].subType === 'CANCELLED';
     if (activities.length === 0) {
       return (
         <>
@@ -45,6 +58,48 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
       );
     }
 
+    if (!cancelledDocument) {
+      return (
+        <>
+          <h3>
+            {formatDocumentStatusTitle(
+              allStatusActivities[allStatusActivities.length - 1],
+              documentType,
+            )}
+            <Button
+              floated="right"
+              labelPosition="left"
+              icon="close"
+              onClick={() => {
+                this.setState({
+                  cancelModalOpen: true,
+                });
+              }}
+              content={`Cancel ${documentType.toLowerCase()}`}
+            />
+          </h3>
+          <Step.Group stackable="tablet" widths={5} fluid>
+            {allDocumentStatuses.map((currentStatus) => (
+              <FinancialDocumentStep
+                documentId={documentId}
+                lastStatusActivity={lastStatusActivity}
+                status={currentStatus}
+                allStatusActivities={allStatusActivities}
+                documentType={documentType}
+                cancelled={cancelledDocument}
+              />
+            ))}
+          </Step.Group>
+          <DocumentStatusModal
+            open={cancelModalOpen}
+            documentId={documentId}
+            documentType={documentType}
+            documentStatus={DocumentStatus.CANCELLED}
+            close={this.closeCancelModal}
+          />
+        </>
+      );
+    }
     return (
       <>
         <h3>
@@ -53,14 +108,15 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
             documentType,
           )}
         </h3>
-        <Step.Group ordered stackable="tablet" widths={5} fluid>
-          {allContractStatuses.map((currentStatus) => (
+        <Step.Group stackable="tablet" widths={5} fluid>
+          {allDocumentStatuses.map((currentStatus) => (
             <FinancialDocumentStep
+              documentId={documentId}
               lastStatusActivity={lastStatusActivity}
               status={currentStatus}
               allStatusActivities={allStatusActivities}
               documentType={documentType}
-              cancelled={canceledDocument}
+              cancelled={cancelledDocument}
             />
           ))}
         </Step.Group>
@@ -69,7 +125,7 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
   }
 }
 
-const mapStateToProps = (state: RootState) => {
+const mapStateToProps = () => {
   return {
   };
 };

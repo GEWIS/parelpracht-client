@@ -1,5 +1,8 @@
 import { ActivityType, GeneralActivity } from '../components/activities/GeneralActivity';
 import { formatLastUpdate } from './lastUpdate';
+import { ContractStatus, InvoiceStatus } from '../clients/server.generated';
+import { SingleEntities } from '../stores/single/single';
+import { DocumentStatus } from '../components/activities/DocumentStatus';
 
 /**
  * Format the status of the document.
@@ -38,17 +41,10 @@ export function formatActivityDate(date: Date, userName: string): string {
  * Get the status in a string with the first character as uppercase and the rest lowercase.
  */
 export function formatStatus(status: string | undefined): string {
-  switch (status) {
-    case 'CREATED': return 'Created';
-    case 'PROPOSED': return 'Proposed';
-    case 'SENT': return 'Sent';
-    case 'CONFIRMED': return 'Confirmed';
-    case 'FINISHED': return 'Finished';
-    case 'CANCELLED': return 'Cancelled';
-    case 'PAID': return 'Paid';
-    case 'IRRECOVERABLE': return 'Irrecoverable';
-    default: return 'Unknown';
+  if (status === undefined) {
+    return 'Unknown';
   }
+  return status[0].toUpperCase() + status.slice(1).toLowerCase();
 }
 
 /**
@@ -67,40 +63,75 @@ export function getAllStatusActivities(activities: GeneralActivity[]): GeneralAc
 /**
  * Get all the contract statuses that applied to a certain status.
  */
-export function getCompletedContractStatuses(status: string, type: string): string[] {
-  if (type === 'Invoice') {
+export function getAllDocumentStatuses(
+  type: SingleEntities,
+): DocumentStatus[] {
+  if (type === SingleEntities.Invoice) {
+    return [InvoiceStatus.CREATED,
+      InvoiceStatus.SENT,
+      InvoiceStatus.PAID] as any as DocumentStatus[];
+  }
+  return [ContractStatus.CREATED,
+    ContractStatus.PROPOSED,
+    ContractStatus.SENT,
+    ContractStatus.CONFIRMED,
+    ContractStatus.FINISHED] as any as DocumentStatus[];
+}
+
+/**
+ * Get all the contract statuses that applied to a certain status.
+ */
+export function getCompletedDocumentStatuses(
+  status: string | undefined,
+  type: SingleEntities,
+): DocumentStatus[] {
+  if (status === undefined) {
+    return [];
+  }
+  if (type === SingleEntities.Invoice) {
     switch (status) {
-      case 'CREATED':
-        return ['Created'];
-      case 'SENT':
-        return ['Created', 'Sent'];
-      case 'PAID':
-        return ['Created', 'Sent', 'Paid'];
-      case 'IRRECOVERABLE':
-        return ['Created', 'Sent', 'Irrecoverable'];
-      case 'CANCELLED':
-        return ['Cancelled'];
-      case 'ALL':
-        return ['Created', 'Sent', 'Paid'];
+      case InvoiceStatus.CREATED:
+        return [InvoiceStatus.CREATED] as any as DocumentStatus[];
+      case InvoiceStatus.SENT:
+        return [InvoiceStatus.CREATED,
+          InvoiceStatus.SENT] as any as DocumentStatus[];
+      case InvoiceStatus.PAID:
+        return [InvoiceStatus.CREATED,
+          InvoiceStatus.SENT,
+          InvoiceStatus.PAID] as any as DocumentStatus[];
+      case InvoiceStatus.IRRECOVERABLE:
+        return [InvoiceStatus.CREATED,
+          InvoiceStatus.SENT,
+          InvoiceStatus.IRRECOVERABLE] as any as DocumentStatus[];
+      case InvoiceStatus.CANCELLED:
+        return [InvoiceStatus.CANCELLED] as any as DocumentStatus[];
       default:
         return [];
     }
   }
   switch (status) {
-    case 'CREATED':
-      return ['Created'];
-    case 'PROPOSED':
-      return ['Created', 'Proposed'];
-    case 'SENT':
-      return ['Created', 'Proposed', 'Sent'];
-    case 'CONFIRMED':
-      return ['Created', 'Proposed', 'Sent', 'Confirmed'];
-    case 'FINISHED':
-      return ['Created', 'Proposed', 'Sent', 'Confirmed', 'Finished'];
-    case 'CANCELLED':
-      return ['Cancelled'];
-    case 'ALL':
-      return ['Created', 'Proposed', 'Sent', 'Confirmed', 'Finished'];
+    case ContractStatus.CREATED:
+      return [ContractStatus.CREATED] as any as DocumentStatus[];
+    case ContractStatus.PROPOSED:
+      return [ContractStatus.CREATED,
+        ContractStatus.PROPOSED] as any as DocumentStatus[];
+    case ContractStatus.SENT:
+      return [ContractStatus.CREATED,
+        ContractStatus.PROPOSED,
+        ContractStatus.SENT] as any as DocumentStatus[];
+    case ContractStatus.CONFIRMED:
+      return [ContractStatus.CREATED,
+        ContractStatus.PROPOSED,
+        ContractStatus.SENT,
+        ContractStatus.CONFIRMED] as any as DocumentStatus[];
+    case ContractStatus.FINISHED:
+      return [ContractStatus.CREATED,
+        ContractStatus.PROPOSED,
+        ContractStatus.SENT,
+        ContractStatus.CONFIRMED,
+        ContractStatus.FINISHED] as any as DocumentStatus[];
+    case ContractStatus.CANCELLED:
+      return [ContractStatus.CANCELLED] as any as DocumentStatus[];
     default:
       return [];
   }
@@ -123,18 +154,51 @@ export function getStatusActivity(
 }
 
 /**
+ * Return the status that can be completed next in array. Note that PROPOSED
+ * status can be skipped, so we have an array with PROPOSED and the status after that
+ */
+export function getNextStatus(
+  currentStatusActivity: GeneralActivity,
+  documentType: SingleEntities,
+): string[] {
+  const currentStatus = currentStatusActivity.subType;
+  if (currentStatus == null) {
+    return [];
+  }
+  // fetch all possible statuses
+  const allStatuses = getAllDocumentStatuses(documentType);
+  const result: string[] = [];
+  // loop over all statuses
+  for (let i = 0; i < allStatuses.length; i++) {
+    // check if the status is the current status
+    if (allStatuses[i].toUpperCase() === currentStatus) {
+      // next item does exist
+      if (typeof allStatuses[i + 1] !== 'undefined') {
+        result.push(allStatuses[i + 1]);
+        if (result[0].toUpperCase() === 'PROPOSED') {
+          result.push(allStatuses[i + 2]);
+        }
+      }
+      // if the next status does not exist
+      return result;
+    }
+  }
+  return result;
+}
+
+/**
  * Check if the status has applied to a document.
  * @return boolean true if status applied and false if it did not apply
  */
 export function statusApplied(
   status: string,
   lastStatusActivity: GeneralActivity,
-  documentType: string,
+  documentType: SingleEntities,
 ): boolean {
   if (lastStatusActivity.subType == null) {
     return false;
   }
-  const completedStatuses = getCompletedContractStatuses(
+  const completedStatuses = getCompletedDocumentStatuses(
     lastStatusActivity.subType.toUpperCase(),
     documentType,
   );
