@@ -8,6 +8,8 @@ import { GeneralActivity } from './GeneralActivity';
 
 interface Props extends RouteComponentProps {
   activities: GeneralActivity[];
+  componentId: number;
+  componentType: string;
 }
 
 interface State {
@@ -20,7 +22,7 @@ class ActivitiesList extends React.Component<Props, State> {
   }
 
   public render() {
-    const { activities } = this.props;
+    const { activities, componentId, componentType } = this.props;
 
     if (activities === undefined) {
       return (
@@ -45,14 +47,6 @@ class ActivitiesList extends React.Component<Props, State> {
       <>
         <h3>
           Activities
-          {/* <Button */}
-          {/*  floated="right" */}
-          {/*  as={NavLink} */}
-          {/*  to={`/${activities[0].type.toLowerCase()}/${activities[0]}/comment`} */}
-          {/*  labelPosition="left" */}
-          {/*  icon="close" */}
-          {/*  content="Cancel" */}
-          {/* /> */}
         </h3>
         {activities.map((activity) => (
           <ActivityComponent activity={activity as GeneralActivity} />
