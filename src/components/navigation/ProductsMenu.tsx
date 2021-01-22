@@ -1,17 +1,10 @@
-import React, { useEffect, useState } from 'react';
-import { connect } from 'react-redux';
+import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
-import { Dispatch } from 'redux';
 import {
-  Dropdown, Icon, Loader, Menu,
+  Dropdown, Icon, Menu,
 } from 'semantic-ui-react';
-import ResourceStatus from '../../stores/resourceStatus';
-import { RootState } from '../../stores/store';
 
-interface Props {
-}
-
-function ProductsMenu(props: Props) {
+function ProductsMenu() {
   const [isOpen, changeOpen] = useState(false);
 
   return (
