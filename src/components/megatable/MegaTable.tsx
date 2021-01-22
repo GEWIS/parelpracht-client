@@ -11,7 +11,7 @@ import {
   changeSortTable,
   fetchTable,
   nextPageTable,
-  prevPageTable,
+  prevPageTable, setFilterTable,
   setTakeTable,
 } from '../../stores/tables/actionCreators';
 import TablePagination from '../TablePagination';
@@ -30,6 +30,7 @@ interface Props {
   take: number;
 
   fetchContracts: () => void;
+  setTableFilter: (filter: { column: string, values: any[] }) => void;
   changeSort: (column: string) => void;
   setTake: (take: number) => void;
   prevPage: () => void;
@@ -37,11 +38,12 @@ interface Props {
 }
 
 function MegaTable({
-  companies, fetchContracts, column, direction, changeSort,
+  companies, fetchContracts, setTableFilter, column, direction, changeSort,
   total, fetched, skip, take,
   prevPage, nextPage, setTake,
 }: Props) {
   useEffect(() => {
+    setTableFilter({ column: 'invoiced', values: [false] });
     fetchContracts();
   }, []);
   return (
@@ -101,6 +103,9 @@ const mapStateToProps = (state: RootState) => {
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
   fetchContracts: () => dispatch(fetchTable(Tables.ETCompanies)),
+  setTableFilter: (filter: { column: string, values: any[] }) => {
+    dispatch(setFilterTable(Tables.ETCompanies, filter));
+  },
   changeSort: (column: string) => {
     dispatch(changeSortTable(Tables.ETCompanies, column));
     dispatch(fetchTable(Tables.ETCompanies));
