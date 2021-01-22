@@ -38,6 +38,7 @@ import DashboardPage from './pages/DashboardPage';
 import NotFound from './pages/NotFound';
 import Insights from './pages/Insights';
 import ProductCategoriesPage from './pages/ProductCategoriesPage';
+import ProductCategoriesCreatePage from './pages/ProductCategoriesCreatePage';
 
 interface Props extends RouteComponentProps {
   // eslint-disable-next-line react/no-unused-prop-types
@@ -121,8 +122,9 @@ function Routes(props: Props) {
           <Route path="/category" exact>
             <ProductCategoriesPage />
           </Route>
-          <Route path="/user/new" exact>
+          <Route path="/category/new" exact>
             <ProductCategoriesPage />
+            <ProductCategoriesCreatePage />
           </Route>
           {/* Company */}
           <Route path="/company" exact>

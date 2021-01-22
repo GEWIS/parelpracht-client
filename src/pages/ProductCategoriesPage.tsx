@@ -4,6 +4,7 @@ import {
   Button, Container, Grid, Header, Icon, Segment,
 } from 'semantic-ui-react';
 import ProductCategoriesTable from '../components/product categories/ProductCategoriesTable';
+import ProductCategoriesTableControls from '../components/product categories/ProductCategoriesTableControls';
 
 function ProductCategoriesPage(props: RouteComponentProps) {
   return (
@@ -28,7 +29,7 @@ function ProductCategoriesPage(props: RouteComponentProps) {
             </Grid.Column>
           </Grid>
 
-          {/* <ProductCategoriesTableControls /> */}
+          <ProductCategoriesTableControls />
 
         </Container>
       </Segment>
