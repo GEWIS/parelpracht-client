@@ -10,7 +10,7 @@ import './ContractComponent.scss';
 import { RootState } from '../../stores/store';
 /* import TablePagination from '../TablePagination';
  */import { getContactName } from '../../stores/contact/selectors';
-import { formatLastUpdate } from '../../helpers/lastUpdate';
+import { formatLastUpdate } from '../../helpers/timestamp';
 
 interface Props extends RouteComponentProps {
   contract: Contract;

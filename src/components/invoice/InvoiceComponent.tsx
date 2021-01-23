@@ -8,7 +8,7 @@ import { getCompanyName } from '../../stores/company/selectors';
 import { RootState } from '../../stores/store';
 /* import TablePagination from '../TablePagination';
  */import { getContactName } from '../../stores/contact/selectors';
-import { formatLastUpdate } from '../../helpers/lastUpdate';
+import { formatLastUpdate } from '../../helpers/timestamp';
 import { Invoice } from '../../clients/server.generated';
 
 interface Props extends RouteComponentProps {
