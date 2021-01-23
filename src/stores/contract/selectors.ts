@@ -1,4 +1,4 @@
-import { Contract, ContractSummary } from '../../clients/server.generated';
+import { Contract, ContractStatus, ContractSummary } from '../../clients/server.generated';
 import { RootState } from '../store';
 import { getSummary } from '../summaries/selectors';
 import { SummaryCollections } from '../summaries/summaries';
@@ -19,4 +19,10 @@ export function getContract(state: RootState, id: number): string {
   return getSummary<ContractSummary>(
     state, SummaryCollections.Contracts, id,
   )?.title ?? '...';
+}
+
+export function getContractStatus(state: RootState, id: number): ContractStatus {
+  return getSummary<ContractSummary>(
+    state, SummaryCollections.Contracts, id,
+  )?.status ?? '...';
 }
