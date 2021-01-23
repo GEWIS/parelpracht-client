@@ -8685,6 +8685,7 @@ export class ExpiredInvoice implements IExpiredInvoice {
     version!: number;
     startDate!: Date;
     companyId!: number;
+    assignedToId!: number;
     createdAt!: Date;
     updatedAt!: Date;
     createdById!: number;
@@ -8705,6 +8706,7 @@ export class ExpiredInvoice implements IExpiredInvoice {
             this.version = _data["version"];
             this.startDate = _data["startDate"] ? new Date(_data["startDate"].toString()) : <any>undefined;
             this.companyId = _data["companyId"];
+            this.assignedToId = _data["assignedToId"];
             this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
             this.updatedAt = _data["updatedAt"] ? new Date(_data["updatedAt"].toString()) : <any>undefined;
             this.createdById = _data["createdById"];
@@ -8725,6 +8727,7 @@ export class ExpiredInvoice implements IExpiredInvoice {
         data["version"] = this.version;
         data["startDate"] = this.startDate ? this.startDate.toISOString() : <any>undefined;
         data["companyId"] = this.companyId;
+        data["assignedToId"] = this.assignedToId;
         data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
         data["updatedAt"] = this.updatedAt ? this.updatedAt.toISOString() : <any>undefined;
         data["createdById"] = this.createdById;
@@ -8738,6 +8741,7 @@ export interface IExpiredInvoice {
     version: number;
     startDate: Date;
     companyId: number;
+    assignedToId: number;
     createdAt: Date;
     updatedAt: Date;
     createdById: number;

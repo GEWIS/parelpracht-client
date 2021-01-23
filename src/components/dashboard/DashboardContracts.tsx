@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { Segment } from 'semantic-ui-react';
+import { Segment, Table } from 'semantic-ui-react';
+import { NavLink } from 'react-router-dom';
 import { Client, RecentContract } from '../../clients/server.generated';
 import DashboardContractsRow from './DashboardContractsRow';
 
@@ -35,6 +36,11 @@ class DashboardContracts extends Component<Props, State> {
       <Segment loading={loading}>
         <h3>Recent contracts</h3>
         {contracts.map((c) => <DashboardContractsRow contract={c} key={c.id} />)}
+        <div style={{ marginTop: '1em' }}>
+          <NavLink to="/contracts/">
+            All contracts...
+          </NavLink>
+        </div>
       </Segment>
     );
   }

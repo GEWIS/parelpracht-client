@@ -45,11 +45,11 @@ function DashboardPage(props: Props) {
       <Container style={{ marginTop: '2em' }}>
         <Grid>
           <Grid.Row columns={2}>
-            <Grid.Column width={10}>
+            <Grid.Column width={9}>
               <DashboardProductInstanceStatusGraph />
               <DashboardContractedCategoryGraph />
             </Grid.Column>
-            <Grid.Column width={6}>
+            <Grid.Column width={7}>
               <DashboardContracts />
               <DashboardInvoices />
             </Grid.Column>
