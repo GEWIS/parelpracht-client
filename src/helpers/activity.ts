@@ -34,6 +34,16 @@ export function formatActivityType(
 
 /**
  * Format the creation date and user that performed the activity.
+ * @param date date of the activity
+ * @param userName of the user who performed the activity
+ */
+export function formatActivityDate(date: Date, userName: string): string {
+  const dateString = formatLastUpdate(date);
+  return `${dateString} by ${userName}`;
+}
+
+/**
+ * Format the summary user and activity for the feed.
  */
 export function formatActivitySummary(
   userName: string,

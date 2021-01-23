@@ -7,7 +7,7 @@ import { RootState } from '../../stores/store';
 import { getUserName } from '../../stores/user/selectors';
 import { formatActivitySummary } from '../../helpers/activity';
 import { ActivityType, GeneralActivity } from './GeneralActivity';
-import { formatLastUpdate } from '../../helpers/lastUpdate';
+import { formatLastUpdate } from '../../helpers/timestamp';
 
 interface Props extends RouteComponentProps {
   activity: GeneralActivity;
