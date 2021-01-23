@@ -54,7 +54,7 @@ class SingleCompanyPage extends React.Component<Props> {
   }
 
   public render() {
-    const { company } = this.props;
+    const { company, status } = this.props;
 
     if (company === undefined) {
       return (
@@ -96,7 +96,8 @@ class SingleCompanyPage extends React.Component<Props> {
             <ActivitiesList
               activities={company.activities as GeneralActivity[]}
               componentId={company.id}
-              componentType="Company"
+              componentType={SingleEntities.Company}
+              resourceStatus={status}
             />
           </Tab.Pane>
         ),
