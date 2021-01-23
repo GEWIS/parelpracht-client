@@ -13,6 +13,7 @@ import { Tables } from '../../stores/tables/tables';
 import ContractRow from './ContractRow';
 import ContractContactFilter from '../tablefilters/ContractContactFilter';
 import CompanyFilter from '../tablefilters/CompanyFilter';
+import UserFilter from '../tablefilters/UserFilter';
 
 interface Props {
   contracts: Contract[];
@@ -63,6 +64,13 @@ function ContractsTable({
               onClick={() => changeSort('date')}
             >
               Last Update
+            </Table.HeaderCell>
+            <Table.HeaderCell>
+              Status
+            </Table.HeaderCell>
+            <Table.HeaderCell>
+              Assigned to
+              <UserFilter />
             </Table.HeaderCell>
           </Table.Row>
         </Table.Header>
