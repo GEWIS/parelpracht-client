@@ -51,11 +51,17 @@ function ContractsTable({
             >
               Title
             </Table.HeaderCell>
-            <Table.HeaderCell>
+            <Table.HeaderCell
+              sorted={column === 'company' ? direction : undefined}
+              onClick={() => changeSort('company')}
+            >
               Company
               <CompanyFilter table={Tables.Contracts} />
             </Table.HeaderCell>
-            <Table.HeaderCell>
+            <Table.HeaderCell
+              sorted={column === 'contact' ? direction : undefined}
+              onClick={() => changeSort('contact')}
+            >
               Contact
               <ContractContactFilter />
             </Table.HeaderCell>

@@ -4,41 +4,38 @@ import {
   Table,
 } from 'semantic-ui-react';
 import { connect } from 'react-redux';
-import { Contract, ContractStatus } from '../../clients/server.generated';
 import { getCompanyName } from '../../stores/company/selectors';
-import './ContractComponent.scss';
 import { RootState } from '../../stores/store';
 /* import TablePagination from '../TablePagination';
  */import { getContactName } from '../../stores/contact/selectors';
 import { formatLastUpdate } from '../../helpers/lastUpdate';
+import { Invoice } from '../../clients/server.generated';
 
 interface Props extends RouteComponentProps {
-  contract: Contract;
+  invoice: Invoice;
 
-  contactName: string;
-  companyName: string;
 }
 
-class ContractComponent extends React.Component<Props> {
+class InvoiceComponent extends React.Component<Props> {
   public render() {
-    const { contract, contactName, companyName } = this.props;
+    const { invoice } = this.props;
 
     return (
       <>
         <Table.Row>
           <Table.Cell>
-            <NavLink to={`/contract/${contract.id}`}>
-              {contract.title}
+            <NavLink to={`/invoice/${invoice.id}`}>
+              {invoice.id}
             </NavLink>
           </Table.Cell>
           <Table.Cell>
-            {contactName}
+            {invoice.id}
           </Table.Cell>
           <Table.Cell>
-            {contract.id}
+            {invoice.id}
           </Table.Cell>
           <Table.Cell>
-            {formatLastUpdate(contract.updatedAt)}
+            {formatLastUpdate(invoice.updatedAt)}
           </Table.Cell>
         </Table.Row>
       </>
@@ -46,11 +43,10 @@ class ContractComponent extends React.Component<Props> {
   }
 }
 
-const mapStateToProps = (state: RootState, props: { contract: Contract }) => {
+const mapStateToProps = (state: RootState, props: { invoice: Invoice }) => {
   return {
-    companyName: getCompanyName(state, props.contract.companyId),
-    contactName: getContactName(state, props.contract.contactId),
+    companyName: getCompanyName(state, props.invoice.companyId),
   };
 };
 
-export default withRouter(connect(mapStateToProps)(ContractComponent));
+export default withRouter(connect(mapStateToProps)(InvoiceComponent));

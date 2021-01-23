@@ -4,11 +4,11 @@ import { NavLink, RouteComponentProps, withRouter } from 'react-router-dom';
 import {
   Button, Icon, Loader, Table,
 } from 'semantic-ui-react';
-import ContractComponent from './ContractComponent';
 import { Company } from '../../clients/server.generated';
 import { getSingle } from '../../stores/single/selectors';
 import { SingleEntities } from '../../stores/single/single';
 import { RootState } from '../../stores/store';
+import InvoiceComponent from './InvoiceComponent';
 
 interface Props extends RouteComponentProps {
   company: Company | undefined;
@@ -18,7 +18,7 @@ interface State {
 
 }
 
-class ContractList extends React.Component<Props, State> {
+class InvoiceList extends React.Component<Props, State> {
   public constructor(props: Props) {
     super(props);
   }
@@ -32,28 +32,16 @@ class ContractList extends React.Component<Props, State> {
       );
     }
 
-    const { contracts } = company;
+    const { invoices } = company;
 
-    if (contracts.length === 0) {
+    if (invoices.length === 0) {
       return (
         <>
           <h3>
-            Contracts
-            <Button
-              icon
-              labelPosition="left"
-              floated="right"
-              style={{ marginTop: '-0.5em' }}
-              basic
-              as={NavLink}
-              to={`${this.props.location.pathname}/contract/new`}
-            >
-              <Icon name="plus" />
-              Add Contract
-            </Button>
+            Invoice
           </h3>
           <h4>
-            There are no contracts yet.
+            There are no invoices yet.
           </h4>
         </>
       );
@@ -62,28 +50,16 @@ class ContractList extends React.Component<Props, State> {
     return (
       <>
         <h3>
-          Contracts
-          <Button
-            icon
-            labelPosition="left"
-            floated="right"
-            style={{ marginTop: '-0.5em' }}
-            basic
-            as={NavLink}
-            to={`${this.props.location.pathname}/contract/new`}
-          >
-            <Icon name="plus" />
-            Add Contract
-          </Button>
+          Invoice
         </h3>
         <Table compact>
           <Table.Header>
             <Table.Row>
               <Table.HeaderCell>
-                Title
+                Invoice ID
               </Table.HeaderCell>
               <Table.HeaderCell>
-                Contact
+                Amount
               </Table.HeaderCell>
               <Table.HeaderCell>
                 Status
@@ -94,8 +70,8 @@ class ContractList extends React.Component<Props, State> {
             </Table.Row>
           </Table.Header>
           <Table.Body>
-            {contracts.map((x) => (
-              <ContractComponent key={x.id} contract={x} />))}
+            {invoices.map((x) => (
+              <InvoiceComponent key={x.id} invoice={x} />))}
           </Table.Body>
         </Table>
       </>
@@ -113,4 +89,4 @@ const mapStateToProps = (state: RootState) => {
 const mapDispatchToProps = () => ({
 });
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ContractList));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(InvoiceList));
