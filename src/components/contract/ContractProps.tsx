@@ -121,6 +121,26 @@ class ContractProps extends React.Component<Props, State> {
       comments,
     } = this.state;
 
+    let companySelector;
+    if (!companySelection) {
+      companySelector = (
+        <Form.Field
+          disabled={!editing}
+          required
+        >
+          {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
+          <label htmlFor="form-company-selector">Company</label>
+          <CompanySelector
+            id="form-company-selector"
+            value={companySelection}
+            onChange={(val: number) => this.setState({
+              companySelection: val,
+            })}
+          />
+        </Form.Field>
+      );
+    }
+
     return (
       <>
         <h2>
@@ -171,20 +191,7 @@ class ContractProps extends React.Component<Props, State> {
               />
             </Form.Field>
           </Form.Group>
-          <Form.Field
-            disabled={!editing}
-            required
-          >
-            {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-            <label htmlFor="form-company-selector">Company</label>
-            <CompanySelector
-              id="form-company-selector"
-              value={companySelection}
-              onChange={(val: number) => this.setState({
-                companySelection: val,
-              })}
-            />
-          </Form.Field>
+          {companySelector}
           <Form.Field
             disabled={!editing}
             required

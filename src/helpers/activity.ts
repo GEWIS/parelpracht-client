@@ -22,19 +22,26 @@ export function formatDocumentStatusTitle(
 /**
  * Format type of the activity to a string used on the website.
  */
-export function formatActivityType(activityType: ActivityType): string {
-  if (activityType === 'COMMENT') {
-    return 'Comment';
+export function formatActivityType(
+  activityType: ActivityType,
+  subType: string | undefined,
+): string {
+  if (activityType === ActivityType.COMMENT) {
+    return 'Comment added';
   }
-  return 'Status changed to: ';
+  return `Status changed to ${subType?.toLowerCase()}`;
 }
 
 /**
  * Format the creation date and user that performed the activity.
  */
-export function formatActivityDate(date: Date, userName: string): string {
-  const dateString = formatLastUpdate(date);
-  return `${dateString} by ${userName}`;
+export function formatActivitySummary(
+  userName: string,
+  activityType: ActivityType,
+  subType: string | undefined,
+): string {
+  const activity = formatActivityType(activityType, subType);
+  return `${activity} by ${userName}`;
 }
 
 /**

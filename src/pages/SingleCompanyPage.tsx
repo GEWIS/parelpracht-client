@@ -20,7 +20,6 @@ import ActivitiesList from '../components/activities/ActivitiesList';
 import { GeneralActivity } from '../components/activities/GeneralActivity';
 import { TransientAlert } from '../stores/alerts/actions';
 import { showTransientAlert } from '../stores/alerts/actionCreators';
-import FilesList from '../components/files/FilesList';
 
 interface Props extends RouteComponentProps<{ companyId: string }> {
   company: Company | undefined;
@@ -53,7 +52,7 @@ class SingleCompanyPage extends React.Component<Props> {
   }
 
   public render() {
-    const { company } = this.props;
+    const { company, status } = this.props;
 
     if (company === undefined) {
       return (
@@ -93,7 +92,8 @@ class SingleCompanyPage extends React.Component<Props> {
             <ActivitiesList
               activities={company.activities as GeneralActivity[]}
               componentId={company.id}
-              componentType="Company"
+              componentType={SingleEntities.Company}
+              resourceStatus={status}
             />
           </Tab.Pane>
         ),

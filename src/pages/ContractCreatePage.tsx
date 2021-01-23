@@ -14,7 +14,10 @@ import AlertContainer from '../components/alerts/AlertContainer';
 import { SingleEntities } from '../stores/single/single';
 import { getSingle } from '../stores/single/selectors';
 
-interface Props extends RouteComponentProps {
+interface SelfProps extends RouteComponentProps<{companyId?: string}> {
+}
+
+interface Props extends SelfProps {
   status: ResourceStatus;
 
   clearContract: () => void;
@@ -35,9 +38,13 @@ class ContractCreatePage extends React.Component<Props> {
   close = () => { this.props.history.goBack(); };
 
   public render() {
+    let compId = 0;
+    if (this.props.match.params.companyId) {
+      compId = parseInt(this.props.match.params.companyId, 10);
+    }
     const contract: Contract = {
       id: 0,
-      companyId: 0,
+      companyId: compId,
       contactId: 0,
       comments: '',
       title: '',

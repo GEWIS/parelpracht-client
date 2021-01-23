@@ -6,11 +6,8 @@ import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import {
-  Client,
-  Contract,
   ContractStatus,
   ContractStatusParams,
-  Invoice,
   InvoiceStatus,
   InvoiceStatusParams,
 } from '../../clients/server.generated';
@@ -106,12 +103,7 @@ class DocumentStatusModal extends React.Component<Props> {
 }
 
 const mapStateToProps = (state: RootState) => {
-  let resStatus: ResourceStatus = getSingle<Invoice>(state, SingleEntities.Invoice).status;
-  if (resStatus == null) {
-    resStatus = getSingle<Contract>(state, SingleEntities.Contract).status;
-  }
   return {
-    resourceStatus: resStatus,
   };
 };
 
