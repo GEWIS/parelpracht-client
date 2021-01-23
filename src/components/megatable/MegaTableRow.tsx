@@ -23,7 +23,7 @@ function MegaTableRow(props: Props) {
   const getNrOfProducts = () => {
     let count = 0;
     for (let i = 0; i < company.contracts.length; i++) {
-      count += company.contracts[0].products.length;
+      count += company.contracts[i].products.length;
     }
     return count;
   };

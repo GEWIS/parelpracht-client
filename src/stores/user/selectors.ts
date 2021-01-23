@@ -27,3 +27,11 @@ export function getUserName(state: RootState, id: number): string {
   if (user === undefined) return '...';
   return formatContactName(user.firstName, user.lastNamePreposition, user.lastName);
 }
+
+export function getUserFirstName(state: RootState, id: number): string {
+  const user = getSummary<UserSummary>(
+    state, SummaryCollections.Users, id,
+  );
+  if (user === undefined) return '...';
+  return user.firstName;
+}

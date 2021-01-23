@@ -5,7 +5,7 @@ import { Table } from 'semantic-ui-react';
 import { Invoice } from '../../clients/server.generated';
 import { getCompanyName } from '../../stores/company/selectors';
 import { RootState } from '../../stores/store';
-import { formatLastUpdate } from '../../helpers/lastUpdate';
+import { formatLastUpdate } from '../../helpers/timestamp';
 
 interface Props {
   invoice: Invoice;

@@ -1,4 +1,3 @@
-import { ListOrFilter } from '../../clients/server.generated';
 import {
   tableActionPattern,
   TableActionType, TableChangeSortAction,

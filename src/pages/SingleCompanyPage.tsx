@@ -90,7 +90,11 @@ class SingleCompanyPage extends React.Component<Props> {
         menuItem: 'Activities',
         render: () => (
           <Tab.Pane>
-            <ActivitiesList activities={company.activities as GeneralActivity[]} />
+            <ActivitiesList
+              activities={company.activities as GeneralActivity[]}
+              componentId={company.id}
+              componentType="Company"
+            />
           </Tab.Pane>
         ),
       },

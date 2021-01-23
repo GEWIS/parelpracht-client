@@ -9,7 +9,7 @@ import {
   Partial_FileParams,
 } from '../../clients/server.generated';
 import { FilesClient } from '../../clients/filesClient';
-import { formatLastUpdate } from '../../helpers/lastUpdate';
+import { formatLastUpdate } from '../../helpers/timestamp';
 import { deleteFileSingle, saveSingleFile } from '../../stores/single/actionCreators';
 import { SingleEntities } from '../../stores/single/single';
 import { GeneralFile } from './GeneralFile';
