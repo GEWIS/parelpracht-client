@@ -5609,8 +5609,6 @@ or a different price that is not a discount */
     discount!: number;
     /** Any comments regarding this product instance */
     comments?: string;
-    /** Subtype of this activity, only used when the type = "STATUS" */
-    subType?: ProductInstanceStatus;
 
     constructor(data?: IProductInstance) {
         if (data) {
@@ -5647,7 +5645,6 @@ or a different price that is not a discount */
             this.basePrice = _data["basePrice"];
             this.discount = _data["discount"];
             this.comments = _data["comments"];
-            this.subType = _data["subType"];
         }
     }
 
@@ -5679,7 +5676,6 @@ or a different price that is not a discount */
         data["basePrice"] = this.basePrice;
         data["discount"] = this.discount;
         data["comments"] = this.comments;
-        data["subType"] = this.subType;
         return data; 
     }
 }
@@ -5713,8 +5709,6 @@ or a different price that is not a discount */
     discount: number;
     /** Any comments regarding this product instance */
     comments?: string;
-    /** Subtype of this activity, only used when the type = "STATUS" */
-    subType?: ProductInstanceStatus;
 }
 
 export class Company implements ICompany {
@@ -5916,6 +5910,8 @@ export class Invoice implements IInvoice {
     version!: number;
     /** All products that have been invoiced */
     products!: ProductInstance[];
+    /** Name of the invoice (by default the same as the first contract) */
+    title!: string;
     /** PO number on the invoice, if needed */
     poNumber?: string;
     /** Date at which this invoice will be sent */
@@ -5963,6 +5959,7 @@ export class Invoice implements IInvoice {
                 for (let item of _data["products"])
                     this.products!.push(ProductInstance.fromJS(item));
             }
+            this.title = _data["title"];
             this.poNumber = _data["poNumber"];
             this.startDate = _data["startDate"] ? new Date(_data["startDate"].toString()) : <any>undefined;
             this.companyId = _data["companyId"];
@@ -6004,6 +6001,7 @@ export class Invoice implements IInvoice {
             for (let item of this.products)
                 data["products"].push(item.toJSON());
         }
+        data["title"] = this.title;
         data["poNumber"] = this.poNumber;
         data["startDate"] = this.startDate ? this.startDate.toISOString() : <any>undefined;
         data["companyId"] = this.companyId;
@@ -6040,6 +6038,8 @@ export interface IInvoice {
     version: number;
     /** All products that have been invoiced */
     products: ProductInstance[];
+    /** Name of the invoice (by default the same as the first contract) */
+    title: string;
     /** PO number on the invoice, if needed */
     poNumber?: string;
     /** Date at which this invoice will be sent */
@@ -6836,13 +6836,6 @@ export interface IProductActivity {
     productId: number;
     /** Product related to this activity */
     product: Product;
-}
-
-export enum ProductInstanceStatus {
-    NOTDELIVERED = "NOTDELIVERED",
-    DELIVERED = "DELIVERED",
-    CANCELLED = "CANCELLED",
-    DEFERRED = "DEFERRED",
 }
 
 export class ProductFile implements IProductFile {
@@ -8113,6 +8106,7 @@ export interface IContractListResponse {
 export class ContractSummary implements IContractSummary {
     id!: number;
     title!: string;
+    status!: ContractStatus;
 
     constructor(data?: IContractSummary) {
         if (data) {
@@ -8127,6 +8121,7 @@ export class ContractSummary implements IContractSummary {
         if (_data) {
             this.id = _data["id"];
             this.title = _data["title"];
+            this.status = _data["status"];
         }
     }
 
@@ -8141,6 +8136,7 @@ export class ContractSummary implements IContractSummary {
         data = typeof data === 'object' ? data : {};
         data["id"] = this.id;
         data["title"] = this.title;
+        data["status"] = this.status;
         return data; 
     }
 }
@@ -8148,6 +8144,7 @@ export class ContractSummary implements IContractSummary {
 export interface IContractSummary {
     id: number;
     title: string;
+    status: ContractStatus;
 }
 
 export class RecentContract implements IRecentContract {
@@ -8430,6 +8427,13 @@ export interface IPartial_ProductInstanceParams {
     comments?: string;
 }
 
+export enum ProductInstanceStatus {
+    NOTDELIVERED = "NOTDELIVERED",
+    DELIVERED = "DELIVERED",
+    CANCELLED = "CANCELLED",
+    DEFERRED = "DEFERRED",
+}
+
 export class ProductInstanceStatusParams implements IProductInstanceStatusParams {
     description!: string;
     subType!: ProductInstanceStatus;
@@ -8642,7 +8646,8 @@ export interface IInvoiceListResponse {
 
 export class InvoiceSummary implements IInvoiceSummary {
     id!: number;
-    companyName!: string;
+    title!: string;
+    status!: InvoiceStatus;
 
     constructor(data?: IInvoiceSummary) {
         if (data) {
@@ -8656,7 +8661,8 @@ export class InvoiceSummary implements IInvoiceSummary {
     init(_data?: any) {
         if (_data) {
             this.id = _data["id"];
-            this.companyName = _data["companyName"];
+            this.title = _data["title"];
+            this.status = _data["status"];
         }
     }
 
@@ -8670,14 +8676,16 @@ export class InvoiceSummary implements IInvoiceSummary {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["id"] = this.id;
-        data["companyName"] = this.companyName;
+        data["title"] = this.title;
+        data["status"] = this.status;
         return data; 
     }
 }
 
 export interface IInvoiceSummary {
     id: number;
-    companyName: string;
+    title: string;
+    status: InvoiceStatus;
 }
 
 export class ExpiredInvoice implements IExpiredInvoice {
@@ -8750,6 +8758,7 @@ export interface IExpiredInvoice {
 
 export class InvoiceParams implements IInvoiceParams {
     companyId!: number;
+    title!: string;
     productInstanceIds!: number[];
     poNumber?: string;
     comments?: string;
@@ -8771,6 +8780,7 @@ export class InvoiceParams implements IInvoiceParams {
     init(_data?: any) {
         if (_data) {
             this.companyId = _data["companyId"];
+            this.title = _data["title"];
             if (Array.isArray(_data["productInstanceIds"])) {
                 this.productInstanceIds = [] as any;
                 for (let item of _data["productInstanceIds"])
@@ -8793,6 +8803,7 @@ export class InvoiceParams implements IInvoiceParams {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["companyId"] = this.companyId;
+        data["title"] = this.title;
         if (Array.isArray(this.productInstanceIds)) {
             data["productInstanceIds"] = [];
             for (let item of this.productInstanceIds)
@@ -8808,6 +8819,7 @@ export class InvoiceParams implements IInvoiceParams {
 
 export interface IInvoiceParams {
     companyId: number;
+    title: string;
     productInstanceIds: number[];
     poNumber?: string;
     comments?: string;
@@ -8818,6 +8830,7 @@ export interface IInvoiceParams {
 /** Make all properties in T optional */
 export class Partial_InvoiceParams implements IPartial_InvoiceParams {
     companyId?: number;
+    title?: string;
     productInstanceIds?: number[];
     poNumber?: string;
     comments?: string;
@@ -8836,6 +8849,7 @@ export class Partial_InvoiceParams implements IPartial_InvoiceParams {
     init(_data?: any) {
         if (_data) {
             this.companyId = _data["companyId"];
+            this.title = _data["title"];
             if (Array.isArray(_data["productInstanceIds"])) {
                 this.productInstanceIds = [] as any;
                 for (let item of _data["productInstanceIds"])
@@ -8858,6 +8872,7 @@ export class Partial_InvoiceParams implements IPartial_InvoiceParams {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["companyId"] = this.companyId;
+        data["title"] = this.title;
         if (Array.isArray(this.productInstanceIds)) {
             data["productInstanceIds"] = [];
             for (let item of this.productInstanceIds)
@@ -8874,6 +8889,7 @@ export class Partial_InvoiceParams implements IPartial_InvoiceParams {
 /** Make all properties in T optional */
 export interface IPartial_InvoiceParams {
     companyId?: number;
+    title?: string;
     productInstanceIds?: number[];
     poNumber?: string;
     comments?: string;

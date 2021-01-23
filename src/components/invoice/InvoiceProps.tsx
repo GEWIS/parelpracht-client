@@ -29,6 +29,7 @@ interface State {
   editing: boolean;
 
   productInstanceIds: number[];
+  title: string;
   comments: string | undefined;
   companyId: number;
   assignedToId: number;
@@ -55,6 +56,7 @@ class InvoiceProps extends React.Component<Props, State> {
   extractState = (props: Props) => {
     const { invoice, companyName } = props;
     return {
+      title: invoice.title,
       productInstanceIds: invoice.products.map((p) => p.id),
       comments: invoice.comments,
       companyId: invoice.companyId,
@@ -65,6 +67,7 @@ class InvoiceProps extends React.Component<Props, State> {
 
   toParams = (): InvoiceParams => {
     return new InvoiceParams({
+      title: this.state.title,
       productInstanceIds: this.state.productInstanceIds,
       comments: this.state.comments,
       companyId: this.state.companyId,
