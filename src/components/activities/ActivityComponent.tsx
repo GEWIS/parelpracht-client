@@ -8,7 +8,7 @@ import './Activity.scss';
 import { RootState } from '../../stores/store';
 import { getUserName } from '../../stores/user/selectors';
 import { formatActivityType, formatActivityDate, formatStatus } from '../../helpers/activity';
-import { GeneralActivity } from './GeneralActivity';
+import { ActivityType, GeneralActivity } from './GeneralActivity';
 
 interface Props extends RouteComponentProps {
   activity: GeneralActivity;
@@ -19,7 +19,7 @@ interface Props extends RouteComponentProps {
 class ActivityComponent extends React.Component<Props> {
   public render() {
     const { activity, userName } = this.props;
-    if (activity.type === 'STATUS') {
+    if (activity.type === ActivityType.STATUS) {
       return (
         <Segment.Group
           horizontal

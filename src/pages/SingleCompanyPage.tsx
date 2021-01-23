@@ -93,7 +93,7 @@ class SingleCompanyPage extends React.Component<Props> {
             <ActivitiesList
               activities={company.activities as GeneralActivity[]}
               componentId={company.id}
-              componentType="Company"
+              componentType={SingleEntities.Company}
             />
           </Tab.Pane>
         ),
