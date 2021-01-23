@@ -38,13 +38,13 @@ function ContractRow(props: Props) {
         {contactName}
       </Table.Cell>
       <Table.Cell>
-        {formatLastUpdate(contract.updatedAt)}
-      </Table.Cell>
-      <Table.Cell>
         {formatStatus(contractStatus)}
       </Table.Cell>
       <Table.Cell>
         {assignedName}
+      </Table.Cell>
+      <Table.Cell>
+        {formatLastUpdate(contract.updatedAt)}
       </Table.Cell>
     </Table.Row>
   );

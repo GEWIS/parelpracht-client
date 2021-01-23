@@ -40,25 +40,34 @@ function InvoicesTable({
 
   return (
     <>
-      <Table singleLine selectable attached sortable fixed>
+      <Table singleLine selectable attached sortable>
         <Table.Header>
           <Table.Row>
             <Table.HeaderCell
               sorted={column === 'invoiceId' ? direction : undefined}
               onClick={() => changeSort('invoiceId')}
             >
-              Invoice Id
+              Title
             </Table.HeaderCell>
             <Table.HeaderCell
-              sorted={column === 'Company' ? direction : undefined}
-              onClick={() => changeSort('Company')}
+              sorted={column === 'company' ? direction : undefined}
+              onClick={() => changeSort('company')}
             >
               Company Name
               <CompanyFilter table={Tables.Invoices} />
             </Table.HeaderCell>
+            <Table.HeaderCell>
+              Status
+            </Table.HeaderCell>
+            <Table.HeaderCell>
+              Financial year
+            </Table.HeaderCell>
+            <Table.HeaderCell>
+              Assigned to
+            </Table.HeaderCell>
             <Table.HeaderCell
-              sorted={column === 'Last updated' ? direction : undefined}
-              onClick={() => changeSort('Last updated')}
+              sorted={column === 'updatedAt' ? direction : undefined}
+              onClick={() => changeSort('updatedAt')}
             >
               Last Update
             </Table.HeaderCell>

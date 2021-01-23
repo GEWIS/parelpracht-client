@@ -42,7 +42,7 @@ function ContractsTable({
 
   return (
     <>
-      <Table singleLine selectable attached sortable fixed>
+      <Table singleLine selectable attached sortable>
         <Table.Header>
           <Table.Row>
             <Table.HeaderCell
@@ -59,18 +59,18 @@ function ContractsTable({
               Contact
               <ContractContactFilter />
             </Table.HeaderCell>
-            <Table.HeaderCell
-              sorted={column === 'date' ? direction : undefined}
-              onClick={() => changeSort('date')}
-            >
-              Last Update
-            </Table.HeaderCell>
             <Table.HeaderCell>
               Status
             </Table.HeaderCell>
             <Table.HeaderCell>
               Assigned to
               <UserFilter />
+            </Table.HeaderCell>
+            <Table.HeaderCell
+              sorted={column === 'updatedAt' ? direction : undefined}
+              onClick={() => changeSort('updatedAt')}
+            >
+              Last Update
             </Table.HeaderCell>
           </Table.Row>
         </Table.Header>
