@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import {
-  Button, Icon, Loader, Table,
+  Button, Feed, Icon, Loader, Table,
 } from 'semantic-ui-react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { Dispatch } from 'redux';
@@ -56,11 +56,13 @@ class ActivitiesList extends React.Component<Props, State> {
       );
     } else {
       activitiesList = (
-        <>
-          {activities.reverse().map((activity) => (
-            <ActivityComponent activity={activity as GeneralActivity} />
-          ))}
-        </>
+        <Feed>
+          {activities
+            .sort((a, b) => { return b.updatedAt.getTime() - a.updatedAt.getTime(); })
+            .map((activity) => (
+              <ActivityComponent activity={activity as GeneralActivity} />
+            ))}
+        </Feed>
       );
     }
 
