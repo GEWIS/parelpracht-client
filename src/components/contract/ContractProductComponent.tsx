@@ -41,6 +41,7 @@ class ContractProductComponent extends React.Component<Props> {
             onClick={() => {
               selectFunction(productInstance.id);
             }}
+            disabled={productInstance.invoiceId !== null}
           />
         </Table.Cell>
         <Table.Cell
