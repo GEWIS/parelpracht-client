@@ -75,6 +75,7 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
               floated="right"
               labelPosition="left"
               icon="close"
+              basic
               onClick={() => {
                 this.setState({
                   cancelModalOpen: true,
