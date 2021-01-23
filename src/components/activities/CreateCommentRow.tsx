@@ -72,19 +72,12 @@ class DocumentStatusProps extends React.Component<Props, State> {
 
   render() {
     const { editing } = this.state;
-
     return (
       <>
-        <h2>
+        <h4>
           {this.props.create ? 'Post Comment' : 'Comment Details'}
-        </h2>
+        </h4>
 
-        <Input
-          fluid={false}
-          id="form-input-comment"
-          placeholder="Comment"
-          onChange={(e) => this.setState({ comment: e.target.value })}
-        />
         <Button
           floated="right"
           icon="save"
@@ -96,6 +89,13 @@ class DocumentStatusProps extends React.Component<Props, State> {
           icon="x icon"
           negative
           onClick={() => this.cancel()}
+        />
+
+        <Input
+          fluid
+          id="form-input-comment"
+          placeholder="Comment"
+          onChange={(e) => this.setState({ comment: e.target.value })}
         />
       </>
     );
