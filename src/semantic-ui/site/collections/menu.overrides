@@ -2,7 +2,7 @@
          Site Overrides
 *******************************/
 
-.ui.inverted.menu.main-menu {
+.ui.inverted.menu {
   background-color: @primaryColor;
 }
 

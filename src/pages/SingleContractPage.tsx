@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { NavLink, RouteComponentProps, withRouter } from 'react-router-dom';
 import {
-  Breadcrumb, Container, Grid, Loader, Segment,
+  Breadcrumb, Container, Grid, Loader, Segment, Tab,
 } from 'semantic-ui-react';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
@@ -19,6 +19,8 @@ import { GeneralActivity } from '../components/activities/GeneralActivity';
 import FinancialDocumentProgress from '../components/activities/FinancialDocumentProgress';
 import { showTransientAlert } from '../stores/alerts/actionCreators';
 import { TransientAlert } from '../stores/alerts/actions';
+import FilesList from '../components/files/FilesList';
+import GenerateContractModal from '../components/files/GenerateContractModal';
 
 interface Props extends RouteComponentProps<{ contractId: string }> {
   contract: Contract | undefined;
@@ -51,7 +53,7 @@ class SingleContractPage extends React.Component<Props> {
   }
 
   public render() {
-    const { contract } = this.props;
+    const { contract, fetchContract, status } = this.props;
 
     if (contract === undefined) {
       return (
@@ -60,6 +62,49 @@ class SingleContractPage extends React.Component<Props> {
         </Container>
       );
     }
+
+    const panes = [
+      {
+        menuItem: 'Products',
+        render: () => (
+          <Tab.Pane>
+            <ContractProductList />
+          </Tab.Pane>
+        ),
+      },
+      {
+        menuItem: 'Files',
+        render: () => (
+          <Tab.Pane>
+            <FilesList
+              files={contract.files}
+              entityId={contract.id}
+              entity={SingleEntities.Contract}
+              fetchEntity={fetchContract}
+              generateModal={(
+                <GenerateContractModal
+                  contractId={contract.id}
+                  fetchContract={fetchContract}
+                />
+              )}
+              status={status}
+            />
+          </Tab.Pane>
+        ),
+      },
+      {
+        menuItem: 'Activities',
+        render: () => (
+          <Tab.Pane>
+            <ActivitiesList
+              activities={contract.activities as GeneralActivity[]}
+              componentId={contract.id}
+              componentType={SingleEntities.Contract}
+            />
+          </Tab.Pane>
+        ),
+      },
+    ];
 
     return (
       <Container style={{ paddingTop: '2em' }}>
@@ -75,20 +120,19 @@ class SingleContractPage extends React.Component<Props> {
           <Grid.Row centered columns={1} style={{ paddingLeft: '1em', paddingRight: '1em' }}>
             <Segment secondary>
               <FinancialDocumentProgress
+                documentId={contract.id}
                 activities={contract.activities as GeneralActivity[]}
-                documentType="Contract"
+                documentType={SingleEntities.Contract}
               />
             </Segment>
           </Grid.Row>
           <Grid.Row columns={2}>
-            <Grid.Column>
+            <Grid.Column width={10}>
+              <Tab panes={panes} menu={{ pointing: true, inverted: true }} />
+            </Grid.Column>
+            <Grid.Column width={6}>
               <Segment secondary>
                 <ContractProps contract={contract} />
-              </Segment>
-            </Grid.Column>
-            <Grid.Column>
-              <Segment secondary>
-                <ActivitiesList activities={contract.activities as GeneralActivity[]} />
               </Segment>
             </Grid.Column>
           </Grid.Row>

@@ -6,7 +6,6 @@ import {
   Container, Dimmer, Header, Loader,
 } from 'semantic-ui-react';
 import { connect } from 'react-redux';
-import _ from 'lodash';
 import ProductsPage from './pages/ProductsPage';
 import SingleProductPage from './pages/SingleProductPage';
 import ProductCreatePage from './pages/ProductCreatePage';
@@ -37,6 +36,11 @@ import ContractInvoiceModal from './pages/ContractInvoiceModal';
 import InvoiceProductInstanceModal from './pages/InvoiceProductInstanceModal';
 import Footer from './components/navigation/Footer';
 import DashboardPage from './pages/DashboardPage';
+import NotFound from './pages/NotFound';
+import Insights from './pages/Insights';
+import ProductCategoriesPage from './pages/ProductCategoriesPage';
+import ProductCategoriesCreatePage from './pages/ProductCategoriesCreatePage';
+import ProductCategoryModal from './pages/ProductCategoryModal';
 
 interface Props extends RouteComponentProps {
   // eslint-disable-next-line react/no-unused-prop-types
@@ -97,6 +101,9 @@ function Routes(props: Props) {
       >
         <AlertContainer internal />
         <Switch>
+          <Route path="/login" exact>
+            <Redirect to="/" />
+          </Route>
           <Route path="/" exact>
             <DashboardPage />
           </Route>
@@ -112,6 +119,18 @@ function Routes(props: Props) {
           <Route path="/product/:productId/contract/new" exact>
             <SingleProductPage />
             <ContractCreatePage />
+          </Route>
+          {/* Product Categories */}
+          <Route path="/category" exact>
+            <ProductCategoriesPage />
+          </Route>
+          <Route path="/category/new" exact>
+            <ProductCategoriesPage />
+            <ProductCategoriesCreatePage />
+          </Route>
+          <Route path="/category/:categoryId" exact>
+            <ProductCategoriesPage />
+            <ProductCategoryModal />
           </Route>
           {/* Company */}
           <Route path="/company" exact>
@@ -171,6 +190,12 @@ function Routes(props: Props) {
             <SingleContractPage />
             <ContractProductInstanceModal />
           </Route>
+
+          {/* Insights */}
+          <Route path="/insights" exact>
+            <Insights />
+          </Route>
+
           {/* Users */}
           <Route path="/user" exact>
             <UsersPage />
@@ -180,6 +205,7 @@ function Routes(props: Props) {
             <UserCreatePage />
           </Route>
           <Route path="/user/:userId" exact component={SingleUserPage} />
+          <Route path="" component={NotFound} />
         </Switch>
       </Container>
       <Footer />

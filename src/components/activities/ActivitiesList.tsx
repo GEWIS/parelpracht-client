@@ -1,13 +1,15 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Loader } from 'semantic-ui-react';
-import { RouteComponentProps, withRouter } from 'react-router-dom';
+import { Button, Loader } from 'semantic-ui-react';
+import { NavLink, RouteComponentProps, withRouter } from 'react-router-dom';
 import { RootState } from '../../stores/store';
 import ActivityComponent from './ActivityComponent';
 import { GeneralActivity } from './GeneralActivity';
 
 interface Props extends RouteComponentProps {
   activities: GeneralActivity[];
+  componentId: number;
+  componentType: string;
 }
 
 interface State {
@@ -20,7 +22,7 @@ class ActivitiesList extends React.Component<Props, State> {
   }
 
   public render() {
-    const { activities } = this.props;
+    const { activities, componentId, componentType } = this.props;
 
     if (activities === undefined) {
       return (

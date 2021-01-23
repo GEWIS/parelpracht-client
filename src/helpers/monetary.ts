@@ -1,5 +1,5 @@
 export function formatPrice(price: number): string {
-  return (price / 100).toFixed(2);
+  return (price / 100).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 }
 
 export function formatPriceFull(price: number): string {

@@ -17,8 +17,8 @@ export function sortColumn(state: RootState): string {
   }
 }
 
-export function getInvoice(state: RootState, id: number): string {
+export function getInvoiceTitle(state: RootState, id: number): string {
   return getSummary<InvoiceSummary>(
     state, SummaryCollections.Invoices, id,
-  )?.companyName ?? '...';
+  )?.title ?? '...';
 }

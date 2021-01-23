@@ -2,7 +2,7 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { Table } from 'semantic-ui-react';
 import { Company, CompanyStatus } from '../../clients/server.generated';
-import { formatLastUpdate } from '../../helpers/lastUpdate';
+import { formatLastUpdate } from '../../helpers/timestamp';
 
 interface Props {
   company: Company;

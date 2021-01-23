@@ -37,7 +37,7 @@ class ProductInstanceModal extends React.Component<Props> {
 
   saveProductInstance = async (productInstance: ProductInstanceParams) => {
     const client = new Client();
-    await client.updateProduct2(parseInt(this.props.match.params.contractId!, 10),
+    await client.updateProductInstance(parseInt(this.props.match.params.contractId!, 10),
       parseInt(this.props.match.params.productInstanceId!, 10), productInstance);
     this.close();
   };

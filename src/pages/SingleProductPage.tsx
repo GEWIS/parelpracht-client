@@ -1,8 +1,7 @@
 import * as React from 'react';
 import { NavLink, RouteComponentProps, withRouter } from 'react-router-dom';
 import {
-  Breadcrumb,
-  Container, Grid, Loader, Segment,
+  Breadcrumb, Container, Grid, Loader, Segment, Tab,
 } from 'semantic-ui-react';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
@@ -19,6 +18,7 @@ import ActivitiesList from '../components/activities/ActivitiesList';
 import { GeneralActivity } from '../components/activities/GeneralActivity';
 import { TransientAlert } from '../stores/alerts/actions';
 import { showTransientAlert } from '../stores/alerts/actionCreators';
+import FilesList from '../components/files/FilesList';
 
 interface Props extends RouteComponentProps<{ productId: string }> {
   product: Product | undefined;
@@ -51,7 +51,7 @@ class SingleProductPage extends React.Component<Props> {
   }
 
   public render() {
-    const { product } = this.props;
+    const { product, fetchProduct, status } = this.props;
 
     if (product === undefined) {
       return (
@@ -60,6 +60,43 @@ class SingleProductPage extends React.Component<Props> {
         </Container>
       );
     }
+
+    const panes = [
+      {
+        menuItem: 'Contracts',
+        render: () => (
+          <Tab.Pane>
+            <ContractList />
+          </Tab.Pane>
+        ),
+      },
+      {
+        menuItem: 'Files',
+        render: () => (
+          <Tab.Pane>
+            <FilesList
+              files={product.files}
+              entityId={product.id}
+              entity={SingleEntities.Product}
+              fetchEntity={fetchProduct}
+              status={status}
+            />
+          </Tab.Pane>
+        ),
+      },
+      {
+        menuItem: 'Activities',
+        render: () => (
+          <Tab.Pane>
+            <ActivitiesList
+              activities={product.activities as GeneralActivity[]}
+              componentId={product.id}
+              componentType="Product"
+            />
+          </Tab.Pane>
+        ),
+      },
+    ];
 
     return (
       <Container style={{ paddingTop: '2em' }}>
@@ -72,17 +109,12 @@ class SingleProductPage extends React.Component<Props> {
         />
         <ProductSummary />
         <Grid columns={2}>
-          <Grid.Column>
-            <Segment>
-              <ProductProps product={product} />
-            </Segment>
+          <Grid.Column width={10}>
+            <Tab panes={panes} menu={{ pointing: true, inverted: true }} />
           </Grid.Column>
-          <Grid.Column>
+          <Grid.Column width={6}>
             <Segment secondary>
-              <ContractList />
-            </Segment>
-            <Segment secondary>
-              <ActivitiesList activities={product.activities as GeneralActivity[]} />
+              <ProductProps product={product} />
             </Segment>
           </Grid.Column>
         </Grid>

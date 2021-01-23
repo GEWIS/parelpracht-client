@@ -11,7 +11,7 @@ import {
 import { countFetched, countTotal, getTable } from '../../stores/tables/selectors';
 import { Tables } from '../../stores/tables/tables';
 import ContactRow from './ContactRow';
-import ContactCompanyFilter from './filters/ContactCompanyFilter';
+import ContactCompanyFilter from '../tablefilters/CompanyFilter';
 
 interface Props {
   contacts: Contact[];
@@ -51,7 +51,7 @@ function ContactsTable({
             </Table.HeaderCell>
             <Table.HeaderCell>
               Company
-              <ContactCompanyFilter />
+              <ContactCompanyFilter table={Tables.Contacts} />
             </Table.HeaderCell>
             <Table.HeaderCell
               sorted={column === 'email' ? direction : undefined}

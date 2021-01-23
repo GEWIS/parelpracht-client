@@ -1,5 +1,4 @@
 import { Action } from 'redux';
-import { ListOrFilter } from '../../clients/server.generated';
 import { Tables } from './tables';
 
 export enum TableActionType {

@@ -10,6 +10,12 @@ export enum SingleActionType {
   Error = 'Single/Error',
   Create = 'Single/Create',
   Clear = 'Single/Clear',
+  SaveFile = 'Single/SaveFile',
+  DeleteFile = 'Single/DeleteFile',
+  CreateStatus = 'Single/CreateStatus',
+  CreateComment = 'Single/CreateComment',
+  SaveActivity = 'Single/SaveActivity',
+  DeleteActivity = 'Single/DeleteActivity',
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -28,8 +34,19 @@ export type SingleSaveAction<S, RSave> = SingleAction<SingleActionType.Save, S> 
   data: RSave,
 };
 
+export type SingleSaveFileAction<S, RSave> = SingleAction<SingleActionType.SaveFile, S> & {
+  id: number,
+  fileId: number,
+  data: RSave,
+};
+
 export type SingleDeleteAction<S> = SingleAction<SingleActionType.Delete, S> & {
   id: number,
+};
+
+export type SingleDeleteFileAction<S> = SingleAction<SingleActionType.DeleteFile, S> & {
+  id: number,
+  fileId: number,
 };
 
 export type SingleErrorAction<S> = SingleAction<SingleActionType.Error, S>;
@@ -39,6 +56,29 @@ export type SingleCreateAction<S, RCreate> = SingleAction<SingleActionType.Creat
 };
 
 export type SingleClearAction<S> = SingleAction<SingleActionType.Clear, S>;
+
+export type SingleCreateStatusAction<S, RCreate> =
+  SingleAction<SingleActionType.CreateStatus, S> & {
+    id: number,
+    data: RCreate,
+  };
+
+export type SingleCreateCommentAction<S, RCreate> =
+  SingleAction<SingleActionType.CreateComment, S> & {
+    id: number,
+    data: RCreate,
+  };
+
+export type SingleSaveActivityAction<S, RSave> = SingleAction<SingleActionType.SaveActivity, S> & {
+  id: number,
+  activityId: number,
+  data: RSave,
+};
+
+export type SingleDeleteActivityAction<S> = SingleAction<SingleActionType.DeleteActivity, S> & {
+  id: number,
+  activityId: number,
+};
 
 export type SingleActions<S extends SingleEntities, R, RSave, RCreate> =
   SingleFetchAction<S> | SingleSetAction<S, R> | SingleClearAction<S>

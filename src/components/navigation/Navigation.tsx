@@ -2,6 +2,7 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { Container, Icon, Menu } from 'semantic-ui-react';
 import AuthMenu from './AuthMenu';
+import ProductsMenu from './ProductsMenu';
 
 function Navigation() {
   return (
@@ -10,10 +11,7 @@ function Navigation() {
         <Menu.Item as={NavLink} header to="/" exact>
           ParelPracht
         </Menu.Item>
-        <Menu.Item as={NavLink} to="/product">
-          <Icon name="shopping bag" />
-          Products
-        </Menu.Item>
+        <ProductsMenu />
         <Menu.Item as={NavLink} to="/company">
           <Icon name="building" />
           Companies
@@ -29,6 +27,10 @@ function Navigation() {
         <Menu.Item as={NavLink} to="/invoice">
           <Icon name="file alternate" />
           Invoices
+        </Menu.Item>
+        <Menu.Item as={NavLink} to="/insights">
+          <Icon name="line graph" />
+          Insights
         </Menu.Item>
         <AuthMenu />
       </Container>

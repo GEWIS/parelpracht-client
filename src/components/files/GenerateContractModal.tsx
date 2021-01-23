@@ -1,27 +1,21 @@
 import React, { ChangeEvent, useState } from 'react';
-import { RouteComponentProps, withRouter } from 'react-router-dom';
-import { Dispatch } from 'redux';
-import { connect } from 'react-redux';
 import {
-  Button,
-  Dimmer, Dropdown, Form, Input, Loader, Modal, Segment,
+  Button, Checkbox,
+  Dropdown, Form, Icon, Input, Modal, Segment,
 } from 'semantic-ui-react';
 import {
-  ContractFile, Language, ContractType, ReturnFileType, Contract, Client, GenerateContractParams,
-} from '../clients/server.generated';
-import AlertContainer from '../components/alerts/AlertContainer';
-import ResourceStatus from '../stores/resourceStatus';
-import { getSingle } from '../stores/single/selectors';
-import { SingleEntities } from '../stores/single/single';
-import { RootState } from '../stores/store';
-import UserSelector from '../components/user/UserSelector';
-import PropsButtons from '../components/PropsButtons';
+  Language, ContractType, ReturnFileType, GenerateContractParams,
+} from '../../clients/server.generated';
+import AlertContainer from '../alerts/AlertContainer';
+import UserSelector from '../user/UserSelector';
+import { FilesClient } from '../../clients/filesClient';
 
 interface Props {
   contractId: number;
+  fetchContract: (id: number) => void;
 }
 
-function GenerateContract(props: Props) {
+function GenerateContractModal(props: Props) {
   const [isOpen, setOpen] = useState(false);
 
   const [name, changeName] = useState('');
@@ -32,10 +26,12 @@ function GenerateContract(props: Props) {
   const [saveToDisk, changeSaveToDisk] = useState(false);
   const [signee1Id, changeSignee1] = useState(0);
   const [signee2Id, changeSignee2] = useState(0);
+  const [loading, changeLoading] = useState(false);
 
   const save = async () => {
-    const client = new Client();
-    await client.generateFile(props.contractId, new GenerateContractParams({
+    changeLoading(true);
+    const client = new FilesClient();
+    await client.generateContractFile(props.contractId, new GenerateContractParams({
       name,
       language,
       contentType,
@@ -46,6 +42,8 @@ function GenerateContract(props: Props) {
       signee2Id,
     }));
     setOpen(false);
+    changeLoading(false);
+    props.fetchContract(props.contractId);
   };
 
   return (
@@ -56,7 +54,19 @@ function GenerateContract(props: Props) {
       open={isOpen}
       dimmer="blurring"
       size="tiny"
-      trigger={<Button primary> Generate File </Button>}
+      trigger={(
+        <Button
+          icon
+          loading={loading}
+          labelPosition="left"
+          floated="right"
+          style={{ marginTop: '-0.5em' }}
+          basic
+        >
+          <Icon name="plus" />
+          Generate File
+        </Button>
+      )}
     >
       <Segment attached="bottom">
         <AlertContainer />
@@ -66,19 +76,51 @@ function GenerateContract(props: Props) {
             primary
             onClick={save}
             floated="right"
+            loading={loading}
           >
             Generate
           </Button>
         </h2>
         <Form style={{ marginTop: '2em' }}>
-          <Form.Group>
+          <Form.Group widths="equal">
             <Form.Field
               label="Name"
               control={Input}
               value={name}
               onChange={(e: ChangeEvent<HTMLInputElement>) => changeName(e.target.value)}
-              width={7}
             />
+            <Form.Field>
+              {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
+              <label htmlFor="form-input-Content-Type">Content Type</label>
+              <Dropdown
+                id="form-input-Content-Type"
+                selection
+                placeholder="Content Type"
+                value={contentType}
+                options={[
+                  { key: 0, text: 'Contract', value: ContractType.CONTRACT },
+                  { key: 1, text: 'Proposal', value: ContractType.PROPOSAL },
+                ]}
+                onChange={(e, data) => changeContentType(data.value as ContractType)}
+              />
+            </Form.Field>
+          </Form.Group>
+          <Form.Group widths="equal">
+            <Form.Field>
+              {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
+              <label htmlFor="form-input-File-Type">File Type</label>
+              <Dropdown
+                id="form-input-File-Type"
+                selection
+                placeholder="File Type"
+                value={fileType}
+                options={[
+                  { key: 0, text: 'PDF', value: ReturnFileType.PDF },
+                  { key: 1, text: 'TEX', value: ReturnFileType.TEX },
+                ]}
+                onChange={(e, data) => changeFileType(data.value as ReturnFileType)}
+              />
+            </Form.Field>
             <Form.Field>
               {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
               <label htmlFor="form-input-language">Language</label>
@@ -95,73 +137,10 @@ function GenerateContract(props: Props) {
               />
             </Form.Field>
           </Form.Group>
-          <Form.Group>
-            <Form.Field>
-              {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-              <label htmlFor="form-input-Content-Type">Content Type</label>
-              <Dropdown
-                id="form-input-Content-Type"
-                selection
-                placeholder="Content Type"
-                value={contentType}
-                options={[
-                  { key: 0, text: 'Contract', value: ContractType.CONTRACT },
-                  { key: 1, text: 'Proposal', value: ContractType.PROPOSAL },
-                ]}
-                onChange={(e, data) => changeContentType(data.value as ContractType)}
-              />
-            </Form.Field>
-            <Form.Field>
-              {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-              <label htmlFor="form-input-File-Type">File Type</label>
-              <Dropdown
-                id="form-input-File-Type"
-                selection
-                placeholder="File Type"
-                value={fileType}
-                options={[
-                  { key: 0, text: 'PDF', value: ReturnFileType.PDF },
-                  { key: 1, text: 'TEX', value: ReturnFileType.TEX },
-                ]}
-                onChange={(e, data) => changeFileType(data.value as ReturnFileType)}
-              />
-            </Form.Field>
-          </Form.Group>
-          <Form.Group>
-            <Form.Field>
-              {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-              <label htmlFor="form-input-Discount">Show Discount</label>
-              <Dropdown
-                id="form-input-Discount"
-                selection
-                placeholder="Show Discount"
-                value={showDiscountPercentages}
-                options={[
-                  { key: 0, text: 'True', value: true },
-                  { key: 1, text: 'False', value: false },
-                ]}
-                onChange={(e, data) => changeDiscount(data.value as boolean)}
-              />
-            </Form.Field>
-            <Form.Field>
-              {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-              <label htmlFor="form-input-SaveToDisk">Save To Disk</label>
-              <Dropdown
-                id="form-input-SaveToDisk"
-                selection
-                placeholder="Save To Disk"
-                value={saveToDisk}
-                options={[
-                  { key: 0, text: 'True', value: true },
-                  { key: 1, text: 'False', value: false },
-                ]}
-                onChange={(e, data) => changeSaveToDisk(data.value as boolean)}
-              />
-            </Form.Field>
-          </Form.Group>
-          <Form.Group>
+          <Form.Group widths="equal">
             <Form.Field
               label="Signee 1"
+              placeholder="Signee 1"
               control={UserSelector}
               value={signee1Id}
               onChange={(id: number) => changeSignee1(id)}
@@ -169,11 +148,36 @@ function GenerateContract(props: Props) {
             />
             <Form.Field
               label="Signee 2"
+              placeholder="Signee 2"
               control={UserSelector}
               value={signee2Id}
               onChange={(id: number) => changeSignee2(id)}
               hideEmail
             />
+          </Form.Group>
+          <Form.Group>
+            <Form.Field>
+              {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
+              <label htmlFor="form-input-Discount">Show Discount</label>
+              <Checkbox
+                toggle
+                defaultChecked
+                id="form-input-Discount"
+                checked={showDiscountPercentages}
+                onChange={(e, data) => changeDiscount(data.checked as boolean)}
+              />
+            </Form.Field>
+            <Form.Field>
+              {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
+              <label htmlFor="form-input-SaveToDisk">Save To Disk</label>
+              <Checkbox
+                id="form-input-SaveToDisk"
+                toggle
+                defaultChecked
+                checked={saveToDisk}
+                onChange={(e, data) => changeSaveToDisk(data.checked as boolean)}
+              />
+            </Form.Field>
           </Form.Group>
         </Form>
       </Segment>
@@ -181,4 +185,4 @@ function GenerateContract(props: Props) {
   );
 }
 
-export default GenerateContract;
+export default GenerateContractModal;

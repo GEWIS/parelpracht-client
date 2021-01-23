@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import { Form, Input } from 'semantic-ui-react';
 import {
-  Invoice, InvoiceParams, ProductInstance,
+  Invoice, InvoiceParams,
 } from '../../clients/server.generated';
 import { getCompanyName } from '../../stores/company/selectors';
 import ResourceStatus from '../../stores/resourceStatus';
@@ -29,6 +29,7 @@ interface State {
   editing: boolean;
 
   productInstanceIds: number[];
+  title: string;
   comments: string | undefined;
   companyId: number;
   assignedToId: number;
@@ -55,6 +56,7 @@ class InvoiceProps extends React.Component<Props, State> {
   extractState = (props: Props) => {
     const { invoice, companyName } = props;
     return {
+      title: invoice.title,
       productInstanceIds: invoice.products.map((p) => p.id),
       comments: invoice.comments,
       companyId: invoice.companyId,
@@ -65,6 +67,7 @@ class InvoiceProps extends React.Component<Props, State> {
 
   toParams = (): InvoiceParams => {
     return new InvoiceParams({
+      title: this.state.title,
       productInstanceIds: this.state.productInstanceIds,
       comments: this.state.comments,
       companyId: this.state.companyId,
@@ -77,8 +80,6 @@ class InvoiceProps extends React.Component<Props, State> {
       editing,
       productInstanceIds,
       comments,
-      companyId,
-      assignedToId,
     } = this.state;
     const { companyName } = this.props;
 

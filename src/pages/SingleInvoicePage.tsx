@@ -2,7 +2,7 @@ import * as React from 'react';
 import { NavLink, RouteComponentProps, withRouter } from 'react-router-dom';
 import {
   Breadcrumb,
-  Container, Grid, Loader, Segment,
+  Container, Grid, Loader, Segment, Tab,
 } from 'semantic-ui-react';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
@@ -18,6 +18,8 @@ import ActivitiesList from '../components/activities/ActivitiesList';
 import { GeneralActivity } from '../components/activities/GeneralActivity';
 import FinancialDocumentProgress from '../components/activities/FinancialDocumentProgress';
 import InvoiceProductList from '../components/invoice/InvoiceProductList';
+import FilesList from '../components/files/FilesList';
+import GenerateInvoiceModal from '../components/files/GenerateInvoiceModal';
 
 interface Props extends RouteComponentProps<{ invoiceId: string }> {
   invoice: Invoice | undefined;
@@ -36,7 +38,7 @@ class SingleInvoicePage extends React.Component<Props> {
   }
 
   public render() {
-    const { invoice } = this.props;
+    const { invoice, fetchInvoice, status } = this.props;
 
     if (invoice === undefined) {
       return (
@@ -45,6 +47,42 @@ class SingleInvoicePage extends React.Component<Props> {
         </Container>
       );
     }
+
+    const panes = [
+      { menuItem: 'Products', render: () => <Tab.Pane /> },
+      {
+        menuItem: 'Files',
+        render: () => (
+          <Tab.Pane>
+            <FilesList
+              files={invoice.files}
+              entityId={invoice.id}
+              entity={SingleEntities.Invoice}
+              fetchEntity={fetchInvoice}
+              generateModal={(
+                <GenerateInvoiceModal
+                  invoiceId={invoice.id}
+                  fetchInvoice={fetchInvoice}
+                />
+            )}
+              status={status}
+            />
+          </Tab.Pane>
+        ),
+      },
+      {
+        menuItem: 'Activities',
+        render: () => (
+          <Tab.Pane>
+            <ActivitiesList
+              activities={invoice.activities as GeneralActivity[]}
+              componentId={invoice.id}
+              componentType={SingleEntities.Invoice}
+            />
+          </Tab.Pane>
+        ),
+      },
+    ];
 
     return (
       <Container style={{ paddingTop: '2em' }}>
@@ -60,20 +98,19 @@ class SingleInvoicePage extends React.Component<Props> {
           <Grid.Row centered columns={1} style={{ paddingLeft: '1em', paddingRight: '1em' }}>
             <Segment secondary>
               <FinancialDocumentProgress
+                documentId={invoice.id}
                 activities={invoice.activities as GeneralActivity[]}
-                documentType="Invoice"
+                documentType={SingleEntities.Invoice}
               />
             </Segment>
           </Grid.Row>
           <Grid.Row columns={2}>
-            <Grid.Column>
-              <Segment>
-                <InvoiceProps invoice={invoice} />
-              </Segment>
+            <Grid.Column width={10}>
+              <Tab panes={panes} menu={{ pointing: true, inverted: true }} />
             </Grid.Column>
-            <Grid.Column>
+            <Grid.Column width={6}>
               <Segment secondary>
-                <ActivitiesList activities={invoice.activities as GeneralActivity[]} />
+                <InvoiceProps invoice={invoice} />
               </Segment>
             </Grid.Column>
             <Segment secondary>

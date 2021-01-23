@@ -1,39 +1,58 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Step, Icon } from 'semantic-ui-react';
-import { RouteComponentProps, withRouter } from 'react-router-dom';
+import { Step, Icon, Button } from 'semantic-ui-react';
+import { NavLink, RouteComponentProps, withRouter } from 'react-router-dom';
 import { RootState } from '../../stores/store';
 import { GeneralActivity } from './GeneralActivity';
 import {
-  formatStatus,
+  formatStatus, getCompletedDocumentStatuses, getNextStatus,
   getStatusActivity,
   statusApplied,
 } from '../../helpers/activity';
+import DocumentStatusModal from './DocumentStatusModal';
+import { SingleEntities } from '../../stores/single/single';
+import { DocumentStatus } from './DocumentStatus';
 
 /**
  * Definition of used variables
  */
 interface Props extends RouteComponentProps {
+  documentId: number;
   lastStatusActivity: GeneralActivity;
-  status: string;
+  status: DocumentStatus;
   cancelled: boolean;
   allStatusActivities: GeneralActivity[];
-  documentType: string;
+  documentType: SingleEntities;
 }
 
 interface State {
-
+  stepModalOpen: boolean;
 }
 
 class FinancialDocumentProgress extends React.Component<Props, State> {
   public constructor(props: Props) {
     super(props);
+    this.state = {
+      stepModalOpen: false,
+    };
   }
+
+  closeStepModal = () => {
+    this.setState({
+      stepModalOpen: false,
+    });
+  };
 
   public render() {
     const {
-      lastStatusActivity, status, cancelled, allStatusActivities, documentType,
+      documentId,
+      lastStatusActivity,
+      status,
+      cancelled,
+      allStatusActivities,
+      documentType,
     } = this.props;
+    const { stepModalOpen } = this.state;
 
     /**
      * Activity with the status update that has been last been completed last.
@@ -43,6 +62,8 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
       allStatusActivities,
       status,
     );
+    const nextStatus: string[] = getNextStatus(lastStatusActivity, documentType);
+
     // check if the document has been cancelled
     if (cancelled) {
       // if it has been cancelled, then we check if the status has been completed
@@ -51,9 +72,10 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
         if (statusCompletedActivity != null) {
           return (
             <Step completed disabled>
+              <Icon />
               <Step.Content>
                 <Step.Title>
-                  {status}
+                  {formatStatus(status)}
                 </Step.Title>
                 <Step.Description>
                   {statusCompletedActivity.description}
@@ -62,13 +84,18 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
             </Step>
           );
         }
+
         // if the status has been completed but it was not logged
-        if (statusCompletedActivity != null) {
+        if (getCompletedDocumentStatuses(
+          lastStatusActivity.subType,
+          documentType,
+        ).includes(status)) {
           return (
             <Step completed disabled>
+              <Icon />
               <Step.Content>
                 <Step.Title>
-                  {status}
+                  {formatStatus(status)}
                 </Step.Title>
                 <Step.Description>
                   Not logged.
@@ -78,13 +105,14 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
           );
         }
       }
+
       // if the status has not been completed and cancelled
       return (
         <Step disabled>
           <Icon color="red" name="close" />
           <Step.Content>
             <Step.Title>
-              {status}
+              {formatStatus(status)}
             </Step.Title>
             <Step.Description>
               {documentType}
@@ -101,9 +129,10 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
       if (statusApplied(status, lastStatusActivity, documentType)) {
         return (
           <Step completed>
+            <Icon />
             <Step.Content>
               <Step.Title>
-                {status}
+                {formatStatus(status)}
               </Step.Title>
               <Step.Description>
                 Not logged.
@@ -112,8 +141,9 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
           </Step>
         );
       }
-      console.log(lastStatusActivity.subType);
-      if (lastStatusActivity.subType === 'IRRECOVERABLE') {
+
+      // the invoice is irrecoverable
+      if (lastStatusActivity.subType === DocumentStatus.IRRECOVERABLE) {
         return (
           <Step disabled>
             <Icon color="red" name="close" />
@@ -128,12 +158,42 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
           </Step>
         );
       }
-      // the status of the document has not been reached yet
+
+      // the status of the document has not been reached yet and can be completed
+      if (nextStatus.includes(status)) {
+        return (
+          <>
+            <Step
+              className="clickable"
+              onClick={() => {
+                this.setState({
+                  stepModalOpen: true,
+                });
+              }}
+            >
+              <Step.Content>
+                <Step.Title>
+                  {formatStatus(status)}
+                </Step.Title>
+              </Step.Content>
+            </Step>
+            <DocumentStatusModal
+              open={stepModalOpen}
+              documentId={documentId}
+              documentType={documentType}
+              documentStatus={status}
+              close={this.closeStepModal}
+            />
+          </>
+        );
+      }
+
+      // the status of the document has not been reached yet and cannot be completed yet
       return (
         <Step>
           <Step.Content>
             <Step.Title>
-              {status}
+              {formatStatus(status)}
             </Step.Title>
             <Step.Description>
               {documentType}
@@ -145,12 +205,14 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
         </Step>
       );
     }
+
     // the status has been completed and logged.
     return (
       <Step completed>
+        <Icon />
         <Step.Content>
           <Step.Title>
-            {status}
+            {formatStatus(status)}
           </Step.Title>
           <Step.Description>
             {statusCompletedActivity.description}

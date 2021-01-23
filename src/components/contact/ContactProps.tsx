@@ -4,6 +4,7 @@ import { Dispatch } from 'redux';
 import {
   Dropdown, Form, Input, TextArea,
 } from 'semantic-ui-react';
+import validator from 'validator';
 import {
   Contact, ContactFunction, ContactParams, Gender,
 } from '../../clients/server.generated';
@@ -153,6 +154,7 @@ class ContactProps extends React.Component<Props, State> {
           <Form.Group>
             <Form.Field
               disabled={!editing}
+              required
               id="form-input-first-name"
               fluid
               control={Input}
@@ -162,6 +164,9 @@ class ContactProps extends React.Component<Props, State> {
                 firstName: e.target.value,
               })}
               width={6}
+              error={
+                validator.isEmpty(firstName)
+              }
             />
             <Form.Field
               disabled={!editing}
@@ -177,6 +182,7 @@ class ContactProps extends React.Component<Props, State> {
             />
             <Form.Field
               disabled={!editing}
+              required
               id="form-input-last-name"
               fluid
               control={Input}
@@ -186,10 +192,13 @@ class ContactProps extends React.Component<Props, State> {
                 lastName: e.target.value,
               })}
               width={6}
+              error={
+                validator.isEmpty(firstName)
+              }
             />
           </Form.Group>
           <Form.Group widths="equal">
-            <Form.Field fluid disabled={!editing}>
+            <Form.Field required fluid disabled={!editing}>
               {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
               <label htmlFor="form-input-gender">Gender</label>
               <Dropdown
@@ -207,7 +216,7 @@ class ContactProps extends React.Component<Props, State> {
                 })}
               />
             </Form.Field>
-            <Form.Field fluid disabled={!editing}>
+            <Form.Field required fluid disabled={!editing}>
               {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
               <label htmlFor="form-input-function">Function</label>
               <Dropdown
@@ -235,6 +244,9 @@ class ContactProps extends React.Component<Props, State> {
               onChange={(e: ChangeEvent<HTMLInputElement>) => this.setState({
                 email: e.target.value,
               })}
+              error={
+                !validator.isEmail(email)
+              }
             />
             <Form.Field
               disabled={!editing}
@@ -246,6 +258,9 @@ class ContactProps extends React.Component<Props, State> {
               onChange={(e: ChangeEvent<HTMLInputElement>) => this.setState({
                 telephone: e.target.value,
               })}
+              error={
+                !validator.isEmpty(telephone!) && !validator.isMobilePhone(telephone!)
+              }
             />
           </Form.Group>
           <Form.Field disabled={!editing}>

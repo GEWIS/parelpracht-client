@@ -1,11 +1,15 @@
 import React from 'react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import {
-  Button, Container, Grid, Header, Icon, Segment,
+  Container, Grid, Header, Icon, Segment,
 } from 'semantic-ui-react';
 import { connect } from 'react-redux';
-import { AuthStatus, User } from '../clients/server.generated';
+import { User } from '../clients/server.generated';
 import { RootState } from '../stores/store';
+import DashboardInvoices from '../components/dashboard/DashboardInvoices';
+import DashboardContracts from '../components/dashboard/DashboardContracts';
+import DashboardProductInstanceStatusGraph from '../components/dashboard/DashboardProductInstanceStatusGraph';
+import DashboardContractedCategoryGraph from '../components/dashboard/DashboardContractedCategoryGraph';
 
 interface Props extends RouteComponentProps {
   // eslint-disable-next-line react/no-unused-prop-types
@@ -37,6 +41,21 @@ function DashboardPage(props: Props) {
         </Container>
       </Segment>
       <Container />
+
+      <Container style={{ marginTop: '2em' }}>
+        <Grid>
+          <Grid.Row columns={2}>
+            <Grid.Column width={9}>
+              <DashboardProductInstanceStatusGraph />
+              <DashboardContractedCategoryGraph />
+            </Grid.Column>
+            <Grid.Column width={7}>
+              <DashboardContracts />
+              <DashboardInvoices />
+            </Grid.Column>
+          </Grid.Row>
+        </Grid>
+      </Container>
     </>
   );
 }

@@ -2,7 +2,7 @@ import * as React from 'react';
 import { NavLink, RouteComponentProps, withRouter } from 'react-router-dom';
 import {
   Breadcrumb,
-  Container, Grid, Loader, Segment,
+  Container, Grid, Loader, Segment, Tab,
 } from 'semantic-ui-react';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
@@ -20,6 +20,7 @@ import ActivitiesList from '../components/activities/ActivitiesList';
 import { GeneralActivity } from '../components/activities/GeneralActivity';
 import { TransientAlert } from '../stores/alerts/actions';
 import { showTransientAlert } from '../stores/alerts/actionCreators';
+import FilesList from '../components/files/FilesList';
 
 interface Props extends RouteComponentProps<{ companyId: string }> {
   company: Company | undefined;
@@ -62,6 +63,43 @@ class SingleCompanyPage extends React.Component<Props> {
       );
     }
 
+    const panes = [
+      {
+        menuItem: 'Contacts',
+        render: () => (
+          <Tab.Pane>
+            <CompanyContactList />
+          </Tab.Pane>
+        ),
+      },
+      {
+        menuItem: 'Contracts',
+        render: () => (
+          <Tab.Pane>
+            <ContractList />
+          </Tab.Pane>
+        ),
+      },
+      {
+        menuItem: 'Invoices',
+        render: () => (
+          <Tab.Pane />
+        ),
+      },
+      {
+        menuItem: 'Activities',
+        render: () => (
+          <Tab.Pane>
+            <ActivitiesList
+              activities={company.activities as GeneralActivity[]}
+              componentId={company.id}
+              componentType="Company"
+            />
+          </Tab.Pane>
+        ),
+      },
+    ];
+
     return (
       <Container style={{ paddingTop: '2em' }}>
         <Breadcrumb
@@ -74,19 +112,11 @@ class SingleCompanyPage extends React.Component<Props> {
         <CompanySummary />
         <Grid columns={2}>
           <Grid.Column width={10}>
-            <Segment>
-              <CompanyProps company={company} />
-            </Segment>
+            <Tab panes={panes} menu={{ pointing: true, inverted: true }} />
           </Grid.Column>
           <Grid.Column width={6}>
             <Segment secondary>
-              <CompanyContactList />
-            </Segment>
-            <Segment secondary>
-              <ContractList />
-            </Segment>
-            <Segment secondary>
-              <ActivitiesList activities={company.activities as GeneralActivity[]} />
+              <CompanyProps company={company} />
             </Segment>
           </Grid.Column>
         </Grid>

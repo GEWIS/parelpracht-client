@@ -559,7 +559,7 @@ export class Client {
      * @param name The name of the new file, as seen in the UI
      * @return Ok
      */
-    uploadFile(file: FileParameter, name: string): Promise<ProductFile> {
+    uploadProductFile(file: FileParameter, name: string): Promise<ProductFile> {
         let url_ = this.baseUrl + "/product/{id}/file/upload";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -582,11 +582,11 @@ export class Client {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processUploadFile(_response);
+            return this.processUploadProductFile(_response);
         });
     }
 
-    protected processUploadFile(response: Response): Promise<ProductFile> {
+    protected processUploadProductFile(response: Response): Promise<ProductFile> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -616,7 +616,7 @@ export class Client {
      * @param fileId ID of the file
      * @return Ok
      */
-    getFile(id: number, fileId: number): Promise<any> {
+    getProductFile(id: number, fileId: number): Promise<any> {
         let url_ = this.baseUrl + "/product/{id}/file/{fileId}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -634,11 +634,11 @@ export class Client {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processGetFile(_response);
+            return this.processGetProductFile(_response);
         });
     }
 
-    protected processGetFile(response: Response): Promise<any> {
+    protected processGetProductFile(response: Response): Promise<any> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -669,7 +669,7 @@ export class Client {
      * @param body Update subset of the parameters of the file
      * @return Ok
      */
-    updateFile(id: number, fileId: number, body: Partial_FileParams): Promise<BaseFile> {
+    updateProductFile(id: number, fileId: number, body: Partial_FileParams): Promise<BaseFile> {
         let url_ = this.baseUrl + "/product/{id}/file/{fileId}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -691,11 +691,11 @@ export class Client {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processUpdateFile(_response);
+            return this.processUpdateProductFile(_response);
         });
     }
 
-    protected processUpdateFile(response: Response): Promise<BaseFile> {
+    protected processUpdateProductFile(response: Response): Promise<BaseFile> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -725,7 +725,7 @@ export class Client {
      * @param fileId ID of the file
      * @return No content
      */
-    deleteFile(id: number, fileId: number): Promise<void> {
+    deleteProductFile(id: number, fileId: number): Promise<void> {
         let url_ = this.baseUrl + "/product/{id}/file/{fileId}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -742,11 +742,11 @@ export class Client {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processDeleteFile(_response);
+            return this.processDeleteProductFile(_response);
         });
     }
 
-    protected processDeleteFile(response: Response): Promise<void> {
+    protected processDeleteProductFile(response: Response): Promise<void> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 204) {
@@ -773,7 +773,7 @@ export class Client {
      * @param body Parameters to create this comment with
      * @return Ok
      */
-    addComment(id: number, body: ActivityParams): Promise<BaseActivity> {
+    addProductComment(id: number, body: ActivityParams): Promise<BaseActivity> {
         let url_ = this.baseUrl + "/product/{id}/comment";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -792,11 +792,11 @@ export class Client {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processAddComment(_response);
+            return this.processAddProductComment(_response);
         });
     }
 
-    protected processAddComment(response: Response): Promise<BaseActivity> {
+    protected processAddProductComment(response: Response): Promise<BaseActivity> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -827,7 +827,7 @@ export class Client {
      * @param body Update subset of parameter of comment activity
      * @return Ok
      */
-    updateActivity(id: number, activityId: number, body: Partial_ActivityParams): Promise<BaseActivity> {
+    updateProductActivity(id: number, activityId: number, body: Partial_ActivityParams): Promise<BaseActivity> {
         let url_ = this.baseUrl + "/product/{id}/activity/{activityId}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -849,11 +849,11 @@ export class Client {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processUpdateActivity(_response);
+            return this.processUpdateProductActivity(_response);
         });
     }
 
-    protected processUpdateActivity(response: Response): Promise<BaseActivity> {
+    protected processUpdateProductActivity(response: Response): Promise<BaseActivity> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -883,7 +883,7 @@ export class Client {
      * @param activityId ID of the activity
      * @return No content
      */
-    deleteActivity(id: number, activityId: number): Promise<void> {
+    deleteProductActivity(id: number, activityId: number): Promise<void> {
         let url_ = this.baseUrl + "/product/{id}/activity/{activityId}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -900,11 +900,11 @@ export class Client {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processDeleteActivity(_response);
+            return this.processDeleteProductActivity(_response);
         });
     }
 
-    protected processDeleteActivity(response: Response): Promise<void> {
+    protected processDeleteProductActivity(response: Response): Promise<void> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 204) {
@@ -924,6 +924,54 @@ export class Client {
             });
         }
         return Promise.resolve<void>(<any>null);
+    }
+
+    /**
+     * @param year Financial year of the overview
+     * @return Ok
+     */
+    getDashboardProductInstanceStatistics(year: number): Promise<DashboardProductInstanceStats> {
+        let url_ = this.baseUrl + "/product/stats/statuses/{year}";
+        if (year === undefined || year === null)
+            throw new Error("The parameter 'year' must be defined.");
+        url_ = url_.replace("{year}", encodeURIComponent("" + year));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <RequestInit>{
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processGetDashboardProductInstanceStatistics(_response);
+        });
+    }
+
+    protected processGetDashboardProductInstanceStatistics(response: Response): Promise<DashboardProductInstanceStats> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = DashboardProductInstanceStats.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<DashboardProductInstanceStats>(<any>null);
     }
 
     /**
@@ -1021,6 +1069,55 @@ export class Client {
             });
         }
         return Promise.resolve<CompanySummary[]>(<any>null);
+    }
+
+    /**
+     * @param body List parameters to sort and filter the list
+     * @return Ok
+     */
+    getAllContractsExtensive(body: ListParams): Promise<any> {
+        let url_ = this.baseUrl + "/company/extensive";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ = <RequestInit>{
+            body: content_,
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processGetAllContractsExtensive(_response);
+        });
+    }
+
+    protected processGetAllContractsExtensive(response: Response): Promise<any> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 !== undefined ? resultData200 : <any>null;
+            return result200;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<any>(<any>null);
     }
 
     /**
@@ -1326,7 +1423,7 @@ export class Client {
      * @param body Parameters to create this comment with
      * @return Ok
      */
-    addComment2(id: number, body: ActivityParams): Promise<BaseActivity> {
+    addCompanyComment(id: number, body: ActivityParams): Promise<BaseActivity> {
         let url_ = this.baseUrl + "/company/{id}/comment";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -1345,11 +1442,11 @@ export class Client {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processAddComment2(_response);
+            return this.processAddCompanyComment(_response);
         });
     }
 
-    protected processAddComment2(response: Response): Promise<BaseActivity> {
+    protected processAddCompanyComment(response: Response): Promise<BaseActivity> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -1380,7 +1477,7 @@ export class Client {
      * @param body Update subset of parameter of comment activity
      * @return Ok
      */
-    updateActivity2(id: number, activityId: number, body: Partial_ActivityParams): Promise<BaseActivity> {
+    updateCompanyActivity(id: number, activityId: number, body: Partial_ActivityParams): Promise<BaseActivity> {
         let url_ = this.baseUrl + "/company/{id}/activity/{activityId}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -1402,11 +1499,11 @@ export class Client {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processUpdateActivity2(_response);
+            return this.processUpdateCompanyActivity(_response);
         });
     }
 
-    protected processUpdateActivity2(response: Response): Promise<BaseActivity> {
+    protected processUpdateCompanyActivity(response: Response): Promise<BaseActivity> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -1436,7 +1533,7 @@ export class Client {
      * @param activityId ID of the comment activity
      * @return No content
      */
-    deleteActivity2(id: number, activityId: number): Promise<void> {
+    deleteCompanyActivity(id: number, activityId: number): Promise<void> {
         let url_ = this.baseUrl + "/company/{id}/activity/{activityId}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -1453,11 +1550,11 @@ export class Client {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processDeleteActivity2(_response);
+            return this.processDeleteCompanyActivity(_response);
         });
     }
 
-    protected processDeleteActivity2(response: Response): Promise<void> {
+    protected processDeleteCompanyActivity(response: Response): Promise<void> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 204) {
@@ -1574,6 +1671,54 @@ export class Client {
             });
         }
         return Promise.resolve<ContractSummary[]>(<any>null);
+    }
+
+    /**
+     * @return Ok
+     */
+    getRecentContracts(): Promise<RecentContract[]> {
+        let url_ = this.baseUrl + "/contract/recent";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <RequestInit>{
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processGetRecentContracts(_response);
+        });
+    }
+
+    protected processGetRecentContracts(response: Response): Promise<RecentContract[]> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(RecentContract.fromJS(item));
+            }
+            return result200;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<RecentContract[]>(<any>null);
     }
 
     /**
@@ -1775,7 +1920,7 @@ export class Client {
      * @param body - Create subset of product
      * @return Ok
      */
-    addProduct(id: number, body: ProductInstanceParams): Promise<ProductInstance> {
+    addProductInstance(id: number, body: ProductInstanceParams): Promise<ProductInstance> {
         let url_ = this.baseUrl + "/contract/{id}/product";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -1794,11 +1939,11 @@ export class Client {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processAddProduct(_response);
+            return this.processAddProductInstance(_response);
         });
     }
 
-    protected processAddProduct(response: Response): Promise<ProductInstance> {
+    protected processAddProductInstance(response: Response): Promise<ProductInstance> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -1829,7 +1974,7 @@ export class Client {
      * @param body Update subset of product instance
      * @return Ok
      */
-    updateProduct2(id: number, prodId: number, body: Partial_ProductInstanceParams): Promise<ProductInstance> {
+    updateProductInstance(id: number, prodId: number, body: Partial_ProductInstanceParams): Promise<ProductInstance> {
         let url_ = this.baseUrl + "/contract/{id}/product/{prodId}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -1851,11 +1996,11 @@ export class Client {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processUpdateProduct2(_response);
+            return this.processUpdateProductInstance(_response);
         });
     }
 
-    protected processUpdateProduct2(response: Response): Promise<ProductInstance> {
+    protected processUpdateProductInstance(response: Response): Promise<ProductInstance> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -1885,7 +2030,7 @@ export class Client {
      * @param prodId ID of the product instance
      * @return No content
      */
-    deleteProduct2(id: number, prodId: number): Promise<void> {
+    deleteProductInstance(id: number, prodId: number): Promise<void> {
         let url_ = this.baseUrl + "/contract/{id}/product/{prodId}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -1902,11 +2047,11 @@ export class Client {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processDeleteProduct2(_response);
+            return this.processDeleteProductInstance(_response);
         });
     }
 
-    protected processDeleteProduct2(response: Response): Promise<void> {
+    protected processDeleteProductInstance(response: Response): Promise<void> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 204) {
@@ -1934,7 +2079,7 @@ export class Client {
      * @param body Parameters to create this status with
      * @return Ok
      */
-    addProductStatus(id: number, prodId: number, body: ProductInstanceStatusParams): Promise<BaseActivity> {
+    addProductInstanceStatus(id: number, prodId: number, body: ProductInstanceStatusParams): Promise<BaseActivity> {
         let url_ = this.baseUrl + "/contract/{id}/product/{prodId}/status";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -1956,11 +2101,11 @@ export class Client {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processAddProductStatus(_response);
+            return this.processAddProductInstanceStatus(_response);
         });
     }
 
-    protected processAddProductStatus(response: Response): Promise<BaseActivity> {
+    protected processAddProductInstanceStatus(response: Response): Promise<BaseActivity> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -1991,7 +2136,7 @@ export class Client {
      * @param body Parameters to create this comment with
      * @return Ok
      */
-    addProductComment(id: number, prodId: number, body: ActivityParams): Promise<BaseActivity> {
+    addProductInstanceComment(id: number, prodId: number, body: ActivityParams): Promise<BaseActivity> {
         let url_ = this.baseUrl + "/contract/{id}/product/{prodId}/comment";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -2013,11 +2158,11 @@ export class Client {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processAddProductComment(_response);
+            return this.processAddProductInstanceComment(_response);
         });
     }
 
-    protected processAddProductComment(response: Response): Promise<BaseActivity> {
+    protected processAddProductInstanceComment(response: Response): Promise<BaseActivity> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -2049,7 +2194,7 @@ export class Client {
      * @param body Update subset of parameter of the activity
      * @return Ok
      */
-    updateProductActivity(id: number, prodId: number, activityId: number, body: Partial_ActivityParams): Promise<BaseActivity> {
+    updateProductInstanceActivity(id: number, prodId: number, activityId: number, body: Partial_ActivityParams): Promise<BaseActivity> {
         let url_ = this.baseUrl + "/contract/{id}/product/{prodId}/activity/{activityId}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -2074,11 +2219,11 @@ export class Client {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processUpdateProductActivity(_response);
+            return this.processUpdateProductInstanceActivity(_response);
         });
     }
 
-    protected processUpdateProductActivity(response: Response): Promise<BaseActivity> {
+    protected processUpdateProductInstanceActivity(response: Response): Promise<BaseActivity> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -2109,7 +2254,7 @@ export class Client {
      * @param activityId ID of the activity
      * @return No content
      */
-    deleteProductActivity(id: number, prodId: number, activityId: number): Promise<void> {
+    deleteProductInstanceActivity(id: number, prodId: number, activityId: number): Promise<void> {
         let url_ = this.baseUrl + "/contract/{id}/product/{prodId}/activity/{activityId}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -2129,11 +2274,11 @@ export class Client {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processDeleteProductActivity(_response);
+            return this.processDeleteProductInstanceActivity(_response);
         });
     }
 
-    protected processDeleteProductActivity(response: Response): Promise<void> {
+    protected processDeleteProductInstanceActivity(response: Response): Promise<void> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 204) {
@@ -2160,7 +2305,7 @@ export class Client {
      * @param body Parameters to create this file with
      * @return Ok
      */
-    generateFile(id: number, body: GenerateContractParams): Promise<any> {
+    generateContractFile(id: number, body: GenerateContractParams): Promise<any> {
         let url_ = this.baseUrl + "/contract/{id}/file/generate";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -2179,11 +2324,11 @@ export class Client {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processGenerateFile(_response);
+            return this.processGenerateContractFile(_response);
         });
     }
 
-    protected processGenerateFile(response: Response): Promise<any> {
+    protected processGenerateContractFile(response: Response): Promise<any> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -2213,7 +2358,7 @@ export class Client {
      * @param name The name of the new file, as seen in the UI
      * @return Ok
      */
-    uploadFile2(file: FileParameter, name: string): Promise<ContractFile> {
+    uploadContractFile(file: FileParameter, name: string): Promise<ContractFile> {
         let url_ = this.baseUrl + "/contract/{id}/file/upload";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -2236,11 +2381,11 @@ export class Client {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processUploadFile2(_response);
+            return this.processUploadContractFile(_response);
         });
     }
 
-    protected processUploadFile2(response: Response): Promise<ContractFile> {
+    protected processUploadContractFile(response: Response): Promise<ContractFile> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -2270,7 +2415,7 @@ export class Client {
      * @param fileId ID of the file
      * @return Ok
      */
-    getFile2(id: number, fileId: number): Promise<any> {
+    getContractFile(id: number, fileId: number): Promise<any> {
         let url_ = this.baseUrl + "/contract/{id}/file/{fileId}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -2288,11 +2433,11 @@ export class Client {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processGetFile2(_response);
+            return this.processGetContractFile(_response);
         });
     }
 
-    protected processGetFile2(response: Response): Promise<any> {
+    protected processGetContractFile(response: Response): Promise<any> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -2323,7 +2468,7 @@ export class Client {
      * @param body Update subset of the parameters of the file
      * @return Ok
      */
-    updateFile2(id: number, fileId: number, body: Partial_FileParams): Promise<BaseFile> {
+    updateContractFile(id: number, fileId: number, body: Partial_FileParams): Promise<BaseFile> {
         let url_ = this.baseUrl + "/contract/{id}/file/{fileId}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -2345,11 +2490,11 @@ export class Client {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processUpdateFile2(_response);
+            return this.processUpdateContractFile(_response);
         });
     }
 
-    protected processUpdateFile2(response: Response): Promise<BaseFile> {
+    protected processUpdateContractFile(response: Response): Promise<BaseFile> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -2379,7 +2524,7 @@ export class Client {
      * @param fileId ID of the file
      * @return No content
      */
-    deleteFile2(id: number, fileId: number): Promise<void> {
+    deleteContractFile(id: number, fileId: number): Promise<void> {
         let url_ = this.baseUrl + "/contract/{id}/file/{fileId}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -2396,11 +2541,11 @@ export class Client {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processDeleteFile2(_response);
+            return this.processDeleteContractFile(_response);
         });
     }
 
-    protected processDeleteFile2(response: Response): Promise<void> {
+    protected processDeleteContractFile(response: Response): Promise<void> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 204) {
@@ -2427,7 +2572,7 @@ export class Client {
      * @param body Parameters to create this status with
      * @return Ok
      */
-    addStatus(id: number, body: ContractStatusParams): Promise<BaseActivity> {
+    addContractStatus(id: number, body: ContractStatusParams): Promise<BaseActivity> {
         let url_ = this.baseUrl + "/contract/{id}/status";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -2446,11 +2591,11 @@ export class Client {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processAddStatus(_response);
+            return this.processAddContractStatus(_response);
         });
     }
 
-    protected processAddStatus(response: Response): Promise<BaseActivity> {
+    protected processAddContractStatus(response: Response): Promise<BaseActivity> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -2480,7 +2625,7 @@ export class Client {
      * @param body Parameters to create this comment with
      * @return Ok
      */
-    addComment3(id: number, body: ActivityParams): Promise<BaseActivity> {
+    addContractComment(id: number, body: ActivityParams): Promise<BaseActivity> {
         let url_ = this.baseUrl + "/contract/{id}/comment";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -2499,11 +2644,11 @@ export class Client {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processAddComment3(_response);
+            return this.processAddContractComment(_response);
         });
     }
 
-    protected processAddComment3(response: Response): Promise<BaseActivity> {
+    protected processAddContractComment(response: Response): Promise<BaseActivity> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -2534,7 +2679,7 @@ export class Client {
      * @param body Update subset of parameter of the activity
      * @return Ok
      */
-    updateActivity3(id: number, activityId: number, body: Partial_ActivityParams): Promise<BaseActivity> {
+    updateContractActivity(id: number, activityId: number, body: Partial_ActivityParams): Promise<BaseActivity> {
         let url_ = this.baseUrl + "/contract/{id}/activity/{activityId}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -2556,11 +2701,11 @@ export class Client {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processUpdateActivity3(_response);
+            return this.processUpdateContractActivity(_response);
         });
     }
 
-    protected processUpdateActivity3(response: Response): Promise<BaseActivity> {
+    protected processUpdateContractActivity(response: Response): Promise<BaseActivity> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -2590,7 +2735,7 @@ export class Client {
      * @param activityId ID of the activity
      * @return No content
      */
-    deleteActivity3(id: number, activityId: number): Promise<void> {
+    deleteContractActivity(id: number, activityId: number): Promise<void> {
         let url_ = this.baseUrl + "/contract/{id}/activity/{activityId}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -2607,11 +2752,11 @@ export class Client {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processDeleteActivity3(_response);
+            return this.processDeleteContractActivity(_response);
         });
     }
 
-    protected processDeleteActivity3(response: Response): Promise<void> {
+    protected processDeleteContractActivity(response: Response): Promise<void> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 204) {
@@ -2728,6 +2873,54 @@ export class Client {
             });
         }
         return Promise.resolve<InvoiceSummary[]>(<any>null);
+    }
+
+    /**
+     * @return Ok
+     */
+    getExpiredInvoices(): Promise<ExpiredInvoice[]> {
+        let url_ = this.baseUrl + "/invoice/expired";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <RequestInit>{
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processGetExpiredInvoices(_response);
+        });
+    }
+
+    protected processGetExpiredInvoices(response: Response): Promise<ExpiredInvoice[]> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(ExpiredInvoice.fromJS(item));
+            }
+            return result200;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<ExpiredInvoice[]>(<any>null);
     }
 
     /**
@@ -2929,7 +3122,7 @@ export class Client {
      * @param body - Create subset of product
      * @return Ok
      */
-    addProduct2(id: number, body: Body): Promise<ProductInstance> {
+    addProduct(id: number, body: Body): Promise<ProductInstance> {
         let url_ = this.baseUrl + "/invoice/{id}/product";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -2948,11 +3141,11 @@ export class Client {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processAddProduct2(_response);
+            return this.processAddProduct(_response);
         });
     }
 
-    protected processAddProduct2(response: Response): Promise<ProductInstance> {
+    protected processAddProduct(response: Response): Promise<ProductInstance> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -2982,7 +3175,7 @@ export class Client {
      * @param prodId ID of the product instance
      * @return No content
      */
-    deleteProduct3(id: number, prodId: number): Promise<void> {
+    deleteProduct2(id: number, prodId: number): Promise<void> {
         let url_ = this.baseUrl + "/invoice/{id}/product/{prodId}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -2999,11 +3192,11 @@ export class Client {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processDeleteProduct3(_response);
+            return this.processDeleteProduct2(_response);
         });
     }
 
-    protected processDeleteProduct3(response: Response): Promise<void> {
+    protected processDeleteProduct2(response: Response): Promise<void> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 204) {
@@ -3030,7 +3223,7 @@ export class Client {
      * @param body Parameters to create this file with
      * @return Ok
      */
-    generateFile2(id: number, body: GenerateInvoiceParams): Promise<any> {
+    generateInvoiceFile(id: number, body: GenerateInvoiceParams): Promise<any> {
         let url_ = this.baseUrl + "/invoice/{id}/file/generate";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -3049,11 +3242,11 @@ export class Client {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processGenerateFile2(_response);
+            return this.processGenerateInvoiceFile(_response);
         });
     }
 
-    protected processGenerateFile2(response: Response): Promise<any> {
+    protected processGenerateInvoiceFile(response: Response): Promise<any> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -3083,7 +3276,7 @@ export class Client {
      * @param name The name of the new file, as seen in the UI
      * @return Ok
      */
-    uploadFile3(file: FileParameter, name: string): Promise<InvoiceFile> {
+    uploadInvoiceFile(file: FileParameter, name: string): Promise<InvoiceFile> {
         let url_ = this.baseUrl + "/invoice/{id}/file/upload";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -3106,11 +3299,11 @@ export class Client {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processUploadFile3(_response);
+            return this.processUploadInvoiceFile(_response);
         });
     }
 
-    protected processUploadFile3(response: Response): Promise<InvoiceFile> {
+    protected processUploadInvoiceFile(response: Response): Promise<InvoiceFile> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -3140,7 +3333,7 @@ export class Client {
      * @param fileId ID of the file
      * @return Ok
      */
-    getFile3(id: number, fileId: number): Promise<any> {
+    getInvoiceFile(id: number, fileId: number): Promise<any> {
         let url_ = this.baseUrl + "/invoice/{id}/file/{fileId}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -3158,11 +3351,11 @@ export class Client {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processGetFile3(_response);
+            return this.processGetInvoiceFile(_response);
         });
     }
 
-    protected processGetFile3(response: Response): Promise<any> {
+    protected processGetInvoiceFile(response: Response): Promise<any> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -3193,7 +3386,7 @@ export class Client {
      * @param body Update subset of the parameters of the file
      * @return Ok
      */
-    updateFile3(id: number, fileId: number, body: Partial_FileParams): Promise<BaseFile> {
+    updateInvoiceFile(id: number, fileId: number, body: Partial_FileParams): Promise<BaseFile> {
         let url_ = this.baseUrl + "/invoice/{id}/file/{fileId}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -3215,11 +3408,11 @@ export class Client {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processUpdateFile3(_response);
+            return this.processUpdateInvoiceFile(_response);
         });
     }
 
-    protected processUpdateFile3(response: Response): Promise<BaseFile> {
+    protected processUpdateInvoiceFile(response: Response): Promise<BaseFile> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -3249,7 +3442,7 @@ export class Client {
      * @param fileId ID of the file
      * @return No content
      */
-    deleteFile3(id: number, fileId: number): Promise<void> {
+    deleteInvoiceFile(id: number, fileId: number): Promise<void> {
         let url_ = this.baseUrl + "/invoice/{id}/file/{fileId}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -3266,11 +3459,11 @@ export class Client {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processDeleteFile3(_response);
+            return this.processDeleteInvoiceFile(_response);
         });
     }
 
-    protected processDeleteFile3(response: Response): Promise<void> {
+    protected processDeleteInvoiceFile(response: Response): Promise<void> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 204) {
@@ -3297,7 +3490,7 @@ export class Client {
      * @param body Parameters to create this status with
      * @return Ok
      */
-    addStatus2(id: number, body: InvoiceStatusParams): Promise<BaseActivity> {
+    addInvoiceStatus(id: number, body: InvoiceStatusParams): Promise<BaseActivity> {
         let url_ = this.baseUrl + "/invoice/{id}/status";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -3316,11 +3509,11 @@ export class Client {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processAddStatus2(_response);
+            return this.processAddInvoiceStatus(_response);
         });
     }
 
-    protected processAddStatus2(response: Response): Promise<BaseActivity> {
+    protected processAddInvoiceStatus(response: Response): Promise<BaseActivity> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -3350,7 +3543,7 @@ export class Client {
      * @param body Parameters to create this comment with
      * @return Ok
      */
-    addComment4(id: number, body: ActivityParams): Promise<BaseActivity> {
+    addInvoiceComment(id: number, body: ActivityParams): Promise<BaseActivity> {
         let url_ = this.baseUrl + "/invoice/{id}/comment";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -3369,11 +3562,11 @@ export class Client {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processAddComment4(_response);
+            return this.processAddInvoiceComment(_response);
         });
     }
 
-    protected processAddComment4(response: Response): Promise<BaseActivity> {
+    protected processAddInvoiceComment(response: Response): Promise<BaseActivity> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -3404,7 +3597,7 @@ export class Client {
      * @param body Update subset of parameter of the activity
      * @return Ok
      */
-    updateActivity4(id: number, activityId: number, body: Partial_ActivityParams): Promise<BaseActivity> {
+    updateInvoiceActivity(id: number, activityId: number, body: Partial_ActivityParams): Promise<BaseActivity> {
         let url_ = this.baseUrl + "/invoice/{id}/activity/{activityId}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -3426,11 +3619,11 @@ export class Client {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processUpdateActivity4(_response);
+            return this.processUpdateInvoiceActivity(_response);
         });
     }
 
-    protected processUpdateActivity4(response: Response): Promise<BaseActivity> {
+    protected processUpdateInvoiceActivity(response: Response): Promise<BaseActivity> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -3460,7 +3653,7 @@ export class Client {
      * @param activityId ID of the activity
      * @return No content
      */
-    deleteActivity4(id: number, activityId: number): Promise<void> {
+    deleteInvoiceActivity(id: number, activityId: number): Promise<void> {
         let url_ = this.baseUrl + "/invoice/{id}/activity/{activityId}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -3477,11 +3670,11 @@ export class Client {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processDeleteActivity4(_response);
+            return this.processDeleteInvoiceActivity(_response);
         });
     }
 
-    protected processDeleteActivity4(response: Response): Promise<void> {
+    protected processDeleteInvoiceActivity(response: Response): Promise<void> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 204) {
@@ -4093,40 +4286,20 @@ export class Client {
     }
 
     /**
-     * @param col (optional) Sorted column
-     * @param dir (optional) Sorting direction
-     * @param skip (optional) Number of elements to skip
-     * @param take (optional) Amount of elements to request
-     * @param search (optional) String to filter on value of select columns
+     * @param body List parameters to sort and filter the list
      * @return Ok
      */
-    getAllCategories(col: string | undefined, dir: Dir | undefined, skip: number | undefined, take: number | undefined, search: string | undefined): Promise<CategoryListResponse> {
-        let url_ = this.baseUrl + "/category?";
-        if (col === null)
-            throw new Error("The parameter 'col' cannot be null.");
-        else if (col !== undefined)
-            url_ += "col=" + encodeURIComponent("" + col) + "&";
-        if (dir === null)
-            throw new Error("The parameter 'dir' cannot be null.");
-        else if (dir !== undefined)
-            url_ += "dir=" + encodeURIComponent("" + dir) + "&";
-        if (skip === null)
-            throw new Error("The parameter 'skip' cannot be null.");
-        else if (skip !== undefined)
-            url_ += "skip=" + encodeURIComponent("" + skip) + "&";
-        if (take === null)
-            throw new Error("The parameter 'take' cannot be null.");
-        else if (take !== undefined)
-            url_ += "take=" + encodeURIComponent("" + take) + "&";
-        if (search === null)
-            throw new Error("The parameter 'search' cannot be null.");
-        else if (search !== undefined)
-            url_ += "search=" + encodeURIComponent("" + search) + "&";
+    getAllCategories(body: ListParams): Promise<CategoryListResponse> {
+        let url_ = this.baseUrl + "/category/table";
         url_ = url_.replace(/[?&]$/, "");
 
+        const content_ = JSON.stringify(body);
+
         let options_ = <RequestInit>{
-            method: "GET",
+            body: content_,
+            method: "POST",
             headers: {
+                "Content-Type": "application/json",
                 "Accept": "application/json"
             }
         };
@@ -4159,6 +4332,54 @@ export class Client {
             });
         }
         return Promise.resolve<CategoryListResponse>(<any>null);
+    }
+
+    /**
+     * @return Ok
+     */
+    getCategorySummaries(): Promise<CategorySummary[]> {
+        let url_ = this.baseUrl + "/category/compact";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <RequestInit>{
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processGetCategorySummaries(_response);
+        });
+    }
+
+    protected processGetCategorySummaries(response: Response): Promise<CategorySummary[]> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(CategorySummary.fromJS(item));
+            }
+            return result200;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<CategorySummary[]>(<any>null);
     }
 
     /**
@@ -4208,54 +4429,6 @@ export class Client {
             });
         }
         return Promise.resolve<ProductCategory>(<any>null);
-    }
-
-    /**
-     * @return Ok
-     */
-    getCategorySummaries(): Promise<CategorySummary[]> {
-        let url_ = this.baseUrl + "/category/compact";
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_ = <RequestInit>{
-            method: "GET",
-            headers: {
-                "Accept": "application/json"
-            }
-        };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processGetCategorySummaries(_response);
-        });
-    }
-
-    protected processGetCategorySummaries(response: Response): Promise<CategorySummary[]> {
-        const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
-        if (status === 200) {
-            return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            if (Array.isArray(resultData200)) {
-                result200 = [] as any;
-                for (let item of resultData200)
-                    result200!.push(CategorySummary.fromJS(item));
-            }
-            return result200;
-            });
-        } else if (status === 401) {
-            return response.text().then((_responseText) => {
-            let result401: any = null;
-            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result401 = WrappedApiError.fromJS(resultData401);
-            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            });
-        }
-        return Promise.resolve<CategorySummary[]>(<any>null);
     }
 
     /**
@@ -4357,6 +4530,98 @@ export class Client {
             });
         }
         return Promise.resolve<ProductCategory>(<any>null);
+    }
+
+    /**
+     * @param id ID of the category
+     * @return No content
+     */
+    deleteCategory(id: number): Promise<void> {
+        let url_ = this.baseUrl + "/category/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <RequestInit>{
+            method: "DELETE",
+            headers: {
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processDeleteCategory(_response);
+        });
+    }
+
+    protected processDeleteCategory(response: Response): Promise<void> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 204) {
+            return response.text().then((_responseText) => {
+            return;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<void>(<any>null);
+    }
+
+    /**
+     * @param year Financial year of the overview
+     * @return Ok
+     */
+    getContractedProductsStatistics(year: number): Promise<ContractedProductsPerMonth> {
+        let url_ = this.baseUrl + "/category/stats/contracted/{year}";
+        if (year === undefined || year === null)
+            throw new Error("The parameter 'year' must be defined.");
+        url_ = url_.replace("{year}", encodeURIComponent("" + year));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <RequestInit>{
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processGetContractedProductsStatistics(_response);
+        });
+    }
+
+    protected processGetContractedProductsStatistics(response: Response): Promise<ContractedProductsPerMonth> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = ContractedProductsPerMonth.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<ContractedProductsPerMonth>(<any>null);
     }
 
     /**
@@ -5645,6 +5910,8 @@ export class Invoice implements IInvoice {
     version!: number;
     /** All products that have been invoiced */
     products!: ProductInstance[];
+    /** Name of the invoice (by default the same as the first contract) */
+    title!: string;
     /** PO number on the invoice, if needed */
     poNumber?: string;
     /** Date at which this invoice will be sent */
@@ -5692,6 +5959,7 @@ export class Invoice implements IInvoice {
                 for (let item of _data["products"])
                     this.products!.push(ProductInstance.fromJS(item));
             }
+            this.title = _data["title"];
             this.poNumber = _data["poNumber"];
             this.startDate = _data["startDate"] ? new Date(_data["startDate"].toString()) : <any>undefined;
             this.companyId = _data["companyId"];
@@ -5733,6 +6001,7 @@ export class Invoice implements IInvoice {
             for (let item of this.products)
                 data["products"].push(item.toJSON());
         }
+        data["title"] = this.title;
         data["poNumber"] = this.poNumber;
         data["startDate"] = this.startDate ? this.startDate.toISOString() : <any>undefined;
         data["companyId"] = this.companyId;
@@ -5769,6 +6038,8 @@ export interface IInvoice {
     version: number;
     /** All products that have been invoiced */
     products: ProductInstance[];
+    /** Name of the invoice (by default the same as the first contract) */
+    title: string;
     /** PO number on the invoice, if needed */
     poNumber?: string;
     /** Date at which this invoice will be sent */
@@ -7475,6 +7746,162 @@ export interface IPartial_ActivityParams {
     description?: string;
 }
 
+export class AnalysisResult implements IAnalysisResult {
+    amount!: number;
+    nrOfProducts!: number;
+
+    constructor(data?: IAnalysisResult) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.amount = _data["amount"];
+            this.nrOfProducts = _data["nrOfProducts"];
+        }
+    }
+
+    static fromJS(data: any): AnalysisResult {
+        data = typeof data === 'object' ? data : {};
+        let result = new AnalysisResult();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["amount"] = this.amount;
+        data["nrOfProducts"] = this.nrOfProducts;
+        return data; 
+    }
+}
+
+export interface IAnalysisResult {
+    amount: number;
+    nrOfProducts: number;
+}
+
+export class InvoicedAmounts implements IInvoicedAmounts {
+    delivered!: AnalysisResult;
+    notDelivered!: AnalysisResult;
+
+    constructor(data?: IInvoicedAmounts) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+        if (!data) {
+            this.delivered = new AnalysisResult();
+            this.notDelivered = new AnalysisResult();
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.delivered = _data["delivered"] ? AnalysisResult.fromJS(_data["delivered"]) : new AnalysisResult();
+            this.notDelivered = _data["notDelivered"] ? AnalysisResult.fromJS(_data["notDelivered"]) : new AnalysisResult();
+        }
+    }
+
+    static fromJS(data: any): InvoicedAmounts {
+        data = typeof data === 'object' ? data : {};
+        let result = new InvoicedAmounts();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["delivered"] = this.delivered ? this.delivered.toJSON() : <any>undefined;
+        data["notDelivered"] = this.notDelivered ? this.notDelivered.toJSON() : <any>undefined;
+        return data; 
+    }
+}
+
+export interface IInvoicedAmounts {
+    delivered: AnalysisResult;
+    notDelivered: AnalysisResult;
+}
+
+export class DashboardProductInstanceStats implements IDashboardProductInstanceStats {
+    suggested!: AnalysisResult;
+    contracted!: AnalysisResult;
+    delivered!: AnalysisResult;
+    invoiced!: InvoicedAmounts;
+    paid!: AnalysisResult;
+    financialYears!: number[];
+
+    constructor(data?: IDashboardProductInstanceStats) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+        if (!data) {
+            this.suggested = new AnalysisResult();
+            this.contracted = new AnalysisResult();
+            this.delivered = new AnalysisResult();
+            this.invoiced = new InvoicedAmounts();
+            this.paid = new AnalysisResult();
+            this.financialYears = [];
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.suggested = _data["suggested"] ? AnalysisResult.fromJS(_data["suggested"]) : new AnalysisResult();
+            this.contracted = _data["contracted"] ? AnalysisResult.fromJS(_data["contracted"]) : new AnalysisResult();
+            this.delivered = _data["delivered"] ? AnalysisResult.fromJS(_data["delivered"]) : new AnalysisResult();
+            this.invoiced = _data["invoiced"] ? InvoicedAmounts.fromJS(_data["invoiced"]) : new InvoicedAmounts();
+            this.paid = _data["paid"] ? AnalysisResult.fromJS(_data["paid"]) : new AnalysisResult();
+            if (Array.isArray(_data["financialYears"])) {
+                this.financialYears = [] as any;
+                for (let item of _data["financialYears"])
+                    this.financialYears!.push(item);
+            }
+        }
+    }
+
+    static fromJS(data: any): DashboardProductInstanceStats {
+        data = typeof data === 'object' ? data : {};
+        let result = new DashboardProductInstanceStats();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["suggested"] = this.suggested ? this.suggested.toJSON() : <any>undefined;
+        data["contracted"] = this.contracted ? this.contracted.toJSON() : <any>undefined;
+        data["delivered"] = this.delivered ? this.delivered.toJSON() : <any>undefined;
+        data["invoiced"] = this.invoiced ? this.invoiced.toJSON() : <any>undefined;
+        data["paid"] = this.paid ? this.paid.toJSON() : <any>undefined;
+        if (Array.isArray(this.financialYears)) {
+            data["financialYears"] = [];
+            for (let item of this.financialYears)
+                data["financialYears"].push(item);
+        }
+        return data; 
+    }
+}
+
+export interface IDashboardProductInstanceStats {
+    suggested: AnalysisResult;
+    contracted: AnalysisResult;
+    delivered: AnalysisResult;
+    invoiced: InvoicedAmounts;
+    paid: AnalysisResult;
+    financialYears: number[];
+}
+
 export class CompanyListResponse implements ICompanyListResponse {
     list!: Company[];
     count!: number;
@@ -7790,6 +8217,7 @@ export interface IContractListResponse {
 export class ContractSummary implements IContractSummary {
     id!: number;
     title!: string;
+    status!: ContractStatus;
 
     constructor(data?: IContractSummary) {
         if (data) {
@@ -7804,6 +8232,7 @@ export class ContractSummary implements IContractSummary {
         if (_data) {
             this.id = _data["id"];
             this.title = _data["title"];
+            this.status = _data["status"];
         }
     }
 
@@ -7818,6 +8247,7 @@ export class ContractSummary implements IContractSummary {
         data = typeof data === 'object' ? data : {};
         data["id"] = this.id;
         data["title"] = this.title;
+        data["status"] = this.status;
         return data; 
     }
 }
@@ -7825,6 +8255,83 @@ export class ContractSummary implements IContractSummary {
 export interface IContractSummary {
     id: number;
     title: string;
+    status: ContractStatus;
+}
+
+export class RecentContract implements IRecentContract {
+    id!: number;
+    title!: string;
+    companyId!: number;
+    assignedToId!: number;
+    contactId!: number;
+    createdAt!: Date;
+    updatedAt!: Date;
+    type!: ActivityType;
+    description!: string;
+    createdById!: number;
+    subType!: ContractStatus;
+
+    constructor(data?: IRecentContract) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.title = _data["title"];
+            this.companyId = _data["companyId"];
+            this.assignedToId = _data["assignedToId"];
+            this.contactId = _data["contactId"];
+            this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
+            this.updatedAt = _data["updatedAt"] ? new Date(_data["updatedAt"].toString()) : <any>undefined;
+            this.type = _data["type"];
+            this.description = _data["description"];
+            this.createdById = _data["createdById"];
+            this.subType = _data["subType"];
+        }
+    }
+
+    static fromJS(data: any): RecentContract {
+        data = typeof data === 'object' ? data : {};
+        let result = new RecentContract();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["title"] = this.title;
+        data["companyId"] = this.companyId;
+        data["assignedToId"] = this.assignedToId;
+        data["contactId"] = this.contactId;
+        data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
+        data["updatedAt"] = this.updatedAt ? this.updatedAt.toISOString() : <any>undefined;
+        data["type"] = this.type;
+        data["description"] = this.description;
+        data["createdById"] = this.createdById;
+        data["subType"] = this.subType;
+        return data; 
+    }
+}
+
+export interface IRecentContract {
+    id: number;
+    title: string;
+    companyId: number;
+    assignedToId: number;
+    contactId: number;
+    createdAt: Date;
+    updatedAt: Date;
+    type: ActivityType;
+    description: string;
+    createdById: number;
+    subType: ContractStatus;
 }
 
 export class ContractParams implements IContractParams {
@@ -8029,6 +8536,13 @@ export interface IPartial_ProductInstanceParams {
     basePrice?: number;
     discount?: number;
     comments?: string;
+}
+
+export enum ProductInstanceStatus {
+    NOTDELIVERED = "NOTDELIVERED",
+    DELIVERED = "DELIVERED",
+    CANCELLED = "CANCELLED",
+    DEFERRED = "DEFERRED",
 }
 
 export class ProductInstanceStatusParams implements IProductInstanceStatusParams {
@@ -8243,7 +8757,8 @@ export interface IInvoiceListResponse {
 
 export class InvoiceSummary implements IInvoiceSummary {
     id!: number;
-    companyName!: string;
+    title!: string;
+    status!: InvoiceStatus;
 
     constructor(data?: IInvoiceSummary) {
         if (data) {
@@ -8257,7 +8772,8 @@ export class InvoiceSummary implements IInvoiceSummary {
     init(_data?: any) {
         if (_data) {
             this.id = _data["id"];
-            this.companyName = _data["companyName"];
+            this.title = _data["title"];
+            this.status = _data["status"];
         }
     }
 
@@ -8271,18 +8787,89 @@ export class InvoiceSummary implements IInvoiceSummary {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["id"] = this.id;
-        data["companyName"] = this.companyName;
+        data["title"] = this.title;
+        data["status"] = this.status;
         return data; 
     }
 }
 
 export interface IInvoiceSummary {
     id: number;
-    companyName: string;
+    title: string;
+    status: InvoiceStatus;
+}
+
+export class ExpiredInvoice implements IExpiredInvoice {
+    id!: number;
+    version!: number;
+    startDate!: Date;
+    companyId!: number;
+    assignedToId!: number;
+    createdAt!: Date;
+    updatedAt!: Date;
+    createdById!: number;
+    value!: number;
+
+    constructor(data?: IExpiredInvoice) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.version = _data["version"];
+            this.startDate = _data["startDate"] ? new Date(_data["startDate"].toString()) : <any>undefined;
+            this.companyId = _data["companyId"];
+            this.assignedToId = _data["assignedToId"];
+            this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
+            this.updatedAt = _data["updatedAt"] ? new Date(_data["updatedAt"].toString()) : <any>undefined;
+            this.createdById = _data["createdById"];
+            this.value = _data["value"];
+        }
+    }
+
+    static fromJS(data: any): ExpiredInvoice {
+        data = typeof data === 'object' ? data : {};
+        let result = new ExpiredInvoice();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["version"] = this.version;
+        data["startDate"] = this.startDate ? this.startDate.toISOString() : <any>undefined;
+        data["companyId"] = this.companyId;
+        data["assignedToId"] = this.assignedToId;
+        data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
+        data["updatedAt"] = this.updatedAt ? this.updatedAt.toISOString() : <any>undefined;
+        data["createdById"] = this.createdById;
+        data["value"] = this.value;
+        return data; 
+    }
+}
+
+export interface IExpiredInvoice {
+    id: number;
+    version: number;
+    startDate: Date;
+    companyId: number;
+    assignedToId: number;
+    createdAt: Date;
+    updatedAt: Date;
+    createdById: number;
+    value: number;
 }
 
 export class InvoiceParams implements IInvoiceParams {
     companyId!: number;
+    title!: string;
     productInstanceIds!: number[];
     poNumber?: string;
     comments?: string;
@@ -8304,6 +8891,7 @@ export class InvoiceParams implements IInvoiceParams {
     init(_data?: any) {
         if (_data) {
             this.companyId = _data["companyId"];
+            this.title = _data["title"];
             if (Array.isArray(_data["productInstanceIds"])) {
                 this.productInstanceIds = [] as any;
                 for (let item of _data["productInstanceIds"])
@@ -8326,6 +8914,7 @@ export class InvoiceParams implements IInvoiceParams {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["companyId"] = this.companyId;
+        data["title"] = this.title;
         if (Array.isArray(this.productInstanceIds)) {
             data["productInstanceIds"] = [];
             for (let item of this.productInstanceIds)
@@ -8341,6 +8930,7 @@ export class InvoiceParams implements IInvoiceParams {
 
 export interface IInvoiceParams {
     companyId: number;
+    title: string;
     productInstanceIds: number[];
     poNumber?: string;
     comments?: string;
@@ -8351,6 +8941,7 @@ export interface IInvoiceParams {
 /** Make all properties in T optional */
 export class Partial_InvoiceParams implements IPartial_InvoiceParams {
     companyId?: number;
+    title?: string;
     productInstanceIds?: number[];
     poNumber?: string;
     comments?: string;
@@ -8369,6 +8960,7 @@ export class Partial_InvoiceParams implements IPartial_InvoiceParams {
     init(_data?: any) {
         if (_data) {
             this.companyId = _data["companyId"];
+            this.title = _data["title"];
             if (Array.isArray(_data["productInstanceIds"])) {
                 this.productInstanceIds = [] as any;
                 for (let item of _data["productInstanceIds"])
@@ -8391,6 +8983,7 @@ export class Partial_InvoiceParams implements IPartial_InvoiceParams {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["companyId"] = this.companyId;
+        data["title"] = this.title;
         if (Array.isArray(this.productInstanceIds)) {
             data["productInstanceIds"] = [];
             for (let item of this.productInstanceIds)
@@ -8407,6 +9000,7 @@ export class Partial_InvoiceParams implements IPartial_InvoiceParams {
 /** Make all properties in T optional */
 export interface IPartial_InvoiceParams {
     companyId?: number;
+    title?: string;
     productInstanceIds?: number[];
     poNumber?: string;
     comments?: string;
@@ -9093,6 +9687,130 @@ export interface IPartial_CategoryParams {
     name?: string;
 }
 
+export class ProductsPerCategory implements IProductsPerCategory {
+    categoryId!: number;
+    amount!: number[];
+    nrOfProducts!: number[];
+
+    constructor(data?: IProductsPerCategory) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+        if (!data) {
+            this.amount = [];
+            this.nrOfProducts = [];
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.categoryId = _data["categoryId"];
+            if (Array.isArray(_data["amount"])) {
+                this.amount = [] as any;
+                for (let item of _data["amount"])
+                    this.amount!.push(item);
+            }
+            if (Array.isArray(_data["nrOfProducts"])) {
+                this.nrOfProducts = [] as any;
+                for (let item of _data["nrOfProducts"])
+                    this.nrOfProducts!.push(item);
+            }
+        }
+    }
+
+    static fromJS(data: any): ProductsPerCategory {
+        data = typeof data === 'object' ? data : {};
+        let result = new ProductsPerCategory();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["categoryId"] = this.categoryId;
+        if (Array.isArray(this.amount)) {
+            data["amount"] = [];
+            for (let item of this.amount)
+                data["amount"].push(item);
+        }
+        if (Array.isArray(this.nrOfProducts)) {
+            data["nrOfProducts"] = [];
+            for (let item of this.nrOfProducts)
+                data["nrOfProducts"].push(item);
+        }
+        return data; 
+    }
+}
+
+export interface IProductsPerCategory {
+    categoryId: number;
+    amount: number[];
+    nrOfProducts: number[];
+}
+
+export class ContractedProductsPerMonth implements IContractedProductsPerMonth {
+    categories!: ProductsPerCategory[];
+    financialYears!: number[];
+
+    constructor(data?: IContractedProductsPerMonth) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+        if (!data) {
+            this.categories = [];
+            this.financialYears = [];
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["categories"])) {
+                this.categories = [] as any;
+                for (let item of _data["categories"])
+                    this.categories!.push(ProductsPerCategory.fromJS(item));
+            }
+            if (Array.isArray(_data["financialYears"])) {
+                this.financialYears = [] as any;
+                for (let item of _data["financialYears"])
+                    this.financialYears!.push(item);
+            }
+        }
+    }
+
+    static fromJS(data: any): ContractedProductsPerMonth {
+        data = typeof data === 'object' ? data : {};
+        let result = new ContractedProductsPerMonth();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.categories)) {
+            data["categories"] = [];
+            for (let item of this.categories)
+                data["categories"].push(item.toJSON());
+        }
+        if (Array.isArray(this.financialYears)) {
+            data["financialYears"] = [];
+            for (let item of this.financialYears)
+                data["financialYears"].push(item);
+        }
+        return data; 
+    }
+}
+
+export interface IContractedProductsPerMonth {
+    categories: ProductsPerCategory[];
+    financialYears: number[];
+}
+
 export class LoginParams implements ILoginParams {
     email?: string;
     password?: string;
@@ -9167,11 +9885,6 @@ export class Body implements IBody {
 
 export interface IBody {
     productId: number;
-}
-
-export enum Dir {
-    ASC = "ASC",
-    DESC = "DESC",
 }
 
 export interface FileParameter {
