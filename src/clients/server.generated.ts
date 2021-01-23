@@ -4577,6 +4577,54 @@ export class Client {
     }
 
     /**
+     * @param year Financial year of the overview
+     * @return Ok
+     */
+    getContractedProductsStatistics(year: number): Promise<ContractedProductsPerMonth> {
+        let url_ = this.baseUrl + "/category/stats/contracted/{year}";
+        if (year === undefined || year === null)
+            throw new Error("The parameter 'year' must be defined.");
+        url_ = url_.replace("{year}", encodeURIComponent("" + year));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <RequestInit>{
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processGetContractedProductsStatistics(_response);
+        });
+    }
+
+    protected processGetContractedProductsStatistics(response: Response): Promise<ContractedProductsPerMonth> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = ContractedProductsPerMonth.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<ContractedProductsPerMonth>(<any>null);
+    }
+
+    /**
      * @return Ok
      */
     login(body: LoginParams): Promise<Product> {
@@ -9506,6 +9554,130 @@ export class Partial_CategoryParams implements IPartial_CategoryParams {
 /** Make all properties in T optional */
 export interface IPartial_CategoryParams {
     name?: string;
+}
+
+export class ProductsPerCategory implements IProductsPerCategory {
+    categoryId!: number;
+    amount!: number[];
+    nrOfProducts!: number[];
+
+    constructor(data?: IProductsPerCategory) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+        if (!data) {
+            this.amount = [];
+            this.nrOfProducts = [];
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.categoryId = _data["categoryId"];
+            if (Array.isArray(_data["amount"])) {
+                this.amount = [] as any;
+                for (let item of _data["amount"])
+                    this.amount!.push(item);
+            }
+            if (Array.isArray(_data["nrOfProducts"])) {
+                this.nrOfProducts = [] as any;
+                for (let item of _data["nrOfProducts"])
+                    this.nrOfProducts!.push(item);
+            }
+        }
+    }
+
+    static fromJS(data: any): ProductsPerCategory {
+        data = typeof data === 'object' ? data : {};
+        let result = new ProductsPerCategory();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["categoryId"] = this.categoryId;
+        if (Array.isArray(this.amount)) {
+            data["amount"] = [];
+            for (let item of this.amount)
+                data["amount"].push(item);
+        }
+        if (Array.isArray(this.nrOfProducts)) {
+            data["nrOfProducts"] = [];
+            for (let item of this.nrOfProducts)
+                data["nrOfProducts"].push(item);
+        }
+        return data; 
+    }
+}
+
+export interface IProductsPerCategory {
+    categoryId: number;
+    amount: number[];
+    nrOfProducts: number[];
+}
+
+export class ContractedProductsPerMonth implements IContractedProductsPerMonth {
+    categories!: ProductsPerCategory[];
+    financialYears!: number[];
+
+    constructor(data?: IContractedProductsPerMonth) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+        if (!data) {
+            this.categories = [];
+            this.financialYears = [];
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["categories"])) {
+                this.categories = [] as any;
+                for (let item of _data["categories"])
+                    this.categories!.push(ProductsPerCategory.fromJS(item));
+            }
+            if (Array.isArray(_data["financialYears"])) {
+                this.financialYears = [] as any;
+                for (let item of _data["financialYears"])
+                    this.financialYears!.push(item);
+            }
+        }
+    }
+
+    static fromJS(data: any): ContractedProductsPerMonth {
+        data = typeof data === 'object' ? data : {};
+        let result = new ContractedProductsPerMonth();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.categories)) {
+            data["categories"] = [];
+            for (let item of this.categories)
+                data["categories"].push(item.toJSON());
+        }
+        if (Array.isArray(this.financialYears)) {
+            data["financialYears"] = [];
+            for (let item of this.financialYears)
+                data["financialYears"].push(item);
+        }
+        return data; 
+    }
+}
+
+export interface IContractedProductsPerMonth {
+    categories: ProductsPerCategory[];
+    financialYears: number[];
 }
 
 export class LoginParams implements ILoginParams {

@@ -9,6 +9,7 @@ import { RootState } from '../stores/store';
 import DashboardInvoices from '../components/dashboard/DashboardInvoices';
 import DashboardContracts from '../components/dashboard/DashboardContracts';
 import DashboardProductInstanceStatusGraph from '../components/dashboard/DashboardProductInstanceStatusGraph';
+import DashboardContractedCategoryGraph from '../components/dashboard/DashboardContractedCategoryGraph';
 
 interface Props extends RouteComponentProps {
   // eslint-disable-next-line react/no-unused-prop-types
@@ -46,6 +47,7 @@ function DashboardPage(props: Props) {
           <Grid.Row columns={2}>
             <Grid.Column width={10}>
               <DashboardProductInstanceStatusGraph />
+              <DashboardContractedCategoryGraph />
             </Grid.Column>
             <Grid.Column width={6}>
               <DashboardContracts />

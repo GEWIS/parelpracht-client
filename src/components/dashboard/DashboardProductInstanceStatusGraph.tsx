@@ -79,7 +79,7 @@ class DashboardProductInstanceStatusGraph extends React.Component<Props, State> 
     const result: object[] = [];
     financialYears.forEach((y: number) => {
       result.push({
-        key: y, value: y, text: y.toString(),
+        key: y, value: y, text: `${(y - 1).toString()} - ${y.toString()}`,
       });
     });
     return result;

@@ -1,6 +1,5 @@
 import { ActivityType, GeneralActivity } from '../components/activities/GeneralActivity';
 import { formatLastUpdate } from './timestamp';
-import { formatLastUpdate } from './lastUpdate';
 import { ContractStatus, InvoiceStatus } from '../clients/server.generated';
 import { SingleEntities } from '../stores/single/single';
 import { DocumentStatus } from '../components/activities/DocumentStatus';
