@@ -77,6 +77,7 @@ class SingleInvoicePage extends React.Component<Props> {
               activities={invoice.activities as GeneralActivity[]}
               componentId={invoice.id}
               componentType={SingleEntities.Invoice}
+              resourceStatus={status}
             />
           </Tab.Pane>
         ),
@@ -100,6 +101,7 @@ class SingleInvoicePage extends React.Component<Props> {
                 documentId={invoice.id}
                 activities={invoice.activities as GeneralActivity[]}
                 documentType={SingleEntities.Invoice}
+                resourceStatus={status}
               />
             </Segment>
           </Grid.Row>

@@ -92,6 +92,7 @@ class SingleProductPage extends React.Component<Props> {
               activities={product.activities as GeneralActivity[]}
               componentId={product.id}
               componentType={SingleEntities.Product}
+              resourceStatus={status}
             />
           </Tab.Pane>
         ),

@@ -1,28 +1,45 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Button, Loader } from 'semantic-ui-react';
-import { NavLink, RouteComponentProps, withRouter } from 'react-router-dom';
+import {
+  Button, Icon, Loader, Table,
+} from 'semantic-ui-react';
+import { RouteComponentProps, withRouter } from 'react-router-dom';
+import { Dispatch } from 'redux';
 import { RootState } from '../../stores/store';
 import ActivityComponent from './ActivityComponent';
 import { GeneralActivity } from './GeneralActivity';
+import { SingleEntities } from '../../stores/single/single';
+import CreateCommentRow from './CreateCommentRow';
+import ResourceStatus from '../../stores/resourceStatus';
 
 interface Props extends RouteComponentProps {
   activities: GeneralActivity[];
   componentId: number;
-  componentType: string;
+  componentType: SingleEntities;
+  resourceStatus: ResourceStatus;
 }
 
 interface State {
-
+  creating: boolean;
 }
 
 class ActivitiesList extends React.Component<Props, State> {
   public constructor(props: Props) {
     super(props);
+    this.state = {
+      creating: false,
+    };
   }
 
+  cancelCreate = () => {
+    this.setState({ creating: false });
+  };
+
   public render() {
-    const { activities, componentId, componentType } = this.props;
+    const {
+      activities, componentId, componentType, resourceStatus,
+    } = this.props;
+    const { creating } = this.state;
 
     if (activities === undefined) {
       return (
@@ -30,15 +47,35 @@ class ActivitiesList extends React.Component<Props, State> {
       );
     }
 
+    let activitiesList;
     if (activities.length === 0) {
-      return (
+      activitiesList = (
+        <h4>
+          No activities logged yet.
+        </h4>
+      );
+    } else {
+      activitiesList = (
         <>
-          <h3>
-            Activities
-          </h3>
-          <h4>
-            No activities logged yet.
-          </h4>
+          {activities.reverse().map((activity) => (
+            <ActivityComponent activity={activity as GeneralActivity} />
+          ))}
+        </>
+      );
+    }
+
+    let createRow;
+
+    if (creating) {
+      createRow = (
+        <>
+          <CreateCommentRow
+            create
+            close={this.cancelCreate}
+            componentId={componentId}
+            componentType={componentType}
+            resourceStatus={resourceStatus}
+          />
         </>
       );
     }
@@ -47,10 +84,20 @@ class ActivitiesList extends React.Component<Props, State> {
       <>
         <h3>
           Activities
+          <Button
+            icon
+            labelPosition="left"
+            floated="right"
+            style={{ marginTop: '-0.5em' }}
+            basic
+            onClick={() => this.setState({ creating: true })}
+          >
+            <Icon name="pencil" />
+            Write comment
+          </Button>
         </h3>
-        {activities.map((activity) => (
-          <ActivityComponent activity={activity as GeneralActivity} />
-        ))}
+        {createRow}
+        {activitiesList}
       </>
     );
   }
@@ -61,7 +108,7 @@ const mapStateToProps = (state: RootState) => {
   };
 };
 
-const mapDispatchToProps = () => ({
+const mapDispatchToProps = (dispatch: Dispatch) => ({
 });
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ActivitiesList));
