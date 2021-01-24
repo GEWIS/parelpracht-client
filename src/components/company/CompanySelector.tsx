@@ -9,11 +9,12 @@ interface Props {
   value: number;
   options: CompanySummary[];
   onChange: (value: number | number[]) => void;
+  disabled?: boolean;
 }
 
 function CompanySelector(props: Props & DropdownProps) {
   const {
-    value, onChange, options, ...rest
+    value, onChange, options, disabled, ...rest
   } = props;
   const dropdownOptions = props.options.map((x) => ({
     key: x.id,
@@ -24,6 +25,7 @@ function CompanySelector(props: Props & DropdownProps) {
   return (
     <Dropdown
       placeholder="Company"
+      disabled={disabled}
       search
       selection
       {...rest}
@@ -33,6 +35,10 @@ function CompanySelector(props: Props & DropdownProps) {
     />
   );
 }
+
+CompanySelector.defaultProps = {
+  disabled: false,
+};
 
 const mapStateToProps = (state: RootState) => ({
   options: state.summaries.Companies.options,
