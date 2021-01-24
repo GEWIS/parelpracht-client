@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import React from 'react';
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { Dropdown, DropdownProps } from 'semantic-ui-react';
 import { CompanySummary } from '../../clients/server.generated';
@@ -13,6 +13,8 @@ interface Props {
 }
 
 function CompanySelector(props: Props & DropdownProps) {
+  const [open, changeOpen] = useState(false);
+
   const {
     value, onChange, options, disabled, ...rest
   } = props;
@@ -28,10 +30,15 @@ function CompanySelector(props: Props & DropdownProps) {
       disabled={disabled}
       search
       selection
+      error={!(value > -1) && !open}
       {...rest}
       options={dropdownOptions}
-      value={props.value}
-      onChange={(e, data) => props.onChange(data.value as any)}
+      value={value}
+      onChange={(e, data) => onChange(data.value as any)}
+      // Because the text is also red when error=true, we need to
+      // keep a state whether the dropdown is open
+      onOpen={() => changeOpen(true)}
+      onClose={() => changeOpen(false)}
     />
   );
 }

@@ -12,7 +12,7 @@ import ResourceStatus from '../stores/resourceStatus';
 import AlertContainer from '../components/alerts/AlertContainer';
 import { getSingle } from '../stores/single/selectors';
 import { SingleEntities } from '../stores/single/single';
-import ProductCategoryProps from '../components/product categories/ProductCategoryProps';
+import ProductCategoryProps from '../components/productcategories/ProductCategoryProps';
 
 interface Props extends RouteComponentProps {
   status: ResourceStatus;

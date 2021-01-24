@@ -17,7 +17,7 @@ import { getSingle } from '../stores/single/selectors';
 import { SingleEntities } from '../stores/single/single';
 import { TransientAlert } from '../stores/alerts/actions';
 import { showTransientAlert } from '../stores/alerts/actionCreators';
-import ProductCategoryProps from '../components/product categories/ProductCategoryProps';
+import ProductCategoryProps from '../components/productcategories/ProductCategoryProps';
 
 interface Props extends RouteComponentProps<{ categoryId: string }> {
   create?: boolean;

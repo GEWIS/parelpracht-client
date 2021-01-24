@@ -6,7 +6,7 @@ import {
 } from 'semantic-ui-react';
 import validator from 'validator';
 import { Product, ProductParams, ProductStatus } from '../../clients/server.generated';
-import ProductCategorySelector from './ProductCategorySelector';
+import ProductCategorySelector from '../productcategories/ProductCategorySelector';
 import { formatPrice } from '../../helpers/monetary';
 import ResourceStatus from '../../stores/resourceStatus';
 import { createSingle, deleteSingle, saveSingle } from '../../stores/single/actionCreators';
@@ -243,7 +243,6 @@ class ProductProps extends React.Component<Props, State> {
           </Form.Field>
           <Form.Field
             disabled={!editing}
-            required
           >
             {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
             <label htmlFor="form-input-description">

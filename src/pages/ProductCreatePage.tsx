@@ -36,13 +36,13 @@ class ProductCreatePage extends React.Component<Props> {
 
   public render() {
     const product: Product = {
-      id: 0,
+      id: -1,
       nameDutch: '',
       nameEnglish: '',
       targetPrice: 0,
       status: ProductStatus.ACTIVE,
       description: '',
-      categoryId: 1,
+      categoryId: -1,
       contractTextDutch: '',
       contractTextEnglish: '',
       deliverySpecificationDutch: '',

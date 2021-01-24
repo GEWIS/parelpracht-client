@@ -3,8 +3,8 @@ import { RouteComponentProps, withRouter } from 'react-router-dom';
 import {
   Button, Container, Grid, Header, Icon, Segment,
 } from 'semantic-ui-react';
-import ProductCategoriesTable from '../components/product categories/ProductCategoriesTable';
-import ProductCategoriesTableControls from '../components/product categories/ProductCategoriesTableControls';
+import ProductCategoriesTable from '../components/productcategories/ProductCategoriesTable';
+import ProductCategoriesTableControls from '../components/productcategories/ProductCategoriesTableControls';
 
 function ProductCategoriesPage(props: RouteComponentProps) {
   return (

@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import React from 'react';
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { Dropdown, DropdownProps } from 'semantic-ui-react';
 import { CategorySummary } from '../../clients/server.generated';
@@ -12,6 +12,8 @@ interface Props {
 }
 
 function ProductCategorySelector(props: Props & DropdownProps) {
+  const [open, changeOpen] = useState(false);
+
   const {
     value, onChange, options, ...rest
   } = props;
@@ -25,12 +27,18 @@ function ProductCategorySelector(props: Props & DropdownProps) {
   return (
     <Dropdown
       placeholder="Product Category"
+      fluid
       search
       selection
+      error={!(value > -1) && !open}
       {...rest}
       options={dropdownOptions}
-      value={props.value}
-      onChange={(e, data) => props.onChange(data.value as any)}
+      value={undefined}
+      onChange={(e, data) => onChange(data.value as any)}
+      // Because the text is also red when error=true, we need to
+      // keep a state whether the dropdown is open
+      onOpen={() => changeOpen(true)}
+      onClose={() => changeOpen(false)}
     />
   );
 }
