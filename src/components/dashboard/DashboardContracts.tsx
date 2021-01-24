@@ -37,7 +37,7 @@ class DashboardContracts extends Component<Props, State> {
         <h3>Recent contracts</h3>
         {contracts.map((c) => <DashboardContractsRow contract={c} key={c.id} />)}
         <div style={{ marginTop: '1em' }}>
-          <NavLink to="/contracts/">
+          <NavLink to="/contract/">
             All contracts...
           </NavLink>
         </div>

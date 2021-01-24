@@ -62,7 +62,7 @@ class ContractProductList extends React.Component<Props, State> {
 
     return (
       <>
-        <h2>
+        <h3>
           Products
           <Button
             icon
@@ -73,6 +73,7 @@ class ContractProductList extends React.Component<Props, State> {
             as={NavLink}
             to={`${this.props.location.pathname}/product/new`}
           >
+            <Icon name="plus" />
             Add Product
           </Button>
           <ContractInvoiceModal
@@ -80,7 +81,7 @@ class ContractProductList extends React.Component<Props, State> {
             companyId={contract.companyId}
           />
 
-        </h2>
+        </h3>
         <Table celled striped>
           <Table.Header>
             <Table.Row>

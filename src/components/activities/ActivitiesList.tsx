@@ -51,7 +51,7 @@ class ActivitiesList extends React.Component<Props, State> {
     if (activities.length === 0) {
       activitiesList = (
         <h4>
-          No activities logged yet.
+          There are no activities logged yet.
         </h4>
       );
     } else {

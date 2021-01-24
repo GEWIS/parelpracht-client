@@ -1,7 +1,7 @@
 import React, { ChangeEvent } from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
-import { Form, Input } from 'semantic-ui-react';
+import { Form, Input, TextArea } from 'semantic-ui-react';
 import {
   Invoice, InvoiceParams,
 } from '../../clients/server.generated';
@@ -98,11 +98,13 @@ class InvoiceProps extends React.Component<Props, State> {
               label="Company"
               value={companyName}
             />
+          </Form.Group>
+          <Form.Group widths="equal">
             <Form.Field
               disabled={!editing}
               fluid
               id="form-input-comments"
-              control={Input}
+              control={TextArea}
               label="Comments"
               value={comments}
               onChange={(e: ChangeEvent<HTMLInputElement>) => this.setState({

@@ -33,6 +33,32 @@ class CompanyContactList extends React.Component<Props, State> {
     }
 
     const { contacts } = company;
+
+    if (contacts.length === 0) {
+      return (
+        <>
+          <h3>
+            Contacts
+            <Button
+              icon
+              labelPosition="left"
+              floated="right"
+              style={{ marginTop: '-0.5em' }}
+              basic
+              as={NavLink}
+              to={`${this.props.location.pathname}/contact/new`}
+            >
+              <Icon name="plus" />
+              Add Contact
+            </Button>
+          </h3>
+          <h4>
+            There are no contacts yet.
+          </h4>
+        </>
+      );
+    }
+
     return (
       <>
         <h3>

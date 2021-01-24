@@ -53,7 +53,7 @@ function InvoicesTable({
               sorted={column === 'company' ? direction : undefined}
               onClick={() => changeSort('company')}
             >
-              Company Name
+              Company
               <CompanyFilter table={Tables.Invoices} />
             </Table.HeaderCell>
             <Table.HeaderCell>
