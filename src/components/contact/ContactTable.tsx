@@ -49,7 +49,10 @@ function ContactsTable({
             >
               Name
             </Table.HeaderCell>
-            <Table.HeaderCell>
+            <Table.HeaderCell
+              sorted={column === 'company' ? direction : undefined}
+              onClick={() => changeSort('company')}
+            >
               Company
               <ContactCompanyFilter table={Tables.Contacts} />
             </Table.HeaderCell>

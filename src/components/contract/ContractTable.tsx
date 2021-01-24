@@ -13,6 +13,7 @@ import { Tables } from '../../stores/tables/tables';
 import ContractRow from './ContractRow';
 import ContractContactFilter from '../tablefilters/ContractContactFilter';
 import CompanyFilter from '../tablefilters/CompanyFilter';
+import UserFilter from '../tablefilters/UserFilter';
 
 interface Props {
   contracts: Contract[];
@@ -41,7 +42,7 @@ function ContractsTable({
 
   return (
     <>
-      <Table singleLine selectable attached sortable fixed>
+      <Table singleLine selectable attached sortable>
         <Table.Header>
           <Table.Row>
             <Table.HeaderCell
@@ -50,17 +51,30 @@ function ContractsTable({
             >
               Title
             </Table.HeaderCell>
-            <Table.HeaderCell>
+            <Table.HeaderCell
+              sorted={column === 'company' ? direction : undefined}
+              onClick={() => changeSort('company')}
+            >
               Company
               <CompanyFilter table={Tables.Contracts} />
             </Table.HeaderCell>
-            <Table.HeaderCell>
+            <Table.HeaderCell
+              sorted={column === 'contact' ? direction : undefined}
+              onClick={() => changeSort('contact')}
+            >
               Contact
               <ContractContactFilter />
             </Table.HeaderCell>
+            <Table.HeaderCell>
+              Status
+            </Table.HeaderCell>
+            <Table.HeaderCell>
+              Assigned to
+              <UserFilter />
+            </Table.HeaderCell>
             <Table.HeaderCell
-              sorted={column === 'date' ? direction : undefined}
-              onClick={() => changeSort('date')}
+              sorted={column === 'updatedAt' ? direction : undefined}
+              onClick={() => changeSort('updatedAt')}
             >
               Last Update
             </Table.HeaderCell>

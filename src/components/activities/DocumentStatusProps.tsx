@@ -141,9 +141,10 @@ class DocumentStatusProps extends React.Component<Props, State> {
   }
 }
 
-const mapStateToProps = (state: RootState) => ({
-  options: state.summaries.Products.options,
-});
+const mapStateToProps = (state: RootState) => {
+  return {
+  };
+};
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
   createSingleStatus: (entity: SingleEntities, id: number, statusParams: object) => dispatch(

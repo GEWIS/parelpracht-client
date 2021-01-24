@@ -12,17 +12,23 @@ import {
 import DocumentStatusModal from './DocumentStatusModal';
 import { SingleEntities } from '../../stores/single/single';
 import { DocumentStatus } from './DocumentStatus';
+import ResourceStatus from '../../stores/resourceStatus';
 
 /**
  * Definition of used variables
  */
 interface Props extends RouteComponentProps {
   documentId: number;
-  lastStatusActivity: GeneralActivity;
-  status: DocumentStatus;
-  cancelled: boolean;
-  allStatusActivities: GeneralActivity[];
   documentType: SingleEntities;
+
+  lastStatusActivity: GeneralActivity;
+  allStatusActivities: GeneralActivity[];
+
+  status: DocumentStatus;
+
+  cancelled: boolean;
+
+  resourceStatus: ResourceStatus;
 }
 
 interface State {
@@ -51,6 +57,7 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
       cancelled,
       allStatusActivities,
       documentType,
+      resourceStatus,
     } = this.props;
     const { stepModalOpen } = this.state;
 
@@ -183,6 +190,7 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
               documentType={documentType}
               documentStatus={status}
               close={this.closeStepModal}
+              resourceStatus={resourceStatus}
             />
           </>
         );

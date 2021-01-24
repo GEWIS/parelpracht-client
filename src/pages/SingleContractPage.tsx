@@ -100,6 +100,7 @@ class SingleContractPage extends React.Component<Props> {
               activities={contract.activities as GeneralActivity[]}
               componentId={contract.id}
               componentType={SingleEntities.Contract}
+              resourceStatus={status}
             />
           </Tab.Pane>
         ),
@@ -123,6 +124,7 @@ class SingleContractPage extends React.Component<Props> {
                 documentId={contract.id}
                 activities={contract.activities as GeneralActivity[]}
                 documentType={SingleEntities.Contract}
+                resourceStatus={status}
               />
             </Segment>
           </Grid.Row>
