@@ -120,6 +120,7 @@ class ContractProps extends React.Component<Props, State> {
       assignedToSelection,
       comments,
     } = this.state;
+    const { contract } = this.props;
 
     let companySelector;
     if (!companySelection) {
@@ -191,7 +192,21 @@ class ContractProps extends React.Component<Props, State> {
               />
             </Form.Field>
           </Form.Group>
-          {companySelector}
+          <Form.Field
+            disabled={!editing}
+            required
+          >
+            {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
+            <label htmlFor="form-company-selector">Company</label>
+            <CompanySelector
+              id="form-company-selector"
+              disabled={editing && contract.id > -1}
+              value={companySelection}
+              onChange={(val: number) => this.setState({
+                companySelection: val,
+              })}
+            />
+          </Form.Field>
           <Form.Field
             disabled={!editing}
             required
@@ -200,6 +215,8 @@ class ContractProps extends React.Component<Props, State> {
             <label htmlFor="form-contact-selector">Contact</label>
             <ContactSelector
               id="form-contact-selector"
+              disabled={editing && (companySelection === -1)}
+              companyId={companySelection}
               value={contactSelection}
               onChange={(val: number) => this.setState({
                 contactSelection: val,

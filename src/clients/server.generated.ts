@@ -9154,6 +9154,7 @@ export class ContactSummary implements IContactSummary {
     lastNamePreposition!: string;
     lastName!: string;
     companyName!: string;
+    companyId!: number;
 
     constructor(data?: IContactSummary) {
         if (data) {
@@ -9171,6 +9172,7 @@ export class ContactSummary implements IContactSummary {
             this.lastNamePreposition = _data["lastNamePreposition"];
             this.lastName = _data["lastName"];
             this.companyName = _data["companyName"];
+            this.companyId = _data["companyId"];
         }
     }
 
@@ -9188,6 +9190,7 @@ export class ContactSummary implements IContactSummary {
         data["lastNamePreposition"] = this.lastNamePreposition;
         data["lastName"] = this.lastName;
         data["companyName"] = this.companyName;
+        data["companyId"] = this.companyId;
         return data; 
     }
 }
@@ -9198,6 +9201,7 @@ export interface IContactSummary {
     lastNamePreposition: string;
     lastName: string;
     companyName: string;
+    companyId: number;
 }
 
 export class ContactParams implements IContactParams {

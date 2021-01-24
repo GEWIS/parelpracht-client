@@ -38,14 +38,14 @@ class ContractCreatePage extends React.Component<Props> {
   close = () => { this.props.history.goBack(); };
 
   public render() {
-    let compId = 0;
+    let compId = -1;
     if (this.props.match.params.companyId) {
       compId = parseInt(this.props.match.params.companyId, 10);
     }
     const contract: Contract = {
-      id: 0,
+      id: -1,
       companyId: compId,
-      contactId: 0,
+      contactId: -1,
       comments: '',
       title: '',
     } as Contract;
