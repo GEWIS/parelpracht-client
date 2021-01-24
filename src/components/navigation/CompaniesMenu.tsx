@@ -4,7 +4,7 @@ import {
   Dropdown, Icon, Menu,
 } from 'semantic-ui-react';
 
-function ProductsMenu() {
+function CompaniesMenu() {
   const [isOpen, changeOpen] = useState(false);
 
   return (
@@ -16,18 +16,18 @@ function ProductsMenu() {
         item
         icon={null}
         as={NavLink}
-        to="/product"
+        to="/company"
         text={(
           <>
-            <Icon name="shopping bag" />
-            Products
+            <Icon name="building" />
+            Companies
           </>
         ) as any}
       >
         <Dropdown.Menu>
-          <Dropdown.Item as={NavLink} to="/category">
-            <Icon name="tags" />
-            Categories
+          <Dropdown.Item as={NavLink} to="/contact">
+            <Icon name="address card" />
+            Contacts
           </Dropdown.Item>
         </Dropdown.Menu>
       </Dropdown>
@@ -35,4 +35,4 @@ function ProductsMenu() {
   );
 }
 
-export default ProductsMenu;
+export default CompaniesMenu;
