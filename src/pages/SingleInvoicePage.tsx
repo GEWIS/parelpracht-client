@@ -17,6 +17,7 @@ import { getSingle } from '../stores/single/selectors';
 import ActivitiesList from '../components/activities/ActivitiesList';
 import { GeneralActivity } from '../components/activities/GeneralActivity';
 import FinancialDocumentProgress from '../components/activities/FinancialDocumentProgress';
+import InvoiceProductList from '../components/invoice/InvoiceProductList';
 import FilesList from '../components/files/FilesList';
 import GenerateInvoiceModal from '../components/files/GenerateInvoiceModal';
 
@@ -48,7 +49,14 @@ class SingleInvoicePage extends React.Component<Props> {
     }
 
     const panes = [
-      { menuItem: 'Products', render: () => <Tab.Pane /> },
+      {
+        menuItem: 'Products',
+        render: () => (
+          <Tab.Pane>
+            <InvoiceProductList />
+          </Tab.Pane>
+        ),
+      },
       {
         menuItem: 'Files',
         render: () => (

@@ -31,7 +31,9 @@ import ContactModal from './pages/ContactModal';
 import UsersPage from './pages/UsersPage';
 import SingleUserPage from './pages/SingleUserPage';
 import UserCreatePage from './pages/UserCreatePage';
-import ProductInstanceModal from './pages/ProductInstanceModal';
+import ContractProductInstanceModal from './pages/ContractProductInstanceModal';
+import ContractInvoiceModal from './pages/ContractInvoiceModal';
+import InvoiceProductInstanceModal from './pages/InvoiceProductInstanceModal';
 import Footer from './components/navigation/Footer';
 import DashboardPage from './pages/DashboardPage';
 import NotFound from './pages/NotFound';
@@ -166,6 +168,10 @@ function Routes(props: Props) {
             <InvoicesPage />
           </Route>
           <Route path="/invoice/:invoiceId" exact component={SingleInvoicePage} />
+          <Route path="/invoice/:invoiceId/product/:productInstanceId" exact>
+            <SingleInvoicePage />
+            <InvoiceProductInstanceModal />
+          </Route>
 
           {/* Contracts */}
           <Route path="/contract" exact>
@@ -178,11 +184,11 @@ function Routes(props: Props) {
           <Route path="/contract/:contractId" exact component={SingleContractPage} />
           <Route path="/contract/:contractId/product/new" exact>
             <SingleContractPage />
-            <ProductInstanceModal create />
+            <ContractProductInstanceModal create />
           </Route>
           <Route path="/contract/:contractId/product/:productInstanceId" exact>
             <SingleContractPage />
-            <ProductInstanceModal />
+            <ContractProductInstanceModal />
           </Route>
 
           {/* Insights */}

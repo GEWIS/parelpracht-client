@@ -101,14 +101,6 @@ class InvoiceProps extends React.Component<Props, State> {
             <Form.Field
               disabled={!editing}
               fluid
-              id="form-input-productIDs"
-              control={Input}
-              label="Products"
-              value={productInstanceIds}
-            />
-            <Form.Field
-              disabled={!editing}
-              fluid
               id="form-input-comments"
               control={Input}
               label="Comments"
