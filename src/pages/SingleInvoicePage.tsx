@@ -49,7 +49,14 @@ class SingleInvoicePage extends React.Component<Props> {
     }
 
     const panes = [
-      { menuItem: 'Products', render: () => <Tab.Pane /> },
+      {
+        menuItem: 'Products',
+        render: () => (
+          <Tab.Pane>
+            <InvoiceProductList />
+          </Tab.Pane>
+        ),
+      },
       {
         menuItem: 'Files',
         render: () => (
@@ -115,9 +122,6 @@ class SingleInvoicePage extends React.Component<Props> {
                 <InvoiceProps invoice={invoice} />
               </Segment>
             </Grid.Column>
-            <Segment secondary>
-              <InvoiceProductList />
-            </Segment>
           </Grid.Row>
         </Grid>
       </Container>

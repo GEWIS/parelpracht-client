@@ -138,11 +138,6 @@ class SingleContractPage extends React.Component<Props> {
               </Segment>
             </Grid.Column>
           </Grid.Row>
-          <Grid.Row columns={1}>
-            <Segment secondary>
-              <ContractProductList />
-            </Segment>
-          </Grid.Row>
         </Grid>
       </Container>
     );

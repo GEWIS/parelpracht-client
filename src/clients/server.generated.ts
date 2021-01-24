@@ -8538,13 +8538,6 @@ export interface IPartial_ProductInstanceParams {
     comments?: string;
 }
 
-export enum ProductInstanceStatus {
-    NOTDELIVERED = "NOTDELIVERED",
-    DELIVERED = "DELIVERED",
-    CANCELLED = "CANCELLED",
-    DEFERRED = "DEFERRED",
-}
-
 export class ProductInstanceStatusParams implements IProductInstanceStatusParams {
     description!: string;
     subType!: ProductInstanceStatus;
