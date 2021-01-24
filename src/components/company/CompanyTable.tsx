@@ -35,6 +35,7 @@ function CompaniesTable({
   prevPage, nextPage, setTake,
 }: Props) {
   useEffect(() => {
+    changeSort('name');
     fetchCompanies();
   }, []);
 
