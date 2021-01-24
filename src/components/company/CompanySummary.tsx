@@ -4,6 +4,7 @@ import {
   Grid, Header, Icon, Loader, Placeholder, Segment,
 } from 'semantic-ui-react';
 import { Company } from '../../clients/server.generated';
+import { formatStatus } from '../../helpers/activity';
 import ResourceStatus from '../../stores/resourceStatus';
 import { getSingle } from '../../stores/single/selectors';
 import { SingleEntities } from '../../stores/single/single';
@@ -53,7 +54,7 @@ function CompanySummary(props: Props) {
           </Grid.Column>
           <Grid.Column>
             <h5>Status</h5>
-            <p>{company.status}</p>
+            <p>{formatStatus(company.status)}</p>
           </Grid.Column>
           <Grid.Column>
             <h5>Created by</h5>

@@ -8,6 +8,8 @@ import ResourceStatus from '../../stores/resourceStatus';
 import { getSingle } from '../../stores/single/selectors';
 import { SingleEntities } from '../../stores/single/single';
 import { RootState } from '../../stores/store';
+import CompanyLink from '../company/CompanyLink';
+import UserLink from '../user/UserLink';
 
 interface Props {
   invoice: Invoice | undefined;
@@ -48,8 +50,16 @@ function InvoiceSummary(props: Props) {
       <Segment attached="bottom">
         <Grid columns={4}>
           <Grid.Column>
-            <h5>Company Name</h5>
-            <p>{invoice.company.name}</p>
+            <h5>Title</h5>
+            <p>{invoice.id}</p>
+          </Grid.Column>
+          <Grid.Column>
+            <h5>Company ID</h5>
+            <CompanyLink id={invoice.companyId} />
+          </Grid.Column>
+          <Grid.Column>
+            <h5>Created by</h5>
+            <UserLink id={invoice.createdById} />
           </Grid.Column>
         </Grid>
       </Segment>

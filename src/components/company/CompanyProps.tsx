@@ -204,14 +204,14 @@ class CompanyProps extends React.Component<Props, State> {
           <Form.Group widths="equal">
             <Form.Field disabled={!editing}>
               {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-              <label htmlFor="form-input-comments">
-                Comments
+              <label htmlFor="form-input-description">
+                Description
               </label>
               <TextArea
-                id="form-input-comments"
+                id="form-input-description"
                 value={comments}
                 onChange={(e) => this.setState({ comments: e.target.value })}
-                placeholder="Comments"
+                placeholder="Description"
               />
             </Form.Field>
             <Form.Field>

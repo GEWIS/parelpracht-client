@@ -50,11 +50,11 @@ class InvoiceProductList extends React.Component<Props, State> {
 
     return (
       <>
+        <h3>
+          Products
+        </h3>
         <Table celled striped>
           <Table.Header>
-            <Table.Row>
-              <Table.HeaderCell colSpan="4">Products</Table.HeaderCell>
-            </Table.Row>
             <Table.Row>
               <Table.HeaderCell>Title</Table.HeaderCell>
               <Table.HeaderCell>Base Price</Table.HeaderCell>
