@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import {
-  Button, Feed, Icon, Loader, Table,
+  Button, Feed, Icon, Loader,
 } from 'semantic-ui-react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { Dispatch } from 'redux';
@@ -60,7 +60,11 @@ class ActivitiesList extends React.Component<Props, State> {
           {activities
             .sort((a, b) => { return b.updatedAt.getTime() - a.updatedAt.getTime(); })
             .map((activity) => (
-              <ActivityComponent activity={activity as GeneralActivity} />
+              <ActivityComponent
+                activity={activity as GeneralActivity}
+                componentId={componentId}
+                componentType={componentType}
+              />
             ))}
         </Feed>
       );
