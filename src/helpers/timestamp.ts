@@ -47,3 +47,8 @@ export function dateToFinancialYear(date: Date): number {
   }
   return date.getFullYear() + 1;
 }
+
+export function dateToFullFinancialYear(date: Date): string {
+  const finYear = dateToFinancialYear(date);
+  return `${finYear - 1} - ${finYear}`;
+}

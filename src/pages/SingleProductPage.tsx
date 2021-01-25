@@ -18,7 +18,8 @@ import { GeneralActivity } from '../components/activities/GeneralActivity';
 import { TransientAlert } from '../stores/alerts/actions';
 import { showTransientAlert } from '../stores/alerts/actionCreators';
 import FilesList from '../components/files/FilesList';
-import ProductRelatedAttributes from '../components/product/ProductRelatedAttributes';
+import ContractCompactTable from '../components/contract/ContractCompactTable';
+import InvoiceCompactTable from '../components/invoice/InvoiceCompactTable';
 
 interface Props extends RouteComponentProps<{ productId: string }> {
   product: Product | undefined;
@@ -66,10 +67,8 @@ class SingleProductPage extends React.Component<Props> {
         menuItem: 'Contracts',
         render: () => (
           <Tab.Pane>
-            <ProductRelatedAttributes
+            <ContractCompactTable
               product={product}
-              header="Contracts"
-              attribute="contract"
             />
           </Tab.Pane>
         ),
@@ -78,10 +77,8 @@ class SingleProductPage extends React.Component<Props> {
         menuItem: 'Invoices',
         render: () => (
           <Tab.Pane>
-            <ProductRelatedAttributes
+            <InvoiceCompactTable
               product={product}
-              header="Invoices"
-              attribute="invoice"
             />
           </Tab.Pane>
         ),

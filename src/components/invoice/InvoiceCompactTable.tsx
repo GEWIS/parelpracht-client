@@ -4,7 +4,7 @@ import {
   Client, PaginationParams, Product, ProductInstance,
 } from '../../clients/server.generated';
 import TablePagination from '../TablePagination';
-import ContractCompactRow from './ContractCompactRow';
+import InvoiceCompactRow from './InvoiceCompactRow';
 
 interface Props {
   product: Product;
@@ -41,7 +41,7 @@ class ContractCompactTable extends React.Component<Props, State> {
     this.setState({ loading: true });
     const client = new Client();
 
-    const productInstances = await client.getProductContracts(product.id, {
+    const productInstances = await client.getProductInvoices(product.id, {
       skip,
       take,
     } as PaginationParams);
@@ -86,10 +86,10 @@ class ContractCompactTable extends React.Component<Props, State> {
     return (
       <>
         <h3>Contracts</h3>
-        <Table striped compact>
+        <Table striped>
           <Loader active={loading} />
           <Table.Body>
-            {productInstances.map((p) => <ContractCompactRow contract={p.contract} />)}
+            {productInstances.map((p) => <InvoiceCompactRow invoice={p.invoice} />)}
           </Table.Body>
         </Table>
         <TablePagination

@@ -2,7 +2,7 @@ import React from 'react';
 import { Table } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import { Invoice, InvoiceStatus } from '../../clients/server.generated';
-import { dateToFinancialYear, formatLastUpdate } from '../../helpers/timestamp';
+import { dateToFullFinancialYear, formatLastUpdate } from '../../helpers/timestamp';
 import { RootState } from '../../stores/store';
 import { formatStatus } from '../../helpers/activity';
 import InvoiceLink from './InvoiceLink';
@@ -21,13 +21,13 @@ function InvoiceCompactRow(props: Props): JSX.Element {
   return (
     <Table.Row>
       <Table.Cell>
-        <InvoiceLink id={invoice.id} />
-      </Table.Cell>
-      <Table.Cell>
         <CompanyLink id={invoice.companyId} />
       </Table.Cell>
       <Table.Cell>
-        {dateToFinancialYear(invoice.startDate)}
+        <InvoiceLink id={invoice.id} />
+      </Table.Cell>
+      <Table.Cell>
+        {dateToFullFinancialYear(invoice.startDate)}
       </Table.Cell>
       <Table.Cell>
         {formatLastUpdate(invoice.updatedAt)}

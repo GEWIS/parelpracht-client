@@ -15,7 +15,7 @@ function InvoiceLink(props: Props) {
   const { id, invoiceTitle } = props;
   return (
     <NavLink to={`/invoice/${id}`}>
-      <Icon name="euro sign" />
+      <Icon name="money bill alternate" />
       F
       {id}
       {' '}
