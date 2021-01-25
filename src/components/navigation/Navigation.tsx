@@ -19,7 +19,7 @@ function Navigation() {
           Contracts
         </Menu.Item>
         <Menu.Item as={NavLink} to="/invoice">
-          <Icon name="file alternate" />
+          <Icon name="money bill alternate outline" />
           Invoices
         </Menu.Item>
         <Menu.Item as={NavLink} to="/insights">

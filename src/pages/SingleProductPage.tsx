@@ -10,7 +10,6 @@ import { RootState } from '../stores/store';
 import ProductProps from '../components/product/ProductProps';
 import ResourceStatus from '../stores/resourceStatus';
 import ProductSummary from '../components/product/ProductSummary';
-import ContractList from '../components/contract/ContractList';
 import { getSingle } from '../stores/single/selectors';
 import { SingleEntities } from '../stores/single/single';
 import { clearSingle, fetchSingle } from '../stores/single/actionCreators';
@@ -19,6 +18,8 @@ import { GeneralActivity } from '../components/activities/GeneralActivity';
 import { TransientAlert } from '../stores/alerts/actions';
 import { showTransientAlert } from '../stores/alerts/actionCreators';
 import FilesList from '../components/files/FilesList';
+import ContractCompactTable from '../components/contract/ContractCompactTable';
+import InvoiceCompactTable from '../components/invoice/InvoiceCompactTable';
 
 interface Props extends RouteComponentProps<{ productId: string }> {
   product: Product | undefined;
@@ -66,7 +67,19 @@ class SingleProductPage extends React.Component<Props> {
         menuItem: 'Contracts',
         render: () => (
           <Tab.Pane>
-            <ContractList />
+            <ContractCompactTable
+              product={product}
+            />
+          </Tab.Pane>
+        ),
+      },
+      {
+        menuItem: 'Invoices',
+        render: () => (
+          <Tab.Pane>
+            <InvoiceCompactTable
+              product={product}
+            />
           </Tab.Pane>
         ),
       },
