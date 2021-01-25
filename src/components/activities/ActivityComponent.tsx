@@ -1,6 +1,8 @@
 import React from 'react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
-import { Feed, Icon, Label } from 'semantic-ui-react';
+import {
+  Divider, Feed, Icon, Label,
+} from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import './Activity.scss';
 import { Dispatch } from 'redux';
@@ -11,6 +13,7 @@ import { ActivityType, GeneralActivity } from './GeneralActivity';
 import { formatLastUpdate } from '../../helpers/timestamp';
 import { SingleEntities } from '../../stores/single/single';
 import { deleteActivitySingle } from '../../stores/single/actionCreators';
+import UserLinkWithoutImage from '../user/UserLinkWithoutImage';
 
 interface Props extends RouteComponentProps {
   activity: GeneralActivity;
@@ -31,7 +34,7 @@ class ActivityComponent extends React.Component<Props> {
   };
 
   public render() {
-    const { activity, userName } = this.props;
+    const { activity } = this.props;
     let feedLabel;
     if (activity.type === ActivityType.COMMENT) {
       feedLabel = (
@@ -43,20 +46,23 @@ class ActivityComponent extends React.Component<Props> {
       );
     }
 
+    const summaryType: string = formatActivitySummary(activity.type, activity.subType);
+    const summaryUser = (
+      <UserLinkWithoutImage id={this.props.activity.createdById} />
+    );
+
     return (
       <Feed.Event>
         <Feed.Label>
           {feedLabel}
-          {/* <Label circular size="big"> */}
-          {/*  {formatUserNameInitials(userName)} */}
-          {/* </Label> */}
         </Feed.Label>
         <Feed.Content>
           <Feed.Date>
             {formatLastUpdate(activity.createdAt)}
           </Feed.Date>
           <Feed.Summary>
-            {formatActivitySummary(userName, activity.type, activity.subType)}
+            {summaryType}
+            {summaryUser}
           </Feed.Summary>
           <Feed.Extra>
             {activity.description}
@@ -65,6 +71,7 @@ class ActivityComponent extends React.Component<Props> {
             {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
             <a>Delete</a>
           </Feed.Meta>
+          <Divider horizontal />
         </Feed.Content>
       </Feed.Event>
     );

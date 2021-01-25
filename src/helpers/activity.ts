@@ -49,12 +49,11 @@ export function formatActivityDate(date: Date, userName: string): string {
  * Format the summary user and activity for the feed.
  */
 export function formatActivitySummary(
-  userName: string,
   activityType: ActivityType,
   subType: string | undefined,
 ): string {
   const activity = formatActivityType(activityType, subType);
-  return `${activity} by ${userName}`;
+  return `${activity} by `;
 }
 
 /**

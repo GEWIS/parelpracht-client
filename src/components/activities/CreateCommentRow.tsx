@@ -86,7 +86,7 @@ class DocumentStatusProps extends React.Component<Props, State> {
         />
         <Button
           floated="right"
-          icon="x icon"
+          icon="close"
           negative
           onClick={() => this.cancel()}
         />
