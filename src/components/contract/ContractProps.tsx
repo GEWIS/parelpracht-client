@@ -123,11 +123,26 @@ class ContractProps extends React.Component<Props, State> {
     } = this.state;
     const { contract } = this.props;
 
-    let companySelector;
+    let companySelector = (
+      <Form.Field
+        disabled={!editing}
+        required
+      >
+        {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
+        <label htmlFor="form-company-selector">Company</label>
+        <CompanySelector
+          id="form-company-selector"
+          value={companySelection}
+          onChange={(val: number) => this.setState({
+            companySelection: val,
+          })}
+        />
+      </Form.Field>
+    );
     if (this.props.companyPredefined) {
       companySelector = (
         <Form.Field
-          disabled={!editing}
+          disabled
           required
         >
           {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
@@ -193,21 +208,7 @@ class ContractProps extends React.Component<Props, State> {
               />
             </Form.Field>
           </Form.Group>
-          <Form.Field
-            disabled={!editing}
-            required
-          >
-            {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-            <label htmlFor="form-company-selector">Company</label>
-            <CompanySelector
-              id="form-company-selector"
-              disabled={editing && contract.id > -1}
-              value={companySelection}
-              onChange={(val: number) => this.setState({
-                companySelection: val,
-              })}
-            />
-          </Form.Field>
+          {companySelector}
           <Form.Field
             disabled={!editing}
             required
