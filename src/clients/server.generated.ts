@@ -555,6 +555,112 @@ export class Client {
     }
 
     /**
+     * @param id Product id
+     * @param body Skip and take to allow for pagination
+     * @return Ok
+     */
+    getProductContracts(id: number, body: PaginationParams): Promise<ProductInstanceListResponse> {
+        let url_ = this.baseUrl + "/product/{id}/contracts";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ = <RequestInit>{
+            body: content_,
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processGetProductContracts(_response);
+        });
+    }
+
+    protected processGetProductContracts(response: Response): Promise<ProductInstanceListResponse> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = ProductInstanceListResponse.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<ProductInstanceListResponse>(<any>null);
+    }
+
+    /**
+     * @param id Product id
+     * @param body Skip and take to allow for pagination
+     * @return Ok
+     */
+    getProductInvoices(id: number, body: PaginationParams): Promise<ProductInstanceListResponse> {
+        let url_ = this.baseUrl + "/product/{id}/invoices";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ = <RequestInit>{
+            body: content_,
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processGetProductInvoices(_response);
+        });
+    }
+
+    protected processGetProductInvoices(response: Response): Promise<ProductInstanceListResponse> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = ProductInstanceListResponse.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<ProductInstanceListResponse>(<any>null);
+    }
+
+    /**
      * @param file The file to upload
      * @param name The name of the new file, as seen in the UI
      * @return Ok
@@ -7201,9 +7307,9 @@ export interface IListOrFilter {
 }
 
 export class ListParams implements IListParams {
-    sorting?: ListSorting;
     skip?: number;
     take?: number;
+    sorting?: ListSorting;
     search?: string;
     filters?: ListOrFilter[];
 
@@ -7218,9 +7324,9 @@ export class ListParams implements IListParams {
 
     init(_data?: any) {
         if (_data) {
-            this.sorting = _data["sorting"] ? ListSorting.fromJS(_data["sorting"]) : <any>undefined;
             this.skip = _data["skip"];
             this.take = _data["take"];
+            this.sorting = _data["sorting"] ? ListSorting.fromJS(_data["sorting"]) : <any>undefined;
             this.search = _data["search"];
             if (Array.isArray(_data["filters"])) {
                 this.filters = [] as any;
@@ -7239,9 +7345,9 @@ export class ListParams implements IListParams {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["sorting"] = this.sorting ? this.sorting.toJSON() : <any>undefined;
         data["skip"] = this.skip;
         data["take"] = this.take;
+        data["sorting"] = this.sorting ? this.sorting.toJSON() : <any>undefined;
         data["search"] = this.search;
         if (Array.isArray(this.filters)) {
             data["filters"] = [];
@@ -7253,9 +7359,9 @@ export class ListParams implements IListParams {
 }
 
 export interface IListParams {
-    sorting?: ListSorting;
     skip?: number;
     take?: number;
+    sorting?: ListSorting;
     search?: string;
     filters?: ListOrFilter[];
 }
@@ -7452,6 +7558,97 @@ export interface IPartial_ProductParams {
     contractTextEnglish?: string;
     deliverySpecificationDutch?: string;
     deliverySpecificationEnglish?: string;
+}
+
+export class ProductInstanceListResponse implements IProductInstanceListResponse {
+    list!: ProductInstance[];
+    count!: number;
+
+    constructor(data?: IProductInstanceListResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+        if (!data) {
+            this.list = [];
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["list"])) {
+                this.list = [] as any;
+                for (let item of _data["list"])
+                    this.list!.push(ProductInstance.fromJS(item));
+            }
+            this.count = _data["count"];
+        }
+    }
+
+    static fromJS(data: any): ProductInstanceListResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new ProductInstanceListResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.list)) {
+            data["list"] = [];
+            for (let item of this.list)
+                data["list"].push(item.toJSON());
+        }
+        data["count"] = this.count;
+        return data; 
+    }
+}
+
+export interface IProductInstanceListResponse {
+    list: ProductInstance[];
+    count: number;
+}
+
+export class PaginationParams implements IPaginationParams {
+    skip?: number;
+    take?: number;
+
+    constructor(data?: IPaginationParams) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.skip = _data["skip"];
+            this.take = _data["take"];
+        }
+    }
+
+    static fromJS(data: any): PaginationParams {
+        data = typeof data === 'object' ? data : {};
+        let result = new PaginationParams();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["skip"] = this.skip;
+        data["take"] = this.take;
+        return data; 
+    }
+}
+
+export interface IPaginationParams {
+    skip?: number;
+    take?: number;
 }
 
 export class BaseFile implements IBaseFile {

@@ -15,7 +15,7 @@ export function sortColumn(state: RootState): string {
     default: return 'unknown';
   }
 }
-export function getContract(state: RootState, id: number): string {
+export function getContractTitle(state: RootState, id: number): string {
   return getSummary<ContractSummary>(
     state, SummaryCollections.Contracts, id,
   )?.title ?? '...';
