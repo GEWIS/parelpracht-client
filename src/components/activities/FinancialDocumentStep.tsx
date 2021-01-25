@@ -21,7 +21,7 @@ interface Props extends RouteComponentProps {
   documentId: number;
   documentType: SingleEntities;
 
-  lastStatusActivity: GeneralActivity;
+  lastStatusActivity: GeneralActivity | undefined;
   allStatusActivities: GeneralActivity[];
 
   status: DocumentStatus;
@@ -69,7 +69,10 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
       allStatusActivities,
       status,
     );
-    const nextStatus: string[] = getNextStatus(lastStatusActivity, documentType);
+    let nextStatus: string[] = [DocumentStatus.CREATED];
+    if (lastStatusActivity !== undefined) {
+      nextStatus = getNextStatus(lastStatusActivity, documentType);
+    }
 
     // check if the document has been cancelled
     if (cancelled) {
@@ -93,7 +96,7 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
         }
 
         // if the status has been completed but it was not logged
-        if (getCompletedDocumentStatuses(
+        if (lastStatusActivity !== undefined && getCompletedDocumentStatuses(
           lastStatusActivity.subType,
           documentType,
         ).includes(status)) {
@@ -104,9 +107,6 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
                 <Step.Title>
                   {formatStatus(status)}
                 </Step.Title>
-                <Step.Description>
-                  Not logged.
-                </Step.Description>
               </Step.Content>
             </Step>
           );
@@ -141,16 +141,14 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
               <Step.Title>
                 {formatStatus(status)}
               </Step.Title>
-              <Step.Description>
-                Not logged.
-              </Step.Description>
             </Step.Content>
           </Step>
         );
       }
 
       // the invoice is irrecoverable
-      if (lastStatusActivity.subType === DocumentStatus.IRRECOVERABLE) {
+      if (lastStatusActivity !== undefined
+        && lastStatusActivity.subType === DocumentStatus.IRRECOVERABLE) {
         return (
           <Step disabled>
             <Icon color="red" name="close" />

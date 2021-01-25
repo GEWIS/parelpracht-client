@@ -11,6 +11,9 @@ export function formatDocumentStatusTitle(
   lastActivity: GeneralActivity,
   documentType: string,
 ): string {
+  if (lastActivity == null) {
+    return `${documentType} status`;
+  }
   if (lastActivity.subType === 'CANCELLED') {
     return `${documentType} has been cancelled.`;
   } if (lastActivity.subType === 'IRRECOVERABLE') {
@@ -209,10 +212,10 @@ export function getNextStatus(
  */
 export function statusApplied(
   status: string,
-  lastStatusActivity: GeneralActivity,
+  lastStatusActivity: GeneralActivity | undefined,
   documentType: SingleEntities,
 ): boolean {
-  if (lastStatusActivity.subType == null) {
+  if (lastStatusActivity == null || lastStatusActivity.subType == null) {
     return false;
   }
   const completedStatuses = getCompletedDocumentStatuses(
@@ -230,9 +233,21 @@ export function statusApplied(
 /**
  * Get last status activity that is not the cancelling of the document
  */
-export function getLastStatus(allStatusActivities: GeneralActivity[]): GeneralActivity {
-  if (allStatusActivities[allStatusActivities.length - 1].subType !== 'CANCELLED') {
-    return allStatusActivities[allStatusActivities.length - 1];
+export function getLastStatus(allStatusActivities: GeneralActivity[]): GeneralActivity | undefined {
+  if (allStatusActivities.length > 0) {
+    if (allStatusActivities[allStatusActivities.length - 1].subType !== 'CANCELLED') {
+      return allStatusActivities[allStatusActivities.length - 1];
+    }
+    return allStatusActivities[allStatusActivities.length - 2];
   }
-  return allStatusActivities[allStatusActivities.length - 2];
+  return undefined;
+}
+
+/**
+ * Get the initials of a user for the feed label
+ * @param userName name of the creator of the activity
+ */
+export function formatUserNameInitials(userName: string): string {
+  const splitName = userName.split(' ');
+  return `${splitName[0][0] + splitName[splitName.length - 1][0]}`;
 }

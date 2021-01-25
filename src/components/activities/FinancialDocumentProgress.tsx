@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Button, Step } from 'semantic-ui-react';
+import { Grid, Button, Step } from 'semantic-ui-react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { GeneralActivity } from './GeneralActivity';
 import FinancialDocumentStep from './FinancialDocumentStep';
@@ -49,41 +49,42 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
     const allDocumentStatuses = getAllDocumentStatuses(documentType);
     const allStatusActivities = getAllStatusActivities(activities);
     const lastStatusActivity = getLastStatus(allStatusActivities);
-    const cancelledDocument = allStatusActivities[allStatusActivities.length - 1].subType === 'CANCELLED';
-    if (activities.length === 0) {
-      return (
-        <>
-          <h3>
-            Document Status
-          </h3>
-          <h4>
-            No status known yet.
-          </h4>
-        </>
-      );
+    let cancelledDocument: boolean = false;
+    if (lastStatusActivity !== undefined) {
+      cancelledDocument = allStatusActivities[allStatusActivities.length - 1].subType === 'CANCELLED';
     }
 
     if (!cancelledDocument) {
       return (
         <>
-          <h3>
-            {formatDocumentStatusTitle(
-              allStatusActivities[allStatusActivities.length - 1],
-              documentType,
-            )}
-            <Button
-              floated="right"
-              labelPosition="left"
-              icon="close"
-              basic
-              onClick={() => {
-                this.setState({
-                  cancelModalOpen: true,
-                });
-              }}
-              content={`Cancel ${documentType.toLowerCase()}`}
-            />
-          </h3>
+          <Grid columns={3}>
+            <Grid.Row>
+              <Grid.Column />
+              <Grid.Column>
+                <h3>
+                  {formatDocumentStatusTitle(
+                    allStatusActivities[allStatusActivities.length - 1],
+                    documentType,
+                  )}
+                </h3>
+              </Grid.Column>
+              <Grid.Column>
+                <Button
+                  floated="right"
+                  labelPosition="left"
+                  icon="close"
+                  basic
+                  onClick={() => {
+                    this.setState({
+                      cancelModalOpen: true,
+                    });
+                  }}
+                  content={`Cancel ${documentType.toLowerCase()}`}
+                />
+              </Grid.Column>
+            </Grid.Row>
+          </Grid>
+
           <Step.Group stackable="tablet" widths={5} fluid>
             {allDocumentStatuses.map((currentStatus) => (
               <FinancialDocumentStep
