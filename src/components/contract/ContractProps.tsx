@@ -16,6 +16,7 @@ import UserSelector from '../user/UserSelector';
 
 interface Props {
   create?: boolean;
+  companyPredefined?: boolean;
   onCancel?: () => void;
 
   contract: Contract;
@@ -122,7 +123,7 @@ class ContractProps extends React.Component<Props, State> {
     } = this.state;
 
     let companySelector;
-    if (!companySelection) {
+    if (this.props.companyPredefined) {
       companySelector = (
         <Form.Field
           disabled={!editing}
