@@ -39,8 +39,10 @@ class ContractCreatePage extends React.Component<Props> {
 
   public render() {
     let compId = -1;
+    let unknownCompany: boolean = true;
     if (this.props.match.params.companyId) {
       compId = parseInt(this.props.match.params.companyId, 10);
+      unknownCompany = false;
     }
     const contract: Contract = {
       id: -1,
@@ -59,7 +61,12 @@ class ContractCreatePage extends React.Component<Props> {
       >
         <Segment>
           <AlertContainer />
-          <ContractProps contract={contract} create onCancel={this.close} />
+          <ContractProps
+            contract={contract}
+            create
+            companyPredefined={unknownCompany}
+            onCancel={this.close}
+          />
         </Segment>
       </Modal>
     );
