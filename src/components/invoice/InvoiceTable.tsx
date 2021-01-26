@@ -44,8 +44,8 @@ function InvoicesTable({
         <Table.Header>
           <Table.Row>
             <Table.HeaderCell
-              sorted={column === 'invoiceId' ? direction : undefined}
-              onClick={() => changeSort('invoiceId')}
+              sorted={column === 'title' ? direction : undefined}
+              onClick={() => changeSort('title')}
             >
               Title
             </Table.HeaderCell>
@@ -59,10 +59,16 @@ function InvoicesTable({
             <Table.HeaderCell>
               Status
             </Table.HeaderCell>
-            <Table.HeaderCell>
+            <Table.HeaderCell
+              sorted={column === 'startDate' ? direction : undefined}
+              onClick={() => changeSort('startDate')}
+            >
               Financial year
             </Table.HeaderCell>
-            <Table.HeaderCell>
+            <Table.HeaderCell
+              sorted={column === 'assignedTo' ? direction : undefined}
+              onClick={() => changeSort('assignedTo')}
+            >
               Assigned to
             </Table.HeaderCell>
             <Table.HeaderCell

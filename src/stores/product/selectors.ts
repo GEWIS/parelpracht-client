@@ -13,7 +13,7 @@ export function sortColumn(state: RootState): string {
     case 'nameEnglish': return 'Name (English)';
     case 'targetPrice': return 'Target Price';
     case 'status': return 'Status';
-    case 'categoryId': return 'Category ID';
+    case 'category': return 'Category';
     default: return 'unknown';
   }
 }

@@ -68,7 +68,10 @@ function ContractsTable({
             <Table.HeaderCell>
               Status
             </Table.HeaderCell>
-            <Table.HeaderCell>
+            <Table.HeaderCell
+              sorted={column === 'assignedTo' ? direction : undefined}
+              onClick={() => changeSort('assignedTo')}
+            >
               Assigned to
               <UserFilter />
             </Table.HeaderCell>

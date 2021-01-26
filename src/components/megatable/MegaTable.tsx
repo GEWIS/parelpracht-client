@@ -11,7 +11,7 @@ import {
   changeSortTable,
   fetchTable,
   nextPageTable,
-  prevPageTable, setFilterTable,
+  prevPageTable, setFilterTable, setSortTable,
   setTakeTable,
 } from '../../stores/tables/actionCreators';
 import TablePagination from '../TablePagination';
@@ -32,26 +32,31 @@ interface Props {
   fetchContracts: () => void;
   setTableFilter: (filter: { column: string, values: any[] }) => void;
   changeSort: (column: string) => void;
+  setSort: (column: string, direction: 'ASC' | 'DESC') => void;
   setTake: (take: number) => void;
   prevPage: () => void;
   nextPage: () => void;
 }
 
 function MegaTable({
-  companies, fetchContracts, setTableFilter, column, direction, changeSort,
+  companies, fetchContracts, setTableFilter, column, direction, changeSort, setSort,
   total, fetched, skip, take,
   prevPage, nextPage, setTake,
 }: Props) {
   useEffect(() => {
+    setSort('companyName', 'ASC');
     setTableFilter({ column: 'invoiced', values: [false] });
     fetchContracts();
   }, []);
   return (
     <>
-      <Table className="rowspanStriped" compact>
+      <Table className="rowspanStriped" compact sortable>
         <Table.Header>
           <Table.Row>
-            <Table.HeaderCell>
+            <Table.HeaderCell
+              sorted={column === 'companyName' ? direction : undefined}
+              onClick={() => changeSort('companyName')}
+            >
               Company
               <CompanyFilter table={Tables.ETCompanies} />
             </Table.HeaderCell>
@@ -108,6 +113,10 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   },
   changeSort: (column: string) => {
     dispatch(changeSortTable(Tables.ETCompanies, column));
+    dispatch(fetchTable(Tables.ETCompanies));
+  },
+  setSort: (column: string, direction: 'ASC' | 'DESC') => {
+    dispatch(setSortTable(Tables.ETCompanies, column, direction));
     dispatch(fetchTable(Tables.ETCompanies));
   },
   setTake: (take: number) => {
