@@ -4,6 +4,7 @@ import { Dispatch } from 'redux';
 import {
   Button, Form, Input,
 } from 'semantic-ui-react';
+import validator from 'validator';
 import { authResetPassword } from '../../stores/auth/actionCreators';
 import ResourceStatus from '../../stores/resourceStatus';
 import { RootState } from '../../stores/store';
@@ -13,6 +14,7 @@ interface Props {
   token: string;
   status: ResourceStatus;
   resetPassword: (password: string, passwordRepeat: string, token: string) => void;
+  validatePassword: (password: string) => void;
 }
 
 function ResetPasswordForm(props: Props) {
@@ -29,7 +31,13 @@ function ResetPasswordForm(props: Props) {
         icon="lock"
         iconPosition="left"
         label="New password"
-        onChange={(e: ChangeEvent<HTMLInputElement>) => changePassword(e.target.value)}
+        error={
+          validator.isEmpty(password) || !validator.isStrongPassword(password)
+        }
+        onChange={(e: ChangeEvent<HTMLInputElement>) => {
+          changePassword(e.target.value);
+          props.validatePassword(e.target.value);
+        }}
       />
       <Form.Field
         id="form-input-password-repeat"
@@ -38,6 +46,9 @@ function ResetPasswordForm(props: Props) {
         type="password"
         icon="lock"
         iconPosition="left"
+        error={
+          validator.isEmpty(passwordRepeat) || !validator.equals(passwordRepeat, password)
+        }
         label="Repeat password"
         onChange={(e: ChangeEvent<HTMLInputElement>) => changePasswordRepeat(e.target.value)}
       />
