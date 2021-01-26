@@ -45,16 +45,10 @@ function ProductsTable({
         <Table.Header>
           <Table.Row>
             <Table.HeaderCell
-              sorted={column === 'nameDutch' ? direction : undefined}
-              onClick={() => changeSort('nameDutch')}
-            >
-              Name (Dutch)
-            </Table.HeaderCell>
-            <Table.HeaderCell
               sorted={column === 'nameEnglish' ? direction : undefined}
               onClick={() => changeSort('nameEnglish')}
             >
-              Name (English)
+              Name
             </Table.HeaderCell>
             <Table.HeaderCell
               sorted={column === 'targetPrice' ? direction : undefined}
