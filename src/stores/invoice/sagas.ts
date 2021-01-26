@@ -2,8 +2,16 @@ import {
   call, put, select, throttle,
 } from 'redux-saga/effects';
 import {
-  ActivityParams, Client, InvoiceStatusParams, Invoice, InvoiceParams, ListOrFilter, ListParams,
-  ListSorting, Partial_FileParams, SortDirection,
+  ActivityParams,
+  Client,
+  Invoice,
+  InvoiceParams,
+  InvoiceStatusParams,
+  ListOrFilter,
+  ListParams,
+  ListSorting,
+  Partial_FileParams,
+  SortDirection,
 } from '../../clients/server.generated';
 import { takeEveryWithErrorHandling } from '../errorHandling';
 import { clearSingle, errorSingle, setSingle } from '../single/actionCreators';
@@ -13,14 +21,16 @@ import {
   SingleCreateAction,
   SingleCreateCommentAction,
   SingleCreateStatusAction,
-  SingleDeleteAction, SingleDeleteActivityAction,
+  SingleDeleteAction,
+  SingleDeleteActivityAction,
   SingleDeleteFileAction,
   SingleFetchAction,
-  SingleSaveAction, SingleSaveActivityAction,
+  SingleSaveAction,
+  SingleSaveActivityAction,
   SingleSaveFileAction,
 } from '../single/actions';
 import { SingleEntities } from '../single/single';
-import { setSummaries } from '../summaries/actionCreators';
+import { fetchSummaries, setSummaries } from '../summaries/actionCreators';
 import { summariesActionPattern, SummariesActionType } from '../summaries/actions';
 import { SummaryCollections } from '../summaries/summaries';
 import { fetchTable, setTable } from '../tables/actionCreators';
@@ -74,6 +84,7 @@ function* saveSingleInvoice(
   yield call([client, client.updateInvoice], action.id, action.data);
   const invoice = yield call([client, client.getInvoice], action.id);
   yield put(setSingle(SingleEntities.Invoice, invoice));
+  yield put(fetchSummaries(SummaryCollections.Invoices));
 }
 
 function* errorSaveSingleInvoice() {
@@ -95,6 +106,7 @@ function* createSingleInvoice(
   const invoice = yield call([client, client.createInvoice], action.data);
   yield put(setSingle(SingleEntities.Invoice, invoice));
   yield put(fetchTable(Tables.Invoices));
+  yield put(fetchSummaries(SummaryCollections.Invoices));
 }
 
 function* errorCreateSingleInvoice() {
@@ -113,6 +125,7 @@ function* deleteSingleInvoice(action: SingleDeleteAction<SingleEntities.Invoice>
   const client = new Client();
   yield call([client, client.deleteInvoice], action.id);
   yield put(clearSingle(SingleEntities.Invoice));
+  yield put(fetchSummaries(SummaryCollections.Invoices));
 }
 
 function* errorDeleteSingleInvoice() {

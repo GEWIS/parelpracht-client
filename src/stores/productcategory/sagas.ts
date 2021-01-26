@@ -2,16 +2,26 @@ import {
   call, put, select, throttle,
 } from 'redux-saga/effects';
 import {
-  Client, ProductCategory, CategoryParams, ListOrFilter, ListParams, ListSorting, SortDirection,
+  CategoryParams,
+  Client,
+  ListOrFilter,
+  ListParams,
+  ListSorting,
+  ProductCategory,
+  SortDirection,
 } from '../../clients/server.generated';
 import { takeEveryWithErrorHandling } from '../errorHandling';
 import { clearSingle, errorSingle, setSingle } from '../single/actionCreators';
 import {
-  singleActionPattern, SingleActionType, SingleCreateAction, SingleDeleteAction,
-  SingleFetchAction, SingleSaveAction,
+  singleActionPattern,
+  SingleActionType,
+  SingleCreateAction,
+  SingleDeleteAction,
+  SingleFetchAction,
+  SingleSaveAction,
 } from '../single/actions';
 import { SingleEntities } from '../single/single';
-import { setSummaries } from '../summaries/actionCreators';
+import { fetchSummaries, setSummaries } from '../summaries/actionCreators';
 import { summariesActionPattern, SummariesActionType } from '../summaries/actions';
 import { SummaryCollections } from '../summaries/summaries';
 import { fetchTable, setTable } from '../tables/actionCreators';
@@ -65,6 +75,8 @@ function* saveSingleProductCategory(
   yield call([client, client.updateCategory], action.id, action.data);
   const productCategory = yield call([client, client.getCategory], action.id);
   yield put(setSingle(SingleEntities.ProductCategory, productCategory));
+  yield put(fetchTable(Tables.ProductCategories));
+  yield put(fetchSummaries(SummaryCollections.ProductCategories));
 }
 
 function* errorSaveSingleProductCategory() {
@@ -86,6 +98,7 @@ function* createSingleProductCategory(
   const productcategory = yield call([client, client.createCategory], action.data);
   yield put(setSingle(SingleEntities.ProductCategory, productcategory));
   yield put(fetchTable(Tables.ProductCategories));
+  yield put(fetchSummaries(SummaryCollections.ProductCategories));
 }
 
 function* errorCreateSingleProductCategory() {
@@ -104,6 +117,8 @@ function* deleteSingleProductCategory(action: SingleDeleteAction<SingleEntities.
   const client = new Client();
   yield call([client, client.deleteCategory], action.id);
   yield put(clearSingle(SingleEntities.ProductCategory));
+  yield put(fetchTable(Tables.ProductCategories));
+  yield put(fetchSummaries(SummaryCollections.ProductCategories));
 }
 
 function* errorDeleteSingleProductCategory() {

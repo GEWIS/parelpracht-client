@@ -1,7 +1,7 @@
 import React from 'react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import {
-  Button, Checkbox, Grid, Header, Icon, Segment, Table,
+  Checkbox, Icon, Table,
 } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import { ActivityType, ProductInstance } from '../../clients/server.generated';
@@ -18,7 +18,7 @@ interface Props extends RouteComponentProps {
   selectFunction: (id: number) => void;
 }
 
-function showRecentStatus(productInstance: ProductInstance) {
+function showRecentStatus(productInstance: ProductInstance): string {
   const statusArray = productInstance.activities.filter((a) => {
     if (a.type === ActivityType.STATUS) return a;
     return null;
@@ -26,7 +26,9 @@ function showRecentStatus(productInstance: ProductInstance) {
 
   // eslint-disable-next-line no-nested-ternary
   // eslint-disable-next-line
-  return statusArray.sort((a, b) => (a.updatedAt > b.updatedAt ? -1 : a.updatedAt < b.updatedAt ? 1 : 0))[0].subType!;
+  const sortedArray = statusArray.sort((a, b) => (a.updatedAt > b.updatedAt ? -1 : a.updatedAt < b.updatedAt ? 1 : 0))
+  if (sortedArray.length === 0) return '';
+  return sortedArray[0].subType!;
 }
 
 class ContractProductComponent extends React.Component<Props> {

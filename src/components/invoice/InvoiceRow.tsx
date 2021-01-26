@@ -5,7 +5,7 @@ import { Table } from 'semantic-ui-react';
 import { Invoice, InvoiceStatus } from '../../clients/server.generated';
 import { getCompanyName } from '../../stores/company/selectors';
 import { RootState } from '../../stores/store';
-import { dateToFinancialYear, formatLastUpdate } from '../../helpers/timestamp';
+import { dateToFullFinancialYear, formatLastUpdate } from '../../helpers/timestamp';
 import { formatStatus } from '../../helpers/activity';
 import { getUserName } from '../../stores/user/selectors';
 import { getInvoiceStatus } from '../../stores/invoice/selectors';
@@ -38,7 +38,7 @@ function InvoiceRow(props: Props) {
         {formatStatus(invoiceStatus)}
       </Table.Cell>
       <Table.Cell>
-        {dateToFinancialYear(invoice.startDate)}
+        {dateToFullFinancialYear(invoice.startDate)}
       </Table.Cell>
       <Table.Cell>
         {assignedName}

@@ -2,17 +2,27 @@ import {
   call, put, select, throttle,
 } from 'redux-saga/effects';
 import {
-  Client, ListOrFilter, ListParams, ListSorting, SortDirection, User, UserParams,
+  Client,
+  ListOrFilter,
+  ListParams,
+  ListSorting,
+  SortDirection,
+  User,
+  UserParams,
 } from '../../clients/server.generated';
 import { takeEveryWithErrorHandling } from '../errorHandling';
 import { clearSingle, errorSingle, setSingle } from '../single/actionCreators';
 import {
-  singleActionPattern, SingleActionType, SingleCreateAction,
-  SingleDeleteAction, SingleFetchAction, SingleSaveAction,
+  singleActionPattern,
+  SingleActionType,
+  SingleCreateAction,
+  SingleDeleteAction,
+  SingleFetchAction,
+  SingleSaveAction,
 } from '../single/actions';
 import { getSingle } from '../single/selectors';
 import { SingleEntities } from '../single/single';
-import { setSummaries } from '../summaries/actionCreators';
+import { fetchSummaries, setSummaries } from '../summaries/actionCreators';
 import { summariesActionPattern, SummariesActionType } from '../summaries/actions';
 import { SummaryCollections } from '../summaries/summaries';
 import { fetchTable, setTable } from '../tables/actionCreators';
@@ -63,6 +73,7 @@ function* deleteSingleUser(action: SingleDeleteAction<SingleEntities.User>) {
   const client = new Client();
   yield call([client, client.deleteUser], action.id);
   yield put(clearSingle(SingleEntities.User));
+  yield put(fetchSummaries(SummaryCollections.Users));
 }
 
 function* errorDeleteSingleUser() {
@@ -77,6 +88,7 @@ function* saveSingleUser(
   yield call([client, client.updateUser], action.id, action.data);
   const user = yield call([client, client.getUser], action.id);
   yield put(setSingle(SingleEntities.User, user));
+  yield put(fetchSummaries(SummaryCollections.Users));
 }
 
 function* errorSaveSingleUser() {
@@ -98,6 +110,7 @@ function* createSingleUser(
   const user = yield call([client, client.createUser], action.data);
   yield put(setSingle(SingleEntities.User, user));
   yield put(fetchTable(Tables.Users));
+  yield put(fetchSummaries(SummaryCollections.Users));
 }
 
 function* errorCreateSingleUser() {

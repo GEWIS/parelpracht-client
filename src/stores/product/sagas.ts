@@ -3,7 +3,13 @@ import {
 } from 'redux-saga/effects';
 import {
   ActivityParams,
-  Client, ListOrFilter, ListParams, ListSorting, Partial_FileParams, Product, ProductParams,
+  Client,
+  ListOrFilter,
+  ListParams,
+  ListSorting,
+  Partial_FileParams,
+  Product,
+  ProductParams,
   SortDirection,
 } from '../../clients/server.generated';
 import { takeEveryWithErrorHandling } from '../errorHandling';
@@ -22,7 +28,7 @@ import {
   SingleSaveFileAction,
 } from '../single/actions';
 import { SingleEntities } from '../single/single';
-import { setSummaries } from '../summaries/actionCreators';
+import { fetchSummaries, setSummaries } from '../summaries/actionCreators';
 import { summariesActionPattern, SummariesActionType } from '../summaries/actions';
 import { SummaryCollections } from '../summaries/summaries';
 import { fetchTable, setTable } from '../tables/actionCreators';
@@ -76,6 +82,7 @@ function* saveSingleProduct(
   yield call([client, client.updateProduct], action.id, action.data);
   const product = yield call([client, client.getProduct], action.id);
   yield put(setSingle(SingleEntities.Product, product));
+  yield put(fetchSummaries(SummaryCollections.Products));
 }
 
 function* errorSaveSingleProduct() {
@@ -97,6 +104,7 @@ function* createSingleProduct(
   const product = yield call([client, client.createProduct], action.data);
   yield put(setSingle(SingleEntities.Product, product));
   yield put(fetchTable(Tables.Products));
+  yield put(fetchSummaries(SummaryCollections.Products));
 }
 
 function* errorCreateSingleProduct() {
@@ -115,6 +123,7 @@ function* deleteSingleProduct(action: SingleDeleteAction<SingleEntities.Product>
   const client = new Client();
   yield call([client, client.deleteProduct], action.id);
   yield put(clearSingle(SingleEntities.Product));
+  yield put(fetchSummaries(SummaryCollections.Products));
 }
 
 function* errorDeleteSingleProduct() {

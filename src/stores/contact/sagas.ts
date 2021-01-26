@@ -11,7 +11,7 @@ import {
   SingleFetchAction, SingleSaveAction,
 } from '../single/actions';
 import { SingleEntities } from '../single/single';
-import { setSummaries } from '../summaries/actionCreators';
+import { fetchSummaries, setSummaries } from '../summaries/actionCreators';
 import { summariesActionPattern, SummariesActionType } from '../summaries/actions';
 import { SummaryCollections } from '../summaries/summaries';
 import { fetchTable, setTable } from '../tables/actionCreators';
@@ -65,6 +65,8 @@ function* saveSingleContact(
   yield call([client, client.updateContact], action.id, action.data);
   const contact = yield call([client, client.getContact], action.id);
   yield put(setSingle(SingleEntities.Contact, contact));
+  yield put(fetchTable(Tables.Contacts));
+  yield put(fetchSummaries(SummaryCollections.Contacts));
 }
 
 function* errorSaveSingleContact() {
@@ -86,6 +88,7 @@ function* createSingleContact(
   const contact = yield call([client, client.createContact], action.data);
   yield put(setSingle(SingleEntities.Contact, contact));
   yield put(fetchTable(Tables.Contacts));
+  yield put(fetchSummaries(SummaryCollections.Contacts));
 }
 
 function* errorCreateSingleContact() {
@@ -104,6 +107,8 @@ function* deleteSingleContact(action: SingleDeleteAction<SingleEntities.Contact>
   const client = new Client();
   yield call([client, client.deleteContact], action.id);
   yield put(clearSingle(SingleEntities.Contact));
+  yield put(fetchTable(Tables.Contacts));
+  yield put(fetchSummaries(SummaryCollections.Contacts));
 }
 
 function* errorDeleteSingleContact() {
