@@ -3,6 +3,7 @@ import {
   Button, Checkbox,
   Dropdown, Form, Icon, Input, Modal, Segment,
 } from 'semantic-ui-react';
+import validator from 'validator';
 import {
   Language, ContractType, ReturnFileType, GenerateContractParams,
 } from '../../clients/server.generated';
@@ -84,12 +85,18 @@ function GenerateContractModal(props: Props) {
         <Form style={{ marginTop: '2em' }}>
           <Form.Group widths="equal">
             <Form.Field
-              label="Name"
+              label="Label"
               control={Input}
+              required
+              error={
+                validator.isEmpty(name)
+              }
               value={name}
               onChange={(e: ChangeEvent<HTMLInputElement>) => changeName(e.target.value)}
             />
-            <Form.Field>
+            <Form.Field
+              required
+            >
               {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
               <label htmlFor="form-input-Content-Type">Content Type</label>
               <Dropdown
@@ -106,7 +113,9 @@ function GenerateContractModal(props: Props) {
             </Form.Field>
           </Form.Group>
           <Form.Group widths="equal">
-            <Form.Field>
+            <Form.Field
+              required
+            >
               {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
               <label htmlFor="form-input-File-Type">File Type</label>
               <Dropdown
@@ -121,7 +130,9 @@ function GenerateContractModal(props: Props) {
                 onChange={(e, data) => changeFileType(data.value as ReturnFileType)}
               />
             </Form.Field>
-            <Form.Field>
+            <Form.Field
+              required
+            >
               {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
               <label htmlFor="form-input-language">Language</label>
               <Dropdown
@@ -143,6 +154,7 @@ function GenerateContractModal(props: Props) {
               placeholder="Signee 1"
               control={UserSelector}
               value={signee1Id}
+              required
               onChange={(id: number) => changeSignee1(id)}
               hideEmail
             />
@@ -150,6 +162,7 @@ function GenerateContractModal(props: Props) {
               label="Signee 2"
               placeholder="Signee 2"
               control={UserSelector}
+              required
               value={signee2Id}
               onChange={(id: number) => changeSignee2(id)}
               hideEmail

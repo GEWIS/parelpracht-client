@@ -35,7 +35,7 @@ function ContactSelector(props: Props & DropdownProps) {
       disabled={disabled}
       search
       selection
-      error={!(value > -1) && !open}
+      error={(value <= 0) && !open}
       {...rest}
       options={dropdownOptions}
       value={value}

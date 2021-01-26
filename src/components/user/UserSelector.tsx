@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import React from 'react';
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { Dropdown, DropdownProps } from 'semantic-ui-react';
 import { UserSummary } from '../../clients/server.generated';
@@ -15,6 +15,8 @@ interface Props {
 }
 
 function UserSelector(props: Props & DropdownProps) {
+  const [open, changeOpen] = useState(false);
+
   const {
     value, onChange, options, hideEmail, ...rest
   } = props;
@@ -30,10 +32,13 @@ function UserSelector(props: Props & DropdownProps) {
       placeholder="User"
       search
       selection
+      error={value < 1 && !open}
       {...rest}
       options={dropdownOptions}
       value={props.value}
       onChange={(e, data) => props.onChange(data.value as any)}
+      onOpen={() => changeOpen(true)}
+      onClose={() => changeOpen(false)}
     />
   );
 }
