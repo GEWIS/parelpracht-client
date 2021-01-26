@@ -4,6 +4,7 @@ import {
   Checkbox,
   Dropdown, Form, Icon, Input, Modal, Segment,
 } from 'semantic-ui-react';
+import validator from 'validator';
 import {
   Language, ReturnFileType, GenerateInvoiceParams,
 } from '../../clients/server.generated';
@@ -81,7 +82,11 @@ function GenerateContract(props: Props) {
         <Form style={{ marginTop: '2em' }}>
           <Form.Group widths="equal">
             <Form.Field
-              label="Name"
+              label="Label"
+              required
+              error={
+                validator.isEmpty(name)
+              }
               control={Input}
               value={name}
               onChange={(e: ChangeEvent<HTMLInputElement>) => changeName(e.target.value)}
@@ -89,6 +94,7 @@ function GenerateContract(props: Props) {
             <Form.Field
               label="Recipient"
               placeholder="Recipient"
+              required
               control={ContactSelector}
               value={recipientId}
               onChange={(id: number) => changeRecipient(id)}
@@ -96,7 +102,9 @@ function GenerateContract(props: Props) {
             />
           </Form.Group>
           <Form.Group widths="equal">
-            <Form.Field>
+            <Form.Field
+              required
+            >
               {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
               <label htmlFor="form-input-File-Type">File Type</label>
               <Dropdown
@@ -111,7 +119,9 @@ function GenerateContract(props: Props) {
                 onChange={(e, data) => changeFileType(data.value as ReturnFileType)}
               />
             </Form.Field>
-            <Form.Field>
+            <Form.Field
+              required
+            >
               {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
               <label htmlFor="form-input-language">Language</label>
               <Dropdown
