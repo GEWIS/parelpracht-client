@@ -9,14 +9,17 @@ import ResourceStatus from '../../stores/resourceStatus';
 import { getSingle } from '../../stores/single/selectors';
 import { SingleEntities } from '../../stores/single/single';
 import { RootState } from '../../stores/store';
+import { getCategoryName } from '../../stores/productcategory/selectors';
+import UserLink from '../user/UserLink';
 
 interface Props {
   product: Product | undefined;
   status: ResourceStatus;
+  categoryName: string;
 }
 
 function ProductSummary(props: Props) {
-  const { product, status } = props;
+  const { product, status, categoryName } = props;
   if (product === undefined
     || (status !== ResourceStatus.FETCHED
       && status !== ResourceStatus.SAVING
@@ -43,13 +46,13 @@ function ProductSummary(props: Props) {
         <Icon name="shopping bag" />
         <Header.Content>
           <Header.Subheader>Product</Header.Subheader>
-          {product.nameDutch}
+          {product.nameEnglish}
         </Header.Content>
       </Header>
       <Segment attached="bottom">
         <Grid columns={4}>
           <Grid.Column>
-            <h5>Name (English)</h5>
+            <h5>Name</h5>
             <p>{product.nameEnglish}</p>
           </Grid.Column>
           <Grid.Column>
@@ -57,7 +60,8 @@ function ProductSummary(props: Props) {
             <p>{formatPriceFull(product.targetPrice)}</p>
           </Grid.Column>
           <Grid.Column>
-            <h5>Created by</h5>
+            <h5>Category</h5>
+            <p>{categoryName}</p>
           </Grid.Column>
         </Grid>
       </Segment>
@@ -65,10 +69,11 @@ function ProductSummary(props: Props) {
   );
 }
 
-const mapStateToProps = (state: RootState) => {
+const mapStateToProps = (state: RootState, props: { product: Product }) => {
   return {
     product: getSingle<Product>(state, SingleEntities.Product).data,
     status: getSingle<Product>(state, SingleEntities.Product).status,
+    categoryName: getCategoryName(state, props.product.categoryId),
   };
 };
 
