@@ -61,7 +61,9 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
             <Grid.Row>
               <Grid.Column />
               <Grid.Column>
-                <h3>
+                <h3
+                  style={{ marginBottom: '0.3em', marginTop: '0.2em' }}
+                >
                   {formatDocumentStatusTitle(
                     allStatusActivities[allStatusActivities.length - 1],
                     documentType,
@@ -85,7 +87,12 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
             </Grid.Row>
           </Grid>
 
-          <Step.Group stackable="tablet" widths={5} fluid>
+          <Step.Group
+            stackable="tablet"
+            widths={5}
+            fluid
+            style={{ marginTop: '0.5em' }}
+          >
             {allDocumentStatuses.map((currentStatus) => (
               <FinancialDocumentStep
                 documentId={documentId}
