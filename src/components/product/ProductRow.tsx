@@ -15,11 +15,6 @@ function ProductRow(props: Props) {
     <Table.Row>
       <Table.Cell>
         <NavLink to={`/product/${product.id}`}>
-          {product.nameDutch}
-        </NavLink>
-      </Table.Cell>
-      <Table.Cell>
-        <NavLink to={`/product/${product.id}`}>
           {product.nameEnglish}
         </NavLink>
       </Table.Cell>
