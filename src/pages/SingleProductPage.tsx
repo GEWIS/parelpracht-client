@@ -121,7 +121,7 @@ class SingleProductPage extends React.Component<Props> {
             { key: 'Product', content: product.nameDutch, active: true },
           ]}
         />
-        <ProductSummary />
+        <ProductSummary product={product} />
         <Grid columns={2}>
           <Grid.Column width={10}>
             <Tab panes={panes} menu={{ pointing: true, inverted: true }} />

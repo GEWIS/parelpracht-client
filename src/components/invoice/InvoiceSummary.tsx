@@ -54,7 +54,7 @@ function InvoiceSummary(props: Props) {
             <p>{invoice.id}</p>
           </Grid.Column>
           <Grid.Column>
-            <h5>Company ID</h5>
+            <h5>Company</h5>
             <CompanyLink id={invoice.companyId} />
           </Grid.Column>
           <Grid.Column>

@@ -56,9 +56,6 @@ function CompanySummary(props: Props) {
             <h5>Status</h5>
             <p>{formatStatus(company.status)}</p>
           </Grid.Column>
-          <Grid.Column>
-            <h5>Created by</h5>
-          </Grid.Column>
         </Grid>
       </Segment>
     </>
