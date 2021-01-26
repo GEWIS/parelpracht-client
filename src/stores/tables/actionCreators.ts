@@ -1,9 +1,16 @@
 import {
   tableActionPattern,
-  TableActionType, TableChangeSortAction,
-  TableClearAction, TableFetchAction,
-  TableNextPageAction, TablePrevPageAction,
-  TableSearchAction, TableSetAction, TableSetFilterAction, TableSetTakeAction,
+  TableActionType,
+  TableChangeSortAction,
+  TableClearAction,
+  TableFetchAction,
+  TableNextPageAction,
+  TablePrevPageAction,
+  TableSearchAction,
+  TableSetAction,
+  TableSetFilterAction,
+  TableSetSortAction,
+  TableSetTakeAction,
 } from './actions';
 import { Tables } from './tables';
 
@@ -29,6 +36,12 @@ export function changeSortTable<T extends Tables>(
   table: T, column: string,
 ): TableChangeSortAction<T> {
   return { type: tableActionPattern(table, TableActionType.ChangeSort), column };
+}
+
+export function setSortTable<T extends Tables>(
+  table: T, column: string, direction: 'ASC' | 'DESC',
+): TableSetSortAction<T> {
+  return { type: tableActionPattern(table, TableActionType.SetSort), column, direction };
 }
 
 export function setTakeTable<T extends Tables>(

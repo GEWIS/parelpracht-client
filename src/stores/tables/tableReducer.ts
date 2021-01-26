@@ -1,8 +1,14 @@
 import ResourceStatus from '../resourceStatus';
 import { TableState } from './tableState';
 import {
-  TableActions, TableActionType, TableChangeSortAction, tableExtractAction,
-  TableSearchAction, TableSetAction, TableSetFilterAction, TableSetTakeAction,
+  TableActions,
+  TableActionType,
+  TableChangeSortAction,
+  tableExtractAction,
+  TableSearchAction,
+  TableSetAction,
+  TableSetFilterAction, TableSetSortAction,
+  TableSetTakeAction,
 } from './actions';
 import { Tables } from './tables';
 
@@ -121,6 +127,15 @@ const createTableReducer = <T extends Tables, R>(t: Tables) => {
           skip: 0,
           sortColumn: a.column,
           sortDirection: 'ASC',
+        };
+      }
+
+      case TableActionType.SetSort: {
+        const a = action as TableSetSortAction<T>;
+        return {
+          ...state,
+          sortColumn: a.column,
+          sortDirection: a.direction,
         };
       }
 
