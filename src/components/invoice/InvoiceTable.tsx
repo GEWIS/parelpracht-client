@@ -12,6 +12,8 @@ import { countFetched, countTotal, getTable } from '../../stores/tables/selector
 import { Tables } from '../../stores/tables/tables';
 import InvoiceRow from './InvoiceRow';
 import CompanyFilter from '../tablefilters/CompanyFilter';
+import InvoiceStatusFilter from '../tablefilters/InvoiceStatusFilter';
+import UserFilter from '../tablefilters/UserFilter';
 
 interface Props {
   invoices: Invoice[];
@@ -58,6 +60,7 @@ function InvoicesTable({
             </Table.HeaderCell>
             <Table.HeaderCell>
               Status
+              <InvoiceStatusFilter />
             </Table.HeaderCell>
             <Table.HeaderCell
               sorted={column === 'startDate' ? direction : undefined}
@@ -70,6 +73,7 @@ function InvoicesTable({
               onClick={() => changeSort('assignedTo')}
             >
               Assigned to
+              <UserFilter table={Tables.Invoices} />
             </Table.HeaderCell>
             <Table.HeaderCell
               sorted={column === 'updatedAt' ? direction : undefined}

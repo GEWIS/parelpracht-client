@@ -9,6 +9,7 @@ import { Tables } from '../../stores/tables/tables';
 import { formatContactName } from '../../helpers/contact';
 
 interface Props {
+  table: Tables;
   options: UserSummary[]
 }
 
@@ -17,7 +18,7 @@ function ProductFilter(props: Props) {
     <ColumnFilter
       column="assignedToId"
       columnName="Assigned to"
-      table={Tables.Users}
+      table={props.table}
       options={props.options.map((u) => ({
         value: u.id,
         key: u.id,
