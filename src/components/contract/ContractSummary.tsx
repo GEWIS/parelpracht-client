@@ -82,14 +82,14 @@ function ContractSummary(props: Props) {
   );
 }
 
-const mapStateToProps = (state: RootState, props: { contract: Contract }) => {
+const mapStateToProps = (state: RootState) => {
   const { data, status } = getSingle<Contract>(state, SingleEntities.Contract);
   return {
     contract: data,
     status,
     companyName: data ? getCompanyName(state, data.companyId) : '...',
     createdByName: data ? getUserName(state, data.createdById) : '...',
-    contactName: getContactName(state, props.contract.contactId),
+    contactName: data ? getContactName(state, data.contactId) : '...',
   };
 };
 
