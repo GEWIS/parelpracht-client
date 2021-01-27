@@ -116,7 +116,7 @@ class SingleContractPage extends React.Component<Props> {
             { key: 'Contract', content: contract.title, active: true },
           ]}
         />
-        <ContractSummary contract={contract} />
+        <ContractSummary />
         <Grid rows={2}>
           <Grid.Row centered columns={1} style={{ paddingLeft: '1em', paddingRight: '1em' }}>
             <Segment secondary>
