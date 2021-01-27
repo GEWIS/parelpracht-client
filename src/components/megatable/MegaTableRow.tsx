@@ -7,6 +7,9 @@ import { formatPriceFull } from '../../helpers/monetary';
 import { ProductSummary } from '../../clients/server.generated';
 import { RootState } from '../../stores/store';
 import { prodInsStatus } from '../../helpers/statusses';
+import CompanyLink from '../company/CompanyLink';
+import ContractLink from '../contract/ContractLink';
+import ProductLink from '../product/ProductLink';
 
 interface Props {
   company: ETCompany;
@@ -42,9 +45,7 @@ function MegaTableRow(props: Props) {
     if (contractNr === 0 && productInstanceNr === 0) {
       innerResult.push((
         <Table.Cell rowSpan={getNrOfProducts()}>
-          <NavLink to={`/company/${company.id}`}>
-            {company.name}
-          </NavLink>
+          <CompanyLink id={company.id} />
         </Table.Cell>
       ));
     }
@@ -52,16 +53,14 @@ function MegaTableRow(props: Props) {
       contract = company.contracts[contractNr];
       innerResult.push((
         <Table.Cell rowSpan={contract.products.length}>
-          <NavLink to={`/contract/${contract.id}`}>
-            {contract.title}
-          </NavLink>
+          <ContractLink id={contract.id} />
         </Table.Cell>
       ));
     }
     product = contract!.products[productInstanceNr];
     innerResult.push((
       <Table.Cell>
-        {getProductFromId(product.productId)}
+        <ProductLink id={product.productId} />
       </Table.Cell>));
     innerResult.push(<Table.Cell>{prodInsStatus(product.subType)}</Table.Cell>);
     innerResult.push(<Table.Cell>{product.invoiceId === null ? 'Not invoiced' : 'Invoiced'}</Table.Cell>);

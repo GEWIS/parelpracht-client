@@ -9,18 +9,18 @@ import { dateToFullFinancialYear, formatLastUpdate } from '../../helpers/timesta
 import { formatStatus } from '../../helpers/activity';
 import { getUserName } from '../../stores/user/selectors';
 import { getInvoiceStatus } from '../../stores/invoice/selectors';
+import CompanyLink from '../company/CompanyLink';
 
 interface Props {
   invoice: Invoice;
 
-  companyName: string;
   assignedName: string;
   invoiceStatus: InvoiceStatus;
 }
 
 function InvoiceRow(props: Props) {
   const {
-    invoice, companyName, assignedName, invoiceStatus,
+    invoice, assignedName, invoiceStatus,
   } = props;
   return (
     <Table.Row>
@@ -30,9 +30,7 @@ function InvoiceRow(props: Props) {
         </NavLink>
       </Table.Cell>
       <Table.Cell>
-        <NavLink to={`/company/${invoice.companyId}`}>
-          {companyName}
-        </NavLink>
+        <CompanyLink id={invoice.companyId} />
       </Table.Cell>
       <Table.Cell>
         {formatStatus(invoiceStatus)}
@@ -52,7 +50,6 @@ function InvoiceRow(props: Props) {
 
 const mapStateToProps = (state: RootState, props: { invoice: Invoice }) => {
   return {
-    companyName: getCompanyName(state, props.invoice.companyId),
     assignedName: getUserName(state, props.invoice.assignedToId),
     invoiceStatus: getInvoiceStatus(state, props.invoice.id),
   };

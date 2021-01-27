@@ -1,19 +1,16 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import { Table } from 'semantic-ui-react';
 import { Contact } from '../../clients/server.generated';
 import { formatContactName } from '../../helpers/contact';
-import { getCompanyName } from '../../stores/company/selectors';
-import { RootState } from '../../stores/store';
+import CompanyLink from '../company/CompanyLink';
 
 interface Props {
   contact: Contact;
-  companyName: string;
 }
 
 function ContactRow(props: Props) {
-  const { contact, companyName } = props;
+  const { contact } = props;
   return (
     <Table.Row>
       <Table.Cell>
@@ -22,7 +19,7 @@ function ContactRow(props: Props) {
         </NavLink>
       </Table.Cell>
       <Table.Cell>
-        {companyName}
+        <CompanyLink id={contact.companyId} />
       </Table.Cell>
       <Table.Cell>
         {contact.email}
@@ -31,10 +28,4 @@ function ContactRow(props: Props) {
   );
 }
 
-const mapStateToProps = (state: RootState, props: { contact: Contact }) => {
-  return {
-    companyName: getCompanyName(state, props.contact.companyId),
-  };
-};
-
-export default connect(mapStateToProps)(ContactRow);
+export default ContactRow;

@@ -1,8 +1,8 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
 import { Table } from 'semantic-ui-react';
 import { Company, CompanyStatus } from '../../clients/server.generated';
 import { formatLastUpdate } from '../../helpers/timestamp';
+import CompanyLink from './CompanyLink';
 
 interface Props {
   company: Company;
@@ -13,9 +13,7 @@ export function CompanyRow(props: Props) {
   return (
     <Table.Row>
       <Table.Cell>
-        <NavLink to={`/company/${company.id}`}>
-          {company.name}
-        </NavLink>
+        <CompanyLink id={company.id} />
       </Table.Cell>
       <Table.Cell>
         {company.status === CompanyStatus.ACTIVE ? 'Active' : 'Inactive'}

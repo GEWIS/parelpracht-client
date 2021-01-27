@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { NavLink } from 'react-router-dom';
+import { NavLink, RouteComponentProps, withRouter } from 'react-router-dom';
 import { Table } from 'semantic-ui-react';
 import { Contract, ContractStatus } from '../../clients/server.generated';
 import { getCompanyName } from '../../stores/company/selectors';
@@ -10,8 +10,9 @@ import { formatLastUpdate } from '../../helpers/timestamp';
 import { getUserName } from '../../stores/user/selectors';
 import { getContractStatus } from '../../stores/contract/selectors';
 import { formatStatus } from '../../helpers/activity';
+import CompanyLink from '../company/CompanyLink';
 
-interface Props {
+interface Props extends RouteComponentProps {
   contract: Contract;
 
   contactName: string;
@@ -32,7 +33,7 @@ function ContractRow(props: Props) {
         </NavLink>
       </Table.Cell>
       <Table.Cell>
-        {companyName}
+        <CompanyLink id={contract.companyId} />
       </Table.Cell>
       <Table.Cell>
         {contactName}
@@ -59,4 +60,4 @@ const mapStateToProps = (state: RootState, props: { contract: Contract }) => {
   };
 };
 
-export default connect(mapStateToProps)(ContractRow);
+export default withRouter(connect(mapStateToProps)(ContractRow));

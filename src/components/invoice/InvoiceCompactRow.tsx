@@ -21,10 +21,10 @@ function InvoiceCompactRow(props: Props): JSX.Element {
   return (
     <Table.Row>
       <Table.Cell>
-        <CompanyLink id={invoice.companyId} />
+        <InvoiceLink id={invoice.id} />
       </Table.Cell>
       <Table.Cell>
-        <InvoiceLink id={invoice.id} />
+        <CompanyLink id={invoice.companyId} />
       </Table.Cell>
       <Table.Cell>
         {dateToFullFinancialYear(invoice.startDate)}
