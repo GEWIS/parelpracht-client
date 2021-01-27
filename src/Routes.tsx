@@ -19,7 +19,7 @@ import SingleInvoicePage from './pages/SingleInvoicePage';
 /* import SingleProductPage from './pages/SingleProductPage'; */
 import ContractsPage from './pages/ContractsPage';
 import SingleContractPage from './pages/SingleContractPage';
-import ContractCreatePage from './pages/ContractCreatePage';
+import ContractModal from './pages/ContractModal';
 import Navigation from './components/navigation/Navigation';
 import { RootState } from './stores/store';
 import ResourceStatus from './stores/resourceStatus';
@@ -118,7 +118,7 @@ function Routes(props: Props) {
           <Route path="/product/:productId" exact component={SingleProductPage} />
           <Route path="/product/:productId/contract/new" exact>
             <SingleProductPage />
-            <ContractCreatePage />
+            <ContractModal />
           </Route>
           {/* Product Categories */}
           <Route path="/category" exact>
@@ -151,7 +151,7 @@ function Routes(props: Props) {
           </Route>
           <Route path="/company/:companyId/contract/new" exact>
             <SingleCompanyPage />
-            <ContractCreatePage />
+            <ContractModal />
           </Route>
 
           {/* Contacts */}
@@ -179,7 +179,7 @@ function Routes(props: Props) {
           </Route>
           <Route path="/contract/new" exact>
             <ContractsPage />
-            <ContractCreatePage />
+            <ContractModal />
           </Route>
           <Route path="/contract/:contractId" exact component={SingleContractPage} />
           <Route path="/contract/:contractId/product/new" exact>

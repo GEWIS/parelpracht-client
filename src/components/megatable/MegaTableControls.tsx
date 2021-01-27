@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
-import { sortColumn } from '../../stores/contract/selectors';
+import { sortColumnMegaTable } from '../../stores/company/selectors';
 import ResourceStatus from '../../stores/resourceStatus';
 import { RootState } from '../../stores/store';
 import TableControls from '../TableControls';
@@ -43,7 +43,7 @@ const mapStateToProps = (state: RootState) => {
     status: contractTable.status,
     countFetched: countFetched(state, Tables.ETCompanies),
     countTotal: countTotal(state, Tables.ETCompanies),
-    column: sortColumn(state),
+    column: sortColumnMegaTable(state),
     lastUpdated: contractTable.lastUpdated,
     search: contractTable.search,
   };

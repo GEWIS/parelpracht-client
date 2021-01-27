@@ -10,8 +10,10 @@ export function sortColumn(state: RootState): string {
   switch (column) {
     case 'id': return 'ID';
     case 'title': return 'Title';
-    case 'date': return 'Date';
-    case 'poNumber': return 'PO Number';
+    case 'company': return 'Company';
+    case 'contact': return 'Contact';
+    case 'assignedTo': return 'Assigned To';
+    case 'updatedAt': return 'Updated At';
     default: return 'unknown';
   }
 }

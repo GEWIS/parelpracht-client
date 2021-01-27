@@ -11,6 +11,7 @@ export enum TableActionType {
   SetTake = 'Table/SetTake',
   Search = 'Table/Search',
   SetFilter = 'Table/SetFilter',
+  SetSort = 'Table/SetSort',
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -27,6 +28,11 @@ export type TableClearAction<T> = TableAction<TableActionType.Clear, T>;
 
 export type TableChangeSortAction<T> = TableAction<TableActionType.ChangeSort, T> & {
   column: string;
+};
+
+export type TableSetSortAction<T> = TableAction<TableActionType.SetSort, T> & {
+  column: string;
+  direction: 'ASC' | 'DESC';
 };
 
 export type TableSetTakeAction<T> = TableAction<TableActionType.SetTake, T> & {

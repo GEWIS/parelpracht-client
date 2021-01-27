@@ -27,7 +27,7 @@ import {
   SingleSaveFileAction,
 } from '../single/actions';
 import { SingleEntities } from '../single/single';
-import { setSummaries } from '../summaries/actionCreators';
+import { fetchSummaries, setSummaries } from '../summaries/actionCreators';
 import { summariesActionPattern, SummariesActionType } from '../summaries/actions';
 import { SummaryCollections } from '../summaries/summaries';
 import { fetchTable, setTable } from '../tables/actionCreators';
@@ -108,6 +108,7 @@ function* saveSingleContract(
   yield call([client, client.updateContract], action.id, action.data);
   const contract = yield call([client, client.getContract], action.id);
   yield put(setSingle(SingleEntities.Contract, contract));
+  yield put(fetchSummaries(SummaryCollections.Contracts));
 }
 
 function* errorSaveSingleContract() {
@@ -129,6 +130,7 @@ function* createSingleContract(
   const contract = yield call([client, client.createContract], action.data);
   yield put(setSingle(SingleEntities.Contract, contract));
   yield put(fetchTable(Tables.Contracts));
+  yield put(fetchSummaries(SummaryCollections.Contracts));
 }
 
 function* errorCreateSingleContract() {
@@ -139,6 +141,8 @@ function* deleteSingleContract(action: SingleDeleteAction<SingleEntities.Contrac
   const client = new Client();
   yield call([client, client.deleteContract], action.id);
   yield put(clearSingle(SingleEntities.Contract));
+  yield put(fetchTable(Tables.Contracts));
+  yield put(fetchSummaries(SummaryCollections.Contracts));
 }
 
 function* errorDeleteSingleContract() {

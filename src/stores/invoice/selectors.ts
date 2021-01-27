@@ -9,10 +9,11 @@ export function sortColumn(state: RootState): string {
   const column = getTable<Invoice>(state, Tables.Invoices).sortColumn;
   switch (column) {
     case 'id': return 'ID';
-    case 'nameDutch': return 'Name (Dutch)';
-    case 'nameEnglish': return 'Name (English)';
-    case 'targetPrice': return 'Target Price';
-    case 'status': return 'Status';
+    case 'title': return 'Title';
+    case 'company': return 'Company';
+    case 'startDate': return 'Financial Year';
+    case 'assignedTo': return 'Assigned To';
+    case 'updatedAt': return 'Last Update';
     default: return 'unknown';
   }
 }

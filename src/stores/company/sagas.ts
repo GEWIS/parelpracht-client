@@ -3,10 +3,16 @@ import {
 } from 'redux-saga/effects';
 import {
   ActivityParams,
-  Client, Company, CompanyParams, ListOrFilter, ListParams, ListSorting, SortDirection,
+  Client,
+  Company,
+  CompanyParams,
+  ListOrFilter,
+  ListParams,
+  ListSorting,
+  SortDirection,
 } from '../../clients/server.generated';
 import { takeEveryWithErrorHandling } from '../errorHandling';
-import { setSummaries } from '../summaries/actionCreators';
+import { fetchSummaries, setSummaries } from '../summaries/actionCreators';
 import { summariesActionPattern, SummariesActionType } from '../summaries/actions';
 import { SummaryCollections } from '../summaries/summaries';
 import { fetchTable, setTable } from '../tables/actionCreators';
@@ -73,6 +79,7 @@ function* saveSingleCompany(
   yield call([client, client.updateCompany], action.id, action.data);
   const company = yield call([client, client.getCompany], action.id);
   yield put(setSingle(SingleEntities.Company, company));
+  yield put(fetchSummaries(SummaryCollections.Companies));
 }
 
 function* errorSaveSingleCompany() {
@@ -94,6 +101,7 @@ function* createSingleCompany(
   const company = yield call([client, client.createCompany], action.data);
   yield put(setSingle(SingleEntities.Company, company));
   yield put(fetchTable(Tables.Companies));
+  yield put(fetchSummaries(SummaryCollections.Companies));
 }
 
 function* errorCreateSingleCompany() {
@@ -112,6 +120,8 @@ function* deleteSingleCompany(action: SingleDeleteAction<SingleEntities.Company>
   const client = new Client();
   yield call([client, client.deleteCompany], action.id);
   yield put(clearSingle(SingleEntities.Company));
+  yield put(fetchTable(Tables.Companies));
+  yield put(fetchSummaries(SummaryCollections.Companies));
 }
 
 function* errorDeleteSingleCompany() {

@@ -124,11 +124,7 @@ class DashboardContractedCategoryGraph extends React.Component<Props, State> {
                 display: false,
               },
               scales: {
-                xAxes: [{
-                  stacked: true,
-                }],
                 yAxes: [{
-                  stacked: true,
                   ticks: {
                     beginAtZero: true,
                     userCallback(value: number) {

@@ -14,6 +14,7 @@ import ContractRow from './ContractRow';
 import ContractContactFilter from '../tablefilters/ContractContactFilter';
 import CompanyFilter from '../tablefilters/CompanyFilter';
 import UserFilter from '../tablefilters/UserFilter';
+import ContractStatusFilter from '../tablefilters/ContractStatusFilter';
 
 interface Props {
   contracts: Contract[];
@@ -67,10 +68,14 @@ function ContractsTable({
             </Table.HeaderCell>
             <Table.HeaderCell>
               Status
+              <ContractStatusFilter />
             </Table.HeaderCell>
-            <Table.HeaderCell>
+            <Table.HeaderCell
+              sorted={column === 'assignedTo' ? direction : undefined}
+              onClick={() => changeSort('assignedTo')}
+            >
               Assigned to
-              <UserFilter />
+              <UserFilter table={Tables.Contracts} />
             </Table.HeaderCell>
             <Table.HeaderCell
               sorted={column === 'updatedAt' ? direction : undefined}
