@@ -98,7 +98,7 @@ class ProductInstanceModal extends React.Component<Props> {
             productInstance={productInstance}
             status={this.props.status}
             create={this.props.create}
-            onCancel={() => { }}
+            onCancel={this.close}
             saveProductInstance={this.saveProductInstance}
             createProductInstance={this.createProductInstance}
           />
