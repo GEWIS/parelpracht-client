@@ -1,7 +1,7 @@
 import React, { ChangeEvent } from 'react';
 import { connect } from 'react-redux';
 import {
-  Form, Input, Label, TextArea,
+  Form, Grid, Input, Label, Segment, TextArea,
 } from 'semantic-ui-react';
 import { ProductInstance, ProductInstanceParams, ProductSummary } from '../../clients/server.generated';
 import ResourceStatus from '../../stores/resourceStatus';
@@ -11,6 +11,8 @@ import { SummaryCollections } from '../../stores/summaries/summaries';
 import PropsButtons from '../PropsButtons';
 import ProductSelector from './ProductSelector';
 import { SingleEntities } from '../../stores/single/single';
+import FinancialDocumentProgress from '../activities/FinancialDocumentProgress';
+import { GeneralActivity } from '../activities/GeneralActivity';
 
 interface Props {
   create?: boolean;
@@ -91,6 +93,7 @@ class ProductInstanceProps extends React.Component<Props, State> {
   };
 
   render() {
+    const { productInstance, status } = this.props;
     const {
       editing,
       basePrice,
@@ -117,23 +120,39 @@ class ProductInstanceProps extends React.Component<Props, State> {
         </h2>
 
         <Form style={{ marginTop: '2em' }}>
-          <Form.Field
-            disabled={!editing}
-          >
-            {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-            <label htmlFor="form-product-dropdown">Product</label>
-            <ProductSelector
-              id="form-assigned-to-selector"
-              value={productId}
-              onChange={(id: number) => this.setState({
-                productId: id,
-                basePrice: (this.props.getBasePrice(id) / 100).toString(),
-              })}
-              clearable
-              fluid
-            />
-          </Form.Field>
-          <Form.Group>
+          <Form.Group widths="equal">
+            <Form.Field
+              disabled={!editing}
+            >
+              {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
+              <label htmlFor="form-product-dropdown">Product</label>
+              <ProductSelector
+                id="form-assigned-to-selector"
+                value={productId}
+                onChange={(id: number) => this.setState({
+                  productId: id,
+                  basePrice: (this.props.getBasePrice(id) / 100).toString(),
+                })}
+                clearable
+                fluid
+              />
+            </Form.Field>
+            <Form.Field disabled={!editing}>
+              {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
+              <label htmlFor="form-input-comments">
+                Details
+              </label>
+              <Input
+                id="form-delivery-spec-english"
+                value={comments}
+                onChange={
+                  (e) => this.setState({ comments: e.target.value })
+                }
+                placeholder="Details"
+              />
+            </Form.Field>
+          </Form.Group>
+          <Form.Group widths="equal">
             <Form.Field
               disabled={!editing}
             >
@@ -173,20 +192,6 @@ class ProductInstanceProps extends React.Component<Props, State> {
               </Input>
             </Form.Field>
           </Form.Group>
-          <Form.Field disabled={!editing}>
-            {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-            <label htmlFor="form-input-comments">
-              Details
-            </label>
-            <Input
-              id="form-delivery-spec-english"
-              value={comments}
-              onChange={
-                (e) => this.setState({ comments: e.target.value })
-              }
-              placeholder="Details"
-            />
-          </Form.Field>
         </Form>
       </>
     );

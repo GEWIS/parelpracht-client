@@ -6,4 +6,5 @@ export enum SingleEntities {
   Invoice = 'Invoice',
   Contract = 'Contract',
   User = 'User',
+  ProductInstance = 'ProductInstance',
 }

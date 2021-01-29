@@ -12,6 +12,7 @@ import authSagas, { fetchAuthStatus } from './auth/sagas';
 import alertsSagas from './alerts/sagas';
 import productSagas from './product/sagas';
 import productCategorySagas from './productcategory/sagas';
+import productInstanceSagas from './productinstance/sagas';
 import contactSagas from './contact/sagas';
 import companySagas from './company/sagas';
 import contractSagas from './contract/sagas';
@@ -28,6 +29,7 @@ const watchSagas = [
   ...alertsSagas,
   ...productSagas,
   ...productCategorySagas,
+  ...productInstanceSagas,
   ...companySagas,
   ...contactSagas,
   ...invoiceSagas,

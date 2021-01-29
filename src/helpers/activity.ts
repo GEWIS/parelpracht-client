@@ -5,6 +5,20 @@ import { SingleEntities } from '../stores/single/single';
 import { DocumentStatus } from '../components/activities/DocumentStatus';
 
 /**
+ * Format an SingleEntity to a document string, which can be used in the activities
+ */
+export function formatDocumentType(entity: SingleEntities) {
+  switch (entity) {
+    case SingleEntities.Contract: return 'Contract';
+    case SingleEntities.Invoice: return 'Invoice';
+    case SingleEntities.ProductInstance: return 'Product';
+    case SingleEntities.Company: return 'Company';
+    case SingleEntities.Product: return 'Product';
+    default: throw new Error(`Unknown entity ${entity} to format`);
+  }
+}
+
+/**
  * Format the status of the document.
  */
 export function formatDocumentStatusTitle(
@@ -88,16 +102,23 @@ export function getAllStatusActivities(activities: GeneralActivity[]): GeneralAc
 export function getAllDocumentStatuses(
   type: SingleEntities,
 ): DocumentStatus[] {
-  if (type === SingleEntities.Invoice) {
-    return [InvoiceStatus.CREATED,
-      InvoiceStatus.SENT,
-      InvoiceStatus.PAID] as any as DocumentStatus[];
+  switch (type) {
+    case SingleEntities.Invoice:
+      return [InvoiceStatus.CREATED,
+        InvoiceStatus.SENT,
+        InvoiceStatus.PAID] as any as DocumentStatus[];
+    case SingleEntities.Contract:
+      return [ContractStatus.CREATED,
+        ContractStatus.PROPOSED,
+        ContractStatus.SENT,
+        ContractStatus.CONFIRMED,
+        ContractStatus.FINISHED] as any as DocumentStatus[];
+    case SingleEntities.ProductInstance:
+      return [ProductInstanceStatus.NOTDELIVERED,
+        ProductInstanceStatus.DELIVERED] as any as DocumentStatus[];
+    default:
+      throw new Error(`Unknown document status type ${type}`);
   }
-  return [ContractStatus.CREATED,
-    ContractStatus.PROPOSED,
-    ContractStatus.SENT,
-    ContractStatus.CONFIRMED,
-    ContractStatus.FINISHED] as any as DocumentStatus[];
 }
 
 /**
@@ -131,32 +152,52 @@ export function getCompletedDocumentStatuses(
         return [];
     }
   }
-  switch (status) {
-    case ContractStatus.CREATED:
-      return [ContractStatus.CREATED] as any as DocumentStatus[];
-    case ContractStatus.PROPOSED:
-      return [ContractStatus.CREATED,
-        ContractStatus.PROPOSED] as any as DocumentStatus[];
-    case ContractStatus.SENT:
-      return [ContractStatus.CREATED,
-        ContractStatus.PROPOSED,
-        ContractStatus.SENT] as any as DocumentStatus[];
-    case ContractStatus.CONFIRMED:
-      return [ContractStatus.CREATED,
-        ContractStatus.PROPOSED,
-        ContractStatus.SENT,
-        ContractStatus.CONFIRMED] as any as DocumentStatus[];
-    case ContractStatus.FINISHED:
-      return [ContractStatus.CREATED,
-        ContractStatus.PROPOSED,
-        ContractStatus.SENT,
-        ContractStatus.CONFIRMED,
-        ContractStatus.FINISHED] as any as DocumentStatus[];
-    case ContractStatus.CANCELLED:
-      return [ContractStatus.CANCELLED] as any as DocumentStatus[];
-    default:
-      return [];
+  if (type === SingleEntities.Contract) {
+    switch (status) {
+      case ContractStatus.CREATED:
+        return [ContractStatus.CREATED] as any as DocumentStatus[];
+      case ContractStatus.PROPOSED:
+        return [ContractStatus.CREATED,
+          ContractStatus.PROPOSED] as any as DocumentStatus[];
+      case ContractStatus.SENT:
+        return [ContractStatus.CREATED,
+          ContractStatus.PROPOSED,
+          ContractStatus.SENT] as any as DocumentStatus[];
+      case ContractStatus.CONFIRMED:
+        return [ContractStatus.CREATED,
+          ContractStatus.PROPOSED,
+          ContractStatus.SENT,
+          ContractStatus.CONFIRMED] as any as DocumentStatus[];
+      case ContractStatus.FINISHED:
+        return [ContractStatus.CREATED,
+          ContractStatus.PROPOSED,
+          ContractStatus.SENT,
+          ContractStatus.CONFIRMED,
+          ContractStatus.FINISHED] as any as DocumentStatus[];
+      case ContractStatus.CANCELLED:
+        return [ContractStatus.CANCELLED] as any as DocumentStatus[];
+      default:
+        return [];
+    }
   }
+  if (type === SingleEntities.ProductInstance) {
+    switch (status) {
+      case ProductInstanceStatus.NOTDELIVERED:
+        return [ProductInstanceStatus.NOTDELIVERED] as any as DocumentStatus[];
+      case ProductInstanceStatus.DELIVERED:
+        return [ProductInstanceStatus.NOTDELIVERED,
+          ProductInstanceStatus.DELIVERED] as any as DocumentStatus[];
+      case ProductInstanceStatus.CANCELLED:
+        return [ProductInstanceStatus.NOTDELIVERED,
+          ProductInstanceStatus.CANCELLED] as any as DocumentStatus[];
+      case ProductInstanceStatus.DEFERRED:
+        return [ProductInstanceStatus.NOTDELIVERED,
+          ProductInstanceStatus.DEFERRED] as any as DocumentStatus[];
+      default:
+        return [];
+    }
+  }
+  return [];
 }
 
 /**

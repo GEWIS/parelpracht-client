@@ -30,6 +30,8 @@ interface Props extends RouteComponentProps {
   documentId: number;
   documentType: SingleEntities;
   documentStatus: DocumentStatus;
+  // If the document is a ProductInstance, the parentId is the contract ID
+  parentId?: number;
 }
 
 class DocumentStatusModal extends React.Component<Props> {
@@ -44,6 +46,7 @@ class DocumentStatusModal extends React.Component<Props> {
       documentStatus,
       open,
       close,
+      parentId,
     } = this.props;
     let documentStatusParams: InvoiceStatusParams | ContractStatusParams | undefined;
     if (documentType === SingleEntities.Contract) {
@@ -95,6 +98,7 @@ class DocumentStatusModal extends React.Component<Props> {
             resourceStatus={this.props.resourceStatus}
             create
             close={close}
+            parentId={parentId}
           />
         </Segment>
       </Modal>

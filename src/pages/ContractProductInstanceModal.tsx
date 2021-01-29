@@ -17,6 +17,8 @@ import ResourceStatus from '../stores/resourceStatus';
 import AlertContainer from '../components/alerts/AlertContainer';
 import { getSingle } from '../stores/single/selectors';
 import { SingleEntities } from '../stores/single/single';
+import FinancialDocumentProgress from '../components/activities/FinancialDocumentProgress';
+import { GeneralActivity } from '../components/activities/GeneralActivity';
 
 interface SelfProps extends RouteComponentProps<{contractId: string, productInstanceId?: string}> {
   create?: boolean;
@@ -51,8 +53,9 @@ class ProductInstanceModal extends React.Component<Props> {
   };
 
   public render() {
+    const { create, status } = this.props;
     let productInstance: ProductInstance | undefined;
-    if (this.props.create) {
+    if (create) {
       const { contractId } = this.props.match.params;
       productInstance = {
         id: 0,
@@ -92,18 +95,27 @@ class ProductInstanceModal extends React.Component<Props> {
         open
         closeIcon
         dimmer="blurring"
-        size="tiny"
+        size="large"
       >
         <Segment attached="bottom">
           <AlertContainer />
           <ProductInstanceProps
             productInstance={productInstance}
-            status={this.props.status}
-            create={this.props.create}
+            status={status}
+            create={create}
             onCancel={this.close}
             saveProductInstance={this.saveProductInstance}
             createProductInstance={this.createProductInstance}
           />
+          <Segment secondary style={{ margin: '2em 1em 1em' }}>
+            <FinancialDocumentProgress
+              documentId={productInstance.id}
+              parentId={productInstance.contractId}
+              activities={productInstance.activities as GeneralActivity[]}
+              documentType={SingleEntities.ProductInstance}
+              resourceStatus={status}
+            />
+          </Segment>
         </Segment>
       </Modal>
     );

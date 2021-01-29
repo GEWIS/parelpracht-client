@@ -15,16 +15,20 @@ import { SingleEntities } from '../../stores/single/single';
 import { formatStatus } from '../../helpers/activity';
 import { createSingleStatus } from '../../stores/single/actionCreators';
 import { DocumentStatus } from './DocumentStatus';
+import { createInstanceStatusSingle } from '../../stores/productinstance/actionCreator';
 
 interface Props {
   create?: boolean;
   createSingleStatus: (entity: SingleEntities, id: number, statusParams: object) => void;
+  createSingleInstanceStatus: (id: number, instanceId: number, statusParam: object) => void;
 
   documentStatusParams: InvoiceStatusParams | ContractStatusParams;
   resourceStatus: ResourceStatus;
   documentId: number;
   documentType: SingleEntities;
   documentStatus: DocumentStatus;
+  // If the document is a ProductInstance, the parentId is the contract ID
+  parentId?: number;
 
   close: () => void;
 }
@@ -61,18 +65,11 @@ class DocumentStatusProps extends React.Component<Props, State> {
     };
   };
 
-  toInvoiceParams = (): InvoiceStatusParams => {
-    return new InvoiceStatusParams({
+  toStatusParams = (): object => {
+    return {
       description: this.state.description,
-      subType: this.props.documentStatus as any as InvoiceStatus,
-    });
-  };
-
-  toContractParams = (): ContractStatusParams => {
-    return new ContractStatusParams({
-      description: this.state.description,
-      subType: this.props.documentStatus as any as ContractStatus,
-    });
+      subType: this.props.documentStatus,
+    };
   };
 
   edit = () => {
@@ -87,11 +84,19 @@ class DocumentStatusProps extends React.Component<Props, State> {
   };
 
   saveDocument = () => {
-    this.props.createSingleStatus(
-      this.props.documentType,
-      this.props.documentId,
-      this.toInvoiceParams(),
-    );
+    if (this.props.documentType === SingleEntities.ProductInstance) {
+      this.props.createSingleInstanceStatus(
+        this.props.parentId!,
+        this.props.documentId,
+        this.toStatusParams(),
+      );
+    } else {
+      this.props.createSingleStatus(
+        this.props.documentType,
+        this.props.documentId,
+        this.toStatusParams(),
+      );
+    }
   };
 
   render() {
@@ -149,6 +154,9 @@ const mapStateToProps = (state: RootState) => {
 const mapDispatchToProps = (dispatch: Dispatch) => ({
   createSingleStatus: (entity: SingleEntities, id: number, statusParams: object) => dispatch(
     createSingleStatus(entity, id, statusParams),
+  ),
+  createSingleInstanceStatus: (id: number, instanceId: number, statusParam: object) => dispatch(
+    createInstanceStatusSingle(id, instanceId, statusParam),
   ),
 });
 
