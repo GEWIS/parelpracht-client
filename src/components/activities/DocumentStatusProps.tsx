@@ -97,6 +97,7 @@ class DocumentStatusProps extends React.Component<Props, State> {
         this.toStatusParams(),
       );
     }
+    this.props.close();
   };
 
   render() {

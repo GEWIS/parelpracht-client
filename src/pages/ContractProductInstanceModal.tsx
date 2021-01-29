@@ -2,7 +2,7 @@ import * as React from 'react';
 import {
   Dimmer,
   Loader,
-  Modal, Segment,
+  Modal, Segment, Tab,
 } from 'semantic-ui-react';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
@@ -19,6 +19,7 @@ import { getSingle } from '../stores/single/selectors';
 import { SingleEntities } from '../stores/single/single';
 import FinancialDocumentProgress from '../components/activities/FinancialDocumentProgress';
 import { GeneralActivity } from '../components/activities/GeneralActivity';
+import ActivitiesList from '../components/activities/ActivitiesList';
 
 interface SelfProps extends RouteComponentProps<{contractId: string, productInstanceId?: string}> {
   create?: boolean;
@@ -114,6 +115,15 @@ class ProductInstanceModal extends React.Component<Props> {
               activities={productInstance.activities as GeneralActivity[]}
               documentType={SingleEntities.ProductInstance}
               resourceStatus={status}
+            />
+          </Segment>
+          <Segment style={{ margin: '2em 1em 1em' }}>
+            <ActivitiesList
+              activities={productInstance.activities as GeneralActivity[]}
+              componentId={productInstance.id}
+              componentType={SingleEntities.ProductInstance}
+              resourceStatus={status}
+              parentId={productInstance.contractId}
             />
           </Segment>
         </Segment>

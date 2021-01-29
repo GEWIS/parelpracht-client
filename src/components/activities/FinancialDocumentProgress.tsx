@@ -65,7 +65,7 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
     }
 
     let deferButton;
-    if (documentType === SingleEntities.ProductInstance) {
+    if (documentType === SingleEntities.ProductInstance && lastStatusActivity?.subType !== 'DEFERRED') {
       deferButton = (
         <Button
           floated="left"
@@ -159,7 +159,7 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
     }
     return (
       <>
-        <h3>
+        <h3 style={{ textAlign: 'center' }}>
           {formatDocumentStatusTitle(
             allStatusActivities[allStatusActivities.length - 1],
             formatDocumentType(documentType),
