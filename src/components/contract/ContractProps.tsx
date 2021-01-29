@@ -150,7 +150,7 @@ class ContractProps extends React.Component<Props, State> {
           <CompanySelector
             id="form-company-selector"
             value={companySelection}
-			disabled
+            disabled
             onChange={(val: number) => this.setState({
               companySelection: val,
             })}
