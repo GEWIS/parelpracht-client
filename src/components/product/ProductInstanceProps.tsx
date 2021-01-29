@@ -191,6 +191,30 @@ class ProductInstanceProps extends React.Component<Props, State> {
                 <input />
               </Input>
             </Form.Field>
+            <Form.Field
+              disabled={!editing}
+            >
+              {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
+              <label htmlFor="form-input-real-price">
+                Real price
+              </label>
+              <Input
+                labelPosition="left"
+                id="form-input-real-price"
+                value={parseInt(basePrice, 10) - parseInt(discount, 10)}
+                onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                  // eslint-disable-next-line no-restricted-globals
+                  const value = isNaN(parseInt(e.target.value, 10)) ? 0
+                    : parseInt(e.target.value, 10);
+                  this.setState({
+                    discount: (parseInt(basePrice, 10) - value).toString(),
+                  });
+                }}
+              >
+                <Label basic>€</Label>
+                <input />
+              </Input>
+            </Form.Field>
           </Form.Group>
         </Form>
       </>
