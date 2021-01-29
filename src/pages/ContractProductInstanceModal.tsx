@@ -44,7 +44,9 @@ class ProductInstanceModal extends React.Component<Props> {
 
   createProductInstance = async (productInstance: ProductInstanceParams) => {
     const client = new Client();
-    await client.addProduct(parseInt(this.props.match.params.contractId!, 10), productInstance);
+    await client.addProductInstance(
+      parseInt(this.props.match.params.contractId!, 10), productInstance,
+    );
     this.close();
   };
 

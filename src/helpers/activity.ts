@@ -1,6 +1,6 @@
 import { ActivityType, GeneralActivity } from '../components/activities/GeneralActivity';
 import { formatLastUpdate } from './timestamp';
-import { ContractStatus, InvoiceStatus } from '../clients/server.generated';
+import { ContractStatus, InvoiceStatus, ProductInstanceStatus } from '../clients/server.generated';
 import { SingleEntities } from '../stores/single/single';
 import { DocumentStatus } from '../components/activities/DocumentStatus';
 
@@ -62,6 +62,9 @@ export function formatActivitySummary(
 export function formatStatus(status: string | undefined): string {
   if (status === undefined) {
     return 'Unknown';
+  }
+  if (status === ProductInstanceStatus.NOTDELIVERED) {
+    return 'Not delivered';
   }
   return status[0].toUpperCase() + status.slice(1).toLowerCase();
 }

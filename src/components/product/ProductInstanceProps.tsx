@@ -176,15 +176,15 @@ class ProductInstanceProps extends React.Component<Props, State> {
           <Form.Field disabled={!editing}>
             {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
             <label htmlFor="form-input-comments">
-              Comments
+              Details
             </label>
-            <TextArea
+            <Input
               id="form-delivery-spec-english"
               value={comments}
               onChange={
                 (e) => this.setState({ comments: e.target.value })
               }
-              placeholder="Comments"
+              placeholder="Details"
             />
           </Form.Field>
         </Form>

@@ -90,6 +90,7 @@ class ContractInvoiceModal extends React.Component<Props, State> {
         basic
         disabled={this.props.productInstanceIds.length === 0}
       >
+        <Icon name="money bill alternate outline" />
         Add
         {' '}
         {(this.props.productInstanceIds.length)}
@@ -109,7 +110,6 @@ class ContractInvoiceModal extends React.Component<Props, State> {
         trigger={trigger}
       >
         <Segment attached="bottom">
-          <AlertContainer />
           {dropdown}
           <Button
             icon
