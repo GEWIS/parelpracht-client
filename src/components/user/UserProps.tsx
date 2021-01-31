@@ -37,7 +37,7 @@ interface State {
   gender: Gender;
   email: string;
   comment: string;
-  function: string;
+  functionName: string;
 
   roleGeneral: boolean;
   roleSignee: boolean;
@@ -70,7 +70,7 @@ class UserProps extends React.Component<Props, State> {
       firstName: user.firstName,
       lastNamePreposition: user.lastNamePreposition,
       lastName: user.lastName,
-      function: user.function,
+      functionName: user.function,
       gender: user.gender,
       email: user.email,
       comment: user.comment ?? '',
@@ -91,7 +91,7 @@ class UserProps extends React.Component<Props, State> {
       gender: this.state.gender,
       email: this.state.email,
       comment: this.state.comment,
-      function: this.state.function,
+      function: this.state.functionName,
 
       roles: _.compact([
         this.state.roleGeneral ? Roles.GENERAL : undefined,
@@ -144,6 +144,7 @@ class UserProps extends React.Component<Props, State> {
       lastName,
       gender,
       email,
+      functionName,
       comment,
 
       roleGeneral, roleSignee, roleAdmin, roleAudit, roleFinancial,
@@ -228,6 +229,20 @@ class UserProps extends React.Component<Props, State> {
               error={
                 !validator.isEmail(email)
               }
+            />
+          </Form.Group>
+          <Form.Group widths="equal">
+            <Form.Field
+              disabled={!editing}
+              id="form-input-function"
+              fluid
+              control={Input}
+              label="Function"
+              placeholder="Appears under your name."
+              value={functionName}
+              onChange={(e: ChangeEvent<HTMLInputElement>) => this.setState({
+                functionName: e.target.value,
+              })}
             />
             <Form.Field required fluid disabled={!editing}>
               {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
