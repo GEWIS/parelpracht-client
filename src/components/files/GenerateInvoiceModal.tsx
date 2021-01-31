@@ -90,6 +90,7 @@ function GenerateContract(props: Props) {
               control={Input}
               value={name}
               onChange={(e: ChangeEvent<HTMLInputElement>) => changeName(e.target.value)}
+              fluid
             />
             <Form.Field
               label="Recipient"
@@ -99,6 +100,7 @@ function GenerateContract(props: Props) {
               value={recipientId}
               onChange={(id: number) => changeRecipient(id)}
               hideEmail
+              fluid
             />
           </Form.Group>
           <Form.Group widths="equal">
@@ -117,6 +119,7 @@ function GenerateContract(props: Props) {
                   { key: 1, text: 'TEX', value: ReturnFileType.TEX },
                 ]}
                 onChange={(e, data) => changeFileType(data.value as ReturnFileType)}
+                fluid
               />
             </Form.Field>
             <Form.Field
@@ -134,6 +137,7 @@ function GenerateContract(props: Props) {
                   { key: 1, text: 'English', value: Language.ENGLISH },
                 ]}
                 onChange={(e, data) => changeLanguage(data.value as Language)}
+                fluid
               />
             </Form.Field>
           </Form.Group>
@@ -147,6 +151,7 @@ function GenerateContract(props: Props) {
                 id="form-input-Discount"
                 checked={showDiscountPercentages}
                 onChange={(e, data) => changeDiscount(data.checked as boolean)}
+                fluid
               />
             </Form.Field>
             <Form.Field>
@@ -158,6 +163,7 @@ function GenerateContract(props: Props) {
                 defaultChecked
                 checked={saveToDisk}
                 onChange={(e, data) => changeSaveToDisk(data.checked as boolean)}
+                fluid
               />
             </Form.Field>
           </Form.Group>

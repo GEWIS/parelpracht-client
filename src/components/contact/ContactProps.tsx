@@ -214,6 +214,7 @@ class ContactProps extends React.Component<Props, State> {
                 onChange={(e, data) => this.setState({
                   gender: data.value as Gender,
                 })}
+                fluid
               />
             </Form.Field>
             <Form.Field required fluid disabled={!editing}>
@@ -230,6 +231,7 @@ class ContactProps extends React.Component<Props, State> {
                 onChange={(e, data) => this.setState({
                   func: data.value as ContactFunction,
                 })}
+                fluid
               />
             </Form.Field>
           </Form.Group>
@@ -275,6 +277,7 @@ class ContactProps extends React.Component<Props, State> {
                 (e) => this.setState({ comments: e.target.value })
               }
               placeholder="Comments"
+              fluid
             />
           </Form.Field>
         </Form>

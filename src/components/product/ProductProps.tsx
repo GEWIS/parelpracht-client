@@ -201,6 +201,7 @@ class ProductProps extends React.Component<Props, State> {
                 id="form-input-target-price"
                 value={targetPrice}
                 onChange={(e) => this.setState({ targetPrice: e.target.value })}
+                fluid
               >
                 <Label basic>€</Label>
                 <input />
@@ -222,6 +223,7 @@ class ProductProps extends React.Component<Props, State> {
                   status:
                     data.checked ? ProductStatus.ACTIVE : ProductStatus.INACTIVE,
                 })}
+                fluid
               />
             </Form.Field>
           </Form.Group>
@@ -253,6 +255,7 @@ class ProductProps extends React.Component<Props, State> {
               value={description}
               onChange={(e) => this.setState({ description: e.target.value })}
               placeholder="Comments"
+              fluid
             />
           </Form.Field>
           <Form.Field disabled={!editing} required error={validator.isEmpty(contractTextDutch)}>
@@ -267,6 +270,7 @@ class ProductProps extends React.Component<Props, State> {
                 (e) => this.setState({ contractTextDutch: e.target.value })
               }
               placeholder="Contract Text (Dutch)"
+              fluid
             />
           </Form.Field>
           <Form.Field disabled={!editing} required error={validator.isEmpty(contractTextEnglish)}>
@@ -281,6 +285,7 @@ class ProductProps extends React.Component<Props, State> {
                 (e) => this.setState({ contractTextEnglish: e.target.value })
               }
               placeholder="Contract Text (English)"
+              fluid
             />
           </Form.Field>
           <Form.Field disabled={!editing}>
@@ -295,6 +300,7 @@ class ProductProps extends React.Component<Props, State> {
                 (e) => this.setState({ deliverySpecDutch: e.target.value })
               }
               placeholder="Delivery Specification (Dutch)"
+              fluid
             />
           </Form.Field>
           <Form.Field disabled={!editing}>
@@ -309,6 +315,7 @@ class ProductProps extends React.Component<Props, State> {
                 (e) => this.setState({ deliverySpecEnglish: e.target.value })
               }
               placeholder="Delivery Specification (English)"
+              fluid
             />
           </Form.Field>
         </Form>

@@ -44,6 +44,7 @@ function ContactSelector(props: Props & DropdownProps) {
       // keep a state whether the dropdown is open
       onOpen={() => changeOpen(true)}
       onClose={() => changeOpen(false)}
+      fluid
     />
   );
 }

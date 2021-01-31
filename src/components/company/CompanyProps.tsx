@@ -212,6 +212,7 @@ class CompanyProps extends React.Component<Props, State> {
                 value={comments}
                 onChange={(e) => this.setState({ comments: e.target.value })}
                 placeholder="Description"
+                fluid
               />
             </Form.Field>
             <Form.Field>
@@ -221,6 +222,7 @@ class CompanyProps extends React.Component<Props, State> {
               </label>
               <Checkbox
                 disabled={!editing}
+                fluid
                 toggle
                 id="form-check-status"
                 label={status === CompanyStatus.ACTIVE ? 'Active' : 'Inactive'}
@@ -250,6 +252,7 @@ class CompanyProps extends React.Component<Props, State> {
               <Input
                 id="form-input-address-street"
                 value={addressStreet}
+                fluid
                 onChange={(e) => this.setState({ addressStreet: e.target.value })}
                 placeholder="Street and number"
               />
@@ -262,6 +265,7 @@ class CompanyProps extends React.Component<Props, State> {
               <Input
                 id="form-input-address-city"
                 value={addressCity}
+                fluid
                 onChange={(e) => this.setState({ addressCity: e.target.value })}
                 placeholder="City"
               />
@@ -282,6 +286,7 @@ class CompanyProps extends React.Component<Props, State> {
               <Input
                 id="form-input-address-postal-code"
                 value={addressPostalCode}
+                fluid
                 onChange={(e) => this.setState({ addressPostalCode: e.target.value })}
                 placeholder="Postal Code"
               />
@@ -322,6 +327,7 @@ class CompanyProps extends React.Component<Props, State> {
                 value={invoiceAddressStreet}
                 onChange={(e) => this.setState({ invoiceAddressStreet: e.target.value })}
                 placeholder="Street and number"
+                fluid
               />
             </Form.Field>
             <Form.Field disabled={!editing}>
@@ -334,6 +340,7 @@ class CompanyProps extends React.Component<Props, State> {
                 value={invoiceAddressCity}
                 onChange={(e) => this.setState({ invoiceAddressCity: e.target.value })}
                 placeholder="City"
+                fluid
               />
             </Form.Field>
           </Form.Group>
@@ -350,6 +357,7 @@ class CompanyProps extends React.Component<Props, State> {
                 value={invoiceAddressPostalCode}
                 onChange={(e) => this.setState({ invoiceAddressPostalCode: e.target.value })}
                 placeholder="Postal Code"
+                fluid
               />
             </Form.Field>
             <Form.Field disabled={!editing}>

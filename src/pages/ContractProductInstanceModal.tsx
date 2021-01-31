@@ -110,28 +110,26 @@ class ProductInstanceModal extends React.Component<Props> {
 
     let activities;
     if (!create) {
-      activities = (
-        <>
-          <Segment secondary style={{ margin: '2em 1em 1em' }}>
-            <FinancialDocumentProgress
-              documentId={productInstance.id}
-              parentId={productInstance.contractId}
-              activities={productInstance.activities as GeneralActivity[]}
-              documentType={SingleEntities.ProductInstance}
-              resourceStatus={status}
-            />
-          </Segment>
-          <Segment style={{ margin: '2em 1em 1em' }}>
-            <ActivitiesList
-              activities={productInstance.activities as GeneralActivity[]}
-              componentId={productInstance.id}
-              componentType={SingleEntities.ProductInstance}
-              resourceStatus={status}
-              parentId={productInstance.contractId}
-            />
-          </Segment>
-        </>
-      );
+      activities = [
+        <Segment secondary style={{ margin: '2em 1em 1em' }}>
+          <FinancialDocumentProgress
+            documentId={productInstance.id}
+            parentId={productInstance.contractId}
+            activities={productInstance.activities as GeneralActivity[]}
+            documentType={SingleEntities.ProductInstance}
+            resourceStatus={status}
+          />
+        </Segment>,
+        <Segment style={{ margin: '2em 1em 1em' }}>
+          <ActivitiesList
+            activities={productInstance.activities as GeneralActivity[]}
+            componentId={productInstance.id}
+            componentType={SingleEntities.ProductInstance}
+            resourceStatus={status}
+            parentId={productInstance.contractId}
+          />
+        </Segment>,
+      ];
     }
 
     return (
@@ -142,7 +140,7 @@ class ProductInstanceModal extends React.Component<Props> {
         dimmer="blurring"
         size={create ? 'tiny' : 'large'}
       >
-        <Segment attached="bottom">
+        <div style={{ margin: '1em' }}>
           <AlertContainer />
           <ProductInstanceProps
             productInstance={productInstance}
@@ -154,7 +152,7 @@ class ProductInstanceModal extends React.Component<Props> {
             createProductInstance={this.createProductInstance}
             removeProductInstance={this.removeProductInstance}
           />
-        </Segment>
+        </div>
         {activities}
       </Modal>
     );

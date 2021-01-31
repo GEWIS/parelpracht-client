@@ -93,6 +93,7 @@ function GenerateContractModal(props: Props) {
               }
               value={name}
               onChange={(e: ChangeEvent<HTMLInputElement>) => changeName(e.target.value)}
+              fluid
             />
             <Form.Field
               required
@@ -109,6 +110,7 @@ function GenerateContractModal(props: Props) {
                   { key: 1, text: 'Proposal', value: ContractType.PROPOSAL },
                 ]}
                 onChange={(e, data) => changeContentType(data.value as ContractType)}
+                fluid
               />
             </Form.Field>
           </Form.Group>
@@ -128,6 +130,7 @@ function GenerateContractModal(props: Props) {
                   { key: 1, text: 'TEX', value: ReturnFileType.TEX },
                 ]}
                 onChange={(e, data) => changeFileType(data.value as ReturnFileType)}
+                fluid
               />
             </Form.Field>
             <Form.Field
@@ -145,6 +148,7 @@ function GenerateContractModal(props: Props) {
                   { key: 1, text: 'English', value: Language.ENGLISH },
                 ]}
                 onChange={(e, data) => changeLanguage(data.value as Language)}
+                fluid
               />
             </Form.Field>
           </Form.Group>
@@ -157,6 +161,7 @@ function GenerateContractModal(props: Props) {
               required
               onChange={(id: number) => changeSignee1(id)}
               hideEmail
+              fluid
             />
             <Form.Field
               label="Signee 2"
@@ -166,6 +171,7 @@ function GenerateContractModal(props: Props) {
               value={signee2Id}
               onChange={(id: number) => changeSignee2(id)}
               hideEmail
+              fluid
             />
           </Form.Group>
           <Form.Group>
@@ -178,6 +184,7 @@ function GenerateContractModal(props: Props) {
                 id="form-input-Discount"
                 checked={showDiscountPercentages}
                 onChange={(e, data) => changeDiscount(data.checked as boolean)}
+                fluid
               />
             </Form.Field>
             <Form.Field>
@@ -189,6 +196,7 @@ function GenerateContractModal(props: Props) {
                 defaultChecked
                 checked={saveToDisk}
                 onChange={(e, data) => changeSaveToDisk(data.checked as boolean)}
+                fluid
               />
             </Form.Field>
           </Form.Group>
