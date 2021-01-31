@@ -10,6 +10,7 @@ import { SingleEntities } from '../../stores/single/single';
 import { RootState } from '../../stores/store';
 import CompanyLink from '../company/CompanyLink';
 import UserLink from '../user/UserLink';
+import { formatPriceFull } from '../../helpers/monetary';
 
 interface Props {
   invoice: Invoice | undefined;
@@ -25,7 +26,7 @@ function InvoiceSummary(props: Props) {
     return (
       <>
         <Header as="h1" attached="top" style={{ backgroundColor: '#eee' }}>
-          <Icon name="file alternate" />
+          <Icon name="money bill alternate outline" />
           <Header.Content>
             <Header.Subheader>Invoice</Header.Subheader>
             <Loader active inline />
@@ -38,21 +39,23 @@ function InvoiceSummary(props: Props) {
     );
   }
 
+  const totalValue = invoice.products
+    .reduce((a, b) => a + (b.basePrice - b.discount), 0);
+
   return (
     <>
       <Header as="h1" attached="top" style={{ backgroundColor: '#eee' }}>
-        <Icon name="file alternate" />
+        <Icon name="money bill alternate outline" />
         <Header.Content>
           <Header.Subheader>Invoice</Header.Subheader>
+          F
           {invoice.id}
+          {' '}
+          {invoice.title}
         </Header.Content>
       </Header>
       <Segment attached="bottom">
         <Grid columns={4}>
-          <Grid.Column>
-            <h5>Title</h5>
-            <p>{invoice.id}</p>
-          </Grid.Column>
           <Grid.Column>
             <h5>Company</h5>
             <CompanyLink id={invoice.companyId} />
@@ -60,6 +63,10 @@ function InvoiceSummary(props: Props) {
           <Grid.Column>
             <h5>Created by</h5>
             <UserLink id={invoice.createdById} />
+          </Grid.Column>
+          <Grid.Column>
+            <h5>Total value</h5>
+            <p>{formatPriceFull(totalValue)}</p>
           </Grid.Column>
         </Grid>
       </Segment>
