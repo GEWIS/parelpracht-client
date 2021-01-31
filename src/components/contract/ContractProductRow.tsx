@@ -13,6 +13,7 @@ interface Props extends RouteComponentProps {
   productInstance: ProductInstance;
 
   selectFunction: (id: number) => void;
+  selected: boolean;
 }
 
 function showRecentStatus(productInstance: ProductInstance): string {
@@ -31,7 +32,7 @@ function showRecentStatus(productInstance: ProductInstance): string {
 class ContractProductRow extends React.Component<Props> {
   public render() {
     const {
-      productInstance, selectFunction,
+      productInstance, selectFunction, selected,
     } = this.props;
 
     let invoice;
@@ -43,10 +44,11 @@ class ContractProductRow extends React.Component<Props> {
       <Table.Row>
         <Table.Cell collapsing>
           <Checkbox
-            onClick={() => {
+            onChange={() => {
               selectFunction(productInstance.id);
             }}
             disabled={productInstance.invoiceId !== null}
+            checked={selected}
           />
         </Table.Cell>
         <Table.Cell>

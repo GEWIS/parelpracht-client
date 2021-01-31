@@ -150,10 +150,19 @@ class ProductInstanceProps extends React.Component<Props, State> {
               <ProductSelector
                 id="form-assigned-to-selector"
                 value={productId}
-                onChange={(id: number) => this.setState({
-                  productId: id,
-                  basePrice: (this.props.getBasePrice(id) / 100).toString(),
-                })}
+                onChange={(id: string) => {
+                  if (id === '') {
+                    this.setState({
+                      productId: -1,
+                      basePrice: '0',
+                    });
+                  } else {
+                    this.setState({
+                      productId: parseInt(id, 10),
+                      basePrice: (this.props.getBasePrice(parseInt(id, 10)) / 100).toString(),
+                    });
+                  }
+                }}
                 clearable
                 fluid
               />

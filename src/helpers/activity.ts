@@ -80,7 +80,7 @@ export function formatStatus(status: string | undefined): string {
   if (status === ProductInstanceStatus.NOTDELIVERED) {
     return 'Not delivered';
   }
-  return status[0].toUpperCase() + status.slice(1).toLowerCase();
+  return status.substring(0, 1).toUpperCase() + status.slice(1).toLowerCase();
 }
 
 /**

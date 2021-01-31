@@ -80,7 +80,6 @@ function DeleteButton(props: DeleteProps) {
         throw new Error(`${entity} is not a valid DeleteEntity`);
     }
 
-    console.log(size);
     return (
       <Popup
         trigger={(

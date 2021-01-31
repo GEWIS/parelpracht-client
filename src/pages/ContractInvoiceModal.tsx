@@ -20,6 +20,7 @@ interface SelfProps extends RouteComponentProps<{contractId: string}> {
 interface Props extends SelfProps {
   contract: Contract;
   productInstanceIds: number[];
+  clearSelection: () => void;
   invoices: InvoiceSummary[];
 
   createInvoice: (invoice: InvoiceParams) => void;
@@ -29,6 +30,7 @@ interface Props extends SelfProps {
 interface State {
   open: boolean;
   selectedInvoice: number | undefined;
+  loading: boolean;
 }
 
 class ContractInvoiceModal extends React.Component<Props, State> {
@@ -37,13 +39,16 @@ class ContractInvoiceModal extends React.Component<Props, State> {
     this.state = {
       open: false,
       selectedInvoice: undefined,
+      loading: false,
     };
   }
 
   save = async () => {
     const {
-      contract, productInstanceIds, createInvoice, fetchContract,
+      contract, productInstanceIds, createInvoice, fetchContract, clearSelection,
     } = this.props;
+    this.setState({ loading: true });
+
     if (this.state.selectedInvoice === -1) {
       await createInvoice(new InvoiceParams({
         title: contract.title,
@@ -55,15 +60,17 @@ class ContractInvoiceModal extends React.Component<Props, State> {
       await Promise.all(this.props.productInstanceIds.map((x) => {
         return client.addProduct(this.state.selectedInvoice!, new Body({ productId: x }));
       }));
+      fetchContract(contract.id);
     }
-    fetchContract(contract.id);
-    this.setState({ open: false });
+    clearSelection();
+    this.setState({ open: false, loading: false });
   };
 
   public render() {
     const {
       invoices, contract,
     } = this.props;
+    const { loading } = this.state;
     const { selectedInvoice } = this.state;
     const availableInvoices = invoices.filter((i) => {
       return i.companyId === contract.companyId && i.status === InvoiceStatus.CREATED;
@@ -124,6 +131,7 @@ class ContractInvoiceModal extends React.Component<Props, State> {
             color="green"
             floated="right"
             onClick={this.save}
+            loading={loading}
           >
             <Icon name="save" />
             Save

@@ -44,7 +44,7 @@ function* createSingleProductInstance(
 ) {
   const client = new Client();
   const instance = yield call([client, client.addProductInstance], action.id, action.data);
-  yield put(fetchSingle(SingleEntities.Contract, instance.id));
+  yield put(fetchSingle(SingleEntities.Contract, instance.contractId));
 }
 
 function* watchCreateSingleProductInstance() {
