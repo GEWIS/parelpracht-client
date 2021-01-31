@@ -62,6 +62,9 @@ function DeleteButton(props: DeleteProps) {
       case SingleEntities.ProductCategory:
         deleteError = 'this product category is used by one or more products';
         break;
+      case SingleEntities.ProductInstance:
+        deleteError = 'this product has an invoice or is delivered/cancelled/deferred or its contract is already sent or proposed';
+        break;
       case SingleEntities.User:
         deleteError = 'this user still has active roles';
         break;

@@ -1,10 +1,8 @@
 import React from 'react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { Checkbox, Table } from 'semantic-ui-react';
-import { connect } from 'react-redux';
 import { ActivityType, ProductInstance } from '../../clients/server.generated';
 import './ContractComponent.scss';
-import { RootState } from '../../stores/store';
 import { formatPriceDiscount, formatPriceFull } from '../../helpers/monetary';
 import ProductInstanceLink from '../product/ProductInstanceLink';
 import { SingleEntities } from '../../stores/single/single';
@@ -77,6 +75,4 @@ class ContractProductRow extends React.Component<Props> {
   }
 }
 
-const mapStateToProps = (state: RootState, props: { productInstance: ProductInstance }) => {};
-
-export default withRouter(connect(mapStateToProps)(ContractProductRow));
+export default withRouter(ContractProductRow);

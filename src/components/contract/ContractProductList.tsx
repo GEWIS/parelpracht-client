@@ -77,8 +77,8 @@ class ContractProductList extends React.Component<Props, State> {
             Add Product
           </Button>
           <ContractInvoiceModal
+            contract={contract}
             productInstanceIds={selected}
-            companyId={contract.companyId}
           />
 
         </h3>

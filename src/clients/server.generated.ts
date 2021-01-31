@@ -8948,6 +8948,7 @@ export interface IInvoiceListResponse {
 export class InvoiceSummary implements IInvoiceSummary {
     id!: number;
     title!: string;
+    companyId!: number;
     status!: InvoiceStatus;
 
     constructor(data?: IInvoiceSummary) {
@@ -8963,6 +8964,7 @@ export class InvoiceSummary implements IInvoiceSummary {
         if (_data) {
             this.id = _data["id"];
             this.title = _data["title"];
+            this.companyId = _data["companyId"];
             this.status = _data["status"];
         }
     }
@@ -8978,6 +8980,7 @@ export class InvoiceSummary implements IInvoiceSummary {
         data = typeof data === 'object' ? data : {};
         data["id"] = this.id;
         data["title"] = this.title;
+        data["companyId"] = this.companyId;
         data["status"] = this.status;
         return data; 
     }
@@ -8986,6 +8989,7 @@ export class InvoiceSummary implements IInvoiceSummary {
 export interface IInvoiceSummary {
     id: number;
     title: string;
+    companyId: number;
     status: InvoiceStatus;
 }
 

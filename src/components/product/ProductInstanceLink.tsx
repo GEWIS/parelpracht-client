@@ -25,9 +25,7 @@ function ProductInstanceLink(props: Props) {
     <NavLink to={`/${entity.toLowerCase()}/${entityId}/product/${productInstanceId}`} {...rest}>
       <Icon name="shopping bag" />
       {productName}
-      {' ('}
-      {details}
-      )
+      {details === '' ? '' : ` (${details})`}
     </NavLink>
   );
 }

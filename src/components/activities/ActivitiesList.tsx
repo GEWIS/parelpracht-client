@@ -64,6 +64,7 @@ class ActivitiesList extends React.Component<Props, State> {
             .sort((a, b) => { return b.updatedAt.getTime() - a.updatedAt.getTime(); })
             .map((activity) => (
               <ActivityComponent
+                key={activity.id}
                 activity={activity as GeneralActivity}
                 componentId={componentId}
                 componentType={componentType}
@@ -80,6 +81,7 @@ class ActivitiesList extends React.Component<Props, State> {
       createRow = (
         <>
           <CreateCommentRow
+            key={-1}
             create
             close={this.cancelCreate}
             componentId={componentId}

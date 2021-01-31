@@ -13,6 +13,7 @@ import { SingleEntities } from '../../stores/single/single';
 import { deleteActivitySingle } from '../../stores/single/actionCreators';
 import UserLinkWithoutImage from '../user/UserLinkWithoutImage';
 import { deleteInstanceActivitySingle } from '../../stores/productinstance/actionCreator';
+import { ContractStatus, InvoiceStatus, ProductInstanceStatus } from '../../clients/server.generated';
 
 interface Props extends RouteComponentProps {
   activity: GeneralActivity;
@@ -61,6 +62,16 @@ class ActivityComponent extends React.Component<Props> {
       <UserLinkWithoutImage id={this.props.activity.createdById} />
     );
 
+    let deleteButton;
+    if (activity.type === ActivityType.STATUS && activity.subType !== ContractStatus.CREATED
+      && activity.subType !== InvoiceStatus.CREATED
+      && activity.subType !== ProductInstanceStatus.NOTDELIVERED) {
+      deleteButton = (
+        // eslint-disable-next-line
+        <a onClick={() => this.deleteComment()}>Delete</a>
+      );
+    }
+
     return (
       <Feed.Event>
         <Feed.Label>
@@ -77,9 +88,8 @@ class ActivityComponent extends React.Component<Props> {
           <Feed.Extra>
             {activity.description}
           </Feed.Extra>
-          <Feed.Meta onClick={() => this.deleteComment()}>
-            {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-            <a>Delete</a>
+          <Feed.Meta>
+            {deleteButton}
           </Feed.Meta>
           <Divider horizontal />
         </Feed.Content>

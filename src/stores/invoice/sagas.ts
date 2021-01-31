@@ -105,7 +105,6 @@ function* createSingleInvoice(
   const client = new Client();
   const invoice = yield call([client, client.createInvoice], action.data);
   yield put(setSingle(SingleEntities.Invoice, invoice));
-  yield put(fetchTable(Tables.Invoices));
   yield put(fetchSummaries(SummaryCollections.Invoices));
 }
 
