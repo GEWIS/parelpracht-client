@@ -1,15 +1,15 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { NavLink, RouteComponentProps, withRouter } from 'react-router-dom';
+import { RouteComponentProps, withRouter } from 'react-router-dom';
 import {
-  Button, Icon, Loader, Table,
+  Loader, Table,
 } from 'semantic-ui-react';
-import InvoiceProductComponent from './InvoiceProductComponent';
+import InvoiceProductComponent from './InvoiceProductRow';
 import { Invoice } from '../../clients/server.generated';
 import { getSingle } from '../../stores/single/selectors';
 import { SingleEntities } from '../../stores/single/single';
 import { RootState } from '../../stores/store';
-import { formatPrice } from '../../helpers/monetary';
+import { formatPriceFull } from '../../helpers/monetary';
 
 interface Props extends RouteComponentProps {
   invoice: Invoice | undefined;
@@ -53,13 +53,13 @@ class InvoiceProductList extends React.Component<Props, State> {
         <h3>
           Products
         </h3>
-        <Table celled striped>
+        <Table compact>
           <Table.Header>
             <Table.Row>
               <Table.HeaderCell>Title</Table.HeaderCell>
-              <Table.HeaderCell>Base Price</Table.HeaderCell>
-              <Table.HeaderCell>Discount</Table.HeaderCell>
-              <Table.HeaderCell>Discounted Price</Table.HeaderCell>
+              <Table.HeaderCell collapsing>Discount</Table.HeaderCell>
+              <Table.HeaderCell collapsing>Real Price</Table.HeaderCell>
+              <Table.HeaderCell collapsing>Contract</Table.HeaderCell>
             </Table.Row>
 
           </Table.Header>
@@ -70,27 +70,18 @@ class InvoiceProductList extends React.Component<Props, State> {
           </Table.Body>
           <Table.Footer>
             <Table.Row>
-              <Table.HeaderCell> Totals: </Table.HeaderCell>
+              <Table.HeaderCell textAlign="right"> Totals: </Table.HeaderCell>
               <Table.HeaderCell>
-                {' €'}
-                {formatPrice(priceSum)}
-                {' '}
-              </Table.HeaderCell>
-              <Table.HeaderCell>
-                {' €'}
-                {formatPrice(discountSum)}
+                {formatPriceFull(discountSum)}
                 {' '}
                 (
                 {discountAmount}
-                {' '}
-                discounts)
-                {' '}
+                )
               </Table.HeaderCell>
               <Table.HeaderCell>
-                {' €'}
-                {formatPrice(discountedPriceSum)}
-                {' '}
+                {formatPriceFull(discountedPriceSum)}
               </Table.HeaderCell>
+              <Table.HeaderCell />
             </Table.Row>
           </Table.Footer>
         </Table>

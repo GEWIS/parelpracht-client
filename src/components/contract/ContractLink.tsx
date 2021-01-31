@@ -7,16 +7,21 @@ import { getContractTitle } from '../../stores/contract/selectors';
 
 interface Props {
   id: number;
+  showId: boolean;
+  showName: boolean;
 
   contractTitle: string;
 }
 
 function ContractLink(props: Props) {
-  const { id, contractTitle } = props;
+  const {
+    id, showId, showName, contractTitle,
+  } = props;
   return (
     <NavLink to={`/contract/${id}`}>
       <Icon name="file alternate" />
-      {contractTitle}
+      {showId ? `C${id} ` : ''}
+      {showName ? contractTitle : ''}
     </NavLink>
   );
 }

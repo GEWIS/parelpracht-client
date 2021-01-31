@@ -7,6 +7,7 @@ import { ActivityType, ProductInstance } from '../../clients/server.generated';
 import { RootState } from '../../stores/store';
 import { getProductName } from '../../stores/product/selectors';
 import { formatPriceDiscount, formatPriceFull } from '../../helpers/monetary';
+import ContractLink from '../contract/ContractLink';
 
 interface Props extends RouteComponentProps {
   productInstance: ProductInstance;
@@ -14,35 +15,27 @@ interface Props extends RouteComponentProps {
   productName: string;
 }
 
-class InvoiceProductComponent extends React.Component<Props> {
+class InvoiceProductRow extends React.Component<Props> {
   public render() {
     const {
       productInstance, productName,
     } = this.props;
     return (
-      <Table.Row onClick={() => {
-        this.props.history.push(
-          `${this.props.location.pathname}/product/${productInstance.id}`,
-        );
-      }}
-      >
+      <Table.Row>
         <Table.Cell collapsing>
-          <Icon name="list alternate outline" />
+          <Icon name="shopping bag" />
           {' '}
           {productName}
+          {productInstance.comments !== '' ? ` (${productInstance.comments})` : ''}
         </Table.Cell>
-        <Table.Cell>
-          {' '}
-          {formatPriceFull(productInstance.basePrice)}
-          {' '}
-        </Table.Cell>
-        <Table.Cell collapsing textAlign="right">
+        <Table.Cell collapsing>
           {formatPriceDiscount(productInstance.discount)}
         </Table.Cell>
         <Table.Cell>
-          {' '}
           {formatPriceFull(productInstance.basePrice - productInstance.discount)}
-          {' '}
+        </Table.Cell>
+        <Table.Cell>
+          <ContractLink id={productInstance.contractId} showId showName={false} />
         </Table.Cell>
       </Table.Row>
     );
@@ -55,4 +48,4 @@ const mapStateToProps = (state: RootState, props: { productInstance: ProductInst
   };
 };
 
-export default withRouter(connect(mapStateToProps)(InvoiceProductComponent));
+export default withRouter(connect(mapStateToProps)(InvoiceProductRow));
