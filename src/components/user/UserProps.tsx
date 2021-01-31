@@ -220,6 +220,7 @@ class UserProps extends React.Component<Props, State> {
               required
               id="form-input-email"
               fluid
+              width={6}
               control={Input}
               label="Email address"
               value={email}
@@ -230,21 +231,7 @@ class UserProps extends React.Component<Props, State> {
                 !validator.isEmail(email)
               }
             />
-          </Form.Group>
-          <Form.Group widths="equal">
-            <Form.Field
-              disabled={!editing}
-              id="form-input-function"
-              fluid
-              control={Input}
-              label="Function"
-              placeholder="Appears under your name."
-              value={functionName}
-              onChange={(e: ChangeEvent<HTMLInputElement>) => this.setState({
-                functionName: e.target.value,
-              })}
-            />
-            <Form.Field required fluid disabled={!editing}>
+            <Form.Field required fluid disabled={!editing} width={3}>
               {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
               <label htmlFor="form-input-gender">Gender</label>
               <Dropdown
@@ -263,6 +250,20 @@ class UserProps extends React.Component<Props, State> {
                 })}
               />
             </Form.Field>
+          </Form.Group>
+          <Form.Group widths="equal">
+            <Form.Field
+              disabled={!editing}
+              id="form-input-function"
+              fluid
+              control={Input}
+              label="Function"
+              placeholder="Appears under your name on contracts."
+              value={functionName}
+              onChange={(e: ChangeEvent<HTMLInputElement>) => this.setState({
+                functionName: e.target.value,
+              })}
+            />
           </Form.Group>
           <Segment>
             <h3>Permissions</h3>
