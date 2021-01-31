@@ -13,6 +13,7 @@ import { RootState } from '../../stores/store';
 import { getUserName } from '../../stores/user/selectors';
 import CompanyLink from '../company/CompanyLink';
 import UserLink from '../user/UserLink';
+import { formatPriceFull } from '../../helpers/monetary';
 
 interface Props {
   contract: Contract | undefined;
@@ -47,21 +48,23 @@ function ContractSummary(props: Props) {
     );
   }
 
+  const totalValue = contract.products
+    .reduce((a, b) => a + (b.basePrice - b.discount), 0);
+
   return (
     <>
       <Header as="h1" attached="top" style={{ backgroundColor: '#eee' }}>
         <Icon name="shopping bag" />
         <Header.Content>
           <Header.Subheader>Contract</Header.Subheader>
+          C
+          {contract.id}
+          {' '}
           {contract.title}
         </Header.Content>
       </Header>
       <Segment attached="bottom">
         <Grid columns={4}>
-          <Grid.Column>
-            <h5>Title</h5>
-            <p>{contract.title}</p>
-          </Grid.Column>
           <Grid.Column>
             <h5>Company</h5>
             <CompanyLink id={contract.companyId} />
@@ -75,6 +78,10 @@ function ContractSummary(props: Props) {
           <Grid.Column>
             <h5>Assigned to</h5>
             <UserLink id={contract.assignedToId} />
+          </Grid.Column>
+          <Grid.Column>
+            <h5>Total value</h5>
+            <p>{formatPriceFull(totalValue)}</p>
           </Grid.Column>
         </Grid>
       </Segment>
