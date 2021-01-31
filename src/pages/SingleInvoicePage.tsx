@@ -53,7 +53,10 @@ class SingleInvoicePage extends React.Component<Props> {
         menuItem: 'Products',
         render: () => (
           <Tab.Pane>
-            <InvoiceProductList />
+            <InvoiceProductList
+              invoice={invoice}
+              fetchInvoice={fetchInvoice}
+            />
           </Tab.Pane>
         ),
       },

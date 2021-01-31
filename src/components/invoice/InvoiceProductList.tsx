@@ -1,37 +1,38 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
-import {
-  Loader, Table,
-} from 'semantic-ui-react';
-import InvoiceProductComponent from './InvoiceProductRow';
-import { Invoice } from '../../clients/server.generated';
-import { getSingle } from '../../stores/single/selectors';
-import { SingleEntities } from '../../stores/single/single';
-import { RootState } from '../../stores/store';
+import { Table } from 'semantic-ui-react';
+import InvoiceProductRow from './InvoiceProductRow';
+import { ActivityType, Client, Invoice } from '../../clients/server.generated';
 import { formatPriceFull } from '../../helpers/monetary';
 
 interface Props extends RouteComponentProps {
-  invoice: Invoice | undefined;
+  invoice: Invoice;
+
+  fetchInvoice: (id: number) => void;
 }
 
-interface State {
-
-}
+interface State {}
 
 class InvoiceProductList extends React.Component<Props, State> {
   public constructor(props: Props) {
     super(props);
   }
 
-  public render() {
-    const { invoice } = this.props;
+  removeProduct = async (instanceId: number) => {
+    const { invoice, fetchInvoice } = this.props;
+    const client = new Client();
+    await client.deleteProduct2(invoice?.id, instanceId);
+    fetchInvoice(invoice.id);
+  };
 
-    if (invoice === undefined) {
-      return (
-        <Loader content="Loading" active />
-      );
-    }
+  deleteButtonActive() {
+    return !(this.props.invoice.activities
+      .filter((a) => a.type === ActivityType.STATUS).length > 1);
+  }
+
+  public render() {
+    console.log(this.deleteButtonActive());
+    const { invoice } = this.props;
 
     const { products } = invoice;
     let priceSum = 0;
@@ -60,27 +61,34 @@ class InvoiceProductList extends React.Component<Props, State> {
               <Table.HeaderCell collapsing>Discount</Table.HeaderCell>
               <Table.HeaderCell collapsing>Real Price</Table.HeaderCell>
               <Table.HeaderCell collapsing>Contract</Table.HeaderCell>
+              <Table.HeaderCell />
             </Table.Row>
 
           </Table.Header>
           <Table.Body>
             {products.map((product) => (
-              <InvoiceProductComponent key={product.id} productInstance={product} />
+              <InvoiceProductRow
+                key={product.id}
+                productInstance={product}
+                removeProduct={this.removeProduct}
+                canDelete={this.deleteButtonActive()}
+              />
             ))}
           </Table.Body>
           <Table.Footer>
             <Table.Row>
               <Table.HeaderCell textAlign="right"> Totals: </Table.HeaderCell>
-              <Table.HeaderCell>
+              <Table.HeaderCell collapsing>
                 {formatPriceFull(discountSum)}
                 {' '}
                 (
                 {discountAmount}
                 )
               </Table.HeaderCell>
-              <Table.HeaderCell>
+              <Table.HeaderCell collapsing>
                 {formatPriceFull(discountedPriceSum)}
               </Table.HeaderCell>
+              <Table.HeaderCell />
               <Table.HeaderCell />
             </Table.Row>
           </Table.Footer>
@@ -90,14 +98,4 @@ class InvoiceProductList extends React.Component<Props, State> {
   }
 }
 
-const mapStateToProps = (state: RootState) => {
-  return {
-    invoice: getSingle<Invoice>(state, SingleEntities.Invoice).data,
-    status: getSingle<Invoice>(state, SingleEntities.Invoice).status,
-  };
-};
-
-const mapDispatchToProps = () => ({
-});
-
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(InvoiceProductList));
+export default withRouter(InvoiceProductList);
