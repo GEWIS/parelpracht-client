@@ -4,13 +4,12 @@ import {
 import {
   ActivityParams,
   Client, Contract,
-  Invoice,
-  InvoiceParams,
+  Invoice, InvoiceCreateParams,
   InvoiceStatusParams,
   ListOrFilter,
   ListParams,
   ListSorting,
-  Partial_FileParams,
+  Partial_FileParams, Partial_InvoiceParams,
   SortDirection,
 } from '../../clients/server.generated';
 import { takeEveryWithErrorHandling } from '../errorHandling';
@@ -35,7 +34,7 @@ import { SingleEntities } from '../single/single';
 import { fetchSummaries, setSummaries } from '../summaries/actionCreators';
 import { summariesActionPattern, SummariesActionType } from '../summaries/actions';
 import { SummaryCollections } from '../summaries/summaries';
-import { fetchTable, setTable } from '../tables/actionCreators';
+import { setTable } from '../tables/actionCreators';
 import { tableActionPattern, TableActionType } from '../tables/actions';
 import { getTable } from '../tables/selectors';
 import { Tables } from '../tables/tables';
@@ -82,7 +81,7 @@ function* fetchSingleInvoice(action: SingleFetchAction<SingleEntities.Invoice>) 
 }
 
 function* saveSingleInvoice(
-  action: SingleSaveAction<SingleEntities.Invoice, InvoiceParams>,
+  action: SingleSaveAction<SingleEntities.Invoice, Partial_InvoiceParams>,
 ) {
   const client = new Client();
   yield call([client, client.updateInvoice], action.id, action.data);
@@ -104,7 +103,7 @@ function* watchSaveSingleInvoice() {
 }
 
 function* createSingleInvoice(
-  action: SingleCreateAction<SingleEntities.Invoice, InvoiceParams>,
+  action: SingleCreateAction<SingleEntities.Invoice, InvoiceCreateParams>,
 ) {
   const client = new Client();
   const invoice = yield call([client, client.createInvoice], action.data);
@@ -113,7 +112,6 @@ function* createSingleInvoice(
 
   const contractState: SingleEntityState<Contract> = yield select(getSingle,
     SingleEntities.Contract);
-  console.log(contractState);
   if (contractState.data) {
     yield put(fetchSingle(SingleEntities.Contract, contractState.data.id));
   }

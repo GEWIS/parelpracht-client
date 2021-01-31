@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { Dispatch } from 'redux';
 import {
-  Body, Client, Contract, InvoiceParams, InvoiceStatus, InvoiceSummary,
+  Body, Client, Contract, InvoiceCreateParams, InvoiceStatus, InvoiceSummary,
 } from '../clients/server.generated';
 import { RootState } from '../stores/store';
 import { SummaryCollections } from '../stores/summaries/summaries';
@@ -23,7 +23,7 @@ interface Props extends SelfProps {
   clearSelection: () => void;
   invoices: InvoiceSummary[];
 
-  createInvoice: (invoice: InvoiceParams) => void;
+  createInvoice: (invoice: InvoiceCreateParams) => void;
   fetchContract: (id: number) => void;
 }
 
@@ -50,7 +50,7 @@ class ContractInvoiceModal extends React.Component<Props, State> {
     this.setState({ loading: true });
 
     if (this.state.selectedInvoice === -1) {
-      await createInvoice(new InvoiceParams({
+      await createInvoice(new InvoiceCreateParams({
         title: contract.title,
         companyId: contract.companyId,
         productInstanceIds,
@@ -149,7 +149,7 @@ const mapStateToProps = (state: RootState) => {
 };
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
-  createInvoice: (invoice: InvoiceParams) => dispatch(
+  createInvoice: (invoice: InvoiceCreateParams) => dispatch(
     createSingle(SingleEntities.Invoice, invoice),
   ),
   fetchContract: (id: number) => dispatch(

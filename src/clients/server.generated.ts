@@ -3178,7 +3178,7 @@ export class Client {
      * @param body Parameters to create invoice with
      * @return Ok
      */
-    createInvoice(body: InvoiceParams): Promise<Invoice> {
+    createInvoice(body: InvoiceCreateParams): Promise<Invoice> {
         let url_ = this.baseUrl + "/invoice";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -9061,16 +9061,16 @@ export interface IExpiredInvoice {
     value: number;
 }
 
-export class InvoiceParams implements IInvoiceParams {
-    companyId!: number;
+export class InvoiceCreateParams implements IInvoiceCreateParams {
     title!: string;
-    productInstanceIds!: number[];
     poNumber?: string;
     comments?: string;
     startDate?: Date;
     assignedToId?: number;
+    productInstanceIds!: number[];
+    companyId!: number;
 
-    constructor(data?: IInvoiceParams) {
+    constructor(data?: IInvoiceCreateParams) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -9084,59 +9084,57 @@ export class InvoiceParams implements IInvoiceParams {
 
     init(_data?: any) {
         if (_data) {
-            this.companyId = _data["companyId"];
             this.title = _data["title"];
+            this.poNumber = _data["poNumber"];
+            this.comments = _data["comments"];
+            this.startDate = _data["startDate"] ? new Date(_data["startDate"].toString()) : <any>undefined;
+            this.assignedToId = _data["assignedToId"];
             if (Array.isArray(_data["productInstanceIds"])) {
                 this.productInstanceIds = [] as any;
                 for (let item of _data["productInstanceIds"])
                     this.productInstanceIds!.push(item);
             }
-            this.poNumber = _data["poNumber"];
-            this.comments = _data["comments"];
-            this.startDate = _data["startDate"] ? new Date(_data["startDate"].toString()) : <any>undefined;
-            this.assignedToId = _data["assignedToId"];
+            this.companyId = _data["companyId"];
         }
     }
 
-    static fromJS(data: any): InvoiceParams {
+    static fromJS(data: any): InvoiceCreateParams {
         data = typeof data === 'object' ? data : {};
-        let result = new InvoiceParams();
+        let result = new InvoiceCreateParams();
         result.init(data);
         return result;
     }
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["companyId"] = this.companyId;
         data["title"] = this.title;
+        data["poNumber"] = this.poNumber;
+        data["comments"] = this.comments;
+        data["startDate"] = this.startDate ? this.startDate.toISOString() : <any>undefined;
+        data["assignedToId"] = this.assignedToId;
         if (Array.isArray(this.productInstanceIds)) {
             data["productInstanceIds"] = [];
             for (let item of this.productInstanceIds)
                 data["productInstanceIds"].push(item);
         }
-        data["poNumber"] = this.poNumber;
-        data["comments"] = this.comments;
-        data["startDate"] = this.startDate ? this.startDate.toISOString() : <any>undefined;
-        data["assignedToId"] = this.assignedToId;
+        data["companyId"] = this.companyId;
         return data; 
     }
 }
 
-export interface IInvoiceParams {
-    companyId: number;
+export interface IInvoiceCreateParams {
     title: string;
-    productInstanceIds: number[];
     poNumber?: string;
     comments?: string;
     startDate?: Date;
     assignedToId?: number;
+    productInstanceIds: number[];
+    companyId: number;
 }
 
 /** Make all properties in T optional */
 export class Partial_InvoiceParams implements IPartial_InvoiceParams {
-    companyId?: number;
     title?: string;
-    productInstanceIds?: number[];
     poNumber?: string;
     comments?: string;
     startDate?: Date;
@@ -9153,13 +9151,7 @@ export class Partial_InvoiceParams implements IPartial_InvoiceParams {
 
     init(_data?: any) {
         if (_data) {
-            this.companyId = _data["companyId"];
             this.title = _data["title"];
-            if (Array.isArray(_data["productInstanceIds"])) {
-                this.productInstanceIds = [] as any;
-                for (let item of _data["productInstanceIds"])
-                    this.productInstanceIds!.push(item);
-            }
             this.poNumber = _data["poNumber"];
             this.comments = _data["comments"];
             this.startDate = _data["startDate"] ? new Date(_data["startDate"].toString()) : <any>undefined;
@@ -9176,13 +9168,7 @@ export class Partial_InvoiceParams implements IPartial_InvoiceParams {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["companyId"] = this.companyId;
         data["title"] = this.title;
-        if (Array.isArray(this.productInstanceIds)) {
-            data["productInstanceIds"] = [];
-            for (let item of this.productInstanceIds)
-                data["productInstanceIds"].push(item);
-        }
         data["poNumber"] = this.poNumber;
         data["comments"] = this.comments;
         data["startDate"] = this.startDate ? this.startDate.toISOString() : <any>undefined;
@@ -9193,9 +9179,7 @@ export class Partial_InvoiceParams implements IPartial_InvoiceParams {
 
 /** Make all properties in T optional */
 export interface IPartial_InvoiceParams {
-    companyId?: number;
     title?: string;
-    productInstanceIds?: number[];
     poNumber?: string;
     comments?: string;
     startDate?: Date;

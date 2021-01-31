@@ -32,6 +32,7 @@ function UserSelector(props: Props & DropdownProps) {
       placeholder="User"
       search
       selection
+      fluid
       error={value < 1 && !open}
       {...rest}
       options={dropdownOptions}
