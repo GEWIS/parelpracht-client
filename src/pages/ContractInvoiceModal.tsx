@@ -1,33 +1,36 @@
 import * as React from 'react';
 import {
-  Button,
-  Dropdown,
-  Icon,
-  Modal, Segment,
+  Button, Dropdown, Icon, Modal, Segment,
 } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
+import { Dispatch } from 'redux';
 import {
-  Body,
-  Client, InvoiceParams, InvoiceSummary,
+  Body, Client, Contract, InvoiceParams, InvoiceStatus, InvoiceSummary,
 } from '../clients/server.generated';
 import { RootState } from '../stores/store';
-import AlertContainer from '../components/alerts/AlertContainer';
 import { SummaryCollections } from '../stores/summaries/summaries';
 import { getSummaryCollection } from '../stores/summaries/selectors';
+import { createSingle, fetchSingle } from '../stores/single/actionCreators';
+import { SingleEntities } from '../stores/single/single';
 
 interface SelfProps extends RouteComponentProps<{contractId: string}> {
 }
 
 interface Props extends SelfProps {
+  contract: Contract;
   productInstanceIds: number[];
-  companyId: number;
+  clearSelection: () => void;
   invoices: InvoiceSummary[];
+
+  createInvoice: (invoice: InvoiceParams) => void;
+  fetchContract: (id: number) => void;
 }
 
 interface State {
   open: boolean;
   selectedInvoice: number | undefined;
+  loading: boolean;
 }
 
 class ContractInvoiceModal extends React.Component<Props, State> {
@@ -36,35 +39,46 @@ class ContractInvoiceModal extends React.Component<Props, State> {
     this.state = {
       open: false,
       selectedInvoice: undefined,
+      loading: false,
     };
   }
 
   save = async () => {
-    const client = new Client();
+    const {
+      contract, productInstanceIds, createInvoice, fetchContract, clearSelection,
+    } = this.props;
+    this.setState({ loading: true });
+
     if (this.state.selectedInvoice === -1) {
-      const invoice = await client.createInvoice(new InvoiceParams({
-        title: '',
-        companyId: this.props.companyId,
-        productInstanceIds: this.props.productInstanceIds,
+      await createInvoice(new InvoiceParams({
+        title: contract.title,
+        companyId: contract.companyId,
+        productInstanceIds,
       }));
-      this.props.history.push(`/invoice/${invoice.id}`);
     } else if (this.state.selectedInvoice !== undefined) {
+      const client = new Client();
       await Promise.all(this.props.productInstanceIds.map((x) => {
         return client.addProduct(this.state.selectedInvoice!, new Body({ productId: x }));
       }));
-      this.props.history.push(`/invoice/${this.state.selectedInvoice}`);
+      fetchContract(contract.id);
     }
+    clearSelection();
+    this.setState({ open: false, loading: false });
   };
 
   public render() {
     const {
-      invoices,
+      invoices, contract,
     } = this.props;
+    const { loading } = this.state;
     const { selectedInvoice } = this.state;
-    const dropdownOptions = [{ key: -1, text: 'Add to new invoice', value: -1 }, ...invoices.map((x) => ({
+    const availableInvoices = invoices.filter((i) => {
+      return i.companyId === contract.companyId && i.status === InvoiceStatus.CREATED;
+    });
+    const dropdownOptions = [{ key: -1, text: 'Add to new invoice', value: -1 }, ...availableInvoices.map((x) => ({
       key: x.id,
-      text: x.id.toString(),
-      description: '',
+      description: `F${x.id.toString()}`,
+      text: x.title,
       value: x.id,
     }))];
 
@@ -90,6 +104,7 @@ class ContractInvoiceModal extends React.Component<Props, State> {
         basic
         disabled={this.props.productInstanceIds.length === 0}
       >
+        <Icon name="money bill alternate outline" />
         Add
         {' '}
         {(this.props.productInstanceIds.length)}
@@ -109,7 +124,6 @@ class ContractInvoiceModal extends React.Component<Props, State> {
         trigger={trigger}
       >
         <Segment attached="bottom">
-          <AlertContainer />
           {dropdown}
           <Button
             icon
@@ -117,6 +131,7 @@ class ContractInvoiceModal extends React.Component<Props, State> {
             color="green"
             floated="right"
             onClick={this.save}
+            loading={loading}
           >
             <Icon name="save" />
             Save
@@ -133,4 +148,13 @@ const mapStateToProps = (state: RootState) => {
   };
 };
 
-export default withRouter(connect(mapStateToProps)(ContractInvoiceModal));
+const mapDispatchToProps = (dispatch: Dispatch) => ({
+  createInvoice: (invoice: InvoiceParams) => dispatch(
+    createSingle(SingleEntities.Invoice, invoice),
+  ),
+  fetchContract: (id: number) => dispatch(
+    fetchSingle(SingleEntities.Contract, id),
+  ),
+});
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ContractInvoiceModal));

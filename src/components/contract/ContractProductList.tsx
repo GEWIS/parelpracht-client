@@ -5,16 +5,16 @@ import {
   Button, Icon, Loader, Table,
 } from 'semantic-ui-react';
 import _ from 'lodash';
-import ContractProductComponent from './ContractProductComponent';
-import { Contract } from '../../clients/server.generated';
-import { getSingle } from '../../stores/single/selectors';
-import { SingleEntities } from '../../stores/single/single';
+import ContractProductRow from './ContractProductRow';
+import { Contract, ContractStatus } from '../../clients/server.generated';
 import { RootState } from '../../stores/store';
-import { formatPrice } from '../../helpers/monetary';
+import { formatPriceFull } from '../../helpers/monetary';
 import ContractInvoiceModal from '../../pages/ContractInvoiceModal';
+import { getContractStatus } from '../../stores/contract/selectors';
 
 interface Props extends RouteComponentProps {
-  contract: Contract | undefined;
+  contract: Contract;
+  contractStatus: ContractStatus;
 }
 
 interface State {
@@ -30,13 +30,17 @@ class ContractProductList extends React.Component<Props, State> {
     };
   }
 
+  clearSelection = () => {
+    this.setState({ selected: [] });
+  };
+
   selectProduct = (id: number) => {
     const { selected } = this.state;
     this.setState({ selected: _.xor(selected, [id]) });
   };
 
   public render() {
-    const { contract } = this.props;
+    const { contract, contractStatus } = this.props;
     const { selected } = this.state;
 
     if (contract === undefined) {
@@ -60,6 +64,10 @@ class ContractProductList extends React.Component<Props, State> {
 
     const discountedPriceSum = priceSum - discountSum;
 
+    const canChangeProducts = contractStatus === ContractStatus.CREATED
+      || contractStatus === ContractStatus.PROPOSED
+      || contractStatus === ContractStatus.SENT;
+
     return (
       <>
         <h3>
@@ -72,34 +80,37 @@ class ContractProductList extends React.Component<Props, State> {
             basic
             as={NavLink}
             to={`${this.props.location.pathname}/product/new`}
+            disabled={!canChangeProducts}
           >
             <Icon name="plus" />
             Add Product
           </Button>
           <ContractInvoiceModal
+            contract={contract}
             productInstanceIds={selected}
-            companyId={contract.companyId}
+            clearSelection={this.clearSelection}
           />
 
         </h3>
-        <Table celled striped>
+        <Table compact>
           <Table.Header>
             <Table.Row>
-              <Table.HeaderCell>Select</Table.HeaderCell>
+              <Table.HeaderCell />
               <Table.HeaderCell>Title</Table.HeaderCell>
-              <Table.HeaderCell>Base Price</Table.HeaderCell>
-              <Table.HeaderCell>Discount</Table.HeaderCell>
-              <Table.HeaderCell>Discounted Price</Table.HeaderCell>
-              <Table.HeaderCell>Status</Table.HeaderCell>
+              <Table.HeaderCell collapsing>Discount</Table.HeaderCell>
+              <Table.HeaderCell collapsing>Real Price</Table.HeaderCell>
+              <Table.HeaderCell collapsing>Status</Table.HeaderCell>
+              <Table.HeaderCell collapsing>Invoice</Table.HeaderCell>
             </Table.Row>
 
           </Table.Header>
           <Table.Body>
             {products.map((product) => (
-              <ContractProductComponent
+              <ContractProductRow
                 key={product.id}
                 productInstance={product}
                 selectFunction={this.selectProduct}
+                selected={selected.includes(product.id)}
               />
             ))}
           </Table.Body>
@@ -107,26 +118,17 @@ class ContractProductList extends React.Component<Props, State> {
             <Table.Row>
               <Table.HeaderCell />
               <Table.HeaderCell> Totals: </Table.HeaderCell>
-              <Table.HeaderCell>
-                {' €'}
-                {formatPrice(priceSum)}
-                {' '}
-              </Table.HeaderCell>
-              <Table.HeaderCell>
-                {' €'}
-                {formatPrice(discountSum)}
+              <Table.HeaderCell singleLine collapsing>
+                {formatPriceFull(discountSum)}
                 {' '}
                 (
                 {discountAmount}
-                {' '}
-                discounts)
-                {' '}
+                )
               </Table.HeaderCell>
-              <Table.HeaderCell>
-                {' €'}
-                {formatPrice(discountedPriceSum)}
-                {' '}
+              <Table.HeaderCell collapsing>
+                {formatPriceFull(discountedPriceSum)}
               </Table.HeaderCell>
+              <Table.HeaderCell />
               <Table.HeaderCell />
             </Table.Row>
           </Table.Footer>
@@ -136,12 +138,9 @@ class ContractProductList extends React.Component<Props, State> {
   }
 }
 
-const mapStateToProps = (state: RootState) => {
-  return {
-    contract: getSingle<Contract>(state, SingleEntities.Contract).data,
-    status: getSingle<Contract>(state, SingleEntities.Contract).status,
-  };
-};
+const mapStateToProps = (state: RootState, props: { contract: Contract }) => ({
+  contractStatus: getContractStatus(state, props.contract.id),
+});
 
 const mapDispatchToProps = () => ({
 });

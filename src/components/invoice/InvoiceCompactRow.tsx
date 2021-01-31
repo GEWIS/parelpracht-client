@@ -21,7 +21,7 @@ function InvoiceCompactRow(props: Props): JSX.Element {
   return (
     <Table.Row>
       <Table.Cell>
-        <InvoiceLink id={invoice.id} />
+        <InvoiceLink id={invoice.id} short={false} />
       </Table.Cell>
       <Table.Cell>
         <CompanyLink id={invoice.companyId} />

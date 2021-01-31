@@ -53,7 +53,7 @@ function MegaTableRow(props: Props) {
       contract = company.contracts[contractNr];
       innerResult.push((
         <Table.Cell rowSpan={contract.products.length}>
-          <ContractLink id={contract.id} />
+          <ContractLink id={contract.id} showId={false} showName />
         </Table.Cell>
       ));
     }

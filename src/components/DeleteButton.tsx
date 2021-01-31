@@ -1,18 +1,21 @@
-import { Button, Popup } from 'semantic-ui-react';
+import { Button, Popup, SemanticCOLORS } from 'semantic-ui-react';
 import React from 'react';
+import { SemanticSIZES } from 'semantic-ui-react/dist/commonjs/generic';
 import ResourceStatus from '../stores/resourceStatus';
 import { SingleEntities } from '../stores/single/single';
 
 interface DeleteProps {
   canDelete: boolean | undefined;
-  entity: SingleEntities;
+  entity: SingleEntities | 'InvoiceProduct';
   remove: () => void;
   status: ResourceStatus;
+  size?: SemanticSIZES;
+  color?: SemanticCOLORS;
 }
 
 function DeleteButton(props: DeleteProps) {
   const {
-    canDelete, entity, remove, status,
+    canDelete, entity, remove, status, size, color,
   } = props;
   if (canDelete === true) {
     return (
@@ -22,6 +25,8 @@ function DeleteButton(props: DeleteProps) {
             icon="trash"
             loading={status === ResourceStatus.DELETING}
             floated="right"
+            size={size}
+            color={color}
           />
         )}
         on="click"
@@ -34,10 +39,10 @@ function DeleteButton(props: DeleteProps) {
           >
             Delete
             {' '}
-            {entity.toLowerCase()}
+            {entity.replace(/([a-z])([A-Z])/g, '$1 $2').trim().toLowerCase()}
           </Button>
         )}
-        header={`Are you sure you want to delete this ${entity.toLowerCase()}?`}
+        header={`Are you sure you want to delete this ${entity.replace(/([a-z])([A-Z])/g, '$1 $2').trim().toLowerCase()}?`}
       />
     );
   }
@@ -62,30 +67,43 @@ function DeleteButton(props: DeleteProps) {
       case SingleEntities.ProductCategory:
         deleteError = 'this product category is used by one or more products';
         break;
+      case SingleEntities.ProductInstance:
+        deleteError = 'this product has an invoice or is delivered/cancelled/deferred or its contract is already sent or proposed';
+        break;
+      case 'InvoiceProduct':
+        deleteError = 'this invoice has already been sent or finished';
+        break;
       case SingleEntities.User:
         deleteError = 'this user still has active roles';
         break;
       default:
         throw new Error(`${entity} is not a valid DeleteEntity`);
     }
+
     return (
       <Popup
         trigger={(
-          <Button.Group floated="right">
+          <Button.Group floated="right" size={size}>
             <Button
               disabled
               icon="trash"
               loading={status === ResourceStatus.DELETING}
+              color={color}
             />
           </Button.Group>
         )}
         on="hover"
         mouseEnterDelay={500}
-        content={`You cannot delete this ${entity}, because ${deleteError}.`}
+        content={`You cannot delete this ${entity.replace(/([a-z])([A-Z])/g, '$1 $2').trim().toLowerCase()}, because ${deleteError}.`}
       />
     );
   }
   return null;
 }
+
+DeleteButton.defaultProps = {
+  size: 'medium',
+  color: undefined,
+};
 
 export default DeleteButton;

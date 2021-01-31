@@ -20,7 +20,7 @@ function ContractCompactRow(props: Props) {
   return (
     <Table.Row>
       <Table.Cell>
-        <ContractLink id={contract.id} />
+        <ContractLink id={contract.id} showId={false} showName />
       </Table.Cell>
       <Table.Cell>
         <CompanyLink id={contract.companyId} />

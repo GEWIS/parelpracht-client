@@ -1,21 +1,19 @@
 import React from 'react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
-import {
-  Checkbox, Icon, Table,
-} from 'semantic-ui-react';
-import { connect } from 'react-redux';
+import { Checkbox, Table } from 'semantic-ui-react';
 import { ActivityType, ProductInstance } from '../../clients/server.generated';
 import './ContractComponent.scss';
-import { RootState } from '../../stores/store';
-import { getProductName } from '../../stores/product/selectors';
 import { formatPriceDiscount, formatPriceFull } from '../../helpers/monetary';
+import ProductInstanceLink from '../product/ProductInstanceLink';
+import { SingleEntities } from '../../stores/single/single';
+import { formatStatus } from '../../helpers/activity';
+import InvoiceLink from '../invoice/InvoiceLink';
 
 interface Props extends RouteComponentProps {
   productInstance: ProductInstance;
 
-  productName: string;
-
   selectFunction: (id: number) => void;
+  selected: boolean;
 }
 
 function showRecentStatus(productInstance: ProductInstance): string {
@@ -31,58 +29,52 @@ function showRecentStatus(productInstance: ProductInstance): string {
   return sortedArray[0].subType!;
 }
 
-class ContractProductComponent extends React.Component<Props> {
+class ContractProductRow extends React.Component<Props> {
   public render() {
     const {
-      productInstance, productName, selectFunction,
+      productInstance, selectFunction, selected,
     } = this.props;
+
+    let invoice;
+    if (productInstance.invoiceId) {
+      invoice = <InvoiceLink id={productInstance.invoiceId} short />;
+    }
+
     return (
       <Table.Row>
         <Table.Cell collapsing>
           <Checkbox
-            onClick={() => {
+            onChange={() => {
               selectFunction(productInstance.id);
             }}
             disabled={productInstance.invoiceId !== null}
+            checked={selected}
           />
         </Table.Cell>
-        <Table.Cell
-          onClick={() => {
-            this.props.history.push(
-              `${this.props.location.pathname}/product/${productInstance.id}`,
-            );
-          }}
-          collapsing
-        >
-          <Icon name="list alternate outline" />
-          {' '}
-          {productName}
-        </Table.Cell>
         <Table.Cell>
-          {' '}
-          {formatPriceFull(productInstance.basePrice)}
-          {' '}
+          <ProductInstanceLink
+            entityId={productInstance.contractId}
+            productId={productInstance.productId}
+            productInstanceId={productInstance.id}
+            entity={SingleEntities.Contract}
+            details={productInstance.comments}
+          />
         </Table.Cell>
         <Table.Cell collapsing textAlign="right">
           {formatPriceDiscount(productInstance.discount)}
         </Table.Cell>
-        <Table.Cell>
-          {' '}
+        <Table.Cell collapsing>
           {formatPriceFull(productInstance.basePrice - productInstance.discount)}
-          {' '}
         </Table.Cell>
-        <Table.Cell>
-          {showRecentStatus(productInstance)}
+        <Table.Cell collapsing>
+          {formatStatus(showRecentStatus(productInstance))}
+        </Table.Cell>
+        <Table.Cell collapsing>
+          {invoice}
         </Table.Cell>
       </Table.Row>
     );
   }
 }
 
-const mapStateToProps = (state: RootState, props: { productInstance: ProductInstance }) => {
-  return {
-    productName: getProductName(state, props.productInstance.productId),
-  };
-};
-
-export default withRouter(connect(mapStateToProps)(ContractProductComponent));
+export default withRouter(ContractProductRow);

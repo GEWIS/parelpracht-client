@@ -7,19 +7,19 @@ import { getInvoiceTitle } from '../../stores/invoice/selectors';
 
 interface Props {
   id: number;
+  short: boolean;
 
   invoiceTitle: string;
 }
 
 function InvoiceLink(props: Props) {
-  const { id, invoiceTitle } = props;
+  const { id, invoiceTitle, short } = props;
   return (
     <NavLink to={`/invoice/${id}`}>
       <Icon name="money bill alternate" />
       F
       {id}
-      {' '}
-      {invoiceTitle}
+      {short ? '' : ` ${invoiceTitle}`}
     </NavLink>
   );
 }

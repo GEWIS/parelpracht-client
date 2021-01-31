@@ -3,7 +3,7 @@ import {
 } from 'redux-saga/effects';
 import {
   ActivityParams,
-  Client,
+  Client, Contract,
   Invoice,
   InvoiceParams,
   InvoiceStatusParams,
@@ -14,7 +14,9 @@ import {
   SortDirection,
 } from '../../clients/server.generated';
 import { takeEveryWithErrorHandling } from '../errorHandling';
-import { clearSingle, errorSingle, setSingle } from '../single/actionCreators';
+import {
+  clearSingle, errorSingle, fetchSingle, setSingle,
+} from '../single/actionCreators';
 import {
   singleActionPattern,
   SingleActionType,
@@ -38,6 +40,8 @@ import { tableActionPattern, TableActionType } from '../tables/actions';
 import { getTable } from '../tables/selectors';
 import { Tables } from '../tables/tables';
 import { TableState } from '../tables/tableState';
+import { SingleEntityState } from '../single/singleState';
+import { getSingle } from '../single/selectors';
 
 function* fetchInvoices() {
   const client = new Client();
@@ -105,8 +109,14 @@ function* createSingleInvoice(
   const client = new Client();
   const invoice = yield call([client, client.createInvoice], action.data);
   yield put(setSingle(SingleEntities.Invoice, invoice));
-  yield put(fetchTable(Tables.Invoices));
   yield put(fetchSummaries(SummaryCollections.Invoices));
+
+  const contractState: SingleEntityState<Contract> = yield select(getSingle,
+    SingleEntities.Contract);
+  console.log(contractState);
+  if (contractState.data) {
+    yield put(fetchSingle(SingleEntities.Contract, contractState.data.id));
+  }
 }
 
 function* errorCreateSingleInvoice() {

@@ -1,11 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Grid, Button, Step } from 'semantic-ui-react';
+import { Button, Grid, Step } from 'semantic-ui-react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { GeneralActivity } from './GeneralActivity';
 import FinancialDocumentStep from './FinancialDocumentStep';
 import {
-  formatDocumentStatusTitle,
+  formatDocumentStatusTitle, formatDocumentType,
   getAllDocumentStatuses,
   getAllStatusActivities,
   getLastStatus,
@@ -17,6 +17,8 @@ import ResourceStatus from '../../stores/resourceStatus';
 
 interface Props extends RouteComponentProps {
   documentId: number;
+  // If the document is a ProductInstance, the parentId is the contract ID
+  parentId?: number;
   activities: GeneralActivity[];
   documentType: SingleEntities;
 
@@ -24,6 +26,7 @@ interface Props extends RouteComponentProps {
 }
 
 interface State {
+  deferModalOpen: boolean;
   cancelModalOpen: boolean;
 }
 
@@ -31,6 +34,7 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
   public constructor(props: Props) {
     super(props);
     this.state = {
+      deferModalOpen: false,
       cancelModalOpen: false,
     };
   }
@@ -41,11 +45,17 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
     });
   };
 
+  closeDeferModal = () => {
+    this.setState({
+      deferModalOpen: false,
+    });
+  };
+
   public render() {
     const {
-      activities, documentType, documentId, resourceStatus,
+      activities, documentType, documentId, resourceStatus, parentId,
     } = this.props;
-    const { cancelModalOpen } = this.state;
+    const { cancelModalOpen, deferModalOpen } = this.state;
     const allDocumentStatuses = getAllDocumentStatuses(documentType);
     const allStatusActivities = getAllStatusActivities(activities);
     const lastStatusActivity = getLastStatus(allStatusActivities);
@@ -54,19 +64,39 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
       cancelledDocument = allStatusActivities[allStatusActivities.length - 1].subType === 'CANCELLED';
     }
 
+    let deferButton;
+    if (documentType === SingleEntities.ProductInstance && lastStatusActivity?.subType !== 'DEFERRED') {
+      deferButton = (
+        <Button
+          floated="left"
+          labelPosition="left"
+          icon="close"
+          basic
+          onClick={() => {
+            this.setState({
+              deferModalOpen: true,
+            });
+          }}
+          content={`Defer ${formatDocumentType(documentType)}`}
+        />
+      );
+    }
+
     if (!cancelledDocument) {
       return (
         <>
           <Grid columns={3}>
             <Grid.Row>
-              <Grid.Column />
+              <Grid.Column>
+                {deferButton}
+              </Grid.Column>
               <Grid.Column>
                 <h3
-                  style={{ marginBottom: '0.3em', marginTop: '0.2em' }}
+                  style={{ marginBottom: '0.3em', marginTop: '0.2em', textAlign: 'center' }}
                 >
                   {formatDocumentStatusTitle(
                     allStatusActivities[allStatusActivities.length - 1],
-                    documentType,
+                    formatDocumentType(documentType),
                   )}
                 </h3>
               </Grid.Column>
@@ -81,7 +111,7 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
                       cancelModalOpen: true,
                     });
                   }}
-                  content={`Cancel ${documentType.toLowerCase()}`}
+                  content={`Cancel ${formatDocumentType(documentType)}`}
                 />
               </Grid.Column>
             </Grid.Row>
@@ -102,12 +132,23 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
                 status={currentStatus}
                 cancelled={cancelledDocument}
                 resourceStatus={resourceStatus}
+                parentId={parentId}
               />
             ))}
           </Step.Group>
           <DocumentStatusModal
+            open={deferModalOpen}
+            documentId={documentId}
+            parentId={parentId}
+            documentType={documentType}
+            documentStatus={DocumentStatus.DEFERRED}
+            close={this.closeDeferModal}
+            resourceStatus={resourceStatus}
+          />
+          <DocumentStatusModal
             open={cancelModalOpen}
             documentId={documentId}
+            parentId={parentId}
             documentType={documentType}
             documentStatus={DocumentStatus.CANCELLED}
             close={this.closeCancelModal}
@@ -118,10 +159,10 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
     }
     return (
       <>
-        <h3>
+        <h3 style={{ textAlign: 'center' }}>
           {formatDocumentStatusTitle(
             allStatusActivities[allStatusActivities.length - 1],
-            documentType,
+            formatDocumentType(documentType),
           )}
         </h3>
         <Step.Group stackable="tablet" widths={5} fluid>
@@ -134,6 +175,7 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
               status={currentStatus}
               cancelled={cancelledDocument}
               resourceStatus={resourceStatus}
+              parentId={parentId}
             />
           ))}
         </Step.Group>

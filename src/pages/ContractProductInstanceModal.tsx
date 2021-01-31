@@ -1,14 +1,12 @@
 import * as React from 'react';
 import {
-  Dimmer,
-  Loader,
-  Modal, Segment,
+  Dimmer, Loader, Modal, Segment,
 } from 'semantic-ui-react';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import {
-  Client, Contract, ProductInstance, ProductInstanceParams, ProductInstanceStatus,
+  Contract, ProductInstance, ProductInstanceParams, ProductInstanceStatus,
 } from '../clients/server.generated';
 import { fetchSingle } from '../stores/single/actionCreators';
 import { RootState } from '../stores/store';
@@ -17,6 +15,14 @@ import ResourceStatus from '../stores/resourceStatus';
 import AlertContainer from '../components/alerts/AlertContainer';
 import { getSingle } from '../stores/single/selectors';
 import { SingleEntities } from '../stores/single/single';
+import FinancialDocumentProgress from '../components/activities/FinancialDocumentProgress';
+import { GeneralActivity } from '../components/activities/GeneralActivity';
+import ActivitiesList from '../components/activities/ActivitiesList';
+import {
+  createInstanceSingle,
+  deleteInstanceSingle,
+  saveInstanceSingle,
+} from '../stores/productinstance/actionCreator';
 
 interface SelfProps extends RouteComponentProps<{contractId: string, productInstanceId?: string}> {
   create?: boolean;
@@ -25,7 +31,12 @@ interface SelfProps extends RouteComponentProps<{contractId: string, productInst
 interface Props extends SelfProps {
   productInstance: ProductInstance | undefined;
   status: ResourceStatus;
+  contract?: Contract;
+
   fetchContract: (id: number) => void;
+  saveProductInstance: (contractId: number, id: number, inst: ProductInstanceParams) => void;
+  createProductInstance: (contractId: number, inst: ProductInstanceParams) => void;
+  removeProductInstance: (contractId: number, id: number) => void;
 }
 
 class ProductInstanceModal extends React.Component<Props> {
@@ -36,24 +47,37 @@ class ProductInstanceModal extends React.Component<Props> {
   };
 
   saveProductInstance = async (productInstance: ProductInstanceParams) => {
-    const client = new Client();
-    await client.updateProductInstance(parseInt(this.props.match.params.contractId!, 10),
-      parseInt(this.props.match.params.productInstanceId!, 10), productInstance);
+    this.props.saveProductInstance(
+      parseInt(this.props.match.params.contractId!, 10),
+      parseInt(this.props.match.params.productInstanceId!, 10),
+      productInstance,
+    );
     this.close();
   };
 
   createProductInstance = async (productInstance: ProductInstanceParams) => {
-    const client = new Client();
-    await client.addProduct(parseInt(this.props.match.params.contractId!, 10), productInstance);
+    this.props.createProductInstance(
+      parseInt(this.props.match.params.contractId!, 10),
+      productInstance,
+    );
+    this.close();
+  };
+
+  removeProductInstance = async () => {
+    this.props.removeProductInstance(
+      parseInt(this.props.match.params.contractId!, 10),
+      parseInt(this.props.match.params.productInstanceId!, 10),
+    );
     this.close();
   };
 
   public render() {
+    const { create, status, contract } = this.props;
     let productInstance: ProductInstance | undefined;
-    if (this.props.create) {
+    if (create) {
       const { contractId } = this.props.match.params;
       productInstance = {
-        id: 0,
+        id: -1,
         contractId: parseInt(contractId, 10),
         productId: 0,
         basePrice: 0,
@@ -84,25 +108,54 @@ class ProductInstanceModal extends React.Component<Props> {
       );
     }
 
+    let activities;
+    if (!create) {
+      activities = (
+        <>
+          <Segment secondary style={{ margin: '2em 1em 1em' }}>
+            <FinancialDocumentProgress
+              documentId={productInstance.id}
+              parentId={productInstance.contractId}
+              activities={productInstance.activities as GeneralActivity[]}
+              documentType={SingleEntities.ProductInstance}
+              resourceStatus={status}
+            />
+          </Segment>
+          <Segment style={{ margin: '2em 1em 1em' }}>
+            <ActivitiesList
+              activities={productInstance.activities as GeneralActivity[]}
+              componentId={productInstance.id}
+              componentType={SingleEntities.ProductInstance}
+              resourceStatus={status}
+              parentId={productInstance.contractId}
+            />
+          </Segment>
+        </>
+      );
+    }
+
     return (
       <Modal
         onClose={this.close}
         open
         closeIcon
         dimmer="blurring"
-        size="tiny"
+        size={create ? 'tiny' : 'large'}
       >
         <Segment attached="bottom">
           <AlertContainer />
           <ProductInstanceProps
             productInstance={productInstance}
-            status={this.props.status}
-            create={this.props.create}
+            contract={contract!}
+            status={status}
+            create={create}
             onCancel={this.close}
             saveProductInstance={this.saveProductInstance}
             createProductInstance={this.createProductInstance}
+            removeProductInstance={this.removeProductInstance}
           />
         </Segment>
+        {activities}
       </Modal>
     );
   }
@@ -116,11 +169,21 @@ const mapStateToProps = (state: RootState, props: SelfProps) => {
       )
       : undefined,
     status: getSingle<Contract>(state, SingleEntities.Contract).status,
+    contract: getSingle<Contract>(state, SingleEntities.Contract).data,
   };
 };
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
   fetchContract: (id: number) => dispatch(fetchSingle(SingleEntities.Contract, id)),
+  saveProductInstance: (contractId: number, id: number, inst: ProductInstanceParams) => dispatch(
+    saveInstanceSingle(contractId, id, inst),
+  ),
+  createProductInstance: (contractId: number, inst: ProductInstanceParams) => dispatch(
+    createInstanceSingle(contractId, inst),
+  ),
+  removeProductInstance: (contractId: number, id: number) => dispatch(
+    deleteInstanceSingle(contractId, id),
+  ),
 });
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ProductInstanceModal));

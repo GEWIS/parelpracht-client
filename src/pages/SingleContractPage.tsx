@@ -68,7 +68,9 @@ class SingleContractPage extends React.Component<Props> {
         menuItem: 'Products',
         render: () => (
           <Tab.Pane>
-            <ContractProductList />
+            <ContractProductList
+              contract={contract}
+            />
           </Tab.Pane>
         ),
       },

@@ -5,6 +5,7 @@ import { NavLink, RouteComponentProps, withRouter } from 'react-router-dom';
 import { RootState } from '../../stores/store';
 import { GeneralActivity } from './GeneralActivity';
 import {
+  formatDocumentType,
   formatStatus, getCompletedDocumentStatuses, getNextStatus,
   getStatusActivity,
   statusApplied,
@@ -20,6 +21,8 @@ import ResourceStatus from '../../stores/resourceStatus';
 interface Props extends RouteComponentProps {
   documentId: number;
   documentType: SingleEntities;
+  // If the document is a ProductInstance, the parentId is the contract ID
+  parentId?: number;
 
   lastStatusActivity: GeneralActivity | undefined;
   allStatusActivities: GeneralActivity[];
@@ -58,6 +61,7 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
       allStatusActivities,
       documentType,
       resourceStatus,
+      parentId,
     } = this.props;
     const { stepModalOpen } = this.state;
 
@@ -122,7 +126,7 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
               {formatStatus(status)}
             </Step.Title>
             <Step.Description>
-              {documentType}
+              {formatDocumentType(documentType)}
               &nbsp;cancelled.
             </Step.Description>
           </Step.Content>
@@ -164,6 +168,24 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
         );
       }
 
+      // the product instance is deferred
+      if (lastStatusActivity !== undefined
+        && lastStatusActivity.subType === DocumentStatus.DEFERRED) {
+        return (
+          <Step disabled>
+            <Icon color="orange" name="stopwatch" />
+            <Step.Content>
+              <Step.Title>
+                {formatStatus(lastStatusActivity.subType)}
+              </Step.Title>
+              <Step.Description>
+                {lastStatusActivity.description}
+              </Step.Description>
+            </Step.Content>
+          </Step>
+        );
+      }
+
       // the status of the document has not been reached yet and can be completed
       if (nextStatus.includes(status)) {
         return (
@@ -185,6 +207,7 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
             <DocumentStatusModal
               open={stepModalOpen}
               documentId={documentId}
+              parentId={parentId}
               documentType={documentType}
               documentStatus={status}
               close={this.closeStepModal}
@@ -202,7 +225,7 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
               {formatStatus(status)}
             </Step.Title>
             <Step.Description>
-              {documentType}
+              {formatDocumentType(documentType)}
               &nbsp;has yet to be &nbsp;
               {status.toLowerCase()}
               .

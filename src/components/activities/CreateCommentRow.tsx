@@ -1,23 +1,25 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import {
-  Button, Input,
-} from 'semantic-ui-react';
+import { Button, Input } from 'semantic-ui-react';
 import { Dispatch } from 'redux';
 import ResourceStatus from '../../stores/resourceStatus';
 import { RootState } from '../../stores/store';
 import { SingleEntities } from '../../stores/single/single';
 import { createSingleComment } from '../../stores/single/actionCreators';
 import { ActivityParams } from '../../clients/server.generated';
+import { createInstanceCommentSingle } from '../../stores/productinstance/actionCreator';
 
 interface Props {
   create: boolean;
   resourceStatus: ResourceStatus;
   componentId: number;
   componentType: SingleEntities;
+  // If the document is a ProductInstance, the parentId is the contract ID
+  parentId?: number;
 
   close: () => void;
   createSingleComment: (entity: SingleEntities, id: number, comment: object) => void;
+  createSingleInstanceComment: (id: number, instanceId: number, comment: object) => void;
 }
 
 interface State {
@@ -62,11 +64,19 @@ class DocumentStatusProps extends React.Component<Props, State> {
   };
 
   addComment = () => {
-    this.props.createSingleComment(
-      this.props.componentType,
-      this.props.componentId,
-      this.toComponentParams(),
-    );
+    if (this.props.componentType === SingleEntities.ProductInstance) {
+      this.props.createSingleInstanceComment(
+        this.props.parentId!,
+        this.props.componentId,
+        this.toComponentParams(),
+      );
+    } else {
+      this.props.createSingleComment(
+        this.props.componentType,
+        this.props.componentId,
+        this.toComponentParams(),
+      );
+    }
     this.cancel();
   };
 
@@ -110,6 +120,9 @@ const mapStateToProps = (state: RootState) => {
 const mapDispatchToProps = (dispatch: Dispatch) => ({
   createSingleComment: (entity: SingleEntities, id: number, comment: object) => dispatch(
     createSingleComment(entity, id, comment),
+  ),
+  createSingleInstanceComment: (id: number, instanceId: number, comment: object) => dispatch(
+    createInstanceCommentSingle(id, instanceId, comment),
   ),
 });
 

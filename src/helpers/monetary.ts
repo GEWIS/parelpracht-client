@@ -8,7 +8,7 @@ export function formatPriceFull(price: number): string {
 
 export function formatPriceDiscount(price: number): string {
   if (price === 0) {
-    return 'None';
+    return '';
   }
-  return ` € ${formatPrice(price)}`;
+  return formatPriceFull(price);
 }

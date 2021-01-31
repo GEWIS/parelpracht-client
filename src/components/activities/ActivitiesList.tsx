@@ -16,6 +16,9 @@ interface Props extends RouteComponentProps {
   activities: GeneralActivity[];
   componentId: number;
   componentType: SingleEntities;
+  // If the document is a ProductInstance, the parentId is the contract ID
+  parentId?: number;
+
   resourceStatus: ResourceStatus;
 }
 
@@ -37,7 +40,7 @@ class ActivitiesList extends React.Component<Props, State> {
 
   public render() {
     const {
-      activities, componentId, componentType, resourceStatus,
+      activities, componentId, componentType, resourceStatus, parentId,
     } = this.props;
     const { creating } = this.state;
 
@@ -61,9 +64,11 @@ class ActivitiesList extends React.Component<Props, State> {
             .sort((a, b) => { return b.updatedAt.getTime() - a.updatedAt.getTime(); })
             .map((activity) => (
               <ActivityComponent
+                key={activity.id}
                 activity={activity as GeneralActivity}
                 componentId={componentId}
                 componentType={componentType}
+                parentId={parentId}
               />
             ))}
         </Feed>
@@ -76,11 +81,13 @@ class ActivitiesList extends React.Component<Props, State> {
       createRow = (
         <>
           <CreateCommentRow
+            key={-1}
             create
             close={this.cancelCreate}
             componentId={componentId}
             componentType={componentType}
             resourceStatus={resourceStatus}
+            parentId={parentId}
           />
         </>
       );
