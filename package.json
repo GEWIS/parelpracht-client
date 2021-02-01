@@ -1,8 +1,9 @@
 {
-  "name": "crm-client",
+  "name": "parelpracht-client",
   "version": "0.1.0",
   "private": true,
   "proxy": "http://localhost:3001",
+  "author": "The 39th board of Study Association GEWIS",
   "dependencies": {
     "@testing-library/jest-dom": "^5.11.6",
     "@testing-library/react": "^11.2.2",
