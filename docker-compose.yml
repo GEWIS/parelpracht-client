@@ -31,11 +31,11 @@ services:
       - TYPEORM_MIGRATIONS=dist/migration/**/*.js
       - TYPEORM_SUBSCRIBERS=dist/subscriber/**/*.js
       - SESSION_SECRET=SecretKeyForParelPracht3939VoVo39VoPeaches
-      - MAIL_HOST=smtp.transip.email
+      - MAIL_HOST=mail.example.com
       - MAIL_PORT=465
-      - MAIL_USER=test@kdnooij.nl
-      - MAIL_PASSWORD=D1tiseentest!
-      - MAIL_FROM="CRM <test@kdnooij.nl>"
+      - MAIL_USER=parelpracht@example.com
+      - MAIL_PASSWORD=password
+      - MAIL_FROM="ParelPracht <parelpracht@example.com>"
     depends_on:
       - database
   database:
