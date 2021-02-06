@@ -1,6 +1,17 @@
 .main {
   position: absolute;
   top: 43px;
-  height: calc(100vh - 43px);
+  height: calc(100vh - 43px - 48px);
   overflow-y: auto;
+}
+
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 34px;
+}
+
+.ui.table.fixed tr > th {
+  overflow: visible;
 }

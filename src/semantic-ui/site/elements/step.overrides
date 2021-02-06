@@ -1,0 +1,11 @@
+/*******************************
+         Site Overrides
+*******************************/
+
+.ui.steps .link.step:hover::after,
+.ui.steps .link.step:hover,
+.ui.steps a.step:hover::after,
+.ui.steps a.step:hover {
+  color: @linkColor;
+  background-color: lightgrey;
+}

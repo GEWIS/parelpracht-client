@@ -1,0 +1,11 @@
+/*******************************
+         Site Overrides
+*******************************/
+
+.ui.inverted.menu {
+  background-color: @primaryColor;
+}
+
+.footer .ui.inverted.segment {
+  background-color: @secondaryColor;
+}

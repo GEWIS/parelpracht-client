@@ -6,7 +6,7 @@ import './App.scss';
 import './Form.scss';
 
 import store, { history } from './stores/store';
-import { Routes } from './Routes';
+import Routes from './Routes';
 import { showAlert } from './stores/alerts/actionCreators';
 import AlertContainer from './components/alerts/AlertContainer';
 
@@ -22,7 +22,7 @@ class App extends React.Component<{}, State> {
     };
   }
 
-  public static getDerivedStateFromError(error: Error) {
+  public static getDerivedStateFromError() {
     // Update state so the next render will show the fallback UI.
     return { hasError: true };
   }

@@ -1,21 +1,25 @@
+import { Product, ProductSummary } from '../../clients/server.generated';
 import { RootState } from '../store';
-
-export function countFetchedProducts(state: RootState): number {
-  return state.product.list.length;
-}
-
-export function countTotalProducts(state: RootState): number {
-  return state.product.listCount;
-}
+import { getSummary } from '../summaries/selectors';
+import { SummaryCollections } from '../summaries/summaries';
+import { getTable } from '../tables/selectors';
+import { Tables } from '../tables/tables';
 
 export function sortColumn(state: RootState): string {
-  const column = state.product.listSortColumn;
+  const column = getTable<Product>(state, Tables.Products).sortColumn;
   switch (column) {
     case 'id': return 'ID';
     case 'nameDutch': return 'Name (Dutch)';
     case 'nameEnglish': return 'Name (English)';
     case 'targetPrice': return 'Target Price';
     case 'status': return 'Status';
+    case 'category': return 'Category';
     default: return 'unknown';
   }
+}
+
+export function getProductName(state: RootState, id: number): string {
+  return getSummary<ProductSummary>(
+    state, SummaryCollections.Products, id,
+  )?.nameDutch ?? '...';
 }

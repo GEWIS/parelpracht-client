@@ -4,7 +4,6 @@ import { Dispatch } from 'redux';
 import { Message } from 'semantic-ui-react';
 import { hideAlert } from '../../stores/alerts/actionCreators';
 import { AlertItemState } from '../../stores/alerts/reducer';
-import { RootState } from '../../stores/store';
 
 interface Props {
   alert: AlertItemState;
@@ -16,6 +15,10 @@ function AlertItem(props: Props) {
     <Message
       onDismiss={() => props.onHide(props.alert.id)}
       error={props.alert.type === 'error'}
+      success={props.alert.type === 'success'}
+      info={props.alert.type === 'info'}
+      warning={props.alert.type === 'warning'}
+      style={{ zIndex: '3939' }}
     >
       <Message.Header>{props.alert.title}</Message.Header>
       {props.alert.message}
@@ -23,7 +26,7 @@ function AlertItem(props: Props) {
   );
 }
 
-const mapStateToProps = (state: RootState) => ({
+const mapStateToProps = () => ({
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({

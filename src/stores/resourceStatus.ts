@@ -4,6 +4,7 @@ enum ResourceStatus {
   SAVING = 'SAVING',
   ERROR = 'ERROR',
   FETCHED = 'FETCHED',
+  DELETING = 'DELETING',
 }
 
 export default ResourceStatus;

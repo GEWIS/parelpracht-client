@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Button, Dropdown, Grid, Segment,
 } from 'semantic-ui-react';
@@ -20,6 +20,7 @@ const takeOptions = [
   { key: 20, value: 20, text: '20' },
   { key: 50, value: 50, text: '50' },
   { key: 100, value: 100, text: '100' },
+  { key: 999, value: 'All', text: 'All' },
 ];
 
 function TablePagination({
@@ -28,6 +29,9 @@ function TablePagination({
 }: Props) {
   const canPrev = skip > 0;
   const canNext = skip + take < countTotal;
+
+  const [selectedAll, changeSelectedAll] = useState(false);
+
   return (
     <Segment attached="bottom">
       <Grid columns={2} verticalAlign="middle">
@@ -44,9 +48,17 @@ function TablePagination({
               options={takeOptions}
               button
               basic
-              text={`${take} items`}
+              text={`${selectedAll ? 'All' : take} items`}
               value={take}
-              onChange={(_, data) => setTake(data.value as number)}
+              onChange={(_, data) => {
+                if (data.value === 'All') {
+                  changeSelectedAll(true);
+                  setTake(countTotal);
+                } else {
+                  changeSelectedAll(false);
+                  setTake(data.value as number);
+                }
+              }}
               style={{ marginRight: '1em' }}
             />
           </Button.Group>

@@ -1,85 +1,269 @@
 import {
-  call, put, select, takeEvery, throttle,
+  call, put, select, throttle,
 } from 'redux-saga/effects';
-import { Client, Dir } from '../../clients/server.generated';
+import {
+  ActivityParams,
+  Client,
+  ListOrFilter,
+  ListParams,
+  ListSorting,
+  Partial_FileParams,
+  Product,
+  ProductParams,
+  SortDirection,
+} from '../../clients/server.generated';
 import { takeEveryWithErrorHandling } from '../errorHandling';
-import type { RootState } from '../store';
+import { clearSingle, errorSingle, setSingle } from '../single/actionCreators';
 import {
-  setProducts, setSingleProduct, fetchProducts as createFetchProducts, errorSingleProduct,
-} from './actionCreators';
-import {
-  ProductActionType, ProductsCreateSingleAction, ProductsFetchSingleAction,
-  ProductsSaveSingleAction,
-} from './actions';
+  singleActionPattern,
+  SingleActionType,
+  SingleCreateAction,
+  SingleCreateCommentAction,
+  SingleDeleteAction,
+  SingleDeleteActivityAction,
+  SingleDeleteFileAction,
+  SingleFetchAction,
+  SingleSaveAction,
+  SingleSaveActivityAction,
+  SingleSaveFileAction,
+} from '../single/actions';
+import { SingleEntities } from '../single/single';
+import { fetchSummaries, setSummaries } from '../summaries/actionCreators';
+import { summariesActionPattern, SummariesActionType } from '../summaries/actions';
+import { SummaryCollections } from '../summaries/summaries';
+import { fetchTable, setTable } from '../tables/actionCreators';
+import { tableActionPattern, TableActionType } from '../tables/actions';
+import { getTable } from '../tables/selectors';
+import { Tables } from '../tables/tables';
+import { TableState } from '../tables/tableState';
 
 function* fetchProducts() {
   const client = new Client();
 
-  const state: RootState = yield select();
+  const state: TableState<Product> = yield select(getTable, Tables.Products);
   const {
-    listSortColumn, listSortDirection,
-    listTake, listSkip,
-    listSearch,
-  } = state.product;
+    sortColumn, sortDirection,
+    take, skip,
+    search, filters,
+  } = state;
 
   const { list, count } = yield call(
-    [client, client.getProducts], listSortColumn, listSortDirection as Dir,
-    listSkip, listTake, listSearch,
+    [client, client.getAllProducts],
+    new ListParams({
+      sorting: new ListSorting({
+        column: sortColumn,
+        direction: sortDirection as SortDirection,
+      }),
+      filters: filters.map((f) => new ListOrFilter(f)),
+      skip,
+      take,
+      search,
+    }),
   );
-  yield put(setProducts(list, count));
+  yield put(setTable(Tables.Products, list, count));
 }
 
-function* fetchSingleProduct(action: ProductsFetchSingleAction) {
+export function* fetchProductSummaries() {
   const client = new Client();
-  const product = yield call([client, client.getProduct], action.id);
-  yield put(setSingleProduct(product));
+  const summaries = yield call([client, client.getProductSummaries]);
+  yield put(setSummaries(SummaryCollections.Products, summaries));
 }
 
-function* saveSingleProduct(action: ProductsSaveSingleAction) {
+function* fetchSingleProduct(action: SingleFetchAction<SingleEntities.Product>) {
   const client = new Client();
-  yield call([client, client.updateProduct], action.id, action.product);
   const product = yield call([client, client.getProduct], action.id);
-  yield put(setSingleProduct(product));
+  yield put(setSingle(SingleEntities.Product, product));
+}
+
+function* saveSingleProduct(
+  action: SingleSaveAction<SingleEntities.Product, ProductParams>,
+) {
+  const client = new Client();
+  yield call([client, client.updateProduct], action.id, action.data);
+  const product = yield call([client, client.getProduct], action.id);
+  yield put(setSingle(SingleEntities.Product, product));
+  yield put(fetchSummaries(SummaryCollections.Products));
 }
 
 function* errorSaveSingleProduct() {
-  yield put(errorSingleProduct());
+  yield put(errorSingle(SingleEntities.Product));
 }
 
 function* watchSaveSingleProduct() {
   yield takeEveryWithErrorHandling(
-    ProductActionType.SaveSingle,
+    singleActionPattern(SingleEntities.Product, SingleActionType.Save),
     saveSingleProduct,
     { onErrorSaga: errorSaveSingleProduct },
   );
 }
 
-function* createSingleProduct(action: ProductsCreateSingleAction) {
+function* createSingleProduct(
+  action: SingleCreateAction<SingleEntities.Product, ProductParams>,
+) {
   const client = new Client();
-  const product = yield call([client, client.createProduct], action.product);
-  yield put(setSingleProduct(product));
-  yield put(createFetchProducts());
+  const product = yield call([client, client.createProduct], action.data);
+  yield put(setSingle(SingleEntities.Product, product));
+  yield put(fetchTable(Tables.Products));
+  yield put(fetchSummaries(SummaryCollections.Products));
 }
 
 function* errorCreateSingleProduct() {
-  yield put(errorSingleProduct());
+  yield put(errorSingle(SingleEntities.Product));
 }
 
 function* watchCreateSingleProduct() {
   yield takeEveryWithErrorHandling(
-    ProductActionType.CreateSingle,
+    singleActionPattern(SingleEntities.Product, SingleActionType.Create),
     createSingleProduct,
     { onErrorSaga: errorCreateSingleProduct },
   );
 }
 
+function* deleteSingleProduct(action: SingleDeleteAction<SingleEntities.Product>) {
+  const client = new Client();
+  yield call([client, client.deleteProduct], action.id);
+  yield put(clearSingle(SingleEntities.Product));
+  yield put(fetchSummaries(SummaryCollections.Products));
+}
+
+function* errorDeleteSingleProduct() {
+  yield put(errorSingle(SingleEntities.Product));
+}
+
+function* watchDeleteSingleProduct() {
+  yield takeEveryWithErrorHandling(
+    singleActionPattern(SingleEntities.Product, SingleActionType.Delete),
+    deleteSingleProduct, { onErrorSaga: errorDeleteSingleProduct },
+  );
+}
+
+function* saveSingleProductFile(
+  action: SingleSaveFileAction<SingleEntities.Product, Partial_FileParams>,
+) {
+  const client = new Client();
+  yield call([client, client.updateProductFile], action.id, action.fileId, action.data);
+  const product = yield call([client, client.getProduct], action.id);
+  yield put(setSingle(SingleEntities.Product, product));
+}
+
+function* errorSaveSingleProductFile() {
+  yield put(errorSingle(SingleEntities.Product));
+}
+
+function* watchSaveSingleProductFile() {
+  yield takeEveryWithErrorHandling(
+    singleActionPattern(SingleEntities.Product, SingleActionType.SaveFile),
+    saveSingleProductFile, { onErrorSaga: errorSaveSingleProductFile },
+  );
+}
+
+function* deleteSingleProductFile(action: SingleDeleteFileAction<SingleEntities.Product>) {
+  const client = new Client();
+  yield call([client, client.deleteProductFile], action.id, action.fileId);
+  const product = yield call([client, client.getProduct], action.id);
+  yield put(setSingle(SingleEntities.Product, product));
+}
+
+function* errorDeleteSingleProductFile() {
+  yield put(errorSingle(SingleEntities.Product));
+}
+
+function* watchDeleteSingleProductFile() {
+  yield takeEveryWithErrorHandling(
+    singleActionPattern(SingleEntities.Product, SingleActionType.DeleteFile),
+    deleteSingleProductFile, { onErrorSaga: errorDeleteSingleProductFile },
+  );
+}
+
+function* createSingleProductComment(
+  action: SingleCreateCommentAction<SingleEntities.Product, ActivityParams>,
+) {
+  const client = new Client();
+  yield call([client, client.addProductComment], action.id, action.data);
+  const product = yield call([client, client.getProduct], action.id);
+  yield put(setSingle(SingleEntities.Product, product));
+}
+
+function* errorCreateSingleProductComment() {
+  yield put(errorSingle(SingleEntities.Product));
+}
+
+function* watchCreateSingleProductComment() {
+  yield takeEveryWithErrorHandling(
+    singleActionPattern(SingleEntities.Product, SingleActionType.CreateComment),
+    createSingleProductComment, { onErrorSaga: errorCreateSingleProductComment },
+  );
+}
+
+function* saveSingleProductActivity(
+  action: SingleSaveActivityAction<SingleEntities.Product, ActivityParams>,
+) {
+  const client = new Client();
+  yield call([client, client.updateProductActivity], action.id, action.activityId, action.data);
+  const product = yield call([client, client.getProduct], action.id);
+  yield put(setSingle(SingleEntities.Product, product));
+}
+
+function* errorSaveSingleProductActivity() {
+  yield put(errorSingle(SingleEntities.Product));
+}
+
+function* watchSaveSingleProductActivity() {
+  yield takeEveryWithErrorHandling(
+    singleActionPattern(SingleEntities.Product, SingleActionType.SaveActivity),
+    saveSingleProductActivity, { onErrorSaga: errorSaveSingleProductActivity },
+  );
+}
+
+function* deleteSingleProductActivity(
+  action: SingleDeleteActivityAction<SingleEntities.Product>,
+) {
+  const client = new Client();
+  yield call([client, client.deleteProductActivity], action.id, action.activityId);
+  const product = yield call([client, client.getProduct], action.id);
+  yield put(setSingle(SingleEntities.Product, product));
+}
+
+function* errorDeleteSingleProductActivity() {
+  yield put(errorSingle(SingleEntities.Product));
+}
+
+function* watchDeleteSingleProductActivity() {
+  yield takeEveryWithErrorHandling(
+    singleActionPattern(SingleEntities.Product, SingleActionType.DeleteActivity),
+    deleteSingleProductActivity, { onErrorSaga: errorDeleteSingleProductActivity },
+  );
+}
+
 export default [
   function* watchFetchProducts() {
-    yield throttle(500, ProductActionType.Fetch, fetchProducts);
+    yield throttle(
+      500,
+      tableActionPattern(Tables.Products, TableActionType.Fetch),
+      fetchProducts,
+    );
+  },
+  function* watchFetchProductSummaries() {
+    yield takeEveryWithErrorHandling(
+      summariesActionPattern(
+        SummaryCollections.Products,
+        SummariesActionType.Fetch,
+      ),
+      fetchProductSummaries,
+    );
   },
   function* watchFetchSingleProduct() {
-    yield takeEveryWithErrorHandling(ProductActionType.FetchSingle, fetchSingleProduct);
+    yield takeEveryWithErrorHandling(
+      singleActionPattern(SingleEntities.Product, SingleActionType.Fetch),
+      fetchSingleProduct,
+    );
   },
   watchSaveSingleProduct,
   watchCreateSingleProduct,
+  watchDeleteSingleProduct,
+  watchSaveSingleProductFile,
+  watchDeleteSingleProductFile,
+  watchCreateSingleProductComment,
+  watchSaveSingleProductActivity,
+  watchDeleteSingleProductActivity,
 ];
