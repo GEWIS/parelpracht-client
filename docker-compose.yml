@@ -1,0 +1,70 @@
+version: '2'
+services:
+  frontend:
+    build:
+      context: ../parelpracht-client
+      dockerfile: docker/frontend/Dockerfile
+    image: yoronex/parelpracht-client
+    networks:
+      - parelpracht
+    volumes:
+      - static:/app/build/static
+  backend:
+    build: ../parelpracht-server
+    image: yoronex/parelpracht-server
+    networks:
+      - parelpracht
+    volumes:
+      - backend-files:/usr/src/app/data
+    environment:
+      - NODE_ENV=production
+      - PORT=3001
+      - TYPEORM_CONNECTION=postgres
+      - TYPEORM_HOST=database
+      - TYPEORM_PORT=5432
+      - TYPEORM_DATABASE=parelpracht
+      - TYPEORM_USERNAME=postgres
+      - TYPEORM_PASSWORD=ParelPassword3939
+      - TYPEORM_SYNCHRONIZE=true
+      - TYPEORM_LOGGING=false
+      - TYPEORM_ENTITIES=dist/entity/**/*.js
+      - TYPEORM_MIGRATIONS=dist/migration/**/*.js
+      - TYPEORM_SUBSCRIBERS=dist/subscriber/**/*.js
+      - SESSION_SECRET=SecretKeyForParelPracht3939VoVo39VoPeaches
+      - MAIL_HOST=mail.example.com
+      - MAIL_PORT=465
+      - MAIL_USER=parelpracht@example.com
+      - MAIL_PASSWORD=password
+      - MAIL_FROM="ParelPracht <parelpracht@example.com>"
+    depends_on:
+      - database
+  database:
+    image: postgres
+    volumes:
+      - database-data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=ParelPassword3939
+      - POSTGRES_DB=parelpracht
+    networks:
+      - parelpracht
+  nginx:
+    build: docker/nginx
+    image: yoronex/parelpracht-nginx
+    depends_on:
+      - backend
+      - frontend
+    ports:
+      - '80:80'
+    networks:
+      - parelpracht
+    volumes:
+      - static:/app/build/static
+volumes:
+  database-data:
+  backend-files:
+  static:
+networks:
+  parelpracht:
+    driver: bridge
+
