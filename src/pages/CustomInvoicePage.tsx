@@ -1,15 +1,21 @@
 import React from 'react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import {
-  Container, Grid, Header, Icon, Segment,
+  Button, Container, Grid, Header, Icon, Segment,
 } from 'semantic-ui-react';
 import CustomInvoiceText from '../components/custominvoice/CustomInvoiceText';
 import {
-  CustomProduct, CustomRecipient, Gender, Language, ReturnFileType,
+  CustomInvoiceGenSettings,
+  CustomProduct,
+  CustomRecipient,
+  Gender,
+  Language,
+  ReturnFileType,
 } from '../clients/server.generated';
 import CustomInvoiceProducts from '../components/custominvoice/CustomInvoiceProducts';
 import CustomInvoiceProps from '../components/custominvoice/CustomInvoiceProps';
 import CustomInvoiceRecipient from '../components/custominvoice/CustomInvoiceRecipient';
+import { FilesClient } from '../clients/filesClient';
 
 interface State {
   language: Language;
@@ -21,6 +27,8 @@ interface State {
   invoiceReason: string;
   recipient: CustomRecipient;
   products: CustomProduct[];
+
+  loading: boolean;
 }
 
 class CustomInvoicePage extends React.Component<RouteComponentProps, State> {
@@ -33,7 +41,7 @@ class CustomInvoicePage extends React.Component<RouteComponentProps, State> {
       ourReference: '',
       theirReference: '',
       invoiceReason: '',
-      recipient: {
+      recipient: new CustomRecipient({
         name: '',
         organizationName: '',
         gender: Gender.UNKNOWN,
@@ -41,10 +49,14 @@ class CustomInvoicePage extends React.Component<RouteComponentProps, State> {
         postalCode: '',
         city: '',
         country: '',
-      } as CustomRecipient,
-      products: [],
+      }),
+      products: [new CustomProduct({
+        name: '',
+        amount: 0,
+        pricePerOne: 0,
+      })],
+      loading: false,
     };
-    this.addProduct();
   }
 
   setAttribute = (attribute: string, value: string) => {
@@ -66,11 +78,11 @@ class CustomInvoicePage extends React.Component<RouteComponentProps, State> {
 
   addProduct = () => {
     const { products } = this.state;
-    const newProduct = {
+    const newProduct = new CustomProduct({
       name: '',
       amount: 0,
       pricePerOne: 0,
-    } as any as CustomProduct;
+    });
     products.push(newProduct);
     this.setState({ products });
   };
@@ -90,11 +102,10 @@ class CustomInvoicePage extends React.Component<RouteComponentProps, State> {
 
   updateRecipientAttribute = (attribute: string, value: string) => {
     const { recipient } = this.state;
+    // @ts-ignore
+    recipient[attribute] = value;
     this.setState({
-      recipient: {
-        ...recipient,
-        [attribute]: value,
-      } as any as CustomRecipient,
+      recipient,
     });
   };
 
@@ -108,9 +119,30 @@ class CustomInvoicePage extends React.Component<RouteComponentProps, State> {
     });
   };
 
+  generate = async () => {
+    const {
+      language, fileType, ourReference, theirReference, subject, invoiceReason, recipient, products,
+    } = this.state;
+    this.setState({ loading: true });
+    const client = new FilesClient();
+    await client.generateCustomInvoiceFile(new CustomInvoiceGenSettings({
+      language,
+      fileType,
+      ourReference,
+      theirReference,
+      subject,
+      invoiceReason,
+      recipient,
+      products,
+    }));
+
+    this.setState({ loading: false });
+  };
+
   render() {
     const {
       language, fileType, subject, ourReference, theirReference, invoiceReason, recipient, products,
+      loading,
     } = this.state;
 
     return (
@@ -129,6 +161,19 @@ class CustomInvoicePage extends React.Component<RouteComponentProps, State> {
                     Generate Custom Invoice
                   </Header.Content>
                 </Header>
+              </Grid.Column>
+              <Grid.Column width="6">
+                <Button
+                  icon
+                  labelPosition="left"
+                  primary
+                  floated="right"
+                  onClick={() => this.generate()}
+                  loading={loading}
+                >
+                  <Icon name="download" />
+                  Generate invoice
+                </Button>
               </Grid.Column>
             </Grid>
 

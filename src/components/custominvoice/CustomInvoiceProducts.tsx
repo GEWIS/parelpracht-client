@@ -14,8 +14,6 @@ interface Props {
 }
 
 function CustomInvoiceProducts(props: Props) {
-  console.log(props.products);
-
   return (
     <Segment secondary>
       <h2>
