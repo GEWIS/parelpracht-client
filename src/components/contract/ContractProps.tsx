@@ -223,6 +223,7 @@ class ContractProps extends React.Component<Props, State> {
               onChange={(val: number) => this.setState({
                 contactSelection: val,
               })}
+              placeholder="Contact"
             />
           </Form.Field>
           <Form.Field

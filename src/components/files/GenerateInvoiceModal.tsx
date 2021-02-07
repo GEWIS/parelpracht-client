@@ -6,14 +6,14 @@ import {
 } from 'semantic-ui-react';
 import validator from 'validator';
 import {
-  Language, ReturnFileType, GenerateInvoiceParams,
+  Language, ReturnFileType, GenerateInvoiceParams, Invoice,
 } from '../../clients/server.generated';
 import AlertContainer from '../alerts/AlertContainer';
 import { FilesClient } from '../../clients/filesClient';
 import ContactSelector from '../contact/ContactSelector';
 
 interface Props {
-  invoiceId: number;
+  invoice: Invoice;
   fetchInvoice: (id: number) => void;
 }
 
@@ -31,7 +31,7 @@ function GenerateContract(props: Props) {
   const save = async () => {
     changeLoading(true);
     const client = new FilesClient();
-    await client.generateInvoiceFile(props.invoiceId, new GenerateInvoiceParams({
+    await client.generateInvoiceFile(props.invoice.id, new GenerateInvoiceParams({
       name,
       language,
       fileType,
@@ -41,7 +41,7 @@ function GenerateContract(props: Props) {
     }));
     setOpen(false);
     changeLoading(false);
-    props.fetchInvoice(props.invoiceId);
+    props.fetchInvoice(props.invoice.id);
   };
 
   return (
@@ -92,16 +92,18 @@ function GenerateContract(props: Props) {
               onChange={(e: ChangeEvent<HTMLInputElement>) => changeName(e.target.value)}
               fluid
             />
-            <Form.Field
-              label="Recipient"
-              placeholder="Recipient"
-              required
-              control={ContactSelector}
-              value={recipientId}
-              onChange={(id: number) => changeRecipient(id)}
-              hideEmail
-              fluid
-            />
+            <Form.Field required>
+              {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
+              <label htmlFor="form-contact-selector">Recipient</label>
+              <ContactSelector
+                id="form-contact-selector"
+                disabled={false}
+                companyId={props.invoice.companyId}
+                value={recipientId}
+                onChange={(id: number) => changeRecipient(id)}
+                placeholder="Recipient"
+              />
+            </Form.Field>
           </Form.Group>
           <Form.Group widths="equal">
             <Form.Field

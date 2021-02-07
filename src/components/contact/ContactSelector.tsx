@@ -10,6 +10,7 @@ interface Props {
   disabled?: boolean;
   companyId: number;
   value: number;
+  placeholder: string;
   options: ContactSummary[];
   onChange: (value: number | number[]) => void;
 }
@@ -18,7 +19,7 @@ function ContactSelector(props: Props & DropdownProps) {
   const [open, changeOpen] = useState(false);
 
   const {
-    value, onChange, options, disabled, companyId, ...rest
+    value, onChange, options, disabled, companyId, placeholder, ...rest
   } = props;
   const dropdownOptions = props.options
     .filter((c) => c.companyId === companyId)
@@ -31,7 +32,7 @@ function ContactSelector(props: Props & DropdownProps) {
 
   return (
     <Dropdown
-      placeholder="Contact"
+      placeholder={placeholder}
       disabled={disabled}
       search
       selection
