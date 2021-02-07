@@ -3592,6 +3592,55 @@ export class Client {
     }
 
     /**
+     * @param body Parameters to create this custom invoice with
+     * @return Ok
+     */
+    generateCustomInvoice(body: CustomInvoiceGenSettings): Promise<any> {
+        let url_ = this.baseUrl + "/invoice/custom";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ = <RequestInit>{
+            body: content_,
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processGenerateCustomInvoice(_response);
+        });
+    }
+
+    protected processGenerateCustomInvoice(response: Response): Promise<any> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 !== undefined ? resultData200 : <any>null;
+            return result200;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<any>(<any>null);
+    }
+
+    /**
      * @param id ID of the invoice
      * @param body Parameters to create this status with
      * @return Ok
@@ -9240,6 +9289,186 @@ export interface IGenerateInvoiceParams {
     showDiscountPercentages: boolean;
     saveToDisk: boolean;
     recipientId: number;
+}
+
+export class CustomRecipient implements ICustomRecipient {
+    name!: string;
+    gender!: Gender;
+    organizationName?: string;
+    street!: string;
+    postalCode!: string;
+    city!: string;
+    country?: string;
+
+    constructor(data?: ICustomRecipient) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.name = _data["name"];
+            this.gender = _data["gender"];
+            this.organizationName = _data["organizationName"];
+            this.street = _data["street"];
+            this.postalCode = _data["postalCode"];
+            this.city = _data["city"];
+            this.country = _data["country"];
+        }
+    }
+
+    static fromJS(data: any): CustomRecipient {
+        data = typeof data === 'object' ? data : {};
+        let result = new CustomRecipient();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["name"] = this.name;
+        data["gender"] = this.gender;
+        data["organizationName"] = this.organizationName;
+        data["street"] = this.street;
+        data["postalCode"] = this.postalCode;
+        data["city"] = this.city;
+        data["country"] = this.country;
+        return data; 
+    }
+}
+
+export interface ICustomRecipient {
+    name: string;
+    gender: Gender;
+    organizationName?: string;
+    street: string;
+    postalCode: string;
+    city: string;
+    country?: string;
+}
+
+export class CustomProduct implements ICustomProduct {
+    name!: string;
+    amount!: number;
+    pricePerOne!: number;
+
+    constructor(data?: ICustomProduct) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.name = _data["name"];
+            this.amount = _data["amount"];
+            this.pricePerOne = _data["pricePerOne"];
+        }
+    }
+
+    static fromJS(data: any): CustomProduct {
+        data = typeof data === 'object' ? data : {};
+        let result = new CustomProduct();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["name"] = this.name;
+        data["amount"] = this.amount;
+        data["pricePerOne"] = this.pricePerOne;
+        return data; 
+    }
+}
+
+export interface ICustomProduct {
+    name: string;
+    amount: number;
+    pricePerOne: number;
+}
+
+export class CustomInvoiceGenSettings implements ICustomInvoiceGenSettings {
+    language!: Language;
+    fileType!: ReturnFileType;
+    recipient!: CustomRecipient;
+    subject!: string;
+    invoiceReason!: string;
+    ourReference!: string;
+    theirReference?: string;
+    products!: CustomProduct[];
+
+    constructor(data?: ICustomInvoiceGenSettings) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+        if (!data) {
+            this.recipient = new CustomRecipient();
+            this.products = [];
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.language = _data["language"];
+            this.fileType = _data["fileType"];
+            this.recipient = _data["recipient"] ? CustomRecipient.fromJS(_data["recipient"]) : new CustomRecipient();
+            this.subject = _data["subject"];
+            this.invoiceReason = _data["invoiceReason"];
+            this.ourReference = _data["ourReference"];
+            this.theirReference = _data["theirReference"];
+            if (Array.isArray(_data["products"])) {
+                this.products = [] as any;
+                for (let item of _data["products"])
+                    this.products!.push(CustomProduct.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): CustomInvoiceGenSettings {
+        data = typeof data === 'object' ? data : {};
+        let result = new CustomInvoiceGenSettings();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["language"] = this.language;
+        data["fileType"] = this.fileType;
+        data["recipient"] = this.recipient ? this.recipient.toJSON() : <any>undefined;
+        data["subject"] = this.subject;
+        data["invoiceReason"] = this.invoiceReason;
+        data["ourReference"] = this.ourReference;
+        data["theirReference"] = this.theirReference;
+        if (Array.isArray(this.products)) {
+            data["products"] = [];
+            for (let item of this.products)
+                data["products"].push(item.toJSON());
+        }
+        return data; 
+    }
+}
+
+export interface ICustomInvoiceGenSettings {
+    language: Language;
+    fileType: ReturnFileType;
+    recipient: CustomRecipient;
+    subject: string;
+    invoiceReason: string;
+    ourReference: string;
+    theirReference?: string;
+    products: CustomProduct[];
 }
 
 export class InvoiceStatusParams implements IInvoiceStatusParams {

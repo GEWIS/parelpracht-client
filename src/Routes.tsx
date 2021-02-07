@@ -41,6 +41,7 @@ import Insights from './pages/Insights';
 import ProductCategoriesPage from './pages/ProductCategoriesPage';
 import ProductCategoriesCreatePage from './pages/ProductCategoriesCreatePage';
 import ProductCategoryModal from './pages/ProductCategoryModal';
+import CustomInvoicePage from './pages/CustomInvoicePage';
 
 interface Props extends RouteComponentProps {
   // eslint-disable-next-line react/no-unused-prop-types
@@ -166,6 +167,9 @@ function Routes(props: Props) {
           {/* Invoice */}
           <Route path="/invoice" exact>
             <InvoicesPage />
+          </Route>
+          <Route path="/invoice/custom" exact>
+            <CustomInvoicePage />
           </Route>
           <Route path="/invoice/:invoiceId" exact component={SingleInvoicePage} />
           <Route path="/invoice/:invoiceId/product/:productInstanceId" exact>
