@@ -55,7 +55,7 @@ function CustomInvoiceProducts(props: Props) {
             <Table.HeaderCell />
             <Table.HeaderCell />
             <Table.HeaderCell />
-            <Table.HeaderCell>
+            <Table.HeaderCell collapsing>
               {formatPriceFull(props.products.reduce((a, b) => a + b.amount * b.pricePerOne, 0))}
             </Table.HeaderCell>
             <Table.HeaderCell />
