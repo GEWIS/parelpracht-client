@@ -5,7 +5,9 @@ You can find the release notes below.
 
 ## v0.2-dev
 ### Added
-Nothing (yet)...
+- Added custom invoices with custom values.
+  - Added support for a custom list of products (With amounts).
+  - Added support for a custom recipient.
 
 ### Changes
 Nothing (yet)...

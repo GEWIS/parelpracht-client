@@ -1,5 +1,5 @@
 import FileSaver from 'file-saver';
-import { GenerateContractParams, GenerateInvoiceParams } from './server.generated';
+import { CustomInvoiceGenSettings, GenerateContractParams, GenerateInvoiceParams } from './server.generated';
 import { SingleEntities } from '../stores/single/single';
 
 export class FilesClient {
@@ -125,6 +125,23 @@ export class FilesClient {
       headers: {
         'Content-Type': 'application/json',
         Accept: 'application/json',
+      },
+    } as RequestInit;
+
+    return this.http.fetch(url, options).then((response: Response) => {
+      return this.processGetGeneralFile(response);
+    });
+  }
+
+  generateCustomInvoiceFile(body: CustomInvoiceGenSettings): Promise<void> {
+    let url = `${this.baseUrl}/invoice/custom`;
+    url = url.replace(/[?&]$/, '');
+
+    const options = {
+      body: JSON.stringify(body),
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
       },
     } as RequestInit;
 
