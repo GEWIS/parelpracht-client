@@ -111,11 +111,9 @@ class CustomInvoicePage extends React.Component<RouteComponentProps, State> {
 
   updateRecipientGender = (gender: Gender) => {
     const { recipient } = this.state;
+    recipient.gender = gender;
     this.setState({
-      recipient: {
-        ...recipient,
-        gender,
-      } as any as CustomRecipient,
+      recipient,
     });
   };
 
