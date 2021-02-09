@@ -8,9 +8,10 @@ You can find the release notes below.
 - Added custom invoices with custom values.
   - Added support for a custom list of products (With amounts).
   - Added support for a custom recipient.
+- Invoices can now be marked as irrecoverable.
 
 ### Changes
-Nothing (yet)...
+- Cancel and Defer buttons for entity statuses are now disabled when the entity is "finished" (so no more statusses are possible).
 
 ### Bugfixes
 - Fixed not being able to select a recipient when generating an invoice file.
