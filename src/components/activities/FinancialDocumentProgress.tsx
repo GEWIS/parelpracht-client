@@ -5,15 +5,17 @@ import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { GeneralActivity } from './GeneralActivity';
 import FinancialDocumentStep from './FinancialDocumentStep';
 import {
-  formatDocumentStatusTitle, formatDocumentType,
+  formatDocumentStatusTitle,
+  formatDocumentType,
   getAllDocumentStatuses,
   getAllStatusActivities,
-  getLastStatus,
+  getLastStatus, getNextStatus,
 } from '../../helpers/activity';
 import DocumentStatusModal from './DocumentStatusModal';
 import { SingleEntities } from '../../stores/single/single';
 import { DocumentStatus } from './DocumentStatus';
 import ResourceStatus from '../../stores/resourceStatus';
+import { InvoiceStatus, ProductInstanceStatus } from '../../clients/server.generated';
 
 interface Props extends RouteComponentProps {
   documentId: number;
@@ -28,6 +30,7 @@ interface Props extends RouteComponentProps {
 interface State {
   deferModalOpen: boolean;
   cancelModalOpen: boolean;
+  irrecoverableModalOpen: boolean;
 }
 
 class FinancialDocumentProgress extends React.Component<Props, State> {
@@ -36,6 +39,7 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
     this.state = {
       deferModalOpen: false,
       cancelModalOpen: false,
+      irrecoverableModalOpen: false,
     };
   }
 
@@ -51,11 +55,17 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
     });
   };
 
+  closeIrrecoverableModal = () => {
+    this.setState({
+      irrecoverableModalOpen: false,
+    });
+  };
+
   public render() {
     const {
       activities, documentType, documentId, resourceStatus, parentId,
     } = this.props;
-    const { cancelModalOpen, deferModalOpen } = this.state;
+    const { cancelModalOpen, deferModalOpen, irrecoverableModalOpen } = this.state;
     const allDocumentStatuses = getAllDocumentStatuses(documentType);
     const allStatusActivities = getAllStatusActivities(activities);
     const lastStatusActivity = getLastStatus(allStatusActivities);
@@ -64,13 +74,13 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
       cancelledDocument = allStatusActivities[allStatusActivities.length - 1].subType === 'CANCELLED';
     }
 
-    let deferButton;
-    if (documentType === SingleEntities.ProductInstance && lastStatusActivity?.subType !== 'DEFERRED') {
-      deferButton = (
+    let leftButton;
+    if (documentType === SingleEntities.ProductInstance) {
+      leftButton = (
         <Button
           floated="left"
           labelPosition="left"
-          icon="close"
+          icon="stopwatch"
           basic
           onClick={() => {
             this.setState({
@@ -78,6 +88,22 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
             });
           }}
           content={`Defer ${formatDocumentType(documentType)}`}
+          disabled={lastStatusActivity?.subType !== ProductInstanceStatus.NOTDELIVERED}
+        />
+      );
+    } else if (documentType === SingleEntities.Invoice) {
+      leftButton = (
+        <Button
+          floated="left"
+          labelPosition="left"
+          icon="close"
+          basic
+          onClick={() => {
+            this.setState({ irrecoverableModalOpen: true });
+          }}
+          content="Mark irrecoverable"
+          disabled={lastStatusActivity?.subType !== InvoiceStatus.CREATED
+          && lastStatusActivity?.subType !== InvoiceStatus.SENT}
         />
       );
     }
@@ -88,7 +114,7 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
           <Grid columns={3}>
             <Grid.Row>
               <Grid.Column>
-                {deferButton}
+                {leftButton}
               </Grid.Column>
               <Grid.Column>
                 <h3
@@ -112,6 +138,7 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
                     });
                   }}
                   content={`Cancel ${formatDocumentType(documentType)}`}
+                  disabled={getNextStatus(lastStatusActivity!, documentType).length === 0}
                 />
               </Grid.Column>
             </Grid.Row>
@@ -152,6 +179,15 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
             documentType={documentType}
             documentStatus={DocumentStatus.CANCELLED}
             close={this.closeCancelModal}
+            resourceStatus={resourceStatus}
+          />
+          <DocumentStatusModal
+            open={irrecoverableModalOpen}
+            documentId={documentId}
+            parentId={parentId}
+            documentType={documentType}
+            documentStatus={DocumentStatus.IRRECOVERABLE}
+            close={this.closeIrrecoverableModal}
             resourceStatus={resourceStatus}
           />
         </>
