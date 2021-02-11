@@ -52,7 +52,7 @@ function* fetchInvoices() {
     search, filters,
   } = state;
 
-  const { list, count } = yield call(
+  const { list, count, lastSeen } = yield call(
     [client, client.getAllInvoices],
     new ListParams({
       sorting: new ListSorting({
@@ -65,7 +65,7 @@ function* fetchInvoices() {
       search,
     }),
   );
-  yield put(setTable(Tables.Invoices, list, count));
+  yield put(setTable(Tables.Invoices, list, count, lastSeen));
 }
 
 export function* fetchInvoiceSummaries() {

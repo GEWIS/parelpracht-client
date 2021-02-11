@@ -54,6 +54,7 @@ const createTableReducer = <T extends Tables, R>(t: Tables) => {
           ...state,
           data: a.data,
           count: a.count,
+          lastSeen: a.lastSeen,
           status: ResourceStatus.FETCHED,
           lastUpdated: new Date(),
         };

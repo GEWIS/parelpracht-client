@@ -3030,6 +3030,46 @@ export class Client {
     }
 
     /**
+     * @return No content
+     */
+    updateLastSeenByTreasurer(): Promise<void> {
+        let url_ = this.baseUrl + "/invoice/lastseen";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <RequestInit>{
+            method: "PUT",
+            headers: {
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processUpdateLastSeenByTreasurer(_response);
+        });
+    }
+
+    protected processUpdateLastSeenByTreasurer(response: Response): Promise<void> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 204) {
+            return response.text().then((_responseText) => {
+            return;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<void>(<any>null);
+    }
+
+    /**
      * @param id ID of invoice to retrieve
      * @return Ok
      */
@@ -8946,6 +8986,7 @@ export interface IContractStatusParams {
 export class InvoiceListResponse implements IInvoiceListResponse {
     list!: Invoice[];
     count!: number;
+    lastSeen?: Date;
 
     constructor(data?: IInvoiceListResponse) {
         if (data) {
@@ -8967,6 +9008,7 @@ export class InvoiceListResponse implements IInvoiceListResponse {
                     this.list!.push(Invoice.fromJS(item));
             }
             this.count = _data["count"];
+            this.lastSeen = _data["lastSeen"] ? new Date(_data["lastSeen"].toString()) : <any>undefined;
         }
     }
 
@@ -8985,6 +9027,7 @@ export class InvoiceListResponse implements IInvoiceListResponse {
                 data["list"].push(item.toJSON());
         }
         data["count"] = this.count;
+        data["lastSeen"] = this.lastSeen ? this.lastSeen.toISOString() : <any>undefined;
         return data; 
     }
 }
@@ -8992,6 +9035,7 @@ export class InvoiceListResponse implements IInvoiceListResponse {
 export interface IInvoiceListResponse {
     list: Invoice[];
     count: number;
+    lastSeen?: Date;
 }
 
 export class InvoiceSummary implements IInvoiceSummary {
