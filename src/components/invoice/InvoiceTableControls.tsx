@@ -9,6 +9,7 @@ import { fetchTable, searchTable } from '../../stores/tables/actionCreators';
 import { Tables } from '../../stores/tables/tables';
 import { Invoice } from '../../clients/server.generated';
 import { countFetched, countTotal, getTable } from '../../stores/tables/selectors';
+import { formatLastUpdate } from '../../helpers/timestamp';
 
 interface Props {
   status: ResourceStatus;
@@ -20,9 +21,17 @@ interface Props {
 
   refresh: () => void;
   setSearch: (search: string) => void;
+
+  lastSeenDate?: Date;
 }
 
 function InvoiceTableControls(props: Props) {
+  const formatLastSeenDate = (): string => {
+    return props.lastSeenDate
+      ? `Last updated by the treasurer at ${formatLastUpdate(props.lastSeenDate)}`
+      : 'Never updated by the treasurer';
+  };
+
   return (
     <TableControls
       status={props.status}
@@ -33,6 +42,7 @@ function InvoiceTableControls(props: Props) {
       search={props.search}
       refresh={props.refresh}
       setSearch={props.setSearch}
+      bottomLine={formatLastSeenDate()}
     />
   );
 }
@@ -46,6 +56,7 @@ const mapStateToProps = (state: RootState) => {
     column: sortColumn(state),
     lastUpdated: invoiceTable.lastUpdated,
     search: invoiceTable.search,
+    lastSeenDate: invoiceTable.lastSeen,
   };
 };
 
@@ -56,5 +67,9 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
     dispatch(fetchTable(Tables.Invoices));
   },
 });
+
+InvoiceTableControls.defaultProps = {
+  lastSeenDate: undefined,
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(InvoiceTableControls);
