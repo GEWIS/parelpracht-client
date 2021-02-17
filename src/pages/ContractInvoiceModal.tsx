@@ -76,7 +76,7 @@ class ContractInvoiceModal extends React.Component<Props, State> {
     const availableInvoices = invoices.filter((i) => {
       return i.companyId === contract.companyId && i.status === InvoiceStatus.CREATED;
     });
-    const dropdownOptions = [{ key: -1, text: 'Add to new invoice', value: -1 }, ...availableInvoices.map((x) => ({
+    const dropdownOptions = [{ key: -1, text: 'Create new invoice', value: -1 }, ...availableInvoices.map((x) => ({
       key: x.id,
       description: `F${x.id.toString()}`,
       text: x.title,
@@ -136,6 +136,13 @@ class ContractInvoiceModal extends React.Component<Props, State> {
           >
             <Icon name="save" />
             Save
+          </Button>
+          <Button
+            icon
+            floated="right"
+            onClick={() => { this.setState({ open: false }); }}
+          >
+            Cancel
           </Button>
         </Modal.Header>
         <Modal.Content attached="bottom">

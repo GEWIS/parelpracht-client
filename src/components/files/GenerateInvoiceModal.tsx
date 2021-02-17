@@ -19,7 +19,6 @@ interface Props {
 
 function GenerateContract(props: Props) {
   const [isOpen, setOpen] = useState(false);
-
   const [name, changeName] = useState('');
   const [language, changeLanguage] = useState(Language.DUTCH);
   const [fileType, changeFileType] = useState(ReturnFileType.PDF);
@@ -71,12 +70,22 @@ function GenerateContract(props: Props) {
         <h2>
           Generate file
           <Button
-            primary
             onClick={save}
             floated="right"
             loading={loading}
+            color="green"
+            icon
+            labelPosition="left"
           >
+            <Icon name="download" />
             Generate
+          </Button>
+          <Button
+            icon
+            floated="right"
+            onClick={() => setOpen(false)}
+          >
+            Cancel
           </Button>
         </h2>
         <Form style={{ marginTop: '2em' }}>
