@@ -53,13 +53,14 @@ class ProductCreatePage extends React.Component<Props> {
       <Modal
         onClose={this.close}
         open
+        closeIcon
         dimmer="blurring"
         closeOnDimmerClick={false}
       >
-        <Segment>
+        <Modal.Content>
           <AlertContainer />
           <ProductProps product={product} create onCancel={this.close} />
-        </Segment>
+        </Modal.Content>
       </Modal>
     );
   }

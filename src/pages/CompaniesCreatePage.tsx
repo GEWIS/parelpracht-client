@@ -53,13 +53,16 @@ class CompaniesCreatePage extends React.Component<Props> {
       <Modal
         onClose={this.close}
         open
+        closeIcon
         dimmer="blurring"
         closeOnDimmerClick={false}
       >
-        <Segment>
+        <Modal.Content>
           <AlertContainer />
-          <CompanyProps company={company} create onCancel={this.close} />
-        </Segment>
+          <Modal.Description>
+            <CompanyProps company={company} create onCancel={this.close} />
+          </Modal.Description>
+        </Modal.Content>
       </Modal>
     );
   }

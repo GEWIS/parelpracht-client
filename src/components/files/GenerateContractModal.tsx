@@ -74,12 +74,22 @@ function GenerateContractModal(props: Props) {
         <h2>
           Generate file
           <Button
-            primary
             onClick={save}
             floated="right"
             loading={loading}
+            color="green"
+            icon
+            labelPosition="left"
           >
+            <Icon name="download" />
             Generate
+          </Button>
+          <Button
+            icon
+            floated="right"
+            onClick={() => setOpen(false)}
+          >
+            Cancel
           </Button>
         </h2>
         <Form style={{ marginTop: '2em' }}>
