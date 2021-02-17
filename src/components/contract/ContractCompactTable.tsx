@@ -88,6 +88,22 @@ class ContractCompactTable extends React.Component<Props, State> {
         <h3>Contracts</h3>
         <Table striped compact>
           <Loader active={loading} />
+          <Table.Header>
+            <Table.Row>
+              <Table.HeaderCell>
+                Title
+              </Table.HeaderCell>
+              <Table.HeaderCell>
+                Company
+              </Table.HeaderCell>
+              <Table.HeaderCell>
+                Status
+              </Table.HeaderCell>
+              <Table.HeaderCell>
+                Last Update
+              </Table.HeaderCell>
+            </Table.Row>
+          </Table.Header>
           <Table.Body>
             {productInstances.map((p) => <ContractCompactRow contract={p.contract} />)}
           </Table.Body>

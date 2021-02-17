@@ -8,45 +8,63 @@ import { getCompanyName } from '../../stores/company/selectors';
 import { RootState } from '../../stores/store';
 /* import TablePagination from '../TablePagination';
  */import { getContactName } from '../../stores/contact/selectors';
-import { formatLastUpdate } from '../../helpers/timestamp';
-import { Invoice } from '../../clients/server.generated';
+import { dateToFullFinancialYear, formatLastUpdate } from '../../helpers/timestamp';
+import { Invoice, InvoiceStatus } from '../../clients/server.generated';
+import CompanyLink from '../company/CompanyLink';
+import { formatStatus } from '../../helpers/activity';
+import { getInvoiceStatus } from '../../stores/invoice/selectors';
+import { formatPriceFull } from '../../helpers/monetary';
 
-interface Props extends RouteComponentProps {
+interface Props {
   invoice: Invoice;
-
+  invoiceStatus: InvoiceStatus;
 }
 
-class InvoiceComponent extends React.Component<Props> {
-  public render() {
-    const { invoice } = this.props;
+function InvoiceComponent(props: Props) {
+  const {
+    invoice, invoiceStatus,
+  } = props;
 
-    return (
-      <>
-        <Table.Row>
-          <Table.Cell>
-            <NavLink to={`/invoice/${invoice.id}`}>
-              {invoice.id}
-            </NavLink>
-          </Table.Cell>
-          <Table.Cell>
-            {invoice.id}
-          </Table.Cell>
-          <Table.Cell>
-            {invoice.id}
-          </Table.Cell>
-          <Table.Cell>
-            {formatLastUpdate(invoice.updatedAt)}
-          </Table.Cell>
-        </Table.Row>
-      </>
-    );
-  }
+  const { products } = invoice;
+  let priceSum = 0;
+  let discountSum = 0;
+  console.log(products);
+
+  products.forEach((p) => {
+    priceSum += p.basePrice;
+    discountSum += p.discount;
+  });
+
+  const discountedPriceSum = priceSum - discountSum;
+
+  return (
+    <Table.Row>
+      <Table.Cell>
+        <NavLink to={`/invoice/${invoice.id}`}>
+          {`F${invoice.id} ${invoice.title}`}
+        </NavLink>
+      </Table.Cell>
+      <Table.Cell>
+        {formatPriceFull(discountedPriceSum)}
+      </Table.Cell>
+      <Table.Cell>
+        {formatStatus(invoiceStatus)}
+      </Table.Cell>
+      <Table.Cell>
+        {dateToFullFinancialYear(invoice.startDate)}
+      </Table.Cell>
+      <Table.Cell>
+        {formatLastUpdate(invoice.updatedAt)}
+      </Table.Cell>
+    </Table.Row>
+  );
 }
 
 const mapStateToProps = (state: RootState, props: { invoice: Invoice }) => {
   return {
     companyName: getCompanyName(state, props.invoice.companyId),
+    invoiceStatus: getInvoiceStatus(state, props.invoice.id),
   };
 };
 
-export default withRouter(connect(mapStateToProps)(InvoiceComponent));
+export default connect(mapStateToProps)(InvoiceComponent);
