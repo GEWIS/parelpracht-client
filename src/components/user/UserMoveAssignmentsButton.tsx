@@ -3,7 +3,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import {
-  Button, ButtonProps, Grid, Modal, Segment,
+  Button, ButtonProps, Grid, Icon, Modal, Segment,
 } from 'semantic-ui-react';
 import { Client, TransferUserParams } from '../../clients/server.generated';
 import { clearSingle, fetchSingle } from '../../stores/single/actionCreators';
@@ -50,10 +50,14 @@ class UserMoveAssignmentsButton extends React.Component<Props, State> {
   public render() {
     const trigger = (
       <Button
-        positive
+        icon
+        labelPosition="left"
         floated="right"
+        style={{ marginTop: '-0.5em' }}
+        primary
       >
-        Move assignments
+        <Icon name="arrow right" />
+        Transfer assignments
       </Button>
     );
 
@@ -67,30 +71,37 @@ class UserMoveAssignmentsButton extends React.Component<Props, State> {
         size="tiny"
         trigger={trigger}
       >
-        <Segment attached="bottom">
-          <Grid>
-            <Grid.Row>
-              <UserSelector
-                id="user-selector"
-                value={this.state.selectedUser}
-                onChange={(val: number | '') => this.setState({
-                  selectedUser: val === '' ? undefined : val,
-                })}
-                clearable
-              />
-            </Grid.Row>
-            <Grid.Row>
-              <Button
-                positive
-                disabled={this.state.selectedUser === undefined}
-                loading={this.state.isLoading}
-                onClick={() => this.moveAssignmentsUser()}
-              >
-                Transfer assignments
-              </Button>
-            </Grid.Row>
-          </Grid>
-        </Segment>
+        <Modal.Header>
+          Transfer Assignments
+          <Button
+            icon
+            positive
+            disabled={this.state.selectedUser === undefined}
+            loading={this.state.isLoading}
+            onClick={() => this.moveAssignmentsUser()}
+            floated="right"
+          >
+            <Icon name="arrow right" />
+            Transfer
+          </Button>
+          <Button
+            icon
+            floated="right"
+            onClick={() => { this.setState({ open: false }); }}
+          >
+            Cancel
+          </Button>
+        </Modal.Header>
+        <Modal.Content>
+          <UserSelector
+            id="user-selector"
+            value={this.state.selectedUser}
+            onChange={(val: number | '') => this.setState({
+              selectedUser: val === '' ? undefined : val,
+            })}
+            clearable
+          />
+        </Modal.Content>
       </Modal>
     );
   }

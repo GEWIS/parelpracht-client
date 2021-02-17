@@ -17,10 +17,11 @@ export class FilesClient {
 
   private getBaseUrl(entity: SingleEntities): string {
     switch (entity) {
-      case SingleEntities.Contract: return `${this.baseUrl}/contract/{id}/file`;
-      case SingleEntities.Invoice: return `${this.baseUrl}/invoice/{id}/file`;
-      case SingleEntities.Product: return `${this.baseUrl}/product/{id}/file`;
-      case SingleEntities.Company: return `${this.baseUrl}/company/{id}/file`;
+      case SingleEntities.Contract: return `${this.baseUrl}/contract/{id}`;
+      case SingleEntities.Invoice: return `${this.baseUrl}/invoice/{id}`;
+      case SingleEntities.Product: return `${this.baseUrl}/product/{id}`;
+      case SingleEntities.Company: return `${this.baseUrl}/company/{id}`;
+      case SingleEntities.User: return `${this.baseUrl}/user/{id}`;
       default: throw new Error(`${entity} does not support files`);
     }
   }
@@ -28,7 +29,7 @@ export class FilesClient {
   getFile(
     entityId: number, fileId: number, entity: SingleEntities,
   ): Promise<any> {
-    let url = `${this.getBaseUrl(entity)}/{fileId}`;
+    let url = `${this.getBaseUrl(entity)}/file/{fileId}`;
 
     if (entityId === undefined || entityId === null) throw new Error("The parameter 'id' must be defined.");
     url = url.replace('{id}', encodeURIComponent(`${entityId}`));
@@ -72,7 +73,7 @@ export class FilesClient {
   async uploadFile(
     entityId: number, file: FormData, entity: SingleEntities,
   ): Promise<Boolean> {
-    let url = `${this.getBaseUrl(entity)}/upload`;
+    let url = `${this.getBaseUrl(entity)}/file/upload`;
 
     if (entityId === undefined || entityId === null) throw new Error("The parameter 'id' must be defined.");
     url = url.replace('{id}', encodeURIComponent(`${entityId}`));
@@ -90,8 +91,29 @@ export class FilesClient {
     });
   }
 
+  async uploadLogo(
+    entityId: number, file: FormData, entity: SingleEntities,
+  ): Promise<Boolean> {
+    let url = `${this.getBaseUrl(entity)}/logo`;
+
+    if (entityId === undefined || entityId === null) throw new Error("The parameter 'id' must be defined.");
+    url = url.replace('{id}', encodeURIComponent(`${entityId}`));
+    url = url.replace(/[?&]$/, '');
+
+    if (file === null || file === undefined) throw new Error("The parameter 'file' cannot be null.");
+
+    const options = <RequestInit>{
+      body: file,
+      method: 'PUT',
+    };
+
+    return this.http.fetch(url, options).then((response: Response) => {
+      return this.processUploadFile(response);
+    });
+  }
+
   private processUploadFile(response: Response): boolean {
-    return response.status === 200;
+    return response.status === 200 || response.status === 204;
   }
 
   generateContractFile(contractId: number, body: GenerateContractParams): Promise<void> {

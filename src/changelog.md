@@ -9,6 +9,7 @@ You can find the release notes below.
   - Added support for a custom list of products (With amounts).
   - Added support for a custom recipient.
 - Invoices can now be marked as irrecoverable.
+- Added Company logos. User can also replace or remove logos.
 
 ### Changes
 - Cancel and Defer buttons for entity statuses are now disabled when the entity is "finished" (so no more statusses are possible).
