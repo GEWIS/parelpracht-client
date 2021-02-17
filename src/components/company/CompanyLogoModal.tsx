@@ -67,20 +67,43 @@ class CompanyLogoModal extends React.Component<Props, State> {
   public render() {
     const { entityName, entityId, fileName } = this.props;
     const { open } = this.state;
+    const image = fileName === '' ? (
+      <Image floated="right" style={{ cursor: 'pointer' }}>
+        <Icon
+          name="building"
+          size="large"
+        />
+      </Image>
+    ) : (
+      <Image
+        floated="right"
+        src={`/static/logos/${fileName}`}
+        style={{ cursor: 'pointer', maxHeight: '50px', width: 'auto' }}
+      />
+    );
+
+    const imageModal = fileName === '' ? (
+      <Image>
+        <Icon
+          name="building"
+          size="huge"
+        />
+      </Image>
+    ) : (
+      <Image
+        src={`/static/logos/${fileName}`}
+        size="medium"
+        wrapped
+      />
+    );
+
     return (
       <Modal
         onClose={() => this.closeModal()}
         onOpen={() => this.openModal()}
         open={open}
         size="small"
-        trigger={(
-          <Image
-            src={`/static/logos/${fileName}`}
-            as="a"
-            size="small"
-            style={{ cursor: 'pointer' }}
-          />
-    )}
+        trigger={image}
       >
         <Modal.Header>
           {entityName}
@@ -88,7 +111,7 @@ class CompanyLogoModal extends React.Component<Props, State> {
           Logo
         </Modal.Header>
         <Modal.Content image>
-          <Image size="medium" src={`/static/logos/${fileName}`} wrapped />
+          {imageModal}
           <Modal.Description>
             <Input
               type="file"

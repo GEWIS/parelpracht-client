@@ -44,6 +44,10 @@ function CompanySummary(props: Props) {
   return (
     <>
       <Header as="h1" attached="top" style={{ backgroundColor: '#eee' }}>
+        <Header.Content>
+          <Header.Subheader>Company</Header.Subheader>
+          {company.name}
+        </Header.Content>
         <CompanyLogoModal
           entity={SingleEntities.Company}
           entityId={company.id}
@@ -52,10 +56,6 @@ function CompanySummary(props: Props) {
           fetchEntity={fetchCompany}
           deleteFunction="company"
         />
-        <Header.Content>
-          <Header.Subheader>Company</Header.Subheader>
-          {company.name}
-        </Header.Content>
       </Header>
       <Segment attached="bottom">
         <Grid columns={4}>
