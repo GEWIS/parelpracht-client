@@ -1620,7 +1620,7 @@ export class Client {
      * @param id Id of the company
      * @return Ok
      */
-    uploadProductFile2(id: number): Promise<CompanyFile> {
+    uploadCompanyFile(id: number): Promise<CompanyFile> {
         let url_ = this.baseUrl + "/company/{id}/file/upload";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -1635,11 +1635,11 @@ export class Client {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processUploadProductFile2(_response);
+            return this.processUploadCompanyFile(_response);
         });
     }
 
-    protected processUploadProductFile2(response: Response): Promise<CompanyFile> {
+    protected processUploadCompanyFile(response: Response): Promise<CompanyFile> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -1669,7 +1669,7 @@ export class Client {
      * @param fileId ID of the file
      * @return Ok
      */
-    getProductFile2(id: number, fileId: number): Promise<any> {
+    getCompanyFile(id: number, fileId: number): Promise<any> {
         let url_ = this.baseUrl + "/company/{id}/file/{fileId}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -1687,11 +1687,11 @@ export class Client {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processGetProductFile2(_response);
+            return this.processGetCompanyFile(_response);
         });
     }
 
-    protected processGetProductFile2(response: Response): Promise<any> {
+    protected processGetCompanyFile(response: Response): Promise<any> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -1722,7 +1722,7 @@ export class Client {
      * @param body Update subset of the parameters of the file
      * @return Ok
      */
-    updateProductFile2(id: number, fileId: number, body: Partial_FileParams): Promise<BaseFile> {
+    updateCompanyFile(id: number, fileId: number, body: Partial_FileParams): Promise<BaseFile> {
         let url_ = this.baseUrl + "/company/{id}/file/{fileId}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -1744,11 +1744,11 @@ export class Client {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processUpdateProductFile2(_response);
+            return this.processUpdateCompanyFile(_response);
         });
     }
 
-    protected processUpdateProductFile2(response: Response): Promise<BaseFile> {
+    protected processUpdateCompanyFile(response: Response): Promise<BaseFile> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -1778,7 +1778,7 @@ export class Client {
      * @param fileId ID of the file
      * @return No content
      */
-    deleteProductFile2(id: number, fileId: number): Promise<void> {
+    deleteCompanyFile(id: number, fileId: number): Promise<void> {
         let url_ = this.baseUrl + "/company/{id}/file/{fileId}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -1795,11 +1795,11 @@ export class Client {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processDeleteProductFile2(_response);
+            return this.processDeleteCompanyFile(_response);
         });
     }
 
-    protected processDeleteProductFile2(response: Response): Promise<void> {
+    protected processDeleteCompanyFile(response: Response): Promise<void> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 204) {

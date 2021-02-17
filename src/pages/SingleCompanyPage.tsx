@@ -54,7 +54,7 @@ class SingleCompanyPage extends React.Component<Props> {
   }
 
   public render() {
-    const { company, status } = this.props;
+    const { company, fetchCompany, status } = this.props;
 
     if (company === undefined) {
       return (
@@ -98,6 +98,20 @@ class SingleCompanyPage extends React.Component<Props> {
               componentId={company.id}
               componentType={SingleEntities.Company}
               resourceStatus={status}
+            />
+          </Tab.Pane>
+        ),
+      },
+      {
+        menuItem: 'Files',
+        render: () => (
+          <Tab.Pane>
+            <FilesList
+              files={company.files}
+              entityId={company.id}
+              entity={SingleEntities.Company}
+              fetchEntity={fetchCompany}
+              status={status}
             />
           </Tab.Pane>
         ),
