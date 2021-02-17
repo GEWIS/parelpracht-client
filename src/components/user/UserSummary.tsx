@@ -61,8 +61,8 @@ function UserSummary(props: Props) {
         <Header.Content style={{ width: '100%' }}>
           <Header.Subheader>User</Header.Subheader>
           {formatContactName(user.firstName, user.lastNamePreposition, user.lastName)}
-          <UserDeleteButton floated="right" userId={user.id} />
-          <UserMoveAssignmentsButton floated="right" userId={user.id} />
+          <UserDeleteButton floated="right" />
+          <UserMoveAssignmentsButton userId={user.id} />
         </Header.Content>
       </Header>
       <Segment attached="bottom">

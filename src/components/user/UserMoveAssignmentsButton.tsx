@@ -5,16 +5,15 @@ import { Dispatch } from 'redux';
 import {
   Button, ButtonProps, Grid, Modal, Segment,
 } from 'semantic-ui-react';
-import { Client } from '../../clients/server.generated';
-import ResourceStatus from '../../stores/resourceStatus';
-import { deleteSingle } from '../../stores/single/actionCreators';
-import { getSingle } from '../../stores/single/selectors';
+import { Client, TransferUserParams } from '../../clients/server.generated';
+import { clearSingle, fetchSingle } from '../../stores/single/actionCreators';
 import { SingleEntities } from '../../stores/single/single';
-import { RootState } from '../../stores/store';
 import UserSelector from './UserSelector';
 
 interface Props extends ButtonProps {
   userId: number;
+  clearUser: () => void;
+  fetchUser: (id: number) => void;
 }
 
 interface State {
@@ -34,21 +33,25 @@ class UserMoveAssignmentsButton extends React.Component<Props, State> {
     };
   }
 
-  async moveAssignmentsUser(id: number, client: Client) {
-    const moveAssignments = client.transfer
+  async moveAssignmentsUser() {
+    const client = new Client();
+
+    this.setState({ isLoading: true });
+    await client.transferAssignments(
+      this.props.userId,
+      new TransferUserParams({ toUserId: this.state.selectedUser! }),
+    );
+    this.props.clearUser();
+    this.props.fetchUser(this.props.userId);
+    this.setState({ isLoading: false });
+    this.setState({ open: false });
   }
 
   public render() {
-    const {
-      userId, deleteUser, status, ...rest
-    } = this.props;
-
-    const client = new Client();
-
     const trigger = (
       <Button
         positive
-        {...rest}
+        floated="right"
       >
         Move assignments
       </Button>
@@ -81,8 +84,9 @@ class UserMoveAssignmentsButton extends React.Component<Props, State> {
                 positive
                 disabled={this.state.selectedUser === undefined}
                 loading={this.state.isLoading}
+                onClick={() => this.moveAssignmentsUser()}
               >
-                Move assignments
+                Transfer assignments
               </Button>
             </Grid.Row>
           </Grid>
@@ -92,7 +96,9 @@ class UserMoveAssignmentsButton extends React.Component<Props, State> {
   }
 }
 
-const mapStateToProps = (state: RootState) => {
-};
+const mapDispatchToProps = (dispatch: Dispatch) => ({
+  fetchUser: (id: number) => dispatch(fetchSingle(SingleEntities.User, id)),
+  clearUser: () => dispatch(clearSingle(SingleEntities.User)),
+});
 
-export default connect(mapStateToProps)(UserMoveAssignmentsButton);
+export default connect(null, mapDispatchToProps)(UserMoveAssignmentsButton);
