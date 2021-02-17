@@ -4,7 +4,7 @@ import {
   Table,
 } from 'semantic-ui-react';
 import { connect } from 'react-redux';
-import { Contract, ContractStatus } from '../../clients/server.generated';
+import { Contract } from '../../clients/server.generated';
 import { getCompanyName } from '../../stores/company/selectors';
 import './ContractComponent.scss';
 import { RootState } from '../../stores/store';
@@ -14,14 +14,12 @@ import { formatLastUpdate } from '../../helpers/timestamp';
 
 interface Props extends RouteComponentProps {
   contract: Contract;
-
   contactName: string;
-  companyName: string;
 }
 
 class ContractComponent extends React.Component<Props> {
   public render() {
-    const { contract, contactName, companyName } = this.props;
+    const { contract, contactName } = this.props;
 
     return (
       <>

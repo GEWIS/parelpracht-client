@@ -1,7 +1,7 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import {
-  Container, Grid, Header, Message, Segment,
+  Container, Grid, Header, Message, Segment, Image,
 } from 'semantic-ui-react';
 import AlertContainer from '../components/alerts/AlertContainer';
 import LoginForm from '../components/auth/LoginForm';
@@ -13,10 +13,11 @@ function LoginPage() {
       <Container>
         <Grid textAlign="center" verticalAlign="middle" style={{ height: '100vh' }}>
           <Grid.Column width={6}>
-            <Header as="h1">
-              ParelPracht
-            </Header>
             <Segment>
+              <Image src="./gewis-logo.png" size="small" centered />
+              <Header as="h1">
+                ParelPracht
+              </Header>
               <LoginForm />
             </Segment>
             <Message>

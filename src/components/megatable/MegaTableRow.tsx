@@ -1,7 +1,6 @@
 import React from 'react';
 import { Table } from 'semantic-ui-react';
 import { connect } from 'react-redux';
-import { NavLink } from 'react-router-dom';
 import { ETCompany, ETContract, ETProductInstance } from '../../helpers/extensiveTableObjects';
 import { formatPriceFull } from '../../helpers/monetary';
 import { ProductSummary } from '../../clients/server.generated';
@@ -29,11 +28,6 @@ function MegaTableRow(props: Props) {
       count += company.contracts[i].products.length;
     }
     return count;
-  };
-
-  const getProductFromId = (id: number) => {
-    return productMap[id];
-    // return products.find((p) => p.id === id)!.nameEnglish;
   };
 
   let [contractNr, productInstanceNr] = [0, 0];

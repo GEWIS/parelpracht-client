@@ -14,7 +14,6 @@ import { deleteFileSingle, saveSingleFile } from '../../stores/single/actionCrea
 import { SingleEntities } from '../../stores/single/single';
 import { GeneralFile } from './GeneralFile';
 import ResourceStatus from '../../stores/resourceStatus';
-import { RootState } from '../../stores/store';
 
 interface Props extends RouteComponentProps {
   file: GeneralFile;
@@ -245,10 +244,6 @@ class SingleFile extends React.Component<Props, State> {
   }
 }
 
-const mapStateToProps = (state: RootState) => {
-  return {};
-};
-
 const mapDispatchToProps = (dispatch: Dispatch) => ({
   saveFile: (entityId: number, fileId: number,
     file: Partial_FileParams, entity: SingleEntities) => dispatch(
@@ -259,4 +254,4 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   ),
 });
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(SingleFile));
+export default withRouter(connect(mapDispatchToProps)(SingleFile));

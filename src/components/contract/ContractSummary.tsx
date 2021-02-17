@@ -19,13 +19,11 @@ interface Props {
   contract: Contract | undefined;
   status: ResourceStatus;
   contactName: string;
-  createdByName: string;
-  companyName: string;
 }
 
 function ContractSummary(props: Props) {
   const {
-    contract, status, createdByName, companyName, contactName,
+    contract, status, contactName,
   } = props;
 
   if (contract === undefined

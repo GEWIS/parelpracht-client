@@ -3,13 +3,10 @@ import { connect } from 'react-redux';
 import { Form, TextArea } from 'semantic-ui-react';
 import { Dispatch } from 'redux';
 import {
-  ContractStatus,
   ContractStatusParams,
-  InvoiceStatus,
   InvoiceStatusParams,
 } from '../../clients/server.generated';
 import ResourceStatus from '../../stores/resourceStatus';
-import { RootState } from '../../stores/store';
 import PropsButtons from '../PropsButtons';
 import { SingleEntities } from '../../stores/single/single';
 import { formatStatus } from '../../helpers/activity';
@@ -147,7 +144,7 @@ class DocumentStatusProps extends React.Component<Props, State> {
   }
 }
 
-const mapStateToProps = (state: RootState) => {
+const mapStateToProps = () => {
   return {
   };
 };

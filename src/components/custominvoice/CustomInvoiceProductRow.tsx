@@ -2,7 +2,7 @@ import React, { ChangeEvent, useState } from 'react';
 import { Button, Input, Table } from 'semantic-ui-react';
 import validator from 'validator';
 import { CustomProduct } from '../../clients/server.generated';
-import { formatPrice, formatPriceFull } from '../../helpers/monetary';
+import { formatPriceFull } from '../../helpers/monetary';
 
 interface Props {
   product: CustomProduct;

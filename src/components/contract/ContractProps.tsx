@@ -121,7 +121,6 @@ class ContractProps extends React.Component<Props, State> {
       assignedToSelection,
       comments,
     } = this.state;
-    const { contract } = this.props;
 
     let companySelector = (
       <Form.Field

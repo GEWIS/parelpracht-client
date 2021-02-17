@@ -1,12 +1,12 @@
 import * as React from 'react';
-import { RouteComponentProps, withRouter } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import {
   Container, Grid, Header, Icon, Segment,
 } from 'semantic-ui-react';
 import ContractTableExtensive from '../components/megatable/MegaTable';
 import ContractTableExtensiveControls from '../components/megatable/MegaTableControls';
 
-function Insights(props: RouteComponentProps) {
+function Insights() {
   return (
     <>
       <Segment style={{ backgroundColor: '#eee' }} vertical basic>

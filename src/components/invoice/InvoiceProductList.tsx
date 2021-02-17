@@ -31,7 +31,6 @@ class InvoiceProductList extends React.Component<Props, State> {
   }
 
   public render() {
-    console.log(this.deleteButtonActive());
     const { invoice } = this.props;
 
     const { products } = invoice;

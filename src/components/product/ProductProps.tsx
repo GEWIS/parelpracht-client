@@ -2,7 +2,7 @@ import React, { ChangeEvent } from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import {
-  Checkbox, Dropdown, Form, Input, Label, TextArea,
+  Checkbox, Form, Input, Label, TextArea,
 } from 'semantic-ui-react';
 import validator from 'validator';
 import { Product, ProductParams, ProductStatus } from '../../clients/server.generated';
