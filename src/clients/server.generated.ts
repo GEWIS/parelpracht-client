@@ -1425,7 +1425,7 @@ export class Client {
      * @return No content
      */
     uploadCompanyLogo(id: number): Promise<void> {
-        let url_ = this.baseUrl + "/company/{id}/avatar";
+        let url_ = this.baseUrl + "/company/{id}/logo";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
         url_ = url_.replace("{id}", encodeURIComponent("" + id));
@@ -1469,7 +1469,7 @@ export class Client {
      * @return Ok
      */
     deleteCompanyLogo(id: number): Promise<Company> {
-        let url_ = this.baseUrl + "/company/{id}/avatar";
+        let url_ = this.baseUrl + "/company/{id}/logo";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
         url_ = url_.replace("{id}", encodeURIComponent("" + id));
@@ -4782,7 +4782,7 @@ export class Client {
      * @return No content
      */
     uploadUserAvatar(id: number): Promise<void> {
-        let url_ = this.baseUrl + "/user/{id}/avatar";
+        let url_ = this.baseUrl + "/user/{id}/logo";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
         url_ = url_.replace("{id}", encodeURIComponent("" + id));
@@ -4826,7 +4826,7 @@ export class Client {
      * @return Ok
      */
     deleteUserAvatar(id: number): Promise<User> {
-        let url_ = this.baseUrl + "/user/{id}/avatar";
+        let url_ = this.baseUrl + "/user/{id}/logo";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
         url_ = url_.replace("{id}", encodeURIComponent("" + id));
