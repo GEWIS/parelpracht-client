@@ -27,13 +27,13 @@ function InvoiceCompactRow(props: Props): JSX.Element {
         <CompanyLink id={invoice.companyId} />
       </Table.Cell>
       <Table.Cell>
+        {formatStatus(status)}
+      </Table.Cell>
+      <Table.Cell>
         {dateToFullFinancialYear(invoice.startDate)}
       </Table.Cell>
       <Table.Cell>
         {formatLastUpdate(invoice.updatedAt)}
-      </Table.Cell>
-      <Table.Cell>
-        {formatStatus(status)}
       </Table.Cell>
     </Table.Row>
   );

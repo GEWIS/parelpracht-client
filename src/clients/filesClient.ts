@@ -20,6 +20,7 @@ export class FilesClient {
       case SingleEntities.Contract: return `${this.baseUrl}/contract/{id}/file`;
       case SingleEntities.Invoice: return `${this.baseUrl}/invoice/{id}/file`;
       case SingleEntities.Product: return `${this.baseUrl}/product/{id}/file`;
+      case SingleEntities.Company: return `${this.baseUrl}/company/{id}/file`;
       default: throw new Error(`${entity} does not support files`);
     }
   }

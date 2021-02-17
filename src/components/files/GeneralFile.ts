@@ -1,3 +1,5 @@
-import { ContractFile, InvoiceFile, ProductFile } from '../../clients/server.generated';
+import {
+  CompanyFile, ContractFile, InvoiceFile, ProductFile,
+} from '../../clients/server.generated';
 
-export type GeneralFile = ContractFile | ProductFile | InvoiceFile;
+export type GeneralFile = ContractFile | ProductFile | InvoiceFile | CompanyFile;

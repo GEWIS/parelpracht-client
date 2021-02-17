@@ -121,7 +121,7 @@ class ContactModal extends React.Component<Props> {
           <ContactProps
             contact={contact}
             create={this.props.create}
-            onCancel={() => { }}
+            onCancel={() => { this.close(); }}
           />
           {
             contact.contracts === undefined || contact.contracts.length === 0 ? (
