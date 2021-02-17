@@ -13,6 +13,7 @@ import { SummaryCollections } from '../stores/summaries/summaries';
 import { getSummaryCollection } from '../stores/summaries/selectors';
 import { createSingle, fetchSingle } from '../stores/single/actionCreators';
 import { SingleEntities } from '../stores/single/single';
+import PropsButtons from '../components/PropsButtons';
 
 interface SelfProps extends RouteComponentProps<{contractId: string}> {
 }
@@ -22,7 +23,7 @@ interface Props extends SelfProps {
   productInstanceIds: number[];
   clearSelection: () => void;
   invoices: InvoiceSummary[];
-
+  onCancel?: () => void;
   createInvoice: (invoice: InvoiceCreateParams) => void;
   fetchContract: (id: number) => void;
 }
@@ -75,7 +76,7 @@ class ContractInvoiceModal extends React.Component<Props, State> {
     const availableInvoices = invoices.filter((i) => {
       return i.companyId === contract.companyId && i.status === InvoiceStatus.CREATED;
     });
-    const dropdownOptions = [{ key: -1, text: 'Add to new invoice', value: -1 }, ...availableInvoices.map((x) => ({
+    const dropdownOptions = [{ key: -1, text: 'Create new invoice', value: -1 }, ...availableInvoices.map((x) => ({
       key: x.id,
       description: `F${x.id.toString()}`,
       text: x.title,
@@ -123,8 +124,8 @@ class ContractInvoiceModal extends React.Component<Props, State> {
         size="tiny"
         trigger={trigger}
       >
-        <Segment attached="bottom">
-          {dropdown}
+        <Modal.Header>
+          Create Invoice
           <Button
             icon
             labelPosition="left"
@@ -136,7 +137,17 @@ class ContractInvoiceModal extends React.Component<Props, State> {
             <Icon name="save" />
             Save
           </Button>
-        </Segment>
+          <Button
+            icon
+            floated="right"
+            onClick={() => { this.setState({ open: false }); }}
+          >
+            Cancel
+          </Button>
+        </Modal.Header>
+        <Modal.Content attached="bottom">
+          {dropdown}
+        </Modal.Content>
       </Modal>
     );
   }
