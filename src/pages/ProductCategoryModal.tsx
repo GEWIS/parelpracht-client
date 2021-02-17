@@ -82,13 +82,14 @@ class ProductCategoryModal extends React.Component<Props> {
           open
           dimmer="blurring"
           size="tiny"
+          closeOnDimmerClick
         >
-          <Segment placeholder attached="bottom">
+          <Modal.Content placeholder attached="bottom">
             <AlertContainer />
             <Dimmer active inverted>
               <Loader />
             </Dimmer>
-          </Segment>
+          </Modal.Content>
         </Modal>
       );
     }
@@ -101,7 +102,7 @@ class ProductCategoryModal extends React.Component<Props> {
         dimmer="blurring"
         size="tiny"
       >
-        <Segment attached="bottom">
+        <Modal.Content attached="bottom">
           <AlertContainer />
           <ProductCategoryProps
             category={category}
@@ -122,7 +123,7 @@ class ProductCategoryModal extends React.Component<Props> {
               </Segment>
             )
           }
-        </Segment>
+        </Modal.Content>
       </Modal>
     );
   }

@@ -108,6 +108,25 @@ class ContactModal extends React.Component<Props> {
       );
     }
 
+    let contractOverview;
+
+    if (this.props.create) {
+      contractOverview = '';
+    } else if (contact.contracts === undefined || contact.contracts.length === 0) {
+      contractOverview = <p>This user has no contracts</p>;
+    } else {
+      contractOverview = (
+        <Segment>
+          <Header>Contracts</Header>
+          <ul>
+            {contact.contracts.map((contract) => {
+              return <li><NavLink to={`/contract/${contract.id}`}>{contract.title}</NavLink></li>;
+            })}
+          </ul>
+        </Segment>
+      );
+    }
+
     return (
       <Modal
         onClose={this.close}
@@ -123,20 +142,7 @@ class ContactModal extends React.Component<Props> {
             create={this.props.create}
             onCancel={() => { this.close(); }}
           />
-          {
-            contact.contracts === undefined || contact.contracts.length === 0 ? (
-              <p>This user has no contracts</p>
-            ) : (
-              <Segment>
-                <Header>Contracts:</Header>
-                <ul>
-                  {contact.contracts.map((contract) => {
-                    return <li><NavLink to={`/contract/${contract.id}`}>{contract.title}</NavLink></li>;
-                  })}
-                </ul>
-              </Segment>
-            )
-          }
+          {contractOverview}
         </Segment>
       </Modal>
     );

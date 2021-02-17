@@ -13,6 +13,7 @@ import { SummaryCollections } from '../stores/summaries/summaries';
 import { getSummaryCollection } from '../stores/summaries/selectors';
 import { createSingle, fetchSingle } from '../stores/single/actionCreators';
 import { SingleEntities } from '../stores/single/single';
+import PropsButtons from '../components/PropsButtons';
 
 interface SelfProps extends RouteComponentProps<{contractId: string}> {
 }
@@ -22,7 +23,7 @@ interface Props extends SelfProps {
   productInstanceIds: number[];
   clearSelection: () => void;
   invoices: InvoiceSummary[];
-
+  onCancel?: () => void;
   createInvoice: (invoice: InvoiceCreateParams) => void;
   fetchContract: (id: number) => void;
 }
@@ -123,8 +124,8 @@ class ContractInvoiceModal extends React.Component<Props, State> {
         size="tiny"
         trigger={trigger}
       >
-        <Segment attached="bottom">
-          {dropdown}
+        <Modal.Header>
+          Create Invoice
           <Button
             icon
             labelPosition="left"
@@ -136,7 +137,10 @@ class ContractInvoiceModal extends React.Component<Props, State> {
             <Icon name="save" />
             Save
           </Button>
-        </Segment>
+        </Modal.Header>
+        <Modal.Content attached="bottom">
+          {dropdown}
+        </Modal.Content>
       </Modal>
     );
   }
