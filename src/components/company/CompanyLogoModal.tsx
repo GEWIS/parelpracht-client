@@ -1,7 +1,7 @@
 import { update } from 'lodash';
 import React from 'react';
 import {
-  Modal, Image, Button, Input,
+  Modal, Image, Button, Input, Icon,
 } from 'semantic-ui-react';
 import { FilesClient } from '../../clients/filesClient';
 import { Client, Company } from '../../clients/server.generated';
@@ -51,12 +51,16 @@ class CompanyLogoModal extends React.Component<Props, State> {
   };
 
   removeImage = async () => {
-    const { deleteFunction, entityId } = this.props;
+    const { deleteFunction, entityId, fetchEntity } = this.props;
     const client = new Client();
+    let result;
     if (deleteFunction === 'company') {
-      await client.deleteCompanyLogo(entityId);
+      result = await client.deleteCompanyLogo(entityId);
     } else if (deleteFunction === 'user') {
-      await client.deleteUserAvatar(entityId);
+      result = await client.deleteUserAvatar(entityId);
+    }
+    if (result) {
+      fetchEntity(entityId);
     }
   };
 
@@ -86,16 +90,13 @@ class CompanyLogoModal extends React.Component<Props, State> {
         <Modal.Content image>
           <Image size="medium" src={`/static/logos/${fileName}`} wrapped />
           <Modal.Description>
-            <h4>Change logo:</h4>
             <Input
               type="file"
               id={`form-file-${entityId}-file`}
               onChange={(e) => this.updateImage(e.target.files![0])}
+              style={{ width: '80%' }}
             />
-            <Button onClick={() => this.removeImage()}>
-              {' '}
-              Remove Logo
-            </Button>
+            <Button size="large" floated="right" icon="trash" onClick={() => this.removeImage()} />
           </Modal.Description>
         </Modal.Content>
         <Modal.Actions>
