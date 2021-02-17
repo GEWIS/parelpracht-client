@@ -13,6 +13,9 @@ import { RootState } from '../../stores/store';
 import PropsButtons from '../PropsButtons';
 import { formatTimestampToDate } from '../../helpers/timestamp';
 import UserSelector from '../user/UserSelector';
+import { formatDocumentIdTitle } from '../../helpers/documents';
+import { TransientAlert } from '../../stores/alerts/actions';
+import { showTransientAlert } from '../../stores/alerts/actionCreators';
 
 interface Props {
   create?: boolean;
@@ -25,6 +28,7 @@ interface Props {
 
   saveInvoice: (id: number, invoice: Partial_InvoiceParams) => void;
   deleteInvoice: (id: number) => void;
+  showTransientAlert: (alert: TransientAlert) => void;
 }
 
 interface State {
@@ -53,6 +57,15 @@ class InvoiceProps extends React.Component<Props, State> {
       && this.props.status === ResourceStatus.FETCHED) {
       // eslint-disable-next-line react/no-did-update-set-state
       this.setState({ editing: false });
+      this.props.showTransientAlert({
+        title: 'Success',
+        message: `Properties of ${formatDocumentIdTitle(
+          this.props.invoice.id,
+          this.props.invoice.title,
+          SingleEntities.Invoice,
+        )} successfully updated.`,
+        type: 'success',
+      });
     }
   }
 
@@ -233,6 +246,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   deleteInvoice: (id: number) => dispatch(
     deleteSingle(SingleEntities.Invoice, id),
   ),
+  showTransientAlert: (alert: TransientAlert) => dispatch(showTransientAlert(alert)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(InvoiceProps);

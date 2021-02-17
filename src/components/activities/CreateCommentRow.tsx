@@ -8,6 +8,8 @@ import { SingleEntities } from '../../stores/single/single';
 import { createSingleComment } from '../../stores/single/actionCreators';
 import { ActivityParams } from '../../clients/server.generated';
 import { createInstanceCommentSingle } from '../../stores/productinstance/actionCreator';
+import { TransientAlert } from '../../stores/alerts/actions';
+import { showTransientAlert } from '../../stores/alerts/actionCreators';
 
 interface Props {
   create: boolean;
@@ -20,6 +22,7 @@ interface Props {
   close: () => void;
   createSingleComment: (entity: SingleEntities, id: number, comment: object) => void;
   createSingleInstanceComment: (id: number, instanceId: number, comment: object) => void;
+  showTransientAlert: (alert: TransientAlert) => void;
 }
 
 interface State {
@@ -77,6 +80,11 @@ class DocumentStatusProps extends React.Component<Props, State> {
         this.toComponentParams(),
       );
     }
+    this.props.showTransientAlert({
+      title: 'Success',
+      message: `Posted comment "${this.state.comment}" successfully.`,
+      type: 'success',
+    });
     this.cancel();
   };
 
@@ -124,6 +132,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   createSingleInstanceComment: (id: number, instanceId: number, comment: object) => dispatch(
     createInstanceCommentSingle(id, instanceId, comment),
   ),
+  showTransientAlert: (alert: TransientAlert) => dispatch(showTransientAlert(alert)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(DocumentStatusProps);

@@ -2,7 +2,7 @@ import React, { ChangeEvent } from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import {
-  Checkbox, Dropdown, Form, Input, Label, TextArea,
+  Checkbox, Form, Input, Label, TextArea,
 } from 'semantic-ui-react';
 import validator from 'validator';
 import { Product, ProductParams, ProductStatus } from '../../clients/server.generated';
@@ -14,6 +14,8 @@ import { getSingle } from '../../stores/single/selectors';
 import { SingleEntities } from '../../stores/single/single';
 import { RootState } from '../../stores/store';
 import PropsButtons from '../PropsButtons';
+import { TransientAlert } from '../../stores/alerts/actions';
+import { showTransientAlert } from '../../stores/alerts/actionCreators';
 
 interface Props {
   create?: boolean;
@@ -25,6 +27,7 @@ interface Props {
   saveProduct: (id: number, product: ProductParams) => void;
   createProduct: (product: ProductParams) => void;
   deleteProduct: (id: number) => void;
+  showTransientAlert: (alert: TransientAlert) => void;
 }
 
 interface State {
@@ -57,6 +60,11 @@ class ProductProps extends React.Component<Props, State> {
       && this.props.status === ResourceStatus.FETCHED) {
       // eslint-disable-next-line react/no-did-update-set-state
       this.setState({ editing: false });
+      this.props.showTransientAlert({
+        title: 'Success',
+        message: `Properties of ${this.props.product.nameEnglish} successfully updated.`,
+        type: 'success',
+      });
     }
   }
 
@@ -340,6 +348,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   deleteProduct: (id: number) => dispatch(
     deleteSingle(SingleEntities.Product, id),
   ),
+  showTransientAlert: (alert: TransientAlert) => dispatch(showTransientAlert(alert)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProductProps);

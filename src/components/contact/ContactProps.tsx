@@ -14,7 +14,9 @@ import { RootState } from '../../stores/store';
 import PropsButtons from '../PropsButtons';
 import { SingleEntities } from '../../stores/single/single';
 import { getSingle } from '../../stores/single/selectors';
-import { formatFunction } from '../../helpers/contact';
+import { formatContactName, formatFunction } from '../../helpers/contact';
+import { TransientAlert } from '../../stores/alerts/actions';
+import { showTransientAlert } from '../../stores/alerts/actionCreators';
 
 interface Props {
   create?: boolean;
@@ -26,6 +28,7 @@ interface Props {
   saveContact: (id: number, contact: ContactParams) => void;
   createContact: (contact: ContactParams) => void;
   deleteContact: (id: number) => void;
+  showTransientAlert: (alert: TransientAlert) => void;
 }
 
 interface State {
@@ -56,6 +59,15 @@ class ContactProps extends React.Component<Props, State> {
       && this.props.status === ResourceStatus.FETCHED) {
       // eslint-disable-next-line react/no-did-update-set-state
       this.setState({ editing: false });
+      this.props.showTransientAlert({
+        title: 'Success',
+        message: `Properties of ${formatContactName(
+          this.props.contact?.firstName,
+          this.props.contact?.lastNamePreposition,
+          this.props.contact?.lastName,
+        )} successfully updated.`,
+        type: 'success',
+      });
     }
   }
 
@@ -303,6 +315,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   deleteContact: (id: number) => dispatch(
     deleteSingle(SingleEntities.Contact, id),
   ),
+  showTransientAlert: (alert: TransientAlert) => dispatch(showTransientAlert(alert)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ContactProps);
