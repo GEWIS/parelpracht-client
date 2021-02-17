@@ -11,6 +11,7 @@ import { getSingle } from '../../stores/single/selectors';
 import { SingleEntities } from '../../stores/single/single';
 import { RootState } from '../../stores/store';
 import UserDeleteButton from './UserDeleteButton';
+import UserMoveAssignmentsButton from './UserMoveAssignmentsButton';
 
 interface Props extends RouteComponentProps {
   user: User | undefined;
@@ -61,6 +62,7 @@ function UserSummary(props: Props) {
           <Header.Subheader>User</Header.Subheader>
           {formatContactName(user.firstName, user.lastNamePreposition, user.lastName)}
           <UserDeleteButton floated="right" userId={user.id} />
+          <UserMoveAssignmentsButton floated="right" userId={user.id} />
         </Header.Content>
       </Header>
       <Segment attached="bottom">
