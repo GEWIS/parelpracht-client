@@ -17,10 +17,14 @@ You can find the release notes below.
 ### Changes
 - The list of recent contracts on the dashboard now only shows your own assigned contracts, except for admins.
 - Cancel and Defer buttons for entity statuses are now disabled when the entity is "finished" (so no more statusses are possible).
+- Selecting signees when creating a contract proposal is disabled and thus no longer necessary.
 
 ### Bugfixes
 - Fixed not being able to select a recipient when generating an invoice file.
 - Fixed the "Invoiced" bar on the dashboard always being zero.
+- Fixed the generate modal being closed when generating a document fails.
+- Fixed a memory leak in the front-end when uploading the first file to an entity.
+- Fixed the diamond underneath a selected tab being black instead of blue.
 
 ## v0.1-beta1 (01-02-2021)
 ### Added
