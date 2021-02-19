@@ -1,14 +1,10 @@
 import React from 'react';
 import { Dropdown, Segment } from 'semantic-ui-react';
-import { connect } from 'react-redux';
-import { CategorySummary, Client, ContractedProductsAnalysis } from '../../clients/server.generated';
+import { Client, ContractedProductsAnalysis } from '../../clients/server.generated';
 import { dateToFinancialYear } from '../../helpers/timestamp';
-import { RootState } from '../../stores/store';
 import CategoryLineChart from '../chart/CategoryLineChart';
 
-interface Props {
-  categories: CategorySummary[];
-}
+interface Props {}
 
 interface State {
   data?: ContractedProductsAnalysis;
@@ -87,8 +83,4 @@ class DashboardContractedCategoryGraph extends React.Component<Props, State> {
   }
 }
 
-const mapStateToProps = (state: RootState) => ({
-  categories: state.summaries.ProductCategories.options,
-});
-
-export default connect(mapStateToProps)(DashboardContractedCategoryGraph);
+export default DashboardContractedCategoryGraph;

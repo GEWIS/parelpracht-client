@@ -162,7 +162,7 @@ class CategoryLineChart extends React.Component<Props, State> {
               },
               ...options,
             }}
-            // redraw
+            redraw
           />
         </div>
       </>
