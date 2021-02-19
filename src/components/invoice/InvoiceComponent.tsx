@@ -28,7 +28,6 @@ function InvoiceComponent(props: Props) {
   const { products } = invoice;
   let priceSum = 0;
   let discountSum = 0;
-  console.log(products);
 
   products.forEach((p) => {
     priceSum += p.basePrice;

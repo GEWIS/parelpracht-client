@@ -67,9 +67,6 @@ class CategoryLineChart extends React.Component<Props, State> {
         pointBackgroundColor: randomColorSet(i),
       });
     });
-
-    console.log(result);
-    console.log(data);
     return result;
   }
 
