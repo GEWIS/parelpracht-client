@@ -19,7 +19,7 @@ import { RootState } from '../../stores/store';
 interface Props extends RouteComponentProps {
   file: GeneralFile;
   create: boolean;
-  closeCreate?: () => void;
+  closeCreate?: (shouldUpdate: boolean) => void;
 
   entity: SingleEntities;
   entityId: number;
@@ -93,7 +93,7 @@ class SingleFile extends React.Component<Props, State> {
     if (!this.props.create) {
       this.setState({ editing: false, ...this.extractState(this.props) });
     } else if (this.props.closeCreate) {
-      this.props.closeCreate();
+      this.props.closeCreate(false);
     }
   };
 
@@ -106,8 +106,7 @@ class SingleFile extends React.Component<Props, State> {
         this.props.entityId, this.toFormDataParams(), this.props.entity,
       );
       if (result) {
-        this.props.fetchEntity(this.props.entityId);
-        if (this.props.closeCreate) this.props.closeCreate();
+        if (this.props.closeCreate) this.props.closeCreate(true);
       }
     } else {
       this.props.saveFile(this.props.entityId, this.props.file.id,

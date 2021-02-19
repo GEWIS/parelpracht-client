@@ -5,16 +5,21 @@ import {
   Dropdown, Form, Icon, Input, Modal, Segment,
 } from 'semantic-ui-react';
 import validator from 'validator';
+import { Dispatch } from 'redux';
+import { connect } from 'react-redux';
 import {
-  Language, ReturnFileType, GenerateInvoiceParams, Invoice,
+  Language, ReturnFileType, GenerateInvoiceParams, Invoice, ContractType,
 } from '../../clients/server.generated';
 import AlertContainer from '../alerts/AlertContainer';
 import { FilesClient } from '../../clients/filesClient';
 import ContactSelector from '../contact/ContactSelector';
+import { TransientAlert } from '../../stores/alerts/actions';
+import { showTransientAlert } from '../../stores/alerts/actionCreators';
 
 interface Props {
   invoice: Invoice;
   fetchInvoice: (id: number) => void;
+  showTransientAlert: (alert: TransientAlert) => void;
 }
 
 function GenerateContract(props: Props) {
@@ -30,7 +35,7 @@ function GenerateContract(props: Props) {
   const save = async () => {
     changeLoading(true);
     const client = new FilesClient();
-    await client.generateInvoiceFile(props.invoice.id, new GenerateInvoiceParams({
+    const success = await client.generateInvoiceFile(props.invoice.id, new GenerateInvoiceParams({
       name,
       language,
       fileType,
@@ -38,9 +43,18 @@ function GenerateContract(props: Props) {
       saveToDisk,
       recipientId,
     }));
-    setOpen(false);
     changeLoading(false);
-    props.fetchInvoice(props.invoice.id);
+
+    if (success) {
+      setOpen(false);
+      props.fetchInvoice(props.invoice.id);
+    } else {
+      props.showTransientAlert({
+        title: 'Error',
+        message: 'Could not generate an invoice file. Please consulate the back-end logs.',
+        type: 'error',
+      });
+    }
   };
 
   return (
@@ -76,6 +90,7 @@ function GenerateContract(props: Props) {
             color="green"
             icon
             labelPosition="left"
+            disabled={validator.isEmpty(name) || recipientId === 0}
           >
             <Icon name="download" />
             Generate
@@ -184,4 +199,8 @@ function GenerateContract(props: Props) {
   );
 }
 
-export default GenerateContract;
+const mapDispatchToProps = (dispatch: Dispatch) => ({
+  showTransientAlert: (alert: TransientAlert) => dispatch(showTransientAlert(alert)),
+});
+
+export default connect(null, mapDispatchToProps)(GenerateContract);
