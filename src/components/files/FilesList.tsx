@@ -31,8 +31,11 @@ class FilesList extends React.Component<Props, State> {
     };
   }
 
-  cancelCreate = () => {
+  cancelCreate = (shouldUpdate: boolean) => {
     this.setState({ creating: false });
+    if (shouldUpdate) {
+      this.props.fetchEntity(this.props.entityId);
+    }
   };
 
   render() {
