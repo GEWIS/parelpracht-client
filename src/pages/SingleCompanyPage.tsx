@@ -22,6 +22,7 @@ import { TransientAlert } from '../stores/alerts/actions';
 import { showTransientAlert } from '../stores/alerts/actionCreators';
 import FilesList from '../components/files/FilesList';
 import InvoiceList from '../components/invoice/InvoiceList';
+import CompanyContractedProductsChart from '../components/company/CompanyContractedProductsChart';
 
 interface Props extends RouteComponentProps<{ companyId: string }> {
   company: Company | undefined;
@@ -114,6 +115,14 @@ class SingleCompanyPage extends React.Component<Props> {
               status={status}
             />
           </Tab.Pane>
+        ),
+      },
+      {
+        menuItem: 'Insights',
+        render: () => (
+          // <Tab.Pane> is set in this tab, because it needs to fetch data and
+          /// therefore needs to show a loading animation
+          <CompanyContractedProductsChart company={company} />
         ),
       },
     ];

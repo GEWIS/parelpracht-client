@@ -20,6 +20,7 @@ import { showTransientAlert } from '../stores/alerts/actionCreators';
 import FilesList from '../components/files/FilesList';
 import ContractCompactTable from '../components/contract/ContractCompactTable';
 import InvoiceCompactTable from '../components/invoice/InvoiceCompactTable';
+import ProductsContractedGraph from '../components/product/ProductsContractedGraph';
 
 interface Props extends RouteComponentProps<{ productId: string }> {
   product: Product | undefined;
@@ -109,6 +110,10 @@ class SingleProductPage extends React.Component<Props> {
             />
           </Tab.Pane>
         ),
+      },
+      {
+        menuItem: 'Insights',
+        render: () => <ProductsContractedGraph product={product} />,
       },
     ];
 

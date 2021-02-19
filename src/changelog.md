@@ -8,14 +8,19 @@ You can find the release notes below.
 - Added custom invoices with custom values.
   - Added support for a custom list of products (With amounts).
   - Added support for a custom recipient.
+- Added an insights tab with a bar chart to the product details page.
+  - The bar chart shows the value of all contracted products by financial year.
+  - The bar chart shows the number of contracted products by financial year.
 - Invoices can now be marked as irrecoverable.
 - Added Company logos. User can also replace or remove logos.
 
 ### Changes
+- The list of recent contracts on the dashboard now only shows your own assigned contracts, except for admins.
 - Cancel and Defer buttons for entity statuses are now disabled when the entity is "finished" (so no more statusses are possible).
 
 ### Bugfixes
 - Fixed not being able to select a recipient when generating an invoice file.
+- Fixed the "Invoiced" bar on the dashboard always being zero.
 
 ## v0.1-beta1 (01-02-2021)
 ### Added
