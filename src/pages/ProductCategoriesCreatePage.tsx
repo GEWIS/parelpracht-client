@@ -13,11 +13,14 @@ import AlertContainer from '../components/alerts/AlertContainer';
 import { getSingle } from '../stores/single/selectors';
 import { SingleEntities } from '../stores/single/single';
 import ProductCategoryProps from '../components/productcategories/ProductCategoryProps';
+import { TransientAlert } from '../stores/alerts/actions';
+import { showTransientAlert } from '../stores/alerts/actionCreators';
 
 interface Props extends RouteComponentProps {
   status: ResourceStatus;
 
   clearCategory: () => void;
+  showTransientAlert: (alert: TransientAlert) => void;
 }
 
 class ProductCategoriesCreatePage extends React.Component<Props> {
@@ -28,9 +31,19 @@ class ProductCategoriesCreatePage extends React.Component<Props> {
   componentDidUpdate(prevProps: Props) {
     if (prevProps.status === ResourceStatus.SAVING
       && this.props.status === ResourceStatus.FETCHED) {
-      this.close();
+      this.closeWithPopupMessage();
+      this.props.showTransientAlert({
+        title: 'Success',
+        message: 'Category successfully created',
+        type: 'success',
+      });
     }
+    console.log(this.props.status);
   }
+
+  closeWithPopupMessage = () => {
+    this.props.history.push('/category');
+  };
 
   close = () => { this.props.history.goBack(); };
 
@@ -68,6 +81,7 @@ const mapStateToProps = (state: RootState) => {
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
   clearCategory: () => dispatch(clearSingle(SingleEntities.ProductCategory)),
+  showTransientAlert: (alert: TransientAlert) => dispatch(showTransientAlert(alert)),
 });
 
 // eslint-disable-next-line max-len

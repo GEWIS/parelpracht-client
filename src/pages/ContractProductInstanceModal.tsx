@@ -23,6 +23,8 @@ import {
   deleteInstanceSingle,
   saveInstanceSingle,
 } from '../stores/productinstance/actionCreator';
+import { TransientAlert } from '../stores/alerts/actions';
+import { showTransientAlert } from '../stores/alerts/actionCreators';
 
 interface SelfProps extends RouteComponentProps<{contractId: string, productInstanceId?: string}> {
   create?: boolean;
@@ -37,6 +39,7 @@ interface Props extends SelfProps {
   saveProductInstance: (contractId: number, id: number, inst: ProductInstanceParams) => void;
   createProductInstance: (contractId: number, inst: ProductInstanceParams) => void;
   removeProductInstance: (contractId: number, id: number) => void;
+  showTransientAlert: (alert: TransientAlert) => void;
 }
 
 class ProductInstanceModal extends React.Component<Props> {
@@ -182,6 +185,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   removeProductInstance: (contractId: number, id: number) => dispatch(
     deleteInstanceSingle(contractId, id),
   ),
+  showTransientAlert: (alert: TransientAlert) => dispatch(showTransientAlert(alert)),
 });
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ProductInstanceModal));

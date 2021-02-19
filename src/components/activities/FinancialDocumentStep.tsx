@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { Dispatch } from 'redux';
 import { Step, Icon, Button } from 'semantic-ui-react';
 import { NavLink, RouteComponentProps, withRouter } from 'react-router-dom';
 import { RootState } from '../../stores/store';
@@ -14,6 +15,8 @@ import DocumentStatusModal from './DocumentStatusModal';
 import { SingleEntities } from '../../stores/single/single';
 import { DocumentStatus } from './DocumentStatus';
 import ResourceStatus from '../../stores/resourceStatus';
+import { TransientAlert } from '../../stores/alerts/actions';
+import { showTransientAlert } from '../../stores/alerts/actionCreators';
 
 /**
  * Definition of used variables
@@ -32,6 +35,7 @@ interface Props extends RouteComponentProps {
   cancelled: boolean;
 
   resourceStatus: ResourceStatus;
+  showTransientAlert: (alert: TransientAlert) => void;
 }
 
 interface State {
@@ -49,6 +53,11 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
   closeStepModal = () => {
     this.setState({
       stepModalOpen: false,
+    });
+    this.props.showTransientAlert({
+      title: 'Success',
+      message: `Saved status ${formatStatus(this.props.status)} successfully.`,
+      type: 'success',
     });
   };
 
@@ -257,6 +266,8 @@ const mapStateToProps = (state: RootState) => {
   };
 };
 
-const mapDispatchToProps = () => ({});
+const mapDispatchToProps = (dispatch: Dispatch) => ({
+  showTransientAlert: (alert: TransientAlert) => dispatch(showTransientAlert(alert)),
+});
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(FinancialDocumentProgress));
