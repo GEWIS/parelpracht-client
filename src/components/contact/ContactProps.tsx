@@ -205,7 +205,7 @@ class ContactProps extends React.Component<Props, State> {
               })}
               width={6}
               error={
-                validator.isEmpty(firstName)
+                validator.isEmpty(lastName)
               }
             />
           </Form.Group>
