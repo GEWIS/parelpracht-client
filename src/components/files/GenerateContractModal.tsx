@@ -3,16 +3,21 @@ import {
   Button, Checkbox, Dropdown, Form, Icon, Input, Modal, Segment,
 } from 'semantic-ui-react';
 import validator from 'validator';
+import { Dispatch } from 'redux';
+import { connect } from 'react-redux';
 import {
   ContractType, GenerateContractParams, Language, ReturnFileType,
 } from '../../clients/server.generated';
 import AlertContainer from '../alerts/AlertContainer';
 import UserSelector from '../user/UserSelector';
 import { FilesClient } from '../../clients/filesClient';
+import { TransientAlert } from '../../stores/alerts/actions';
+import { showTransientAlert } from '../../stores/alerts/actionCreators';
 
 interface Props {
   contractId: number;
   fetchContract: (id: number) => void;
+  showTransientAlert: (alert: TransientAlert) => void;
 }
 
 function GenerateContractModal(props: Props) {
@@ -39,7 +44,7 @@ function GenerateContractModal(props: Props) {
   const save = async () => {
     changeLoading(true);
     const client = new FilesClient();
-    await client.generateContractFile(props.contractId, new GenerateContractParams({
+    const success = await client.generateContractFile(props.contractId, new GenerateContractParams({
       name,
       language,
       contentType,
@@ -49,9 +54,18 @@ function GenerateContractModal(props: Props) {
       signee1Id,
       signee2Id,
     }));
-    setOpen(false);
     changeLoading(false);
-    props.fetchContract(props.contractId);
+
+    if (success) {
+      setOpen(false);
+      props.fetchContract(props.contractId);
+    } else {
+      props.showTransientAlert({
+        title: 'Error',
+        message: 'Could not generate a contract file. Please consulate the back-end logs.',
+        type: 'error',
+      });
+    }
   };
 
   return (
@@ -87,6 +101,9 @@ function GenerateContractModal(props: Props) {
             color="green"
             icon
             labelPosition="left"
+            disabled={validator.isEmpty(name)
+              || (signee1Id === 0 && contentType === ContractType.CONTRACT)
+              || (signee2Id === 0 && contentType === ContractType.CONTRACT)}
           >
             <Icon name="download" />
             Generate
@@ -227,4 +244,8 @@ function GenerateContractModal(props: Props) {
   );
 }
 
-export default GenerateContractModal;
+const mapDispatchToProps = (dispatch: Dispatch) => ({
+  showTransientAlert: (alert: TransientAlert) => dispatch(showTransientAlert(alert)),
+});
+
+export default connect(null, mapDispatchToProps)(GenerateContractModal);

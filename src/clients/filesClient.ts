@@ -49,7 +49,7 @@ export class FilesClient {
     });
   }
 
-  private async processGetGeneralFile(response: Response) {
+  private async processGetGeneralFile(response: Response): Promise<boolean> {
     const { status } = response;
     const headers: any = {};
     if (response.headers && response.headers.forEach) {
@@ -67,7 +67,9 @@ export class FilesClient {
 
     if (status === 200) {
       FileSaver.saveAs(await response.blob(), filename);
+      return true;
     }
+    return false;
   }
 
   async uploadFile(
@@ -116,7 +118,7 @@ export class FilesClient {
     return response.status === 200 || response.status === 204;
   }
 
-  generateContractFile(contractId: number, body: GenerateContractParams): Promise<void> {
+  generateContractFile(contractId: number, body: GenerateContractParams): Promise<boolean> {
     let url = `${this.baseUrl}/contract/{id}/file/generate`;
     if (contractId === undefined || contractId === null) throw new Error("The parameter 'id' must be defined.");
     url = url.replace('{id}', encodeURIComponent(`${contractId}`));
@@ -136,7 +138,7 @@ export class FilesClient {
     });
   }
 
-  generateInvoiceFile(invoiceId: number, body: GenerateInvoiceParams): Promise<void> {
+  generateInvoiceFile(invoiceId: number, body: GenerateInvoiceParams): Promise<boolean> {
     let url = `${this.baseUrl}/invoice/{id}/file/generate`;
     if (invoiceId === undefined || invoiceId === null) throw new Error("The parameter 'id' must be defined.");
     url = url.replace('{id}', encodeURIComponent(`${invoiceId}`));
@@ -156,7 +158,7 @@ export class FilesClient {
     });
   }
 
-  generateCustomInvoiceFile(body: CustomInvoiceGenSettings): Promise<void> {
+  generateCustomInvoiceFile(body: CustomInvoiceGenSettings): Promise<boolean> {
     let url = `${this.baseUrl}/invoice/custom`;
     url = url.replace(/[?&]$/, '');
 
