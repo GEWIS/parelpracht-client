@@ -12,13 +12,14 @@ interface Props {
   onChange: (value: number | number[]) => void;
   // eslint-disable-next-line react/require-default-props
   hideEmail?: boolean;
+  correct?: boolean;
 }
 
 function UserSelector(props: Props & DropdownProps) {
   const [open, changeOpen] = useState(false);
 
   const {
-    value, onChange, options, hideEmail, ...rest
+    value, onChange, options, hideEmail, correct, ...rest
   } = props;
   const dropdownOptions = props.options.map((x) => ({
     key: x.id,
@@ -33,7 +34,7 @@ function UserSelector(props: Props & DropdownProps) {
       search
       selection
       fluid
-      error={value < 1 && !open}
+      error={(value < 1 && !open) && correct !== true}
       {...rest}
       options={dropdownOptions}
       value={props.value}
@@ -47,5 +48,10 @@ function UserSelector(props: Props & DropdownProps) {
 const mapStateToProps = (state: RootState) => ({
   options: state.summaries.Users.options,
 });
+
+UserSelector.defaultProps = {
+  correct: undefined,
+  hideEmail: undefined,
+};
 
 export default connect(mapStateToProps)(UserSelector);

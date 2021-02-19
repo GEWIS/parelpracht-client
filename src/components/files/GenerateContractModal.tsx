@@ -1,11 +1,10 @@
 import React, { ChangeEvent, useState } from 'react';
 import {
-  Button, Checkbox,
-  Dropdown, Form, Icon, Input, Modal, Segment,
+  Button, Checkbox, Dropdown, Form, Icon, Input, Modal, Segment,
 } from 'semantic-ui-react';
 import validator from 'validator';
 import {
-  Language, ContractType, ReturnFileType, GenerateContractParams,
+  ContractType, GenerateContractParams, Language, ReturnFileType,
 } from '../../clients/server.generated';
 import AlertContainer from '../alerts/AlertContainer';
 import UserSelector from '../user/UserSelector';
@@ -28,6 +27,14 @@ function GenerateContractModal(props: Props) {
   const [signee1Id, changeSignee1] = useState(0);
   const [signee2Id, changeSignee2] = useState(0);
   const [loading, changeLoading] = useState(false);
+
+  const setContentType = (newType: ContractType) => {
+    changeContentType(newType);
+    if (newType === ContractType.PROPOSAL) {
+      changeSignee1(0);
+      changeSignee2(0);
+    }
+  };
 
   const save = async () => {
     changeLoading(true);
@@ -119,7 +126,7 @@ function GenerateContractModal(props: Props) {
                   { key: 0, text: 'Contract', value: ContractType.CONTRACT },
                   { key: 1, text: 'Proposal', value: ContractType.PROPOSAL },
                 ]}
-                onChange={(e, data) => changeContentType(data.value as ContractType)}
+                onChange={(e, data) => setContentType(data.value as ContractType)}
                 fluid
               />
             </Form.Field>
@@ -168,19 +175,23 @@ function GenerateContractModal(props: Props) {
               placeholder="Signee 1"
               control={UserSelector}
               value={signee1Id}
-              required
+              required={contentType === ContractType.CONTRACT}
+              disabled={contentType !== ContractType.CONTRACT}
               onChange={(id: number) => changeSignee1(id)}
               hideEmail
+              correct={contentType === ContractType.PROPOSAL}
               fluid
             />
             <Form.Field
               label="Signee 2"
               placeholder="Signee 2"
               control={UserSelector}
-              required
+              required={contentType === ContractType.CONTRACT}
+              disabled={contentType !== ContractType.CONTRACT}
               value={signee2Id}
               onChange={(id: number) => changeSignee2(id)}
               hideEmail
+              correct={contentType === ContractType.PROPOSAL}
               fluid
             />
           </Form.Group>
