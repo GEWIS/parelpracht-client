@@ -15,13 +15,11 @@ function CompaniesMenu() {
         onMouseLeave={() => changeOpen(false)}
         item
         icon={null}
-        as={NavLink}
-        to="/company"
-        text={(
-          <>
+        trigger={(
+          <NavLink to="/company">
             <Icon name="building" />
-            Companies
-          </>
+            Products
+          </NavLink>
         ) as any}
       >
         <Dropdown.Menu>

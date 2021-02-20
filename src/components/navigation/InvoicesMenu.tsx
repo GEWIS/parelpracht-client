@@ -15,13 +15,11 @@ function InvoicesMenu() {
         onMouseLeave={() => changeOpen(false)}
         item
         icon={null}
-        as={NavLink}
-        to="/invoice"
-        text={(
-          <>
+        trigger={(
+          <NavLink to="/invoice">
             <Icon name="money bill alternate outline" />
-            Invoices
-          </>
+            Products
+          </NavLink>
         ) as any}
       >
         <Dropdown.Menu>
