@@ -110,11 +110,6 @@ class DocumentStatusProps extends React.Component<Props, State> {
   }
 }
 
-const mapStateToProps = () => {
-  return {
-  };
-};
-
 const mapDispatchToProps = (dispatch: Dispatch) => ({
   createSingleComment: (entity: SingleEntities, id: number, comment: object) => dispatch(
     createSingleComment(entity, id, comment),
@@ -124,4 +119,4 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   ),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(DocumentStatusProps);
+export default connect(mapDispatchToProps)(DocumentStatusProps);

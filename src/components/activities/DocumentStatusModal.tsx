@@ -104,14 +104,9 @@ class DocumentStatusModal extends React.Component<Props> {
   }
 }
 
-const mapStateToProps = () => {
-  return {
-  };
-};
-
 const mapDispatchToProps = (dispatch: Dispatch) => ({
   fetchInvoice: (id: number) => dispatch(fetchSingle(SingleEntities.Invoice, id)),
   fetchContract: (id: number) => dispatch(fetchSingle(SingleEntities.Contract, id)),
 });
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(DocumentStatusModal));
+export default withRouter(connect(mapDispatchToProps)(DocumentStatusModal));
