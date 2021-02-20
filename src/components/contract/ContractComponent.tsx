@@ -4,7 +4,7 @@ import {
   Table,
 } from 'semantic-ui-react';
 import { connect } from 'react-redux';
-import { Contract, ContractStatus } from '../../clients/server.generated';
+import { Contract } from '../../clients/server.generated';
 import { getCompanyName } from '../../stores/company/selectors';
 import './ContractComponent.scss';
 import { RootState } from '../../stores/store';
@@ -16,7 +16,6 @@ import { formatStatus } from '../../helpers/activity';
 
 interface Props {
   contract: Contract;
-
   contactName: string;
   status: ContractStatus;
 }

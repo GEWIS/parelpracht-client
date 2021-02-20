@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Segment, Table } from 'semantic-ui-react';
+import { Segment } from 'semantic-ui-react';
 import { NavLink } from 'react-router-dom';
 import { Client, RecentContract } from '../../clients/server.generated';
 import DashboardContractsRow from './DashboardContractsRow';

@@ -20,7 +20,6 @@ import ActivitiesList from '../components/activities/ActivitiesList';
 import { GeneralActivity } from '../components/activities/GeneralActivity';
 import { TransientAlert } from '../stores/alerts/actions';
 import { showTransientAlert } from '../stores/alerts/actionCreators';
-import FilesList from '../components/files/FilesList';
 import InvoiceList from '../components/invoice/InvoiceList';
 import CompanyContractedProductsChart from '../components/company/CompanyContractedProductsChart';
 

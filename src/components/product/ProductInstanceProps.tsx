@@ -114,7 +114,6 @@ class ProductInstanceProps extends React.Component<Props, State> {
   }
 
   render() {
-    const { productInstance, status } = this.props;
     const {
       editing,
       basePrice,

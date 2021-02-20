@@ -1,8 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { NavLink, RouteComponentProps, withRouter } from 'react-router-dom';
+import { RouteComponentProps, withRouter } from 'react-router-dom';
 import {
-  Button, Icon, Loader, Table,
+  Loader, Table,
 } from 'semantic-ui-react';
 import { Company } from '../../clients/server.generated';
 import { getSingle } from '../../stores/single/selectors';

@@ -1,8 +1,6 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { Button, Icon, Table } from 'semantic-ui-react';
-import { RootState } from '../../stores/store';
 import { SingleEntities } from '../../stores/single/single';
 import { ContractFile } from '../../clients/server.generated';
 import ResourceStatus from '../../stores/resourceStatus';
@@ -110,8 +108,4 @@ class FilesList extends React.Component<Props, State> {
   }
 }
 
-const mapStateToProps = (state: RootState) => ({});
-
-const mapDispatchToProps = () => ({});
-
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(FilesList));
+export default withRouter(FilesList);

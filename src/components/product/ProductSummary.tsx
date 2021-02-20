@@ -10,7 +10,6 @@ import { getSingle } from '../../stores/single/selectors';
 import { SingleEntities } from '../../stores/single/single';
 import { RootState } from '../../stores/store';
 import { getCategoryName } from '../../stores/productcategory/selectors';
-import UserLink from '../user/UserLink';
 
 interface Props {
   product: Product | undefined;

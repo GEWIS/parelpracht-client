@@ -1,11 +1,8 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import {
   Button, Feed, Icon, Loader,
 } from 'semantic-ui-react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
-import { Dispatch } from 'redux';
-import { RootState } from '../../stores/store';
 import ActivityComponent from './ActivityComponent';
 import { GeneralActivity } from './GeneralActivity';
 import { SingleEntities } from '../../stores/single/single';
@@ -116,12 +113,4 @@ class ActivitiesList extends React.Component<Props, State> {
   }
 }
 
-const mapStateToProps = (state: RootState) => {
-  return {
-  };
-};
-
-const mapDispatchToProps = (dispatch: Dispatch) => ({
-});
-
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ActivitiesList));
+export default withRouter(ActivitiesList);

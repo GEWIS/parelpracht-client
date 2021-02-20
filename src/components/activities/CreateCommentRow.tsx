@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { Button, Input } from 'semantic-ui-react';
 import { Dispatch } from 'redux';
 import ResourceStatus from '../../stores/resourceStatus';
-import { RootState } from '../../stores/store';
 import { SingleEntities } from '../../stores/single/single';
 import { createSingleComment } from '../../stores/single/actionCreators';
 import { ActivityParams } from '../../clients/server.generated';
@@ -24,7 +23,6 @@ interface Props {
 
 interface State {
   editing: boolean;
-
   comment: string;
 }
 
@@ -112,11 +110,6 @@ class DocumentStatusProps extends React.Component<Props, State> {
   }
 }
 
-const mapStateToProps = (state: RootState) => {
-  return {
-  };
-};
-
 const mapDispatchToProps = (dispatch: Dispatch) => ({
   createSingleComment: (entity: SingleEntities, id: number, comment: object) => dispatch(
     createSingleComment(entity, id, comment),
@@ -126,4 +119,4 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   ),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(DocumentStatusProps);
+export default connect(mapDispatchToProps)(DocumentStatusProps);

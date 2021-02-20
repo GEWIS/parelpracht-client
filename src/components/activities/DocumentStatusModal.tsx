@@ -12,10 +12,8 @@ import {
   InvoiceStatusParams,
 } from '../../clients/server.generated';
 import { fetchSingle } from '../../stores/single/actionCreators';
-import { RootState } from '../../stores/store';
 import ResourceStatus from '../../stores/resourceStatus';
 import AlertContainer from '../alerts/AlertContainer';
-import { getSingle } from '../../stores/single/selectors';
 import { SingleEntities } from '../../stores/single/single';
 import DocumentStatusProps from './DocumentStatusProps';
 import { DocumentStatus } from './DocumentStatus';
@@ -106,14 +104,9 @@ class DocumentStatusModal extends React.Component<Props> {
   }
 }
 
-const mapStateToProps = (state: RootState) => {
-  return {
-  };
-};
-
 const mapDispatchToProps = (dispatch: Dispatch) => ({
   fetchInvoice: (id: number) => dispatch(fetchSingle(SingleEntities.Invoice, id)),
   fetchContract: (id: number) => dispatch(fetchSingle(SingleEntities.Contract, id)),
 });
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(DocumentStatusModal));
+export default withRouter(connect(mapDispatchToProps)(DocumentStatusModal));
