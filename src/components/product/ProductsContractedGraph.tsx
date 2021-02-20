@@ -41,6 +41,7 @@ class ProductsContractedGraph extends React.Component<Props, State> {
 
   createBarChartDataObject = (data: AnalysisResultByYear[]): object => {
     const { dataSetSelection } = this.state;
+    const { product } = this.props;
 
     const labels = data.map((x) => x.year);
     let datasets;
@@ -65,6 +66,15 @@ class ProductsContractedGraph extends React.Component<Props, State> {
           hoverBackgroundColor: 'rgba(255, 148, 128, 0.8)',
           hoverBorderColor: 'rgba(41, 48, 101, 1)',
           data: data.map((x) => x.nrOfProducts),
+        },
+        {
+          type: 'line',
+          label: 'Minimum Target',
+          borderColor: 'rgba(41, 48, 101, 1)',
+          borderWidth: 1,
+          hoverBackgroundColor: 'rgba(255, 148, 128, 0.8)',
+          hoverBorderColor: 'rgba(41, 48, 101, 1)',
+          data: product.minTarget,
         }];
         break;
       default:

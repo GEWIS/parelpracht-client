@@ -40,6 +40,8 @@ interface State {
   contractTextEnglish: string;
   deliverySpecDutch: string | undefined;
   deliverySpecEnglish: string | undefined;
+  minTarget: number;
+  maxTarget: number;
 }
 
 class ProductProps extends React.Component<Props, State> {
@@ -73,6 +75,8 @@ class ProductProps extends React.Component<Props, State> {
       contractTextEnglish: product.contractTextEnglish,
       deliverySpecDutch: product.deliverySpecificationDutch,
       deliverySpecEnglish: product.deliverySpecificationEnglish,
+      minTarget: product.minTarget,
+      maxTarget: product.maxTarget,
     };
   };
 
@@ -80,7 +84,6 @@ class ProductProps extends React.Component<Props, State> {
     return new ProductParams({
       nameDutch: this.state.nameDutch,
       nameEnglish: this.state.nameEnglish,
-      targetPrice: Math.round(Number.parseFloat(this.state.targetPrice) * 100),
       status: this.state.status,
       description: this.state.description,
       categoryId: this.state.categoryId,
@@ -88,6 +91,9 @@ class ProductProps extends React.Component<Props, State> {
       contractTextEnglish: this.state.contractTextEnglish,
       deliverySpecificationEnglish: this.state.deliverySpecEnglish,
       deliverySpecificationDutch: this.state.deliverySpecDutch,
+      minTarget: this.state.minTarget,
+      maxTarget: this.state.maxTarget,
+      targetPrice: Math.round(Number.parseFloat(this.state.targetPrice) * 100),
     });
   };
 
@@ -112,7 +118,7 @@ class ProductProps extends React.Component<Props, State> {
   };
 
   remove = () => {
-    if (!this.props.create) {
+    if (!this.props.create && this.props.deleteProduct) {
       this.props.deleteProduct(this.props.product.id);
     }
   };
@@ -121,18 +127,25 @@ class ProductProps extends React.Component<Props, State> {
     if (this.props.create) {
       return undefined;
     }
-    return !(this.props.product.instances.length > 0 || this.props.product.files.length > 0);
+    return !(this.props.product.instances.length > 0
+      || this.props.product.files.length > 0);
   };
 
   render() {
     const {
       editing,
-      nameDutch, nameEnglish,
-      targetPrice, status,
+      nameDutch,
+      nameEnglish,
+      targetPrice,
+      status,
       description,
       categoryId,
-      contractTextDutch, contractTextEnglish,
-      deliverySpecDutch, deliverySpecEnglish,
+      contractTextDutch,
+      contractTextEnglish,
+      deliverySpecDutch,
+      deliverySpecEnglish,
+      minTarget,
+      maxTarget,
     } = this.state;
 
     return (
@@ -187,6 +200,22 @@ class ProductProps extends React.Component<Props, State> {
               }
             />
           </Form.Group>
+          <Form.Field
+            disabled={!editing}
+            required
+          >
+            {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
+            <label htmlFor="form-input-category">
+              Product category
+            </label>
+            <ProductCategorySelector
+              id="form-input-category"
+              value={categoryId}
+              onChange={(val: number) => this.setState({
+                categoryId: val,
+              })}
+            />
+          </Form.Field>
           <Form.Group widths="equal">
             <Form.Field
               disabled={!editing}
@@ -227,22 +256,39 @@ class ProductProps extends React.Component<Props, State> {
               />
             </Form.Field>
           </Form.Group>
-          <Form.Field
-            disabled={!editing}
-            required
-          >
-            {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-            <label htmlFor="form-input-category">
-              Product category
-            </label>
-            <ProductCategorySelector
-              id="form-input-category"
-              value={categoryId}
-              onChange={(val: number) => this.setState({
-                categoryId: val,
+          <Form.Group widths="equal">
+            <Form.Field
+              disabled={!editing}
+              value={minTarget}
+              onChange={(e: ChangeEvent<HTMLInputElement>) => this.setState({
+                minTarget: e.target.value as any as number,
               })}
-            />
-          </Form.Field>
+            >
+              {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
+              <label htmlFor="form-input-minimal-target">
+                Minimal Target
+              </label>
+              <Input
+                id="form-input-minimal-target"
+                type="number"
+                placeholder="Maximum target"
+                fluid
+              />
+            </Form.Field>
+            <Form.Field
+              disabled={!editing}
+              id="form-input-maximum-target"
+              fluid
+              control={Input}
+              label="Maximum Target"
+              value={maxTarget}
+              onChange={(val: number) => this.setState({
+                maxTarget: val,
+              })}
+            >
+              <Input type="number" placeholder="Maximum target" />
+            </Form.Field>
+          </Form.Group>
           <Form.Field
             disabled={!editing}
           >
@@ -254,7 +300,7 @@ class ProductProps extends React.Component<Props, State> {
               id="form-input-description"
               value={description}
               onChange={(e) => this.setState({ description: e.target.value })}
-              placeholder="Comments"
+              placeholder="Internal comments"
               fluid
             />
           </Form.Field>
@@ -269,7 +315,7 @@ class ProductProps extends React.Component<Props, State> {
               onChange={
                 (e) => this.setState({ contractTextDutch: e.target.value })
               }
-              placeholder="Contract Text (Dutch)"
+              placeholder="Contract text in Dutch"
               fluid
             />
           </Form.Field>
@@ -284,7 +330,7 @@ class ProductProps extends React.Component<Props, State> {
               onChange={
                 (e) => this.setState({ contractTextEnglish: e.target.value })
               }
-              placeholder="Contract Text (English)"
+              placeholder="Contract text in English"
               fluid
             />
           </Form.Field>
@@ -299,7 +345,7 @@ class ProductProps extends React.Component<Props, State> {
               onChange={
                 (e) => this.setState({ deliverySpecDutch: e.target.value })
               }
-              placeholder="Delivery Specification (Dutch)"
+              placeholder="Delivery specifications in Dutch"
               fluid
             />
           </Form.Field>
@@ -314,7 +360,7 @@ class ProductProps extends React.Component<Props, State> {
               onChange={
                 (e) => this.setState({ deliverySpecEnglish: e.target.value })
               }
-              placeholder="Delivery Specification (English)"
+              placeholder="Delivery specifications in English"
               fluid
             />
           </Form.Field>
