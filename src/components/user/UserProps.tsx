@@ -38,7 +38,7 @@ interface State {
   email: string;
   comment: string;
   functionName: string;
-
+  receiveEmails: boolean;
   roleGeneral: boolean;
   roleSignee: boolean;
   roleFinancial: boolean;
@@ -74,7 +74,7 @@ class UserProps extends React.Component<Props, State> {
       gender: user.gender,
       email: user.email,
       comment: user.comment ?? '',
-
+      receiveEmails: user.receiveEmails,
       roleGeneral: user.roles.find((r) => r.name === Roles.GENERAL) !== undefined,
       roleSignee: user.roles.find((r) => r.name === Roles.SIGNEE) !== undefined,
       roleFinancial: user.roles.find((r) => r.name === Roles.FINANCIAL) !== undefined,
@@ -92,6 +92,7 @@ class UserProps extends React.Component<Props, State> {
       email: this.state.email,
       comment: this.state.comment,
       function: this.state.functionName,
+      receiveEmails: this.state.receiveEmails,
 
       roles: _.compact([
         this.state.roleGeneral ? Roles.GENERAL : undefined,
@@ -146,9 +147,26 @@ class UserProps extends React.Component<Props, State> {
       email,
       functionName,
       comment,
+      receiveEmails,
 
       roleGeneral, roleSignee, roleAdmin, roleAudit, roleFinancial,
     } = this.state;
+
+    const receiveEmailsCheckbox = roleAudit || roleFinancial ? (
+      <Form.Field>
+        <Checkbox
+          label="I want to receive an email each time an invoice is created"
+          disabled={!editing}
+          id="form-receive-emails"
+          checked={receiveEmails}
+          onChange={(e, data) => this.setState({
+            receiveEmails: data.checked!,
+          })}
+        />
+      </Form.Field>
+    ) : (
+      ' '
+    );
 
     return (
       <>
@@ -265,6 +283,7 @@ class UserProps extends React.Component<Props, State> {
               })}
             />
           </Form.Group>
+          {receiveEmailsCheckbox}
           <Segment>
             <h3>Permissions</h3>
             <Form.Group widths="equal">
@@ -359,7 +378,6 @@ class UserProps extends React.Component<Props, State> {
               placeholder="Comment"
             />
           </Form.Field>
-
         </Form>
       </>
     );
