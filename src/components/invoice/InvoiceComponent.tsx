@@ -1,16 +1,14 @@
 import React from 'react';
-import { NavLink, RouteComponentProps, withRouter } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import {
   Table,
 } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import { getCompanyName } from '../../stores/company/selectors';
 import { RootState } from '../../stores/store';
-/* import TablePagination from '../TablePagination';
- */import { getContactName } from '../../stores/contact/selectors';
+/* import TablePagination from '../TablePagination'; */
 import { dateToFullFinancialYear, formatLastUpdate } from '../../helpers/timestamp';
 import { Invoice, InvoiceStatus } from '../../clients/server.generated';
-import CompanyLink from '../company/CompanyLink';
 import { formatStatus } from '../../helpers/activity';
 import { getInvoiceStatus } from '../../stores/invoice/selectors';
 import { formatPriceFull } from '../../helpers/monetary';

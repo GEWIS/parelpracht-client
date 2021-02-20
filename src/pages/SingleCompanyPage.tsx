@@ -22,6 +22,7 @@ import { TransientAlert } from '../stores/alerts/actions';
 import { showTransientAlert } from '../stores/alerts/actionCreators';
 import InvoiceList from '../components/invoice/InvoiceList';
 import CompanyContractedProductsChart from '../components/company/CompanyContractedProductsChart';
+import FilesList from '../components/files/FilesList';
 
 interface Props extends RouteComponentProps<{ companyId: string }> {
   company: Company | undefined;

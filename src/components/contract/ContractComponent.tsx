@@ -1,10 +1,10 @@
 import React from 'react';
-import { NavLink, RouteComponentProps, withRouter } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import {
   Table,
 } from 'semantic-ui-react';
 import { connect } from 'react-redux';
-import { Contract } from '../../clients/server.generated';
+import { Contract, ContractStatus } from '../../clients/server.generated';
 import { getCompanyName } from '../../stores/company/selectors';
 import './ContractComponent.scss';
 import { RootState } from '../../stores/store';

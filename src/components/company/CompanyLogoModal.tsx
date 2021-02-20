@@ -1,10 +1,9 @@
-import { update } from 'lodash';
 import React from 'react';
 import {
   Modal, Image, Button, Input, Icon,
 } from 'semantic-ui-react';
 import { FilesClient } from '../../clients/filesClient';
-import { Client, Company } from '../../clients/server.generated';
+import { Client } from '../../clients/server.generated';
 import { SingleEntities } from '../../stores/single/single';
 
 interface Props {
