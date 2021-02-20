@@ -231,14 +231,13 @@ class UserProps extends React.Component<Props, State> {
                 !validator.isEmail(email)
               }
             />
-            <Form.Field required fluid disabled={!editing} width={3}>
+            <Form.Field required disabled={!editing} width={3}>
               {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
               <label htmlFor="form-input-gender">Gender</label>
               <Dropdown
                 id="form-input-gender"
                 selection
                 placeholder="Gender"
-                defaultValue={2}
                 value={gender}
                 options={[
                   { key: 0, text: 'Male', value: Gender.MALE },
@@ -248,6 +247,7 @@ class UserProps extends React.Component<Props, State> {
                 onChange={(e, data) => this.setState({
                   gender: data.value as Gender,
                 })}
+                fluid
               />
             </Form.Field>
           </Form.Group>

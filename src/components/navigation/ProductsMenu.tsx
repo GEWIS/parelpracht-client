@@ -18,6 +18,7 @@ function ProductsMenu() {
         trigger={(
           <NavLink to="/product">
             <Icon name="shopping bag" />
+            {' '}
             Products
           </NavLink>
         ) as any}

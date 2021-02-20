@@ -18,7 +18,8 @@ function CompaniesMenu() {
         trigger={(
           <NavLink to="/company">
             <Icon name="building" />
-            Products
+            {' '}
+            Companies
           </NavLink>
         ) as any}
       >

@@ -18,7 +18,8 @@ function InvoicesMenu() {
         trigger={(
           <NavLink to="/invoice">
             <Icon name="money bill alternate outline" />
-            Products
+            {' '}
+            Invoices
           </NavLink>
         ) as any}
       >

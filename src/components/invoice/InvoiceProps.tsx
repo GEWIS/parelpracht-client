@@ -203,7 +203,6 @@ class InvoiceProps extends React.Component<Props, State> {
           <Form.Group widths="equal">
             <Form.Field
               disabled={!editing}
-              fluid
               id="form-input-comments"
               control={TextArea}
               label="Comments"

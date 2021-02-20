@@ -86,8 +86,8 @@ class ContractCompactTable extends React.Component<Props, State> {
     return (
       <>
         <h3>Contracts</h3>
+        <Loader active={loading} />
         <Table striped compact>
-          <Loader active={loading} />
           <Table.Header>
             <Table.Row>
               <Table.HeaderCell>
@@ -105,7 +105,7 @@ class ContractCompactTable extends React.Component<Props, State> {
             </Table.Row>
           </Table.Header>
           <Table.Body>
-            {productInstances.map((p) => <ContractCompactRow contract={p.contract} />)}
+            {productInstances.map((p) => <ContractCompactRow key={p.id} contract={p.contract} />)}
           </Table.Body>
         </Table>
         <TablePagination

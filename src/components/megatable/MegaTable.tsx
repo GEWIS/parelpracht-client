@@ -3,7 +3,7 @@ import { Table } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import { ETCompany } from '../../helpers/extensiveTableObjects';
-import ContractExtensiveRow from './MegaTableRow';
+import MegaTableRow from './MegaTableRow';
 import { RootState } from '../../stores/store';
 import { countFetched, countTotal, getTable } from '../../stores/tables/selectors';
 import { Tables } from '../../stores/tables/tables';
@@ -77,7 +77,9 @@ function MegaTable({
             <Table.HeaderCell>Details</Table.HeaderCell>
           </Table.Row>
         </Table.Header>
-        {companies.map((c) => <ContractExtensiveRow company={c} key={c.id} />)}
+        <Table.Body>
+          {companies.map((c) => <MegaTableRow company={c} key={c.id} />)}
+        </Table.Body>
       </Table>
       <TablePagination
         countTotal={total}
