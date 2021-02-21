@@ -19,9 +19,9 @@ function ContactSelector(props: Props & DropdownProps) {
   const [open, changeOpen] = useState(false);
 
   const {
-    value, onChange, options, disabled, companyId, placeholder, ...rest
+    value, onChange, options, disabled, companyId, placeholder,
   } = props;
-  const dropdownOptions = props.options
+  const dropdownOptions = options
     .filter((c) => c.companyId === companyId)
     .map((x) => ({
       key: x.id,
@@ -37,7 +37,6 @@ function ContactSelector(props: Props & DropdownProps) {
       search
       selection
       error={(value <= 0) && !open}
-      {...rest}
       options={dropdownOptions}
       value={value}
       onChange={(e, data) => onChange(data.value as any)}

@@ -13,9 +13,9 @@ interface Props {
 
 function ProductSelector(props: Props & DropdownProps) {
   const {
-    value, onChange, options, ...rest
+    value, onChange, options,
   } = props;
-  const dropdownOptions = props.options.map((x) => ({
+  const dropdownOptions = options.map((x) => ({
     key: x.id,
     text: x.nameDutch,
     description: x.nameEnglish,
@@ -27,10 +27,9 @@ function ProductSelector(props: Props & DropdownProps) {
       placeholder="Product"
       search
       selection
-      {...rest}
       options={dropdownOptions}
-      value={props.value}
-      onChange={(e, data) => props.onChange(data.value as any)}
+      value={value}
+      onChange={(e, data) => onChange(data.value as any)}
     />
   );
 }
