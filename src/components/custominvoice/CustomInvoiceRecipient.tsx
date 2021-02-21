@@ -53,7 +53,7 @@ class CustomInvoiceRecipient extends React.Component<Props, State> {
                 'organizationName', e.target.value,
               )}
             />
-            <Form.Field required fluid>
+            <Form.Field required>
               {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
               <label htmlFor="form-input-gender">Gender</label>
               <Dropdown

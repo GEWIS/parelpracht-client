@@ -11,7 +11,6 @@ interface Props {
   entityId: number;
   entity: SingleEntities;
   productInstanceId: number;
-  productId: number;
 
   productName: string;
   details?: string;
@@ -19,10 +18,10 @@ interface Props {
 
 function ProductInstanceLink(props: Props) {
   const {
-    entity, entityId, productInstanceId, productName, details, ...rest
+    entity, entityId, productInstanceId, productName, details,
   } = props;
   return (
-    <NavLink to={`/${entity.toLowerCase()}/${entityId}/product/${productInstanceId}`} {...rest}>
+    <NavLink to={`/${entity.toLowerCase()}/${entityId}/product/${productInstanceId}`}>
       <Icon name="shopping bag" />
       {productName}
       {details === '' ? '' : ` (${details})`}

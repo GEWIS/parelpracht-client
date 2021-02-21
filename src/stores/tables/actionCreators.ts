@@ -66,7 +66,7 @@ export function prevPageTable<T extends Tables>(table: T): TablePrevPageAction<T
 }
 
 export function setFilterTable<T extends Tables>(
-  table: T, filter: {column: string, values: any[]},
+  table: T, filter: { column: string, values: any[] },
 ): TableSetFilterAction<T> {
   return { type: tableActionPattern(table, TableActionType.SetFilter), ...filter };
 }

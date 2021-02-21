@@ -15,7 +15,7 @@ interface Props {
 function CategoryLink(props: Props) {
   const { id, categoryName, ...rest } = props;
   return (
-    <NavLink to={`/category/${id}`} {...rest}>
+    <NavLink to={`/category/${id}`}>
       <Icon name="tags" />
       {categoryName}
     </NavLink>

@@ -12,9 +12,9 @@ interface Props {
 }
 
 function UserLinkWithoutImage(props: Props) {
-  const { id, userName, ...rest } = props;
+  const { id, userName } = props;
   return (
-    <NavLink to={`/user/${id}`} {...rest}>
+    <NavLink to={`/user/${id}`}>
       {userName}
     </NavLink>
   );

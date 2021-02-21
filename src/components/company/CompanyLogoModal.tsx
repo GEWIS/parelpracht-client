@@ -67,12 +67,18 @@ class CompanyLogoModal extends React.Component<Props, State> {
     const { entityName, entityId, fileName } = this.props;
     const { open } = this.state;
     const image = fileName === '' ? (
-      <Image floated="right" style={{ cursor: 'pointer' }}>
+      <Button
+        floated="right"
+        primary
+        style={{
+          marginTop: '10px',
+        }}
+      >
         <Icon
           name="building"
-          size="large"
         />
-      </Image>
+        Add company logo
+      </Button>
     ) : (
       <Image
         floated="right"
@@ -96,6 +102,23 @@ class CompanyLogoModal extends React.Component<Props, State> {
       />
     );
 
+    const deleteButton = fileName === '' ? (
+      ''
+    ) : (
+      <Button
+        color="red"
+        floated="left"
+        onClick={() => this.removeImage()}
+      >
+        <Icon name="trash" />
+        Delete
+        {' '}
+        {entityName}
+        {' '}
+        logo
+      </Button>
+    );
+
     return (
       <Modal
         onClose={() => this.closeModal()}
@@ -112,16 +135,23 @@ class CompanyLogoModal extends React.Component<Props, State> {
         <Modal.Content image>
           {imageModal}
           <Modal.Description>
+            <h4>
+              Upload
+              {' '}
+              {entityName}
+              {' '}
+              logo
+            </h4>
             <Input
               type="file"
               id={`form-file-${entityId}-file`}
               onChange={(e) => this.updateImage(e.target.files![0])}
               style={{ width: '80%' }}
             />
-            <Button size="large" floated="right" icon="trash" onClick={() => this.removeImage()} />
           </Modal.Description>
         </Modal.Content>
         <Modal.Actions>
+          {deleteButton}
           <Button onClick={() => this.closeModal()}>Cancel</Button>
         </Modal.Actions>
       </Modal>
