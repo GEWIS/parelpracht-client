@@ -63,7 +63,103 @@ class LogoAvatarModal extends React.Component<Props, State> {
   };
 
   public renderUserAvatar(): JSX.Element {
-    return <Button />;
+    const { entityName, entityId, fileName } = this.props;
+    const { open } = this.state;
+    const image = fileName === '' ? (
+      <Button
+        floated="right"
+        primary
+        style={{
+          marginTop: '10px',
+        }}
+      >
+        <Icon
+          name="user circle"
+        />
+        Add user avatar
+      </Button>
+    ) : (
+      <div style={{
+        width: '4rem',
+        height: '4rem',
+        float: 'right',
+        backgroundImage: `url("/static/logos/${fileName}")`,
+        backgroundSize: 'cover',
+        backgroundRepeat: 'no-repeat',
+        backgroundPosition: 'center center',
+        borderRadius: '50%',
+        border: '1px solid #D4D4D5',
+        cursor: 'pointer',
+      }}
+      />
+    );
+
+    const imageModal = fileName === '' ? (
+      <Image>
+        <Icon
+          name="user circle"
+          size="huge"
+        />
+      </Image>
+    ) : (
+      <Image
+        src={`/static/logos/${fileName}`}
+        size="medium"
+        wrapped
+      />
+    );
+
+    const deleteButton = fileName === '' ? (
+      ''
+    ) : (
+      <Button
+        color="red"
+        floated="left"
+        onClick={() => this.removeImage()}
+      >
+        <Icon name="trash" />
+        Delete
+        {' '}
+        {entityName}
+        &#39;s avatar
+      </Button>
+    );
+
+    return (
+      <Modal
+        onClose={() => this.closeModal()}
+        onOpen={() => this.openModal()}
+        open={open}
+        size="small"
+        trigger={image}
+      >
+        <Modal.Header>
+          {entityName}
+          &#39;s Avatar
+        </Modal.Header>
+        <Modal.Content image>
+          {imageModal}
+          <Modal.Description>
+            <h4>
+              Upload
+              {' '}
+              {entityName}
+              &#39;s Avatar
+            </h4>
+            <Input
+              type="file"
+              id={`form-file-${entityId}-file`}
+              onChange={(e) => this.updateImage(e.target.files![0])}
+              style={{ width: '80%' }}
+            />
+          </Modal.Description>
+        </Modal.Content>
+        <Modal.Actions>
+          {deleteButton}
+          <Button onClick={() => this.closeModal()}>Cancel</Button>
+        </Modal.Actions>
+      </Modal>
+    );
   }
 
   public renderCompanyLogo(): JSX.Element {
