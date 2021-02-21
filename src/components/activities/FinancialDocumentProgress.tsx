@@ -81,8 +81,10 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
       leftButton = (
         <Popup
           header={`Defer ${formatDocumentType(documentType)}`}
-          content={`By defering this ${formatDocumentType(documentType)}, you indicate that it will 
+          content={`By defering this ${formatDocumentType(documentType)}, you indicate that it will
           not be delivered in the current academic year.`}
+          mouseEnterDelay={500}
+          wide
           trigger={(
             <Button
               floated="left"
@@ -106,10 +108,12 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
           header={`Mark
           irrecoverable`}
           content={`By marking this invoice irrecoverable, you indicate that the money owed from this invoice can not collected.
-          Either the invoice is no longer valid 
-          (i.e. it was created more than 5 years ago) or the responsible party indicated to not pay the invoice. 
+          Either the invoice is no longer valid
+          (i.e. it was created more than 5 years ago) or the responsible party indicated to not pay the invoice.
           Note that this is different from cancelling an invoice, in which the contracted products can still be invoiced on
           another invoice.`}
+          mouseEnterDelay={500}
+          wide
           trigger={(
             <Button
               floated="left"
