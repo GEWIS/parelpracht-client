@@ -24,7 +24,8 @@ import {
   saveInstanceSingle,
 } from '../stores/productinstance/actionCreator';
 
-interface SelfProps extends RouteComponentProps<{contractId: string, productInstanceId?: string}> {
+interface SelfProps extends
+  RouteComponentProps<{ contractId: string, productInstanceId?: string }> {
   create?: boolean;
 }
 
