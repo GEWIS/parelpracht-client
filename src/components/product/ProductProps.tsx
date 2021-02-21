@@ -211,9 +211,11 @@ class ProductProps extends React.Component<Props, State> {
             <ProductCategorySelector
               id="form-input-category"
               value={categoryId}
-              onChange={(val: number) => this.setState({
-                categoryId: val,
-              })}
+              onChange={(val: number) => {
+                this.setState({
+                  categoryId: val,
+                });
+              }}
             />
           </Form.Field>
           <Form.Group widths="equal">
@@ -252,17 +254,12 @@ class ProductProps extends React.Component<Props, State> {
                   status:
                     data.checked ? ProductStatus.ACTIVE : ProductStatus.INACTIVE,
                 })}
-                fluid
               />
             </Form.Field>
           </Form.Group>
           <Form.Group widths="equal">
             <Form.Field
               disabled={!editing}
-              value={minTarget}
-              onChange={(e: ChangeEvent<HTMLInputElement>) => this.setState({
-                minTarget: e.target.value as any as number,
-              })}
             >
               {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
               <label htmlFor="form-input-minimal-target">
@@ -271,22 +268,31 @@ class ProductProps extends React.Component<Props, State> {
               <Input
                 id="form-input-minimal-target"
                 type="number"
-                placeholder="Maximum target"
+                placeholder="Minimal target"
+                value={minTarget}
                 fluid
+                onChange={(e: ChangeEvent<HTMLInputElement>) => this.setState({
+                  minTarget: e.target.value as any as number,
+                })}
               />
             </Form.Field>
             <Form.Field
               disabled={!editing}
-              id="form-input-maximum-target"
-              fluid
-              control={Input}
-              label="Maximum Target"
-              value={maxTarget}
-              onChange={(val: number) => this.setState({
-                maxTarget: val,
-              })}
             >
-              <Input type="number" placeholder="Maximum target" />
+              {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
+              <label htmlFor="form-input-maximum-target">
+                Maximum Target
+              </label>
+              <Input
+                id="form-input-maximum-target"
+                type="number"
+                placeholder="Maximum target"
+                value={maxTarget}
+                fluid
+                onChange={(e: ChangeEvent<HTMLInputElement>) => this.setState({
+                  maxTarget: e.target.value as any as number,
+                })}
+              />
             </Form.Field>
           </Form.Group>
           <Form.Field
@@ -301,7 +307,6 @@ class ProductProps extends React.Component<Props, State> {
               value={description}
               onChange={(e) => this.setState({ description: e.target.value })}
               placeholder="Internal comments"
-              fluid
             />
           </Form.Field>
           <Form.Field disabled={!editing} required error={validator.isEmpty(contractTextDutch)}>
@@ -316,7 +321,6 @@ class ProductProps extends React.Component<Props, State> {
                 (e) => this.setState({ contractTextDutch: e.target.value })
               }
               placeholder="Contract text in Dutch"
-              fluid
             />
           </Form.Field>
           <Form.Field disabled={!editing} required error={validator.isEmpty(contractTextEnglish)}>
@@ -331,7 +335,6 @@ class ProductProps extends React.Component<Props, State> {
                 (e) => this.setState({ contractTextEnglish: e.target.value })
               }
               placeholder="Contract text in English"
-              fluid
             />
           </Form.Field>
           <Form.Field disabled={!editing}>
@@ -346,7 +349,6 @@ class ProductProps extends React.Component<Props, State> {
                 (e) => this.setState({ deliverySpecDutch: e.target.value })
               }
               placeholder="Delivery specifications in Dutch"
-              fluid
             />
           </Form.Field>
           <Form.Field disabled={!editing}>
@@ -361,7 +363,6 @@ class ProductProps extends React.Component<Props, State> {
                 (e) => this.setState({ deliverySpecEnglish: e.target.value })
               }
               placeholder="Delivery specifications in English"
-              fluid
             />
           </Form.Field>
         </Form>
