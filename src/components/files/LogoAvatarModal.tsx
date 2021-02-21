@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  Modal, Image, Button, Input, Icon,
+  Button, Icon, Image, Input, Modal,
 } from 'semantic-ui-react';
 import { FilesClient } from '../../clients/filesClient';
 import { Client } from '../../clients/server.generated';
@@ -12,7 +12,6 @@ interface Props {
   entityName: string;
   fileName: string;
   fetchEntity: (entityId: number) => void;
-  deleteFunction: string;
 }
 
 interface State {
@@ -20,7 +19,7 @@ interface State {
 
 }
 
-class CompanyLogoModal extends React.Component<Props, State> {
+class LogoAvatarModal extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
@@ -50,12 +49,12 @@ class CompanyLogoModal extends React.Component<Props, State> {
   };
 
   removeImage = async () => {
-    const { deleteFunction, entityId, fetchEntity } = this.props;
+    const { entity, entityId, fetchEntity } = this.props;
     const client = new Client();
     let result;
-    if (deleteFunction === 'company') {
+    if (entity === SingleEntities.Company) {
       result = await client.deleteCompanyLogo(entityId);
-    } else if (deleteFunction === 'user') {
+    } else if (entity === SingleEntities.User) {
       result = await client.deleteUserAvatar(entityId);
     }
     if (result) {
@@ -63,7 +62,11 @@ class CompanyLogoModal extends React.Component<Props, State> {
     }
   };
 
-  public render() {
+  public renderUserAvatar(): JSX.Element {
+    return <Button />;
+  }
+
+  public renderCompanyLogo(): JSX.Element {
     const { entityName, entityId, fileName } = this.props;
     const { open } = this.state;
     const image = fileName === '' ? (
@@ -80,11 +83,13 @@ class CompanyLogoModal extends React.Component<Props, State> {
         Add company logo
       </Button>
     ) : (
-      <Image
-        floated="right"
-        src={`/static/logos/${fileName}`}
-        style={{ cursor: 'pointer', maxHeight: '50px', width: 'auto' }}
-      />
+      <div>
+        <Image
+          floated="right"
+          src={`/static/logos/${fileName}`}
+          style={{ cursor: 'pointer', maxHeight: '4rem', width: 'auto' }}
+        />
+      </div>
     );
 
     const imageModal = fileName === '' ? (
@@ -157,6 +162,18 @@ class CompanyLogoModal extends React.Component<Props, State> {
       </Modal>
     );
   }
+
+  public render() {
+    const { entity } = this.props;
+    switch (entity) {
+      case SingleEntities.Company:
+        return this.renderCompanyLogo();
+      case SingleEntities.User:
+        return this.renderUserAvatar();
+      default:
+        throw new Error(`Entity ${entity} does not support logos or avatars`);
+    }
+  }
 }
 
-export default CompanyLogoModal;
+export default LogoAvatarModal;
