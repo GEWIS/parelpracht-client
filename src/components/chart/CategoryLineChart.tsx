@@ -109,6 +109,7 @@ class CategoryLineChart extends React.Component<Props, State> {
                 userCallback(value: number) {
                   return value;
                 },
+                precision: 0,
               },
             }],
           },
