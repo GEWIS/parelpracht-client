@@ -41,7 +41,7 @@ function AuthMenu(props: Props) {
   return (
     <Menu.Menu position="right">
       <Dropdown
-        text={(
+        trigger={(
           <>
             <Icon name="user circle" style={{ marginRight: '1em' }} />
             {name}

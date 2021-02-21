@@ -19,9 +19,9 @@ function UserSelector(props: Props & DropdownProps) {
   const [open, changeOpen] = useState(false);
 
   const {
-    value, onChange, options, hideEmail, correct, ...rest
+    value, onChange, options, hideEmail, correct,
   } = props;
-  const dropdownOptions = props.options.map((x) => ({
+  const dropdownOptions = options.map((x) => ({
     key: x.id,
     text: formatContactName(x.firstName, x.lastNamePreposition, x.lastName),
     description: hideEmail ? undefined : x.email,
@@ -35,10 +35,9 @@ function UserSelector(props: Props & DropdownProps) {
       selection
       fluid
       error={(value < 1 && !open) && correct !== true}
-      {...rest}
       options={dropdownOptions}
       value={props.value}
-      onChange={(e, data) => props.onChange(data.value as any)}
+      onChange={(e, data) => onChange(data.value as any)}
       onOpen={() => changeOpen(true)}
       onClose={() => changeOpen(false)}
     />

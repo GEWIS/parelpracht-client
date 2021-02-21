@@ -150,8 +150,9 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
             fluid
             style={{ marginTop: '0.5em' }}
           >
-            {allDocumentStatuses.map((currentStatus) => (
+            {allDocumentStatuses.map((currentStatus, i) => (
               <FinancialDocumentStep
+                key={i.toString()}
                 documentId={documentId}
                 documentType={documentType}
                 lastStatusActivity={lastStatusActivity}
@@ -202,8 +203,9 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
           )}
         </h3>
         <Step.Group stackable="tablet" widths={5} fluid>
-          {allDocumentStatuses.map((currentStatus) => (
+          {allDocumentStatuses.map((currentStatus, i) => (
             <FinancialDocumentStep
+              key={i.toString()}
               documentId={documentId}
               documentType={documentType}
               lastStatusActivity={lastStatusActivity}

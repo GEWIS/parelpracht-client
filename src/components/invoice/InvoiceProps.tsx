@@ -203,7 +203,6 @@ class InvoiceProps extends React.Component<Props, State> {
           <Form.Group widths="equal">
             <Form.Field
               disabled={!editing}
-              fluid
               id="form-input-comments"
               control={TextArea}
               label="Comments"
@@ -219,7 +218,7 @@ class InvoiceProps extends React.Component<Props, State> {
   }
 }
 
-const mapStateToProps = (state: RootState, props: {invoice: Invoice}) => {
+const mapStateToProps = (state: RootState, props: { invoice: Invoice }) => {
   return {
     status: getSingle<Invoice>(state, SingleEntities.Invoice).status,
     companyName: getCompanyName(state, props.invoice.companyId),

@@ -120,7 +120,11 @@ class ContactModal extends React.Component<Props> {
           <Header>Contracts</Header>
           <ul>
             {contact.contracts.map((contract) => {
-              return <li><NavLink to={`/contract/${contract.id}`}>{contract.title}</NavLink></li>;
+              return (
+                <li key={contract.id}>
+                  <NavLink to={`/contract/${contract.id}`}>{contract.title}</NavLink>
+                </li>
+              );
             })}
           </ul>
         </Segment>

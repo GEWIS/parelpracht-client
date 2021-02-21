@@ -25,6 +25,7 @@ You can find the release notes below.
 - Fixed the generate modal being closed when generating a document fails.
 - Fixed a memory leak in the front-end when uploading the first file to an entity.
 - Fixed the diamond underneath a selected tab being black instead of blue.
+- Fixed most of the errors from the browser console.
 
 ## v0.1-beta1 (01-02-2021)
 ### Added

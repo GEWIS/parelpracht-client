@@ -16,7 +16,7 @@ import AlertContainer from '../components/alerts/AlertContainer';
 import { getSingle } from '../stores/single/selectors';
 import { SingleEntities } from '../stores/single/single';
 
-interface SelfProps extends RouteComponentProps<{invoiceId: string, productInstanceId?: string}> {
+interface SelfProps extends RouteComponentProps<{ invoiceId: string, productInstanceId?: string }> {
   create?: boolean;
 }
 
