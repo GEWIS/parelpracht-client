@@ -25,6 +25,8 @@ You can find the release notes below.
 - Fixed the generate modal being closed when generating a document fails.
 - Fixed a memory leak in the front-end when uploading the first file to an entity.
 - Fixed the diamond underneath a selected tab being black instead of blue.
+- Fixed not being able to update the details of a product in a contract.
+- Fixed a product in a contract still being selected after removing this product from the contract.
 - Fixed most of the errors from the browser console.
 
 ## v0.1-beta1 (01-02-2021)
