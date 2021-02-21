@@ -7,4 +7,5 @@ export enum Tables {
   Contracts = 'Contracts',
   ETCompanies = 'ETCompanies',
   Users = 'Users',
+  DirectMail = 'DirectMail',
 }

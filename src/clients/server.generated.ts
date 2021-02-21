@@ -6110,6 +6110,13 @@ export interface IProduct {
     files: ProductFile[];
 }
 
+export class DirectMail implements IDirectMail {
+    /** The starting year of education for the direct mailing list */
+    generation!: number;
+    /** The amount of students in this direct mailing list */
+    students!: number;
+}
+
 export class ProductCategory implements IProductCategory {
     /** Incremental ID of the entity */
     id!: number;
@@ -6176,6 +6183,13 @@ export class ProductCategory implements IProductCategory {
         }
         return data; 
     }
+}
+
+export interface IDirectMail {
+  /** The starting year of education for the direct mailing list */
+  generation: number;
+  /** The amount of students in this direct mailing list */
+  students: number;
 }
 
 export interface IProductCategory {

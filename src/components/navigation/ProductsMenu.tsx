@@ -29,6 +29,10 @@ function ProductsMenu() {
             <Icon name="tags" />
             Categories
           </Dropdown.Item>
+          <Dropdown.Item as={NavLink} to="/directmail">
+            <Icon name="mail" />
+            Direct Mail
+          </Dropdown.Item>
         </Dropdown.Menu>
       </Dropdown>
     </Menu.Menu>
