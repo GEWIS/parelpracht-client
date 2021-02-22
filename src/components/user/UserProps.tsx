@@ -38,7 +38,7 @@ interface State {
   email: string;
   comment: string;
   functionName: string;
-
+  replyToEmail: string;
   roleGeneral: boolean;
   roleSignee: boolean;
   roleFinancial: boolean;
@@ -74,6 +74,7 @@ class UserProps extends React.Component<Props, State> {
       gender: user.gender,
       email: user.email,
       comment: user.comment ?? '',
+      replyToEmail: user.replyToEmail,
 
       roleGeneral: user.roles.find((r) => r.name === Roles.GENERAL) !== undefined,
       roleSignee: user.roles.find((r) => r.name === Roles.SIGNEE) !== undefined,
@@ -92,6 +93,7 @@ class UserProps extends React.Component<Props, State> {
       email: this.state.email,
       comment: this.state.comment,
       function: this.state.functionName,
+      replyToEmail: this.state.replyToEmail,
 
       roles: _.compact([
         this.state.roleGeneral ? Roles.GENERAL : undefined,
@@ -146,6 +148,7 @@ class UserProps extends React.Component<Props, State> {
       email,
       functionName,
       comment,
+      replyToEmail,
 
       roleGeneral, roleSignee, roleAdmin, roleAudit, roleFinancial,
     } = this.state;
@@ -190,7 +193,7 @@ class UserProps extends React.Component<Props, State> {
               id="form-input-middle-name"
               fluid
               control={Input}
-              label="Middle Name"
+              label="Preposition"
               value={lastNamePreposition}
               onChange={(e: ChangeEvent<HTMLInputElement>) => this.setState({
                 lastNamePreposition: e.target.value,
@@ -231,7 +234,7 @@ class UserProps extends React.Component<Props, State> {
                 !validator.isEmail(email)
               }
             />
-            <Form.Field required disabled={!editing} width={3}>
+            <Form.Field required fluid disabled={!editing} width={3}>
               {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
               <label htmlFor="form-input-gender">Gender</label>
               <Dropdown
@@ -247,21 +250,52 @@ class UserProps extends React.Component<Props, State> {
                 onChange={(e, data) => this.setState({
                   gender: data.value as Gender,
                 })}
-                fluid
+                width={4}
               />
             </Form.Field>
-          </Form.Group>
-          <Form.Group widths="equal">
             <Form.Field
               disabled={!editing}
               id="form-input-function"
               fluid
+              required
+              width={12}
               control={Input}
               label="Function"
               placeholder="Appears under your name on contracts."
               value={functionName}
               onChange={(e: ChangeEvent<HTMLInputElement>) => this.setState({
                 functionName: e.target.value,
+              })}
+              error={
+                validator.isEmpty(functionName)
+              }
+            />
+          </Form.Group>
+          <Form.Group widths="equal">
+            <Form.Field
+              disabled={!editing}
+              id="form-input-email"
+              fluid
+              required
+              control={Input}
+              label="Personal mail address"
+              value={email}
+              onChange={(e: ChangeEvent<HTMLInputElement>) => this.setState({
+                email: e.target.value,
+              })}
+              error={
+                !validator.isEmail(email)
+              }
+            />
+            <Form.Field
+              disabled={!editing}
+              id="form-input-reply-to-email"
+              fluid
+              control={Input}
+              label="Reply-to mail address"
+              value={replyToEmail}
+              onChange={(e: ChangeEvent<HTMLInputElement>) => this.setState({
+                replyToEmail: e.target.value,
               })}
             />
           </Form.Group>

@@ -1,6 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Button, Grid, Step } from 'semantic-ui-react';
+import {
+  Button, Grid, Popup, Step,
+} from 'semantic-ui-react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { GeneralActivity } from './GeneralActivity';
 import FinancialDocumentStep from './FinancialDocumentStep';
@@ -77,33 +79,55 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
     let leftButton;
     if (documentType === SingleEntities.ProductInstance) {
       leftButton = (
-        <Button
-          floated="left"
-          labelPosition="left"
-          icon="stopwatch"
-          basic
-          onClick={() => {
-            this.setState({
-              deferModalOpen: true,
-            });
-          }}
-          content={`Defer ${formatDocumentType(documentType)}`}
-          disabled={lastStatusActivity?.subType !== ProductInstanceStatus.NOTDELIVERED}
+        <Popup
+          header={`Defer ${formatDocumentType(documentType)}`}
+          content={`By defering this ${formatDocumentType(documentType)}, you indicate that it will
+          not be delivered in the current academic year.`}
+          mouseEnterDelay={500}
+          wide
+          trigger={(
+            <Button
+              floated="left"
+              labelPosition="left"
+              icon="stopwatch"
+              basic
+              onClick={() => {
+                this.setState({
+                  deferModalOpen: true,
+                });
+              }}
+              content={`Defer ${formatDocumentType(documentType)}`}
+              disabled={lastStatusActivity?.subType !== ProductInstanceStatus.NOTDELIVERED}
+            />
+          )}
         />
       );
     } else if (documentType === SingleEntities.Invoice) {
       leftButton = (
-        <Button
-          floated="left"
-          labelPosition="left"
-          icon="close"
-          basic
-          onClick={() => {
-            this.setState({ irrecoverableModalOpen: true });
-          }}
-          content="Mark irrecoverable"
-          disabled={lastStatusActivity?.subType !== InvoiceStatus.CREATED
-          && lastStatusActivity?.subType !== InvoiceStatus.SENT}
+        <Popup
+          header={`Mark
+          irrecoverable`}
+          content={`By marking this invoice irrecoverable, you indicate that the money owed from this invoice can not collected.
+          Either the invoice is no longer valid
+          (i.e. it was created more than 5 years ago) or the responsible party indicated to not pay the invoice.
+          Note that this is different from cancelling an invoice, in which the contracted products can still be invoiced on
+          another invoice.`}
+          mouseEnterDelay={500}
+          wide
+          trigger={(
+            <Button
+              floated="left"
+              labelPosition="left"
+              icon="close"
+              basic
+              onClick={() => {
+                this.setState({ irrecoverableModalOpen: true });
+              }}
+              content="Mark irrecoverable"
+              disabled={lastStatusActivity?.subType !== InvoiceStatus.CREATED
+              && lastStatusActivity?.subType !== InvoiceStatus.SENT}
+            />
+          )}
         />
       );
     }
