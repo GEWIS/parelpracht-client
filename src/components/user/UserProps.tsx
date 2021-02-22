@@ -39,6 +39,7 @@ interface State {
   comment: string;
   functionName: string;
   replyToEmail: string;
+  receiveEmails: boolean;
   roleGeneral: boolean;
   roleSignee: boolean;
   roleFinancial: boolean;
@@ -76,6 +77,7 @@ class UserProps extends React.Component<Props, State> {
       comment: user.comment ?? '',
       replyToEmail: user.replyToEmail,
 
+      receiveEmails: user.receiveEmails,
       roleGeneral: user.roles.find((r) => r.name === Roles.GENERAL) !== undefined,
       roleSignee: user.roles.find((r) => r.name === Roles.SIGNEE) !== undefined,
       roleFinancial: user.roles.find((r) => r.name === Roles.FINANCIAL) !== undefined,
@@ -93,6 +95,7 @@ class UserProps extends React.Component<Props, State> {
       email: this.state.email,
       comment: this.state.comment,
       function: this.state.functionName,
+      receiveEmails: this.state.receiveEmails,
       replyToEmail: this.state.replyToEmail,
 
       roles: _.compact([
@@ -149,9 +152,26 @@ class UserProps extends React.Component<Props, State> {
       functionName,
       comment,
       replyToEmail,
+      receiveEmails,
 
       roleGeneral, roleSignee, roleAdmin, roleAudit, roleFinancial,
     } = this.state;
+
+    const receiveEmailsCheckbox = roleAudit || roleFinancial ? (
+      <Form.Field>
+        <Checkbox
+          label="I want to receive an email each time an invoice is created"
+          disabled={!editing}
+          id="form-receive-emails"
+          checked={receiveEmails}
+          onChange={(e, data) => this.setState({
+            receiveEmails: data.checked!,
+          })}
+        />
+      </Form.Field>
+    ) : (
+      ' '
+    );
 
     return (
       <>
@@ -271,6 +291,7 @@ class UserProps extends React.Component<Props, State> {
               }
             />
           </Form.Group>
+          {receiveEmailsCheckbox}
           <Form.Group widths="equal">
             <Form.Field
               disabled={!editing}
@@ -393,7 +414,6 @@ class UserProps extends React.Component<Props, State> {
               placeholder="Comment"
             />
           </Form.Field>
-
         </Form>
       </>
     );
