@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { RouteComponentProps, withRouter } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import {
   Container, Segment, Grid, Header, Icon,
 } from 'semantic-ui-react';

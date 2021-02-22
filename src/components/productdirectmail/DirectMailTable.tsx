@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import { Table } from 'semantic-ui-react';
@@ -12,7 +12,7 @@ import { Tables } from '../../stores/tables/tables';
 import DirectMailRow from './DirectMailRow';
 
 interface Props {
-  /* directmail: DirectMail[]; */
+  directmail: DirectMail[];
   price: number;
   column: string;
   direction: 'ascending' | 'descending';
@@ -21,11 +21,11 @@ interface Props {
 }
 
 function DirectMailTable({
-  /* directmail, */
+  directmail,
   price,
   column, direction, changeSort, fetchDirectMail,
 } : Props) {
-  React.useEffect(() => {
+  useEffect(() => {
     fetchDirectMail();
   }, []);
 
@@ -48,9 +48,9 @@ function DirectMailTable({
             </Table.HeaderCell>
           </Table.Row>
         </Table.Header>
-        {//<Table.Body>
-        //  {directmail.map((x) => <DirectMailRow directmail={x} price={price} />)}
-        //</Table.Body>
+        <Table.Body>
+          {directmail.map((x) => <DirectMailRow directmail={x} price={price} />)}
+        </Table.Body>
       </Table>
     </>
   );
@@ -62,6 +62,7 @@ const mapStateToProps = (state: RootState) => {
     total: countTotal(state, Tables.DirectMail),
     fetched: countFetched(state, Tables.DirectMail),
     column: directMailTable.sortColumn,
+    directmail: directMailTable.data,
     direction: directMailTable.sortDirection === 'ASC'
       ? 'ascending' : 'descending' as 'ascending' | 'descending',
   };

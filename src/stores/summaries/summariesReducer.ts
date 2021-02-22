@@ -36,7 +36,7 @@ const createSummariesReducer = <S extends SummaryCollections, R extends SummaryB
         };
       case SummariesActionType.Set: {
         const a = action as SummariesSetAction<S, R>;
-        const lookup: {[key: number]: R} = {};
+        const lookup: { [key: number]: R } = {};
         a.data.forEach((x) => { lookup[x.id] = x; });
         return {
           ...state,
