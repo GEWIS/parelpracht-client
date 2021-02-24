@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import './Activity.scss';
 import { Dispatch } from 'redux';
 import { RootState } from '../../stores/store';
-import { getUserName } from '../../stores/user/selectors';
+import { getUserAvatar, getUserName } from '../../stores/user/selectors';
 import { formatActivitySummary } from '../../helpers/activity';
 import { ActivityType, GeneralActivity } from './GeneralActivity';
 import { formatLastUpdate } from '../../helpers/timestamp';
@@ -14,6 +14,7 @@ import { deleteActivitySingle } from '../../stores/single/actionCreators';
 import UserLinkWithoutImage from '../user/UserLinkWithoutImage';
 import { deleteInstanceActivitySingle } from '../../stores/productinstance/actionCreator';
 import { ContractStatus, InvoiceStatus, ProductInstanceStatus } from '../../clients/server.generated';
+import UserAvatar from '../user/UserAvatar';
 
 interface Props extends RouteComponentProps {
   activity: GeneralActivity;
@@ -23,6 +24,7 @@ interface Props extends RouteComponentProps {
   parentId?: number;
 
   userName: string;
+  avatarUrl: string;
   deleteActivitySingle: (entity: SingleEntities, id: number, activityId: number) => void;
   deleteInstanceActivitySingle: (id: number, instanceId: number, activityId: number) => void;
 }
@@ -45,17 +47,19 @@ class ActivityComponent extends React.Component<Props> {
   };
 
   public render() {
-    const { activity } = this.props;
-    let feedLabel;
-    if (activity.type === ActivityType.COMMENT) {
-      feedLabel = (
-        <Icon name="pencil" />
-      );
-    } else {
-      feedLabel = (
-        <Icon name="checkmark" />
-      );
-    }
+    const { activity, avatarUrl } = this.props;
+    const feedLabel = (
+      <UserAvatar size="3em" fileName={avatarUrl} clickable={false} />
+    );
+    // if (activity.type === ActivityType.COMMENT) {
+    //   feedLabel = (
+    //     <Icon name="pencil" />
+    //   );
+    // } else {
+    //   feedLabel = (
+    //     <Icon name="checkmark" />
+    //   );
+    // }
 
     const summaryType: string = formatActivitySummary(activity.type, activity.subType);
     const summaryUser = (
@@ -101,6 +105,7 @@ class ActivityComponent extends React.Component<Props> {
 const mapStateToProps = (state: RootState, props: { activity: GeneralActivity }) => {
   return {
     userName: getUserName(state, props.activity.createdById),
+    avatarUrl: getUserAvatar(state, props.activity.createdById),
   };
 };
 
