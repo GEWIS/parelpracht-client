@@ -2,9 +2,14 @@ import React from 'react';
 import {
   Button, Icon, Image, Input, Modal,
 } from 'semantic-ui-react';
+import { connect } from 'react-redux';
+import { Dispatch } from 'redux';
 import { FilesClient } from '../../clients/filesClient';
-import { Client } from '../../clients/server.generated';
+import { Client, User } from '../../clients/server.generated';
 import { SingleEntities } from '../../stores/single/single';
+import UserAvatar from '../user/UserAvatar';
+import { RootState } from '../../stores/store';
+import { authFetchProfile } from '../../stores/auth/actionCreators';
 
 interface Props {
   entity: SingleEntities;
@@ -12,11 +17,13 @@ interface Props {
   entityName: string;
   fileName: string;
   fetchEntity: (entityId: number) => void;
+
+  loggedInUser?: User;
+  fetchAuthProfile: () => void;
 }
 
 interface State {
   open: boolean;
-
 }
 
 class LogoAvatarModal extends React.Component<Props, State> {
@@ -26,6 +33,16 @@ class LogoAvatarModal extends React.Component<Props, State> {
       open: false,
     };
   }
+
+  updateAuthedUser = () => {
+    const {
+      entity, entityId, loggedInUser, fetchAuthProfile,
+    } = this.props;
+
+    if (entity === SingleEntities.User && entityId === loggedInUser!.id) {
+      fetchAuthProfile();
+    }
+  };
 
   openModal = () => {
     this.setState({ open: true });
@@ -37,7 +54,9 @@ class LogoAvatarModal extends React.Component<Props, State> {
 
   updateImage = async (fileData: any) => {
     const client = new FilesClient();
-    const { entityId, entity, fetchEntity } = this.props;
+    const {
+      entityId, entity, fetchEntity,
+    } = this.props;
     const formData = new FormData();
     formData.append('file', fileData);
     const result = await client.uploadLogo(
@@ -46,6 +65,8 @@ class LogoAvatarModal extends React.Component<Props, State> {
     if (result) {
       fetchEntity(entityId);
     }
+
+    if (entity === SingleEntities.User) this.updateAuthedUser();
   };
 
   removeImage = async () => {
@@ -60,6 +81,8 @@ class LogoAvatarModal extends React.Component<Props, State> {
     if (result) {
       fetchEntity(entityId);
     }
+
+    if (entity === SingleEntities.User) this.updateAuthedUser();
   };
 
   public renderUserAvatar(): JSX.Element {
@@ -79,19 +102,9 @@ class LogoAvatarModal extends React.Component<Props, State> {
         Add user avatar
       </Button>
     ) : (
-      <div style={{
-        width: '4rem',
-        height: '4rem',
-        float: 'right',
-        backgroundImage: `url("/static/logos/${fileName}")`,
-        backgroundSize: 'cover',
-        backgroundRepeat: 'no-repeat',
-        backgroundPosition: 'center center',
-        borderRadius: '50%',
-        border: '1px solid #D4D4D5',
-        cursor: 'pointer',
-      }}
-      />
+      <div>
+        <UserAvatar fileName={fileName} size="4rem" clickable imageCss={{ float: 'right' }} />
+      </div>
     );
 
     const imageModal = fileName === '' ? (
@@ -272,4 +285,14 @@ class LogoAvatarModal extends React.Component<Props, State> {
   }
 }
 
-export default LogoAvatarModal;
+const mapStateToProps = (state: RootState) => {
+  return {
+    loggedInUser: state.auth.profile,
+  };
+};
+
+const mapDispatchToProps = (dispatch: Dispatch) => ({
+  fetchAuthProfile: () => dispatch(authFetchProfile()),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(LogoAvatarModal);
