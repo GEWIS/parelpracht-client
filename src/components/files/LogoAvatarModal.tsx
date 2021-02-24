@@ -197,6 +197,7 @@ class LogoAvatarModal extends React.Component<Props, State> {
           floated="right"
           src={`/static/logos/${fileName}`}
           style={{ cursor: 'pointer', maxHeight: '4rem', width: 'auto' }}
+          title="Click to upload a new image"
         />
       </div>
     );

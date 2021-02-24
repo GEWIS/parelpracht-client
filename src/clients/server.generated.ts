@@ -9013,6 +9013,7 @@ export interface ICompanyListResponse {
 export class CompanySummary implements ICompanySummary {
     id!: number;
     name!: string;
+    logoFilename!: string;
 
     constructor(data?: ICompanySummary) {
         if (data) {
@@ -9027,6 +9028,7 @@ export class CompanySummary implements ICompanySummary {
         if (_data) {
             this.id = _data["id"];
             this.name = _data["name"];
+            this.logoFilename = _data["logoFilename"];
         }
     }
 
@@ -9041,6 +9043,7 @@ export class CompanySummary implements ICompanySummary {
         data = typeof data === 'object' ? data : {};
         data["id"] = this.id;
         data["name"] = this.name;
+        data["logoFilename"] = this.logoFilename;
         return data; 
     }
 }
@@ -9048,6 +9051,7 @@ export class CompanySummary implements ICompanySummary {
 export interface ICompanySummary {
     id: number;
     name: string;
+    logoFilename: string;
 }
 
 export class CompanyParams implements ICompanyParams {
