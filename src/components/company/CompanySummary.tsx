@@ -11,7 +11,7 @@ import { fetchSingle } from '../../stores/single/actionCreators';
 import { getSingle } from '../../stores/single/selectors';
 import { SingleEntities } from '../../stores/single/single';
 import { RootState } from '../../stores/store';
-import CompanyLogoModal from './CompanyLogoModal';
+import LogoAvatarModal from '../files/LogoAvatarModal';
 
 interface Props {
   company: Company | undefined;
@@ -44,18 +44,26 @@ function CompanySummary(props: Props) {
   return (
     <>
       <Header as="h1" attached="top" style={{ backgroundColor: '#eee' }}>
-        <Header.Content>
-          <Header.Subheader>Company</Header.Subheader>
-          {company.name}
-        </Header.Content>
-        <CompanyLogoModal
-          entity={SingleEntities.Company}
-          entityId={company.id}
-          entityName={company.name}
-          fileName={company.logoFilename}
-          fetchEntity={fetchCompany}
-          deleteFunction="company"
-        />
+        <Grid>
+          <Grid.Row columns="2">
+            <Grid.Column>
+              <Icon name="building" size="large" style={{ padding: '0.5rem' }} />
+              <Header.Content style={{ paddingLeft: '0.75rem' }}>
+                <Header.Subheader>Company</Header.Subheader>
+                {company.name}
+              </Header.Content>
+            </Grid.Column>
+            <Grid.Column>
+              <LogoAvatarModal
+                entity={SingleEntities.Company}
+                entityId={company.id}
+                entityName={company.name}
+                fileName={company.logoFilename}
+                fetchEntity={fetchCompany}
+              />
+            </Grid.Column>
+          </Grid.Row>
+        </Grid>
       </Header>
       <Segment attached="bottom">
         <Grid columns={4}>

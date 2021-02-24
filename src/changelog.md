@@ -11,13 +11,24 @@ You can find the release notes below.
 - Added an insights tab with a bar chart to the product details page.
   - The bar chart shows the value of all contracted products by financial year.
   - The bar chart shows the number of contracted products by financial year.
+- Added an insights tab with a bar chart to the company details page.
+  - The bar chart shows the value of all contracted products by that company by financial year.
+  - The bar chart shows the number of contracted products by that company by financial year.
+- Added company logos, which can be uploaded from their respective company pages.
+  - The logos are also shown on the company's contracts and invoices.
+- Added user avatars, which can be uploaded from your own user page.
+  - The avatars are also shown in every activity feed.
+  - The avatar is used in the main menu.
+- Added a button to the user details page, which can be used to transfer all your assignments to a different user.
+- Added a reply-to email address for users, which will be used in contracts.
 - Invoices can now be marked as irrecoverable.
-- Added Company logos. User can also replace or remove logos.
+- Added a GEWIS logo to the login page of ParelPracht.
 
 ### Changes
 - The list of recent contracts on the dashboard now only shows your own assigned contracts, except for admins.
 - Cancel and Defer buttons for entity statuses are now disabled when the entity is "finished" (so no more statusses are possible).
 - Selecting signees when creating a contract proposal is disabled and thus no longer necessary.
+- All emails sent by ParelPracht are now nicely formatted.
 
 ### Bugfixes
 - Fixed not being able to select a recipient when generating an invoice file.
@@ -28,6 +39,7 @@ You can find the release notes below.
 - Fixed not being able to update the details of a product in a contract.
 - Fixed a product in a contract still being selected after removing this product from the contract.
 - Fixed most of the errors from the browser console.
+- Fixed user function not being required in the front-end, while it was required in the back-end.
 
 ## v0.1-beta1 (01-02-2021)
 ### Added

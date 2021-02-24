@@ -31,3 +31,9 @@ export function getCompanyName(state: RootState, id: number): string {
     state, SummaryCollections.Companies, id,
   )?.name ?? '...';
 }
+
+export function getCompanyLogo(state: RootState, id: number): string {
+  return getSummary<CompanySummary>(
+    state, SummaryCollections.Companies, id,
+  )?.logoFilename ?? '';
+}

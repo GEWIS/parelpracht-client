@@ -10,6 +10,7 @@ import { formatContactName } from '../../helpers/contact';
 import { authLogout } from '../../stores/auth/actionCreators';
 import ResourceStatus from '../../stores/resourceStatus';
 import { RootState } from '../../stores/store';
+import UserAvatar from '../user/UserAvatar';
 
 interface Props {
   authStatus: AuthStatus | undefined;
@@ -43,7 +44,13 @@ function AuthMenu(props: Props) {
       <Dropdown
         trigger={(
           <>
-            <Icon name="user circle" style={{ marginRight: '1em' }} />
+            <UserAvatar
+              fileName={props.profile.avatarFilename}
+              size="1.8em"
+              clickable={false}
+              imageCss={{ margin: '-0.4em 1em -0.4em -0.4em' }}
+              iconCss={{ marginRight: '1em', marginBottom: '-0.125em' }}
+            />
             {name}
           </>
         ) as any}

@@ -9013,6 +9013,7 @@ export interface ICompanyListResponse {
 export class CompanySummary implements ICompanySummary {
     id!: number;
     name!: string;
+    logoFilename!: string;
 
     constructor(data?: ICompanySummary) {
         if (data) {
@@ -9027,6 +9028,7 @@ export class CompanySummary implements ICompanySummary {
         if (_data) {
             this.id = _data["id"];
             this.name = _data["name"];
+            this.logoFilename = _data["logoFilename"];
         }
     }
 
@@ -9041,6 +9043,7 @@ export class CompanySummary implements ICompanySummary {
         data = typeof data === 'object' ? data : {};
         data["id"] = this.id;
         data["name"] = this.name;
+        data["logoFilename"] = this.logoFilename;
         return data; 
     }
 }
@@ -9048,6 +9051,7 @@ export class CompanySummary implements ICompanySummary {
 export interface ICompanySummary {
     id: number;
     name: string;
+    logoFilename: string;
 }
 
 export class CompanyParams implements ICompanyParams {
@@ -9409,6 +9413,7 @@ export interface IContractListResponse {
 export class ContractSummary implements IContractSummary {
     id!: number;
     title!: string;
+    value!: number;
     status!: ContractStatus;
 
     constructor(data?: IContractSummary) {
@@ -9424,6 +9429,7 @@ export class ContractSummary implements IContractSummary {
         if (_data) {
             this.id = _data["id"];
             this.title = _data["title"];
+            this.value = _data["value"];
             this.status = _data["status"];
         }
     }
@@ -9439,6 +9445,7 @@ export class ContractSummary implements IContractSummary {
         data = typeof data === 'object' ? data : {};
         data["id"] = this.id;
         data["title"] = this.title;
+        data["value"] = this.value;
         data["status"] = this.status;
         return data; 
     }
@@ -9447,6 +9454,7 @@ export class ContractSummary implements IContractSummary {
 export interface IContractSummary {
     id: number;
     title: string;
+    value: number;
     status: ContractStatus;
 }
 
@@ -9948,6 +9956,7 @@ export class InvoiceSummary implements IInvoiceSummary {
     id!: number;
     title!: string;
     companyId!: number;
+    value!: number;
     status!: InvoiceStatus;
 
     constructor(data?: IInvoiceSummary) {
@@ -9964,6 +9973,7 @@ export class InvoiceSummary implements IInvoiceSummary {
             this.id = _data["id"];
             this.title = _data["title"];
             this.companyId = _data["companyId"];
+            this.value = _data["value"];
             this.status = _data["status"];
         }
     }
@@ -9980,6 +9990,7 @@ export class InvoiceSummary implements IInvoiceSummary {
         data["id"] = this.id;
         data["title"] = this.title;
         data["companyId"] = this.companyId;
+        data["value"] = this.value;
         data["status"] = this.status;
         return data; 
     }
@@ -9989,6 +10000,7 @@ export interface IInvoiceSummary {
     id: number;
     title: string;
     companyId: number;
+    value: number;
     status: InvoiceStatus;
 }
 
@@ -10763,6 +10775,7 @@ export class UserSummary implements IUserSummary {
     lastNamePreposition!: string;
     lastName!: string;
     email!: string;
+    avatarFilename!: string;
 
     constructor(data?: IUserSummary) {
         if (data) {
@@ -10780,6 +10793,7 @@ export class UserSummary implements IUserSummary {
             this.lastNamePreposition = _data["lastNamePreposition"];
             this.lastName = _data["lastName"];
             this.email = _data["email"];
+            this.avatarFilename = _data["avatarFilename"];
         }
     }
 
@@ -10797,6 +10811,7 @@ export class UserSummary implements IUserSummary {
         data["lastNamePreposition"] = this.lastNamePreposition;
         data["lastName"] = this.lastName;
         data["email"] = this.email;
+        data["avatarFilename"] = this.avatarFilename;
         return data; 
     }
 }
@@ -10807,6 +10822,7 @@ export interface IUserSummary {
     lastNamePreposition: string;
     lastName: string;
     email: string;
+    avatarFilename: string;
 }
 
 /** Make all properties in T optional */
