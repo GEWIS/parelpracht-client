@@ -2,6 +2,7 @@ import React from 'react';
 import { Dropdown, Grid } from 'semantic-ui-react';
 import { Line } from 'react-chartjs-2';
 import { connect } from 'react-redux';
+import { ChartOptions } from 'chart.js';
 import { formatPriceFull } from '../../helpers/monetary';
 import { randomColorSet } from '../../helpers/colors';
 import { ProductsPerCategory } from '../../clients/server.generated';
@@ -75,7 +76,7 @@ class CategoryLineChart extends React.Component<Props, State> {
     const { dataSetSelection } = this.state;
     const chartData = this.createLineChartDataObject();
 
-    let options: object = {};
+    let options: ChartOptions = {};
     switch (dataSetSelection) {
       case DataSet.VALUES:
         options = {
@@ -83,7 +84,7 @@ class CategoryLineChart extends React.Component<Props, State> {
             yAxes: [{
               ticks: {
                 beginAtZero: true,
-                userCallback(value: number) {
+                callback(value: number) {
                   return formatPriceFull(value);
                 },
               },
@@ -106,7 +107,7 @@ class CategoryLineChart extends React.Component<Props, State> {
             yAxes: [{
               ticks: {
                 beginAtZero: true,
-                userCallback(value: number) {
+                callback(value: number) {
                   return value;
                 },
                 precision: 0,

@@ -121,7 +121,7 @@ class DashboardProductInstanceStatusGraph extends React.Component<Props, State> 
                   stacked: true,
                   ticks: {
                     beginAtZero: true,
-                    userCallback(value: number) {
+                    callback(value: number) {
                       return formatPriceFull(value);
                     },
                   },

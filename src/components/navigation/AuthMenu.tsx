@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { NavLink } from 'react-router-dom';
+import { NavLink, RouteComponentProps, withRouter } from 'react-router-dom';
 import { Dispatch } from 'redux';
 import {
   Dropdown, Icon, Loader, Menu,
@@ -12,7 +12,7 @@ import ResourceStatus from '../../stores/resourceStatus';
 import { RootState } from '../../stores/store';
 import UserAvatar from '../user/UserAvatar';
 
-interface Props {
+interface Props extends RouteComponentProps {
   authStatus: AuthStatus | undefined;
   status: ResourceStatus;
 
@@ -31,6 +31,12 @@ function AuthMenu(props: Props) {
       </Menu.Item>
     );
   }
+
+  const logout = () => {
+    props.history.push('/login');
+    props.logout();
+  };
+
   const name = formatContactName(
     props.profile.firstName,
     props.profile.lastNamePreposition,
@@ -64,7 +70,7 @@ function AuthMenu(props: Props) {
               Users
             </Dropdown.Item>
           ) : null}
-          <Dropdown.Item onClick={props.logout}>
+          <Dropdown.Item onClick={logout}>
             <Icon name="sign-out" />
             Logout
           </Dropdown.Item>
@@ -87,4 +93,4 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   logout: () => dispatch(authLogout()),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(AuthMenu);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(AuthMenu));

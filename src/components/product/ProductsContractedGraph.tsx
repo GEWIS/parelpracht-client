@@ -1,6 +1,7 @@
 import React from 'react';
 import { Dropdown, Grid, Tab } from 'semantic-ui-react';
 import { Bar } from 'react-chartjs-2';
+import { ChartOptions } from 'chart.js';
 import { AnalysisResultByYear, Client, Product } from '../../clients/server.generated';
 import { DataSet } from '../chart/CategoryLineChart';
 import { formatPriceFull } from '../../helpers/monetary';
@@ -119,7 +120,7 @@ class ProductsContractedGraph extends React.Component<Props, State> {
   createBarChartOptionsObject = () => {
     const { dataSetSelection } = this.state;
     const { product } = this.props;
-    let options;
+    let options: ChartOptions;
     switch (dataSetSelection) {
       case DataSet.VALUES:
         options = {
@@ -134,7 +135,7 @@ class ProductsContractedGraph extends React.Component<Props, State> {
               stacked: true,
               ticks: {
                 beginAtZero: true,
-                userCallback(value: number) {
+                callback(value: number) {
                   return formatPriceFull(value);
                 },
               },
@@ -162,7 +163,7 @@ class ProductsContractedGraph extends React.Component<Props, State> {
               stacked: true,
               ticks: {
                 beginAtZero: true,
-                userCallback(value: number) {
+                callback(value: number) {
                   return value;
                 },
               },
@@ -178,6 +179,7 @@ class ProductsContractedGraph extends React.Component<Props, State> {
         };
         break;
       default:
+        options = {};
     }
     return options;
   };

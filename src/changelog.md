@@ -40,6 +40,7 @@ You can find the release notes below.
 - Fixed a product in a contract still being selected after removing this product from the contract.
 - Fixed most of the errors from the browser console.
 - Fixed user function not being required in the front-end, while it was required in the back-end.
+- Fixed a store error showing up when you log out.
 
 ## v0.1-beta1 (01-02-2021)
 ### Added
