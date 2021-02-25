@@ -253,4 +253,4 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
 
 const mapDispatchToProps = () => ({});
 
-export default withRouter(connect(mapDispatchToProps)(FinancialDocumentProgress));
+export default withRouter(connect(null, mapDispatchToProps)(FinancialDocumentProgress));

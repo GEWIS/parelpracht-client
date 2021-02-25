@@ -253,4 +253,4 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   ),
 });
 
-export default withRouter(connect(mapDispatchToProps)(SingleFile));
+export default withRouter(connect(null, mapDispatchToProps)(SingleFile));

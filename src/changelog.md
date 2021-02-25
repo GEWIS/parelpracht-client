@@ -19,8 +19,11 @@ You can find the release notes below.
 - Added user avatars, which can be uploaded from your own user page.
   - The avatars are also shown in every activity feed.
   - The avatar is used in the main menu.
+- Treasurers will receive an email with an invoice, when this invoice has been marked as "Sent".
+  - This is optional and has to be enabled in the User props.
 - Added a button to the user details page, which can be used to transfer all your assignments to a different user.
 - Added a reply-to email address for users, which will be used in contracts.
+  - Optionally, ParelPracht will send emails to this email address (only for treasurers).
 - Invoices can now be marked as irrecoverable.
 - Added a GEWIS logo to the login page of ParelPracht.
 

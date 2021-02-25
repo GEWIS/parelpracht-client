@@ -40,6 +40,7 @@ interface State {
   functionName: string;
   replyToEmail: string;
   receiveEmails: boolean;
+  sendEmailsToReplyToEmail: boolean;
   roleGeneral: boolean;
   roleSignee: boolean;
   roleFinancial: boolean;
@@ -78,6 +79,7 @@ class UserProps extends React.Component<Props, State> {
       replyToEmail: user.replyToEmail,
 
       receiveEmails: user.receiveEmails,
+      sendEmailsToReplyToEmail: user.sendEmailsToReplyToEmail,
       roleGeneral: user.roles.find((r) => r.name === Roles.GENERAL) !== undefined,
       roleSignee: user.roles.find((r) => r.name === Roles.SIGNEE) !== undefined,
       roleFinancial: user.roles.find((r) => r.name === Roles.FINANCIAL) !== undefined,
@@ -97,6 +99,7 @@ class UserProps extends React.Component<Props, State> {
       function: this.state.functionName,
       receiveEmails: this.state.receiveEmails,
       replyToEmail: this.state.replyToEmail,
+      sendEmailsToReplyToEmail: this.state.sendEmailsToReplyToEmail,
 
       roles: _.compact([
         this.state.roleGeneral ? Roles.GENERAL : undefined,
@@ -153,22 +156,36 @@ class UserProps extends React.Component<Props, State> {
       comment,
       replyToEmail,
       receiveEmails,
+      sendEmailsToReplyToEmail,
 
       roleGeneral, roleSignee, roleAdmin, roleAudit, roleFinancial,
     } = this.state;
 
     const receiveEmailsCheckbox = roleAudit || roleFinancial ? (
-      <Form.Field>
-        <Checkbox
-          label="I want to receive an email each time an invoice is created"
-          disabled={!editing}
-          id="form-receive-emails"
-          checked={receiveEmails}
-          onChange={(e, data) => this.setState({
-            receiveEmails: data.checked!,
-          })}
-        />
-      </Form.Field>
+      <>
+        <Form.Field>
+          <Checkbox
+            label="I want to receive an email each time an invoice is created"
+            disabled={!editing}
+            id="form-receive-emails"
+            checked={receiveEmails}
+            onChange={(e, data) => this.setState({
+              receiveEmails: data.checked!,
+            })}
+          />
+        </Form.Field>
+        <Form.Field>
+          <Checkbox
+            label="I want to receive email on my reply-to email address"
+            disabled={!editing}
+            id="form-send-emails-to-reply-to"
+            checked={sendEmailsToReplyToEmail}
+            onChange={(e, data) => this.setState({
+              sendEmailsToReplyToEmail: data.checked!,
+            })}
+          />
+        </Form.Field>
+      </>
     ) : (
       ' '
     );
@@ -238,23 +255,7 @@ class UserProps extends React.Component<Props, State> {
             />
           </Form.Group>
           <Form.Group widths="equal">
-            <Form.Field
-              disabled={!editing}
-              required
-              id="form-input-email"
-              fluid
-              width={6}
-              control={Input}
-              label="Email address"
-              value={email}
-              onChange={(e: ChangeEvent<HTMLInputElement>) => this.setState({
-                email: e.target.value,
-              })}
-              error={
-                !validator.isEmail(email)
-              }
-            />
-            <Form.Field required fluid disabled={!editing} width={3}>
+            <Form.Field required disabled={!editing} width={3}>
               {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
               <label htmlFor="form-input-gender">Gender</label>
               <Dropdown
@@ -270,6 +271,7 @@ class UserProps extends React.Component<Props, State> {
                 onChange={(e, data) => this.setState({
                   gender: data.value as Gender,
                 })}
+                fluid
                 width={4}
               />
             </Form.Field>
