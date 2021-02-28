@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import { Form, Input } from 'semantic-ui-react';
 import validator from 'validator';
+import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { ActivityType, Contract, ContractParams } from '../../clients/server.generated';
 import { createSingle, deleteSingle, saveSingle } from '../../stores/single/actionCreators';
 import ResourceStatus from '../../stores/resourceStatus';
@@ -14,7 +15,7 @@ import { SingleEntities } from '../../stores/single/single';
 import { getSingle } from '../../stores/single/selectors';
 import UserSelector from '../user/UserSelector';
 
-interface Props {
+interface Props extends RouteComponentProps {
   create?: boolean;
   companyPredefined?: boolean;
   onCancel?: () => void;
@@ -98,6 +99,7 @@ class ContractProps extends React.Component<Props, State> {
 
   remove = () => {
     if (!this.props.create) {
+      this.props.history.push('/contract');
       this.props.deleteContract(this.props.contract.id);
     }
   };
@@ -261,4 +263,4 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   ),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(ContractProps);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ContractProps));

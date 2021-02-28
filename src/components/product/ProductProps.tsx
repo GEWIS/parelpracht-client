@@ -5,6 +5,7 @@ import {
   Checkbox, Form, Input, Label, TextArea,
 } from 'semantic-ui-react';
 import validator from 'validator';
+import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { Product, ProductParams, ProductStatus } from '../../clients/server.generated';
 import ProductCategorySelector from '../productcategories/ProductCategorySelector';
 import { formatPrice } from '../../helpers/monetary';
@@ -15,7 +16,7 @@ import { SingleEntities } from '../../stores/single/single';
 import { RootState } from '../../stores/store';
 import PropsButtons from '../PropsButtons';
 
-interface Props {
+interface Props extends RouteComponentProps {
   create?: boolean;
   onCancel?: () => void;
 
@@ -119,6 +120,7 @@ class ProductProps extends React.Component<Props, State> {
 
   remove = () => {
     if (!this.props.create && this.props.deleteProduct) {
+      this.props.history.push('/product');
       this.props.deleteProduct(this.props.product.id);
     }
   };
@@ -389,4 +391,4 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   ),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(ProductProps);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ProductProps));

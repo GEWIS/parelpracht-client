@@ -21,6 +21,7 @@ import { showTransientAlert } from '../stores/alerts/actionCreators';
 
 interface Props extends RouteComponentProps<{ companyId: string, contactId?: string }> {
   create?: boolean;
+  onCompanyPage: boolean;
   contact: Contact | undefined;
   status: ResourceStatus;
 
@@ -142,6 +143,7 @@ class ContactModal extends React.Component<Props> {
         <Segment attached="bottom">
           <AlertContainer />
           <ContactProps
+            onCompanyPage={this.props.onCompanyPage}
             contact={contact}
             create={this.props.create}
             onCancel={() => { this.close(); }}

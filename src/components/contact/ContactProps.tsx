@@ -5,10 +5,13 @@ import {
   Dropdown, Form, Input, TextArea,
 } from 'semantic-ui-react';
 import validator from 'validator';
+import { RouteComponentProps, withRouter } from 'react-router-dom';
 import {
   Contact, ContactFunction, ContactParams, Gender,
 } from '../../clients/server.generated';
-import { createSingle, deleteSingle, saveSingle } from '../../stores/single/actionCreators';
+import {
+  createSingle, deleteSingle, fetchSingle, saveSingle,
+} from '../../stores/single/actionCreators';
 import ResourceStatus from '../../stores/resourceStatus';
 import { RootState } from '../../stores/store';
 import PropsButtons from '../PropsButtons';
@@ -16,8 +19,9 @@ import { SingleEntities } from '../../stores/single/single';
 import { getSingle } from '../../stores/single/selectors';
 import { formatFunction } from '../../helpers/contact';
 
-interface Props {
+interface Props extends RouteComponentProps {
   create?: boolean;
+  onCompanyPage: boolean;
   onCancel?: () => void;
 
   contact: Contact;
@@ -26,6 +30,7 @@ interface Props {
   saveContact: (id: number, contact: ContactParams) => void;
   createContact: (contact: ContactParams) => void;
   deleteContact: (id: number) => void;
+  fetchCompany: (id: number) => void;
 }
 
 interface State {
@@ -110,6 +115,12 @@ class ContactProps extends React.Component<Props, State> {
   remove = () => {
     if (!this.props.create) {
       this.props.deleteContact(this.props.contact.id);
+      if (this.props.onCompanyPage) {
+        this.props.history.push(`/company/${this.props.contact.companyId}`);
+        this.props.fetchCompany(this.props.contact.companyId);
+      } else {
+        this.props.history.push('/contact');
+      }
     }
   };
 
@@ -303,6 +314,9 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   deleteContact: (id: number) => dispatch(
     deleteSingle(SingleEntities.Contact, id),
   ),
+  fetchCompany: (id: number) => dispatch(
+    fetchSingle(SingleEntities.Company, id),
+  ),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(ContactProps);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ContactProps));

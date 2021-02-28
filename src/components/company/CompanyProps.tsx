@@ -7,6 +7,7 @@ import {
   Form, Input, TextArea,
 } from 'semantic-ui-react';
 import validator from 'validator';
+import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { Company, CompanyParams, CompanyStatus } from '../../clients/server.generated';
 import { createSingle, deleteSingle, saveSingle } from '../../stores/single/actionCreators';
 import ResourceStatus from '../../stores/resourceStatus';
@@ -16,7 +17,7 @@ import { getSingle } from '../../stores/single/selectors';
 import { SingleEntities } from '../../stores/single/single';
 import COUNTRY_OPTIONS from './countries.json';
 
-interface Props {
+interface Props extends RouteComponentProps {
   create?: boolean;
   onCancel?: () => void;
 
@@ -120,6 +121,7 @@ class CompanyProps extends React.Component<Props, State> {
 
   remove = () => {
     if (!this.props.create && this.props.deleteCompany) {
+      this.props.history.push('/company');
       this.props.deleteCompany(this.props.company.id);
     }
   };
@@ -403,4 +405,4 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   ),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(CompanyProps);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(CompanyProps));

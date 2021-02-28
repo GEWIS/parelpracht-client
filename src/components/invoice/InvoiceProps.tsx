@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import { Form, Input, TextArea } from 'semantic-ui-react';
 import { DateInput } from 'semantic-ui-calendar-react';
+import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { ActivityType, Invoice, Partial_InvoiceParams } from '../../clients/server.generated';
 import { getCompanyName } from '../../stores/company/selectors';
 import ResourceStatus from '../../stores/resourceStatus';
@@ -14,7 +15,7 @@ import PropsButtons from '../PropsButtons';
 import { formatTimestampToDate } from '../../helpers/timestamp';
 import UserSelector from '../user/UserSelector';
 
-interface Props {
+interface Props extends RouteComponentProps {
   create?: boolean;
   onCancel?: () => void;
 
@@ -99,6 +100,7 @@ class InvoiceProps extends React.Component<Props, State> {
 
   remove = () => {
     if (!this.props.create) {
+      this.props.history.push('/invoice');
       this.props.deleteInvoice(this.props.invoice.id);
     }
   };
@@ -234,4 +236,4 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   ),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(InvoiceProps);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(InvoiceProps));

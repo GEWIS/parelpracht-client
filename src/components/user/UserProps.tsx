@@ -6,6 +6,7 @@ import {
 } from 'semantic-ui-react';
 import validator from 'validator';
 import _ from 'lodash';
+import { RouteComponentProps, withRouter } from 'react-router-dom';
 import {
   User, UserParams, Gender, Roles,
 } from '../../clients/server.generated';
@@ -16,7 +17,7 @@ import PropsButtons from '../PropsButtons';
 import { SingleEntities } from '../../stores/single/single';
 import { getSingle } from '../../stores/single/selectors';
 
-interface Props {
+interface Props extends RouteComponentProps {
   create?: boolean;
   onCancel?: () => void;
 
@@ -133,6 +134,7 @@ class UserProps extends React.Component<Props, State> {
 
   remove = () => {
     if (!this.props.create) {
+      this.props.history.push('/user');
       this.props.deleteUser(this.props.user.id);
     }
   };
@@ -440,4 +442,4 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   ),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(UserProps);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(UserProps));
