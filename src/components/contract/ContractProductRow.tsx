@@ -57,7 +57,7 @@ class ContractProductRow extends React.Component<Props> {
             productId={productInstance.productId}
             productInstanceId={productInstance.id}
             entity={SingleEntities.Contract}
-            details={productInstance.comments}
+            details={productInstance.details}
           />
         </Table.Cell>
         <Table.Cell collapsing textAlign="right">

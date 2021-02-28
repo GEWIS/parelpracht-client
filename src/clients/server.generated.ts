@@ -6389,7 +6389,7 @@ or a different price that is not a discount */
     /** Optional discount amount */
     discount!: number;
     /** Any comments regarding this product instance */
-    comments?: string;
+    details?: string;
 
     constructor(data?: IProductInstance) {
         if (data) {
@@ -6425,7 +6425,7 @@ or a different price that is not a discount */
             }
             this.basePrice = _data["basePrice"];
             this.discount = _data["discount"];
-            this.comments = _data["comments"];
+            this.details = _data["details"];
         }
     }
 
@@ -6456,7 +6456,7 @@ or a different price that is not a discount */
         }
         data["basePrice"] = this.basePrice;
         data["discount"] = this.discount;
-        data["comments"] = this.comments;
+        data["details"] = this.details;
         return data; 
     }
 }
@@ -6489,7 +6489,7 @@ or a different price that is not a discount */
     /** Optional discount amount */
     discount: number;
     /** Any comments regarding this product instance */
-    comments?: string;
+    details?: string;
 }
 
 export class Company implements ICompany {
@@ -6872,6 +6872,10 @@ export enum InvoiceStatus {
 export enum ActivityType {
     STATUS = "STATUS",
     COMMENT = "COMMENT",
+    EDIT = "EDIT",
+    REASSIGN = "REASSIGN",
+    ADDPRODUCT = "ADDPRODUCT",
+    DELPRODUCT = "DELPRODUCT",
 }
 
 export class InvoiceActivity implements IInvoiceActivity {
