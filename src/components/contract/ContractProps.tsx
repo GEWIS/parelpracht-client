@@ -115,6 +115,7 @@ class ContractProps extends React.Component<Props, State> {
   };
 
   render() {
+    const { create } = this.props;
     const {
       editing,
       title,
@@ -124,22 +125,7 @@ class ContractProps extends React.Component<Props, State> {
       comments,
     } = this.state;
 
-    let companySelector = (
-      <Form.Field
-        disabled={!editing}
-        required
-      >
-        {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-        <label htmlFor="form-company-selector">Company</label>
-        <CompanySelector
-          id="form-company-selector"
-          value={companySelection}
-          onChange={(val: number) => this.setState({
-            companySelection: val,
-          })}
-        />
-      </Form.Field>
-    );
+    let companySelector: JSX.Element;
     if (this.props.companyPredefined) {
       companySelector = (
         <Form.Field
@@ -152,6 +138,23 @@ class ContractProps extends React.Component<Props, State> {
             id="form-company-selector"
             value={companySelection}
             disabled
+            onChange={(val: number) => this.setState({
+              companySelection: val,
+            })}
+          />
+        </Form.Field>
+      );
+    } else {
+      companySelector = (
+        <Form.Field
+          disabled={!editing || !create}
+          required
+        >
+          {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
+          <label htmlFor="form-company-selector">Company</label>
+          <CompanySelector
+            id="form-company-selector"
+            value={companySelection}
             onChange={(val: number) => this.setState({
               companySelection: val,
             })}
@@ -211,7 +214,7 @@ class ContractProps extends React.Component<Props, State> {
           </Form.Group>
           {companySelector}
           <Form.Field
-            disabled={!editing}
+            disabled={!editing || !create}
             required
           >
             {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
