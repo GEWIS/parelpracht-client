@@ -19,11 +19,16 @@ You can find the release notes below.
 - Added user avatars, which can be uploaded from your own user page.
   - The avatars are also shown in every activity feed.
   - The avatar is used in the main menu.
+- Added new activities which will all be created automatically.
+  - Added an activity for when one changes an entity's details.
+  - Added an activity for when one changes the assignment of a contract or invoice.
+  - Added an activity for when one adds products to a contract.
+  - Added an activity for when one removes a product from a contract.
 - Treasurers will receive an email with an invoice, when this invoice has been marked as "Sent".
   - This is optional and has to be enabled in the User props.
 - Added a button to the user details page, which can be used to transfer all your assignments to a different user.
 - Added a reply-to email address for users, which will be used in contracts.
-  - Optionally, ParelPracht will send emails to this email address (only for treasurers).
+  - Optionally, ParelPracht will send non-authentication related emails to this email address.
 - Invoices can now be marked as irrecoverable.
 - Added a GEWIS logo to the login page of ParelPracht.
 
@@ -32,6 +37,9 @@ You can find the release notes below.
 - Cancel and Defer buttons for entity statuses are now disabled when the entity is "finished" (so no more statusses are possible).
 - Selecting signees when creating a contract proposal is disabled and thus no longer necessary.
 - All emails sent by ParelPracht are now nicely formatted.
+- It is no longer possible to create empty comments.
+- When you delete an entity, you will now be properly redirected to prevent empty pages and infinite loading.
+- The "Updated At" value of every entity will now be updated when an activity is added.
 
 ### Bugfixes
 - Fixed not being able to select a recipient when generating an invoice file.
@@ -44,6 +52,7 @@ You can find the release notes below.
 - Fixed most of the errors from the browser console.
 - Fixed user function not being required in the front-end, while it was required in the back-end.
 - Fixed a store error showing up when you log out.
+- Fixed slow performance of the company details.
 
 ## v0.1-beta1 (01-02-2021)
 ### Added

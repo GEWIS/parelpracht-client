@@ -2,9 +2,7 @@ import React, { ChangeEvent } from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import {
-  Checkbox,
-  Dropdown,
-  Form, Input, TextArea,
+  Checkbox, Form, Input, TextArea,
 } from 'semantic-ui-react';
 import validator from 'validator';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
@@ -15,7 +13,7 @@ import { RootState } from '../../stores/store';
 import PropsButtons from '../PropsButtons';
 import { getSingle } from '../../stores/single/selectors';
 import { SingleEntities } from '../../stores/single/single';
-import COUNTRY_OPTIONS from './countries.json';
+import CountrySelector from './CountrySelector';
 
 interface Props extends RouteComponentProps {
   create?: boolean;
@@ -293,27 +291,14 @@ class CompanyProps extends React.Component<Props, State> {
                 placeholder="Postal Code"
               />
             </Form.Field>
-            <Form.Field
-              disabled={!editing}
-              required
-            >
-              {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-              <label htmlFor="form-input-address-country">
-                Country
-              </label>
-              <Dropdown
-                id="form-input-address-country"
-                placeholder="Country"
-                fluid
-                search
-                selection
-                options={COUNTRY_OPTIONS}
-                value={addressCountry}
-                onChange={(e, data) => this.setState({
-                  addressCountry: data.value as any,
-                })}
-              />
-            </Form.Field>
+            <CountrySelector
+              editing={editing}
+              country={addressCountry}
+              updateValue={(e, data) => this.setState({
+                addressCountry: data.value as any,
+              })}
+              id="form-input-address-country"
+            />
           </Form.Group>
           <h2>
             Invoice Address
@@ -362,24 +347,14 @@ class CompanyProps extends React.Component<Props, State> {
                 fluid
               />
             </Form.Field>
-            <Form.Field disabled={!editing}>
-              {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-              <label htmlFor="form-input-invoice-address-country">
-                Country
-              </label>
-              <Dropdown
-                id="form-input-invoice-address-country"
-                placeholder="Country"
-                fluid
-                search
-                selection
-                options={COUNTRY_OPTIONS}
-                value={invoiceAddressCountry}
-                onChange={(e, data) => this.setState({
-                  invoiceAddressCountry: data.value as any,
-                })}
-              />
-            </Form.Field>
+            <CountrySelector
+              editing={editing}
+              country={invoiceAddressCountry}
+              updateValue={(e, data) => this.setState({
+                invoiceAddressCountry: data.value as any,
+              })}
+              id="form-input-invoice-address-country"
+            />
           </Form.Group>
         </Form>
       </>
