@@ -53,6 +53,7 @@ You can find the release notes below.
 - Fixed user function not being required in the front-end, while it was required in the back-end.
 - Fixed a store error showing up when you log out.
 - Fixed slow performance of the company details.
+- Fixed delete popup not visible when in a modal.
 
 ## v0.1-beta1 (01-02-2021)
 ### Added

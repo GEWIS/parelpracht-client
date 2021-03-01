@@ -10,7 +10,6 @@ interface Props {
   value: number;
   options: UserSummary[];
   onChange: (value: number | number[]) => void;
-  // eslint-disable-next-line react/require-default-props
   hideEmail?: boolean;
   correct?: boolean;
 }
