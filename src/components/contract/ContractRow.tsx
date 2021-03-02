@@ -14,16 +14,14 @@ import CompanyLink from '../company/CompanyLink';
 
 interface Props extends RouteComponentProps {
   contract: Contract;
-
   contactName: string;
-  companyName: string;
   assignedName: string;
   contractStatus: ContractStatus;
 }
 
 function ContractRow(props: Props) {
   const {
-    contract, companyName, contactName, assignedName, contractStatus,
+    contract, contactName, assignedName, contractStatus,
   } = props;
   return (
     <Table.Row>

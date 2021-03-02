@@ -15,3 +15,7 @@
 .ui.table.fixed tr > th {
   overflow: visible;
 }
+
+.blurring.dimmed.dimmable > :not(#root) {
+  filter: none !important;
+}

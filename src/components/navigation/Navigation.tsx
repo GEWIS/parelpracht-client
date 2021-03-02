@@ -4,6 +4,7 @@ import { Container, Icon, Menu } from 'semantic-ui-react';
 import AuthMenu from './AuthMenu';
 import CompaniesMenu from './CompaniesMenu';
 import ProductsMenu from './ProductsMenu';
+import InvoicesMenu from './InvoicesMenu';
 
 function Navigation() {
   return (
@@ -18,10 +19,7 @@ function Navigation() {
           <Icon name="file alternate" />
           Contracts
         </Menu.Item>
-        <Menu.Item as={NavLink} to="/invoice">
-          <Icon name="money bill alternate outline" />
-          Invoices
-        </Menu.Item>
+        <InvoicesMenu />
         <Menu.Item as={NavLink} to="/insights">
           <Icon name="line graph" />
           Insights

@@ -4,13 +4,11 @@ import {
   Loader,
   Modal, Segment,
 } from 'semantic-ui-react';
-import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import {
-  Client, Contract, Invoice, ProductInstance, ProductInstanceParams, ProductInstanceStatus,
+  Contract, Invoice, ProductInstance,
 } from '../clients/server.generated';
-import { fetchSingle } from '../stores/single/actionCreators';
 import { RootState } from '../stores/store';
 import InvoiceProductInstanceProps from '../components/invoice/InvoiceProductInstanceProps';
 import ResourceStatus from '../stores/resourceStatus';
@@ -18,7 +16,7 @@ import AlertContainer from '../components/alerts/AlertContainer';
 import { getSingle } from '../stores/single/selectors';
 import { SingleEntities } from '../stores/single/single';
 
-interface SelfProps extends RouteComponentProps<{invoiceId: string, productInstanceId?: string}> {
+interface SelfProps extends RouteComponentProps<{ invoiceId: string, productInstanceId?: string }> {
   create?: boolean;
 }
 
@@ -90,9 +88,5 @@ const mapStateToProps = (state: RootState, props: SelfProps) => {
   };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch) => ({
-  // fetchInvoice: (id: number) => dispatch(fetchSingle(SingleEntities.Invoice, id)),
-});
-
 // eslint-disable-next-line max-len
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(InvoiceProductInstanceModal));
+export default withRouter(connect(mapStateToProps)(InvoiceProductInstanceModal));

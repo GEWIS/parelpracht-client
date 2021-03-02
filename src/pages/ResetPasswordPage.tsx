@@ -14,7 +14,7 @@ import { connect } from 'react-redux';
 import AlertContainer from '../components/alerts/AlertContainer';
 import ResetPasswordForm from '../components/auth/ResetPasswordForm';
 import { RootState } from '../stores/store';
-import { authForgotPassword, authRequestClear } from '../stores/auth/actionCreators';
+import { authRequestClear } from '../stores/auth/actionCreators';
 import ResourceStatus from '../stores/resourceStatus';
 
 interface Props extends RouteComponentProps {

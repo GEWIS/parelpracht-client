@@ -19,12 +19,13 @@ export function fetchTable<T extends Tables>(table: T): TableFetchAction<T> {
 }
 
 export function setTable<T extends Tables, R>(
-  table: T, data: R[], count: number,
+  table: T, data: R[], count: number, lastSeen?: Date,
 ): TableSetAction<T, R> {
   return {
     type: tableActionPattern(table, TableActionType.Set),
     data,
     count,
+    lastSeen,
   };
 }
 
@@ -65,7 +66,7 @@ export function prevPageTable<T extends Tables>(table: T): TablePrevPageAction<T
 }
 
 export function setFilterTable<T extends Tables>(
-  table: T, filter: {column: string, values: any[]},
+  table: T, filter: { column: string, values: any[] },
 ): TableSetFilterAction<T> {
   return { type: tableActionPattern(table, TableActionType.SetFilter), ...filter };
 }

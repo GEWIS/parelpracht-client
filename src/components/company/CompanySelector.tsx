@@ -16,9 +16,9 @@ function CompanySelector(props: Props & DropdownProps) {
   const [open, changeOpen] = useState(false);
 
   const {
-    value, onChange, options, disabled, ...rest
+    value, onChange, options, disabled,
   } = props;
-  const dropdownOptions = props.options.map((x) => ({
+  const dropdownOptions = options.map((x) => ({
     key: x.id,
     text: x.name,
     value: x.id,
@@ -31,9 +31,8 @@ function CompanySelector(props: Props & DropdownProps) {
       search
       selection
       error={!(value > -1) && !open}
-      {...rest}
       options={dropdownOptions}
-      value={value}
+      value={value < 0 ? '' : value}
       onChange={(e, data) => onChange(data.value as any)}
       // Because the text is also red when error=true, we need to
       // keep a state whether the dropdown is open

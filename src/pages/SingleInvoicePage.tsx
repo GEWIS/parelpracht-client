@@ -71,7 +71,7 @@ class SingleInvoicePage extends React.Component<Props> {
               fetchEntity={fetchInvoice}
               generateModal={(
                 <GenerateInvoiceModal
-                  invoiceId={invoice.id}
+                  invoice={invoice}
                   fetchInvoice={fetchInvoice}
                 />
             )}

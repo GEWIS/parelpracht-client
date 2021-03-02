@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { NavLink } from 'react-router-dom';
+import { NavLink, RouteComponentProps, withRouter } from 'react-router-dom';
 import { Dispatch } from 'redux';
 import {
   Dropdown, Icon, Loader, Menu,
@@ -10,8 +10,9 @@ import { formatContactName } from '../../helpers/contact';
 import { authLogout } from '../../stores/auth/actionCreators';
 import ResourceStatus from '../../stores/resourceStatus';
 import { RootState } from '../../stores/store';
+import UserAvatar from '../user/UserAvatar';
 
-interface Props {
+interface Props extends RouteComponentProps {
   authStatus: AuthStatus | undefined;
   status: ResourceStatus;
 
@@ -30,6 +31,12 @@ function AuthMenu(props: Props) {
       </Menu.Item>
     );
   }
+
+  const logout = () => {
+    props.history.push('/login');
+    props.logout();
+  };
+
   const name = formatContactName(
     props.profile.firstName,
     props.profile.lastNamePreposition,
@@ -41,9 +48,15 @@ function AuthMenu(props: Props) {
   return (
     <Menu.Menu position="right">
       <Dropdown
-        text={(
+        trigger={(
           <>
-            <Icon name="user circle" style={{ marginRight: '1em' }} />
+            <UserAvatar
+              fileName={props.profile.avatarFilename}
+              size="1.8em"
+              clickable={false}
+              imageCss={{ margin: '-0.4em 1em -0.4em -0.4em' }}
+              iconCss={{ marginRight: '1em', marginBottom: '-0.125em' }}
+            />
             {name}
           </>
         ) as any}
@@ -57,7 +70,7 @@ function AuthMenu(props: Props) {
               Users
             </Dropdown.Item>
           ) : null}
-          <Dropdown.Item onClick={props.logout}>
+          <Dropdown.Item onClick={logout}>
             <Icon name="sign-out" />
             Logout
           </Dropdown.Item>
@@ -80,4 +93,4 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   logout: () => dispatch(authLogout()),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(AuthMenu);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(AuthMenu));

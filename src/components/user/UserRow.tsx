@@ -4,7 +4,6 @@ import { NavLink } from 'react-router-dom';
 import { Checkbox, Table } from 'semantic-ui-react';
 import { Roles, User } from '../../clients/server.generated';
 import { formatContactName } from '../../helpers/contact';
-import { RootState } from '../../stores/store';
 
 interface Props {
   user: User;
@@ -70,7 +69,4 @@ function UserRow(props: Props) {
   );
 }
 
-const mapStateToProps = (state: RootState, props: { user: User }) => ({
-});
-
-export default connect(mapStateToProps)(UserRow);
+export default connect()(UserRow);

@@ -82,13 +82,14 @@ class ProductCategoryModal extends React.Component<Props> {
           open
           dimmer="blurring"
           size="tiny"
+          closeOnDimmerClick
         >
-          <Segment placeholder attached="bottom">
+          <Modal.Content>
             <AlertContainer />
             <Dimmer active inverted>
               <Loader />
             </Dimmer>
-          </Segment>
+          </Modal.Content>
         </Modal>
       );
     }
@@ -101,7 +102,7 @@ class ProductCategoryModal extends React.Component<Props> {
         dimmer="blurring"
         size="tiny"
       >
-        <Segment attached="bottom">
+        <Modal.Content attached="bottom">
           <AlertContainer />
           <ProductCategoryProps
             category={category}
@@ -116,13 +117,17 @@ class ProductCategoryModal extends React.Component<Props> {
                 <Header>Products:</Header>
                 <ul>
                   {category.products.map((product) => {
-                    return <li><NavLink to={`/product/${product.id}`}>{product.nameEnglish}</NavLink></li>;
+                    return (
+                      <li key={product.id}>
+                        <NavLink to={`/product/${product.id}`}>{product.nameEnglish}</NavLink>
+                      </li>
+                    );
                   })}
                 </ul>
               </Segment>
             )
           }
-        </Segment>
+        </Modal.Content>
       </Modal>
     );
   }

@@ -1,8 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { NavLink, RouteComponentProps, withRouter } from 'react-router-dom';
+import { RouteComponentProps, withRouter } from 'react-router-dom';
 import {
-  Button, Icon, Loader, Table,
+  Loader, Table,
 } from 'semantic-ui-react';
 import { Company } from '../../clients/server.generated';
 import { getSingle } from '../../stores/single/selectors';
@@ -50,13 +50,13 @@ class InvoiceList extends React.Component<Props, State> {
     return (
       <>
         <h3>
-          Invoice
+          Invoices
         </h3>
         <Table compact>
           <Table.Header>
             <Table.Row>
               <Table.HeaderCell>
-                Invoice ID
+                Title
               </Table.HeaderCell>
               <Table.HeaderCell>
                 Amount
@@ -65,13 +65,15 @@ class InvoiceList extends React.Component<Props, State> {
                 Status
               </Table.HeaderCell>
               <Table.HeaderCell>
+                Year
+              </Table.HeaderCell>
+              <Table.HeaderCell>
                 Last Update
               </Table.HeaderCell>
             </Table.Row>
           </Table.Header>
           <Table.Body>
-            {invoices.map((x) => (
-              <InvoiceComponent key={x.id} invoice={x} />))}
+            {invoices.map((x) => <InvoiceComponent key={x.id} invoice={x} />)}
           </Table.Body>
         </Table>
       </>

@@ -3,7 +3,7 @@ import { Modal, Segment } from 'semantic-ui-react';
 import marked from 'marked';
 import releaseNotes from '../changelog.md';
 
-export const version = 'v0.1-beta1';
+export const version = 'v0.2-dev';
 
 interface Props {}
 interface State {

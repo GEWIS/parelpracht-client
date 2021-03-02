@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {
-  Modal, Segment,
+  Modal,
 } from 'semantic-ui-react';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
@@ -53,13 +53,16 @@ class CompaniesCreatePage extends React.Component<Props> {
       <Modal
         onClose={this.close}
         open
+        closeIcon
         dimmer="blurring"
         closeOnDimmerClick={false}
       >
-        <Segment>
+        <Modal.Content>
           <AlertContainer />
-          <CompanyProps company={company} create onCancel={this.close} />
-        </Segment>
+          <Modal.Description>
+            <CompanyProps company={company} create onCancel={this.close} />
+          </Modal.Description>
+        </Modal.Content>
       </Modal>
     );
   }

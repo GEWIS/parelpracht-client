@@ -1,5 +1,5 @@
 import FileSaver from 'file-saver';
-import { GenerateContractParams, GenerateInvoiceParams } from './server.generated';
+import { CustomInvoiceGenSettings, GenerateContractParams, GenerateInvoiceParams } from './server.generated';
 import { SingleEntities } from '../stores/single/single';
 
 export class FilesClient {
@@ -17,9 +17,11 @@ export class FilesClient {
 
   private getBaseUrl(entity: SingleEntities): string {
     switch (entity) {
-      case SingleEntities.Contract: return `${this.baseUrl}/contract/{id}/file`;
-      case SingleEntities.Invoice: return `${this.baseUrl}/invoice/{id}/file`;
-      case SingleEntities.Product: return `${this.baseUrl}/product/{id}/file`;
+      case SingleEntities.Contract: return `${this.baseUrl}/contract/{id}`;
+      case SingleEntities.Invoice: return `${this.baseUrl}/invoice/{id}`;
+      case SingleEntities.Product: return `${this.baseUrl}/product/{id}`;
+      case SingleEntities.Company: return `${this.baseUrl}/company/{id}`;
+      case SingleEntities.User: return `${this.baseUrl}/user/{id}`;
       default: throw new Error(`${entity} does not support files`);
     }
   }
@@ -27,7 +29,7 @@ export class FilesClient {
   getFile(
     entityId: number, fileId: number, entity: SingleEntities,
   ): Promise<any> {
-    let url = `${this.getBaseUrl(entity)}/{fileId}`;
+    let url = `${this.getBaseUrl(entity)}/file/{fileId}`;
 
     if (entityId === undefined || entityId === null) throw new Error("The parameter 'id' must be defined.");
     url = url.replace('{id}', encodeURIComponent(`${entityId}`));
@@ -47,7 +49,7 @@ export class FilesClient {
     });
   }
 
-  private async processGetGeneralFile(response: Response) {
+  private async processGetGeneralFile(response: Response): Promise<boolean> {
     const { status } = response;
     const headers: any = {};
     if (response.headers && response.headers.forEach) {
@@ -65,13 +67,15 @@ export class FilesClient {
 
     if (status === 200) {
       FileSaver.saveAs(await response.blob(), filename);
+      return true;
     }
+    return false;
   }
 
   async uploadFile(
     entityId: number, file: FormData, entity: SingleEntities,
   ): Promise<Boolean> {
-    let url = `${this.getBaseUrl(entity)}/upload`;
+    let url = `${this.getBaseUrl(entity)}/file/upload`;
 
     if (entityId === undefined || entityId === null) throw new Error("The parameter 'id' must be defined.");
     url = url.replace('{id}', encodeURIComponent(`${entityId}`));
@@ -89,11 +93,32 @@ export class FilesClient {
     });
   }
 
-  private processUploadFile(response: Response): boolean {
-    return response.status === 200;
+  async uploadLogo(
+    entityId: number, file: FormData, entity: SingleEntities,
+  ): Promise<Boolean> {
+    let url = `${this.getBaseUrl(entity)}/logo`;
+
+    if (entityId === undefined || entityId === null) throw new Error("The parameter 'id' must be defined.");
+    url = url.replace('{id}', encodeURIComponent(`${entityId}`));
+    url = url.replace(/[?&]$/, '');
+
+    if (file === null || file === undefined) throw new Error("The parameter 'file' cannot be null.");
+
+    const options = <RequestInit>{
+      body: file,
+      method: 'PUT',
+    };
+
+    return this.http.fetch(url, options).then((response: Response) => {
+      return this.processUploadFile(response);
+    });
   }
 
-  generateContractFile(contractId: number, body: GenerateContractParams): Promise<void> {
+  private processUploadFile(response: Response): boolean {
+    return response.status === 200 || response.status === 204;
+  }
+
+  generateContractFile(contractId: number, body: GenerateContractParams): Promise<boolean> {
     let url = `${this.baseUrl}/contract/{id}/file/generate`;
     if (contractId === undefined || contractId === null) throw new Error("The parameter 'id' must be defined.");
     url = url.replace('{id}', encodeURIComponent(`${contractId}`));
@@ -113,7 +138,7 @@ export class FilesClient {
     });
   }
 
-  generateInvoiceFile(invoiceId: number, body: GenerateInvoiceParams): Promise<void> {
+  generateInvoiceFile(invoiceId: number, body: GenerateInvoiceParams): Promise<boolean> {
     let url = `${this.baseUrl}/invoice/{id}/file/generate`;
     if (invoiceId === undefined || invoiceId === null) throw new Error("The parameter 'id' must be defined.");
     url = url.replace('{id}', encodeURIComponent(`${invoiceId}`));
@@ -125,6 +150,23 @@ export class FilesClient {
       headers: {
         'Content-Type': 'application/json',
         Accept: 'application/json',
+      },
+    } as RequestInit;
+
+    return this.http.fetch(url, options).then((response: Response) => {
+      return this.processGetGeneralFile(response);
+    });
+  }
+
+  generateCustomInvoiceFile(body: CustomInvoiceGenSettings): Promise<boolean> {
+    let url = `${this.baseUrl}/invoice/custom`;
+    url = url.replace(/[?&]$/, '');
+
+    const options = {
+      body: JSON.stringify(body),
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
       },
     } as RequestInit;
 

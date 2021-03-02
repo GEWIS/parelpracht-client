@@ -52,7 +52,7 @@ class InvoiceProductRow extends React.Component<Props, State> {
           <Icon name="shopping bag" />
           {' '}
           {productName}
-          {productInstance.comments !== '' ? ` (${productInstance.comments})` : ''}
+          {productInstance.details !== '' ? ` (${productInstance.details})` : ''}
         </Table.Cell>
         <Table.Cell collapsing>
           {formatPriceDiscount(productInstance.discount)}

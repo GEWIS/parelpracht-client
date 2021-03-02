@@ -20,8 +20,9 @@ import ActivitiesList from '../components/activities/ActivitiesList';
 import { GeneralActivity } from '../components/activities/GeneralActivity';
 import { TransientAlert } from '../stores/alerts/actions';
 import { showTransientAlert } from '../stores/alerts/actionCreators';
-import FilesList from '../components/files/FilesList';
 import InvoiceList from '../components/invoice/InvoiceList';
+import CompanyContractedProductsChart from '../components/company/CompanyContractedProductsChart';
+import FilesList from '../components/files/FilesList';
 
 interface Props extends RouteComponentProps<{ companyId: string }> {
   company: Company | undefined;
@@ -54,7 +55,7 @@ class SingleCompanyPage extends React.Component<Props> {
   }
 
   public render() {
-    const { company, status } = this.props;
+    const { company, fetchCompany, status } = this.props;
 
     if (company === undefined) {
       return (
@@ -100,6 +101,28 @@ class SingleCompanyPage extends React.Component<Props> {
               resourceStatus={status}
             />
           </Tab.Pane>
+        ),
+      },
+      {
+        menuItem: 'Files',
+        render: () => (
+          <Tab.Pane>
+            <FilesList
+              files={company.files}
+              entityId={company.id}
+              entity={SingleEntities.Company}
+              fetchEntity={fetchCompany}
+              status={status}
+            />
+          </Tab.Pane>
+        ),
+      },
+      {
+        menuItem: 'Insights',
+        render: () => (
+          // <Tab.Pane> is set in this tab, because it needs to fetch data and
+          /// therefore needs to show a loading animation
+          <CompanyContractedProductsChart company={company} />
         ),
       },
     ];

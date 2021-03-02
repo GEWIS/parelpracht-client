@@ -16,6 +16,7 @@ services:
       - parelpracht
     volumes:
       - backend-files:/usr/src/app/data
+      - logos:/usr/src/app/data/logos
     environment:
       - NODE_ENV=production
       - PORT=3001
@@ -55,15 +56,17 @@ services:
       - backend
       - frontend
     ports:
-      - '80:80'
+      - '39390:80'
     networks:
       - parelpracht
     volumes:
       - static:/app/build/static
+      - logos:/usr/src/app/data/logos
 volumes:
   database-data:
   backend-files:
   static:
+  logos:
 networks:
   parelpracht:
     driver: bridge

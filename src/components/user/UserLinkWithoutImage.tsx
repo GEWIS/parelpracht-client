@@ -2,7 +2,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { NavLink } from 'react-router-dom';
-import { Icon } from 'semantic-ui-react';
 import { getUserName } from '../../stores/user/selectors';
 import { RootState } from '../../stores/store';
 
@@ -13,9 +12,9 @@ interface Props {
 }
 
 function UserLinkWithoutImage(props: Props) {
-  const { id, userName, ...rest } = props;
+  const { id, userName } = props;
   return (
-    <NavLink to={`/user/${id}`} {...rest}>
+    <NavLink to={`/user/${id}`}>
       {userName}
     </NavLink>
   );

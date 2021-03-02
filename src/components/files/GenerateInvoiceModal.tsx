@@ -5,21 +5,25 @@ import {
   Dropdown, Form, Icon, Input, Modal, Segment,
 } from 'semantic-ui-react';
 import validator from 'validator';
+import { Dispatch } from 'redux';
+import { connect } from 'react-redux';
 import {
-  Language, ReturnFileType, GenerateInvoiceParams,
+  Language, ReturnFileType, GenerateInvoiceParams, Invoice, ContractType,
 } from '../../clients/server.generated';
 import AlertContainer from '../alerts/AlertContainer';
 import { FilesClient } from '../../clients/filesClient';
 import ContactSelector from '../contact/ContactSelector';
+import { TransientAlert } from '../../stores/alerts/actions';
+import { showTransientAlert } from '../../stores/alerts/actionCreators';
 
 interface Props {
-  invoiceId: number;
+  invoice: Invoice;
   fetchInvoice: (id: number) => void;
+  showTransientAlert: (alert: TransientAlert) => void;
 }
 
 function GenerateContract(props: Props) {
   const [isOpen, setOpen] = useState(false);
-
   const [name, changeName] = useState('');
   const [language, changeLanguage] = useState(Language.DUTCH);
   const [fileType, changeFileType] = useState(ReturnFileType.PDF);
@@ -31,7 +35,7 @@ function GenerateContract(props: Props) {
   const save = async () => {
     changeLoading(true);
     const client = new FilesClient();
-    await client.generateInvoiceFile(props.invoiceId, new GenerateInvoiceParams({
+    const success = await client.generateInvoiceFile(props.invoice.id, new GenerateInvoiceParams({
       name,
       language,
       fileType,
@@ -39,9 +43,18 @@ function GenerateContract(props: Props) {
       saveToDisk,
       recipientId,
     }));
-    setOpen(false);
     changeLoading(false);
-    props.fetchInvoice(props.invoiceId);
+
+    if (success) {
+      setOpen(false);
+      props.fetchInvoice(props.invoice.id);
+    } else {
+      props.showTransientAlert({
+        title: 'Error',
+        message: 'Could not generate an invoice file. Please consulate the back-end logs.',
+        type: 'error',
+      });
+    }
   };
 
   return (
@@ -71,12 +84,23 @@ function GenerateContract(props: Props) {
         <h2>
           Generate file
           <Button
-            primary
             onClick={save}
             floated="right"
             loading={loading}
+            color="green"
+            icon
+            labelPosition="left"
+            disabled={validator.isEmpty(name) || recipientId === 0}
           >
+            <Icon name="download" />
             Generate
+          </Button>
+          <Button
+            icon
+            floated="right"
+            onClick={() => setOpen(false)}
+          >
+            Cancel
           </Button>
         </h2>
         <Form style={{ marginTop: '2em' }}>
@@ -92,16 +116,18 @@ function GenerateContract(props: Props) {
               onChange={(e: ChangeEvent<HTMLInputElement>) => changeName(e.target.value)}
               fluid
             />
-            <Form.Field
-              label="Recipient"
-              placeholder="Recipient"
-              required
-              control={ContactSelector}
-              value={recipientId}
-              onChange={(id: number) => changeRecipient(id)}
-              hideEmail
-              fluid
-            />
+            <Form.Field required>
+              {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
+              <label htmlFor="form-contact-selector">Recipient</label>
+              <ContactSelector
+                id="form-contact-selector"
+                disabled={false}
+                companyId={props.invoice.companyId}
+                value={recipientId}
+                onChange={(id: number) => changeRecipient(id)}
+                placeholder="Recipient"
+              />
+            </Form.Field>
           </Form.Group>
           <Form.Group widths="equal">
             <Form.Field
@@ -173,4 +199,8 @@ function GenerateContract(props: Props) {
   );
 }
 
-export default GenerateContract;
+const mapDispatchToProps = (dispatch: Dispatch) => ({
+  showTransientAlert: (alert: TransientAlert) => dispatch(showTransientAlert(alert)),
+});
+
+export default connect(null, mapDispatchToProps)(GenerateContract);

@@ -32,7 +32,6 @@ import UsersPage from './pages/UsersPage';
 import SingleUserPage from './pages/SingleUserPage';
 import UserCreatePage from './pages/UserCreatePage';
 import ContractProductInstanceModal from './pages/ContractProductInstanceModal';
-import ContractInvoiceModal from './pages/ContractInvoiceModal';
 import InvoiceProductInstanceModal from './pages/InvoiceProductInstanceModal';
 import Footer from './components/navigation/Footer';
 import DashboardPage from './pages/DashboardPage';
@@ -41,6 +40,7 @@ import Insights from './pages/Insights';
 import ProductCategoriesPage from './pages/ProductCategoriesPage';
 import ProductCategoriesCreatePage from './pages/ProductCategoriesCreatePage';
 import ProductCategoryModal from './pages/ProductCategoryModal';
+import CustomInvoicePage from './pages/CustomInvoicePage';
 
 interface Props extends RouteComponentProps {
   // eslint-disable-next-line react/no-unused-prop-types
@@ -143,11 +143,11 @@ function Routes(props: Props) {
           <Route path="/company/:companyId" exact component={SingleCompanyPage} />
           <Route path="/company/:companyId/contact/new" exact>
             <SingleCompanyPage />
-            <ContactModal create />
+            <ContactModal create onCompanyPage />
           </Route>
           <Route path="/company/:companyId/contact/:contactId" exact>
             <SingleCompanyPage />
-            <ContactModal />
+            <ContactModal onCompanyPage />
           </Route>
           <Route path="/company/:companyId/contract/new" exact>
             <SingleCompanyPage />
@@ -160,12 +160,15 @@ function Routes(props: Props) {
           </Route>
           <Route path="/contact/:contactId" exact>
             <ContactsPage />
-            <ContactModal />
+            <ContactModal onCompanyPage={false} />
           </Route>
 
           {/* Invoice */}
           <Route path="/invoice" exact>
             <InvoicesPage />
+          </Route>
+          <Route path="/invoice/custom" exact>
+            <CustomInvoicePage />
           </Route>
           <Route path="/invoice/:invoiceId" exact component={SingleInvoicePage} />
           <Route path="/invoice/:invoiceId/product/:productInstanceId" exact>

@@ -27,7 +27,7 @@ function* saveSingleProductInstance(
   action: SingleSaveInstanceAction<ProductInstanceParams>,
 ) {
   const client = new Client();
-  yield call([client, client.updateProductInstance], action.id, action.id, action.data);
+  yield call([client, client.updateProductInstance], action.id, action.instanceId, action.data);
   yield put(fetchSingle(SingleEntities.Contract, action.id));
 }
 

@@ -4,17 +4,20 @@ import { Redirect, RouteComponentProps, withRouter } from 'react-router-dom';
 import {
   Grid, Header, Icon, Loader, Placeholder, Segment,
 } from 'semantic-ui-react';
+import { Dispatch } from 'redux';
 import { User } from '../../clients/server.generated';
 import { formatContactName, formatGender } from '../../helpers/contact';
 import ResourceStatus from '../../stores/resourceStatus';
 import { getSingle } from '../../stores/single/selectors';
 import { SingleEntities } from '../../stores/single/single';
 import { RootState } from '../../stores/store';
-import UserDeleteButton from './UserDeleteButton';
+import LogoAvatarModal from '../files/LogoAvatarModal';
+import { fetchSingle } from '../../stores/single/actionCreators';
 
 interface Props extends RouteComponentProps {
   user: User | undefined;
   status: ResourceStatus;
+  fetchUser: (id: number) => void;
 }
 
 function usePrevious(value: any) {
@@ -34,7 +37,7 @@ function UserSummary(props: Props) {
     return (<Redirect to="/user" />);
   }
 
-  const { user, status } = props;
+  const { user, status, fetchUser } = props;
   if (user === undefined
     || status === ResourceStatus.EMPTY || status === ResourceStatus.FETCHING) {
     return (
@@ -56,12 +59,27 @@ function UserSummary(props: Props) {
   return (
     <>
       <Header as="h1" attached="top" style={{ backgroundColor: '#eee' }}>
-        <Icon name="user" />
-        <Header.Content style={{ width: '100%' }}>
-          <Header.Subheader>User</Header.Subheader>
-          {formatContactName(user.firstName, user.lastNamePreposition, user.lastName)}
-          <UserDeleteButton floated="right" userId={user.id} />
-        </Header.Content>
+        <Grid>
+          <Grid.Row columns="2">
+            <Grid.Column>
+              <Icon name="user" size="large" style={{ padding: '0.5rem' }} />
+              <Header.Content style={{ paddingLeft: '0.75rem' }}>
+                <Header.Subheader>User</Header.Subheader>
+                {formatContactName(user.firstName, user.lastNamePreposition, user.lastName)}
+              </Header.Content>
+            </Grid.Column>
+            <Grid.Column>
+              <LogoAvatarModal
+                entity={SingleEntities.User}
+                entityId={user.id}
+                entityName={user.firstName}
+                fileName={user.avatarFilename}
+                fetchEntity={fetchUser}
+              />
+              {/* <UserDeleteButton floated="right" style={{ marginTop: '-0.5em' }} /> */}
+            </Grid.Column>
+          </Grid.Row>
+        </Grid>
       </Header>
       <Segment attached="bottom">
         <Grid columns={4}>
@@ -83,6 +101,10 @@ function UserSummary(props: Props) {
   );
 }
 
+const mapDispatchToProps = (dispatch: Dispatch) => ({
+  fetchUser: (id: number) => dispatch(fetchSingle(SingleEntities.User, id)),
+});
+
 const mapStateToProps = (state: RootState) => {
   return {
     user: getSingle<User>(state, SingleEntities.User).data,
@@ -90,4 +112,4 @@ const mapStateToProps = (state: RootState) => {
   };
 };
 
-export default withRouter(connect(mapStateToProps)(UserSummary));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(UserSummary));

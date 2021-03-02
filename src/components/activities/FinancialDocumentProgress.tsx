@@ -1,19 +1,23 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Button, Grid, Step } from 'semantic-ui-react';
+import {
+  Button, Grid, Popup, Step,
+} from 'semantic-ui-react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { GeneralActivity } from './GeneralActivity';
 import FinancialDocumentStep from './FinancialDocumentStep';
 import {
-  formatDocumentStatusTitle, formatDocumentType,
+  formatDocumentStatusTitle,
+  formatDocumentType,
   getAllDocumentStatuses,
   getAllStatusActivities,
-  getLastStatus,
+  getLastStatus, getNextStatus,
 } from '../../helpers/activity';
 import DocumentStatusModal from './DocumentStatusModal';
 import { SingleEntities } from '../../stores/single/single';
 import { DocumentStatus } from './DocumentStatus';
 import ResourceStatus from '../../stores/resourceStatus';
+import { InvoiceStatus, ProductInstanceStatus } from '../../clients/server.generated';
 
 interface Props extends RouteComponentProps {
   documentId: number;
@@ -28,6 +32,7 @@ interface Props extends RouteComponentProps {
 interface State {
   deferModalOpen: boolean;
   cancelModalOpen: boolean;
+  irrecoverableModalOpen: boolean;
 }
 
 class FinancialDocumentProgress extends React.Component<Props, State> {
@@ -36,6 +41,7 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
     this.state = {
       deferModalOpen: false,
       cancelModalOpen: false,
+      irrecoverableModalOpen: false,
     };
   }
 
@@ -51,11 +57,17 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
     });
   };
 
+  closeIrrecoverableModal = () => {
+    this.setState({
+      irrecoverableModalOpen: false,
+    });
+  };
+
   public render() {
     const {
       activities, documentType, documentId, resourceStatus, parentId,
     } = this.props;
-    const { cancelModalOpen, deferModalOpen } = this.state;
+    const { cancelModalOpen, deferModalOpen, irrecoverableModalOpen } = this.state;
     const allDocumentStatuses = getAllDocumentStatuses(documentType);
     const allStatusActivities = getAllStatusActivities(activities);
     const lastStatusActivity = getLastStatus(allStatusActivities);
@@ -64,20 +76,58 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
       cancelledDocument = allStatusActivities[allStatusActivities.length - 1].subType === 'CANCELLED';
     }
 
-    let deferButton;
-    if (documentType === SingleEntities.ProductInstance && lastStatusActivity?.subType !== 'DEFERRED') {
-      deferButton = (
-        <Button
-          floated="left"
-          labelPosition="left"
-          icon="close"
-          basic
-          onClick={() => {
-            this.setState({
-              deferModalOpen: true,
-            });
-          }}
-          content={`Defer ${formatDocumentType(documentType)}`}
+    let leftButton;
+    if (documentType === SingleEntities.ProductInstance) {
+      leftButton = (
+        <Popup
+          header={`Defer ${formatDocumentType(documentType)}`}
+          content={`By defering this ${formatDocumentType(documentType)}, you indicate that it will
+          not be delivered in the current academic year.`}
+          mouseEnterDelay={500}
+          wide
+          trigger={(
+            <Button
+              floated="left"
+              labelPosition="left"
+              icon="stopwatch"
+              basic
+              onClick={() => {
+                this.setState({
+                  deferModalOpen: true,
+                });
+              }}
+              content={`Defer ${formatDocumentType(documentType)}`}
+              disabled={lastStatusActivity?.subType !== ProductInstanceStatus.NOTDELIVERED}
+            />
+          )}
+        />
+      );
+    } else if (documentType === SingleEntities.Invoice) {
+      leftButton = (
+        <Popup
+          header={`Mark
+          irrecoverable`}
+          content={`By marking this invoice irrecoverable, you indicate that the money owed from this invoice can not collected.
+          Either the invoice is no longer valid
+          (i.e. it was created more than 5 years ago) or the responsible party indicated to not pay the invoice.
+          Note that this is different from cancelling an invoice, in which the contracted products can still be invoiced on
+          another invoice.`}
+          mouseEnterDelay={500}
+          wide
+          trigger={(
+            <Button
+              floated="left"
+              labelPosition="left"
+              icon="close"
+              basic
+              onClick={() => {
+                this.setState({ irrecoverableModalOpen: true });
+              }}
+              content="Mark irrecoverable"
+              disabled={lastStatusActivity?.subType !== InvoiceStatus.CREATED
+              && lastStatusActivity?.subType !== InvoiceStatus.SENT}
+            />
+          )}
         />
       );
     }
@@ -88,7 +138,7 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
           <Grid columns={3}>
             <Grid.Row>
               <Grid.Column>
-                {deferButton}
+                {leftButton}
               </Grid.Column>
               <Grid.Column>
                 <h3
@@ -112,6 +162,7 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
                     });
                   }}
                   content={`Cancel ${formatDocumentType(documentType)}`}
+                  disabled={getNextStatus(lastStatusActivity!, documentType).length === 0}
                 />
               </Grid.Column>
             </Grid.Row>
@@ -123,8 +174,9 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
             fluid
             style={{ marginTop: '0.5em' }}
           >
-            {allDocumentStatuses.map((currentStatus) => (
+            {allDocumentStatuses.map((currentStatus, i) => (
               <FinancialDocumentStep
+                key={i.toString()}
                 documentId={documentId}
                 documentType={documentType}
                 lastStatusActivity={lastStatusActivity}
@@ -154,6 +206,15 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
             close={this.closeCancelModal}
             resourceStatus={resourceStatus}
           />
+          <DocumentStatusModal
+            open={irrecoverableModalOpen}
+            documentId={documentId}
+            parentId={parentId}
+            documentType={documentType}
+            documentStatus={DocumentStatus.IRRECOVERABLE}
+            close={this.closeIrrecoverableModal}
+            resourceStatus={resourceStatus}
+          />
         </>
       );
     }
@@ -166,8 +227,9 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
           )}
         </h3>
         <Step.Group stackable="tablet" widths={5} fluid>
-          {allDocumentStatuses.map((currentStatus) => (
+          {allDocumentStatuses.map((currentStatus, i) => (
             <FinancialDocumentStep
+              key={i.toString()}
               documentId={documentId}
               documentType={documentType}
               lastStatusActivity={lastStatusActivity}

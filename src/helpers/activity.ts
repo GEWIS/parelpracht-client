@@ -1,6 +1,8 @@
-import { ActivityType, GeneralActivity } from '../components/activities/GeneralActivity';
+import { GeneralActivity } from '../components/activities/GeneralActivity';
 import { formatLastUpdate } from './timestamp';
-import { ContractStatus, InvoiceStatus, ProductInstanceStatus } from '../clients/server.generated';
+import {
+  ActivityType, ContractStatus, InvoiceStatus, ProductInstanceStatus,
+} from '../clients/server.generated';
 import { SingleEntities } from '../stores/single/single';
 import { DocumentStatus } from '../components/activities/DocumentStatus';
 
@@ -42,11 +44,24 @@ export function formatDocumentStatusTitle(
 export function formatActivityType(
   activityType: ActivityType,
   subType: string | undefined,
+  entity: SingleEntities,
 ): string {
-  if (activityType === ActivityType.COMMENT) {
-    return 'Comment added';
+  switch (activityType) {
+    case ActivityType.COMMENT:
+      return 'Comment added';
+    case ActivityType.STATUS:
+      return `Status changed to ${subType?.toLowerCase()}`;
+    case ActivityType.EDIT:
+      return `${formatDocumentType(entity)} updated`;
+    case ActivityType.REASSIGN:
+      return 'Assignment changed';
+    case ActivityType.ADDPRODUCT:
+      return `Products added to ${formatDocumentType(entity)}`;
+    case ActivityType.DELPRODUCT:
+      return `Product removed from ${formatDocumentType(entity)}`;
+    default:
+      throw new Error(`Unknown activity type ${activityType}`);
   }
-  return `Status changed to ${subType?.toLowerCase()}`;
 }
 
 /**
@@ -65,8 +80,9 @@ export function formatActivityDate(date: Date, userName: string): string {
 export function formatActivitySummary(
   activityType: ActivityType,
   subType: string | undefined,
+  entity: SingleEntities,
 ): string {
-  const activity = formatActivityType(activityType, subType);
+  const activity = formatActivityType(activityType, subType, entity);
   return `${activity} by `;
 }
 

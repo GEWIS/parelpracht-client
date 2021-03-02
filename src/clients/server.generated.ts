@@ -661,6 +661,57 @@ export class Client {
     }
 
     /**
+     * @return Ok
+     */
+    getProductStatistics(id: number): Promise<AnalysisResultByYear[]> {
+        let url_ = this.baseUrl + "/product/{id}/statistics";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <RequestInit>{
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processGetProductStatistics(_response);
+        });
+    }
+
+    protected processGetProductStatistics(response: Response): Promise<AnalysisResultByYear[]> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(AnalysisResultByYear.fromJS(item));
+            }
+            return result200;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<AnalysisResultByYear[]>(<any>null);
+    }
+
+    /**
      * @param file The file to upload
      * @param name The name of the new file, as seen in the UI
      * @return Ok
@@ -1421,6 +1472,98 @@ export class Client {
     }
 
     /**
+     * @param id ID of the user
+     * @return No content
+     */
+    uploadCompanyLogo(id: number): Promise<void> {
+        let url_ = this.baseUrl + "/company/{id}/logo";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <RequestInit>{
+            method: "PUT",
+            headers: {
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processUploadCompanyLogo(_response);
+        });
+    }
+
+    protected processUploadCompanyLogo(response: Response): Promise<void> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 204) {
+            return response.text().then((_responseText) => {
+            return;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<void>(<any>null);
+    }
+
+    /**
+     * @param id Id of the company
+     * @return Ok
+     */
+    deleteCompanyLogo(id: number): Promise<Company> {
+        let url_ = this.baseUrl + "/company/{id}/logo";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <RequestInit>{
+            method: "DELETE",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processDeleteCompanyLogo(_response);
+        });
+    }
+
+    protected processDeleteCompanyLogo(response: Response): Promise<Company> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = Company.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<Company>(<any>null);
+    }
+
+    /**
      * @param id ID of company to retrieve unresolved invoices for
      * @return Ok
      */
@@ -1522,6 +1665,258 @@ export class Client {
             });
         }
         return Promise.resolve<Contact[]>(<any>null);
+    }
+
+    /**
+     * @return Ok
+     */
+    getCompanyStatistics(id: number): Promise<ContractedProductsAnalysis> {
+        let url_ = this.baseUrl + "/company/{id}/statistics";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <RequestInit>{
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processGetCompanyStatistics(_response);
+        });
+    }
+
+    protected processGetCompanyStatistics(response: Response): Promise<ContractedProductsAnalysis> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = ContractedProductsAnalysis.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<ContractedProductsAnalysis>(<any>null);
+    }
+
+    /**
+     * @param id Id of the company
+     * @return Ok
+     */
+    uploadCompanyFile(id: number): Promise<CompanyFile> {
+        let url_ = this.baseUrl + "/company/{id}/file/upload";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <RequestInit>{
+            method: "POST",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processUploadCompanyFile(_response);
+        });
+    }
+
+    protected processUploadCompanyFile(response: Response): Promise<CompanyFile> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = CompanyFile.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<CompanyFile>(<any>null);
+    }
+
+    /**
+     * @param id ID of the company
+     * @param fileId ID of the file
+     * @return Ok
+     */
+    getCompanyFile(id: number, fileId: number): Promise<any> {
+        let url_ = this.baseUrl + "/company/{id}/file/{fileId}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        if (fileId === undefined || fileId === null)
+            throw new Error("The parameter 'fileId' must be defined.");
+        url_ = url_.replace("{fileId}", encodeURIComponent("" + fileId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <RequestInit>{
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processGetCompanyFile(_response);
+        });
+    }
+
+    protected processGetCompanyFile(response: Response): Promise<any> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 !== undefined ? resultData200 : <any>null;
+            return result200;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<any>(<any>null);
+    }
+
+    /**
+     * @param id ID of the company
+     * @param fileId ID of the file
+     * @param body Update subset of the parameters of the file
+     * @return Ok
+     */
+    updateCompanyFile(id: number, fileId: number, body: Partial_FileParams): Promise<BaseFile> {
+        let url_ = this.baseUrl + "/company/{id}/file/{fileId}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        if (fileId === undefined || fileId === null)
+            throw new Error("The parameter 'fileId' must be defined.");
+        url_ = url_.replace("{fileId}", encodeURIComponent("" + fileId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ = <RequestInit>{
+            body: content_,
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processUpdateCompanyFile(_response);
+        });
+    }
+
+    protected processUpdateCompanyFile(response: Response): Promise<BaseFile> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = BaseFile.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<BaseFile>(<any>null);
+    }
+
+    /**
+     * @param id ID of the company
+     * @param fileId ID of the file
+     * @return No content
+     */
+    deleteCompanyFile(id: number, fileId: number): Promise<void> {
+        let url_ = this.baseUrl + "/company/{id}/file/{fileId}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        if (fileId === undefined || fileId === null)
+            throw new Error("The parameter 'fileId' must be defined.");
+        url_ = url_.replace("{fileId}", encodeURIComponent("" + fileId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <RequestInit>{
+            method: "DELETE",
+            headers: {
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processDeleteCompanyFile(_response);
+        });
+    }
+
+    protected processDeleteCompanyFile(response: Response): Promise<void> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 204) {
+            return response.text().then((_responseText) => {
+            return;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<void>(<any>null);
     }
 
     /**
@@ -3030,6 +3425,46 @@ export class Client {
     }
 
     /**
+     * @return No content
+     */
+    updateLastSeenByTreasurer(): Promise<void> {
+        let url_ = this.baseUrl + "/invoice/lastseen";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <RequestInit>{
+            method: "PUT",
+            headers: {
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processUpdateLastSeenByTreasurer(_response);
+        });
+    }
+
+    protected processUpdateLastSeenByTreasurer(response: Response): Promise<void> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 204) {
+            return response.text().then((_responseText) => {
+            return;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<void>(<any>null);
+    }
+
+    /**
      * @param id ID of invoice to retrieve
      * @return Ok
      */
@@ -3589,6 +4024,55 @@ export class Client {
             });
         }
         return Promise.resolve<void>(<any>null);
+    }
+
+    /**
+     * @param body Parameters to create this custom invoice with
+     * @return Ok
+     */
+    generateCustomInvoice(body: CustomInvoiceGenSettings): Promise<any> {
+        let url_ = this.baseUrl + "/invoice/custom";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ = <RequestInit>{
+            body: content_,
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processGenerateCustomInvoice(_response);
+        });
+    }
+
+    protected processGenerateCustomInvoice(response: Response): Promise<any> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 !== undefined ? resultData200 : <any>null;
+            return result200;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<any>(<any>null);
     }
 
     /**
@@ -4392,6 +4876,147 @@ export class Client {
     }
 
     /**
+     * @param id ID of the user
+     * @return No content
+     */
+    uploadUserAvatar(id: number): Promise<void> {
+        let url_ = this.baseUrl + "/user/{id}/logo";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <RequestInit>{
+            method: "PUT",
+            headers: {
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processUploadUserAvatar(_response);
+        });
+    }
+
+    protected processUploadUserAvatar(response: Response): Promise<void> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 204) {
+            return response.text().then((_responseText) => {
+            return;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<void>(<any>null);
+    }
+
+    /**
+     * @param id ID of the user
+     * @return Ok
+     */
+    deleteUserAvatar(id: number): Promise<User> {
+        let url_ = this.baseUrl + "/user/{id}/logo";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <RequestInit>{
+            method: "DELETE",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processDeleteUserAvatar(_response);
+        });
+    }
+
+    protected processDeleteUserAvatar(response: Response): Promise<User> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = User.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<User>(<any>null);
+    }
+
+    /**
+     * @param id ID of the from-user
+     * @param body parameters, namely ID of the to-user
+     * @return No content
+     */
+    transferAssignments(id: number, body: TransferUserParams): Promise<void> {
+        let url_ = this.baseUrl + "/user/{id}/assignments";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ = <RequestInit>{
+            body: content_,
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processTransferAssignments(_response);
+        });
+    }
+
+    protected processTransferAssignments(response: Response): Promise<void> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 204) {
+            return response.text().then((_responseText) => {
+            return;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<void>(<any>null);
+    }
+
+    /**
      * @param body List parameters to sort and filter the list
      * @return Ok
      */
@@ -4686,7 +5311,7 @@ export class Client {
      * @param year Financial year of the overview
      * @return Ok
      */
-    getContractedProductsStatistics(year: number): Promise<ContractedProductsPerMonth> {
+    getContractedProductsStatistics(year: number): Promise<ContractedProductsAnalysis> {
         let url_ = this.baseUrl + "/category/stats/contracted/{year}";
         if (year === undefined || year === null)
             throw new Error("The parameter 'year' must be defined.");
@@ -4705,14 +5330,14 @@ export class Client {
         });
     }
 
-    protected processGetContractedProductsStatistics(response: Response): Promise<ContractedProductsPerMonth> {
+    protected processGetContractedProductsStatistics(response: Response): Promise<ContractedProductsAnalysis> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = ContractedProductsPerMonth.fromJS(resultData200);
+            result200 = ContractedProductsAnalysis.fromJS(resultData200);
             return result200;
             });
         } else if (status === 401) {
@@ -4727,7 +5352,7 @@ export class Client {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<ContractedProductsPerMonth>(<any>null);
+        return Promise.resolve<ContractedProductsAnalysis>(<any>null);
     }
 
     /**
@@ -4805,6 +5430,9 @@ export class UserParams implements IUserParams {
     lastName!: string;
     function!: string;
     gender!: Gender;
+    replyToEmail?: string;
+    receiveEmails?: boolean;
+    sendEmailsToReplyToEmail?: boolean;
     comment?: string;
     roles?: Roles[];
 
@@ -4825,6 +5453,9 @@ export class UserParams implements IUserParams {
             this.lastName = _data["lastName"];
             this.function = _data["function"];
             this.gender = _data["gender"];
+            this.replyToEmail = _data["replyToEmail"];
+            this.receiveEmails = _data["receiveEmails"];
+            this.sendEmailsToReplyToEmail = _data["sendEmailsToReplyToEmail"];
             this.comment = _data["comment"];
             if (Array.isArray(_data["roles"])) {
                 this.roles = [] as any;
@@ -4849,6 +5480,9 @@ export class UserParams implements IUserParams {
         data["lastName"] = this.lastName;
         data["function"] = this.function;
         data["gender"] = this.gender;
+        data["replyToEmail"] = this.replyToEmail;
+        data["receiveEmails"] = this.receiveEmails;
+        data["sendEmailsToReplyToEmail"] = this.sendEmailsToReplyToEmail;
         data["comment"] = this.comment;
         if (Array.isArray(this.roles)) {
             data["roles"] = [];
@@ -4866,6 +5500,9 @@ export interface IUserParams {
     lastName: string;
     function: string;
     gender: Gender;
+    replyToEmail?: string;
+    receiveEmails?: boolean;
+    sendEmailsToReplyToEmail?: boolean;
     comment?: string;
     roles?: Roles[];
 }
@@ -4966,10 +5603,19 @@ export class User implements IUser {
     lastName!: string;
     /** Email address of the user */
     email!: string;
+    /** Email address used in PDF files */
+    replyToEmail!: string;
     /** Any comments regarding this user */
     comment!: string;
     /** Function of this user, used when generating documents and printed below this user's name */
     function!: string;
+    /** Optional filename of the user's avatar */
+    avatarFilename!: string;
+    /** Whether this user wishes to receive (regular) email updates, e.g. sent invoices */
+    receiveEmails!: boolean;
+    /** Whether the update emails (from the boolean above) should
+be sent to "email", or "replyToEmail" */
+    sendEmailsToReplyToEmail!: boolean;
     /** The roles this user has */
     roles!: Role[];
 
@@ -4997,8 +5643,12 @@ export class User implements IUser {
             this.lastNamePreposition = _data["lastNamePreposition"];
             this.lastName = _data["lastName"];
             this.email = _data["email"];
+            this.replyToEmail = _data["replyToEmail"];
             this.comment = _data["comment"];
             this.function = _data["function"];
+            this.avatarFilename = _data["avatarFilename"];
+            this.receiveEmails = _data["receiveEmails"];
+            this.sendEmailsToReplyToEmail = _data["sendEmailsToReplyToEmail"];
             if (Array.isArray(_data["roles"])) {
                 this.roles = [] as any;
                 for (let item of _data["roles"])
@@ -5026,8 +5676,12 @@ export class User implements IUser {
         data["lastNamePreposition"] = this.lastNamePreposition;
         data["lastName"] = this.lastName;
         data["email"] = this.email;
+        data["replyToEmail"] = this.replyToEmail;
         data["comment"] = this.comment;
         data["function"] = this.function;
+        data["avatarFilename"] = this.avatarFilename;
+        data["receiveEmails"] = this.receiveEmails;
+        data["sendEmailsToReplyToEmail"] = this.sendEmailsToReplyToEmail;
         if (Array.isArray(this.roles)) {
             data["roles"] = [];
             for (let item of this.roles)
@@ -5058,10 +5712,19 @@ export interface IUser {
     lastName: string;
     /** Email address of the user */
     email: string;
+    /** Email address used in PDF files */
+    replyToEmail: string;
     /** Any comments regarding this user */
     comment: string;
     /** Function of this user, used when generating documents and printed below this user's name */
     function: string;
+    /** Optional filename of the user's avatar */
+    avatarFilename: string;
+    /** Whether this user wishes to receive (regular) email updates, e.g. sent invoices */
+    receiveEmails: boolean;
+    /** Whether the update emails (from the boolean above) should
+be sent to "email", or "replyToEmail" */
+    sendEmailsToReplyToEmail: boolean;
     /** The roles this user has */
     roles: Role[];
 }
@@ -5291,6 +5954,10 @@ export class Product implements IProduct {
     /** Delivery attachment text used on the PDF file, in English */
     deliverySpecificationEnglish?: string;
     categoryId!: number;
+    /** Target minimum amount contracted for this product */
+    minTarget!: number;
+    /** Target maximum amount contracted for this product */
+    maxTarget!: number;
     /** Category this product is in */
     category!: ProductCategory;
     /** All the product instances of this product, used in contracts and invoiced */
@@ -5332,6 +5999,8 @@ export class Product implements IProduct {
             this.deliverySpecificationDutch = _data["deliverySpecificationDutch"];
             this.deliverySpecificationEnglish = _data["deliverySpecificationEnglish"];
             this.categoryId = _data["categoryId"];
+            this.minTarget = _data["minTarget"];
+            this.maxTarget = _data["maxTarget"];
             this.category = _data["category"] ? ProductCategory.fromJS(_data["category"]) : new ProductCategory();
             if (Array.isArray(_data["instances"])) {
                 this.instances = [] as any;
@@ -5375,6 +6044,8 @@ export class Product implements IProduct {
         data["deliverySpecificationDutch"] = this.deliverySpecificationDutch;
         data["deliverySpecificationEnglish"] = this.deliverySpecificationEnglish;
         data["categoryId"] = this.categoryId;
+        data["minTarget"] = this.minTarget;
+        data["maxTarget"] = this.maxTarget;
         data["category"] = this.category ? this.category.toJSON() : <any>undefined;
         if (Array.isArray(this.instances)) {
             data["instances"] = [];
@@ -5425,6 +6096,10 @@ export interface IProduct {
     /** Delivery attachment text used on the PDF file, in English */
     deliverySpecificationEnglish?: string;
     categoryId: number;
+    /** Target minimum amount contracted for this product */
+    minTarget: number;
+    /** Target maximum amount contracted for this product */
+    maxTarget: number;
     /** Category this product is in */
     category: ProductCategory;
     /** All the product instances of this product, used in contracts and invoiced */
@@ -5714,7 +6389,7 @@ or a different price that is not a discount */
     /** Optional discount amount */
     discount!: number;
     /** Any comments regarding this product instance */
-    comments?: string;
+    details?: string;
 
     constructor(data?: IProductInstance) {
         if (data) {
@@ -5750,7 +6425,7 @@ or a different price that is not a discount */
             }
             this.basePrice = _data["basePrice"];
             this.discount = _data["discount"];
-            this.comments = _data["comments"];
+            this.details = _data["details"];
         }
     }
 
@@ -5781,7 +6456,7 @@ or a different price that is not a discount */
         }
         data["basePrice"] = this.basePrice;
         data["discount"] = this.discount;
-        data["comments"] = this.comments;
+        data["details"] = this.details;
         return data; 
     }
 }
@@ -5814,7 +6489,7 @@ or a different price that is not a discount */
     /** Optional discount amount */
     discount: number;
     /** Any comments regarding this product instance */
-    comments?: string;
+    details?: string;
 }
 
 export class Company implements ICompany {
@@ -5844,6 +6519,8 @@ export class Company implements ICompany {
     phoneNumber?: string;
     /** Optional end date of the collaboration with this company */
     endDate?: Date;
+    /** Optional filename of a logo image */
+    logoFilename!: string;
     /** Comments regarding the company */
     comments?: string;
     /** All contracts related to this company */
@@ -5854,6 +6531,8 @@ export class Company implements ICompany {
     contacts!: Contact[];
     /** All updates / activities regarding this company */
     activities!: CompanyActivity[];
+    /** All files regarding this company */
+    files!: CompanyFile[];
 
     constructor(data?: ICompany) {
         if (data) {
@@ -5867,6 +6546,7 @@ export class Company implements ICompany {
             this.invoices = [];
             this.contacts = [];
             this.activities = [];
+            this.files = [];
         }
     }
 
@@ -5889,6 +6569,7 @@ export class Company implements ICompany {
             this.status = _data["status"];
             this.phoneNumber = _data["phoneNumber"];
             this.endDate = _data["endDate"] ? new Date(_data["endDate"].toString()) : <any>undefined;
+            this.logoFilename = _data["logoFilename"];
             this.comments = _data["comments"];
             if (Array.isArray(_data["contracts"])) {
                 this.contracts = [] as any;
@@ -5909,6 +6590,11 @@ export class Company implements ICompany {
                 this.activities = [] as any;
                 for (let item of _data["activities"])
                     this.activities!.push(CompanyActivity.fromJS(item));
+            }
+            if (Array.isArray(_data["files"])) {
+                this.files = [] as any;
+                for (let item of _data["files"])
+                    this.files!.push(CompanyFile.fromJS(item));
             }
         }
     }
@@ -5939,6 +6625,7 @@ export class Company implements ICompany {
         data["status"] = this.status;
         data["phoneNumber"] = this.phoneNumber;
         data["endDate"] = this.endDate ? this.endDate.toISOString() : <any>undefined;
+        data["logoFilename"] = this.logoFilename;
         data["comments"] = this.comments;
         if (Array.isArray(this.contracts)) {
             data["contracts"] = [];
@@ -5959,6 +6646,11 @@ export class Company implements ICompany {
             data["activities"] = [];
             for (let item of this.activities)
                 data["activities"].push(item.toJSON());
+        }
+        if (Array.isArray(this.files)) {
+            data["files"] = [];
+            for (let item of this.files)
+                data["files"].push(item.toJSON());
         }
         return data; 
     }
@@ -5991,6 +6683,8 @@ export interface ICompany {
     phoneNumber?: string;
     /** Optional end date of the collaboration with this company */
     endDate?: Date;
+    /** Optional filename of a logo image */
+    logoFilename: string;
     /** Comments regarding the company */
     comments?: string;
     /** All contracts related to this company */
@@ -6001,6 +6695,8 @@ export interface ICompany {
     contacts: Contact[];
     /** All updates / activities regarding this company */
     activities: CompanyActivity[];
+    /** All files regarding this company */
+    files: CompanyFile[];
 }
 
 export class Invoice implements IInvoice {
@@ -6176,6 +6872,10 @@ export enum InvoiceStatus {
 export enum ActivityType {
     STATUS = "STATUS",
     COMMENT = "COMMENT",
+    EDIT = "EDIT",
+    REASSIGN = "REASSIGN",
+    ADDPRODUCT = "ADDPRODUCT",
+    DELPRODUCT = "DELPRODUCT",
 }
 
 export class InvoiceActivity implements IInvoiceActivity {
@@ -6626,6 +7326,110 @@ export interface ICompanyActivity {
     createdBy: User;
     companyId: number;
     /** Company related to this activity */
+    company: Company;
+}
+
+export class CompanyFile implements ICompanyFile {
+    /** Incremental ID of the entity */
+    id!: number;
+    /** Date at which this entity has been created */
+    createdAt!: Date;
+    /** Date at which this entity has last been updated */
+    updatedAt!: Date;
+    /** If this entity has been soft-deleted, this is the date at which the entity has been deleted */
+    deletedAt?: Date;
+    /** Version number of this entity */
+    version!: number;
+    /** Name of the file as shown in the front-end */
+    name!: string;
+    /** Name of the file as shown when downloaded */
+    downloadName!: string;
+    /** Location of the file on disk */
+    location!: string;
+    createdById!: number;
+    /** User who created this file */
+    createdBy!: User;
+    companyId!: number;
+    /** Company related to this file */
+    company!: Company;
+
+    constructor(data?: ICompanyFile) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+        if (!data) {
+            this.createdBy = new User();
+            this.company = new Company();
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
+            this.updatedAt = _data["updatedAt"] ? new Date(_data["updatedAt"].toString()) : <any>undefined;
+            this.deletedAt = _data["deletedAt"] ? new Date(_data["deletedAt"].toString()) : <any>undefined;
+            this.version = _data["version"];
+            this.name = _data["name"];
+            this.downloadName = _data["downloadName"];
+            this.location = _data["location"];
+            this.createdById = _data["createdById"];
+            this.createdBy = _data["createdBy"] ? User.fromJS(_data["createdBy"]) : new User();
+            this.companyId = _data["companyId"];
+            this.company = _data["company"] ? Company.fromJS(_data["company"]) : new Company();
+        }
+    }
+
+    static fromJS(data: any): CompanyFile {
+        data = typeof data === 'object' ? data : {};
+        let result = new CompanyFile();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
+        data["updatedAt"] = this.updatedAt ? this.updatedAt.toISOString() : <any>undefined;
+        data["deletedAt"] = this.deletedAt ? this.deletedAt.toISOString() : <any>undefined;
+        data["version"] = this.version;
+        data["name"] = this.name;
+        data["downloadName"] = this.downloadName;
+        data["location"] = this.location;
+        data["createdById"] = this.createdById;
+        data["createdBy"] = this.createdBy ? this.createdBy.toJSON() : <any>undefined;
+        data["companyId"] = this.companyId;
+        data["company"] = this.company ? this.company.toJSON() : <any>undefined;
+        return data; 
+    }
+}
+
+export interface ICompanyFile {
+    /** Incremental ID of the entity */
+    id: number;
+    /** Date at which this entity has been created */
+    createdAt: Date;
+    /** Date at which this entity has last been updated */
+    updatedAt: Date;
+    /** If this entity has been soft-deleted, this is the date at which the entity has been deleted */
+    deletedAt?: Date;
+    /** Version number of this entity */
+    version: number;
+    /** Name of the file as shown in the front-end */
+    name: string;
+    /** Name of the file as shown when downloaded */
+    downloadName: string;
+    /** Location of the file on disk */
+    location: string;
+    createdById: number;
+    /** User who created this file */
+    createdBy: User;
+    companyId: number;
+    /** Company related to this file */
     company: Company;
 }
 
@@ -7418,6 +8222,8 @@ export class ProductParams implements IProductParams {
     nameDutch!: string;
     nameEnglish!: string;
     targetPrice!: number;
+    minTarget?: number;
+    maxTarget?: number;
     status!: ProductStatus;
     description?: string;
     categoryId!: number;
@@ -7440,6 +8246,8 @@ export class ProductParams implements IProductParams {
             this.nameDutch = _data["nameDutch"];
             this.nameEnglish = _data["nameEnglish"];
             this.targetPrice = _data["targetPrice"];
+            this.minTarget = _data["minTarget"];
+            this.maxTarget = _data["maxTarget"];
             this.status = _data["status"];
             this.description = _data["description"];
             this.categoryId = _data["categoryId"];
@@ -7462,6 +8270,8 @@ export class ProductParams implements IProductParams {
         data["nameDutch"] = this.nameDutch;
         data["nameEnglish"] = this.nameEnglish;
         data["targetPrice"] = this.targetPrice;
+        data["minTarget"] = this.minTarget;
+        data["maxTarget"] = this.maxTarget;
         data["status"] = this.status;
         data["description"] = this.description;
         data["categoryId"] = this.categoryId;
@@ -7477,6 +8287,8 @@ export interface IProductParams {
     nameDutch: string;
     nameEnglish: string;
     targetPrice: number;
+    minTarget?: number;
+    maxTarget?: number;
     status: ProductStatus;
     description?: string;
     categoryId: number;
@@ -7491,6 +8303,8 @@ export class Partial_ProductParams implements IPartial_ProductParams {
     nameDutch?: string;
     nameEnglish?: string;
     targetPrice?: number;
+    minTarget?: number;
+    maxTarget?: number;
     status?: ProductStatus;
     description?: string;
     categoryId?: number;
@@ -7513,6 +8327,8 @@ export class Partial_ProductParams implements IPartial_ProductParams {
             this.nameDutch = _data["nameDutch"];
             this.nameEnglish = _data["nameEnglish"];
             this.targetPrice = _data["targetPrice"];
+            this.minTarget = _data["minTarget"];
+            this.maxTarget = _data["maxTarget"];
             this.status = _data["status"];
             this.description = _data["description"];
             this.categoryId = _data["categoryId"];
@@ -7535,6 +8351,8 @@ export class Partial_ProductParams implements IPartial_ProductParams {
         data["nameDutch"] = this.nameDutch;
         data["nameEnglish"] = this.nameEnglish;
         data["targetPrice"] = this.targetPrice;
+        data["minTarget"] = this.minTarget;
+        data["maxTarget"] = this.maxTarget;
         data["status"] = this.status;
         data["description"] = this.description;
         data["categoryId"] = this.categoryId;
@@ -7551,6 +8369,8 @@ export interface IPartial_ProductParams {
     nameDutch?: string;
     nameEnglish?: string;
     targetPrice?: number;
+    minTarget?: number;
+    maxTarget?: number;
     status?: ProductStatus;
     description?: string;
     categoryId?: number;
@@ -7649,6 +8469,50 @@ export class PaginationParams implements IPaginationParams {
 export interface IPaginationParams {
     skip?: number;
     take?: number;
+}
+
+export class AnalysisResultByYear implements IAnalysisResultByYear {
+    amount!: number;
+    nrOfProducts!: number;
+    year!: number;
+
+    constructor(data?: IAnalysisResultByYear) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.amount = _data["amount"];
+            this.nrOfProducts = _data["nrOfProducts"];
+            this.year = _data["year"];
+        }
+    }
+
+    static fromJS(data: any): AnalysisResultByYear {
+        data = typeof data === 'object' ? data : {};
+        let result = new AnalysisResultByYear();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["amount"] = this.amount;
+        data["nrOfProducts"] = this.nrOfProducts;
+        data["year"] = this.year;
+        return data; 
+    }
+}
+
+export interface IAnalysisResultByYear {
+    amount: number;
+    nrOfProducts: number;
+    year: number;
 }
 
 export class BaseFile implements IBaseFile {
@@ -8153,6 +9017,7 @@ export interface ICompanyListResponse {
 export class CompanySummary implements ICompanySummary {
     id!: number;
     name!: string;
+    logoFilename!: string;
 
     constructor(data?: ICompanySummary) {
         if (data) {
@@ -8167,6 +9032,7 @@ export class CompanySummary implements ICompanySummary {
         if (_data) {
             this.id = _data["id"];
             this.name = _data["name"];
+            this.logoFilename = _data["logoFilename"];
         }
     }
 
@@ -8181,6 +9047,7 @@ export class CompanySummary implements ICompanySummary {
         data = typeof data === 'object' ? data : {};
         data["id"] = this.id;
         data["name"] = this.name;
+        data["logoFilename"] = this.logoFilename;
         return data; 
     }
 }
@@ -8188,6 +9055,7 @@ export class CompanySummary implements ICompanySummary {
 export interface ICompanySummary {
     id: number;
     name: string;
+    logoFilename: string;
 }
 
 export class CompanyParams implements ICompanyParams {
@@ -8360,6 +9228,141 @@ export interface IPartial_CompanyParams {
     endDate?: Date;
 }
 
+export class ProductsPerCategory implements IProductsPerCategory {
+    categoryId!: number;
+    amount!: number[];
+    nrOfProducts!: number[];
+
+    constructor(data?: IProductsPerCategory) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+        if (!data) {
+            this.amount = [];
+            this.nrOfProducts = [];
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.categoryId = _data["categoryId"];
+            if (Array.isArray(_data["amount"])) {
+                this.amount = [] as any;
+                for (let item of _data["amount"])
+                    this.amount!.push(item);
+            }
+            if (Array.isArray(_data["nrOfProducts"])) {
+                this.nrOfProducts = [] as any;
+                for (let item of _data["nrOfProducts"])
+                    this.nrOfProducts!.push(item);
+            }
+        }
+    }
+
+    static fromJS(data: any): ProductsPerCategory {
+        data = typeof data === 'object' ? data : {};
+        let result = new ProductsPerCategory();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["categoryId"] = this.categoryId;
+        if (Array.isArray(this.amount)) {
+            data["amount"] = [];
+            for (let item of this.amount)
+                data["amount"].push(item);
+        }
+        if (Array.isArray(this.nrOfProducts)) {
+            data["nrOfProducts"] = [];
+            for (let item of this.nrOfProducts)
+                data["nrOfProducts"].push(item);
+        }
+        return data; 
+    }
+}
+
+export interface IProductsPerCategory {
+    categoryId: number;
+    amount: number[];
+    nrOfProducts: number[];
+}
+
+export class ContractedProductsAnalysis implements IContractedProductsAnalysis {
+    categories!: ProductsPerCategory[];
+    labels?: string[];
+    financialYears?: number[];
+
+    constructor(data?: IContractedProductsAnalysis) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+        if (!data) {
+            this.categories = [];
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["categories"])) {
+                this.categories = [] as any;
+                for (let item of _data["categories"])
+                    this.categories!.push(ProductsPerCategory.fromJS(item));
+            }
+            if (Array.isArray(_data["labels"])) {
+                this.labels = [] as any;
+                for (let item of _data["labels"])
+                    this.labels!.push(item);
+            }
+            if (Array.isArray(_data["financialYears"])) {
+                this.financialYears = [] as any;
+                for (let item of _data["financialYears"])
+                    this.financialYears!.push(item);
+            }
+        }
+    }
+
+    static fromJS(data: any): ContractedProductsAnalysis {
+        data = typeof data === 'object' ? data : {};
+        let result = new ContractedProductsAnalysis();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.categories)) {
+            data["categories"] = [];
+            for (let item of this.categories)
+                data["categories"].push(item.toJSON());
+        }
+        if (Array.isArray(this.labels)) {
+            data["labels"] = [];
+            for (let item of this.labels)
+                data["labels"].push(item);
+        }
+        if (Array.isArray(this.financialYears)) {
+            data["financialYears"] = [];
+            for (let item of this.financialYears)
+                data["financialYears"].push(item);
+        }
+        return data; 
+    }
+}
+
+export interface IContractedProductsAnalysis {
+    categories: ProductsPerCategory[];
+    labels?: string[];
+    financialYears?: number[];
+}
+
 export class ContractListResponse implements IContractListResponse {
     list!: Contract[];
     count!: number;
@@ -8414,6 +9417,7 @@ export interface IContractListResponse {
 export class ContractSummary implements IContractSummary {
     id!: number;
     title!: string;
+    value!: number;
     status!: ContractStatus;
 
     constructor(data?: IContractSummary) {
@@ -8429,6 +9433,7 @@ export class ContractSummary implements IContractSummary {
         if (_data) {
             this.id = _data["id"];
             this.title = _data["title"];
+            this.value = _data["value"];
             this.status = _data["status"];
         }
     }
@@ -8444,6 +9449,7 @@ export class ContractSummary implements IContractSummary {
         data = typeof data === 'object' ? data : {};
         data["id"] = this.id;
         data["title"] = this.title;
+        data["value"] = this.value;
         data["status"] = this.status;
         return data; 
     }
@@ -8452,6 +9458,7 @@ export class ContractSummary implements IContractSummary {
 export interface IContractSummary {
     id: number;
     title: string;
+    value: number;
     status: ContractStatus;
 }
 
@@ -8897,6 +9904,7 @@ export interface IContractStatusParams {
 export class InvoiceListResponse implements IInvoiceListResponse {
     list!: Invoice[];
     count!: number;
+    lastSeen?: Date;
 
     constructor(data?: IInvoiceListResponse) {
         if (data) {
@@ -8918,6 +9926,7 @@ export class InvoiceListResponse implements IInvoiceListResponse {
                     this.list!.push(Invoice.fromJS(item));
             }
             this.count = _data["count"];
+            this.lastSeen = _data["lastSeen"] ? new Date(_data["lastSeen"].toString()) : <any>undefined;
         }
     }
 
@@ -8936,6 +9945,7 @@ export class InvoiceListResponse implements IInvoiceListResponse {
                 data["list"].push(item.toJSON());
         }
         data["count"] = this.count;
+        data["lastSeen"] = this.lastSeen ? this.lastSeen.toISOString() : <any>undefined;
         return data; 
     }
 }
@@ -8943,12 +9953,14 @@ export class InvoiceListResponse implements IInvoiceListResponse {
 export interface IInvoiceListResponse {
     list: Invoice[];
     count: number;
+    lastSeen?: Date;
 }
 
 export class InvoiceSummary implements IInvoiceSummary {
     id!: number;
     title!: string;
     companyId!: number;
+    value!: number;
     status!: InvoiceStatus;
 
     constructor(data?: IInvoiceSummary) {
@@ -8965,6 +9977,7 @@ export class InvoiceSummary implements IInvoiceSummary {
             this.id = _data["id"];
             this.title = _data["title"];
             this.companyId = _data["companyId"];
+            this.value = _data["value"];
             this.status = _data["status"];
         }
     }
@@ -8981,6 +9994,7 @@ export class InvoiceSummary implements IInvoiceSummary {
         data["id"] = this.id;
         data["title"] = this.title;
         data["companyId"] = this.companyId;
+        data["value"] = this.value;
         data["status"] = this.status;
         return data; 
     }
@@ -8990,6 +10004,7 @@ export interface IInvoiceSummary {
     id: number;
     title: string;
     companyId: number;
+    value: number;
     status: InvoiceStatus;
 }
 
@@ -9240,6 +10255,186 @@ export interface IGenerateInvoiceParams {
     showDiscountPercentages: boolean;
     saveToDisk: boolean;
     recipientId: number;
+}
+
+export class CustomRecipient implements ICustomRecipient {
+    name!: string;
+    gender!: Gender;
+    organizationName?: string;
+    street!: string;
+    postalCode!: string;
+    city!: string;
+    country?: string;
+
+    constructor(data?: ICustomRecipient) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.name = _data["name"];
+            this.gender = _data["gender"];
+            this.organizationName = _data["organizationName"];
+            this.street = _data["street"];
+            this.postalCode = _data["postalCode"];
+            this.city = _data["city"];
+            this.country = _data["country"];
+        }
+    }
+
+    static fromJS(data: any): CustomRecipient {
+        data = typeof data === 'object' ? data : {};
+        let result = new CustomRecipient();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["name"] = this.name;
+        data["gender"] = this.gender;
+        data["organizationName"] = this.organizationName;
+        data["street"] = this.street;
+        data["postalCode"] = this.postalCode;
+        data["city"] = this.city;
+        data["country"] = this.country;
+        return data; 
+    }
+}
+
+export interface ICustomRecipient {
+    name: string;
+    gender: Gender;
+    organizationName?: string;
+    street: string;
+    postalCode: string;
+    city: string;
+    country?: string;
+}
+
+export class CustomProduct implements ICustomProduct {
+    name!: string;
+    amount!: number;
+    pricePerOne!: number;
+
+    constructor(data?: ICustomProduct) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.name = _data["name"];
+            this.amount = _data["amount"];
+            this.pricePerOne = _data["pricePerOne"];
+        }
+    }
+
+    static fromJS(data: any): CustomProduct {
+        data = typeof data === 'object' ? data : {};
+        let result = new CustomProduct();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["name"] = this.name;
+        data["amount"] = this.amount;
+        data["pricePerOne"] = this.pricePerOne;
+        return data; 
+    }
+}
+
+export interface ICustomProduct {
+    name: string;
+    amount: number;
+    pricePerOne: number;
+}
+
+export class CustomInvoiceGenSettings implements ICustomInvoiceGenSettings {
+    language!: Language;
+    fileType!: ReturnFileType;
+    recipient!: CustomRecipient;
+    subject!: string;
+    invoiceReason!: string;
+    ourReference!: string;
+    theirReference?: string;
+    products!: CustomProduct[];
+
+    constructor(data?: ICustomInvoiceGenSettings) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+        if (!data) {
+            this.recipient = new CustomRecipient();
+            this.products = [];
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.language = _data["language"];
+            this.fileType = _data["fileType"];
+            this.recipient = _data["recipient"] ? CustomRecipient.fromJS(_data["recipient"]) : new CustomRecipient();
+            this.subject = _data["subject"];
+            this.invoiceReason = _data["invoiceReason"];
+            this.ourReference = _data["ourReference"];
+            this.theirReference = _data["theirReference"];
+            if (Array.isArray(_data["products"])) {
+                this.products = [] as any;
+                for (let item of _data["products"])
+                    this.products!.push(CustomProduct.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): CustomInvoiceGenSettings {
+        data = typeof data === 'object' ? data : {};
+        let result = new CustomInvoiceGenSettings();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["language"] = this.language;
+        data["fileType"] = this.fileType;
+        data["recipient"] = this.recipient ? this.recipient.toJSON() : <any>undefined;
+        data["subject"] = this.subject;
+        data["invoiceReason"] = this.invoiceReason;
+        data["ourReference"] = this.ourReference;
+        data["theirReference"] = this.theirReference;
+        if (Array.isArray(this.products)) {
+            data["products"] = [];
+            for (let item of this.products)
+                data["products"].push(item.toJSON());
+        }
+        return data; 
+    }
+}
+
+export interface ICustomInvoiceGenSettings {
+    language: Language;
+    fileType: ReturnFileType;
+    recipient: CustomRecipient;
+    subject: string;
+    invoiceReason: string;
+    ourReference: string;
+    theirReference?: string;
+    products: CustomProduct[];
 }
 
 export class InvoiceStatusParams implements IInvoiceStatusParams {
@@ -9584,6 +10779,7 @@ export class UserSummary implements IUserSummary {
     lastNamePreposition!: string;
     lastName!: string;
     email!: string;
+    avatarFilename!: string;
 
     constructor(data?: IUserSummary) {
         if (data) {
@@ -9601,6 +10797,7 @@ export class UserSummary implements IUserSummary {
             this.lastNamePreposition = _data["lastNamePreposition"];
             this.lastName = _data["lastName"];
             this.email = _data["email"];
+            this.avatarFilename = _data["avatarFilename"];
         }
     }
 
@@ -9618,6 +10815,7 @@ export class UserSummary implements IUserSummary {
         data["lastNamePreposition"] = this.lastNamePreposition;
         data["lastName"] = this.lastName;
         data["email"] = this.email;
+        data["avatarFilename"] = this.avatarFilename;
         return data; 
     }
 }
@@ -9628,6 +10826,7 @@ export interface IUserSummary {
     lastNamePreposition: string;
     lastName: string;
     email: string;
+    avatarFilename: string;
 }
 
 /** Make all properties in T optional */
@@ -9638,6 +10837,9 @@ export class Partial_UserParams implements IPartial_UserParams {
     lastName?: string;
     function?: string;
     gender?: Gender;
+    replyToEmail?: string;
+    receiveEmails?: boolean;
+    sendEmailsToReplyToEmail?: boolean;
     comment?: string;
     roles?: Roles[];
 
@@ -9658,6 +10860,9 @@ export class Partial_UserParams implements IPartial_UserParams {
             this.lastName = _data["lastName"];
             this.function = _data["function"];
             this.gender = _data["gender"];
+            this.replyToEmail = _data["replyToEmail"];
+            this.receiveEmails = _data["receiveEmails"];
+            this.sendEmailsToReplyToEmail = _data["sendEmailsToReplyToEmail"];
             this.comment = _data["comment"];
             if (Array.isArray(_data["roles"])) {
                 this.roles = [] as any;
@@ -9682,6 +10887,9 @@ export class Partial_UserParams implements IPartial_UserParams {
         data["lastName"] = this.lastName;
         data["function"] = this.function;
         data["gender"] = this.gender;
+        data["replyToEmail"] = this.replyToEmail;
+        data["receiveEmails"] = this.receiveEmails;
+        data["sendEmailsToReplyToEmail"] = this.sendEmailsToReplyToEmail;
         data["comment"] = this.comment;
         if (Array.isArray(this.roles)) {
             data["roles"] = [];
@@ -9700,8 +10908,47 @@ export interface IPartial_UserParams {
     lastName?: string;
     function?: string;
     gender?: Gender;
+    replyToEmail?: string;
+    receiveEmails?: boolean;
+    sendEmailsToReplyToEmail?: boolean;
     comment?: string;
     roles?: Roles[];
+}
+
+export class TransferUserParams implements ITransferUserParams {
+    toUserId!: number;
+
+    constructor(data?: ITransferUserParams) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.toUserId = _data["toUserId"];
+        }
+    }
+
+    static fromJS(data: any): TransferUserParams {
+        data = typeof data === 'object' ? data : {};
+        let result = new TransferUserParams();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["toUserId"] = this.toUserId;
+        return data; 
+    }
+}
+
+export interface ITransferUserParams {
+    toUserId: number;
 }
 
 export class CategoryListResponse implements ICategoryListResponse {
@@ -9867,130 +11114,6 @@ export class Partial_CategoryParams implements IPartial_CategoryParams {
 /** Make all properties in T optional */
 export interface IPartial_CategoryParams {
     name?: string;
-}
-
-export class ProductsPerCategory implements IProductsPerCategory {
-    categoryId!: number;
-    amount!: number[];
-    nrOfProducts!: number[];
-
-    constructor(data?: IProductsPerCategory) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-        if (!data) {
-            this.amount = [];
-            this.nrOfProducts = [];
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.categoryId = _data["categoryId"];
-            if (Array.isArray(_data["amount"])) {
-                this.amount = [] as any;
-                for (let item of _data["amount"])
-                    this.amount!.push(item);
-            }
-            if (Array.isArray(_data["nrOfProducts"])) {
-                this.nrOfProducts = [] as any;
-                for (let item of _data["nrOfProducts"])
-                    this.nrOfProducts!.push(item);
-            }
-        }
-    }
-
-    static fromJS(data: any): ProductsPerCategory {
-        data = typeof data === 'object' ? data : {};
-        let result = new ProductsPerCategory();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["categoryId"] = this.categoryId;
-        if (Array.isArray(this.amount)) {
-            data["amount"] = [];
-            for (let item of this.amount)
-                data["amount"].push(item);
-        }
-        if (Array.isArray(this.nrOfProducts)) {
-            data["nrOfProducts"] = [];
-            for (let item of this.nrOfProducts)
-                data["nrOfProducts"].push(item);
-        }
-        return data; 
-    }
-}
-
-export interface IProductsPerCategory {
-    categoryId: number;
-    amount: number[];
-    nrOfProducts: number[];
-}
-
-export class ContractedProductsPerMonth implements IContractedProductsPerMonth {
-    categories!: ProductsPerCategory[];
-    financialYears!: number[];
-
-    constructor(data?: IContractedProductsPerMonth) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-        if (!data) {
-            this.categories = [];
-            this.financialYears = [];
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            if (Array.isArray(_data["categories"])) {
-                this.categories = [] as any;
-                for (let item of _data["categories"])
-                    this.categories!.push(ProductsPerCategory.fromJS(item));
-            }
-            if (Array.isArray(_data["financialYears"])) {
-                this.financialYears = [] as any;
-                for (let item of _data["financialYears"])
-                    this.financialYears!.push(item);
-            }
-        }
-    }
-
-    static fromJS(data: any): ContractedProductsPerMonth {
-        data = typeof data === 'object' ? data : {};
-        let result = new ContractedProductsPerMonth();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        if (Array.isArray(this.categories)) {
-            data["categories"] = [];
-            for (let item of this.categories)
-                data["categories"].push(item.toJSON());
-        }
-        if (Array.isArray(this.financialYears)) {
-            data["financialYears"] = [];
-            for (let item of this.financialYears)
-                data["financialYears"].push(item);
-        }
-        return data; 
-    }
-}
-
-export interface IContractedProductsPerMonth {
-    categories: ProductsPerCategory[];
-    financialYears: number[];
 }
 
 export class LoginParams implements ILoginParams {

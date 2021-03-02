@@ -5,6 +5,7 @@ import {
   Form, Input,
 } from 'semantic-ui-react';
 import validator from 'validator';
+import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { CategoryParams, ProductCategory } from '../../clients/server.generated';
 import { createSingle, deleteSingle, saveSingle } from '../../stores/single/actionCreators';
 import ResourceStatus from '../../stores/resourceStatus';
@@ -13,7 +14,7 @@ import PropsButtons from '../PropsButtons';
 import { getSingle } from '../../stores/single/selectors';
 import { SingleEntities } from '../../stores/single/single';
 
-interface Props {
+interface Props extends RouteComponentProps {
   create?: boolean;
   onCancel?: () => void;
 
@@ -85,16 +86,22 @@ class ProductCategoryProps extends React.Component<Props, State> {
 
   remove = () => {
     if (!this.props.create && this.props.deleteCategory) {
+      this.props.history.push('/category');
       this.props.deleteCategory(this.props.category.id);
     }
   };
 
-  deleteButtonActive() {
+  propsHaveErrors = (): boolean => {
+    const { name } = this.state;
+    return validator.isEmpty(name);
+  };
+
+  deleteButtonActive = () => {
     if (this.props.create) {
       return undefined;
     }
     return !(this.props.category.products.length > 0);
-  }
+  };
 
   render() {
     const {
@@ -111,6 +118,7 @@ class ProductCategoryProps extends React.Component<Props, State> {
           <PropsButtons
             editing={editing}
             canDelete={this.deleteButtonActive()}
+            canSave={!this.propsHaveErrors()}
             entity={SingleEntities.ProductCategory}
             status={this.props.status}
             cancel={this.cancel}
@@ -163,4 +171,4 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   ),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(ProductCategoryProps);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ProductCategoryProps));

@@ -14,7 +14,7 @@ import AlertContainer from '../components/alerts/AlertContainer';
 import { SingleEntities } from '../stores/single/single';
 import { getSingle } from '../stores/single/selectors';
 
-interface SelfProps extends RouteComponentProps<{companyId?: string}> {
+interface SelfProps extends RouteComponentProps<{ companyId?: string }> {
 }
 
 interface Props extends SelfProps {
@@ -63,11 +63,12 @@ class ContractModal extends React.Component<Props> {
     return (
       <Modal
         onClose={this.close}
+        closeIcon
         open
         dimmer="blurring"
         closeOnDimmerClick={false}
       >
-        <Segment>
+        <Modal.Content>
           <AlertContainer />
           <ContractProps
             contract={contract}
@@ -75,7 +76,7 @@ class ContractModal extends React.Component<Props> {
             companyPredefined={companyPredefined}
             onCancel={this.close}
           />
-        </Segment>
+        </Modal.Content>
       </Modal>
     );
   }

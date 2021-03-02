@@ -85,11 +85,30 @@ class ContractCompactTable extends React.Component<Props, State> {
 
     return (
       <>
-        <h3>Contracts</h3>
+        <h3>Invoices</h3>
+        <Loader active={loading} />
         <Table striped>
-          <Loader active={loading} />
+          <Table.Header>
+            <Table.Row>
+              <Table.HeaderCell>
+                Title
+              </Table.HeaderCell>
+              <Table.HeaderCell>
+                Company
+              </Table.HeaderCell>
+              <Table.HeaderCell>
+                Status
+              </Table.HeaderCell>
+              <Table.HeaderCell>
+                Year
+              </Table.HeaderCell>
+              <Table.HeaderCell>
+                Last Update
+              </Table.HeaderCell>
+            </Table.Row>
+          </Table.Header>
           <Table.Body>
-            {productInstances.map((p) => <InvoiceCompactRow invoice={p.invoice} />)}
+            {productInstances.map((p) => <InvoiceCompactRow key={p.id} invoice={p.invoice} />)}
           </Table.Body>
         </Table>
         <TablePagination

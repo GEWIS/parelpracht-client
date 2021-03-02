@@ -9,6 +9,7 @@ import {
   ListOrFilter,
   ListParams,
   ListSorting,
+  Partial_FileParams,
   SortDirection,
 } from '../../clients/server.generated';
 import { takeEveryWithErrorHandling } from '../errorHandling';
@@ -28,9 +29,11 @@ import {
   SingleCreateCommentAction,
   SingleDeleteAction,
   SingleDeleteActivityAction,
+  SingleDeleteFileAction,
   SingleFetchAction,
   SingleSaveAction,
   SingleSaveActivityAction,
+  SingleSaveFileAction,
 } from '../single/actions';
 import { SingleEntities } from '../single/single';
 
@@ -135,6 +138,44 @@ function* watchDeleteSingleCompany() {
   );
 }
 
+function* saveSingleCompanyFile(
+  action: SingleSaveFileAction<SingleEntities.Company, Partial_FileParams>,
+) {
+  const client = new Client();
+  yield call([client, client.updateCompanyFile], action.id, action.fileId, action.data);
+  const company = yield call([client, client.getCompany], action.id);
+  yield put(setSingle(SingleEntities.Company, company));
+}
+
+function* errorSaveSingleCompanyFile() {
+  yield put(errorSingle(SingleEntities.Company));
+}
+
+function* watchSaveSingleCompanyFile() {
+  yield takeEveryWithErrorHandling(
+    singleActionPattern(SingleEntities.Company, SingleActionType.SaveFile),
+    saveSingleCompanyFile, { onErrorSaga: errorSaveSingleCompanyFile },
+  );
+}
+
+function* deleteSingleCompanyFile(action: SingleDeleteFileAction<SingleEntities.Company>) {
+  const client = new Client();
+  yield call([client, client.deleteCompanyFile], action.id, action.fileId);
+  const company = yield call([client, client.getCompany], action.id);
+  yield put(setSingle(SingleEntities.Company, company));
+}
+
+function* errorDeleteSingleCompanyFile() {
+  yield put(errorSingle(SingleEntities.Company));
+}
+
+function* watchDeleteSingleCompanyFile() {
+  yield takeEveryWithErrorHandling(
+    singleActionPattern(SingleEntities.Company, SingleActionType.DeleteFile),
+    deleteSingleCompanyFile, { onErrorSaga: errorDeleteSingleCompanyFile },
+  );
+}
+
 function* createSingleCompanyComment(
   action: SingleCreateCommentAction<SingleEntities.Company, ActivityParams>,
 ) {
@@ -221,6 +262,8 @@ export default [
   watchSaveSingleCompany,
   watchCreateSingleCompany,
   watchDeleteSingleCompany,
+  watchSaveSingleCompanyFile,
+  watchDeleteSingleCompanyFile,
   watchCreateSingleCompanyComment,
   watchSaveSingleCompanyActivity,
   watchDeleteSingleCompanyActivity,

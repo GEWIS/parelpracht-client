@@ -13,6 +13,8 @@ interface Props {
 
   refresh: () => void;
   setSearch: (search: string) => void;
+
+  bottomLine?: string;
 }
 
 function TableControls(props: Props) {
@@ -33,6 +35,8 @@ function TableControls(props: Props) {
           {`${props.countFetched} of ${props.countTotal} item(s) shown \u00b7
             sorted on ${props.column} \u00b7
             updated ${timeAgo.format(props.lastUpdated)}`}
+          {props.bottomLine !== undefined ? <br /> : undefined}
+          {props.bottomLine}
         </p>
       </Grid.Column>
       <Grid.Column style={{ paddingTop: 0, paddingBottom: '0.5em' }} verticalAlign="middle">
@@ -58,5 +62,9 @@ function TableControls(props: Props) {
     </Grid>
   );
 }
+
+TableControls.defaultProps = {
+  bottomLine: undefined,
+};
 
 export default TableControls;

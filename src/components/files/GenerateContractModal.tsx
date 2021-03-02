@@ -1,19 +1,23 @@
 import React, { ChangeEvent, useState } from 'react';
 import {
-  Button, Checkbox,
-  Dropdown, Form, Icon, Input, Modal, Segment,
+  Button, Checkbox, Dropdown, Form, Icon, Input, Modal, Segment,
 } from 'semantic-ui-react';
 import validator from 'validator';
+import { Dispatch } from 'redux';
+import { connect } from 'react-redux';
 import {
-  Language, ContractType, ReturnFileType, GenerateContractParams,
+  ContractType, GenerateContractParams, Language, ReturnFileType,
 } from '../../clients/server.generated';
 import AlertContainer from '../alerts/AlertContainer';
 import UserSelector from '../user/UserSelector';
 import { FilesClient } from '../../clients/filesClient';
+import { TransientAlert } from '../../stores/alerts/actions';
+import { showTransientAlert } from '../../stores/alerts/actionCreators';
 
 interface Props {
   contractId: number;
   fetchContract: (id: number) => void;
+  showTransientAlert: (alert: TransientAlert) => void;
 }
 
 function GenerateContractModal(props: Props) {
@@ -29,10 +33,18 @@ function GenerateContractModal(props: Props) {
   const [signee2Id, changeSignee2] = useState(0);
   const [loading, changeLoading] = useState(false);
 
+  const setContentType = (newType: ContractType) => {
+    changeContentType(newType);
+    if (newType === ContractType.PROPOSAL) {
+      changeSignee1(0);
+      changeSignee2(0);
+    }
+  };
+
   const save = async () => {
     changeLoading(true);
     const client = new FilesClient();
-    await client.generateContractFile(props.contractId, new GenerateContractParams({
+    const success = await client.generateContractFile(props.contractId, new GenerateContractParams({
       name,
       language,
       contentType,
@@ -42,9 +54,18 @@ function GenerateContractModal(props: Props) {
       signee1Id,
       signee2Id,
     }));
-    setOpen(false);
     changeLoading(false);
-    props.fetchContract(props.contractId);
+
+    if (success) {
+      setOpen(false);
+      props.fetchContract(props.contractId);
+    } else {
+      props.showTransientAlert({
+        title: 'Error',
+        message: 'Could not generate a contract file. Please consulate the back-end logs.',
+        type: 'error',
+      });
+    }
   };
 
   return (
@@ -74,12 +95,25 @@ function GenerateContractModal(props: Props) {
         <h2>
           Generate file
           <Button
-            primary
             onClick={save}
             floated="right"
             loading={loading}
+            color="green"
+            icon
+            labelPosition="left"
+            disabled={validator.isEmpty(name)
+              || (signee1Id === 0 && contentType === ContractType.CONTRACT)
+              || (signee2Id === 0 && contentType === ContractType.CONTRACT)}
           >
+            <Icon name="download" />
             Generate
+          </Button>
+          <Button
+            icon
+            floated="right"
+            onClick={() => setOpen(false)}
+          >
+            Cancel
           </Button>
         </h2>
         <Form style={{ marginTop: '2em' }}>
@@ -109,7 +143,7 @@ function GenerateContractModal(props: Props) {
                   { key: 0, text: 'Contract', value: ContractType.CONTRACT },
                   { key: 1, text: 'Proposal', value: ContractType.PROPOSAL },
                 ]}
-                onChange={(e, data) => changeContentType(data.value as ContractType)}
+                onChange={(e, data) => setContentType(data.value as ContractType)}
                 fluid
               />
             </Form.Field>
@@ -158,19 +192,23 @@ function GenerateContractModal(props: Props) {
               placeholder="Signee 1"
               control={UserSelector}
               value={signee1Id}
-              required
+              required={contentType === ContractType.CONTRACT}
+              disabled={contentType !== ContractType.CONTRACT}
               onChange={(id: number) => changeSignee1(id)}
               hideEmail
+              correct={contentType === ContractType.PROPOSAL}
               fluid
             />
             <Form.Field
               label="Signee 2"
               placeholder="Signee 2"
               control={UserSelector}
-              required
+              required={contentType === ContractType.CONTRACT}
+              disabled={contentType !== ContractType.CONTRACT}
               value={signee2Id}
               onChange={(id: number) => changeSignee2(id)}
               hideEmail
+              correct={contentType === ContractType.PROPOSAL}
               fluid
             />
           </Form.Group>
@@ -206,4 +244,8 @@ function GenerateContractModal(props: Props) {
   );
 }
 
-export default GenerateContractModal;
+const mapDispatchToProps = (dispatch: Dispatch) => ({
+  showTransientAlert: (alert: TransientAlert) => dispatch(showTransientAlert(alert)),
+});
+
+export default connect(null, mapDispatchToProps)(GenerateContractModal);

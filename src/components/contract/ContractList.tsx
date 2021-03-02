@@ -95,7 +95,7 @@ class ContractList extends React.Component<Props, State> {
           </Table.Header>
           <Table.Body>
             {contracts.map((x) => (
-              <ContractComponent key={x.id} contract={x} />))}
+              <ContractComponent contract={x} />))}
           </Table.Body>
         </Table>
       </>

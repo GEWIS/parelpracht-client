@@ -1,10 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import {
-  Grid, Header, Icon, Loader, Placeholder, Segment,
+  Grid, Header, Icon, Image, Loader, Placeholder, Segment,
 } from 'semantic-ui-react';
 import { Contract } from '../../clients/server.generated';
-import { getCompanyName } from '../../stores/company/selectors';
+import { getCompanyLogo, getCompanyName } from '../../stores/company/selectors';
 import { getContactName } from '../../stores/contact/selectors';
 import ResourceStatus from '../../stores/resourceStatus';
 import { getSingle } from '../../stores/single/selectors';
@@ -19,13 +19,12 @@ interface Props {
   contract: Contract | undefined;
   status: ResourceStatus;
   contactName: string;
-  createdByName: string;
-  companyName: string;
+  logoFilename: string;
 }
 
 function ContractSummary(props: Props) {
   const {
-    contract, status, createdByName, companyName, contactName,
+    contract, status, contactName, logoFilename,
   } = props;
 
   if (contract === undefined
@@ -51,17 +50,34 @@ function ContractSummary(props: Props) {
   const totalValue = contract.products
     .reduce((a, b) => a + (b.basePrice - b.discount), 0);
 
+  const logo = logoFilename !== '' ? (
+    <Image
+      floated="right"
+      src={`/static/logos/${logoFilename}`}
+      style={{ maxHeight: '4rem', width: 'auto' }}
+    />
+  ) : <div />;
+
   return (
     <>
       <Header as="h1" attached="top" style={{ backgroundColor: '#eee' }}>
-        <Icon name="shopping bag" />
-        <Header.Content>
-          <Header.Subheader>Contract</Header.Subheader>
-          C
-          {contract.id}
-          {' '}
-          {contract.title}
-        </Header.Content>
+        <Grid>
+          <Grid.Row columns="2">
+            <Grid.Column>
+              <Icon name="file alternate" size="large" style={{ padding: '0.5rem' }} />
+              <Header.Content>
+                <Header.Subheader>Contract</Header.Subheader>
+                C
+                {contract.id}
+                {' '}
+                {contract.title}
+              </Header.Content>
+            </Grid.Column>
+            <Grid.Column>
+              {logo}
+            </Grid.Column>
+          </Grid.Row>
+        </Grid>
       </Header>
       <Segment attached="bottom">
         <Grid columns={4}>
@@ -95,6 +111,7 @@ const mapStateToProps = (state: RootState) => {
     contract: data,
     status,
     companyName: data ? getCompanyName(state, data.companyId) : '...',
+    logoFilename: data ? getCompanyLogo(state, data.companyId) : '',
     createdByName: data ? getUserName(state, data.createdById) : '...',
     contactName: data ? getContactName(state, data.contactId) : '...',
   };

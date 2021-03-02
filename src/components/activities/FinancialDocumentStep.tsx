@@ -1,8 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Step, Icon, Button } from 'semantic-ui-react';
-import { NavLink, RouteComponentProps, withRouter } from 'react-router-dom';
-import { RootState } from '../../stores/store';
+import { Step, Icon } from 'semantic-ui-react';
+import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { GeneralActivity } from './GeneralActivity';
 import {
   formatDocumentType,
@@ -252,11 +251,6 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
   }
 }
 
-const mapStateToProps = (state: RootState) => {
-  return {
-  };
-};
-
 const mapDispatchToProps = () => ({});
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(FinancialDocumentProgress));
+export default withRouter(connect(null, mapDispatchToProps)(FinancialDocumentProgress));

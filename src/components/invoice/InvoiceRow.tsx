@@ -3,7 +3,6 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { Table } from 'semantic-ui-react';
 import { Invoice, InvoiceStatus } from '../../clients/server.generated';
-import { getCompanyName } from '../../stores/company/selectors';
 import { RootState } from '../../stores/store';
 import { dateToFullFinancialYear, formatLastUpdate } from '../../helpers/timestamp';
 import { formatStatus } from '../../helpers/activity';
