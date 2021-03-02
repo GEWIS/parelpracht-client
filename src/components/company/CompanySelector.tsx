@@ -32,7 +32,7 @@ function CompanySelector(props: Props & DropdownProps) {
       selection
       error={!(value > -1) && !open}
       options={dropdownOptions}
-      value={value}
+      value={value < 0 ? '' : value}
       onChange={(e, data) => onChange(data.value as any)}
       // Because the text is also red when error=true, we need to
       // keep a state whether the dropdown is open

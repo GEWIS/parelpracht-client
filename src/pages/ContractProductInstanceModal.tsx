@@ -80,7 +80,7 @@ class ContractProductInstanceModal extends React.Component<Props> {
       productInstance = {
         id: -1,
         contractId: parseInt(contractId, 10),
-        productId: 0,
+        productId: -1,
         basePrice: 0,
         discount: 0,
         comments: '',

@@ -28,7 +28,7 @@ function ProductSelector(props: Props & DropdownProps) {
       search
       selection
       options={dropdownOptions}
-      value={value}
+      value={value < 0 ? '' : value}
       onChange={(e, data) => onChange(data.value as any)}
     />
   );
