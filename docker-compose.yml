@@ -56,7 +56,7 @@ services:
       - backend
       - frontend
     ports:
-      - '80:80'
+      - '39390:80'
     networks:
       - parelpracht
     volumes:

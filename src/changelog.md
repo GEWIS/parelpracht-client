@@ -1,16 +1,18 @@
 # Change log
-The current version of ParelPracht is **v0.1-beta1**, released on February 1st, 2021.
+The current version of ParelPracht is **v0.2-beta2**, released on March 2nd, 2021.
 You can find the release notes below.
 ----------------------
 
-## v0.2-dev
+## v0.2-beta2 (02-03-2021)
 ### Added
 - Added custom invoices with custom values.
   - Added support for a custom list of products (With amounts).
   - Added support for a custom recipient.
+- Added a minimal and maximal target to products.
 - Added an insights tab with a bar chart to the product details page.
   - The bar chart shows the value of all contracted products by financial year.
   - The bar chart shows the number of contracted products by financial year.
+  - The targets are also shown in these charts for comparison.
 - Added an insights tab with a bar chart to the company details page.
   - The bar chart shows the value of all contracted products by that company by financial year.
   - The bar chart shows the number of contracted products by that company by financial year.
@@ -40,6 +42,7 @@ You can find the release notes below.
 - It is no longer possible to create empty comments.
 - When you delete an entity, you will now be properly redirected to prevent empty pages and infinite loading.
 - The "Updated At" value of every entity will now be updated when an activity is added.
+- The "Save" button is disabled when a form has errors.
 
 ### Bugfixes
 - Fixed not being able to select a recipient when generating an invoice file.
@@ -52,8 +55,9 @@ You can find the release notes below.
 - Fixed most of the errors from the browser console.
 - Fixed user function not being required in the front-end, while it was required in the back-end.
 - Fixed a store error showing up when you log out.
-- Fixed slow performance of the company details.
-- Fixed delete popup not visible when in a modal.
+- Fixed slow performance of the company details and "Create Company" modal.
+- Fixed delete popup not being visible when in a modal.
+- Fixed the placeholder text of some dropdowns being red or black instead of grey.
 
 ## v0.1-beta1 (01-02-2021)
 ### Added
