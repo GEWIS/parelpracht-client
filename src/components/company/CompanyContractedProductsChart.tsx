@@ -39,7 +39,7 @@ class CompanyContractedProductsChart extends React.Component<Props, State> {
     }
 
     return (
-      <Tab.Pane laoding={loading}>
+      <Tab.Pane loading={loading}>
         <CategoryLineChart
           data={data.categories}
           labels={data.labels || []}

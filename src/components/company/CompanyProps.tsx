@@ -215,7 +215,7 @@ class CompanyProps extends React.Component<Props, State> {
             />
           </Form.Group>
           <Form.Group widths="equal">
-            <Form.Field disabled={!editing}>
+            <Form.Field disabled={!editing} fluid>
               {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
               <label htmlFor="form-input-description">
                 Description
@@ -225,7 +225,6 @@ class CompanyProps extends React.Component<Props, State> {
                 value={comments}
                 onChange={(e) => this.setState({ comments: e.target.value })}
                 placeholder="Description"
-                fluid
               />
             </Form.Field>
             <Form.Field>
