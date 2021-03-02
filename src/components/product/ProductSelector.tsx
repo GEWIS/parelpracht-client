@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import React from 'react';
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { Dropdown, DropdownProps } from 'semantic-ui-react';
 import { ProductSummary } from '../../clients/server.generated';
@@ -12,6 +12,8 @@ interface Props {
 }
 
 function ProductSelector(props: Props & DropdownProps) {
+  const [open, changeOpen] = useState(false);
+
   const {
     value, onChange, options,
   } = props;
@@ -30,6 +32,9 @@ function ProductSelector(props: Props & DropdownProps) {
       options={dropdownOptions}
       value={value < 0 ? '' : value}
       onChange={(e, data) => onChange(data.value as any)}
+      error={(value < 1 && !open)}
+      onOpen={() => changeOpen(true)}
+      onClose={() => changeOpen(false)}
     />
   );
 }

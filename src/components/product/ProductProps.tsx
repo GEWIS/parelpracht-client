@@ -125,6 +125,22 @@ class ProductProps extends React.Component<Props, State> {
     }
   };
 
+  propsHaveErrors = (): boolean => {
+    const {
+      nameDutch, nameEnglish, categoryId, targetPrice, minTarget, maxTarget,
+      contractTextDutch, contractTextEnglish,
+    } = this.state;
+    return (validator.isEmpty(nameDutch)
+      || validator.isEmpty(nameEnglish)
+      || categoryId < 0
+      || (parseFloat(targetPrice) < 0 || Number.isNaN(parseFloat(targetPrice)))
+      || (minTarget !== undefined ? minTarget < 0 : false)
+      || maxTarget < (minTarget || 0)
+      || validator.isEmpty(contractTextDutch)
+      || validator.isEmpty(contractTextEnglish)
+    );
+  };
+
   deleteButtonActive = () => {
     if (this.props.create) {
       return undefined;
@@ -158,6 +174,7 @@ class ProductProps extends React.Component<Props, State> {
           <PropsButtons
             editing={editing}
             canDelete={this.deleteButtonActive()}
+            canSave={!this.propsHaveErrors()}
             entity={SingleEntities.Product}
             status={this.props.status}
             cancel={this.cancel}
@@ -224,6 +241,7 @@ class ProductProps extends React.Component<Props, State> {
             <Form.Field
               disabled={!editing}
               required
+              error={parseFloat(targetPrice) < 0 || Number.isNaN(parseFloat(targetPrice))}
             >
               {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
               <label htmlFor="form-input-target-price">
@@ -262,6 +280,7 @@ class ProductProps extends React.Component<Props, State> {
           <Form.Group widths="equal">
             <Form.Field
               disabled={!editing}
+              error={minTarget !== undefined ? minTarget < 0 : false}
             >
               {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
               <label htmlFor="form-input-minimal-target">
@@ -280,6 +299,7 @@ class ProductProps extends React.Component<Props, State> {
             </Form.Field>
             <Form.Field
               disabled={!editing}
+              error={maxTarget < (minTarget || 0)}
             >
               {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
               <label htmlFor="form-input-maximum-target">

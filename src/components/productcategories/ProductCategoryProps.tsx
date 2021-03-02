@@ -91,12 +91,17 @@ class ProductCategoryProps extends React.Component<Props, State> {
     }
   };
 
-  deleteButtonActive() {
+  propsHaveErrors = (): boolean => {
+    const { name } = this.state;
+    return validator.isEmpty(name);
+  };
+
+  deleteButtonActive = () => {
     if (this.props.create) {
       return undefined;
     }
     return !(this.props.category.products.length > 0);
-  }
+  };
 
   render() {
     const {
@@ -113,6 +118,7 @@ class ProductCategoryProps extends React.Component<Props, State> {
           <PropsButtons
             editing={editing}
             canDelete={this.deleteButtonActive()}
+            canSave={!this.propsHaveErrors()}
             entity={SingleEntities.ProductCategory}
             status={this.props.status}
             cancel={this.cancel}

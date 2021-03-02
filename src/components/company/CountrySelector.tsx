@@ -28,7 +28,6 @@ class CountrySelector extends React.Component<Props> {
     return (
       <Form.Field
         disabled={!this.props.editing}
-        required
       >
         {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
         <label htmlFor={this.props.id}>
@@ -40,6 +39,7 @@ class CountrySelector extends React.Component<Props> {
           fluid
           search
           selection
+          clearable
           options={this.countries}
           value={this.props.country}
           lazyLoad

@@ -104,6 +104,16 @@ class ContractProps extends React.Component<Props, State> {
     }
   };
 
+  propsHaveErrors = (): boolean => {
+    const {
+      title, companySelection, contactSelection,
+    } = this.state;
+    return (validator.isEmpty(title)
+      || companySelection < 0
+      || contactSelection < 0
+    );
+  };
+
   deleteButtonActive = () => {
     // If we create a contract, do not show the button
     if (this.props.create) {
@@ -171,6 +181,7 @@ class ContractProps extends React.Component<Props, State> {
           <PropsButtons
             editing={editing}
             canDelete={this.deleteButtonActive()}
+            canSave={!this.propsHaveErrors()}
             entity={SingleEntities.Contract}
             status={this.props.status}
             cancel={this.cancel}

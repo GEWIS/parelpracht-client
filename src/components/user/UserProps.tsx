@@ -139,6 +139,17 @@ class UserProps extends React.Component<Props, State> {
     }
   };
 
+  propsHaveErrors = (): boolean => {
+    const {
+      firstName, lastName, functionName, email,
+    } = this.state;
+    return (validator.isEmpty(firstName)
+      || validator.isEmpty(lastName)
+      || validator.isEmpty(functionName)
+      || !validator.isEmail(email)
+    );
+  };
+
   deleteButtonActive = () => {
     if (this.props.create) {
       return undefined;
@@ -200,6 +211,7 @@ class UserProps extends React.Component<Props, State> {
           <PropsButtons
             editing={editing}
             canDelete={this.deleteButtonActive()}
+            canSave={!this.propsHaveErrors()}
             entity={SingleEntities.User}
             status={this.props.status}
             cancel={this.cancel}

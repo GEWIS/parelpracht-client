@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {
-  Modal, Segment,
+  Modal,
 } from 'semantic-ui-react';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';

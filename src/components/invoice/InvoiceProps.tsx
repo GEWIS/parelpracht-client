@@ -4,6 +4,7 @@ import { Dispatch } from 'redux';
 import { Form, Input, TextArea } from 'semantic-ui-react';
 import { DateInput } from 'semantic-ui-calendar-react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
+import validator from 'validator';
 import { ActivityType, Invoice, Partial_InvoiceParams } from '../../clients/server.generated';
 import { getCompanyName } from '../../stores/company/selectors';
 import ResourceStatus from '../../stores/resourceStatus';
@@ -105,6 +106,11 @@ class InvoiceProps extends React.Component<Props, State> {
     }
   };
 
+  propsHaveErrors = (): boolean => {
+    const { title } = this.state;
+    return (validator.isEmpty(title));
+  };
+
   deleteButtonActive = () => {
     if (this.props.create) {
       return undefined;
@@ -131,6 +137,7 @@ class InvoiceProps extends React.Component<Props, State> {
           <PropsButtons
             editing={editing}
             canDelete={this.deleteButtonActive()}
+            canSave={!this.propsHaveErrors()}
             entity={SingleEntities.Invoice}
             status={this.props.status}
             cancel={this.cancel}
@@ -151,6 +158,7 @@ class InvoiceProps extends React.Component<Props, State> {
               onChange={(e: ChangeEvent<HTMLInputElement>) => {
                 this.setState({ title: e.target.value });
               }}
+              error={validator.isEmpty(title)}
             />
             <Form.Field
               disabled={!editing}
@@ -188,7 +196,10 @@ class InvoiceProps extends React.Component<Props, State> {
                 this.setState({ poNumber: e.target.value });
               }}
             />
-            <Form.Field disabled={!editing}>
+            <Form.Field
+              disabled={!editing}
+              error={validator.isEmpty(formatTimestampToDate(startDate))}
+            >
               {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
               <label htmlFor="form-input-startdate">Invoice date</label>
               <DateInput

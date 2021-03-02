@@ -124,12 +124,23 @@ class ContactProps extends React.Component<Props, State> {
     }
   };
 
-  deleteButtonActive() {
+  propsHaveErrors = (): boolean => {
+    const {
+      firstName, lastName, email, telephone,
+    } = this.state;
+    return (validator.isEmpty(firstName)
+      || validator.isEmpty(lastName)
+      || !validator.isEmail(email)
+      || (!validator.isEmpty(telephone!) && !validator.isMobilePhone(telephone!))
+    );
+  };
+
+  deleteButtonActive = () => {
     if (this.props.create) {
       return undefined;
     }
     return !(this.props.contact.contracts.length > 0);
-  }
+  };
 
   render() {
     const {
@@ -152,6 +163,7 @@ class ContactProps extends React.Component<Props, State> {
           <PropsButtons
             editing={editing}
             canDelete={this.deleteButtonActive()}
+            canSave={!this.propsHaveErrors()}
             entity={SingleEntities.Contact}
             status={this.props.status}
             cancel={this.cancel}
@@ -204,7 +216,7 @@ class ContactProps extends React.Component<Props, State> {
               })}
               width={6}
               error={
-                validator.isEmpty(firstName)
+                validator.isEmpty(lastName)
               }
             />
           </Form.Group>

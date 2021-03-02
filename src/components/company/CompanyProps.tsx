@@ -124,14 +124,26 @@ class CompanyProps extends React.Component<Props, State> {
     }
   };
 
-  deleteButtonActive() {
+  deleteButtonActive = () => {
     if (this.props.create) {
       return undefined;
     }
     return !(this.props.company.contacts.length > 0
       || this.props.company.invoices.length > 0
       || this.props.company.contacts.length > 0);
-  }
+  };
+
+  propsHaveErrors = (): boolean => {
+    const {
+      name, phoneNumber, addressStreet, addressCity, addressPostalCode,
+    } = this.state;
+    return (validator.isEmpty(name)
+      || (!validator.isEmpty(phoneNumber!) && !validator.isMobilePhone(phoneNumber!))
+      || validator.isEmpty(addressStreet)
+      || validator.isEmpty(addressCity)
+      || !validator.isPostalCode(addressPostalCode, 'any')
+    );
+  };
 
   render() {
     const {
@@ -158,6 +170,7 @@ class CompanyProps extends React.Component<Props, State> {
           <PropsButtons
             editing={editing}
             canDelete={this.deleteButtonActive()}
+            canSave={!this.propsHaveErrors()}
             entity={SingleEntities.Company}
             status={this.props.status}
             cancel={this.cancel}
