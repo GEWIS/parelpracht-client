@@ -1,7 +1,13 @@
 # Change log
-The current version of ParelPracht is **v0.2-beta2**, released on March 2nd, 2021.
+The current version of ParelPracht is **v0.2.1-beta2**, released on March 7nd, 2021.
 You can find the release notes below.
 ----------------------
+
+## v0.2.1-beta2 (07-03-2021)
+
+### Bugfixes
+- Fixed being unable to log in when using the Docker version of ParelPracht
+- Fixed a bug when the front-end crashed when trying to create a new user.
 
 ## v0.2-beta2 (02-03-2021)
 ### Added
