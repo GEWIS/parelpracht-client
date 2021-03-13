@@ -3,6 +3,11 @@ The current version of ParelPracht is **v0.2.1-beta2**, released on March 7nd, 2
 You can find the release notes below.
 ----------------------
 
+## v0.3-dev
+### Added
+### Changes
+### Bugfixes
+
 ## v0.2.1-beta2 (07-03-2021)
 
 ### Bugfixes
