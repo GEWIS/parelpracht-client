@@ -9,6 +9,7 @@ const initialState: AuthState = {
 
   profile: undefined,
   profileStatus: ResourceStatus.EMPTY,
+  roles: [],
 
   passwordRequest: ResourceStatus.EMPTY,
 };
@@ -39,12 +40,14 @@ export default function authReducer(
       return {
         ...state,
         profile: action.profile,
+        roles: action.profile.roles.map((r) => r.name),
         profileStatus: ResourceStatus.FETCHED,
       };
     case AuthActionType.Logout:
       return {
         ...state,
         profile: undefined,
+        roles: [],
         profileStatus: ResourceStatus.EMPTY,
       };
     case AuthActionType.ResetPassword:

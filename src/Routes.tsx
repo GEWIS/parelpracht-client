@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {
-  withRouter, Switch, Route, RouteComponentProps, Redirect,
+  Redirect, Route, RouteComponentProps, Switch, withRouter,
 } from 'react-router-dom';
 import {
   Container, Dimmer, Header, Loader,
@@ -23,7 +23,7 @@ import ContractModal from './pages/ContractModal';
 import Navigation from './components/navigation/Navigation';
 import { RootState } from './stores/store';
 import ResourceStatus from './stores/resourceStatus';
-import { AuthStatus } from './clients/server.generated';
+import { AuthStatus, Roles, User } from './clients/server.generated';
 import LoginPage from './pages/LoginPage';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
 import ResetPasswordPage from './pages/ResetPasswordPage';
@@ -41,26 +41,32 @@ import ProductCategoriesPage from './pages/ProductCategoriesPage';
 import ProductCategoriesCreatePage from './pages/ProductCategoriesCreatePage';
 import ProductCategoryModal from './pages/ProductCategoryModal';
 import CustomInvoicePage from './pages/CustomInvoicePage';
+import { authedUserHasRole } from './stores/auth/selectors';
 
 interface Props extends RouteComponentProps {
   // eslint-disable-next-line react/no-unused-prop-types
   authStatus: AuthStatus | undefined;
   status: ResourceStatus;
+  profile: User | undefined;
+
+  hasRole: (role: Roles) => boolean;
 }
 
 function Routes(props: Props) {
-  if (props.status !== ResourceStatus.FETCHED || props.authStatus === undefined) {
-    return (
-      <Container>
-        <Dimmer active page inverted>
+  const loader = (
+    <Container>
+      <Dimmer active page inverted>
 
-          <Header as="h2" icon>
-            <Loader inline content="ParelPracht" size="large" />
-            <Header.Subheader>Checking login information...</Header.Subheader>
-          </Header>
-        </Dimmer>
-      </Container>
-    );
+        <Header as="h2" icon>
+          <Loader inline content="ParelPracht" size="large" />
+          <Header.Subheader>Checking login information...</Header.Subheader>
+        </Header>
+      </Dimmer>
+    </Container>
+  );
+
+  if (props.status !== ResourceStatus.FETCHED || props.authStatus === undefined) {
+    return loader;
   }
 
   if (!props.authStatus.authenticated) {
@@ -91,6 +97,8 @@ function Routes(props: Props) {
       </Switch>
     );
   }
+
+  if (props.profile === undefined) return loader;
 
   return (
     <div>
@@ -200,13 +208,15 @@ function Routes(props: Props) {
           </Route>
 
           {/* Users */}
-          <Route path="/user" exact>
-            <UsersPage />
-          </Route>
-          <Route path="/user/new" exact>
-            <UsersPage />
-            <UserCreatePage />
-          </Route>
+          {props.hasRole(Roles.ADMIN) ? [
+            <Route path="/user" exact>
+              <UsersPage />
+            </Route>,
+            <Route path="/user/new" exact>
+              <UsersPage />
+              <UserCreatePage />
+            </Route>,
+          ] : null}
           <Route path="/user/:userId" exact component={SingleUserPage} />
           <Route path="" component={NotFound} />
         </Switch>
@@ -222,6 +232,7 @@ const mapStateToProps = (state: RootState) => {
     status: state.auth.status,
     profile: state.auth.profile,
     profileStatus: state.auth.profileStatus,
+    hasRole: (role: Roles): boolean => authedUserHasRole(state, role),
   };
 };
 

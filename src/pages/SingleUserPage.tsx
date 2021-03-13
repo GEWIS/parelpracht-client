@@ -39,7 +39,7 @@ class SingleUserPage extends React.Component<Props> {
     if (this.props.status === ResourceStatus.EMPTY
       && prevProps.status === ResourceStatus.DELETING
     ) {
-      this.props.history.push('/company');
+      this.props.history.push('/user');
       this.props.showTransientAlert({
         title: 'Success',
         message: `User ${prevProps.user?.firstName} successfully deleted`,

@@ -6,6 +6,7 @@ export interface AuthState {
   status: ResourceStatus;
 
   profile: User | undefined;
+  roles: string[];
   profileStatus: ResourceStatus;
 
   passwordRequest: ResourceStatus;
