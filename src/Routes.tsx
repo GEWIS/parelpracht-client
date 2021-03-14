@@ -41,7 +41,6 @@ import ProductCategoriesPage from './pages/ProductCategoriesPage';
 import ProductCategoriesCreatePage from './pages/ProductCategoriesCreatePage';
 import ProductCategoryModal from './pages/ProductCategoryModal';
 import CustomInvoicePage from './pages/CustomInvoicePage';
-import DirectMailPage from './pages/DirectMailPage';
 
 interface Props extends RouteComponentProps {
   // eslint-disable-next-line react/no-unused-prop-types
@@ -132,9 +131,6 @@ function Routes(props: Props) {
           <Route path="/category/:categoryId" exact>
             <ProductCategoriesPage />
             <ProductCategoryModal />
-          </Route>
-          <Route path="/directmail">
-            <DirectMailPage />
           </Route>
           {/* Company */}
           <Route path="/company" exact>

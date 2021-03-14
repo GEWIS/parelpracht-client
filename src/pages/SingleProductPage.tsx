@@ -21,6 +21,7 @@ import FilesList from '../components/files/FilesList';
 import ContractCompactTable from '../components/contract/ContractCompactTable';
 import InvoiceCompactTable from '../components/invoice/InvoiceCompactTable';
 import ProductsContractedGraph from '../components/product/ProductsContractedGraph';
+import PricingTable from '../components/productpricing/PricingTable';
 
 interface Props extends RouteComponentProps<{ productId: string }> {
   product: Product | undefined;
@@ -116,6 +117,19 @@ class SingleProductPage extends React.Component<Props> {
         render: () => <ProductsContractedGraph product={product} />,
       },
     ];
+
+    console.log(product);
+
+    if (product.pricing !== undefined) {
+      panes.push({
+        menuItem: 'Pricing',
+        render: () => (
+          <Tab.Pane>
+            <PricingTable pricing={product.pricing!} productId={product.id} />
+          </Tab.Pane>
+        ),
+      });
+    }
 
     return (
       <Container style={{ paddingTop: '2em' }}>
