@@ -84,7 +84,7 @@ class ProductCategoryModal extends React.Component<Props> {
           size="tiny"
           closeOnDimmerClick
         >
-          <Modal.Content placeholder attached="bottom">
+          <Modal.Content>
             <AlertContainer />
             <Dimmer active inverted>
               <Loader />
@@ -117,7 +117,11 @@ class ProductCategoryModal extends React.Component<Props> {
                 <Header>Products:</Header>
                 <ul>
                   {category.products.map((product) => {
-                    return <li><NavLink to={`/product/${product.id}`}>{product.nameEnglish}</NavLink></li>;
+                    return (
+                      <li key={product.id}>
+                        <NavLink to={`/product/${product.id}`}>{product.nameEnglish}</NavLink>
+                      </li>
+                    );
                   })}
                 </ul>
               </Segment>

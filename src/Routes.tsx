@@ -147,11 +147,11 @@ function Routes(props: Props) {
           <Route path="/company/:companyId" exact component={SingleCompanyPage} />
           <Route path="/company/:companyId/contact/new" exact>
             <SingleCompanyPage />
-            <ContactModal create />
+            <ContactModal create onCompanyPage />
           </Route>
           <Route path="/company/:companyId/contact/:contactId" exact>
             <SingleCompanyPage />
-            <ContactModal />
+            <ContactModal onCompanyPage />
           </Route>
           <Route path="/company/:companyId/contract/new" exact>
             <SingleCompanyPage />
@@ -164,7 +164,7 @@ function Routes(props: Props) {
           </Route>
           <Route path="/contact/:contactId" exact>
             <ContactsPage />
-            <ContactModal />
+            <ContactModal onCompanyPage={false} />
           </Route>
 
           {/* Invoice */}

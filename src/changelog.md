@@ -1,23 +1,59 @@
 # Change log
-The current version of ParelPracht is **v0.1-beta1**, released on February 1st, 2021.
+The current version of ParelPracht is **v0.2.1-beta2**, released on March 7nd, 2021.
 You can find the release notes below.
 ----------------------
 
-## v0.2-dev
+## v0.3-dev
+### Added
+### Changes
+### Bugfixes
+
+## v0.2.1-beta2 (07-03-2021)
+
+### Bugfixes
+- Fixed being unable to log in when using the Docker version of ParelPracht
+- Fixed a bug when the front-end crashed when trying to create a new user.
+
+## v0.2-beta2 (02-03-2021)
 ### Added
 - Added custom invoices with custom values.
   - Added support for a custom list of products (With amounts).
   - Added support for a custom recipient.
+- Added a minimal and maximal target to products.
 - Added an insights tab with a bar chart to the product details page.
   - The bar chart shows the value of all contracted products by financial year.
   - The bar chart shows the number of contracted products by financial year.
+  - The targets are also shown in these charts for comparison.
+- Added an insights tab with a bar chart to the company details page.
+  - The bar chart shows the value of all contracted products by that company by financial year.
+  - The bar chart shows the number of contracted products by that company by financial year.
+- Added company logos, which can be uploaded from their respective company pages.
+  - The logos are also shown on the company's contracts and invoices.
+- Added user avatars, which can be uploaded from your own user page.
+  - The avatars are also shown in every activity feed.
+  - The avatar is used in the main menu.
+- Added new activities which will all be created automatically.
+  - Added an activity for when one changes an entity's details.
+  - Added an activity for when one changes the assignment of a contract or invoice.
+  - Added an activity for when one adds products to a contract.
+  - Added an activity for when one removes a product from a contract.
+- Treasurers will receive an email with an invoice, when this invoice has been marked as "Sent".
+  - This is optional and has to be enabled in the User props.
+- Added a button to the user details page, which can be used to transfer all your assignments to a different user.
+- Added a reply-to email address for users, which will be used in contracts.
+  - Optionally, ParelPracht will send non-authentication related emails to this email address.
 - Invoices can now be marked as irrecoverable.
-- Added Company logos. User can also replace or remove logos.
+- Added a GEWIS logo to the login page of ParelPracht.
 
 ### Changes
 - The list of recent contracts on the dashboard now only shows your own assigned contracts, except for admins.
 - Cancel and Defer buttons for entity statuses are now disabled when the entity is "finished" (so no more statusses are possible).
 - Selecting signees when creating a contract proposal is disabled and thus no longer necessary.
+- All emails sent by ParelPracht are now nicely formatted.
+- It is no longer possible to create empty comments.
+- When you delete an entity, you will now be properly redirected to prevent empty pages and infinite loading.
+- The "Updated At" value of every entity will now be updated when an activity is added.
+- The "Save" button is disabled when a form has errors.
 
 ### Bugfixes
 - Fixed not being able to select a recipient when generating an invoice file.
@@ -25,6 +61,14 @@ You can find the release notes below.
 - Fixed the generate modal being closed when generating a document fails.
 - Fixed a memory leak in the front-end when uploading the first file to an entity.
 - Fixed the diamond underneath a selected tab being black instead of blue.
+- Fixed not being able to update the details of a product in a contract.
+- Fixed a product in a contract still being selected after removing this product from the contract.
+- Fixed most of the errors from the browser console.
+- Fixed user function not being required in the front-end, while it was required in the back-end.
+- Fixed a store error showing up when you log out.
+- Fixed slow performance of the company details and "Create Company" modal.
+- Fixed delete popup not being visible when in a modal.
+- Fixed the placeholder text of some dropdowns being red or black instead of grey.
 
 ## v0.1-beta1 (01-02-2021)
 ### Added

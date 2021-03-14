@@ -21,6 +21,7 @@ import { showTransientAlert } from '../stores/alerts/actionCreators';
 
 interface Props extends RouteComponentProps<{ companyId: string, contactId?: string }> {
   create?: boolean;
+  onCompanyPage: boolean;
   contact: Contact | undefined;
   status: ResourceStatus;
 
@@ -120,7 +121,11 @@ class ContactModal extends React.Component<Props> {
           <Header>Contracts</Header>
           <ul>
             {contact.contracts.map((contract) => {
-              return <li><NavLink to={`/contract/${contract.id}`}>{contract.title}</NavLink></li>;
+              return (
+                <li key={contract.id}>
+                  <NavLink to={`/contract/${contract.id}`}>{contract.title}</NavLink>
+                </li>
+              );
             })}
           </ul>
         </Segment>
@@ -138,6 +143,7 @@ class ContactModal extends React.Component<Props> {
         <Segment attached="bottom">
           <AlertContainer />
           <ContactProps
+            onCompanyPage={this.props.onCompanyPage}
             contact={contact}
             create={this.props.create}
             onCancel={() => { this.close(); }}

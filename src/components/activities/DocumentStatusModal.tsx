@@ -109,4 +109,4 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   fetchContract: (id: number) => dispatch(fetchSingle(SingleEntities.Contract, id)),
 });
 
-export default withRouter(connect(mapDispatchToProps)(DocumentStatusModal));
+export default withRouter(connect(null, mapDispatchToProps)(DocumentStatusModal));

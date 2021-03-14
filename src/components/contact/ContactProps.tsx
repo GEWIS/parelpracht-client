@@ -5,10 +5,13 @@ import {
   Dropdown, Form, Input, TextArea,
 } from 'semantic-ui-react';
 import validator from 'validator';
+import { RouteComponentProps, withRouter } from 'react-router-dom';
 import {
   Contact, ContactFunction, ContactParams, Gender,
 } from '../../clients/server.generated';
-import { createSingle, deleteSingle, saveSingle } from '../../stores/single/actionCreators';
+import {
+  createSingle, deleteSingle, fetchSingle, saveSingle,
+} from '../../stores/single/actionCreators';
 import ResourceStatus from '../../stores/resourceStatus';
 import { RootState } from '../../stores/store';
 import PropsButtons from '../PropsButtons';
@@ -16,8 +19,9 @@ import { SingleEntities } from '../../stores/single/single';
 import { getSingle } from '../../stores/single/selectors';
 import { formatFunction } from '../../helpers/contact';
 
-interface Props {
+interface Props extends RouteComponentProps {
   create?: boolean;
+  onCompanyPage: boolean;
   onCancel?: () => void;
 
   contact: Contact;
@@ -26,6 +30,7 @@ interface Props {
   saveContact: (id: number, contact: ContactParams) => void;
   createContact: (contact: ContactParams) => void;
   deleteContact: (id: number) => void;
+  fetchCompany: (id: number) => void;
 }
 
 interface State {
@@ -110,15 +115,32 @@ class ContactProps extends React.Component<Props, State> {
   remove = () => {
     if (!this.props.create) {
       this.props.deleteContact(this.props.contact.id);
+      if (this.props.onCompanyPage) {
+        this.props.history.push(`/company/${this.props.contact.companyId}`);
+        this.props.fetchCompany(this.props.contact.companyId);
+      } else {
+        this.props.history.push('/contact');
+      }
     }
   };
 
-  deleteButtonActive() {
+  propsHaveErrors = (): boolean => {
+    const {
+      firstName, lastName, email, telephone,
+    } = this.state;
+    return (validator.isEmpty(firstName)
+      || validator.isEmpty(lastName)
+      || !validator.isEmail(email)
+      || (!validator.isEmpty(telephone!) && !validator.isMobilePhone(telephone!))
+    );
+  };
+
+  deleteButtonActive = () => {
     if (this.props.create) {
       return undefined;
     }
     return !(this.props.contact.contracts.length > 0);
-  }
+  };
 
   render() {
     const {
@@ -141,6 +163,7 @@ class ContactProps extends React.Component<Props, State> {
           <PropsButtons
             editing={editing}
             canDelete={this.deleteButtonActive()}
+            canSave={!this.propsHaveErrors()}
             entity={SingleEntities.Contact}
             status={this.props.status}
             cancel={this.cancel}
@@ -193,7 +216,7 @@ class ContactProps extends React.Component<Props, State> {
               })}
               width={6}
               error={
-                validator.isEmpty(firstName)
+                validator.isEmpty(lastName)
               }
             />
           </Form.Group>
@@ -303,6 +326,9 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   deleteContact: (id: number) => dispatch(
     deleteSingle(SingleEntities.Contact, id),
   ),
+  fetchCompany: (id: number) => dispatch(
+    fetchSingle(SingleEntities.Company, id),
+  ),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(ContactProps);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ContactProps));

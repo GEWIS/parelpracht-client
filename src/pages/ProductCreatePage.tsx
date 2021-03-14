@@ -47,6 +47,8 @@ class ProductCreatePage extends React.Component<Props> {
       contractTextEnglish: '',
       deliverySpecificationDutch: '',
       deliverySpecificationEnglish: '',
+      minTarget: 0,
+      maxTarget: 0,
     } as Product;
 
     return (

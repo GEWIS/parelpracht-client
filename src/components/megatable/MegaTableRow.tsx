@@ -35,10 +35,11 @@ function MegaTableRow(props: Props) {
   let innerResult: JSX.Element[] = [];
   let contract: ETContract;
   let product: ETProductInstance;
+
   while (contractNr < company.contracts.length) {
     if (contractNr === 0 && productInstanceNr === 0) {
       innerResult.push((
-        <Table.Cell rowSpan={getNrOfProducts()}>
+        <Table.Cell rowSpan={getNrOfProducts()} key={company.id}>
           <CompanyLink id={company.id} />
         </Table.Cell>
       ));
@@ -46,25 +47,25 @@ function MegaTableRow(props: Props) {
     if (productInstanceNr === 0) {
       contract = company.contracts[contractNr];
       innerResult.push((
-        <Table.Cell rowSpan={contract.products.length}>
+        <Table.Cell rowSpan={contract.products.length} key={contract.id}>
           <ContractLink id={contract.id} showId={false} showName />
         </Table.Cell>
       ));
     }
     product = contract!.products[productInstanceNr];
     innerResult.push((
-      <Table.Cell>
+      <Table.Cell key={`${product.id}-1`}>
         <ProductLink id={product.productId} />
       </Table.Cell>));
-    innerResult.push(<Table.Cell>{prodInsStatus(product.subType)}</Table.Cell>);
-    innerResult.push(<Table.Cell>{product.invoiceId === null ? 'Not invoiced' : 'Invoiced'}</Table.Cell>);
+    innerResult.push(<Table.Cell key={`${product.id}-2`}>{prodInsStatus(product.subType)}</Table.Cell>);
+    innerResult.push(<Table.Cell key={`${product.id}-3`}>{product.invoiceId === null ? 'Not invoiced' : 'Invoiced'}</Table.Cell>);
     innerResult.push((
-      <Table.Cell>
+      <Table.Cell key={`${product.id}-4`}>
         {formatPriceFull(product.basePrice - product.discount)}
       </Table.Cell>));
-    innerResult.push(<Table.Cell>{product.comments}</Table.Cell>);
+    innerResult.push(<Table.Cell key={`${product.id}-5`}>{product.comments}</Table.Cell>);
 
-    result.push(<Table.Row>{innerResult}</Table.Row>);
+    result.push(<Table.Row key={product.id}>{innerResult}</Table.Row>);
     innerResult = [];
     productInstanceNr++;
     if (productInstanceNr === company.contracts[contractNr].products.length) {
@@ -73,11 +74,7 @@ function MegaTableRow(props: Props) {
     }
   }
 
-  return (
-    <Table.Body>
-      {result}
-    </Table.Body>
-  );
+  return <>{result}</>;
 }
 
 const mapStateToProps = (state: RootState) => ({

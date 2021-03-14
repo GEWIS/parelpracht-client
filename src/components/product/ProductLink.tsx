@@ -13,9 +13,9 @@ interface Props {
 }
 
 function ProductLink(props: Props) {
-  const { id, productName, ...rest } = props;
+  const { id, productName } = props;
   return (
-    <NavLink to={`/product/${id}`} {...rest}>
+    <NavLink to={`/product/${id}`}>
       <Icon name="shopping bag" />
       {productName}
     </NavLink>

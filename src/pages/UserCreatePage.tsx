@@ -41,7 +41,9 @@ class UserCreatePage extends React.Component<Props> {
       lastNamePreposition: '',
       lastName: '',
       email: '',
+      replyToEmail: '',
       gender: Gender.UNKNOWN,
+      function: '',
       comment: '',
       roles: [],
     } as any;

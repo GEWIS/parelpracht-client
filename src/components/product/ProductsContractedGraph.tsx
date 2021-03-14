@@ -1,6 +1,7 @@
 import React from 'react';
 import { Dropdown, Grid, Tab } from 'semantic-ui-react';
 import { Bar } from 'react-chartjs-2';
+import { ChartOptions } from 'chart.js';
 import { AnalysisResultByYear, Client, Product } from '../../clients/server.generated';
 import { DataSet } from '../chart/CategoryLineChart';
 import { formatPriceFull } from '../../helpers/monetary';
@@ -41,6 +42,7 @@ class ProductsContractedGraph extends React.Component<Props, State> {
 
   createBarChartDataObject = (data: AnalysisResultByYear[]): object => {
     const { dataSetSelection } = this.state;
+    const { product } = this.props;
 
     const labels = data.map((x) => x.year);
     let datasets;
@@ -54,18 +56,61 @@ class ProductsContractedGraph extends React.Component<Props, State> {
           hoverBackgroundColor: 'rgba(255, 148, 128, 0.8)',
           hoverBorderColor: 'rgba(41, 48, 101, 1)',
           data: data.map((x) => x.amount),
-        }];
+        }, {
+          label: 'Minimum Target (€)',
+          labelString: 'Minimum Target',
+          type: 'line',
+          borderColor: 'rgba(41, 48, 101, 1)',
+          borderWidth: 2,
+          radius: 2,
+          data: [product.targetPrice * product.minTarget, product.targetPrice * product.minTarget],
+          fill: false,
+          cubicInterpolationMode: 'monotone',
+        }, {
+          label: 'Maximum Target (€)',
+          labelString: 'Maximum Target',
+          type: 'line',
+          borderColor: 'rgba(41, 48, 101, 1)',
+          borderWidth: 2,
+          radius: 2,
+          data: [product.targetPrice * product.maxTarget, product.targetPrice * product.maxTarget],
+          fill: false,
+          cubicInterpolationMode: 'monotone',
+        },
+        ];
         break;
       case DataSet.AMOUNTS:
-        datasets = [{
-          label: 'Amounts',
-          backgroundColor: 'rgba(41, 48, 101, 0.8)',
-          borderColor: 'rgba(41, 48, 101, 1)',
-          borderWidth: 1,
-          hoverBackgroundColor: 'rgba(255, 148, 128, 0.8)',
-          hoverBorderColor: 'rgba(41, 48, 101, 1)',
-          data: data.map((x) => x.nrOfProducts),
-        }];
+        datasets = [
+          {
+            label: 'Amounts',
+            backgroundColor: 'rgba(41, 48, 101, 0.8)',
+            borderColor: 'rgba(41, 48, 101, 1)',
+            borderWidth: 1,
+            hoverBackgroundColor: 'rgba(255, 148, 128, 0.8)',
+            hoverBorderColor: 'rgba(41, 48, 101, 1)',
+            data: data.map((x) => x.nrOfProducts),
+          }, {
+            label: 'Minimum Target',
+            labelString: 'Minimum Target',
+            type: 'line',
+            backgroundColor: 'rgba(41, 48, 101, 0.8)',
+            borderColor: 'rgba(41, 48, 101, 1)',
+            borderWidth: 2,
+            data: [product.minTarget, product.minTarget],
+            fill: false,
+            cubicInterpolationMode: 'monotone',
+          }, {
+            label: 'Maximum Target',
+            labelString: 'Maximum Target',
+            type: 'line',
+            backgroundColor: 'rgba(41, 48, 101, 0.8)',
+            borderColor: 'rgba(41, 48, 101, 1)',
+            borderWidth: 2,
+            data: [product.maxTarget, product.maxTarget],
+            fill: false,
+            cubicInterpolationMode: 'monotone',
+          },
+        ];
         break;
       default:
     }
@@ -74,12 +119,13 @@ class ProductsContractedGraph extends React.Component<Props, State> {
 
   createBarChartOptionsObject = () => {
     const { dataSetSelection } = this.state;
-    let options;
+    const { product } = this.props;
+    let options: ChartOptions;
     switch (dataSetSelection) {
       case DataSet.VALUES:
         options = {
           legend: {
-            display: false,
+            display: true,
           },
           scales: {
             xAxes: [{
@@ -89,7 +135,7 @@ class ProductsContractedGraph extends React.Component<Props, State> {
               stacked: true,
               ticks: {
                 beginAtZero: true,
-                userCallback(value: number) {
+                callback(value: number) {
                   return formatPriceFull(value);
                 },
               },
@@ -107,7 +153,7 @@ class ProductsContractedGraph extends React.Component<Props, State> {
       case DataSet.AMOUNTS:
         options = {
           legend: {
-            display: false,
+            display: true,
           },
           scales: {
             xAxes: [{
@@ -117,7 +163,7 @@ class ProductsContractedGraph extends React.Component<Props, State> {
               stacked: true,
               ticks: {
                 beginAtZero: true,
-                userCallback(value: number) {
+                callback(value: number) {
                   return value;
                 },
               },
@@ -133,6 +179,7 @@ class ProductsContractedGraph extends React.Component<Props, State> {
         };
         break;
       default:
+        options = {};
     }
     return options;
   };

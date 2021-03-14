@@ -145,7 +145,7 @@ class SingleFile extends React.Component<Props, State> {
           </Table.Cell>
           <Table.Cell textAlign="right" collapsing>
             <Button
-              icon="x icon"
+              icon="x"
               negative
               onClick={() => this.cancel()}
             />
@@ -253,4 +253,4 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   ),
 });
 
-export default withRouter(connect(mapDispatchToProps)(SingleFile));
+export default withRouter(connect(null, mapDispatchToProps)(SingleFile));

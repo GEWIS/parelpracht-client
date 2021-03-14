@@ -6,6 +6,7 @@ import {
 } from 'semantic-ui-react';
 import validator from 'validator';
 import _ from 'lodash';
+import { RouteComponentProps, withRouter } from 'react-router-dom';
 import {
   User, UserParams, Gender, Roles,
 } from '../../clients/server.generated';
@@ -16,7 +17,7 @@ import PropsButtons from '../PropsButtons';
 import { SingleEntities } from '../../stores/single/single';
 import { getSingle } from '../../stores/single/selectors';
 
-interface Props {
+interface Props extends RouteComponentProps {
   create?: boolean;
   onCancel?: () => void;
 
@@ -38,7 +39,9 @@ interface State {
   email: string;
   comment: string;
   functionName: string;
-
+  replyToEmail: string;
+  receiveEmails: boolean;
+  sendEmailsToReplyToEmail: boolean;
   roleGeneral: boolean;
   roleSignee: boolean;
   roleFinancial: boolean;
@@ -74,7 +77,10 @@ class UserProps extends React.Component<Props, State> {
       gender: user.gender,
       email: user.email,
       comment: user.comment ?? '',
+      replyToEmail: user.replyToEmail,
 
+      receiveEmails: user.receiveEmails,
+      sendEmailsToReplyToEmail: user.sendEmailsToReplyToEmail,
       roleGeneral: user.roles.find((r) => r.name === Roles.GENERAL) !== undefined,
       roleSignee: user.roles.find((r) => r.name === Roles.SIGNEE) !== undefined,
       roleFinancial: user.roles.find((r) => r.name === Roles.FINANCIAL) !== undefined,
@@ -92,6 +98,9 @@ class UserProps extends React.Component<Props, State> {
       email: this.state.email,
       comment: this.state.comment,
       function: this.state.functionName,
+      receiveEmails: this.state.receiveEmails,
+      replyToEmail: this.state.replyToEmail,
+      sendEmailsToReplyToEmail: this.state.sendEmailsToReplyToEmail,
 
       roles: _.compact([
         this.state.roleGeneral ? Roles.GENERAL : undefined,
@@ -125,8 +134,20 @@ class UserProps extends React.Component<Props, State> {
 
   remove = () => {
     if (!this.props.create) {
+      this.props.history.push('/user');
       this.props.deleteUser(this.props.user.id);
     }
+  };
+
+  propsHaveErrors = (): boolean => {
+    const {
+      firstName, lastName, functionName, email,
+    } = this.state;
+    return (validator.isEmpty(firstName)
+      || validator.isEmpty(lastName)
+      || validator.isEmpty(functionName)
+      || !validator.isEmail(email)
+    );
   };
 
   deleteButtonActive = () => {
@@ -146,9 +167,41 @@ class UserProps extends React.Component<Props, State> {
       email,
       functionName,
       comment,
+      replyToEmail,
+      receiveEmails,
+      sendEmailsToReplyToEmail,
 
       roleGeneral, roleSignee, roleAdmin, roleAudit, roleFinancial,
     } = this.state;
+
+    const receiveEmailsCheckbox = roleAudit || roleFinancial ? (
+      <>
+        <Form.Field>
+          <Checkbox
+            label="I want to receive an email each time an invoice is created"
+            disabled={!editing}
+            id="form-receive-emails"
+            checked={receiveEmails}
+            onChange={(e, data) => this.setState({
+              receiveEmails: data.checked!,
+            })}
+          />
+        </Form.Field>
+        <Form.Field>
+          <Checkbox
+            label="I want to receive email on my reply-to email address"
+            disabled={!editing}
+            id="form-send-emails-to-reply-to"
+            checked={sendEmailsToReplyToEmail}
+            onChange={(e, data) => this.setState({
+              sendEmailsToReplyToEmail: data.checked!,
+            })}
+          />
+        </Form.Field>
+      </>
+    ) : (
+      ' '
+    );
 
     return (
       <>
@@ -158,6 +211,7 @@ class UserProps extends React.Component<Props, State> {
           <PropsButtons
             editing={editing}
             canDelete={this.deleteButtonActive()}
+            canSave={!this.propsHaveErrors()}
             entity={SingleEntities.User}
             status={this.props.status}
             cancel={this.cancel}
@@ -190,7 +244,7 @@ class UserProps extends React.Component<Props, State> {
               id="form-input-middle-name"
               fluid
               control={Input}
-              label="Middle Name"
+              label="Preposition"
               value={lastNamePreposition}
               onChange={(e: ChangeEvent<HTMLInputElement>) => this.setState({
                 lastNamePreposition: e.target.value,
@@ -215,30 +269,13 @@ class UserProps extends React.Component<Props, State> {
             />
           </Form.Group>
           <Form.Group widths="equal">
-            <Form.Field
-              disabled={!editing}
-              required
-              id="form-input-email"
-              fluid
-              width={6}
-              control={Input}
-              label="Email address"
-              value={email}
-              onChange={(e: ChangeEvent<HTMLInputElement>) => this.setState({
-                email: e.target.value,
-              })}
-              error={
-                !validator.isEmail(email)
-              }
-            />
-            <Form.Field required fluid disabled={!editing} width={3}>
+            <Form.Field required disabled={!editing} width={3}>
               {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
               <label htmlFor="form-input-gender">Gender</label>
               <Dropdown
                 id="form-input-gender"
                 selection
                 placeholder="Gender"
-                defaultValue={2}
                 value={gender}
                 options={[
                   { key: 0, text: 'Male', value: Gender.MALE },
@@ -248,20 +285,54 @@ class UserProps extends React.Component<Props, State> {
                 onChange={(e, data) => this.setState({
                   gender: data.value as Gender,
                 })}
+                fluid
+                width={4}
               />
             </Form.Field>
-          </Form.Group>
-          <Form.Group widths="equal">
             <Form.Field
               disabled={!editing}
               id="form-input-function"
               fluid
+              required
+              width={12}
               control={Input}
               label="Function"
               placeholder="Appears under your name on contracts."
               value={functionName}
               onChange={(e: ChangeEvent<HTMLInputElement>) => this.setState({
                 functionName: e.target.value,
+              })}
+              error={
+                validator.isEmpty(functionName)
+              }
+            />
+          </Form.Group>
+          {receiveEmailsCheckbox}
+          <Form.Group widths="equal">
+            <Form.Field
+              disabled={!editing}
+              id="form-input-email"
+              fluid
+              required
+              control={Input}
+              label="Personal mail address"
+              value={email}
+              onChange={(e: ChangeEvent<HTMLInputElement>) => this.setState({
+                email: e.target.value,
+              })}
+              error={
+                !validator.isEmail(email)
+              }
+            />
+            <Form.Field
+              disabled={!editing}
+              id="form-input-reply-to-email"
+              fluid
+              control={Input}
+              label="Reply-to mail address"
+              value={replyToEmail}
+              onChange={(e: ChangeEvent<HTMLInputElement>) => this.setState({
+                replyToEmail: e.target.value,
               })}
             />
           </Form.Group>
@@ -359,7 +430,6 @@ class UserProps extends React.Component<Props, State> {
               placeholder="Comment"
             />
           </Form.Field>
-
         </Form>
       </>
     );
@@ -384,4 +454,4 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   ),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(UserProps);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(UserProps));

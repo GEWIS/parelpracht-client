@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import React from 'react';
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { Dropdown, DropdownProps } from 'semantic-ui-react';
 import { ProductSummary } from '../../clients/server.generated';
@@ -12,10 +12,12 @@ interface Props {
 }
 
 function ProductSelector(props: Props & DropdownProps) {
+  const [open, changeOpen] = useState(false);
+
   const {
-    value, onChange, options, ...rest
+    value, onChange, options,
   } = props;
-  const dropdownOptions = props.options.map((x) => ({
+  const dropdownOptions = options.map((x) => ({
     key: x.id,
     text: x.nameDutch,
     description: x.nameEnglish,
@@ -27,10 +29,12 @@ function ProductSelector(props: Props & DropdownProps) {
       placeholder="Product"
       search
       selection
-      {...rest}
       options={dropdownOptions}
-      value={props.value}
-      onChange={(e, data) => props.onChange(data.value as any)}
+      value={value < 0 ? '' : value}
+      onChange={(e, data) => onChange(data.value as any)}
+      error={(value < 1 && !open)}
+      onOpen={() => changeOpen(true)}
+      onClose={() => changeOpen(false)}
     />
   );
 }

@@ -48,12 +48,6 @@
         "text":"Anguilla"
     },
     {
-        "key":"aq",
-        "value":"aq",
-        "flag":"aq",
-        "text":"All land and ice shelves south of the 60th parallel south"
-    },
-    {
         "key":"ag",
         "value":"ag",
         "flag":"ag",
@@ -162,10 +156,10 @@
         "text":"The Plurinational State of Bolivia"
     },
     {
-        "key":"bq",
-        "value":"bq",
-        "flag":"bq",
-        "text":"Bonaire, Sint Eustatius and Saba"
+        "key":"an",
+        "value":"an",
+        "flag":"an",
+        "text":"Netherlands Antilles"
     },
     {
         "key":"ba",
@@ -340,12 +334,6 @@
         "value":"cu",
         "flag":"cu",
         "text":"The Republic of Cuba"
-    },
-    {
-        "key":"cw",
-        "value":"cw",
-        "flag":"cw",
-        "text":"The Country of Curaçao"
     },
     {
         "key":"cy",
@@ -552,12 +540,6 @@
         "text":"The Republic of Guatemala"
     },
     {
-        "key":"gg",
-        "value":"gg",
-        "flag":"gg",
-        "text":"The Bailiwick of Guernsey"
-    },
-    {
         "key":"gn",
         "value":"gn",
         "flag":"gn",
@@ -648,12 +630,6 @@
         "text":"Ireland"
     },
     {
-        "key":"im",
-        "value":"im",
-        "flag":"im",
-        "text":"The Isle of Man"
-    },
-    {
         "key":"il",
         "value":"il",
         "flag":"il",
@@ -676,12 +652,6 @@
         "value":"jp",
         "flag":"jp",
         "text":"Japan"
-    },
-    {
-        "key":"je",
-        "value":"je",
-        "flag":"je",
-        "text":"The Bailiwick of Jersey"
     },
     {
         "key":"jo",
@@ -1110,12 +1080,6 @@
         "text":"The Republic of Rwanda"
     },
     {
-        "key":"bl",
-        "value":"bl",
-        "flag":"bl",
-        "text":"The Collectivity of Saint-Barthélemy"
-    },
-    {
         "key":"sh",
         "value":"sh",
         "flag":"sh",
@@ -1132,12 +1096,6 @@
         "value":"lc",
         "flag":"lc",
         "text":"Saint Lucia"
-    },
-    {
-        "key":"mf",
-        "value":"mf",
-        "flag":"mf",
-        "text":"The Collectivity of Saint-Martin"
     },
     {
         "key":"pm",
@@ -1206,12 +1164,6 @@
         "text":"The Republic of Singapore"
     },
     {
-        "key":"sx",
-        "value":"sx",
-        "flag":"sx",
-        "text":"Sint Maarten"
-    },
-    {
         "key":"sk",
         "value":"sk",
         "flag":"sk",
@@ -1246,12 +1198,6 @@
         "value":"gs",
         "flag":"gs",
         "text":"South Georgia and the South Sandwich Islands"
-    },
-    {
-        "key":"ss",
-        "value":"ss",
-        "flag":"ss",
-        "text":"The Republic of South Sudan"
     },
     {
         "key":"es",
