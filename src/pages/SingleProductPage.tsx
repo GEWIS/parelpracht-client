@@ -22,6 +22,7 @@ import ContractCompactTable from '../components/contract/ContractCompactTable';
 import InvoiceCompactTable from '../components/invoice/InvoiceCompactTable';
 import ProductsContractedGraph from '../components/product/ProductsContractedGraph';
 import PricingTable from '../components/productpricing/PricingTable';
+import CreatePricing from '../components/productpricing/CreatePricing';
 
 interface Props extends RouteComponentProps<{ productId: string }> {
   product: Product | undefined;
@@ -118,8 +119,6 @@ class SingleProductPage extends React.Component<Props> {
       },
     ];
 
-    console.log(product);
-
     if (product.pricing !== undefined) {
       panes.push({
         menuItem: 'Pricing',
@@ -149,6 +148,11 @@ class SingleProductPage extends React.Component<Props> {
             <Segment secondary>
               <ProductProps product={product} />
             </Segment>
+            {product.pricing === undefined ? (
+              <Segment secondary>
+                <CreatePricing productId={product.id} />
+              </Segment>
+            ) : null }
           </Grid.Column>
         </Grid>
       </Container>

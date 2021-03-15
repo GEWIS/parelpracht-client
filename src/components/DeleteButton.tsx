@@ -11,11 +11,12 @@ interface DeleteProps {
   status: ResourceStatus;
   size?: SemanticSIZES;
   color?: SemanticCOLORS;
+  style?: Partial<CSSStyleDeclaration>;
 }
 
 function DeleteButton(props: DeleteProps) {
   const {
-    canDelete, entity, remove, status, size, color,
+    canDelete, entity, remove, status, size, color, style,
   } = props;
   if (canDelete === true) {
     return (
@@ -27,6 +28,7 @@ function DeleteButton(props: DeleteProps) {
             floated="right"
             size={size}
             color={color}
+            style={style}
           />
         )}
         on="click"
@@ -89,6 +91,7 @@ function DeleteButton(props: DeleteProps) {
               icon="trash"
               loading={status === ResourceStatus.DELETING}
               color={color}
+              style={style}
             />
           </Button.Group>
         )}
@@ -104,6 +107,7 @@ function DeleteButton(props: DeleteProps) {
 DeleteButton.defaultProps = {
   size: 'medium',
   color: undefined,
+  style: {},
 };
 
 export default DeleteButton;

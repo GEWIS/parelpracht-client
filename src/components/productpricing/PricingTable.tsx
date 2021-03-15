@@ -10,7 +10,6 @@ import PropsButtons from '../PropsButtons';
 import { SingleEntities } from '../../stores/single/single';
 import ResourceStatus from '../../stores/resourceStatus';
 import { fetchSingle } from '../../stores/single/actionCreators';
-import { RootState } from '../../stores/store';
 
 interface Props {
   pricing: ProductPricing;
@@ -64,13 +63,14 @@ class PricingTable extends React.Component<Props, State> {
     const { pricingData } = this.state;
     if (pricingData.length === 0) {
       this.setState({ pricingData: [['']] });
+    } else {
+      const newArray = [];
+      for (let i = 0; i < pricingData[0].length; i++) {
+        newArray.push('');
+      }
+      pricingData.push(newArray);
+      this.setState({ pricingData });
     }
-    const newArray = [];
-    for (let i = 0; i < pricingData[0].length; i++) {
-      newArray.push('');
-    }
-    pricingData.push(newArray);
-    this.setState({ pricingData });
   };
 
   removeRow = (index: number) => {
@@ -99,8 +99,14 @@ class PricingTable extends React.Component<Props, State> {
     this.setState({ editing: false });
   };
 
+  remove = async () => {
+    const { productId, fetchProduct } = this.props;
+    const client = new Client();
+    await client.deletePricing(productId);
+    fetchProduct(productId);
+  };
+
   render() {
-    const { pricing } = this.props;
     const {
       pricingData, editing, status, description,
     } = this.state;
@@ -115,23 +121,24 @@ class PricingTable extends React.Component<Props, State> {
                 primary
                 floated="right"
                 onClick={this.addRow}
-                style={{ marginBottom: '1em' }}
+                style={{ marginTop: '-0.5em' }}
               >
                 Add row
               </Button>
-              <Button primary floated="right" onClick={this.addColumn}>Add column</Button>
+              <Button primary floated="right" onClick={this.addColumn} style={{ marginTop: '-0.5em' }}>Add column</Button>
             </>
           ) : null}
           <PropsButtons
             editing={editing}
-            canDelete={undefined}
+            canDelete
             canSave
             entity={SingleEntities.Product}
             status={status}
             cancel={this.cancel}
             edit={this.edit}
             save={this.save}
-            remove={() => {}}
+            remove={this.remove}
+            style={{ marginTop: '-0.5em' }}
           />
         </h3>
         {editing ? (
@@ -176,7 +183,7 @@ class PricingTable extends React.Component<Props, State> {
             <Table.Footer>
               <Table.Row>
                 {pricingData[0].map((p, i) => (
-                  <Table.HeaderCell style={{ textAlign: 'center' }}>
+                  <Table.HeaderCell key={i.toString()} style={{ textAlign: 'center' }}>
                     <Button
                       negative
                       onClick={() => this.removeColumn(i)}
