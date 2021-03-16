@@ -6517,8 +6517,6 @@ export class Company implements ICompany {
     status!: CompanyStatus;
     /** General phone number of the company */
     phoneNumber?: string;
-    /** Optional end date of the collaboration with this company */
-    endDate?: Date;
     /** Optional filename of a logo image */
     logoFilename!: string;
     /** Comments regarding the company */
@@ -6568,7 +6566,6 @@ export class Company implements ICompany {
             this.invoiceAddressCountry = _data["invoiceAddressCountry"];
             this.status = _data["status"];
             this.phoneNumber = _data["phoneNumber"];
-            this.endDate = _data["endDate"] ? new Date(_data["endDate"].toString()) : <any>undefined;
             this.logoFilename = _data["logoFilename"];
             this.comments = _data["comments"];
             if (Array.isArray(_data["contracts"])) {
@@ -6624,7 +6621,6 @@ export class Company implements ICompany {
         data["invoiceAddressCountry"] = this.invoiceAddressCountry;
         data["status"] = this.status;
         data["phoneNumber"] = this.phoneNumber;
-        data["endDate"] = this.endDate ? this.endDate.toISOString() : <any>undefined;
         data["logoFilename"] = this.logoFilename;
         data["comments"] = this.comments;
         if (Array.isArray(this.contracts)) {
@@ -6681,8 +6677,6 @@ export interface ICompany {
     status: CompanyStatus;
     /** General phone number of the company */
     phoneNumber?: string;
-    /** Optional end date of the collaboration with this company */
-    endDate?: Date;
     /** Optional filename of a logo image */
     logoFilename: string;
     /** Comments regarding the company */
@@ -9071,7 +9065,6 @@ export class CompanyParams implements ICompanyParams {
     invoiceAddressCity?: string;
     invoiceAddressCountry?: string;
     status?: CompanyStatus;
-    endDate?: Date;
 
     constructor(data?: ICompanyParams) {
         if (data) {
@@ -9096,7 +9089,6 @@ export class CompanyParams implements ICompanyParams {
             this.invoiceAddressCity = _data["invoiceAddressCity"];
             this.invoiceAddressCountry = _data["invoiceAddressCountry"];
             this.status = _data["status"];
-            this.endDate = _data["endDate"] ? new Date(_data["endDate"].toString()) : <any>undefined;
         }
     }
 
@@ -9121,7 +9113,6 @@ export class CompanyParams implements ICompanyParams {
         data["invoiceAddressCity"] = this.invoiceAddressCity;
         data["invoiceAddressCountry"] = this.invoiceAddressCountry;
         data["status"] = this.status;
-        data["endDate"] = this.endDate ? this.endDate.toISOString() : <any>undefined;
         return data; 
     }
 }
@@ -9139,7 +9130,6 @@ export interface ICompanyParams {
     invoiceAddressCity?: string;
     invoiceAddressCountry?: string;
     status?: CompanyStatus;
-    endDate?: Date;
 }
 
 /** Make all properties in T optional */
@@ -9156,7 +9146,6 @@ export class Partial_CompanyParams implements IPartial_CompanyParams {
     invoiceAddressCity?: string;
     invoiceAddressCountry?: string;
     status?: CompanyStatus;
-    endDate?: Date;
 
     constructor(data?: IPartial_CompanyParams) {
         if (data) {
@@ -9181,7 +9170,6 @@ export class Partial_CompanyParams implements IPartial_CompanyParams {
             this.invoiceAddressCity = _data["invoiceAddressCity"];
             this.invoiceAddressCountry = _data["invoiceAddressCountry"];
             this.status = _data["status"];
-            this.endDate = _data["endDate"] ? new Date(_data["endDate"].toString()) : <any>undefined;
         }
     }
 
@@ -9206,7 +9194,6 @@ export class Partial_CompanyParams implements IPartial_CompanyParams {
         data["invoiceAddressCity"] = this.invoiceAddressCity;
         data["invoiceAddressCountry"] = this.invoiceAddressCountry;
         data["status"] = this.status;
-        data["endDate"] = this.endDate ? this.endDate.toISOString() : <any>undefined;
         return data; 
     }
 }
@@ -9225,7 +9212,6 @@ export interface IPartial_CompanyParams {
     invoiceAddressCity?: string;
     invoiceAddressCountry?: string;
     status?: CompanyStatus;
-    endDate?: Date;
 }
 
 export class ProductsPerCategory implements IProductsPerCategory {
@@ -11119,6 +11105,7 @@ export interface IPartial_CategoryParams {
 export class LoginParams implements ILoginParams {
     email?: string;
     password?: string;
+    rememberMe?: boolean;
 
     constructor(data?: ILoginParams) {
         if (data) {
@@ -11133,6 +11120,7 @@ export class LoginParams implements ILoginParams {
         if (_data) {
             this.email = _data["email"];
             this.password = _data["password"];
+            this.rememberMe = _data["rememberMe"];
         }
     }
 
@@ -11147,6 +11135,7 @@ export class LoginParams implements ILoginParams {
         data = typeof data === 'object' ? data : {};
         data["email"] = this.email;
         data["password"] = this.password;
+        data["rememberMe"] = this.rememberMe;
         return data; 
     }
 }
@@ -11154,6 +11143,7 @@ export class LoginParams implements ILoginParams {
 export interface ILoginParams {
     email?: string;
     password?: string;
+    rememberMe?: boolean;
 }
 
 export class Body implements IBody {
