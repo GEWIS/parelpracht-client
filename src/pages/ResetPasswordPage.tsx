@@ -125,7 +125,7 @@ function ResetPasswordPage(props: Props) {
                     <td>
                       {eightCharacters ? <Icon name="check" color="green" /> : <Icon name="close" color="red" />}
                     </td>
-                    <td>Eight characters in lengtd</td>
+                    <td>Eight characters in length</td>
                   </tr>
                   <tr>
                     <td>
