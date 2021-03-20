@@ -129,6 +129,9 @@ function InvoicesTable({
               <CompanyFilter table={Tables.Invoices} />
             </Table.HeaderCell>
             <Table.HeaderCell>
+              Amount
+            </Table.HeaderCell>
+            <Table.HeaderCell>
               Status
               <InvoiceStatusFilter />
             </Table.HeaderCell>
@@ -137,13 +140,6 @@ function InvoicesTable({
               onClick={() => changeSort('startDate')}
             >
               Financial year
-            </Table.HeaderCell>
-            <Table.HeaderCell
-              sorted={column === 'assignedTo' ? direction : undefined}
-              onClick={() => changeSort('assignedTo')}
-            >
-              Assigned to
-              <UserFilter table={Tables.Invoices} />
             </Table.HeaderCell>
             <Table.HeaderCell
               sorted={column === 'updatedAt' ? direction : undefined}

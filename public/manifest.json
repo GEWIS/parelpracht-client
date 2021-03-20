@@ -21,7 +21,42 @@
       "src": "gewis-logo.png",
       "type": "image/png",
       "sizes": "512x512"
-    }
+    },
+    {
+      "src": "peach.webp",
+      "type": "image/png",
+      "sizes": "512x512"
+    },
+    {
+      "src": "ParelPracht-black.png",
+      "type": "image/png",
+      "sizes": "2000x2296"
+    },
+    {
+      "src": "ParelPracht-blue.png",
+      "type": "image/png",
+      "sizes": "2000x2296"
+    },
+    {
+      "src": "ParelPracht-white.png",
+      "type": "image/png",
+      "sizes": "2000x2296"
+    },
+    {
+      "src": "ParelPracht-peach.png",
+      "type": "image/png",
+      "sizes": "2000x2296"
+    },
+    {
+      "src": "ParelPracht-whitesvg.svg",
+      "type": "image/png",
+      "sizes": "2000x2296"
+    },
+    {
+      "src": "ParelPracht-blacksvg.svg",
+      "type": "image/png",
+      "sizes": "2000x2296"
+    },
   ],
   "start_url": ".",
   "display": "standalone",

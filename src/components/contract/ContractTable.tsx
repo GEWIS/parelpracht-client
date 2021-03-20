@@ -138,15 +138,11 @@ function ContractsTable({
               <ContractContactFilter />
             </Table.HeaderCell>
             <Table.HeaderCell>
+              Amount
+            </Table.HeaderCell>
+            <Table.HeaderCell>
               Status
               <ContractStatusFilter />
-            </Table.HeaderCell>
-            <Table.HeaderCell
-              sorted={column === 'assignedTo' ? direction : undefined}
-              onClick={() => changeSort('assignedTo')}
-            >
-              Assigned to
-              <UserFilter table={Tables.Contracts} />
             </Table.HeaderCell>
             <Table.HeaderCell
               sorted={column === 'updatedAt' ? direction : undefined}
