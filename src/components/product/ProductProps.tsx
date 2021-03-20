@@ -17,6 +17,7 @@ import { RootState } from '../../stores/store';
 import PropsButtons from '../PropsButtons';
 import { TransientAlert } from '../../stores/alerts/actions';
 import { showTransientAlert } from '../../stores/alerts/actionCreators';
+import TextAreaMimic from '../TextAreaMimic';
 
 interface Props extends RouteComponentProps {
   create?: boolean;
@@ -320,75 +321,93 @@ class ProductProps extends React.Component<Props, State> {
               />
             </Form.Field>
           </Form.Group>
-          <Form.Field
-            disabled={!editing}
-          >
+          <Form.Field>
             {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
             <label htmlFor="form-input-description">
               Comments (internal)
             </label>
-            <TextArea
-              id="form-input-description"
-              value={description}
-              onChange={(e) => this.setState({ description: e.target.value })}
-              placeholder="Internal comments"
-            />
+            {editing ? (
+              <TextArea
+                id="form-input-description"
+                value={description}
+                onChange={(e) => this.setState({ description: e.target.value })}
+                placeholder="Internal comments"
+              />
+            ) : (
+              <TextAreaMimic content={description} />
+            )}
           </Form.Field>
-          <Form.Field disabled={!editing} required error={validator.isEmpty(contractTextDutch)}>
+          <Form.Field required error={validator.isEmpty(contractTextDutch)}>
             {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
             <label htmlFor="form-input-contract-text-dutch">
               Contract Text (Dutch)
             </label>
-            <TextArea
-              id="form-input-contract-text-dutch"
-              value={contractTextDutch}
-              onChange={
-                (e) => this.setState({ contractTextDutch: e.target.value })
-              }
-              placeholder="Contract text in Dutch"
-            />
+            {editing ? (
+              <TextArea
+                id="form-input-contract-text-dutch"
+                value={contractTextDutch}
+                onChange={
+                  (e) => this.setState({ contractTextDutch: e.target.value })
+                }
+                placeholder="Contract text in Dutch"
+              />
+            ) : (
+              <TextAreaMimic content={contractTextDutch} />
+            )}
           </Form.Field>
-          <Form.Field disabled={!editing} required error={validator.isEmpty(contractTextEnglish)}>
+          <Form.Field required error={validator.isEmpty(contractTextEnglish)}>
             {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
             <label htmlFor="form-input-contract-text-english">
               Contract Text (English)
             </label>
-            <TextArea
-              id="form-input-contract-text-english"
-              value={contractTextEnglish}
-              onChange={
-                (e) => this.setState({ contractTextEnglish: e.target.value })
-              }
-              placeholder="Contract text in English"
-            />
+            {editing ? (
+              <TextArea
+                id="form-input-contract-text-english"
+                value={contractTextEnglish}
+                onChange={
+                  (e) => this.setState({ contractTextEnglish: e.target.value })
+                }
+                placeholder="Contract text in English"
+              />
+            ) : (
+              <TextAreaMimic content={contractTextEnglish} />
+            )}
           </Form.Field>
-          <Form.Field disabled={!editing}>
+          <Form.Field>
             {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
             <label htmlFor="form-input-delivery-spec-dutch">
               Delivery Specification (Dutch)
             </label>
-            <TextArea
-              id="form-input-delivery-spec-dutch"
-              value={deliverySpecDutch}
-              onChange={
-                (e) => this.setState({ deliverySpecDutch: e.target.value })
-              }
-              placeholder="Delivery specifications in Dutch"
-            />
+            {editing ? (
+              <TextArea
+                id="form-input-delivery-spec-dutch"
+                value={deliverySpecDutch}
+                onChange={
+                  (e) => this.setState({ deliverySpecDutch: e.target.value })
+                }
+                placeholder="Delivery specifications in Dutch"
+              />
+            ) : (
+              <TextAreaMimic content={deliverySpecDutch} />
+            )}
           </Form.Field>
-          <Form.Field disabled={!editing}>
+          <Form.Field>
             {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
             <label htmlFor="form-input-delivery-spec-english">
               Delivery Specification (English)
             </label>
-            <TextArea
-              id="form-delivery-spec-english"
-              value={deliverySpecEnglish}
-              onChange={
-                (e) => this.setState({ deliverySpecEnglish: e.target.value })
-              }
-              placeholder="Delivery specifications in English"
-            />
+            {editing ? (
+              <TextArea
+                id="form-delivery-spec-english"
+                value={deliverySpecEnglish}
+                onChange={
+                  (e) => this.setState({ deliverySpecEnglish: e.target.value })
+                }
+                placeholder="Delivery specifications in English"
+              />
+            ) : (
+              <TextAreaMimic content={deliverySpecEnglish} />
+            )}
           </Form.Field>
         </Form>
       </>
