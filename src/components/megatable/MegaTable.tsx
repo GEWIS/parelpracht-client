@@ -1,5 +1,7 @@
 import React, { useEffect } from 'react';
-import { Table } from 'semantic-ui-react';
+import {
+  Dimmer, Loader, Segment, Table,
+} from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import { ETCompany } from '../../helpers/extensiveTableObjects';
@@ -19,6 +21,7 @@ import CompanyFilter from '../tablefilters/CompanyFilter';
 import ProductFilter from '../tablefilters/ProductFilter';
 import ProductInstanceStatusFilter from '../tablefilters/ProductInstanceStatusFilter';
 import ProductInstanceInvoicedFilter from '../tablefilters/ProductInstanceInvoicedFilter';
+import ResourceStatus from '../../stores/resourceStatus';
 
 interface Props {
   companies: ETCompany[];
@@ -28,6 +31,7 @@ interface Props {
   fetched: number;
   skip: number;
   take: number;
+  status: ResourceStatus;
 
   fetchContracts: () => void;
   setTableFilter: (filter: { column: string, values: any[] }) => void;
@@ -40,7 +44,7 @@ interface Props {
 
 function MegaTable({
   companies, fetchContracts, setTableFilter, column, direction, changeSort, setSort,
-  total, fetched, skip, take,
+  total, fetched, skip, take, status,
   prevPage, nextPage, setTake,
 }: Props) {
   useEffect(() => {
@@ -48,6 +52,56 @@ function MegaTable({
     setTableFilter({ column: 'invoiced', values: [false] });
     fetchContracts();
   }, []);
+
+  if (status === ResourceStatus.FETCHING || status === ResourceStatus.SAVING) {
+    return (
+      <>
+        <Segment>
+          <Dimmer active inverted>
+            <Loader inverted />
+          </Dimmer>
+          <Table className="rowspanStriped" compact sortable>
+            <Table.Header>
+              <Table.Row>
+                <Table.HeaderCell
+                  sorted={column === 'companyName' ? direction : undefined}
+                  onClick={() => changeSort('companyName')}
+                >
+                  Company
+                  <CompanyFilter table={Tables.ETCompanies} />
+                </Table.HeaderCell>
+                <Table.HeaderCell>Contract</Table.HeaderCell>
+                <Table.HeaderCell>
+                  Product
+                  <ProductFilter />
+                </Table.HeaderCell>
+                <Table.HeaderCell>
+                  Status
+                  <ProductInstanceStatusFilter />
+                </Table.HeaderCell>
+                <Table.HeaderCell>
+                  Invoiced
+                  <ProductInstanceInvoicedFilter />
+                </Table.HeaderCell>
+                <Table.HeaderCell>Price</Table.HeaderCell>
+                <Table.HeaderCell>Details</Table.HeaderCell>
+              </Table.Row>
+            </Table.Header>
+          </Table>
+          <TablePagination
+            countTotal={total}
+            countFetched={fetched}
+            skip={skip}
+            take={take}
+            nextPage={nextPage}
+            prevPage={prevPage}
+            setTake={setTake}
+          />
+        </Segment>
+      </>
+    );
+  }
+
   return (
     <>
       <Table className="rowspanStriped" compact sortable>
@@ -99,6 +153,7 @@ const mapStateToProps = (state: RootState) => {
   return {
     total: countTotal(state, Tables.ETCompanies),
     fetched: countFetched(state, Tables.ETCompanies),
+    status: contractTable.status,
     skip: contractTable.skip,
     take: contractTable.take,
     companies: contractTable.data,
