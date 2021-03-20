@@ -2,11 +2,10 @@ import React, { ChangeEvent } from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import {
-  Checkbox,
-  Dropdown,
-  Form, Input, TextArea,
+  Checkbox, Form, Input, TextArea,
 } from 'semantic-ui-react';
 import validator from 'validator';
+import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { Company, CompanyParams, CompanyStatus } from '../../clients/server.generated';
 import { createSingle, deleteSingle, saveSingle } from '../../stores/single/actionCreators';
 import ResourceStatus from '../../stores/resourceStatus';
@@ -14,11 +13,11 @@ import { RootState } from '../../stores/store';
 import PropsButtons from '../PropsButtons';
 import { getSingle } from '../../stores/single/selectors';
 import { SingleEntities } from '../../stores/single/single';
-import COUNTRY_OPTIONS from './countries.json';
+import CountrySelector from './CountrySelector';
 import { TransientAlert } from '../../stores/alerts/actions';
 import { showTransientAlert } from '../../stores/alerts/actionCreators';
 
-interface Props {
+interface Props extends RouteComponentProps {
   create?: boolean;
   onCancel?: () => void;
 
@@ -128,18 +127,31 @@ class CompanyProps extends React.Component<Props, State> {
 
   remove = () => {
     if (!this.props.create && this.props.deleteCompany) {
+      this.props.history.push('/company');
       this.props.deleteCompany(this.props.company.id);
     }
   };
 
-  deleteButtonActive() {
+  deleteButtonActive = () => {
     if (this.props.create) {
       return undefined;
     }
     return !(this.props.company.contacts.length > 0
       || this.props.company.invoices.length > 0
       || this.props.company.contacts.length > 0);
-  }
+  };
+
+  propsHaveErrors = (): boolean => {
+    const {
+      name, phoneNumber, addressStreet, addressCity, addressPostalCode,
+    } = this.state;
+    return (validator.isEmpty(name)
+      || (!validator.isEmpty(phoneNumber!) && !validator.isMobilePhone(phoneNumber!))
+      || validator.isEmpty(addressStreet)
+      || validator.isEmpty(addressCity)
+      || !validator.isPostalCode(addressPostalCode, 'any')
+    );
+  };
 
   render() {
     const {
@@ -166,6 +178,7 @@ class CompanyProps extends React.Component<Props, State> {
           <PropsButtons
             editing={editing}
             canDelete={this.deleteButtonActive()}
+            canSave={!this.propsHaveErrors()}
             entity={SingleEntities.Company}
             status={this.props.status}
             cancel={this.cancel}
@@ -210,7 +223,7 @@ class CompanyProps extends React.Component<Props, State> {
             />
           </Form.Group>
           <Form.Group widths="equal">
-            <Form.Field disabled={!editing}>
+            <Form.Field disabled={!editing} fluid>
               {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
               <label htmlFor="form-input-description">
                 Description
@@ -220,7 +233,6 @@ class CompanyProps extends React.Component<Props, State> {
                 value={comments}
                 onChange={(e) => this.setState({ comments: e.target.value })}
                 placeholder="Description"
-                fluid
               />
             </Form.Field>
             <Form.Field>
@@ -299,27 +311,14 @@ class CompanyProps extends React.Component<Props, State> {
                 placeholder="Postal Code"
               />
             </Form.Field>
-            <Form.Field
-              disabled={!editing}
-              required
-            >
-              {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-              <label htmlFor="form-input-address-country">
-                Country
-              </label>
-              <Dropdown
-                id="form-input-address-country"
-                placeholder="Country"
-                fluid
-                search
-                selection
-                options={COUNTRY_OPTIONS}
-                value={addressCountry}
-                onChange={(e, data) => this.setState({
-                  addressCountry: data.value as any,
-                })}
-              />
-            </Form.Field>
+            <CountrySelector
+              editing={editing}
+              country={addressCountry}
+              updateValue={(e, data) => this.setState({
+                addressCountry: data.value as any,
+              })}
+              id="form-input-address-country"
+            />
           </Form.Group>
           <h2>
             Invoice Address
@@ -368,24 +367,14 @@ class CompanyProps extends React.Component<Props, State> {
                 fluid
               />
             </Form.Field>
-            <Form.Field disabled={!editing}>
-              {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-              <label htmlFor="form-input-invoice-address-country">
-                Country
-              </label>
-              <Dropdown
-                id="form-input-invoice-address-country"
-                placeholder="Country"
-                fluid
-                search
-                selection
-                options={COUNTRY_OPTIONS}
-                value={invoiceAddressCountry}
-                onChange={(e, data) => this.setState({
-                  invoiceAddressCountry: data.value as any,
-                })}
-              />
-            </Form.Field>
+            <CountrySelector
+              editing={editing}
+              country={invoiceAddressCountry}
+              updateValue={(e, data) => this.setState({
+                invoiceAddressCountry: data.value as any,
+              })}
+              id="form-input-invoice-address-country"
+            />
           </Form.Group>
         </Form>
       </>
@@ -412,4 +401,4 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   showTransientAlert: (alert: TransientAlert) => dispatch(showTransientAlert(alert)),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(CompanyProps);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(CompanyProps));

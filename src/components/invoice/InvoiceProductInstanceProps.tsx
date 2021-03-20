@@ -8,9 +8,7 @@ import ResourceStatus from '../../stores/resourceStatus';
 import { RootState } from '../../stores/store';
 import { getSummary } from '../../stores/summaries/selectors';
 import { SummaryCollections } from '../../stores/summaries/summaries';
-import PropsButtons from '../PropsButtons';
 import ProductSelector from '../product/ProductSelector';
-import { SingleEntities } from '../../stores/single/single';
 
 interface Props {
   create?: boolean;
@@ -57,7 +55,7 @@ class ProductInstanceProps extends React.Component<Props, State> {
       productId: productInstance.productId,
       basePrice: (productInstance.basePrice / 100).toString(),
       discount: (productInstance.discount / 100).toString(),
-      comments: productInstance.comments,
+      comments: productInstance.details,
     };
   };
 

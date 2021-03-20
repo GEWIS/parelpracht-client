@@ -1,5 +1,5 @@
 import React from 'react';
-import { NavLink, RouteComponentProps, withRouter } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import {
   Table,
 } from 'semantic-ui-react';
@@ -16,7 +16,6 @@ import { formatStatus } from '../../helpers/activity';
 
 interface Props {
   contract: Contract;
-
   contactName: string;
   status: ContractStatus;
 }

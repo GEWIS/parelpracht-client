@@ -4,21 +4,24 @@ services:
     build:
       context: ../parelpracht-client
       dockerfile: docker/frontend/Dockerfile
-    image: yoronex/parelpracht-client
+    image: yoronex/parelpracht-client:latest
     networks:
       - parelpracht
     volumes:
       - static:/app/build/static
   backend:
     build: ../parelpracht-server
-    image: yoronex/parelpracht-server
+    image: yoronex/parelpracht-server:latest
     networks:
       - parelpracht
     volumes:
       - backend-files:/usr/src/app/data
+      - logos:/usr/src/app/data/logos
     environment:
       - NODE_ENV=production
       - PORT=3001
+      - USE_HTTPS=false
+      - SERVER_HOST=localhost:39390
       - TYPEORM_CONNECTION=postgres
       - TYPEORM_HOST=database
       - TYPEORM_PORT=5432
@@ -50,20 +53,26 @@ services:
       - parelpracht
   nginx:
     build: docker/nginx
-    image: yoronex/parelpracht-nginx
+    image: yoronex/parelpracht-nginx:latest
     depends_on:
       - backend
       - frontend
     ports:
-      - '80:80'
+      - '39390:80'
     networks:
       - parelpracht
     volumes:
       - static:/app/build/static
+      - logos:/usr/src/app/data/logos
 volumes:
   database-data:
+    driver: local
   backend-files:
+    driver: local
   static:
+    driver: local
+  logos:
+    driver: local
 networks:
   parelpracht:
     driver: bridge

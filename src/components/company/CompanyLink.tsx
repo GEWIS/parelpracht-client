@@ -13,9 +13,9 @@ interface Props {
 }
 
 function CompanyLink(props: Props) {
-  const { id, companyName, ...rest } = props;
+  const { id, companyName } = props;
   return (
-    <NavLink to={`/company/${id}`} {...rest}>
+    <NavLink to={`/company/${id}`}>
       <Icon name="building" />
       {companyName}
     </NavLink>

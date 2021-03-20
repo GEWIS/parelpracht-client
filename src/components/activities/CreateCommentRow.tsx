@@ -2,8 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Button, Input } from 'semantic-ui-react';
 import { Dispatch } from 'redux';
+import validator from 'validator';
 import ResourceStatus from '../../stores/resourceStatus';
-import { RootState } from '../../stores/store';
 import { SingleEntities } from '../../stores/single/single';
 import { createSingleComment } from '../../stores/single/actionCreators';
 import { ActivityParams } from '../../clients/server.generated';
@@ -27,7 +27,6 @@ interface Props {
 
 interface State {
   editing: boolean;
-
   comment: string;
 }
 
@@ -89,7 +88,7 @@ class DocumentStatusProps extends React.Component<Props, State> {
   };
 
   render() {
-    const { editing } = this.state;
+    const { editing, comment } = this.state;
     return (
       <>
         <h4>
@@ -101,6 +100,7 @@ class DocumentStatusProps extends React.Component<Props, State> {
           icon="save"
           positive
           onClick={() => this.addComment()}
+          disabled={validator.isEmpty(comment)}
         />
         <Button
           floated="right"
@@ -114,16 +114,12 @@ class DocumentStatusProps extends React.Component<Props, State> {
           id="form-input-comment"
           placeholder="Comment"
           onChange={(e) => this.setState({ comment: e.target.value })}
+          error={validator.isEmpty(comment)}
         />
       </>
     );
   }
 }
-
-const mapStateToProps = (state: RootState) => {
-  return {
-  };
-};
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
   createSingleComment: (entity: SingleEntities, id: number, comment: object) => dispatch(
@@ -135,4 +131,4 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   showTransientAlert: (alert: TransientAlert) => dispatch(showTransientAlert(alert)),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(DocumentStatusProps);
+export default connect(null, mapDispatchToProps)(DocumentStatusProps);

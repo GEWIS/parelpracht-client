@@ -63,7 +63,7 @@ class ProductInstanceProps extends React.Component<Props, State> {
       productId: productInstance.productId,
       basePrice: (productInstance.basePrice / 100).toString(),
       discount: (productInstance.discount / 100).toString(),
-      comments: productInstance.comments,
+      comments: productInstance.details,
     };
   };
 
@@ -102,7 +102,12 @@ class ProductInstanceProps extends React.Component<Props, State> {
     }
   };
 
-  deleteButtonActive() {
+  propsHaveErrors = (): boolean => {
+    const { productId } = this.state;
+    return (productId < 0);
+  };
+
+  deleteButtonActive = () => {
     if (this.props.create) {
       return undefined;
     }
@@ -111,10 +116,9 @@ class ProductInstanceProps extends React.Component<Props, State> {
       || this.props.productInstance.activities
         .filter((a) => a.type === ActivityType.STATUS).length > 1
       || this.props.productInstance.invoiceId === undefined);
-  }
+  };
 
   render() {
-    const { productInstance, status } = this.props;
     const {
       editing,
       basePrice,
@@ -131,6 +135,7 @@ class ProductInstanceProps extends React.Component<Props, State> {
           <PropsButtons
             editing={editing}
             canDelete={this.deleteButtonActive()}
+            canSave={!this.propsHaveErrors()}
             entity={SingleEntities.Product}
             status={this.props.status}
             cancel={this.cancel}

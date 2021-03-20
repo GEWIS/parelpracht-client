@@ -5,6 +5,7 @@ import {
   Checkbox, Form, Input, Label, TextArea,
 } from 'semantic-ui-react';
 import validator from 'validator';
+import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { Product, ProductParams, ProductStatus } from '../../clients/server.generated';
 import ProductCategorySelector from '../productcategories/ProductCategorySelector';
 import { formatPrice } from '../../helpers/monetary';
@@ -17,7 +18,7 @@ import PropsButtons from '../PropsButtons';
 import { TransientAlert } from '../../stores/alerts/actions';
 import { showTransientAlert } from '../../stores/alerts/actionCreators';
 
-interface Props {
+interface Props extends RouteComponentProps {
   create?: boolean;
   onCancel?: () => void;
 
@@ -43,6 +44,8 @@ interface State {
   contractTextEnglish: string;
   deliverySpecDutch: string | undefined;
   deliverySpecEnglish: string | undefined;
+  minTarget: number;
+  maxTarget: number;
 }
 
 class ProductProps extends React.Component<Props, State> {
@@ -81,6 +84,8 @@ class ProductProps extends React.Component<Props, State> {
       contractTextEnglish: product.contractTextEnglish,
       deliverySpecDutch: product.deliverySpecificationDutch,
       deliverySpecEnglish: product.deliverySpecificationEnglish,
+      minTarget: product.minTarget,
+      maxTarget: product.maxTarget,
     };
   };
 
@@ -88,7 +93,6 @@ class ProductProps extends React.Component<Props, State> {
     return new ProductParams({
       nameDutch: this.state.nameDutch,
       nameEnglish: this.state.nameEnglish,
-      targetPrice: Math.round(Number.parseFloat(this.state.targetPrice) * 100),
       status: this.state.status,
       description: this.state.description,
       categoryId: this.state.categoryId,
@@ -96,6 +100,9 @@ class ProductProps extends React.Component<Props, State> {
       contractTextEnglish: this.state.contractTextEnglish,
       deliverySpecificationEnglish: this.state.deliverySpecEnglish,
       deliverySpecificationDutch: this.state.deliverySpecDutch,
+      minTarget: this.state.minTarget,
+      maxTarget: this.state.maxTarget,
+      targetPrice: Math.round(Number.parseFloat(this.state.targetPrice) * 100),
     });
   };
 
@@ -120,27 +127,51 @@ class ProductProps extends React.Component<Props, State> {
   };
 
   remove = () => {
-    if (!this.props.create) {
+    if (!this.props.create && this.props.deleteProduct) {
+      this.props.history.push('/product');
       this.props.deleteProduct(this.props.product.id);
     }
+  };
+
+  propsHaveErrors = (): boolean => {
+    const {
+      nameDutch, nameEnglish, categoryId, targetPrice, minTarget, maxTarget,
+      contractTextDutch, contractTextEnglish,
+    } = this.state;
+    return (validator.isEmpty(nameDutch)
+      || validator.isEmpty(nameEnglish)
+      || categoryId < 0
+      || (parseFloat(targetPrice) < 0 || Number.isNaN(parseFloat(targetPrice)))
+      || (minTarget !== undefined ? minTarget < 0 : false)
+      || maxTarget < (minTarget || 0)
+      || validator.isEmpty(contractTextDutch)
+      || validator.isEmpty(contractTextEnglish)
+    );
   };
 
   deleteButtonActive = () => {
     if (this.props.create) {
       return undefined;
     }
-    return !(this.props.product.instances.length > 0 || this.props.product.files.length > 0);
+    return !(this.props.product.instances.length > 0
+      || this.props.product.files.length > 0);
   };
 
   render() {
     const {
       editing,
-      nameDutch, nameEnglish,
-      targetPrice, status,
+      nameDutch,
+      nameEnglish,
+      targetPrice,
+      status,
       description,
       categoryId,
-      contractTextDutch, contractTextEnglish,
-      deliverySpecDutch, deliverySpecEnglish,
+      contractTextDutch,
+      contractTextEnglish,
+      deliverySpecDutch,
+      deliverySpecEnglish,
+      minTarget,
+      maxTarget,
     } = this.state;
 
     return (
@@ -151,6 +182,7 @@ class ProductProps extends React.Component<Props, State> {
           <PropsButtons
             editing={editing}
             canDelete={this.deleteButtonActive()}
+            canSave={!this.propsHaveErrors()}
             entity={SingleEntities.Product}
             status={this.props.status}
             cancel={this.cancel}
@@ -195,10 +227,29 @@ class ProductProps extends React.Component<Props, State> {
               }
             />
           </Form.Group>
+          <Form.Field
+            disabled={!editing}
+            required
+          >
+            {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
+            <label htmlFor="form-input-category">
+              Product category
+            </label>
+            <ProductCategorySelector
+              id="form-input-category"
+              value={categoryId}
+              onChange={(val: number) => {
+                this.setState({
+                  categoryId: val,
+                });
+              }}
+            />
+          </Form.Field>
           <Form.Group widths="equal">
             <Form.Field
               disabled={!editing}
               required
+              error={parseFloat(targetPrice) < 0 || Number.isNaN(parseFloat(targetPrice))}
             >
               {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
               <label htmlFor="form-input-target-price">
@@ -231,26 +282,49 @@ class ProductProps extends React.Component<Props, State> {
                   status:
                     data.checked ? ProductStatus.ACTIVE : ProductStatus.INACTIVE,
                 })}
-                fluid
               />
             </Form.Field>
           </Form.Group>
-          <Form.Field
-            disabled={!editing}
-            required
-          >
-            {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-            <label htmlFor="form-input-category">
-              Product category
-            </label>
-            <ProductCategorySelector
-              id="form-input-category"
-              value={categoryId}
-              onChange={(val: number) => this.setState({
-                categoryId: val,
-              })}
-            />
-          </Form.Field>
+          <Form.Group widths="equal">
+            <Form.Field
+              disabled={!editing}
+              error={minTarget !== undefined ? minTarget < 0 : false}
+            >
+              {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
+              <label htmlFor="form-input-minimal-target">
+                Minimal Target
+              </label>
+              <Input
+                id="form-input-minimal-target"
+                type="number"
+                placeholder="Minimal target"
+                value={minTarget}
+                fluid
+                onChange={(e: ChangeEvent<HTMLInputElement>) => this.setState({
+                  minTarget: e.target.value as any as number,
+                })}
+              />
+            </Form.Field>
+            <Form.Field
+              disabled={!editing}
+              error={maxTarget < (minTarget || 0)}
+            >
+              {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
+              <label htmlFor="form-input-maximum-target">
+                Maximum Target
+              </label>
+              <Input
+                id="form-input-maximum-target"
+                type="number"
+                placeholder="Maximum target"
+                value={maxTarget}
+                fluid
+                onChange={(e: ChangeEvent<HTMLInputElement>) => this.setState({
+                  maxTarget: e.target.value as any as number,
+                })}
+              />
+            </Form.Field>
+          </Form.Group>
           <Form.Field
             disabled={!editing}
           >
@@ -262,8 +336,7 @@ class ProductProps extends React.Component<Props, State> {
               id="form-input-description"
               value={description}
               onChange={(e) => this.setState({ description: e.target.value })}
-              placeholder="Comments"
-              fluid
+              placeholder="Internal comments"
             />
           </Form.Field>
           <Form.Field disabled={!editing} required error={validator.isEmpty(contractTextDutch)}>
@@ -277,8 +350,7 @@ class ProductProps extends React.Component<Props, State> {
               onChange={
                 (e) => this.setState({ contractTextDutch: e.target.value })
               }
-              placeholder="Contract Text (Dutch)"
-              fluid
+              placeholder="Contract text in Dutch"
             />
           </Form.Field>
           <Form.Field disabled={!editing} required error={validator.isEmpty(contractTextEnglish)}>
@@ -292,8 +364,7 @@ class ProductProps extends React.Component<Props, State> {
               onChange={
                 (e) => this.setState({ contractTextEnglish: e.target.value })
               }
-              placeholder="Contract Text (English)"
-              fluid
+              placeholder="Contract text in English"
             />
           </Form.Field>
           <Form.Field disabled={!editing}>
@@ -307,8 +378,7 @@ class ProductProps extends React.Component<Props, State> {
               onChange={
                 (e) => this.setState({ deliverySpecDutch: e.target.value })
               }
-              placeholder="Delivery Specification (Dutch)"
-              fluid
+              placeholder="Delivery specifications in Dutch"
             />
           </Form.Field>
           <Form.Field disabled={!editing}>
@@ -322,8 +392,7 @@ class ProductProps extends React.Component<Props, State> {
               onChange={
                 (e) => this.setState({ deliverySpecEnglish: e.target.value })
               }
-              placeholder="Delivery Specification (English)"
-              fluid
+              placeholder="Delivery specifications in English"
             />
           </Form.Field>
         </Form>
@@ -351,4 +420,4 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   showTransientAlert: (alert: TransientAlert) => dispatch(showTransientAlert(alert)),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(ProductProps);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ProductProps));

@@ -1,9 +1,4 @@
-import { User } from '../../clients/server.generated';
-
-export enum ActivityType {
-  STATUS = 'STATUS',
-  COMMENT = 'COMMENT',
-}
+import { ActivityType, User } from '../../clients/server.generated';
 
 export class GeneralActivity {
   /** Incremental ID of the entity */

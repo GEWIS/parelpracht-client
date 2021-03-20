@@ -30,6 +30,16 @@ class ContractProductList extends React.Component<Props, State> {
     };
   }
 
+  componentDidUpdate(prevProps: Readonly<Props>) {
+    if (prevProps.contract.products.length > this.props.contract.products.length) {
+      // The following operation is safe, because we only change the state if one
+      // of the products has been removed. We do this check on the props and not
+      // on the state, so there is no infinite loop.
+      // eslint-disable-next-line react/no-did-update-set-state
+      this.setState({ selected: [] });
+    }
+  }
+
   clearSelection = () => {
     this.setState({ selected: [] });
   };
@@ -105,7 +115,7 @@ class ContractProductList extends React.Component<Props, State> {
 
           </Table.Header>
           <Table.Body>
-            {products.map((product) => (
+            {products.sort((a, b) => a.id - b.id).map((product) => (
               <ContractProductRow
                 key={product.id}
                 productInstance={product}

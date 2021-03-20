@@ -1,21 +1,24 @@
 import React from 'react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import {
-  Button, Divider, Feed, Icon, Popup,
+  Button, Feed, Popup, Segment,
 } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import './Activity.scss';
 import { Dispatch } from 'redux';
 import { RootState } from '../../stores/store';
-import { getUserName } from '../../stores/user/selectors';
+import { getUserAvatar, getUserName } from '../../stores/user/selectors';
 import { formatActivitySummary, formatStatus } from '../../helpers/activity';
-import { ActivityType, GeneralActivity } from './GeneralActivity';
+import { GeneralActivity } from './GeneralActivity';
 import { formatLastUpdate } from '../../helpers/timestamp';
 import { SingleEntities } from '../../stores/single/single';
 import { deleteActivitySingle } from '../../stores/single/actionCreators';
 import UserLinkWithoutImage from '../user/UserLinkWithoutImage';
 import { deleteInstanceActivitySingle } from '../../stores/productinstance/actionCreator';
-import { ContractStatus, InvoiceStatus, ProductInstanceStatus } from '../../clients/server.generated';
+import {
+  ActivityType, ContractStatus, InvoiceStatus, ProductInstanceStatus,
+} from '../../clients/server.generated';
+import UserAvatar from '../user/UserAvatar';
 import { TransientAlert } from '../../stores/alerts/actions';
 import { showTransientAlert } from '../../stores/alerts/actionCreators';
 
@@ -27,6 +30,7 @@ interface Props extends RouteComponentProps {
   parentId?: number;
 
   userName: string;
+  avatarUrl: string;
   deleteActivitySingle: (entity: SingleEntities, id: number, activityId: number) => void;
   deleteInstanceActivitySingle: (id: number, instanceId: number, activityId: number) => void;
   showTransientAlert: (alert: TransientAlert) => void;
@@ -59,29 +63,20 @@ class ActivityComponent extends React.Component<Props> {
   };
 
   public render() {
-    const { activity } = this.props;
-    let feedLabel;
-    if (activity.type === ActivityType.COMMENT) {
-      feedLabel = (
-        <Icon name="pencil" />
-      );
-    } else {
-      feedLabel = (
-        <Icon name="checkmark" />
-      );
-    }
+    const { activity, avatarUrl, componentType } = this.props;
+    const feedLabel = (
+      <UserAvatar size="3em" fileName={avatarUrl} clickable={false} />
+    );
 
-    const summaryType: string = formatActivitySummary(activity.type, activity.subType);
+    const summaryType = formatActivitySummary(activity.type, activity.subType, componentType);
     const summaryUser = (
       <UserLinkWithoutImage id={this.props.activity.createdById} />
     );
     const deleteMessage = `Delete ${activity.type.toLowerCase()}`;
     let deleteButton;
-    if ((activity.type === ActivityType.STATUS
-      && activity.subType !== ContractStatus.CREATED
-      && activity.subType !== InvoiceStatus.CREATED
-      && activity.subType !== ProductInstanceStatus.NOTDELIVERED)
-      || activity.type === ActivityType.COMMENT) {
+    if (!(activity.type === ActivityType.STATUS && (activity.subType === ContractStatus.CREATED
+      || activity.subType === InvoiceStatus.CREATED
+      || activity.subType === ProductInstanceStatus.NOTDELIVERED))) {
       const headerString = `Are you sure you want to delete this ${activity.type.toLowerCase()}?`;
       deleteButton = (
         // eslint-disable-next-line
@@ -99,18 +94,42 @@ class ActivityComponent extends React.Component<Props> {
             >
               {deleteMessage}
             </Button>
-        )}
+          )}
           header={headerString}
         />
       );
     }
+
+    let feedDescription;
+    if (activity.description === '') {
+      feedDescription = undefined;
+    } else if (activity.type === ActivityType.COMMENT || activity.type === ActivityType.STATUS) {
+      feedDescription = (
+        <Feed.Extra><Segment raised>{activity.description}</Segment></Feed.Extra>);
+    } else {
+      feedDescription = (<Feed.Extra style={{ fontStyle: 'italic' }}>{activity.description}</Feed.Extra>);
+    }
+
+    // const feedDescription = activity.description !== '' ? (
+    //   <Feed.Extra
+    //     style={activity.type !== ActivityType.COMMENT ? { fontStyle: 'italic' } : {}}
+    //   >
+    //     {activity.description}
+    //   </Feed.Extra>
+    // ) : undefined;
+
+    const feedButtons = deleteButton !== undefined ? (
+      <Feed.Meta>
+        {deleteButton}
+      </Feed.Meta>
+    ) : undefined;
 
     return (
       <Feed.Event>
         <Feed.Label>
           {feedLabel}
         </Feed.Label>
-        <Feed.Content>
+        <Feed.Content style={{ marginBottom: '1em' }}>
           <Feed.Date>
             {formatLastUpdate(activity.createdAt)}
           </Feed.Date>
@@ -118,13 +137,9 @@ class ActivityComponent extends React.Component<Props> {
             {summaryType}
             {summaryUser}
           </Feed.Summary>
-          <Feed.Extra>
-            {activity.description}
-          </Feed.Extra>
-          <Feed.Meta>
-            {deleteButton}
-          </Feed.Meta>
-          <Divider horizontal />
+          {feedDescription}
+          {feedButtons}
+          {/* <Divider horizontal /> */}
         </Feed.Content>
       </Feed.Event>
     );
@@ -134,6 +149,7 @@ class ActivityComponent extends React.Component<Props> {
 const mapStateToProps = (state: RootState, props: { activity: GeneralActivity }) => {
   return {
     userName: getUserName(state, props.activity.createdById),
+    avatarUrl: getUserAvatar(state, props.activity.createdById),
   };
 };
 

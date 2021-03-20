@@ -121,7 +121,7 @@ class DashboardProductInstanceStatusGraph extends React.Component<Props, State> 
                   stacked: true,
                   ticks: {
                     beginAtZero: true,
-                    userCallback(value: number) {
+                    callback(value: number) {
                       return formatPriceFull(value);
                     },
                   },
@@ -199,8 +199,8 @@ class DashboardProductInstanceStatusGraph extends React.Component<Props, State> 
                   )}
                   trigger={(
                     <span>
-                      {(data?.invoiced.delivered.amount || 0)
-                      + (data?.invoiced.notDelivered.amount || 0)}
+                      {(data?.invoiced.delivered.nrOfProducts || 0)
+                      + (data?.invoiced.notDelivered.nrOfProducts || 0)}
                     </span>
                   )}
                 />

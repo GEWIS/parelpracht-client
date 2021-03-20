@@ -15,7 +15,7 @@ import { createSingle, fetchSingle } from '../stores/single/actionCreators';
 import { SingleEntities } from '../stores/single/single';
 import PropsButtons from '../components/PropsButtons';
 
-interface SelfProps extends RouteComponentProps<{contractId: string}> {
+interface SelfProps extends RouteComponentProps<{ contractId: string }> {
 }
 
 interface Props extends SelfProps {

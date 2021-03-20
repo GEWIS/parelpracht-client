@@ -5,10 +5,13 @@ import {
   Dropdown, Form, Input, TextArea,
 } from 'semantic-ui-react';
 import validator from 'validator';
+import { RouteComponentProps, withRouter } from 'react-router-dom';
 import {
   Contact, ContactFunction, ContactParams, Gender,
 } from '../../clients/server.generated';
-import { createSingle, deleteSingle, saveSingle } from '../../stores/single/actionCreators';
+import {
+  createSingle, deleteSingle, fetchSingle, saveSingle,
+} from '../../stores/single/actionCreators';
 import ResourceStatus from '../../stores/resourceStatus';
 import { RootState } from '../../stores/store';
 import PropsButtons from '../PropsButtons';
@@ -18,8 +21,9 @@ import { formatContactName, formatFunction } from '../../helpers/contact';
 import { TransientAlert } from '../../stores/alerts/actions';
 import { showTransientAlert } from '../../stores/alerts/actionCreators';
 
-interface Props {
+interface Props extends RouteComponentProps {
   create?: boolean;
+  onCompanyPage: boolean;
   onCancel?: () => void;
 
   contact: Contact;
@@ -29,6 +33,7 @@ interface Props {
   createContact: (contact: ContactParams) => void;
   deleteContact: (id: number) => void;
   showTransientAlert: (alert: TransientAlert) => void;
+  fetchCompany: (id: number) => void;
 }
 
 interface State {
@@ -122,15 +127,32 @@ class ContactProps extends React.Component<Props, State> {
   remove = () => {
     if (!this.props.create) {
       this.props.deleteContact(this.props.contact.id);
+      if (this.props.onCompanyPage) {
+        this.props.history.push(`/company/${this.props.contact.companyId}`);
+        this.props.fetchCompany(this.props.contact.companyId);
+      } else {
+        this.props.history.push('/contact');
+      }
     }
   };
 
-  deleteButtonActive() {
+  propsHaveErrors = (): boolean => {
+    const {
+      firstName, lastName, email, telephone,
+    } = this.state;
+    return (validator.isEmpty(firstName)
+      || validator.isEmpty(lastName)
+      || !validator.isEmail(email)
+      || (!validator.isEmpty(telephone!) && !validator.isMobilePhone(telephone!))
+    );
+  };
+
+  deleteButtonActive = () => {
     if (this.props.create) {
       return undefined;
     }
     return !(this.props.contact.contracts.length > 0);
-  }
+  };
 
   render() {
     const {
@@ -153,6 +175,7 @@ class ContactProps extends React.Component<Props, State> {
           <PropsButtons
             editing={editing}
             canDelete={this.deleteButtonActive()}
+            canSave={!this.propsHaveErrors()}
             entity={SingleEntities.Contact}
             status={this.props.status}
             cancel={this.cancel}
@@ -316,6 +339,9 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
     deleteSingle(SingleEntities.Contact, id),
   ),
   showTransientAlert: (alert: TransientAlert) => dispatch(showTransientAlert(alert)),
+  fetchCompany: (id: number) => dispatch(
+    fetchSingle(SingleEntities.Company, id),
+  ),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(ContactProps);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ContactProps));

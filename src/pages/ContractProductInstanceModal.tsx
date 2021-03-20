@@ -26,7 +26,9 @@ import {
 import { TransientAlert } from '../stores/alerts/actions';
 import { showTransientAlert } from '../stores/alerts/actionCreators';
 
-interface SelfProps extends RouteComponentProps<{contractId: string, productInstanceId?: string}> {
+interface SelfProps extends RouteComponentProps<{
+  contractId: string, productInstanceId?: string
+}> {
   create?: boolean;
 }
 
@@ -42,7 +44,7 @@ interface Props extends SelfProps {
   showTransientAlert: (alert: TransientAlert) => void;
 }
 
-class ProductInstanceModal extends React.Component<Props> {
+class ContractProductInstanceModal extends React.Component<Props> {
   close = () => {
     const { contractId } = this.props.match.params;
     this.props.fetchContract(parseInt(contractId, 10));
@@ -82,7 +84,7 @@ class ProductInstanceModal extends React.Component<Props> {
       productInstance = {
         id: -1,
         contractId: parseInt(contractId, 10),
-        productId: 0,
+        productId: -1,
         basePrice: 0,
         discount: 0,
         comments: '',
@@ -114,7 +116,7 @@ class ProductInstanceModal extends React.Component<Props> {
     let activities;
     if (!create) {
       activities = [
-        <Segment secondary style={{ margin: '2em 1em 1em' }}>
+        <Segment secondary style={{ margin: '2em 1em 1em' }} key="seg-1">
           <FinancialDocumentProgress
             documentId={productInstance.id}
             parentId={productInstance.contractId}
@@ -123,7 +125,7 @@ class ProductInstanceModal extends React.Component<Props> {
             resourceStatus={status}
           />
         </Segment>,
-        <Segment style={{ margin: '2em 1em 1em' }}>
+        <Segment style={{ margin: '2em 1em 1em' }} key="seg-2">
           <ActivitiesList
             activities={productInstance.activities as GeneralActivity[]}
             componentId={productInstance.id}
@@ -188,4 +190,5 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   showTransientAlert: (alert: TransientAlert) => dispatch(showTransientAlert(alert)),
 });
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ProductInstanceModal));
+export default withRouter(connect(mapStateToProps,
+  mapDispatchToProps)(ContractProductInstanceModal));

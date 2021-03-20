@@ -40,16 +40,17 @@ function CustomInvoiceProducts(props: Props) {
             <Table.HeaderCell />
           </Table.Row>
         </Table.Header>
-        <Table.Body />
-        {props.products.map((product: CustomProduct, id: number) => (
-          <CustomInvoiceProductRow
-            product={product}
-            id={id}
-            key={id.toString()}
-            updateProduct={props.updateProduct}
-            removeProduct={props.removeProduct}
-          />
-        ))}
+        <Table.Body>
+          {props.products.map((product: CustomProduct, id: number) => (
+            <CustomInvoiceProductRow
+              product={product}
+              id={id}
+              key={id.toString()}
+              updateProduct={props.updateProduct}
+              removeProduct={props.removeProduct}
+            />
+          ))}
+        </Table.Body>
         <Table.Footer>
           <Table.Row>
             <Table.HeaderCell />

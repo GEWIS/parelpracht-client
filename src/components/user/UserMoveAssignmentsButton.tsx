@@ -3,7 +3,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import {
-  Button, ButtonProps, Grid, Icon, Modal, Segment,
+  Button, ButtonProps, Icon, Modal,
 } from 'semantic-ui-react';
 import { Client, TransferUserParams } from '../../clients/server.generated';
 import { clearSingle, fetchSingle } from '../../stores/single/actionCreators';

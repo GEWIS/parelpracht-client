@@ -16,6 +16,7 @@ import { SingleEntities } from '../stores/single/single';
 import { formatContactName } from '../helpers/contact';
 import { TransientAlert } from '../stores/alerts/actions';
 import { showTransientAlert } from '../stores/alerts/actionCreators';
+import UserMoveAssignmentsButton from '../components/user/UserMoveAssignmentsButton';
 
 interface Props extends RouteComponentProps<{ userId: string }> {
   user: User | undefined;
@@ -50,6 +51,8 @@ class SingleUserPage extends React.Component<Props> {
   public render() {
     const { user } = this.props;
 
+    if (user === undefined) return (<div />);
+
     return (
       <Container style={{ paddingTop: '2em' }}>
         <Breadcrumb
@@ -73,6 +76,11 @@ class SingleUserPage extends React.Component<Props> {
                 <UserProps user={user} />
               </Segment>
             ) : <Segment placeholder />}
+          </Grid.Column>
+          <Grid.Column>
+            <Segment style={{ height: '4rem' }}>
+              <UserMoveAssignmentsButton userId={user.id} />
+            </Segment>
           </Grid.Column>
         </Grid>
       </Container>

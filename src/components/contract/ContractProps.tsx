@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import { Form, Input } from 'semantic-ui-react';
 import validator from 'validator';
+import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { ActivityType, Contract, ContractParams } from '../../clients/server.generated';
 import { createSingle, deleteSingle, saveSingle } from '../../stores/single/actionCreators';
 import ResourceStatus from '../../stores/resourceStatus';
@@ -17,7 +18,7 @@ import { TransientAlert } from '../../stores/alerts/actions';
 import { showTransientAlert } from '../../stores/alerts/actionCreators';
 import { formatDocumentIdTitle } from '../../helpers/documents';
 
-interface Props {
+interface Props extends RouteComponentProps {
   create?: boolean;
   companyPredefined?: boolean;
   onCancel?: () => void;
@@ -111,8 +112,19 @@ class ContractProps extends React.Component<Props, State> {
 
   remove = () => {
     if (!this.props.create) {
+      this.props.history.push('/contract');
       this.props.deleteContract(this.props.contract.id);
     }
+  };
+
+  propsHaveErrors = (): boolean => {
+    const {
+      title, companySelection, contactSelection,
+    } = this.state;
+    return (validator.isEmpty(title)
+      || companySelection < 0
+      || contactSelection < 0
+    );
   };
 
   deleteButtonActive = () => {
@@ -126,6 +138,7 @@ class ContractProps extends React.Component<Props, State> {
   };
 
   render() {
+    const { create } = this.props;
     const {
       editing,
       title,
@@ -134,24 +147,8 @@ class ContractProps extends React.Component<Props, State> {
       assignedToSelection,
       comments,
     } = this.state;
-    const { contract } = this.props;
 
-    let companySelector = (
-      <Form.Field
-        disabled={!editing}
-        required
-      >
-        {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-        <label htmlFor="form-company-selector">Company</label>
-        <CompanySelector
-          id="form-company-selector"
-          value={companySelection}
-          onChange={(val: number) => this.setState({
-            companySelection: val,
-          })}
-        />
-      </Form.Field>
-    );
+    let companySelector: JSX.Element;
     if (this.props.companyPredefined) {
       companySelector = (
         <Form.Field
@@ -170,6 +167,23 @@ class ContractProps extends React.Component<Props, State> {
           />
         </Form.Field>
       );
+    } else {
+      companySelector = (
+        <Form.Field
+          disabled={!editing || !create}
+          required
+        >
+          {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
+          <label htmlFor="form-company-selector">Company</label>
+          <CompanySelector
+            id="form-company-selector"
+            value={companySelection}
+            onChange={(val: number) => this.setState({
+              companySelection: val,
+            })}
+          />
+        </Form.Field>
+      );
     }
 
     return (
@@ -180,6 +194,7 @@ class ContractProps extends React.Component<Props, State> {
           <PropsButtons
             editing={editing}
             canDelete={this.deleteButtonActive()}
+            canSave={!this.propsHaveErrors()}
             entity={SingleEntities.Contract}
             status={this.props.status}
             cancel={this.cancel}
@@ -223,7 +238,7 @@ class ContractProps extends React.Component<Props, State> {
           </Form.Group>
           {companySelector}
           <Form.Field
-            disabled={!editing}
+            disabled={!editing || !create}
             required
           >
             {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
@@ -276,4 +291,4 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   showTransientAlert: (alert: TransientAlert) => dispatch(showTransientAlert(alert)),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(ContractProps);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ContractProps));

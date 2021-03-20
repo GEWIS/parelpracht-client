@@ -20,6 +20,9 @@ import { showTransientAlert } from '../stores/alerts/actionCreators';
 import FilesList from '../components/files/FilesList';
 import ContractCompactTable from '../components/contract/ContractCompactTable';
 import InvoiceCompactTable from '../components/invoice/InvoiceCompactTable';
+import ProductsContractedGraph from '../components/product/ProductsContractedGraph';
+import PricingTable from '../components/productpricing/PricingTable';
+import CreatePricing from '../components/productpricing/CreatePricing';
 
 interface Props extends RouteComponentProps<{ productId: string }> {
   product: Product | undefined;
@@ -110,7 +113,22 @@ class SingleProductPage extends React.Component<Props> {
           </Tab.Pane>
         ),
       },
+      {
+        menuItem: 'Insights',
+        render: () => <ProductsContractedGraph product={product} />,
+      },
     ];
+
+    if (product.pricing !== undefined) {
+      panes.push({
+        menuItem: 'Pricing',
+        render: () => (
+          <Tab.Pane>
+            <PricingTable pricing={product.pricing!} productId={product.id} />
+          </Tab.Pane>
+        ),
+      });
+    }
 
     return (
       <Container style={{ paddingTop: '2em' }}>
@@ -130,6 +148,11 @@ class SingleProductPage extends React.Component<Props> {
             <Segment secondary>
               <ProductProps product={product} />
             </Segment>
+            {product.pricing === undefined ? (
+              <Segment secondary>
+                <CreatePricing productId={product.id} />
+              </Segment>
+            ) : null }
           </Grid.Column>
         </Grid>
       </Container>

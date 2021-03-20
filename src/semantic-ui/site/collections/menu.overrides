@@ -6,6 +6,10 @@
   background-color: @primaryColor;
 }
 
+.ui.inverted.menu.pointing  .active.item::after {
+  background: @primaryColor !important;
+}
+
 .footer .ui.inverted.segment {
   background-color: @secondaryColor;
 }
