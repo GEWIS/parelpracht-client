@@ -6,7 +6,7 @@ import {
 } from 'semantic-ui-react';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
-import { Company } from '../clients/server.generated';
+import { Company, Roles } from '../clients/server.generated';
 import { fetchSingle, clearSingle } from '../stores/single/actionCreators';
 import { RootState } from '../stores/store';
 import CompanyProps from '../components/company/CompanyProps';
@@ -23,6 +23,7 @@ import { showTransientAlert } from '../stores/alerts/actionCreators';
 import InvoiceList from '../components/invoice/InvoiceList';
 import CompanyContractedProductsChart from '../components/company/CompanyContractedProductsChart';
 import FilesList from '../components/files/FilesList';
+import AuthorizationComponent from '../components/AuthorizationComponent';
 
 interface Props extends RouteComponentProps<{ companyId: string }> {
   company: Company | undefined;
@@ -59,9 +60,14 @@ class SingleCompanyPage extends React.Component<Props> {
 
     if (company === undefined) {
       return (
-        <Container style={{ paddingTop: '2em' }}>
-          <Loader content="Loading" active />
-        </Container>
+        <AuthorizationComponent
+          roles={[Roles.GENERAL, Roles.ADMIN, Roles.AUDIT]}
+          notFound
+        >
+          <Container style={{ paddingTop: '2em' }}>
+            <Loader content="Loading" active />
+          </Container>
+        </AuthorizationComponent>
       );
     }
 
@@ -128,26 +134,31 @@ class SingleCompanyPage extends React.Component<Props> {
     ];
 
     return (
-      <Container style={{ paddingTop: '2em' }}>
-        <Breadcrumb
-          icon="right angle"
-          sections={[
-            { key: 'Companies', content: <NavLink to="/company">Companies</NavLink> },
-            { key: 'Company', content: company.name, active: true },
-          ]}
-        />
-        <CompanySummary />
-        <Grid columns={2}>
-          <Grid.Column width={10}>
-            <Tab panes={panes} menu={{ pointing: true, inverted: true }} />
-          </Grid.Column>
-          <Grid.Column width={6}>
-            <Segment secondary>
-              <CompanyProps company={company} />
-            </Segment>
-          </Grid.Column>
-        </Grid>
-      </Container>
+      <AuthorizationComponent
+        roles={[Roles.GENERAL, Roles.ADMIN, Roles.AUDIT]}
+        notFound
+      >
+        <Container style={{ paddingTop: '2em' }}>
+          <Breadcrumb
+            icon="right angle"
+            sections={[
+              { key: 'Companies', content: <NavLink to="/company">Companies</NavLink> },
+              { key: 'Company', content: company.name, active: true },
+            ]}
+          />
+          <CompanySummary />
+          <Grid columns={2}>
+            <Grid.Column width={10}>
+              <Tab panes={panes} menu={{ pointing: true, inverted: true }} />
+            </Grid.Column>
+            <Grid.Column width={6}>
+              <Segment secondary>
+                <CompanyProps company={company} />
+              </Segment>
+            </Grid.Column>
+          </Grid>
+        </Container>
+      </AuthorizationComponent>
     );
   }
 }
