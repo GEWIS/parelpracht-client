@@ -53,11 +53,6 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
     this.setState({
       stepModalOpen: false,
     });
-    this.props.showTransientAlert({
-      title: 'Success',
-      message: `Saved status ${formatStatus(this.props.status)} successfully.`,
-      type: 'success',
-    });
   };
 
   public render() {

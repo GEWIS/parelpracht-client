@@ -64,15 +64,23 @@ class ContactProps extends React.Component<Props, State> {
       && this.props.status === ResourceStatus.FETCHED) {
       // eslint-disable-next-line react/no-did-update-set-state
       this.setState({ editing: false });
-      this.props.showTransientAlert({
-        title: 'Success',
-        message: `Properties of ${formatContactName(
-          this.props.contact?.firstName,
-          this.props.contact?.lastNamePreposition,
-          this.props.contact?.lastName,
-        )} successfully updated.`,
-        type: 'success',
-      });
+      if (this.props.create) {
+        this.props.showTransientAlert({
+          title: 'Success',
+          message: 'Successfully created new contact.',
+          type: 'success',
+        });
+      } else {
+        this.props.showTransientAlert({
+          title: 'Success',
+          message: `Properties of ${formatContactName(
+            this.props.contact?.firstName,
+            this.props.contact?.lastNamePreposition,
+            this.props.contact?.lastName,
+          )} successfully updated.`,
+          type: 'success',
+        });
+      }
     }
   }
 

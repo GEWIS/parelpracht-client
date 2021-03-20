@@ -1,7 +1,5 @@
 import * as React from 'react';
-import {
-  Modal, Segment,
-} from 'semantic-ui-react';
+import { Modal } from 'semantic-ui-react';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
@@ -38,7 +36,6 @@ class ProductCategoriesCreatePage extends React.Component<Props> {
         type: 'success',
       });
     }
-    console.log(this.props.status);
   }
 
   closeWithPopupMessage = () => {
@@ -48,8 +45,7 @@ class ProductCategoriesCreatePage extends React.Component<Props> {
   close = () => { this.props.history.goBack(); };
 
   public render() {
-    let category = new ProductCategory();
-    category = {
+    const category = {
       id: 0,
       name: '',
       products: [],

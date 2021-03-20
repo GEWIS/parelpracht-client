@@ -25,6 +25,7 @@ import {
 } from '../stores/productinstance/actionCreator';
 import { TransientAlert } from '../stores/alerts/actions';
 import { showTransientAlert } from '../stores/alerts/actionCreators';
+import { getProductName } from '../stores/product/selectors';
 
 interface SelfProps extends RouteComponentProps<{
   contractId: string, productInstanceId?: string
@@ -36,6 +37,7 @@ interface Props extends SelfProps {
   productInstance: ProductInstance | undefined;
   status: ResourceStatus;
   contract?: Contract;
+  productName: string;
 
   fetchContract: (id: number) => void;
   saveProductInstance: (contractId: number, id: number, inst: ProductInstanceParams) => void;
@@ -165,14 +167,20 @@ class ContractProductInstanceModal extends React.Component<Props> {
 }
 
 const mapStateToProps = (state: RootState, props: SelfProps) => {
+  const prodInstance = !props.create
+    ? getSingle<Contract>(state, SingleEntities.Contract).data?.products.find(
+      (p) => p.id === parseInt(props.match.params.productInstanceId!, 10),
+    )
+    : undefined;
+  let prodName = '';
+  if (prodInstance !== undefined) {
+    prodName = getProductName(state, prodInstance.productId);
+  }
   return {
-    productInstance: !props.create
-      ? getSingle<Contract>(state, SingleEntities.Contract).data?.products.find(
-        (p) => p.id === parseInt(props.match.params.productInstanceId!, 10),
-      )
-      : undefined,
+    productInstance: prodInstance,
     status: getSingle<Contract>(state, SingleEntities.Contract).status,
     contract: getSingle<Contract>(state, SingleEntities.Contract).data,
+    productName: prodName,
   };
 };
 

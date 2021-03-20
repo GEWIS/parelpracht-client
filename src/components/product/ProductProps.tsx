@@ -63,11 +63,6 @@ class ProductProps extends React.Component<Props, State> {
       && this.props.status === ResourceStatus.FETCHED) {
       // eslint-disable-next-line react/no-did-update-set-state
       this.setState({ editing: false });
-      this.props.showTransientAlert({
-        title: 'Success',
-        message: `Properties of ${this.props.product.nameEnglish} successfully updated.`,
-        type: 'success',
-      });
     }
   }
 
