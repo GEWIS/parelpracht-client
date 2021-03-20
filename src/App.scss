@@ -1,15 +1,32 @@
 .main {
   position: absolute;
-  top: 43px;
-  height: calc(100vh - 43px - 48px);
+  top: 47px;
+  height: calc(100vh - 47px - 34px);
   overflow-y: auto;
 }
 
 .footer {
-  position: absolute;
+  position: absolute !important;
   bottom: 0;
   width: 100%;
   height: 34px;
+  padding: 1rem;
+
+  .ui.container {
+    height: 100%;
+
+    .ui.grid {
+      height: 100%;
+
+      .column {
+        height: 100%;
+      }
+    }
+  }
+}
+
+.footer .ui.container {
+  height: 100%
 }
 
 .ui.table.fixed tr > th {

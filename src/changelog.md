@@ -5,8 +5,15 @@ You can find the release notes below.
 
 ## v0.3-dev
 ### Added
+- Added a pricing table for products.
+  - This table is optional and completely customizable.
+  - Data is stored in a JSON format, so linking it with other applications is possible.
+- Added support for the MariaDB / MySQL database system.
 ### Changes
+- Made the footer smaller and removed the 1px white line in Chrome
+- After changing your email address, you can log in with your new email address instead of your old one.
 ### Bugfixes
+- Fixed page numbers showing "???" in generated PDF files.
 
 ## v0.2.1-beta2 (07-03-2021)
 

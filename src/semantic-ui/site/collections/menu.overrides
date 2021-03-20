@@ -10,6 +10,6 @@
   background: @primaryColor !important;
 }
 
-.footer .ui.inverted.segment {
+.ui.inverted.segment.footer {
   background-color: @secondaryColor;
 }
