@@ -14,7 +14,6 @@ import { deleteFileSingle, saveSingleFile } from '../../stores/single/actionCrea
 import { SingleEntities } from '../../stores/single/single';
 import { GeneralFile } from './GeneralFile';
 import ResourceStatus from '../../stores/resourceStatus';
-import { RootState } from '../../stores/store';
 import { TransientAlert } from '../../stores/alerts/actions';
 import { showTransientAlert } from '../../stores/alerts/actionCreators';
 

@@ -7,8 +7,8 @@ import { connect } from 'react-redux';
 import './Activity.scss';
 import { Dispatch } from 'redux';
 import { RootState } from '../../stores/store';
-import { getUserAvatar, getUserName } from '../../stores/user/selectors';
-import { formatActivitySummary, formatStatus } from '../../helpers/activity';
+import { getUserAvatar } from '../../stores/user/selectors';
+import { formatActivitySummary } from '../../helpers/activity';
 import { GeneralActivity } from './GeneralActivity';
 import { formatLastUpdate } from '../../helpers/timestamp';
 import { SingleEntities } from '../../stores/single/single';
@@ -29,8 +29,8 @@ interface Props extends RouteComponentProps {
   // If the document is a ProductInstance, the parentId is the contract ID
   parentId?: number;
 
-  userName: string;
   avatarUrl: string;
+
   deleteActivitySingle: (entity: SingleEntities, id: number, activityId: number) => void;
   deleteInstanceActivitySingle: (id: number, instanceId: number, activityId: number) => void;
   showTransientAlert: (alert: TransientAlert) => void;
@@ -51,15 +51,6 @@ class ActivityComponent extends React.Component<Props> {
         this.props.activity.id,
       );
     }
-    let activitySubtype = `"${formatStatus(this.props.activity.subType?.toLowerCase())}"`;
-    if (this.props.activity.subType == null) {
-      activitySubtype = `"${this.props.activity.description}"`;
-    }
-    this.props.showTransientAlert({
-      title: 'Success',
-      message: `Deleted ${this.props.activity.type.toLowerCase()} ${activitySubtype} successfully.`,
-      type: 'success',
-    });
   };
 
   public render() {
@@ -79,7 +70,6 @@ class ActivityComponent extends React.Component<Props> {
       || activity.subType === ProductInstanceStatus.NOTDELIVERED))) {
       const headerString = `Are you sure you want to delete this ${activity.type.toLowerCase()}?`;
       deleteButton = (
-        // eslint-disable-next-line
         <Popup
           trigger={(
             // eslint-disable-next-line jsx-a11y/anchor-is-valid
@@ -148,7 +138,6 @@ class ActivityComponent extends React.Component<Props> {
 
 const mapStateToProps = (state: RootState, props: { activity: GeneralActivity }) => {
   return {
-    userName: getUserName(state, props.activity.createdById),
     avatarUrl: getUserAvatar(state, props.activity.createdById),
   };
 };

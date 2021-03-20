@@ -19,6 +19,7 @@ class PricingRow extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
+      // eslint-disable-next-line react/no-unused-state
       fields: props.pricing,
     };
   }
@@ -27,7 +28,6 @@ class PricingRow extends React.Component<Props, State> {
     const {
       pricing, header, editing, row, updateField, removeRow,
     } = this.props;
-    const { fields } = this.state;
 
     if (!editing) {
       return (

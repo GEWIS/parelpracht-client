@@ -30,11 +30,12 @@ interface State {
   comment: string;
 }
 
-class DocumentStatusProps extends React.Component<Props, State> {
+class CreateCommentRow extends React.Component<Props, State> {
   public constructor(props: Props) {
     super(props);
 
     this.state = {
+      // eslint-disable-next-line react/no-unused-state
       editing: props.create ?? false,
       comment: '',
     };
@@ -43,17 +44,19 @@ class DocumentStatusProps extends React.Component<Props, State> {
   componentDidUpdate(prevProps: Props) {
     if (prevProps.resourceStatus === ResourceStatus.SAVING
       && this.props.resourceStatus === ResourceStatus.FETCHED) {
-      // eslint-disable-next-line react/no-did-update-set-state
+      // eslint-disable-next-line react/no-unused-state,react/no-did-update-set-state
       this.setState({ editing: false });
     }
   }
 
   edit = () => {
+    // eslint-disable-next-line react/no-unused-state
     this.setState({ editing: true });
   };
 
   cancel = () => {
     if (!this.props.create) {
+      // eslint-disable-next-line react/no-unused-state
       this.setState({ editing: false });
     }
     this.props.close();
@@ -81,14 +84,14 @@ class DocumentStatusProps extends React.Component<Props, State> {
     }
     this.props.showTransientAlert({
       title: 'Success',
-      message: `Posted comment "${this.state.comment}" successfully.`,
+      message: `Posted comment ${this.state.comment} successfully.`,
       type: 'success',
     });
     this.cancel();
   };
 
   render() {
-    const { editing, comment } = this.state;
+    const { comment } = this.state;
     return (
       <>
         <h4>
@@ -131,4 +134,4 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   showTransientAlert: (alert: TransientAlert) => dispatch(showTransientAlert(alert)),
 });
 
-export default connect(null, mapDispatchToProps)(DocumentStatusProps);
+export default connect(null, mapDispatchToProps)(CreateCommentRow);

@@ -1,13 +1,12 @@
 import * as React from 'react';
 import { NavLink, RouteComponentProps, withRouter } from 'react-router-dom';
 import {
-  Breadcrumb,
-  Container, Grid, Loader, Segment, Tab,
+  Breadcrumb, Container, Grid, Loader, Segment, Tab,
 } from 'semantic-ui-react';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import { Company } from '../clients/server.generated';
-import { fetchSingle, clearSingle } from '../stores/single/actionCreators';
+import { clearSingle, fetchSingle } from '../stores/single/actionCreators';
 import { RootState } from '../stores/store';
 import CompanyProps from '../components/company/CompanyProps';
 import ResourceStatus from '../stores/resourceStatus';
@@ -49,6 +48,14 @@ class SingleCompanyPage extends React.Component<Props> {
       this.props.showTransientAlert({
         title: 'Success',
         message: `Company ${prevProps.company?.name} successfully deleted`,
+        type: 'success',
+      });
+    }
+    if (this.props.status === ResourceStatus.FETCHED
+    && prevProps.status === ResourceStatus.SAVING) {
+      this.props.showTransientAlert({
+        title: 'Success',
+        message: `Properties of ${this.props.company?.name} successfully updated.`,
         type: 'success',
       });
     }

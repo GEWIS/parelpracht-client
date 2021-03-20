@@ -119,7 +119,6 @@ class ProductsContractedGraph extends React.Component<Props, State> {
 
   createBarChartOptionsObject = () => {
     const { dataSetSelection } = this.state;
-    const { product } = this.props;
     let options: ChartOptions;
     switch (dataSetSelection) {
       case DataSet.VALUES:
