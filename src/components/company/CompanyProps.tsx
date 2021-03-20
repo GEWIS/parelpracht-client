@@ -16,6 +16,7 @@ import { SingleEntities } from '../../stores/single/single';
 import CountrySelector from './CountrySelector';
 import { TransientAlert } from '../../stores/alerts/actions';
 import { showTransientAlert } from '../../stores/alerts/actionCreators';
+import TextAreaMimic from '../TextAreaMimic';
 
 interface Props extends RouteComponentProps {
   create?: boolean;
@@ -218,17 +219,21 @@ class CompanyProps extends React.Component<Props, State> {
             />
           </Form.Group>
           <Form.Group widths="equal">
-            <Form.Field disabled={!editing} fluid>
+            <Form.Field fluid>
               {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
               <label htmlFor="form-input-description">
                 Description
               </label>
-              <TextArea
-                id="form-input-description"
-                value={comments}
-                onChange={(e) => this.setState({ comments: e.target.value })}
-                placeholder="Description"
-              />
+              {editing ? (
+                <TextArea
+                  id="form-input-description"
+                  value={comments}
+                  onChange={(e) => this.setState({ comments: e.target.value })}
+                  placeholder="Description"
+                />
+              ) : (
+                <TextAreaMimic content={comments} />
+              )}
             </Form.Field>
             <Form.Field>
               {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}

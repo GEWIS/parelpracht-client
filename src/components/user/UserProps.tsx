@@ -16,6 +16,7 @@ import { RootState } from '../../stores/store';
 import PropsButtons from '../PropsButtons';
 import { SingleEntities } from '../../stores/single/single';
 import { getSingle } from '../../stores/single/selectors';
+import TextAreaMimic from '../TextAreaMimic';
 
 interface Props extends RouteComponentProps {
   create?: boolean;
@@ -421,14 +422,18 @@ class UserProps extends React.Component<Props, State> {
             <label htmlFor="form-input-comment">
               Comments
             </label>
-            <TextArea
-              id="form-delivery-spec-english"
-              value={comment}
-              onChange={
-                (e) => this.setState({ comment: e.target.value })
-              }
-              placeholder="Comment"
-            />
+            {editing ? (
+              <TextArea
+                id="form-delivery-spec-english"
+                value={comment}
+                onChange={
+                  (e) => this.setState({ comment: e.target.value })
+                }
+                placeholder="Comment"
+              />
+            ) : (
+              <TextAreaMimic content={comment} />
+            )}
           </Form.Field>
         </Form>
       </>

@@ -9,6 +9,7 @@ import { RootState } from '../../stores/store';
 import { getSummary } from '../../stores/summaries/selectors';
 import { SummaryCollections } from '../../stores/summaries/summaries';
 import ProductSelector from '../product/ProductSelector';
+import TextAreaMimic from '../TextAreaMimic';
 
 interface Props {
   create?: boolean;
@@ -160,19 +161,23 @@ class ProductInstanceProps extends React.Component<Props, State> {
               </Input>
             </Form.Field>
           </Form.Group>
-          <Form.Field disabled={!editing}>
+          <Form.Field>
             {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
             <label htmlFor="form-input-comments">
               Comments
             </label>
-            <TextArea
-              id="form-delivery-spec-english"
-              value={comments}
-              onChange={
-                (e) => this.setState({ comments: e.target.value })
-              }
-              placeholder="Comments"
-            />
+            {editing ? (
+              <TextArea
+                id="form-delivery-spec-english"
+                value={comments}
+                onChange={
+                  (e) => this.setState({ comments: e.target.value })
+                }
+                placeholder="Comments"
+              />
+            ) : (
+              <TextAreaMimic content={comments} />
+            )}
           </Form.Field>
         </Form>
       </>

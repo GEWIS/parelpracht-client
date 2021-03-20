@@ -13,6 +13,7 @@ import { formatStatus } from '../../helpers/activity';
 import { createSingleStatus } from '../../stores/single/actionCreators';
 import { DocumentStatus } from './DocumentStatus';
 import { createInstanceStatusSingle } from '../../stores/productinstance/actionCreator';
+import TextAreaMimic from '../TextAreaMimic';
 
 interface Props {
   create?: boolean;
@@ -125,19 +126,23 @@ class DocumentStatusProps extends React.Component<Props, State> {
         </h2>
 
         <Form style={{ marginTop: '2em' }}>
-          <Form.Field disabled={!editing}>
+          <Form.Field>
             {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
             <label htmlFor="form-input-description">
               Comments
             </label>
-            <TextArea
-              id="form-delivery-spec-english"
-              value={description}
-              onChange={
-                (e) => this.setState({ description: e.target.value })
-              }
-              placeholder="Comments"
-            />
+            {editing ? (
+              <TextArea
+                id="form-delivery-spec-english"
+                value={description}
+                onChange={
+                  (e) => this.setState({ description: e.target.value })
+                }
+                placeholder="Comments"
+              />
+            ) : (
+              <TextAreaMimic content={description} />
+            )}
           </Form.Field>
         </Form>
       </>
