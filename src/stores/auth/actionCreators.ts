@@ -24,8 +24,10 @@ export function authSetProfile(profile: User): AuthSetProfile {
   return { type: AuthActionType.SetProfile, profile };
 }
 
-export function authLogin(email: string, password: string): AuthLogin {
-  return { type: AuthActionType.Login, email, password };
+export function authLogin(email: string, password: string, rememberMe: boolean): AuthLogin {
+  return {
+    type: AuthActionType.Login, email, password, rememberMe,
+  };
 }
 
 export function authLogout(): AuthLogout {

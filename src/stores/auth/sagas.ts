@@ -45,6 +45,7 @@ function* login(action: AuthLogin) {
     new LoginParams({
       email: action.email,
       password: action.password,
+      rememberMe: action.rememberMe,
     }));
 
   yield put(authFetchStatus());

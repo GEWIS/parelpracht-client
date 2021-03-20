@@ -11673,6 +11673,7 @@ export interface IPartial_CategoryParams_ {
 export class LoginParams implements ILoginParams {
     email?: string;
     password?: string;
+    rememberMe?: boolean;
 
     constructor(data?: ILoginParams) {
         if (data) {
@@ -11687,6 +11688,7 @@ export class LoginParams implements ILoginParams {
         if (_data) {
             this.email = _data["email"];
             this.password = _data["password"];
+            this.rememberMe = _data["rememberMe"];
         }
     }
 
@@ -11701,6 +11703,7 @@ export class LoginParams implements ILoginParams {
         data = typeof data === 'object' ? data : {};
         data["email"] = this.email;
         data["password"] = this.password;
+        data["rememberMe"] = this.rememberMe;
         return data; 
     }
 }
@@ -11708,6 +11711,7 @@ export class LoginParams implements ILoginParams {
 export interface ILoginParams {
     email?: string;
     password?: string;
+    rememberMe?: boolean;
 }
 
 export class Body implements IBody {

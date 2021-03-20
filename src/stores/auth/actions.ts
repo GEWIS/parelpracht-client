@@ -36,6 +36,7 @@ export type AuthSetProfile = Action<AuthActionType.SetProfile> & {
 export type AuthLogin = Action<AuthActionType.Login> & {
   email: string;
   password: string;
+  rememberMe: boolean;
 };
 export type AuthLogout = Action<AuthActionType.Logout>;
 
