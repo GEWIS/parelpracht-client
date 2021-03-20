@@ -1,5 +1,7 @@
 import { User, UserSummary } from '../../clients/server.generated';
 import { formatContactName } from '../../helpers/contact';
+import { getSingle } from '../single/selectors';
+import { SingleEntities } from '../single/single';
 import { RootState } from '../store';
 import { getSummary } from '../summaries/selectors';
 import { SummaryCollections } from '../summaries/summaries';
@@ -42,4 +44,11 @@ export function getUserAvatar(state: RootState, id: number): string {
   );
   if (user === undefined) return '';
   return user.avatarFilename;
+}
+
+// Returns whether the single user inspected is the authenticated user.
+// In other words: if the user is viewing his/her profile page
+export function isProfile(state: RootState): boolean {
+  const user = getSingle<User>(state, SingleEntities.User).data;
+  return user?.id === state.auth.profile?.id;
 }
