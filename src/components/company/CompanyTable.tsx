@@ -1,7 +1,9 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
-import { Table } from 'semantic-ui-react';
+import {
+  Dimmer, Loader, Segment, Table,
+} from 'semantic-ui-react';
 import { Company } from '../../clients/server.generated';
 import TablePagination from '../TablePagination';
 import { RootState } from '../../stores/store';
@@ -13,6 +15,7 @@ import { countFetched, countTotal, getTable } from '../../stores/tables/selector
 import { Tables } from '../../stores/tables/tables';
 import { CompanyRow } from './CompanyRow';
 import CompanyStatusFilter from '../tablefilters/CompanyStatusFilter';
+import ResourceStatus from '../../stores/resourceStatus';
 
 interface Props {
   companies: Company[];
@@ -22,6 +25,7 @@ interface Props {
   fetched: number;
   skip: number;
   take: number;
+  status: ResourceStatus;
 
   fetchCompanies: () => void;
   setTableFilter: (filter: { column: string, values: any[] }) => void;
@@ -34,7 +38,7 @@ interface Props {
 
 function CompaniesTable({
   companies, fetchCompanies, column, direction, changeSort, setSort, setTableFilter,
-  total, fetched, skip, take,
+  total, fetched, skip, take, status,
   prevPage, nextPage, setTake,
 }: Props) {
   useEffect(() => {
@@ -42,6 +46,55 @@ function CompaniesTable({
     setTableFilter({ column: 'status', values: ['ACTIVE'] });
     fetchCompanies();
   }, []);
+
+  if (status === ResourceStatus.FETCHING || status === ResourceStatus.SAVING) {
+    return (
+      <>
+        <Segment>
+          <Dimmer active inverted>
+            <Loader inverted />
+          </Dimmer>
+          <Table singleLine selectable attached sortable fixed>
+            <Table.Header>
+              <Table.Row>
+                <Table.HeaderCell
+                  sorted={column === 'name' ? direction : undefined}
+                  onClick={() => changeSort('name')}
+                >
+                  Name
+                </Table.HeaderCell>
+                <Table.HeaderCell
+                  sorted={column === 'status' ? direction : undefined}
+                  onClick={() => changeSort('status')}
+                >
+                  Status
+                  <CompanyStatusFilter />
+                </Table.HeaderCell>
+                <Table.HeaderCell
+                  sorted={column === 'updatedAt' ? direction : undefined}
+                  onClick={() => changeSort('updatedAt')}
+                >
+                  Last Update
+                </Table.HeaderCell>
+              </Table.Row>
+            </Table.Header>
+            <Table.Body>
+              {companies.map((x) => <CompanyRow company={x} key={x.id} />)}
+            </Table.Body>
+          </Table>
+          <TablePagination
+            countTotal={total}
+            countFetched={fetched}
+            skip={skip}
+            take={take}
+            nextPage={nextPage}
+            prevPage={prevPage}
+            setTake={setTake}
+          />
+        </Segment>
+      </>
+    );
+  }
 
   return (
     <>
@@ -91,6 +144,7 @@ const mapStateToProps = (state: RootState) => {
   return {
     total: countTotal(state, Tables.Companies),
     fetched: countFetched(state, Tables.Companies),
+    status: companyTable.status,
     skip: companyTable.skip,
     take: companyTable.take,
     companies: companyTable.data,
