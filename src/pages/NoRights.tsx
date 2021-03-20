@@ -3,7 +3,7 @@ import {
   Container, Grid, Header, Icon, Segment, Image,
 } from 'semantic-ui-react';
 
-function NotFound() {
+function NoRights() {
   return (
     <>
       <Segment style={{ backgroundColor: '#eee' }} vertical basic>
@@ -14,7 +14,7 @@ function NotFound() {
                 <Icon name="hand paper" />
                 <Header.Content>
                   <h1>
-                    404: Could not find this page
+                    Stop, hammertime!
                   </h1>
                 </Header.Content>
               </Header>
@@ -29,9 +29,10 @@ function NotFound() {
           </Grid.Column>
           <Grid.Column textAlign="left" verticalAlign="middle" width="12">
             <h1 style={{ fontSize: '70px' }}>
-              There is no money here,
-              <br />
-              keep looking!
+              Sorry, you don&apos;t have the rights to view this page!
+            </h1>
+            <h1 style={{ fontSize: '40px', color: '#737373' }}>
+              Please contact your administrator.
             </h1>
           </Grid.Column>
         </Grid>
@@ -40,4 +41,4 @@ function NotFound() {
   );
 }
 
-export default NotFound;
+export default NoRights;

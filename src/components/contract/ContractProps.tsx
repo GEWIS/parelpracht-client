@@ -1,7 +1,7 @@
 import React, { ChangeEvent } from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
-import { Form, Input } from 'semantic-ui-react';
+import { Form, Input, TextArea } from 'semantic-ui-react';
 import validator from 'validator';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import {
@@ -250,7 +250,7 @@ class ContractProps extends React.Component<Props, State> {
             disabled={!editing}
             fluid
             id="form-input-comments"
-            control={Input}
+            control={TextArea}
             label="Comments"
             value={comments}
             onChange={(e: ChangeEvent<HTMLInputElement>) => this.setState({

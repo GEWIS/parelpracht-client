@@ -16,7 +16,8 @@ function LoginPage() {
             <Segment>
               <Image src="./gewis-logo.png" size="small" centered />
               <Header as="h1">
-                ParelPracht
+                <Image src="./ParelPracht-black.png" size="mini" style={{ marginBottom: '5.5px', marginRight: '-3px', paddingRight: '-4px' }} />
+                <span style={{ marginBottom: '0px', verticalAlign: 'bottom', fontFamily: 'Recursive' }}>arelPracht</span>
               </Header>
               <LoginForm />
             </Segment>
