@@ -2,13 +2,14 @@ import React from 'react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { Icon, Table } from 'semantic-ui-react';
 import { connect } from 'react-redux';
-import { ProductInstance } from '../../clients/server.generated';
+import { ProductInstance, Roles } from '../../clients/server.generated';
 import { RootState } from '../../stores/store';
 import { getProductName } from '../../stores/product/selectors';
 import { formatPriceDiscount, formatPriceFull } from '../../helpers/monetary';
 import ContractLink from '../contract/ContractLink';
 import DeleteButton from '../DeleteButton';
 import ResourceStatus from '../../stores/resourceStatus';
+import AuthorizationComponent from '../AuthorizationComponent';
 
 interface Props extends RouteComponentProps {
   productInstance: ProductInstance;
@@ -64,7 +65,9 @@ class InvoiceProductRow extends React.Component<Props, State> {
           <ContractLink id={productInstance.contractId} showId showName={false} />
         </Table.Cell>
         <Table.Cell collapsing>
-          <DeleteButton remove={this.removeProduct} entity="InvoiceProduct" status={status} canDelete={canDelete} size="mini" color="red" />
+          <AuthorizationComponent roles={[Roles.GENERAL, Roles.ADMIN]} notFound={false}>
+            <DeleteButton remove={this.removeProduct} entity="InvoiceProduct" status={status} canDelete={canDelete} size="mini" color="red" />
+          </AuthorizationComponent>
         </Table.Cell>
       </Table.Row>
     );

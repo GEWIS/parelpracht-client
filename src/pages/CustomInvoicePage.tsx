@@ -11,11 +11,13 @@ import {
   Gender,
   Language,
   ReturnFileType,
+  Roles,
 } from '../clients/server.generated';
 import CustomInvoiceProducts from '../components/custominvoice/CustomInvoiceProducts';
 import CustomInvoiceProps from '../components/custominvoice/CustomInvoiceProps';
 import CustomInvoiceRecipient from '../components/custominvoice/CustomInvoiceRecipient';
 import { FilesClient } from '../clients/filesClient';
+import AuthorizationComponent from '../components/AuthorizationComponent';
 
 interface State {
   language: Language;
@@ -144,7 +146,7 @@ class CustomInvoicePage extends React.Component<RouteComponentProps, State> {
     } = this.state;
 
     return (
-      <>
+      <AuthorizationComponent roles={[Roles.FINANCIAL, Roles.ADMIN]} notFound>
         <Segment style={{ backgroundColor: '#eee' }} vertical basic>
           <Container style={{ paddingTop: '1em' }}>
             <Grid columns={2}>
@@ -218,7 +220,7 @@ class CustomInvoicePage extends React.Component<RouteComponentProps, State> {
             </Grid.Row>
           </Grid>
         </Container>
-      </>
+      </AuthorizationComponent>
     );
   }
 }

@@ -4,13 +4,14 @@ import { Dispatch } from 'redux';
 import {
   Grid, Header, Icon, Loader, Placeholder, Segment,
 } from 'semantic-ui-react';
-import { Company } from '../../clients/server.generated';
+import { Company, Roles } from '../../clients/server.generated';
 import { formatStatus } from '../../helpers/activity';
 import ResourceStatus from '../../stores/resourceStatus';
 import { fetchSingle } from '../../stores/single/actionCreators';
 import { getSingle } from '../../stores/single/selectors';
 import { SingleEntities } from '../../stores/single/single';
 import { RootState } from '../../stores/store';
+import AuthorizationComponent from '../AuthorizationComponent';
 import LogoAvatarModal from '../files/LogoAvatarModal';
 
 interface Props {
@@ -54,13 +55,18 @@ function CompanySummary(props: Props) {
               </Header.Content>
             </Grid.Column>
             <Grid.Column>
-              <LogoAvatarModal
-                entity={SingleEntities.Company}
-                entityId={company.id}
-                entityName={company.name}
-                fileName={company.logoFilename}
-                fetchEntity={fetchCompany}
-              />
+              <AuthorizationComponent
+                roles={[Roles.GENERAL, Roles.ADMIN]}
+                notFound={false}
+              >
+                <LogoAvatarModal
+                  entity={SingleEntities.Company}
+                  entityId={company.id}
+                  entityName={company.name}
+                  fileName={company.logoFilename}
+                  fetchEntity={fetchCompany}
+                />
+              </AuthorizationComponent>
             </Grid.Column>
           </Grid.Row>
         </Grid>

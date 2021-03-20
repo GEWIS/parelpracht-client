@@ -13,6 +13,9 @@ import DocumentStatusModal from './DocumentStatusModal';
 import { SingleEntities } from '../../stores/single/single';
 import { DocumentStatus } from './DocumentStatus';
 import ResourceStatus from '../../stores/resourceStatus';
+import { Roles } from '../../clients/server.generated';
+import { RootState } from '../../stores/store';
+import { authedUserHasRole } from '../../stores/auth/selectors';
 
 /**
  * Definition of used variables
@@ -31,6 +34,10 @@ interface Props extends RouteComponentProps {
   cancelled: boolean;
 
   resourceStatus: ResourceStatus;
+
+  hasRole: (role: Roles) => boolean;
+
+  roles: Roles[];
 }
 
 interface State {
@@ -61,6 +68,8 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
       documentType,
       resourceStatus,
       parentId,
+      hasRole,
+      roles,
     } = this.props;
     const { stepModalOpen } = this.state;
 
@@ -186,7 +195,7 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
       }
 
       // the status of the document has not been reached yet and can be completed
-      if (nextStatus.includes(status)) {
+      if (nextStatus.includes(status) && status !== DocumentStatus.FINISHED) {
         return (
           <>
             <Step
@@ -196,6 +205,7 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
                   stepModalOpen: true,
                 });
               }}
+              disabled={!(roles.some(hasRole))}
             >
               <Step.Content>
                 <Step.Title>
@@ -251,6 +261,12 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
   }
 }
 
+const mapStateToProps = (state: RootState) => {
+  return {
+    hasRole: (role: Roles): boolean => authedUserHasRole(state, role),
+  };
+};
+
 const mapDispatchToProps = () => ({});
 
-export default withRouter(connect(null, mapDispatchToProps)(FinancialDocumentProgress));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(FinancialDocumentProgress));

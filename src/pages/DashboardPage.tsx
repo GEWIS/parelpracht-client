@@ -4,13 +4,12 @@ import {
   Container, Grid, Header, Icon, Segment,
 } from 'semantic-ui-react';
 import { connect } from 'react-redux';
-import { Roles, User } from '../clients/server.generated';
+import { User } from '../clients/server.generated';
 import { RootState } from '../stores/store';
 import DashboardInvoices from '../components/dashboard/DashboardInvoices';
 import DashboardContracts from '../components/dashboard/DashboardContracts';
 import DashboardProductInstanceStatusGraph from '../components/dashboard/DashboardProductInstanceStatusGraph';
 import DashboardContractedCategoryGraph from '../components/dashboard/DashboardContractedCategoryGraph';
-import AuthorizationComponent from '../components/AuthorizationComponent';
 
 interface Props extends RouteComponentProps {
   // eslint-disable-next-line react/no-unused-prop-types

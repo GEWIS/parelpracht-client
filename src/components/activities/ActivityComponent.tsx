@@ -14,9 +14,10 @@ import { deleteActivitySingle } from '../../stores/single/actionCreators';
 import UserLinkWithoutImage from '../user/UserLinkWithoutImage';
 import { deleteInstanceActivitySingle } from '../../stores/productinstance/actionCreator';
 import {
-  ActivityType, ContractStatus, InvoiceStatus, ProductInstanceStatus,
+  ActivityType, ContractStatus, InvoiceStatus, ProductInstanceStatus, Roles,
 } from '../../clients/server.generated';
 import UserAvatar from '../user/UserAvatar';
+import AuthorizationComponent from '../AuthorizationComponent';
 
 interface Props extends RouteComponentProps {
   activity: GeneralActivity;
@@ -65,10 +66,12 @@ class ActivityComponent extends React.Component<Props> {
       || activity.subType === ProductInstanceStatus.NOTDELIVERED))) {
       deleteButton = (
         <>
-          {/* eslint-disable-next-line */}
-          <a onClick={() => this.deleteComment()}>
-            Delete
-          </a>
+          <AuthorizationComponent roles={[Roles.ADMIN]} notFound={false}>
+            {/* eslint-disable-next-line */}
+            <a onClick={() => this.deleteComment()}>
+              Delete
+            </a>
+          </AuthorizationComponent>
         </>
       );
     }

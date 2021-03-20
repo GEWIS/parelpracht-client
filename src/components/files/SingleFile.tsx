@@ -6,7 +6,7 @@ import {
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import {
-  Partial_FileParams,
+  Partial_FileParams, Roles,
 } from '../../clients/server.generated';
 import { FilesClient } from '../../clients/filesClient';
 import { formatLastUpdate } from '../../helpers/timestamp';
@@ -14,6 +14,7 @@ import { deleteFileSingle, saveSingleFile } from '../../stores/single/actionCrea
 import { SingleEntities } from '../../stores/single/single';
 import { GeneralFile } from './GeneralFile';
 import ResourceStatus from '../../stores/resourceStatus';
+import AuthorizationComponent from '../AuthorizationComponent';
 
 interface Props extends RouteComponentProps {
   file: GeneralFile;
@@ -206,32 +207,34 @@ class SingleFile extends React.Component<Props, State> {
         <Table.Cell>{file!.downloadName}</Table.Cell>
         <Table.Cell>{formatLastUpdate(file!.updatedAt)}</Table.Cell>
         <Table.Cell textAlign="right" collapsing>
-          <Popup
-            trigger={(
-              <Button
-                icon="trash"
-                negative
-                loading={status === ResourceStatus.DELETING}
-              />
+          <AuthorizationComponent roles={[Roles.GENERAL, Roles.ADMIN]} notFound={false}>
+            <Popup
+              trigger={(
+                <Button
+                  icon="trash"
+                  negative
+                  loading={status === ResourceStatus.DELETING}
+                />
             )}
-            on="click"
-            content={(
-              <Button
-                color="red"
-                onClick={() => this.remove()}
-                loading={status === ResourceStatus.DELETING}
-                style={{ marginTop: '0.5em' }}
-              >
-                Delete file
-              </Button>
+              on="click"
+              content={(
+                <Button
+                  color="red"
+                  onClick={() => this.remove()}
+                  loading={status === ResourceStatus.DELETING}
+                  style={{ marginTop: '0.5em' }}
+                >
+                  Delete file
+                </Button>
             )}
-            header="Are you sure you want to delete this file?"
-          />
-          <Button
-            icon="pencil"
-            primary
-            onClick={() => this.setState({ editing: true })}
-          />
+              header="Are you sure you want to delete this file?"
+            />
+            <Button
+              icon="pencil"
+              primary
+              onClick={() => this.setState({ editing: true })}
+            />
+          </AuthorizationComponent>
           <Button
             icon="download"
             primary

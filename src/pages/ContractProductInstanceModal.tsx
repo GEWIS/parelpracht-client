@@ -6,7 +6,7 @@ import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import {
-  Contract, ProductInstance, ProductInstanceParams, ProductInstanceStatus,
+  Contract, ProductInstance, ProductInstanceParams, ProductInstanceStatus, Roles,
 } from '../clients/server.generated';
 import { fetchSingle } from '../stores/single/actionCreators';
 import { RootState } from '../stores/store';
@@ -119,6 +119,7 @@ class ContractProductInstanceModal extends React.Component<Props> {
             activities={productInstance.activities as GeneralActivity[]}
             documentType={SingleEntities.ProductInstance}
             resourceStatus={status}
+            roles={[Roles.ADMIN, Roles.GENERAL]}
           />
         </Segment>,
         <Segment style={{ margin: '2em 1em 1em' }} key="seg-2">

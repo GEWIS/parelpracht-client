@@ -24,6 +24,7 @@ import InvoiceList from '../components/invoice/InvoiceList';
 import CompanyContractedProductsChart from '../components/company/CompanyContractedProductsChart';
 import FilesList from '../components/files/FilesList';
 import AuthorizationComponent from '../components/AuthorizationComponent';
+import { authedUserHasRole } from '../stores/auth/selectors';
 
 interface Props extends RouteComponentProps<{ companyId: string }> {
   company: Company | undefined;
@@ -32,6 +33,7 @@ interface Props extends RouteComponentProps<{ companyId: string }> {
   fetchCompany: (id: number) => void;
   clearCompany: () => void;
   showTransientAlert: (alert: TransientAlert) => void;
+  hasRole: (role: Roles) => boolean;
 }
 
 class SingleCompanyPage extends React.Component<Props> {
@@ -56,7 +58,9 @@ class SingleCompanyPage extends React.Component<Props> {
   }
 
   public render() {
-    const { company, fetchCompany, status } = this.props;
+    const {
+      company, fetchCompany, status, hasRole,
+    } = this.props;
 
     if (company === undefined) {
       return (
@@ -96,7 +100,10 @@ class SingleCompanyPage extends React.Component<Props> {
           </Tab.Pane>
         ),
       },
-      {
+    ];
+
+    if (hasRole(Roles.ADMIN) || hasRole(Roles.GENERAL) || hasRole(Roles.AUDIT)) {
+      panes.push({
         menuItem: 'Activities',
         render: () => (
           <Tab.Pane>
@@ -108,8 +115,9 @@ class SingleCompanyPage extends React.Component<Props> {
             />
           </Tab.Pane>
         ),
-      },
-      {
+      });
+
+      panes.push({
         menuItem: 'Files',
         render: () => (
           <Tab.Pane>
@@ -122,16 +130,19 @@ class SingleCompanyPage extends React.Component<Props> {
             />
           </Tab.Pane>
         ),
-      },
-      {
+      });
+    }
+
+    if (hasRole(Roles.ADMIN) || hasRole(Roles.GENERAL)) {
+      panes.push({
         menuItem: 'Insights',
         render: () => (
           // <Tab.Pane> is set in this tab, because it needs to fetch data and
           /// therefore needs to show a loading animation
           <CompanyContractedProductsChart company={company} />
         ),
-      },
-    ];
+      });
+    }
 
     return (
       <AuthorizationComponent
@@ -167,6 +178,7 @@ const mapStateToProps = (state: RootState) => {
   return {
     company: getSingle<Company>(state, SingleEntities.Company).data,
     status: getSingle<Company>(state, SingleEntities.Company).status,
+    hasRole: (role: Roles): boolean => authedUserHasRole(state, role),
   };
 };
 

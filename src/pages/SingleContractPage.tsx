@@ -5,7 +5,7 @@ import {
 } from 'semantic-ui-react';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
-import { Contract } from '../clients/server.generated';
+import { Contract, Roles } from '../clients/server.generated';
 import { clearSingle, fetchSingle } from '../stores/single/actionCreators';
 import { RootState } from '../stores/store';
 import ContractProps from '../components/contract/ContractProps';
@@ -21,6 +21,7 @@ import { showTransientAlert } from '../stores/alerts/actionCreators';
 import { TransientAlert } from '../stores/alerts/actions';
 import FilesList from '../components/files/FilesList';
 import GenerateContractModal from '../components/files/GenerateContractModal';
+import { authedUserHasRole } from '../stores/auth/selectors';
 
 interface Props extends RouteComponentProps<{ contractId: string }> {
   contract: Contract | undefined;
@@ -29,6 +30,7 @@ interface Props extends RouteComponentProps<{ contractId: string }> {
   fetchContract: (id: number) => void;
   clearContract: () => void;
   showTransientAlert: (alert: TransientAlert) => void;
+  hasRole: (role: Roles) => boolean;
 }
 
 class SingleContractPage extends React.Component<Props> {
@@ -53,7 +55,9 @@ class SingleContractPage extends React.Component<Props> {
   }
 
   public render() {
-    const { contract, fetchContract, status } = this.props;
+    const {
+      contract, fetchContract, status, hasRole,
+    } = this.props;
 
     if (contract === undefined) {
       return (
@@ -74,7 +78,24 @@ class SingleContractPage extends React.Component<Props> {
           </Tab.Pane>
         ),
       },
-      {
+    ];
+
+    if (hasRole(Roles.ADMIN) || hasRole(Roles.GENERAL) || hasRole(Roles.AUDIT)) {
+      panes.push({
+        menuItem: 'Activities',
+        render: () => (
+          <Tab.Pane>
+            <ActivitiesList
+              activities={contract.activities as GeneralActivity[]}
+              componentId={contract.id}
+              componentType={SingleEntities.Contract}
+              resourceStatus={status}
+            />
+          </Tab.Pane>
+        ),
+      });
+
+      panes.push({
         menuItem: 'Files',
         render: () => (
           <Tab.Pane>
@@ -88,26 +109,13 @@ class SingleContractPage extends React.Component<Props> {
                   contractId={contract.id}
                   fetchContract={fetchContract}
                 />
-              )}
+                )}
               status={status}
             />
           </Tab.Pane>
         ),
-      },
-      {
-        menuItem: 'Activities',
-        render: () => (
-          <Tab.Pane>
-            <ActivitiesList
-              activities={contract.activities as GeneralActivity[]}
-              componentId={contract.id}
-              componentType={SingleEntities.Contract}
-              resourceStatus={status}
-            />
-          </Tab.Pane>
-        ),
-      },
-    ];
+      });
+    }
 
     return (
       <Container style={{ paddingTop: '2em' }}>
@@ -127,6 +135,7 @@ class SingleContractPage extends React.Component<Props> {
                 activities={contract.activities as GeneralActivity[]}
                 documentType={SingleEntities.Contract}
                 resourceStatus={status}
+                roles={[Roles.ADMIN, Roles.GENERAL]}
               />
             </Segment>
           </Grid.Row>
@@ -150,6 +159,7 @@ const mapStateToProps = (state: RootState) => {
   return {
     contract: getSingle<Contract>(state, SingleEntities.Contract).data,
     status: getSingle<Contract>(state, SingleEntities.Contract).status,
+    hasRole: (role: Roles): boolean => authedUserHasRole(state, role),
   };
 };
 

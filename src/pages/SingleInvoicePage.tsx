@@ -6,7 +6,7 @@ import {
 } from 'semantic-ui-react';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
-import { Invoice } from '../clients/server.generated';
+import { Invoice, Roles } from '../clients/server.generated';
 import { RootState } from '../stores/store';
 import ResourceStatus from '../stores/resourceStatus';
 import InvoiceSummary from '../components/invoice/InvoiceSummary';
@@ -20,6 +20,8 @@ import FinancialDocumentProgress from '../components/activities/FinancialDocumen
 import InvoiceProductList from '../components/invoice/InvoiceProductList';
 import FilesList from '../components/files/FilesList';
 import GenerateInvoiceModal from '../components/files/GenerateInvoiceModal';
+import AuthorizationComponent from '../components/AuthorizationComponent';
+import { authedUserHasRole } from '../stores/auth/selectors';
 
 interface Props extends RouteComponentProps<{ invoiceId: string }> {
   invoice: Invoice | undefined;
@@ -27,6 +29,7 @@ interface Props extends RouteComponentProps<{ invoiceId: string }> {
 
   fetchInvoice: (id: number) => void;
   clearInvoice: () => void;
+  hasRole: (role: Roles) => boolean;
 }
 
 class SingleInvoicePage extends React.Component<Props> {
@@ -38,7 +41,9 @@ class SingleInvoicePage extends React.Component<Props> {
   }
 
   public render() {
-    const { invoice, fetchInvoice, status } = this.props;
+    const {
+      invoice, fetchInvoice, status, hasRole,
+    } = this.props;
 
     if (invoice === undefined) {
       return (
@@ -60,7 +65,11 @@ class SingleInvoicePage extends React.Component<Props> {
           </Tab.Pane>
         ),
       },
-      {
+    ];
+
+    if (hasRole(Roles.GENERAL)
+    || hasRole(Roles.ADMIN) || hasRole(Roles.AUDIT) || hasRole(Roles.FINANCIAL)) {
+      panes.push({
         menuItem: 'Files',
         render: () => (
           <Tab.Pane>
@@ -79,8 +88,8 @@ class SingleInvoicePage extends React.Component<Props> {
             />
           </Tab.Pane>
         ),
-      },
-      {
+      });
+      panes.push({
         menuItem: 'Activities',
         render: () => (
           <Tab.Pane>
@@ -92,42 +101,48 @@ class SingleInvoicePage extends React.Component<Props> {
             />
           </Tab.Pane>
         ),
-      },
-    ];
+      });
+    }
 
     return (
-      <Container style={{ paddingTop: '2em' }}>
-        <Breadcrumb
-          icon="right angle"
-          sections={[
-            { key: 'Invoices', content: <NavLink to="/invoice">Invoices</NavLink> },
-            { key: 'Invoice', content: invoice.id, active: true },
-          ]}
-        />
-        <InvoiceSummary />
-        <Grid rows={2}>
-          <Grid.Row centered columns={1} style={{ paddingLeft: '1em', paddingRight: '1em' }}>
-            <Segment secondary>
-              <FinancialDocumentProgress
-                documentId={invoice.id}
-                activities={invoice.activities as GeneralActivity[]}
-                documentType={SingleEntities.Invoice}
-                resourceStatus={status}
-              />
-            </Segment>
-          </Grid.Row>
-          <Grid.Row columns={2}>
-            <Grid.Column width={10}>
-              <Tab panes={panes} menu={{ pointing: true, inverted: true }} />
-            </Grid.Column>
-            <Grid.Column width={6}>
+      <AuthorizationComponent
+        roles={[Roles.GENERAL, Roles.FINANCIAL, Roles.AUDIT, Roles.ADMIN]}
+        notFound
+      >
+        <Container style={{ paddingTop: '2em' }}>
+          <Breadcrumb
+            icon="right angle"
+            sections={[
+              { key: 'Invoices', content: <NavLink to="/invoice">Invoices</NavLink> },
+              { key: 'Invoice', content: invoice.id, active: true },
+            ]}
+          />
+          <InvoiceSummary />
+          <Grid rows={2}>
+            <Grid.Row centered columns={1} style={{ paddingLeft: '1em', paddingRight: '1em' }}>
               <Segment secondary>
-                <InvoiceProps invoice={invoice} />
+                <FinancialDocumentProgress
+                  documentId={invoice.id}
+                  activities={invoice.activities as GeneralActivity[]}
+                  documentType={SingleEntities.Invoice}
+                  resourceStatus={status}
+                  roles={[Roles.ADMIN, Roles.GENERAL, Roles.FINANCIAL]}
+                />
               </Segment>
-            </Grid.Column>
-          </Grid.Row>
-        </Grid>
-      </Container>
+            </Grid.Row>
+            <Grid.Row columns={2}>
+              <Grid.Column width={10}>
+                <Tab panes={panes} menu={{ pointing: true, inverted: true }} />
+              </Grid.Column>
+              <Grid.Column width={6}>
+                <Segment secondary>
+                  <InvoiceProps invoice={invoice} />
+                </Segment>
+              </Grid.Column>
+            </Grid.Row>
+          </Grid>
+        </Container>
+      </AuthorizationComponent>
     );
   }
 }
@@ -136,6 +151,7 @@ const mapStateToProps = (state: RootState) => {
   return {
     invoice: getSingle<Invoice>(state, SingleEntities.Invoice).data,
     status: getSingle<Invoice>(state, SingleEntities.Invoice).status,
+    hasRole: (role: Roles): boolean => authedUserHasRole(state, role),
   };
 };
 

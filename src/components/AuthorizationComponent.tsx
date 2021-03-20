@@ -12,7 +12,7 @@ interface Props {
   hasRole: (role: Roles) => boolean;
 }
 
-class Authorization extends React.Component<Props> {
+class AuthorizationComponent extends React.Component<Props> {
   render() {
     const {
       roles, notFound, hasRole, children,
@@ -36,4 +36,4 @@ const mapStateToProps = (state: RootState) => {
   };
 };
 
-export default connect(mapStateToProps)(Authorization);
+export default connect(mapStateToProps)(AuthorizationComponent);

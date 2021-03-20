@@ -6,11 +6,12 @@ import {
 } from 'semantic-ui-react';
 import _ from 'lodash';
 import ContractProductRow from './ContractProductRow';
-import { Contract, ContractStatus } from '../../clients/server.generated';
+import { Contract, ContractStatus, Roles } from '../../clients/server.generated';
 import { RootState } from '../../stores/store';
 import { formatPriceFull } from '../../helpers/monetary';
 import ContractInvoiceModal from '../../pages/ContractInvoiceModal';
 import { getContractStatus } from '../../stores/contract/selectors';
+import AuthorizationComponent from '../AuthorizationComponent';
 
 interface Props extends RouteComponentProps {
   contract: Contract;
@@ -82,24 +83,26 @@ class ContractProductList extends React.Component<Props, State> {
       <>
         <h3>
           Products
-          <Button
-            icon
-            labelPosition="left"
-            floated="right"
-            style={{ marginTop: '-0.5em' }}
-            basic
-            as={NavLink}
-            to={`${this.props.location.pathname}/product/new`}
-            disabled={!canChangeProducts}
-          >
-            <Icon name="plus" />
-            Add Product
-          </Button>
-          <ContractInvoiceModal
-            contract={contract}
-            productInstanceIds={selected}
-            clearSelection={this.clearSelection}
-          />
+          <AuthorizationComponent roles={[Roles.GENERAL, Roles.ADMIN]} notFound={false}>
+            <Button
+              icon
+              labelPosition="left"
+              floated="right"
+              style={{ marginTop: '-0.5em' }}
+              basic
+              as={NavLink}
+              to={`${this.props.location.pathname}/product/new`}
+              disabled={!canChangeProducts}
+            >
+              <Icon name="plus" />
+              Add Product
+            </Button>
+            <ContractInvoiceModal
+              contract={contract}
+              productInstanceIds={selected}
+              clearSelection={this.clearSelection}
+            />
+          </AuthorizationComponent>
 
         </h3>
         <Table compact>

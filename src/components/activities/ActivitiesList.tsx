@@ -8,6 +8,8 @@ import { GeneralActivity } from './GeneralActivity';
 import { SingleEntities } from '../../stores/single/single';
 import CreateCommentRow from './CreateCommentRow';
 import ResourceStatus from '../../stores/resourceStatus';
+import AuthorizationComponent from '../AuthorizationComponent';
+import { Roles } from '../../clients/server.generated';
 
 interface Props extends RouteComponentProps {
   activities: GeneralActivity[];
@@ -94,17 +96,19 @@ class ActivitiesList extends React.Component<Props, State> {
       <>
         <h3>
           Activities
-          <Button
-            icon
-            labelPosition="left"
-            floated="right"
-            style={{ marginTop: '-0.5em' }}
-            basic
-            onClick={() => this.setState({ creating: true })}
-          >
-            <Icon name="pencil" />
-            Write comment
-          </Button>
+          <AuthorizationComponent roles={[Roles.GENERAL, Roles.ADMIN]} notFound={false}>
+            <Button
+              icon
+              labelPosition="left"
+              floated="right"
+              style={{ marginTop: '-0.5em' }}
+              basic
+              onClick={() => this.setState({ creating: true })}
+            >
+              <Icon name="pencil" />
+              Write comment
+            </Button>
+          </AuthorizationComponent>
         </h3>
         {createRow}
         {activitiesList}

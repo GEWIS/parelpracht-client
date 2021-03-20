@@ -42,6 +42,7 @@ import ProductCategoriesCreatePage from './pages/ProductCategoriesCreatePage';
 import ProductCategoryModal from './pages/ProductCategoryModal';
 import CustomInvoicePage from './pages/CustomInvoicePage';
 import { authedUserHasRole } from './stores/auth/selectors';
+import AuthorizationComponent from './components/AuthorizationComponent';
 
 interface Props extends RouteComponentProps {
   // eslint-disable-next-line react/no-unused-prop-types
@@ -145,21 +146,27 @@ function Routes(props: Props) {
             <CompaniesPage />
           </Route>
           <Route path="/company/new" exact>
-            <CompaniesPage />
-            <CompaniesCreatePage />
+            <AuthorizationComponent roles={[Roles.ADMIN]} notFound>
+              <CompaniesPage />
+              <CompaniesCreatePage />
+            </AuthorizationComponent>
           </Route>
           <Route path="/company/:companyId" exact component={SingleCompanyPage} />
           <Route path="/company/:companyId/contact/new" exact>
-            <SingleCompanyPage />
-            <ContactModal create onCompanyPage />
+            <AuthorizationComponent roles={[Roles.GENERAL, Roles.ADMIN]} notFound>
+              <SingleCompanyPage />
+              <ContactModal create onCompanyPage />
+            </AuthorizationComponent>
           </Route>
           <Route path="/company/:companyId/contact/:contactId" exact>
             <SingleCompanyPage />
             <ContactModal onCompanyPage />
           </Route>
           <Route path="/company/:companyId/contract/new" exact>
-            <SingleCompanyPage />
-            <ContractModal />
+            <AuthorizationComponent roles={[Roles.GENERAL, Roles.ADMIN]} notFound>
+              <SingleCompanyPage />
+              <ContractModal />
+            </AuthorizationComponent>
           </Route>
 
           {/* Contacts */}
@@ -167,8 +174,10 @@ function Routes(props: Props) {
             <ContactsPage />
           </Route>
           <Route path="/contact/:contactId" exact>
-            <ContactsPage />
-            <ContactModal onCompanyPage={false} />
+            <AuthorizationComponent roles={[Roles.GENERAL, Roles.ADMIN, Roles.AUDIT]} notFound>
+              <ContactsPage />
+              <ContactModal onCompanyPage={false} />
+            </AuthorizationComponent>
           </Route>
 
           {/* Invoice */}
@@ -189,17 +198,26 @@ function Routes(props: Props) {
             <ContractsPage />
           </Route>
           <Route path="/contract/new" exact>
-            <ContractsPage />
-            <ContractModal />
+            <AuthorizationComponent roles={[Roles.GENERAL, Roles.ADMIN]} notFound={false}>
+              <ContractsPage />
+              <ContractModal />
+            </AuthorizationComponent>
           </Route>
           <Route path="/contract/:contractId" exact component={SingleContractPage} />
           <Route path="/contract/:contractId/product/new" exact>
-            <SingleContractPage />
-            <ContractProductInstanceModal create />
+            <AuthorizationComponent roles={[Roles.GENERAL, Roles.ADMIN]} notFound={false}>
+              <SingleContractPage />
+              <ContractProductInstanceModal create />
+            </AuthorizationComponent>
           </Route>
           <Route path="/contract/:contractId/product/:productInstanceId" exact>
-            <SingleContractPage />
-            <ContractProductInstanceModal />
+            <AuthorizationComponent
+              roles={[Roles.GENERAL, Roles.ADMIN, Roles.AUDIT]}
+              notFound={false}
+            >
+              <SingleContractPage />
+              <ContractProductInstanceModal />
+            </AuthorizationComponent>
           </Route>
 
           {/* Insights */}

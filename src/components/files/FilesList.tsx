@@ -2,10 +2,11 @@ import React from 'react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { Button, Icon, Table } from 'semantic-ui-react';
 import { SingleEntities } from '../../stores/single/single';
-import { ContractFile } from '../../clients/server.generated';
+import { ContractFile, Roles } from '../../clients/server.generated';
 import ResourceStatus from '../../stores/resourceStatus';
 import { GeneralFile } from './GeneralFile';
 import SingleFile from './SingleFile';
+import AuthorizationComponent from '../AuthorizationComponent';
 
 interface Props extends RouteComponentProps {
   files: GeneralFile[];
@@ -72,18 +73,20 @@ class FilesList extends React.Component<Props, State> {
       <>
         <h3>
           Files
-          <Button
-            icon
-            labelPosition="left"
-            floated="right"
-            style={{ marginTop: '-0.5em' }}
-            basic
-            onClick={() => this.setState({ creating: true })}
-          >
-            <Icon name="plus" />
-            Upload File
-          </Button>
-          {generateModal}
+          <AuthorizationComponent roles={[Roles.GENERAL, Roles.ADMIN]} notFound={false}>
+            <Button
+              icon
+              labelPosition="left"
+              floated="right"
+              style={{ marginTop: '-0.5em' }}
+              basic
+              onClick={() => this.setState({ creating: true })}
+            >
+              <Icon name="plus" />
+              Upload File
+            </Button>
+            {generateModal}
+          </AuthorizationComponent>
         </h3>
         <Table compact>
           <Table.Body>
