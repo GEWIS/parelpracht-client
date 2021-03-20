@@ -50,7 +50,7 @@ function CompaniesTable({
   if (status === ResourceStatus.FETCHING || status === ResourceStatus.SAVING) {
     return (
       <>
-        <Segment>
+        <Segment style={{ padding: '0px' }}>
           <Dimmer active inverted>
             <Loader inverted />
           </Dimmer>
