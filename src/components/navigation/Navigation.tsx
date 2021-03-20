@@ -14,7 +14,7 @@ function Navigation() {
       <Container>
         <Menu.Item as={NavLink} header to="/" exact>
           <Image
-            src="./ParelPracht-whitesvg.svg"
+            src="/ParelPracht-whitesvg.svg"
             width="26px"
             style={{
               marginBottom: '-6px', marginTop: '-10px', marginRight: '0px', paddingRight: '0px',
