@@ -87,6 +87,9 @@ function MegaTable({
                 <Table.HeaderCell>Details</Table.HeaderCell>
               </Table.Row>
             </Table.Header>
+            <Table.Body>
+              {companies.map((c) => <MegaTableRow company={c} key={c.id} />)}
+            </Table.Body>
           </Table>
           <TablePagination
             countTotal={total}
