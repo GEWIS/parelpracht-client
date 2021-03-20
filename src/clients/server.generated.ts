@@ -555,6 +555,151 @@ export class Client {
     }
 
     /**
+     * @param id ID of the product
+     * @return Ok
+     */
+    addPricing(id: number): Promise<ProductPricing> {
+        let url_ = this.baseUrl + "/product/{id}/pricing";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <RequestInit>{
+            method: "POST",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processAddPricing(_response);
+        });
+    }
+
+    protected processAddPricing(response: Response): Promise<ProductPricing> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = ProductPricing.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<ProductPricing>(<any>null);
+    }
+
+    /**
+     * @param id ID of the product
+     * @param body Description string and JSON table (nested array)
+     * @return Ok
+     */
+    updatePricing(id: number, body: Partial_PricingParams): Promise<ProductPricing> {
+        let url_ = this.baseUrl + "/product/{id}/pricing";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ = <RequestInit>{
+            body: content_,
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processUpdatePricing(_response);
+        });
+    }
+
+    protected processUpdatePricing(response: Response): Promise<ProductPricing> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = ProductPricing.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<ProductPricing>(<any>null);
+    }
+
+    /**
+     * @param id ID of the product
+     * @return No content
+     */
+    deletePricing(id: number): Promise<void> {
+        let url_ = this.baseUrl + "/product/{id}/pricing";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <RequestInit>{
+            method: "DELETE",
+            headers: {
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processDeletePricing(_response);
+        });
+    }
+
+    protected processDeletePricing(response: Response): Promise<void> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 204) {
+            return response.text().then((_responseText) => {
+            return;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<void>(<any>null);
+    }
+
+    /**
      * @param id Product id
      * @param body Skip and take to allow for pagination
      * @return Ok
@@ -5966,6 +6111,8 @@ export class Product implements IProduct {
     activities!: ProductActivity[];
     /** All files regarding this product */
     files!: ProductFile[];
+    /** Optional ProductPricing object */
+    pricing?: ProductPricing;
 
     constructor(data?: IProduct) {
         if (data) {
@@ -6017,6 +6164,7 @@ export class Product implements IProduct {
                 for (let item of _data["files"])
                     this.files!.push(ProductFile.fromJS(item));
             }
+            this.pricing = _data["pricing"] ? ProductPricing.fromJS(_data["pricing"]) : <any>undefined;
         }
     }
 
@@ -6062,6 +6210,7 @@ export class Product implements IProduct {
             for (let item of this.files)
                 data["files"].push(item.toJSON());
         }
+        data["pricing"] = this.pricing ? this.pricing.toJSON() : <any>undefined;
         return data; 
     }
 }
@@ -6108,6 +6257,8 @@ export interface IProduct {
     activities: ProductActivity[];
     /** All files regarding this product */
     files: ProductFile[];
+    /** Optional ProductPricing object */
+    pricing?: ProductPricing;
 }
 
 export class ProductCategory implements IProductCategory {
@@ -6517,8 +6668,6 @@ export class Company implements ICompany {
     status!: CompanyStatus;
     /** General phone number of the company */
     phoneNumber?: string;
-    /** Optional end date of the collaboration with this company */
-    endDate?: Date;
     /** Optional filename of a logo image */
     logoFilename!: string;
     /** Comments regarding the company */
@@ -6568,7 +6717,6 @@ export class Company implements ICompany {
             this.invoiceAddressCountry = _data["invoiceAddressCountry"];
             this.status = _data["status"];
             this.phoneNumber = _data["phoneNumber"];
-            this.endDate = _data["endDate"] ? new Date(_data["endDate"].toString()) : <any>undefined;
             this.logoFilename = _data["logoFilename"];
             this.comments = _data["comments"];
             if (Array.isArray(_data["contracts"])) {
@@ -6624,7 +6772,6 @@ export class Company implements ICompany {
         data["invoiceAddressCountry"] = this.invoiceAddressCountry;
         data["status"] = this.status;
         data["phoneNumber"] = this.phoneNumber;
-        data["endDate"] = this.endDate ? this.endDate.toISOString() : <any>undefined;
         data["logoFilename"] = this.logoFilename;
         data["comments"] = this.comments;
         if (Array.isArray(this.contracts)) {
@@ -6681,8 +6828,6 @@ export interface ICompany {
     status: CompanyStatus;
     /** General phone number of the company */
     phoneNumber?: string;
-    /** Optional end date of the collaboration with this company */
-    endDate?: Date;
     /** Optional filename of a logo image */
     logoFilename: string;
     /** Comments regarding the company */
@@ -7963,6 +8108,87 @@ export interface IProductFile {
     product: Product;
 }
 
+export class ProductPricing implements IProductPricing {
+    id!: number;
+    /** Piece of text to be placed above the table */
+    description!: string;
+    /** Table parsed as a JSON object */
+    data!: string;
+    product!: Product;
+    /** Date at which this entity has been created */
+    createdAt!: Date;
+    /** Date at which this entity has last been updated */
+    updatedAt!: Date;
+    /** If this entity has been soft-deleted, this is the date
+at which the entity has been deleted */
+    deletedAt?: Date;
+    /** Version number of this entity */
+    version!: number;
+
+    constructor(data?: IProductPricing) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+        if (!data) {
+            this.product = new Product();
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.description = _data["description"];
+            this.data = _data["data"];
+            this.product = _data["product"] ? Product.fromJS(_data["product"]) : new Product();
+            this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
+            this.updatedAt = _data["updatedAt"] ? new Date(_data["updatedAt"].toString()) : <any>undefined;
+            this.deletedAt = _data["deletedAt"] ? new Date(_data["deletedAt"].toString()) : <any>undefined;
+            this.version = _data["version"];
+        }
+    }
+
+    static fromJS(data: any): ProductPricing {
+        data = typeof data === 'object' ? data : {};
+        let result = new ProductPricing();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["description"] = this.description;
+        data["data"] = this.data;
+        data["product"] = this.product ? this.product.toJSON() : <any>undefined;
+        data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
+        data["updatedAt"] = this.updatedAt ? this.updatedAt.toISOString() : <any>undefined;
+        data["deletedAt"] = this.deletedAt ? this.deletedAt.toISOString() : <any>undefined;
+        data["version"] = this.version;
+        return data; 
+    }
+}
+
+export interface IProductPricing {
+    id: number;
+    /** Piece of text to be placed above the table */
+    description: string;
+    /** Table parsed as a JSON object */
+    data: string;
+    product: Product;
+    /** Date at which this entity has been created */
+    createdAt: Date;
+    /** Date at which this entity has last been updated */
+    updatedAt: Date;
+    /** If this entity has been soft-deleted, this is the date
+at which the entity has been deleted */
+    deletedAt?: Date;
+    /** Version number of this entity */
+    version: number;
+}
+
 export class ProductListResponse implements IProductListResponse {
     list!: Product[];
     count!: number;
@@ -8378,6 +8604,48 @@ export interface IPartial_ProductParams {
     contractTextEnglish?: string;
     deliverySpecificationDutch?: string;
     deliverySpecificationEnglish?: string;
+}
+
+/** Make all properties in T optional */
+export class Partial_PricingParams implements IPartial_PricingParams {
+    description?: string;
+    data?: string;
+
+    constructor(data?: IPartial_PricingParams) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.description = _data["description"];
+            this.data = _data["data"];
+        }
+    }
+
+    static fromJS(data: any): Partial_PricingParams {
+        data = typeof data === 'object' ? data : {};
+        let result = new Partial_PricingParams();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["description"] = this.description;
+        data["data"] = this.data;
+        return data; 
+    }
+}
+
+/** Make all properties in T optional */
+export interface IPartial_PricingParams {
+    description?: string;
+    data?: string;
 }
 
 export class ProductInstanceListResponse implements IProductInstanceListResponse {
@@ -9071,7 +9339,6 @@ export class CompanyParams implements ICompanyParams {
     invoiceAddressCity?: string;
     invoiceAddressCountry?: string;
     status?: CompanyStatus;
-    endDate?: Date;
 
     constructor(data?: ICompanyParams) {
         if (data) {
@@ -9096,7 +9363,6 @@ export class CompanyParams implements ICompanyParams {
             this.invoiceAddressCity = _data["invoiceAddressCity"];
             this.invoiceAddressCountry = _data["invoiceAddressCountry"];
             this.status = _data["status"];
-            this.endDate = _data["endDate"] ? new Date(_data["endDate"].toString()) : <any>undefined;
         }
     }
 
@@ -9121,7 +9387,6 @@ export class CompanyParams implements ICompanyParams {
         data["invoiceAddressCity"] = this.invoiceAddressCity;
         data["invoiceAddressCountry"] = this.invoiceAddressCountry;
         data["status"] = this.status;
-        data["endDate"] = this.endDate ? this.endDate.toISOString() : <any>undefined;
         return data; 
     }
 }
@@ -9139,7 +9404,6 @@ export interface ICompanyParams {
     invoiceAddressCity?: string;
     invoiceAddressCountry?: string;
     status?: CompanyStatus;
-    endDate?: Date;
 }
 
 /** Make all properties in T optional */
@@ -9156,7 +9420,6 @@ export class Partial_CompanyParams implements IPartial_CompanyParams {
     invoiceAddressCity?: string;
     invoiceAddressCountry?: string;
     status?: CompanyStatus;
-    endDate?: Date;
 
     constructor(data?: IPartial_CompanyParams) {
         if (data) {
@@ -9181,7 +9444,6 @@ export class Partial_CompanyParams implements IPartial_CompanyParams {
             this.invoiceAddressCity = _data["invoiceAddressCity"];
             this.invoiceAddressCountry = _data["invoiceAddressCountry"];
             this.status = _data["status"];
-            this.endDate = _data["endDate"] ? new Date(_data["endDate"].toString()) : <any>undefined;
         }
     }
 
@@ -9206,7 +9468,6 @@ export class Partial_CompanyParams implements IPartial_CompanyParams {
         data["invoiceAddressCity"] = this.invoiceAddressCity;
         data["invoiceAddressCountry"] = this.invoiceAddressCountry;
         data["status"] = this.status;
-        data["endDate"] = this.endDate ? this.endDate.toISOString() : <any>undefined;
         return data; 
     }
 }
@@ -9225,7 +9486,6 @@ export interface IPartial_CompanyParams {
     invoiceAddressCity?: string;
     invoiceAddressCountry?: string;
     status?: CompanyStatus;
-    endDate?: Date;
 }
 
 export class ProductsPerCategory implements IProductsPerCategory {

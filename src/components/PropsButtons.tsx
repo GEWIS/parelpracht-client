@@ -10,6 +10,7 @@ interface Props {
   canSave: boolean;
   entity: SingleEntities;
   status: ResourceStatus;
+  style?: Partial<CSSStyleDeclaration>;
 
   cancel: () => void;
   edit: () => void;
@@ -20,7 +21,7 @@ interface Props {
 function PropsButtons(props: Props) {
   const {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    editing, canDelete, canSave, entity, status, cancel, edit, save, remove,
+    editing, canDelete, canSave, entity, status, cancel, edit, save, remove, style,
   } = props;
 
   switch (status) {
@@ -36,24 +37,37 @@ function PropsButtons(props: Props) {
               floated="right"
               onClick={save}
               disabled={!canSave}
+              style={style}
             >
               <Icon name="save" />
               Save
             </Button>
-            <Button icon floated="right" onClick={cancel}>
+            <Button icon floated="right" onClick={cancel} style={style}>
               Cancel
             </Button>
-            <DeleteButton entity={entity} canDelete={canDelete} status={status} remove={remove} />
+            <DeleteButton
+              entity={entity}
+              canDelete={canDelete}
+              status={status}
+              remove={remove}
+              style={style}
+            />
           </>
         );
       }
       return (
         <>
-          <Button icon labelPosition="left" floated="right" onClick={edit}>
+          <Button icon labelPosition="left" floated="right" onClick={edit} style={style}>
             <Icon name="pencil" />
             Edit
           </Button>
-          <DeleteButton entity={entity} canDelete={canDelete} status={status} remove={remove} />
+          <DeleteButton
+            entity={entity}
+            canDelete={canDelete}
+            status={status}
+            remove={remove}
+            style={style}
+          />
         </>
       );
     case ResourceStatus.SAVING:
@@ -65,11 +79,12 @@ function PropsButtons(props: Props) {
             color="green"
             floated="right"
             loading
+            style={style}
           >
             <Icon name="save" />
             Save
           </Button>
-          <Button icon floated="right" onClick={cancel} disabled>
+          <Button icon floated="right" onClick={cancel} disabled style={style}>
             Cancel
           </Button>
           <DeleteButton
@@ -77,10 +92,15 @@ function PropsButtons(props: Props) {
             canDelete={canDelete === undefined ? undefined : false}
             status={status}
             remove={remove}
+            style={style}
           />
         </>
       );
   }
 }
+
+PropsButtons.defaultProps = {
+  style: {},
+};
 
 export default PropsButtons;

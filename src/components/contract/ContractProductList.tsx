@@ -115,7 +115,7 @@ class ContractProductList extends React.Component<Props, State> {
 
           </Table.Header>
           <Table.Body>
-            {products.map((product) => (
+            {products.sort((a, b) => a.id - b.id).map((product) => (
               <ContractProductRow
                 key={product.id}
                 productInstance={product}
