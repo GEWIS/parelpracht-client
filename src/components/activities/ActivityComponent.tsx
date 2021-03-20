@@ -68,7 +68,7 @@ class ActivityComponent extends React.Component<Props> {
     if (!(activity.type === ActivityType.STATUS && (activity.subType === ContractStatus.CREATED
       || activity.subType === InvoiceStatus.CREATED
       || activity.subType === ProductInstanceStatus.NOTDELIVERED))) {
-      const headerString = `Are you sure you want to delete this ${activity.type.toLowerCase()}?`;
+      const headerString = 'Are you sure you want to delete this activity?';
       deleteButton = (
         <Popup
           trigger={(
@@ -76,6 +76,7 @@ class ActivityComponent extends React.Component<Props> {
             <a>Delete</a>
           )}
           on="click"
+          hideOnScroll
           content={(
             <Button
               color="red"
@@ -99,14 +100,6 @@ class ActivityComponent extends React.Component<Props> {
     } else {
       feedDescription = (<Feed.Extra style={{ fontStyle: 'italic' }}>{activity.description}</Feed.Extra>);
     }
-
-    // const feedDescription = activity.description !== '' ? (
-    //   <Feed.Extra
-    //     style={activity.type !== ActivityType.COMMENT ? { fontStyle: 'italic' } : {}}
-    //   >
-    //     {activity.description}
-    //   </Feed.Extra>
-    // ) : undefined;
 
     const feedButtons = deleteButton !== undefined ? (
       <Feed.Meta>
