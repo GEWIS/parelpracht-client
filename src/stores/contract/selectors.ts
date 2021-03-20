@@ -28,3 +28,9 @@ export function getContractStatus(state: RootState, id: number): ContractStatus 
     state, SummaryCollections.Contracts, id,
   )?.status ?? '...';
 }
+
+export function getContractValue(state: RootState, id: number): number {
+  return getSummary<ContractSummary>(
+    state, SummaryCollections.Contracts, id,
+  )?.value ?? undefined;
+}

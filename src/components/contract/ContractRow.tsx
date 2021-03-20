@@ -8,20 +8,22 @@ import { getContactName } from '../../stores/contact/selectors';
 import { RootState } from '../../stores/store';
 import { formatLastUpdate } from '../../helpers/timestamp';
 import { getUserName } from '../../stores/user/selectors';
-import { getContractStatus } from '../../stores/contract/selectors';
+import { getContractStatus, getContractValue } from '../../stores/contract/selectors';
 import { formatStatus } from '../../helpers/activity';
 import CompanyLink from '../company/CompanyLink';
+import { formatPriceFull } from '../../helpers/monetary';
 
 interface Props extends RouteComponentProps {
   contract: Contract;
   contactName: string;
   assignedName: string;
   contractStatus: ContractStatus;
+  value: number;
 }
 
 function ContractRow(props: Props) {
   const {
-    contract, contactName, assignedName, contractStatus,
+    contract, value, contactName, assignedName, contractStatus,
   } = props;
   return (
     <Table.Row>
@@ -37,10 +39,10 @@ function ContractRow(props: Props) {
         {contactName}
       </Table.Cell>
       <Table.Cell>
-        {formatStatus(contractStatus)}
+        {formatPriceFull(value)}
       </Table.Cell>
       <Table.Cell>
-        {assignedName}
+        {formatStatus(contractStatus)}
       </Table.Cell>
       <Table.Cell>
         {formatLastUpdate(contract.updatedAt)}
@@ -55,6 +57,7 @@ const mapStateToProps = (state: RootState, props: { contract: Contract }) => {
     contactName: getContactName(state, props.contract.contactId),
     assignedName: getUserName(state, props.contract.assignedToId),
     contractStatus: getContractStatus(state, props.contract.id),
+    value: getContractValue(state, props.contract.id),
   };
 };
 

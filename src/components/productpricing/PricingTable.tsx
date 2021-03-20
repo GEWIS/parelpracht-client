@@ -145,6 +145,7 @@ class PricingTable extends React.Component<Props, State> {
           <Form>
             <TextArea
               value={description}
+              placeholder="Add a description"
               onChange={(e) => this.setState({ description: e.target.value })}
             />
           </Form>

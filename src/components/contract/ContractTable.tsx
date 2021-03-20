@@ -52,7 +52,7 @@ function ContractsTable({
           <Dimmer active inverted>
             <Loader inverted />
           </Dimmer>
-          <Table singleLine selectable attached sortable>
+          <Table singleLine selectable attached sortable fixed>
             <Table.Header>
               <Table.Row>
                 <Table.HeaderCell
@@ -114,7 +114,7 @@ function ContractsTable({
 
   return (
     <>
-      <Table singleLine selectable attached sortable>
+      <Table singleLine selectable attached sortable fixed>
         <Table.Header>
           <Table.Row>
             <Table.HeaderCell
@@ -138,15 +138,11 @@ function ContractsTable({
               <ContractContactFilter />
             </Table.HeaderCell>
             <Table.HeaderCell>
+              Amount
+            </Table.HeaderCell>
+            <Table.HeaderCell>
               Status
               <ContractStatusFilter />
-            </Table.HeaderCell>
-            <Table.HeaderCell
-              sorted={column === 'assignedTo' ? direction : undefined}
-              onClick={() => changeSort('assignedTo')}
-            >
-              Assigned to
-              <UserFilter table={Tables.Contracts} />
             </Table.HeaderCell>
             <Table.HeaderCell
               sorted={column === 'updatedAt' ? direction : undefined}

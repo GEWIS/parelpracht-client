@@ -7,19 +7,19 @@ import { RootState } from '../../stores/store';
 import { dateToFullFinancialYear, formatLastUpdate } from '../../helpers/timestamp';
 import { formatStatus } from '../../helpers/activity';
 import { getUserName } from '../../stores/user/selectors';
-import { getInvoiceStatus } from '../../stores/invoice/selectors';
+import { getInvoiceStatus, getInvoiceValue } from '../../stores/invoice/selectors';
 import CompanyLink from '../company/CompanyLink';
+import { formatPriceFull } from '../../helpers/monetary';
 
 interface Props {
   invoice: Invoice;
-
-  assignedName: string;
   invoiceStatus: InvoiceStatus;
+  value: number;
 }
 
 function InvoiceRow(props: Props) {
   const {
-    invoice, assignedName, invoiceStatus,
+    invoice, value, invoiceStatus,
   } = props;
   return (
     <Table.Row>
@@ -32,13 +32,13 @@ function InvoiceRow(props: Props) {
         <CompanyLink id={invoice.companyId} />
       </Table.Cell>
       <Table.Cell>
+        {formatPriceFull(value)}
+      </Table.Cell>
+      <Table.Cell>
         {formatStatus(invoiceStatus)}
       </Table.Cell>
       <Table.Cell>
         {dateToFullFinancialYear(invoice.startDate)}
-      </Table.Cell>
-      <Table.Cell>
-        {assignedName}
       </Table.Cell>
       <Table.Cell>
         {formatLastUpdate(invoice.updatedAt)}
@@ -49,8 +49,8 @@ function InvoiceRow(props: Props) {
 
 const mapStateToProps = (state: RootState, props: { invoice: Invoice }) => {
   return {
-    assignedName: getUserName(state, props.invoice.assignedToId),
     invoiceStatus: getInvoiceStatus(state, props.invoice.id),
+    value: getInvoiceValue(state, props.invoice.id),
   };
 };
 

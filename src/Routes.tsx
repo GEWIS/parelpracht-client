@@ -36,6 +36,7 @@ import InvoiceProductInstanceModal from './pages/InvoiceProductInstanceModal';
 import Footer from './components/navigation/Footer';
 import DashboardPage from './pages/DashboardPage';
 import NotFound from './pages/NotFound';
+import NoRights from './pages/NoRights';
 import Insights from './pages/Insights';
 import ProductCategoriesPage from './pages/ProductCategoriesPage';
 import ProductCategoriesCreatePage from './pages/ProductCategoriesCreatePage';
@@ -208,6 +209,7 @@ function Routes(props: Props) {
             <UserCreatePage />
           </Route>
           <Route path="/user/:userId" exact component={SingleUserPage} />
+          <Route path="/norights" component={NoRights} />
           <Route path="" component={NotFound} />
         </Switch>
       </Container>
