@@ -88,7 +88,10 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
           mouseEnterDelay={500}
           wide
           trigger={(
-            <AuthorizationComponent roles={[Roles.GENERAL, Roles.ADMIN]} notFound={false}>
+            <AuthorizationComponent
+              roles={[Roles.GENERAL, Roles.ADMIN, Roles.FINANCIAL]}
+              notFound={false}
+            >
               <Button
                 floated="left"
                 labelPosition="left"
@@ -119,7 +122,10 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
           mouseEnterDelay={500}
           wide
           trigger={(
-            <AuthorizationComponent roles={[Roles.GENERAL, Roles.ADMIN]} notFound={false}>
+            <AuthorizationComponent
+              roles={[Roles.GENERAL, Roles.ADMIN, Roles.FINANCIAL]}
+              notFound={false}
+            >
               <Button
                 floated="left"
                 labelPosition="left"

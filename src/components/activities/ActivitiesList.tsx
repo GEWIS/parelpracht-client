@@ -96,7 +96,10 @@ class ActivitiesList extends React.Component<Props, State> {
       <>
         <h3>
           Activities
-          <AuthorizationComponent roles={[Roles.GENERAL, Roles.ADMIN]} notFound={false}>
+          <AuthorizationComponent
+            roles={[Roles.GENERAL, Roles.ADMIN, Roles.FINANCIAL]}
+            notFound={false}
+          >
             <Button
               icon
               labelPosition="left"

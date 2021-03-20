@@ -116,7 +116,7 @@ class ProductCategoryProps extends React.Component<Props, State> {
         <h2>
           {this.props.create ? 'New Product Category' : 'Details'}
 
-          <AuthorizationComponent roles={[Roles.GENERAL, Roles.ADMIN]} notFound={false}>
+          <AuthorizationComponent roles={[Roles.ADMIN]} notFound={false}>
             <PropsButtons
               editing={editing}
               canDelete={this.deleteButtonActive()}

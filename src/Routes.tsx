@@ -207,14 +207,14 @@ function Routes(props: Props) {
             <ContractsPage />
           </Route>
           <Route path="/contract/new" exact>
-            <AuthorizationComponent roles={[Roles.GENERAL, Roles.ADMIN]} notFound={false}>
+            <AuthorizationComponent roles={[Roles.GENERAL, Roles.ADMIN]} notFound>
               <ContractsPage />
               <ContractModal />
             </AuthorizationComponent>
           </Route>
           <Route path="/contract/:contractId" exact component={SingleContractPage} />
           <Route path="/contract/:contractId/product/new" exact>
-            <AuthorizationComponent roles={[Roles.GENERAL, Roles.ADMIN]} notFound={false}>
+            <AuthorizationComponent roles={[Roles.GENERAL, Roles.ADMIN]} notFound>
               <SingleContractPage />
               <ContractProductInstanceModal create />
             </AuthorizationComponent>
