@@ -6,7 +6,7 @@ import {
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import {
-  Partial_FileParams,
+  Partial_FileParams_ as Partial_FileParams,
 } from '../../clients/server.generated';
 import { FilesClient } from '../../clients/filesClient';
 import { formatLastUpdate } from '../../helpers/timestamp';
@@ -117,24 +117,12 @@ class SingleFile extends React.Component<Props, State> {
     }
 
     this.setState({ saveLoading: false });
-    this.props.showTransientAlert({
-      title: 'Success',
-      message: `Uploaded ${this.state.fileName} successfully.`,
-      type: 'success',
-      displayTimeInMs: 3000,
-    });
   };
 
   remove = () => {
     if (!this.props.create && !this.state.editing) {
       this.props.deleteFile(this.props.entityId, this.props.file.id, this.props.entity);
     }
-    this.props.showTransientAlert({
-      title: 'Success',
-      message: `Deleted ${this.state.fileName} successfully.`,
-      type: 'success',
-      displayTimeInMs: 3000,
-    });
   };
 
   public render() {
