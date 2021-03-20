@@ -14,6 +14,8 @@ import { deleteFileSingle, saveSingleFile } from '../../stores/single/actionCrea
 import { SingleEntities } from '../../stores/single/single';
 import { GeneralFile } from './GeneralFile';
 import ResourceStatus from '../../stores/resourceStatus';
+import { TransientAlert } from '../../stores/alerts/actions';
+import { showTransientAlert } from '../../stores/alerts/actionCreators';
 
 interface Props extends RouteComponentProps {
   file: GeneralFile;
@@ -28,6 +30,7 @@ interface Props extends RouteComponentProps {
   deleteFile: (entityId: number, fileId: number, entity: SingleEntities) => void;
   fetchEntity: (entityId: number) => void;
   status: ResourceStatus;
+  showTransientAlert: (alert: TransientAlert) => void;
 }
 
 interface State {
@@ -114,12 +117,22 @@ class SingleFile extends React.Component<Props, State> {
     }
 
     this.setState({ saveLoading: false });
+    this.props.showTransientAlert({
+      title: 'Success',
+      message: `Uploaded ${this.state.fileName} successfully.`,
+      type: 'success',
+    });
   };
 
   remove = () => {
     if (!this.props.create && !this.state.editing) {
       this.props.deleteFile(this.props.entityId, this.props.file.id, this.props.entity);
     }
+    this.props.showTransientAlert({
+      title: 'Success',
+      message: `Deleted ${this.state.fileName} successfully.`,
+      type: 'success',
+    });
   };
 
   public render() {
@@ -251,6 +264,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   deleteFile: (entityId: number, fileId: number, entity: SingleEntities) => dispatch(
     deleteFileSingle(entity, entityId, fileId),
   ),
+  showTransientAlert: (alert: TransientAlert) => dispatch(showTransientAlert(alert)),
 });
 
 export default withRouter(connect(null, mapDispatchToProps)(SingleFile));

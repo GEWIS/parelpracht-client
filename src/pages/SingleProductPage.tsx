@@ -51,6 +51,13 @@ class SingleProductPage extends React.Component<Props> {
         message: `Product ${prevProps.product?.nameEnglish} successfully deleted`,
         type: 'success',
       });
+    } else if (prevProps.status === ResourceStatus.SAVING
+      && this.props.status === ResourceStatus.FETCHED) {
+      this.props.showTransientAlert({
+        title: 'Success',
+        message: `Properties of ${this.props.product?.nameEnglish} successfully updated.`,
+        type: 'success',
+      });
     }
   }
 

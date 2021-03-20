@@ -8,6 +8,8 @@ import { SingleEntities } from '../../stores/single/single';
 import { createSingleComment } from '../../stores/single/actionCreators';
 import { ActivityParams } from '../../clients/server.generated';
 import { createInstanceCommentSingle } from '../../stores/productinstance/actionCreator';
+import { TransientAlert } from '../../stores/alerts/actions';
+import { showTransientAlert } from '../../stores/alerts/actionCreators';
 
 interface Props {
   create: boolean;
@@ -20,6 +22,7 @@ interface Props {
   close: () => void;
   createSingleComment: (entity: SingleEntities, id: number, comment: object) => void;
   createSingleInstanceComment: (id: number, instanceId: number, comment: object) => void;
+  showTransientAlert: (alert: TransientAlert) => void;
 }
 
 interface State {
@@ -27,11 +30,12 @@ interface State {
   comment: string;
 }
 
-class DocumentStatusProps extends React.Component<Props, State> {
+class CreateCommentRow extends React.Component<Props, State> {
   public constructor(props: Props) {
     super(props);
 
     this.state = {
+      // eslint-disable-next-line react/no-unused-state
       editing: props.create ?? false,
       comment: '',
     };
@@ -40,17 +44,19 @@ class DocumentStatusProps extends React.Component<Props, State> {
   componentDidUpdate(prevProps: Props) {
     if (prevProps.resourceStatus === ResourceStatus.SAVING
       && this.props.resourceStatus === ResourceStatus.FETCHED) {
-      // eslint-disable-next-line react/no-did-update-set-state
+      // eslint-disable-next-line react/no-unused-state,react/no-did-update-set-state
       this.setState({ editing: false });
     }
   }
 
   edit = () => {
+    // eslint-disable-next-line react/no-unused-state
     this.setState({ editing: true });
   };
 
   cancel = () => {
     if (!this.props.create) {
+      // eslint-disable-next-line react/no-unused-state
       this.setState({ editing: false });
     }
     this.props.close();
@@ -76,11 +82,16 @@ class DocumentStatusProps extends React.Component<Props, State> {
         this.toComponentParams(),
       );
     }
+    this.props.showTransientAlert({
+      title: 'Success',
+      message: `Posted comment ${this.state.comment} successfully.`,
+      type: 'success',
+    });
     this.cancel();
   };
 
   render() {
-    const { editing, comment } = this.state;
+    const { comment } = this.state;
     return (
       <>
         <h4>
@@ -120,6 +131,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   createSingleInstanceComment: (id: number, instanceId: number, comment: object) => dispatch(
     createInstanceCommentSingle(id, instanceId, comment),
   ),
+  showTransientAlert: (alert: TransientAlert) => dispatch(showTransientAlert(alert)),
 });
 
-export default connect(null, mapDispatchToProps)(DocumentStatusProps);
+export default connect(null, mapDispatchToProps)(CreateCommentRow);

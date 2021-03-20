@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Step, Icon } from 'semantic-ui-react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
+import { Dispatch } from 'redux';
 import { GeneralActivity } from './GeneralActivity';
 import {
   formatDocumentType,
@@ -13,6 +14,8 @@ import DocumentStatusModal from './DocumentStatusModal';
 import { SingleEntities } from '../../stores/single/single';
 import { DocumentStatus } from './DocumentStatus';
 import ResourceStatus from '../../stores/resourceStatus';
+import { TransientAlert } from '../../stores/alerts/actions';
+import { showTransientAlert } from '../../stores/alerts/actionCreators';
 
 /**
  * Definition of used variables
@@ -31,6 +34,7 @@ interface Props extends RouteComponentProps {
   cancelled: boolean;
 
   resourceStatus: ResourceStatus;
+  showTransientAlert: (alert: TransientAlert) => void;
 }
 
 interface State {
@@ -251,6 +255,8 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
   }
 }
 
-const mapDispatchToProps = () => ({});
+const mapDispatchToProps = (dispatch: Dispatch) => ({
+  showTransientAlert: (alert: TransientAlert) => dispatch(showTransientAlert(alert)),
+});
 
 export default withRouter(connect(null, mapDispatchToProps)(FinancialDocumentProgress));
