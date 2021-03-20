@@ -32,6 +32,7 @@ function DeleteButton(props: DeleteProps) {
           />
         )}
         on="click"
+        hideOnScroll
         content={(
           <Button
             color="red"

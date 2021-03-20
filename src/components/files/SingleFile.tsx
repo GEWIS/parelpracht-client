@@ -218,6 +218,7 @@ class SingleFile extends React.Component<Props, State> {
               />
             )}
             on="click"
+            hideOnScroll
             content={(
               <Button
                 color="red"
