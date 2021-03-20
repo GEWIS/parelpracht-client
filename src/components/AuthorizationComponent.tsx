@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Roles } from '../clients/server.generated';
-import NotFound from '../pages/NotFound';
+import NoRights from '../pages/NoRights';
 import { authedUserHasRole } from '../stores/auth/selectors';
 import { RootState } from '../stores/store';
 
@@ -23,7 +23,7 @@ class AuthorizationComponent extends React.Component<Props> {
     }
 
     if (notFound) {
-      return <NotFound />;
+      return <NoRights />;
     }
 
     return null;

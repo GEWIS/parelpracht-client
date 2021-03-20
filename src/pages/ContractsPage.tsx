@@ -10,7 +10,10 @@ import ContractTableControls from '../components/contract/ContractTableControls'
 
 function ContractsPage(props: RouteComponentProps) {
   return (
-    <>
+    <AuthorizationComponent
+      roles={[Roles.SIGNEE, Roles.GENERAL, Roles.FINANCIAL, Roles.AUDIT, Roles.AUDIT]}
+      notFound
+    >
       <Segment style={{ backgroundColor: '#eee' }} vertical basic>
         <Container style={{ paddingTop: '2em' }}>
           <Grid columns={2}>
@@ -40,7 +43,7 @@ function ContractsPage(props: RouteComponentProps) {
       <Container>
         <ContractsTable />
       </Container>
-    </>
+    </AuthorizationComponent>
   );
 }
 

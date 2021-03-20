@@ -122,25 +122,33 @@ function Routes(props: Props) {
             <ProductsPage />
           </Route>
           <Route path="/product/new" exact>
-            <ProductsPage />
-            <ProductCreatePage />
+            <AuthorizationComponent roles={[Roles.ADMIN, Roles.GENERAL]} notFound>
+              <ProductsPage />
+              <ProductCreatePage />
+            </AuthorizationComponent>
           </Route>
           <Route path="/product/:productId" exact component={SingleProductPage} />
           <Route path="/product/:productId/contract/new" exact>
-            <SingleProductPage />
-            <ContractModal />
+            <AuthorizationComponent roles={[Roles.ADMIN, Roles.GENERAL]} notFound>
+              <SingleProductPage />
+              <ContractModal />
+            </AuthorizationComponent>
           </Route>
           {/* Product Categories */}
           <Route path="/category" exact>
             <ProductCategoriesPage />
           </Route>
           <Route path="/category/new" exact>
-            <ProductCategoriesPage />
-            <ProductCategoriesCreatePage />
+            <AuthorizationComponent roles={[Roles.ADMIN]} notFound>
+              <ProductCategoriesPage />
+              <ProductCategoriesCreatePage />
+            </AuthorizationComponent>
           </Route>
           <Route path="/category/:categoryId" exact>
-            <ProductCategoriesPage />
-            <ProductCategoryModal />
+            <AuthorizationComponent roles={[Roles.ADMIN, Roles.GENERAL]} notFound>
+              <ProductCategoriesPage />
+              <ProductCategoryModal />
+            </AuthorizationComponent>
           </Route>
           {/* Company */}
           <Route path="/company" exact>

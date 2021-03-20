@@ -5,7 +5,7 @@ import {
 } from 'semantic-ui-react';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
-import { Product } from '../clients/server.generated';
+import { Product, Roles } from '../clients/server.generated';
 import { RootState } from '../stores/store';
 import ProductProps from '../components/product/ProductProps';
 import ResourceStatus from '../stores/resourceStatus';
@@ -23,6 +23,7 @@ import InvoiceCompactTable from '../components/invoice/InvoiceCompactTable';
 import ProductsContractedGraph from '../components/product/ProductsContractedGraph';
 import PricingTable from '../components/productpricing/PricingTable';
 import CreatePricing from '../components/productpricing/CreatePricing';
+import AuthorizationComponent from '../components/AuthorizationComponent';
 
 interface Props extends RouteComponentProps<{ productId: string }> {
   product: Product | undefined;
@@ -59,9 +60,11 @@ class SingleProductPage extends React.Component<Props> {
 
     if (product === undefined) {
       return (
-        <Container style={{ paddingTop: '2em' }}>
-          <Loader content="Loading" active />
-        </Container>
+        <AuthorizationComponent roles={[Roles.GENERAL, Roles.ADMIN]} notFound>
+          <Container style={{ paddingTop: '2em' }}>
+            <Loader content="Loading" active />
+          </Container>
+        </AuthorizationComponent>
       );
     }
 
@@ -131,31 +134,33 @@ class SingleProductPage extends React.Component<Props> {
     }
 
     return (
-      <Container style={{ paddingTop: '2em' }}>
-        <Breadcrumb
-          icon="right angle"
-          sections={[
-            { key: 'Products', content: <NavLink to="/product">Products</NavLink> },
-            { key: 'Product', content: product.nameDutch, active: true },
-          ]}
-        />
-        <ProductSummary product={product} />
-        <Grid columns={2}>
-          <Grid.Column width={10}>
-            <Tab panes={panes} menu={{ pointing: true, inverted: true }} />
-          </Grid.Column>
-          <Grid.Column width={6}>
-            <Segment secondary>
-              <ProductProps product={product} />
-            </Segment>
-            {product.pricing === undefined ? (
+      <AuthorizationComponent roles={[Roles.GENERAL, Roles.ADMIN]} notFound>
+        <Container style={{ paddingTop: '2em' }}>
+          <Breadcrumb
+            icon="right angle"
+            sections={[
+              { key: 'Products', content: <NavLink to="/product">Products</NavLink> },
+              { key: 'Product', content: product.nameDutch, active: true },
+            ]}
+          />
+          <ProductSummary product={product} />
+          <Grid columns={2}>
+            <Grid.Column width={10}>
+              <Tab panes={panes} menu={{ pointing: true, inverted: true }} />
+            </Grid.Column>
+            <Grid.Column width={6}>
               <Segment secondary>
-                <CreatePricing productId={product.id} />
+                <ProductProps product={product} />
               </Segment>
-            ) : null }
-          </Grid.Column>
-        </Grid>
-      </Container>
+              {product.pricing === undefined ? (
+                <Segment secondary>
+                  <CreatePricing productId={product.id} />
+                </Segment>
+              ) : null }
+            </Grid.Column>
+          </Grid>
+        </Container>
+      </AuthorizationComponent>
     );
   }
 }

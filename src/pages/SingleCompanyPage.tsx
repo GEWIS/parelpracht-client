@@ -23,8 +23,8 @@ import { showTransientAlert } from '../stores/alerts/actionCreators';
 import InvoiceList from '../components/invoice/InvoiceList';
 import CompanyContractedProductsChart from '../components/company/CompanyContractedProductsChart';
 import FilesList from '../components/files/FilesList';
-import AuthorizationComponent from '../components/AuthorizationComponent';
 import { authedUserHasRole } from '../stores/auth/selectors';
+import AuthorizationComponent from '../components/AuthorizationComponent';
 
 interface Props extends RouteComponentProps<{ companyId: string }> {
   company: Company | undefined;
