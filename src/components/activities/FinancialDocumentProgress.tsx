@@ -17,7 +17,8 @@ import DocumentStatusModal from './DocumentStatusModal';
 import { SingleEntities } from '../../stores/single/single';
 import { DocumentStatus } from './DocumentStatus';
 import ResourceStatus from '../../stores/resourceStatus';
-import { InvoiceStatus, ProductInstanceStatus } from '../../clients/server.generated';
+import { InvoiceStatus, ProductInstanceStatus, Roles } from '../../clients/server.generated';
+import AuthorizationComponent from '../AuthorizationComponent';
 
 interface Props extends RouteComponentProps {
   documentId: number;
@@ -27,6 +28,7 @@ interface Props extends RouteComponentProps {
   documentType: SingleEntities;
 
   resourceStatus: ResourceStatus;
+  roles: Roles[];
 }
 
 interface State {
@@ -65,7 +67,7 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
 
   public render() {
     const {
-      activities, documentType, documentId, resourceStatus, parentId,
+      activities, documentType, documentId, resourceStatus, parentId, roles,
     } = this.props;
     const { cancelModalOpen, deferModalOpen, irrecoverableModalOpen } = this.state;
     const allDocumentStatuses = getAllDocumentStatuses(documentType);
@@ -86,19 +88,24 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
           mouseEnterDelay={500}
           wide
           trigger={(
-            <Button
-              floated="left"
-              labelPosition="left"
-              icon="stopwatch"
-              basic
-              onClick={() => {
-                this.setState({
-                  deferModalOpen: true,
-                });
-              }}
-              content={`Defer ${formatDocumentType(documentType)}`}
-              disabled={lastStatusActivity?.subType !== ProductInstanceStatus.NOTDELIVERED}
-            />
+            <AuthorizationComponent
+              roles={[Roles.GENERAL, Roles.ADMIN, Roles.FINANCIAL]}
+              notFound={false}
+            >
+              <Button
+                floated="left"
+                labelPosition="left"
+                icon="stopwatch"
+                basic
+                onClick={() => {
+                  this.setState({
+                    deferModalOpen: true,
+                  });
+                }}
+                content={`Defer ${formatDocumentType(documentType)}`}
+                disabled={lastStatusActivity?.subType !== ProductInstanceStatus.NOTDELIVERED}
+              />
+            </AuthorizationComponent>
           )}
         />
       );
@@ -115,18 +122,23 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
           mouseEnterDelay={500}
           wide
           trigger={(
-            <Button
-              floated="left"
-              labelPosition="left"
-              icon="close"
-              basic
-              onClick={() => {
-                this.setState({ irrecoverableModalOpen: true });
-              }}
-              content="Mark irrecoverable"
-              disabled={lastStatusActivity?.subType !== InvoiceStatus.CREATED
-              && lastStatusActivity?.subType !== InvoiceStatus.SENT}
-            />
+            <AuthorizationComponent
+              roles={[Roles.GENERAL, Roles.ADMIN, Roles.FINANCIAL]}
+              notFound={false}
+            >
+              <Button
+                floated="left"
+                labelPosition="left"
+                icon="close"
+                basic
+                onClick={() => {
+                  this.setState({ irrecoverableModalOpen: true });
+                }}
+                content="Mark irrecoverable"
+                disabled={lastStatusActivity?.subType !== InvoiceStatus.CREATED
+                && lastStatusActivity?.subType !== InvoiceStatus.SENT}
+              />
+            </AuthorizationComponent>
           )}
         />
       );
@@ -151,19 +163,21 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
                 </h3>
               </Grid.Column>
               <Grid.Column>
-                <Button
-                  floated="right"
-                  labelPosition="left"
-                  icon="close"
-                  basic
-                  onClick={() => {
-                    this.setState({
-                      cancelModalOpen: true,
-                    });
-                  }}
-                  content={`Cancel ${formatDocumentType(documentType)}`}
-                  disabled={getNextStatus(lastStatusActivity!, documentType).length === 0}
-                />
+                <AuthorizationComponent roles={[Roles.GENERAL, Roles.ADMIN]} notFound={false}>
+                  <Button
+                    floated="right"
+                    labelPosition="left"
+                    icon="close"
+                    basic
+                    onClick={() => {
+                      this.setState({
+                        cancelModalOpen: true,
+                      });
+                    }}
+                    content={`Cancel ${formatDocumentType(documentType)}`}
+                    disabled={getNextStatus(lastStatusActivity!, documentType).length === 0}
+                  />
+                </AuthorizationComponent>
               </Grid.Column>
             </Grid.Row>
           </Grid>
@@ -185,6 +199,7 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
                 cancelled={cancelledDocument}
                 resourceStatus={resourceStatus}
                 parentId={parentId}
+                roles={roles}
               />
             ))}
           </Step.Group>
@@ -238,6 +253,7 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
               cancelled={cancelledDocument}
               resourceStatus={resourceStatus}
               parentId={parentId}
+              roles={roles}
             />
           ))}
         </Step.Group>

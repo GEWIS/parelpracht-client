@@ -16,6 +16,9 @@ import { DocumentStatus } from './DocumentStatus';
 import ResourceStatus from '../../stores/resourceStatus';
 import { TransientAlert } from '../../stores/alerts/actions';
 import { showTransientAlert } from '../../stores/alerts/actionCreators';
+import { Roles } from '../../clients/server.generated';
+import { RootState } from '../../stores/store';
+import { authedUserHasRole } from '../../stores/auth/selectors';
 
 /**
  * Definition of used variables
@@ -35,6 +38,10 @@ interface Props extends RouteComponentProps {
 
   resourceStatus: ResourceStatus;
   showTransientAlert: (alert: TransientAlert) => void;
+
+  hasRole: (role: Roles) => boolean;
+
+  roles: Roles[];
 }
 
 interface State {
@@ -65,6 +72,8 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
       documentType,
       resourceStatus,
       parentId,
+      hasRole,
+      roles,
     } = this.props;
     const { stepModalOpen } = this.state;
 
@@ -190,7 +199,7 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
       }
 
       // the status of the document has not been reached yet and can be completed
-      if (nextStatus.includes(status)) {
+      if (nextStatus.includes(status) && status !== DocumentStatus.FINISHED) {
         return (
           <>
             <Step
@@ -200,6 +209,7 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
                   stepModalOpen: true,
                 });
               }}
+              disabled={!(roles.some(hasRole))}
             >
               <Step.Content>
                 <Step.Title>
@@ -259,4 +269,10 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   showTransientAlert: (alert: TransientAlert) => dispatch(showTransientAlert(alert)),
 });
 
-export default withRouter(connect(null, mapDispatchToProps)(FinancialDocumentProgress));
+const mapStateToProps = (state: RootState) => {
+  return {
+    hasRole: (role: Roles): boolean => authedUserHasRole(state, role),
+  };
+};
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(FinancialDocumentProgress));

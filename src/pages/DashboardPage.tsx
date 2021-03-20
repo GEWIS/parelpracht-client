@@ -20,6 +20,7 @@ function DashboardPage(props: Props) {
   const {
     user,
   } = props;
+
   return (
     <>
       <Segment style={{ backgroundColor: '#eee' }} vertical basic>
@@ -40,8 +41,6 @@ function DashboardPage(props: Props) {
 
         </Container>
       </Segment>
-      <Container />
-
       <Container style={{ marginTop: '2em' }}>
         <Grid>
           <Grid.Row columns={2}>
@@ -56,7 +55,7 @@ function DashboardPage(props: Props) {
           </Grid.Row>
         </Grid>
       </Container>
-    </>
+    </ >
   );
 }
 

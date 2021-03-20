@@ -16,11 +16,12 @@ import { deleteActivitySingle } from '../../stores/single/actionCreators';
 import UserLinkWithoutImage from '../user/UserLinkWithoutImage';
 import { deleteInstanceActivitySingle } from '../../stores/productinstance/actionCreator';
 import {
-  ActivityType, ContractStatus, InvoiceStatus, ProductInstanceStatus,
+  ActivityType, ContractStatus, InvoiceStatus, ProductInstanceStatus, Roles,
 } from '../../clients/server.generated';
 import UserAvatar from '../user/UserAvatar';
 import { TransientAlert } from '../../stores/alerts/actions';
 import { showTransientAlert } from '../../stores/alerts/actionCreators';
+import AuthorizationComponent from '../AuthorizationComponent';
 
 interface Props extends RouteComponentProps {
   activity: GeneralActivity;
@@ -70,24 +71,26 @@ class ActivityComponent extends React.Component<Props> {
       || activity.subType === ProductInstanceStatus.NOTDELIVERED))) {
       const headerString = 'Are you sure you want to delete this activity?';
       deleteButton = (
-        <Popup
-          trigger={(
+        <AuthorizationComponent roles={[Roles.ADMIN]} notFound={false}>
+          <Popup
+            trigger={(
             // eslint-disable-next-line jsx-a11y/anchor-is-valid
-            <a>Delete</a>
+              <a>Delete</a>
           )}
-          on="click"
-          hideOnScroll
-          content={(
-            <Button
-              color="red"
-              onClick={() => this.deleteComment()}
-              style={{ marginTop: '0.5em' }}
-            >
-              {deleteMessage}
-            </Button>
+            on="click"
+            hideOnScroll
+            content={(
+              <Button
+                color="red"
+                onClick={() => this.deleteComment()}
+                style={{ marginTop: '0.5em' }}
+              >
+                {deleteMessage}
+              </Button>
           )}
-          header={headerString}
-        />
+            header={headerString}
+          />
+        </AuthorizationComponent>
       );
     }
 

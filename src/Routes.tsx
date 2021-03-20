@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {
-  withRouter, Switch, Route, RouteComponentProps, Redirect,
+  Redirect, Route, RouteComponentProps, Switch, withRouter,
 } from 'react-router-dom';
 import {
   Container, Dimmer, Header, Loader,
@@ -16,14 +16,13 @@ import AlertContainer from './components/alerts/AlertContainer';
 import ContactsPage from './pages/ContactPage';
 import InvoicesPage from './pages/InvoicesPage';
 import SingleInvoicePage from './pages/SingleInvoicePage';
-/* import SingleProductPage from './pages/SingleProductPage'; */
 import ContractsPage from './pages/ContractsPage';
 import SingleContractPage from './pages/SingleContractPage';
 import ContractModal from './pages/ContractModal';
 import Navigation from './components/navigation/Navigation';
 import { RootState } from './stores/store';
 import ResourceStatus from './stores/resourceStatus';
-import { AuthStatus } from './clients/server.generated';
+import { AuthStatus, Roles, User } from './clients/server.generated';
 import LoginPage from './pages/LoginPage';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
 import ResetPasswordPage from './pages/ResetPasswordPage';
@@ -42,26 +41,33 @@ import ProductCategoriesPage from './pages/ProductCategoriesPage';
 import ProductCategoriesCreatePage from './pages/ProductCategoriesCreatePage';
 import ProductCategoryModal from './pages/ProductCategoryModal';
 import CustomInvoicePage from './pages/CustomInvoicePage';
+import { authedUserHasRole } from './stores/auth/selectors';
+import AuthorizationComponent from './components/AuthorizationComponent';
 
 interface Props extends RouteComponentProps {
   // eslint-disable-next-line react/no-unused-prop-types
   authStatus: AuthStatus | undefined;
   status: ResourceStatus;
+  profile: User | undefined;
+
+  hasRole: (role: Roles) => boolean;
 }
 
 function Routes(props: Props) {
-  if (props.status !== ResourceStatus.FETCHED || props.authStatus === undefined) {
-    return (
-      <Container>
-        <Dimmer active page inverted>
+  const loader = (
+    <Container>
+      <Dimmer active page inverted>
 
-          <Header as="h2" icon>
-            <Loader inline content="ParelPracht" size="large" />
-            <Header.Subheader>Checking login information...</Header.Subheader>
-          </Header>
-        </Dimmer>
-      </Container>
-    );
+        <Header as="h2" icon>
+          <Loader inline content="ParelPracht" size="large" />
+          <Header.Subheader>Checking login information...</Header.Subheader>
+        </Header>
+      </Dimmer>
+    </Container>
+  );
+
+  if (props.status !== ResourceStatus.FETCHED || props.authStatus === undefined) {
+    return loader;
   }
 
   if (!props.authStatus.authenticated) {
@@ -93,6 +99,8 @@ function Routes(props: Props) {
     );
   }
 
+  if (props.profile === undefined) return loader;
+
   return (
     <div>
       <Navigation />
@@ -113,46 +121,60 @@ function Routes(props: Props) {
             <ProductsPage />
           </Route>
           <Route path="/product/new" exact>
-            <ProductsPage />
-            <ProductCreatePage />
+            <AuthorizationComponent roles={[Roles.ADMIN, Roles.GENERAL]} notFound>
+              <ProductsPage />
+              <ProductCreatePage />
+            </AuthorizationComponent>
           </Route>
           <Route path="/product/:productId" exact component={SingleProductPage} />
           <Route path="/product/:productId/contract/new" exact>
-            <SingleProductPage />
-            <ContractModal />
+            <AuthorizationComponent roles={[Roles.ADMIN, Roles.GENERAL]} notFound>
+              <SingleProductPage />
+              <ContractModal />
+            </AuthorizationComponent>
           </Route>
           {/* Product Categories */}
           <Route path="/category" exact>
             <ProductCategoriesPage />
           </Route>
           <Route path="/category/new" exact>
-            <ProductCategoriesPage />
-            <ProductCategoriesCreatePage />
+            <AuthorizationComponent roles={[Roles.ADMIN]} notFound>
+              <ProductCategoriesPage />
+              <ProductCategoriesCreatePage />
+            </AuthorizationComponent>
           </Route>
           <Route path="/category/:categoryId" exact>
-            <ProductCategoriesPage />
-            <ProductCategoryModal />
+            <AuthorizationComponent roles={[Roles.ADMIN, Roles.GENERAL]} notFound>
+              <ProductCategoriesPage />
+              <ProductCategoryModal />
+            </AuthorizationComponent>
           </Route>
           {/* Company */}
           <Route path="/company" exact>
             <CompaniesPage />
           </Route>
           <Route path="/company/new" exact>
-            <CompaniesPage />
-            <CompaniesCreatePage />
+            <AuthorizationComponent roles={[Roles.ADMIN]} notFound>
+              <CompaniesPage />
+              <CompaniesCreatePage />
+            </AuthorizationComponent>
           </Route>
           <Route path="/company/:companyId" exact component={SingleCompanyPage} />
           <Route path="/company/:companyId/contact/new" exact>
-            <SingleCompanyPage />
-            <ContactModal create onCompanyPage />
+            <AuthorizationComponent roles={[Roles.GENERAL, Roles.ADMIN]} notFound>
+              <SingleCompanyPage />
+              <ContactModal create onCompanyPage />
+            </AuthorizationComponent>
           </Route>
           <Route path="/company/:companyId/contact/:contactId" exact>
             <SingleCompanyPage />
             <ContactModal onCompanyPage />
           </Route>
           <Route path="/company/:companyId/contract/new" exact>
-            <SingleCompanyPage />
-            <ContractModal />
+            <AuthorizationComponent roles={[Roles.GENERAL, Roles.ADMIN]} notFound>
+              <SingleCompanyPage />
+              <ContractModal />
+            </AuthorizationComponent>
           </Route>
 
           {/* Contacts */}
@@ -160,8 +182,10 @@ function Routes(props: Props) {
             <ContactsPage />
           </Route>
           <Route path="/contact/:contactId" exact>
-            <ContactsPage />
-            <ContactModal onCompanyPage={false} />
+            <AuthorizationComponent roles={[Roles.GENERAL, Roles.ADMIN, Roles.AUDIT]} notFound>
+              <ContactsPage />
+              <ContactModal onCompanyPage={false} />
+            </AuthorizationComponent>
           </Route>
 
           {/* Invoice */}
@@ -182,17 +206,26 @@ function Routes(props: Props) {
             <ContractsPage />
           </Route>
           <Route path="/contract/new" exact>
-            <ContractsPage />
-            <ContractModal />
+            <AuthorizationComponent roles={[Roles.GENERAL, Roles.ADMIN]} notFound>
+              <ContractsPage />
+              <ContractModal />
+            </AuthorizationComponent>
           </Route>
           <Route path="/contract/:contractId" exact component={SingleContractPage} />
           <Route path="/contract/:contractId/product/new" exact>
-            <SingleContractPage />
-            <ContractProductInstanceModal create />
+            <AuthorizationComponent roles={[Roles.GENERAL, Roles.ADMIN]} notFound>
+              <SingleContractPage />
+              <ContractProductInstanceModal create />
+            </AuthorizationComponent>
           </Route>
           <Route path="/contract/:contractId/product/:productInstanceId" exact>
-            <SingleContractPage />
-            <ContractProductInstanceModal />
+            <AuthorizationComponent
+              roles={[Roles.GENERAL, Roles.ADMIN, Roles.AUDIT]}
+              notFound={false}
+            >
+              <SingleContractPage />
+              <ContractProductInstanceModal />
+            </AuthorizationComponent>
           </Route>
 
           {/* Insights */}
@@ -201,13 +234,15 @@ function Routes(props: Props) {
           </Route>
 
           {/* Users */}
-          <Route path="/user" exact>
-            <UsersPage />
-          </Route>
-          <Route path="/user/new" exact>
-            <UsersPage />
-            <UserCreatePage />
-          </Route>
+          {props.hasRole(Roles.ADMIN) ? [
+            <Route path="/user" exact>
+              <UsersPage />
+            </Route>,
+            <Route path="/user/new" exact>
+              <UsersPage />
+              <UserCreatePage />
+            </Route>,
+          ] : null}
           <Route path="/user/:userId" exact component={SingleUserPage} />
           <Route path="/norights" component={NoRights} />
           <Route path="" component={NotFound} />
@@ -224,6 +259,7 @@ const mapStateToProps = (state: RootState) => {
     status: state.auth.status,
     profile: state.auth.profile,
     profileStatus: state.auth.profileStatus,
+    hasRole: (role: Roles): boolean => authedUserHasRole(state, role),
   };
 };
 

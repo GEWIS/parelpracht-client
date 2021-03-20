@@ -7,6 +7,8 @@ import AuthMenu from './AuthMenu';
 import CompaniesMenu from './CompaniesMenu';
 import ProductsMenu from './ProductsMenu';
 import InvoicesMenu from './InvoicesMenu';
+import AuthorizationComponent from '../AuthorizationComponent';
+import { Roles } from '../../clients/server.generated';
 
 function Navigation() {
   return (
@@ -21,13 +23,22 @@ function Navigation() {
             }}
           />
         </Menu.Item>
-        <ProductsMenu />
-        <CompaniesMenu />
+        <AuthorizationComponent roles={[Roles.GENERAL, Roles.ADMIN]} notFound={false}>
+          <ProductsMenu />
+        </AuthorizationComponent>
+        <AuthorizationComponent roles={[Roles.GENERAL, Roles.ADMIN, Roles.AUDIT]} notFound={false}>
+          <CompaniesMenu />
+        </AuthorizationComponent>
         <Menu.Item as={NavLink} to="/contract">
           <Icon name="file alternate" />
           Contracts
         </Menu.Item>
-        <InvoicesMenu />
+        <AuthorizationComponent
+          roles={[Roles.GENERAL, Roles.ADMIN, Roles.AUDIT, Roles.FINANCIAL]}
+          notFound={false}
+        >
+          <InvoicesMenu />
+        </AuthorizationComponent>
         <Menu.Item as={NavLink} to="/insights">
           <Icon name="line graph" />
           Insights

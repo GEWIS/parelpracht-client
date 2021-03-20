@@ -11,6 +11,7 @@ import { authLogout } from '../../stores/auth/actionCreators';
 import ResourceStatus from '../../stores/resourceStatus';
 import { RootState } from '../../stores/store';
 import UserAvatar from '../user/UserAvatar';
+import { authedUserHasRole } from '../../stores/auth/selectors';
 
 interface Props extends RouteComponentProps {
   authStatus: AuthStatus | undefined;
@@ -18,6 +19,7 @@ interface Props extends RouteComponentProps {
 
   profile: User | undefined;
   profileStatus: ResourceStatus;
+  hasRole: (role: Roles) => boolean;
 
   logout: () => void;
 }
@@ -43,7 +45,7 @@ function AuthMenu(props: Props) {
     props.profile.lastName,
   );
 
-  const isAdmin = props.profile.roles.find((r) => r.name === Roles.ADMIN) !== undefined;
+  const isAdmin = props.hasRole(Roles.ADMIN);
 
   return (
     <Menu.Menu position="right">
@@ -69,7 +71,12 @@ function AuthMenu(props: Props) {
               <Icon name="users" />
               Users
             </Dropdown.Item>
-          ) : null}
+          ) : (
+            <Dropdown.Item as={NavLink} to={`/user/${props.profile.id}`}>
+              <Icon name="users" />
+              My profile
+            </Dropdown.Item>
+          )}
           <Dropdown.Item onClick={logout}>
             <Icon name="sign-out" />
             Logout
@@ -86,6 +93,7 @@ const mapStateToProps = (state: RootState) => {
     status: state.auth.status,
     profile: state.auth.profile,
     profileStatus: state.auth.profileStatus,
+    hasRole: (role: Roles): boolean => authedUserHasRole(state, role),
   };
 };
 
