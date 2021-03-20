@@ -82,8 +82,11 @@ class SingleUserPage extends React.Component<Props> {
             ) : <Segment placeholder />}
           </Grid.Column>
           <Grid.Column>
-            <Segment style={{ height: '4rem' }}>
-              <UserMoveAssignmentsButton userId={user.id} />
+            <Segment>
+              <h2>
+                Responsibilities
+                <UserMoveAssignmentsButton userId={user.id} />
+              </h2>
             </Segment>
             {isProfilePage ? (
               <Segment>

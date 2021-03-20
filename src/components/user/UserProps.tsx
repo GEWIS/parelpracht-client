@@ -187,17 +187,6 @@ class UserProps extends React.Component<Props, State> {
             })}
           />
         </Form.Field>
-        <Form.Field>
-          <Checkbox
-            label="I want to receive email on my reply-to email address"
-            disabled={!editing}
-            id="form-send-emails-to-reply-to"
-            checked={sendEmailsToReplyToEmail}
-            onChange={(e, data) => this.setState({
-              sendEmailsToReplyToEmail: data.checked!,
-            })}
-          />
-        </Form.Field>
       </>
     ) : (
       ' '
@@ -307,7 +296,6 @@ class UserProps extends React.Component<Props, State> {
               }
             />
           </Form.Group>
-          {receiveEmailsCheckbox}
           <Form.Group widths="equal">
             <Form.Field
               disabled={!editing}
@@ -336,6 +324,18 @@ class UserProps extends React.Component<Props, State> {
               })}
             />
           </Form.Group>
+          <Form.Field>
+            <Checkbox
+              label="I want to receive all emails on my reply-to email address"
+              disabled={!editing}
+              id="form-send-emails-to-reply-to"
+              checked={sendEmailsToReplyToEmail}
+              onChange={(e, data) => this.setState({
+                sendEmailsToReplyToEmail: data.checked!,
+              })}
+            />
+          </Form.Field>
+          {receiveEmailsCheckbox}
           <Segment>
             <h3>Permissions</h3>
             <Form.Group widths="equal">

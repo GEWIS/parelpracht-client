@@ -53,7 +53,6 @@ class UserMoveAssignmentsButton extends React.Component<Props, State> {
         icon
         labelPosition="left"
         floated="right"
-        style={{ marginTop: '-0.5em' }}
         primary
       >
         <Icon name="arrow right" />
