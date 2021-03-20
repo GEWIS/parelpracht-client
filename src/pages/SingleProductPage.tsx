@@ -159,13 +159,11 @@ class SingleProductPage extends React.Component<Props> {
             </Grid.Column>
             <Grid.Column width={6}>
               <Segment secondary>
-                <ProductProps product={product} />
+                <ProductProps
+                  product={product}
+                  productPricingActive={product.pricing === undefined}
+                />
               </Segment>
-              {product.pricing === undefined ? (
-                <Segment secondary>
-                  <CreatePricing productId={product.id} />
-                </Segment>
-              ) : null }
             </Grid.Column>
           </Grid>
         </Container>

@@ -2,11 +2,13 @@ import React, { ChangeEvent } from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import {
-  Checkbox, Form, Input, Label, TextArea,
+  Checkbox, Form, Grid, Input, Label, Segment, TextArea,
 } from 'semantic-ui-react';
 import validator from 'validator';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
-import { Product, ProductParams, ProductStatus } from '../../clients/server.generated';
+import {
+  Product, ProductParams, ProductStatus, Roles,
+} from '../../clients/server.generated';
 import ProductCategorySelector from '../productcategories/ProductCategorySelector';
 import { formatPrice } from '../../helpers/monetary';
 import ResourceStatus from '../../stores/resourceStatus';
@@ -18,12 +20,15 @@ import PropsButtons from '../PropsButtons';
 import { TransientAlert } from '../../stores/alerts/actions';
 import { showTransientAlert } from '../../stores/alerts/actionCreators';
 import TextAreaMimic from '../TextAreaMimic';
+import CreatePricing from '../productpricing/CreatePricing';
+import AuthorizationComponent from '../AuthorizationComponent';
 
 interface Props extends RouteComponentProps {
   create?: boolean;
   onCancel?: () => void;
 
   product: Product;
+  productPricingActive?: boolean;
   status: ResourceStatus;
 
   saveProduct: (id: number, product: ProductParams) => void;
@@ -223,24 +228,39 @@ class ProductProps extends React.Component<Props, State> {
               }
             />
           </Form.Group>
-          <Form.Field
-            disabled={!editing}
-            required
-          >
-            {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-            <label htmlFor="form-input-category">
-              Product category
-            </label>
-            <ProductCategorySelector
-              id="form-input-category"
-              value={categoryId}
-              onChange={(val: number) => {
-                this.setState({
-                  categoryId: val,
-                });
-              }}
-            />
-          </Form.Field>
+          <Form.Group widths="equal">
+            <Form.Field
+              disabled={!editing}
+              required
+            >
+              {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
+              <label htmlFor="form-input-category">
+                Product category
+              </label>
+              <ProductCategorySelector
+                id="form-input-category"
+                value={categoryId}
+                onChange={(val: number) => {
+                  this.setState({
+                    categoryId: val,
+                  });
+                }}
+              />
+            </Form.Field>
+            {this.props.productPricingActive ? (
+              <AuthorizationComponent roles={[Roles.ADMIN]} notFound={false}>
+                <Form.Field
+                  disabled={!editing}
+                >
+                  {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
+                  <label htmlFor="form-check-status">
+                    Pricing Tab
+                  </label>
+                  <CreatePricing productId={this.props.product.id} />
+                </Form.Field>
+              </AuthorizationComponent>
+            ) : null }
+          </Form.Group>
           <Form.Group widths="equal">
             <Form.Field
               disabled={!editing}
