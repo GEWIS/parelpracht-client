@@ -14,6 +14,8 @@ import PropsButtons from '../PropsButtons';
 import { getSingle } from '../../stores/single/selectors';
 import { SingleEntities } from '../../stores/single/single';
 import CountrySelector from './CountrySelector';
+import { TransientAlert } from '../../stores/alerts/actions';
+import { showTransientAlert } from '../../stores/alerts/actionCreators';
 
 interface Props extends RouteComponentProps {
   create?: boolean;
@@ -25,6 +27,7 @@ interface Props extends RouteComponentProps {
   saveCompany: (id: number, company: CompanyParams) => void;
   createCompany: (company: CompanyParams) => void;
   deleteCompany: (id: number) => void;
+  showTransientAlert: (alert: TransientAlert) => void;
 }
 
 interface State {
@@ -390,6 +393,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   deleteCompany: (id: number) => dispatch(
     deleteSingle(SingleEntities.Company, id),
   ),
+  showTransientAlert: (alert: TransientAlert) => dispatch(showTransientAlert(alert)),
 });
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(CompanyProps));

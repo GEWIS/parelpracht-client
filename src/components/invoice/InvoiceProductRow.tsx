@@ -2,6 +2,7 @@ import React from 'react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { Icon, Table } from 'semantic-ui-react';
 import { connect } from 'react-redux';
+import { Dispatch } from 'redux';
 import { ProductInstance } from '../../clients/server.generated';
 import { RootState } from '../../stores/store';
 import { getProductName } from '../../stores/product/selectors';
@@ -9,6 +10,8 @@ import { formatPriceDiscount, formatPriceFull } from '../../helpers/monetary';
 import ContractLink from '../contract/ContractLink';
 import DeleteButton from '../DeleteButton';
 import ResourceStatus from '../../stores/resourceStatus';
+import { TransientAlert } from '../../stores/alerts/actions';
+import { showTransientAlert } from '../../stores/alerts/actionCreators';
 
 interface Props extends RouteComponentProps {
   productInstance: ProductInstance;
@@ -16,6 +19,7 @@ interface Props extends RouteComponentProps {
   canDelete: boolean;
 
   productName: string;
+  showTransientAlert: (alert: TransientAlert) => void;
 }
 
 interface State {
@@ -35,9 +39,18 @@ class InvoiceProductRow extends React.Component<Props, State> {
     this.setState({ status: ResourceStatus.DELETING });
     try {
       await removeProduct(this.props.productInstance.id);
+      this.props.showTransientAlert({
+        title: 'Success',
+        message: 'Deleted product from invoice successfully.',
+        type: 'success',
+      });
     } catch {
-      // TODO: show error alert
       this.setState({ status: ResourceStatus.FETCHED });
+      this.props.showTransientAlert({
+        title: 'Error',
+        message: 'Error deleting product from invoice.',
+        type: 'error',
+      });
     }
   };
 
@@ -77,4 +90,8 @@ const mapStateToProps = (state: RootState, props: { productInstance: ProductInst
   };
 };
 
-export default withRouter(connect(mapStateToProps)(InvoiceProductRow));
+const mapDispatchToProps = (dispatch: Dispatch) => ({
+  showTransientAlert: (alert: TransientAlert) => dispatch(showTransientAlert(alert)),
+});
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(InvoiceProductRow));

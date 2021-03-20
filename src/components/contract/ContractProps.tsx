@@ -14,6 +14,9 @@ import PropsButtons from '../PropsButtons';
 import { SingleEntities } from '../../stores/single/single';
 import { getSingle } from '../../stores/single/selectors';
 import UserSelector from '../user/UserSelector';
+import { TransientAlert } from '../../stores/alerts/actions';
+import { showTransientAlert } from '../../stores/alerts/actionCreators';
+import { formatDocumentIdTitle } from '../../helpers/documents';
 
 interface Props extends RouteComponentProps {
   create?: boolean;
@@ -26,6 +29,7 @@ interface Props extends RouteComponentProps {
   saveContract: (id: number, contract: ContractParams) => void;
   createContract: (contract: ContractParams) => void;
   deleteContract: (id: number) => void;
+  showTransientAlert: (alert: TransientAlert) => void;
 }
 
 interface State {
@@ -53,6 +57,15 @@ class ContractProps extends React.Component<Props, State> {
       && this.props.status === ResourceStatus.FETCHED) {
       // eslint-disable-next-line react/no-did-update-set-state
       this.setState({ editing: false });
+      this.props.showTransientAlert({
+        title: 'Success',
+        message: `Properties of ${formatDocumentIdTitle(
+          this.props.contract.id,
+          this.props.contract.title,
+          SingleEntities.Contract,
+        )} successfully updated.`,
+        type: 'success',
+      });
     }
   }
 
@@ -275,6 +288,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   deleteContract: (id: number) => dispatch(
     deleteSingle(SingleEntities.Contract, id),
   ),
+  showTransientAlert: (alert: TransientAlert) => dispatch(showTransientAlert(alert)),
 });
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ContractProps));

@@ -8,7 +8,7 @@ import validator from 'validator';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import {
-  Language, ReturnFileType, GenerateInvoiceParams, Invoice, ContractType,
+  Language, ReturnFileType, GenerateInvoiceParams, Invoice,
 } from '../../clients/server.generated';
 import AlertContainer from '../alerts/AlertContainer';
 import { FilesClient } from '../../clients/filesClient';

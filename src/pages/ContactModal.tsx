@@ -18,6 +18,7 @@ import { getSingle } from '../stores/single/selectors';
 import { SingleEntities } from '../stores/single/single';
 import { TransientAlert } from '../stores/alerts/actions';
 import { showTransientAlert } from '../stores/alerts/actionCreators';
+import { formatContactName } from '../helpers/contact';
 
 interface Props extends RouteComponentProps<{ companyId: string, contactId?: string }> {
   create?: boolean;
@@ -45,21 +46,35 @@ class ContactModal extends React.Component<Props> {
     if (this.props.status === ResourceStatus.FETCHED
       && prevProps.status === ResourceStatus.SAVING
     ) {
-      this.close();
+      this.closeWithPopupMessage();
     }
 
     if (this.props.status === ResourceStatus.EMPTY
       && prevProps.status === ResourceStatus.DELETING
     ) {
-      this.close();
-      // TODO: Fix alert not showing up, because it seems to get dismissed when closing the modal
+      this.closeWithPopupMessage();
+
       this.props.showTransientAlert({
         title: 'Success',
-        message: `Contact ${prevProps.contact?.firstName} successfully deleted`,
+        message: `Contact ${formatContactName(
+          prevProps.contact?.firstName,
+          prevProps.contact?.lastNamePreposition,
+          prevProps.contact?.lastName,
+        )} successfully deleted`,
         type: 'success',
       });
     }
   }
+
+  closeWithPopupMessage = () => {
+    const { companyId } = this.props.match.params;
+
+    // If the modal is not opened on a company page, we cannot refresh the company information
+    if (companyId !== undefined) {
+      this.props.fetchCompany(parseInt(companyId, 10));
+    }
+    this.props.history.push(`/company/${companyId}`);
+  };
 
   close = () => {
     const { companyId } = this.props.match.params;
