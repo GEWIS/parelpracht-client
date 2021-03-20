@@ -121,6 +121,7 @@ class SingleFile extends React.Component<Props, State> {
       title: 'Success',
       message: `Uploaded ${this.state.fileName} successfully.`,
       type: 'success',
+      displayTimeInMs: 3000,
     });
   };
 
@@ -132,6 +133,7 @@ class SingleFile extends React.Component<Props, State> {
       title: 'Success',
       message: `Deleted ${this.state.fileName} successfully.`,
       type: 'success',
+      displayTimeInMs: 3000,
     });
   };
 

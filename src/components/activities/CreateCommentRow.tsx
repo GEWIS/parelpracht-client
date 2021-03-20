@@ -86,6 +86,7 @@ class CreateCommentRow extends React.Component<Props, State> {
       title: 'Success',
       message: `Posted comment ${this.state.comment} successfully.`,
       type: 'success',
+      displayTimeInMs: 3000,
     });
     this.cancel();
   };

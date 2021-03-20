@@ -50,6 +50,7 @@ class SingleProductPage extends React.Component<Props> {
         title: 'Success',
         message: `Product ${prevProps.product?.nameEnglish} successfully deleted`,
         type: 'success',
+        displayTimeInMs: 3000,
       });
     } else if (prevProps.status === ResourceStatus.SAVING
       && this.props.status === ResourceStatus.FETCHED) {
@@ -57,6 +58,7 @@ class SingleProductPage extends React.Component<Props> {
         title: 'Success',
         message: `Properties of ${this.props.product?.nameEnglish} successfully updated.`,
         type: 'success',
+        displayTimeInMs: 3000,
       });
     }
   }

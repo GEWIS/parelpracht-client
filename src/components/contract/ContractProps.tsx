@@ -65,6 +65,7 @@ class ContractProps extends React.Component<Props, State> {
           SingleEntities.Contract,
         )} successfully updated.`,
         type: 'success',
+        displayTimeInMs: 3000,
       });
     }
   }

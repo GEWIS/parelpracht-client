@@ -43,6 +43,7 @@ class InvoiceProductRow extends React.Component<Props, State> {
         title: 'Success',
         message: 'Deleted product from invoice successfully.',
         type: 'success',
+        displayTimeInMs: 3000,
       });
     } catch {
       this.setState({ status: ResourceStatus.FETCHED });
@@ -50,6 +51,7 @@ class InvoiceProductRow extends React.Component<Props, State> {
         title: 'Error',
         message: 'Error deleting product from invoice.',
         type: 'error',
+        displayTimeInMs: 1000,
       });
     }
   };

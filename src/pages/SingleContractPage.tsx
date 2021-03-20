@@ -48,6 +48,7 @@ class SingleContractPage extends React.Component<Props> {
         title: 'Success',
         message: `Contract ${prevProps.contract?.title} successfully deleted`,
         type: 'success',
+        displayTimeInMs: 3000,
       });
     }
   }

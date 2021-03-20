@@ -34,6 +34,7 @@ class ProductCategoriesCreatePage extends React.Component<Props> {
         title: 'Success',
         message: 'Category successfully created',
         type: 'success',
+        displayTimeInMs: 3000,
       });
     }
   }

@@ -67,6 +67,7 @@ class InvoiceProps extends React.Component<Props, State> {
           SingleEntities.Invoice,
         )} successfully updated.`,
         type: 'success',
+        displayTimeInMs: 3000,
       });
     }
   }
