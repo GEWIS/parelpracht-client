@@ -4,7 +4,9 @@ import { Dispatch } from 'redux';
 import { Form, Input } from 'semantic-ui-react';
 import validator from 'validator';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
-import { ActivityType, Contract, ContractParams } from '../../clients/server.generated';
+import {
+  ActivityType, Contract, ContractParams, Roles,
+} from '../../clients/server.generated';
 import { createSingle, deleteSingle, saveSingle } from '../../stores/single/actionCreators';
 import ResourceStatus from '../../stores/resourceStatus';
 import { RootState } from '../../stores/store';
@@ -220,6 +222,7 @@ class ContractProps extends React.Component<Props, State> {
                   assignedToSelection: val === '' ? undefined : val,
                 })}
                 clearable
+                role={Roles.GENERAL}
               />
             </Form.Field>
           </Form.Group>

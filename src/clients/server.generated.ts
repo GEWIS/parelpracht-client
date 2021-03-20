@@ -11040,6 +11040,7 @@ export class UserSummary implements IUserSummary {
     lastName!: string;
     email!: string;
     avatarFilename!: string;
+    roles!: Roles[];
 
     constructor(data?: IUserSummary) {
         if (data) {
@@ -11047,6 +11048,9 @@ export class UserSummary implements IUserSummary {
                 if (data.hasOwnProperty(property))
                     (<any>this)[property] = (<any>data)[property];
             }
+        }
+        if (!data) {
+            this.roles = [];
         }
     }
 
@@ -11058,6 +11062,11 @@ export class UserSummary implements IUserSummary {
             this.lastName = _data["lastName"];
             this.email = _data["email"];
             this.avatarFilename = _data["avatarFilename"];
+            if (Array.isArray(_data["roles"])) {
+                this.roles = [] as any;
+                for (let item of _data["roles"])
+                    this.roles!.push(item);
+            }
         }
     }
 
@@ -11076,6 +11085,11 @@ export class UserSummary implements IUserSummary {
         data["lastName"] = this.lastName;
         data["email"] = this.email;
         data["avatarFilename"] = this.avatarFilename;
+        if (Array.isArray(this.roles)) {
+            data["roles"] = [];
+            for (let item of this.roles)
+                data["roles"].push(item);
+        }
         return data; 
     }
 }
@@ -11087,6 +11101,7 @@ export interface IUserSummary {
     lastName: string;
     email: string;
     avatarFilename: string;
+    roles: Roles[];
 }
 
 /** Make all properties in T optional */

@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { Dropdown, DropdownProps } from 'semantic-ui-react';
-import { UserSummary } from '../../clients/server.generated';
+import { Roles, UserSummary } from '../../clients/server.generated';
 import { formatContactName } from '../../helpers/contact';
 import { RootState } from '../../stores/store';
 
@@ -12,15 +12,20 @@ interface Props {
   onChange: (value: number | number[]) => void;
   hideEmail?: boolean;
   correct?: boolean;
+  role?: Roles;
 }
 
 function UserSelector(props: Props & DropdownProps) {
   const [open, changeOpen] = useState(false);
 
   const {
-    value, onChange, options, hideEmail, correct,
+    value, onChange, options, hideEmail, correct, role,
   } = props;
-  const dropdownOptions = options.map((x) => ({
+
+  const filteredOptions = role !== undefined
+    ? options.filter((u) => u.roles.includes(role))
+    : options;
+  const dropdownOptions = filteredOptions.map((x) => ({
     key: x.id,
     text: formatContactName(x.firstName, x.lastNamePreposition, x.lastName),
     description: hideEmail ? undefined : x.email,
@@ -50,6 +55,7 @@ const mapStateToProps = (state: RootState) => ({
 UserSelector.defaultProps = {
   correct: undefined,
   hideEmail: undefined,
+  role: undefined,
 };
 
 export default connect(mapStateToProps)(UserSelector);

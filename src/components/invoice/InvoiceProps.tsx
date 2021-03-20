@@ -5,7 +5,9 @@ import { Form, Input, TextArea } from 'semantic-ui-react';
 import { DateInput } from 'semantic-ui-calendar-react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import validator from 'validator';
-import { ActivityType, Invoice, Partial_InvoiceParams } from '../../clients/server.generated';
+import {
+  ActivityType, Invoice, Partial_InvoiceParams, Roles,
+} from '../../clients/server.generated';
 import { getCompanyName } from '../../stores/company/selectors';
 import ResourceStatus from '../../stores/resourceStatus';
 import { deleteSingle, saveSingle } from '../../stores/single/actionCreators';
@@ -171,6 +173,7 @@ class InvoiceProps extends React.Component<Props, State> {
                 onChange={(val: number) => this.setState({
                   assignedToId: val,
                 })}
+                role={Roles.GENERAL}
               />
             </Form.Field>
           </Form.Group>

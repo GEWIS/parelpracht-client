@@ -6,7 +6,7 @@ import validator from 'validator';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import {
-  ContractType, GenerateContractParams, Language, ReturnFileType,
+  ContractType, GenerateContractParams, Language, ReturnFileType, Roles,
 } from '../../clients/server.generated';
 import AlertContainer from '../alerts/AlertContainer';
 import UserSelector from '../user/UserSelector';
@@ -198,6 +198,7 @@ function GenerateContractModal(props: Props) {
               hideEmail
               correct={contentType === ContractType.PROPOSAL}
               fluid
+              role={Roles.SIGNEE}
             />
             <Form.Field
               label="Signee 2"
@@ -210,6 +211,7 @@ function GenerateContractModal(props: Props) {
               hideEmail
               correct={contentType === ContractType.PROPOSAL}
               fluid
+              role={Roles.SIGNEE}
             />
           </Form.Group>
           <Form.Group>

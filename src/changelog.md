@@ -12,6 +12,8 @@ You can find the release notes below.
 ### Changes
 - Made the footer smaller and removed the 1px white line in Chrome
 - After changing your email address, you can log in with your new email address instead of your old one.
+- When selecting a signee for generating a contract, only users with the role "Signee" can be selected.
+- When selecting an assigned-to-user, only users with the role "General" can be selected.
 ### Bugfixes
 - Fixed page numbers showing "???" in generated PDF files.
 - Fixed diamond underneath tabs being black on hover.
