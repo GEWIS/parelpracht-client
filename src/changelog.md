@@ -14,6 +14,7 @@ You can find the release notes below.
 - After changing your email address, you can log in with your new email address instead of your old one.
 ### Bugfixes
 - Fixed page numbers showing "???" in generated PDF files.
+- Fixed diamond underneath tabs being black on hover.
 
 ## v0.2.1-beta2 (07-03-2021)
 

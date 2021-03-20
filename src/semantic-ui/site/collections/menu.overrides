@@ -6,7 +6,11 @@
   background-color: @primaryColor;
 }
 
-.ui.inverted.menu.pointing  .active.item::after {
+.ui.inverted.menu.pointing .active.item::after {
+  background: @primaryColor !important;
+}
+
+.ui.inverted.pointing.menu .active.item:hover::after {
   background: @primaryColor !important;
 }
 
