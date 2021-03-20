@@ -1,7 +1,7 @@
 import React from 'react';
 import { Loader, Table } from 'semantic-ui-react';
 import {
-  Client, ContractListResponse, PaginationParams, Product, ProductInstance,
+  Client, PaginationParams, Product, ProductInstance,
 } from '../../clients/server.generated';
 import TablePagination from '../TablePagination';
 import ContractCompactRow from './ContractCompactRow';

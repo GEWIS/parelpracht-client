@@ -6,7 +6,6 @@ import { Invoice, InvoiceStatus } from '../../clients/server.generated';
 import { RootState } from '../../stores/store';
 import { dateToFullFinancialYear, formatLastUpdate } from '../../helpers/timestamp';
 import { formatStatus } from '../../helpers/activity';
-import { getUserName } from '../../stores/user/selectors';
 import { getInvoiceStatus, getInvoiceValue } from '../../stores/invoice/selectors';
 import CompanyLink from '../company/CompanyLink';
 import { formatPriceFull } from '../../helpers/monetary';

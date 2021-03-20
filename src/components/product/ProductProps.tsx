@@ -2,7 +2,7 @@ import React, { ChangeEvent } from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import {
-  Checkbox, Form, Grid, Input, Label, Segment, TextArea,
+  Checkbox, Form, Input, Label, TextArea,
 } from 'semantic-ui-react';
 import validator from 'validator';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
@@ -247,19 +247,24 @@ class ProductProps extends React.Component<Props, State> {
                 }}
               />
             </Form.Field>
-            {this.props.productPricingActive ? (
-              <AuthorizationComponent roles={[Roles.ADMIN]} notFound={false}>
-                <Form.Field
-                  disabled={!editing}
-                >
-                  {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-                  <label htmlFor="form-check-status">
-                    Pricing Tab
-                  </label>
-                  <CreatePricing productId={this.props.product.id} />
-                </Form.Field>
-              </AuthorizationComponent>
-            ) : null }
+            <Form.Field
+              disabled={!editing}
+            >
+              {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
+              <label htmlFor="form-check-status">
+                Status
+              </label>
+              <Checkbox
+                toggle
+                id="form-check-status"
+                label={status === ProductStatus.ACTIVE ? 'Active' : 'Inactive'}
+                checked={status === ProductStatus.ACTIVE}
+                onChange={(_, data) => this.setState({
+                  status:
+                    data.checked ? ProductStatus.ACTIVE : ProductStatus.INACTIVE,
+                })}
+              />
+            </Form.Field>
           </Form.Group>
           <Form.Group widths="equal">
             <Form.Field
@@ -282,24 +287,19 @@ class ProductProps extends React.Component<Props, State> {
                 <input />
               </Input>
             </Form.Field>
-            <Form.Field
-              disabled={!editing}
-            >
-              {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-              <label htmlFor="form-check-status">
-                Status
-              </label>
-              <Checkbox
-                toggle
-                id="form-check-status"
-                label={status === ProductStatus.ACTIVE ? 'Active' : 'Inactive'}
-                checked={status === ProductStatus.ACTIVE}
-                onChange={(_, data) => this.setState({
-                  status:
-                    data.checked ? ProductStatus.ACTIVE : ProductStatus.INACTIVE,
-                })}
-              />
-            </Form.Field>
+            {this.props.productPricingActive ? (
+              <AuthorizationComponent roles={[Roles.ADMIN]} notFound={false}>
+                <Form.Field
+                  disabled={!editing}
+                >
+                  {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
+                  <label htmlFor="form-check-status">
+                    Pricing Tab
+                  </label>
+                  <CreatePricing productId={this.props.product.id} />
+                </Form.Field>
+              </AuthorizationComponent>
+            ) : null }
           </Form.Group>
           <Form.Group widths="equal">
             <Form.Field

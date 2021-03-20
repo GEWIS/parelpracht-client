@@ -22,7 +22,6 @@ import ContractCompactTable from '../components/contract/ContractCompactTable';
 import InvoiceCompactTable from '../components/invoice/InvoiceCompactTable';
 import ProductsContractedGraph from '../components/product/ProductsContractedGraph';
 import PricingTable from '../components/productpricing/PricingTable';
-import CreatePricing from '../components/productpricing/CreatePricing';
 import AuthorizationComponent from '../components/AuthorizationComponent';
 
 interface Props extends RouteComponentProps<{ productId: string }> {
