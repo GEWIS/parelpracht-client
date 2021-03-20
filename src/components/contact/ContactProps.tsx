@@ -69,6 +69,7 @@ class ContactProps extends React.Component<Props, State> {
           title: 'Success',
           message: 'Successfully created new contact.',
           type: 'success',
+          displayTimeInMs: 3000,
         });
       } else {
         this.props.showTransientAlert({
@@ -79,6 +80,7 @@ class ContactProps extends React.Component<Props, State> {
             this.props.contact?.lastName,
           )} successfully updated.`,
           type: 'success',
+          displayTimeInMs: 3000,
         });
       }
     }

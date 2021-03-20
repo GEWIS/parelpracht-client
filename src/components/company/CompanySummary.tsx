@@ -84,11 +84,17 @@ function CompanySummary(props: Props) {
         <Grid>
           <Grid.Row columns="2">
             <Grid.Column>
-              <Icon name="building" size="large" style={{ padding: '0.5rem' }} />
-              <Header.Content style={{ paddingLeft: '0.75rem' }}>
-                <Header.Subheader>Company</Header.Subheader>
-                {company.name}
-              </Header.Content>
+              <Grid columns="equal">
+                <Grid.Column width="1">
+                  <Icon name="building" size="large" style={{ padding: '0.5rem' }} />
+                </Grid.Column>
+                <Grid.Column>
+                  <Header.Content style={{ paddingLeft: '1.5rem' }}>
+                    <Header.Subheader>Company</Header.Subheader>
+                    {company.name}
+                  </Header.Content>
+                </Grid.Column>
+              </Grid>
             </Grid.Column>
             <Grid.Column>
               <LogoAvatarModal

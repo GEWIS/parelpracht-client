@@ -117,22 +117,12 @@ class SingleFile extends React.Component<Props, State> {
     }
 
     this.setState({ saveLoading: false });
-    this.props.showTransientAlert({
-      title: 'Success',
-      message: `Uploaded ${this.state.fileName} successfully.`,
-      type: 'success',
-    });
   };
 
   remove = () => {
     if (!this.props.create && !this.state.editing) {
       this.props.deleteFile(this.props.entityId, this.props.file.id, this.props.entity);
     }
-    this.props.showTransientAlert({
-      title: 'Success',
-      message: `Deleted ${this.state.fileName} successfully.`,
-      type: 'success',
-    });
   };
 
   public render() {

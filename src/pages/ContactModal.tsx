@@ -62,6 +62,7 @@ class ContactModal extends React.Component<Props> {
           prevProps.contact?.lastName,
         )} successfully deleted`,
         type: 'success',
+        displayTimeInMs: 3000,
       });
     }
   }

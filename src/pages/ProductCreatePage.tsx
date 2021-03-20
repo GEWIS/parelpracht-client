@@ -34,6 +34,7 @@ class ProductCreatePage extends React.Component<Props> {
         title: 'Success',
         message: 'Product successfully created',
         type: 'success',
+        displayTimeInMs: 3000,
       });
     }
   }
