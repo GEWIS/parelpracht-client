@@ -83,43 +83,58 @@ class ContractCompactTable extends React.Component<Props, State> {
       productInstances, countTotal, skip, take, loading,
     } = this.state;
 
+    let invoiceList;
+    if (productInstances.length === 0) {
+      invoiceList = (
+        <h4>
+          There are no invoices created yet.
+        </h4>
+      );
+    } else {
+      invoiceList = (
+        <>
+          <Table striped>
+            <Table.Header>
+              <Table.Row>
+                <Table.HeaderCell>
+                  Title
+                </Table.HeaderCell>
+                <Table.HeaderCell>
+                  Company
+                </Table.HeaderCell>
+                <Table.HeaderCell>
+                  Status
+                </Table.HeaderCell>
+                <Table.HeaderCell>
+                  Year
+                </Table.HeaderCell>
+                <Table.HeaderCell>
+                  Last Update
+                </Table.HeaderCell>
+              </Table.Row>
+            </Table.Header>
+            <Table.Body>
+              {productInstances.map((p) => <InvoiceCompactRow key={p.id} invoice={p.invoice} />)}
+            </Table.Body>
+          </Table>
+          <TablePagination
+            countTotal={countTotal}
+            countFetched={productInstances.length}
+            skip={skip}
+            take={take}
+            nextPage={this.nextPage}
+            prevPage={this.prevPage}
+            setTake={this.setTake}
+          />
+        </>
+      );
+    }
+
     return (
       <>
         <h3>Invoices</h3>
         <Loader active={loading} />
-        <Table striped>
-          <Table.Header>
-            <Table.Row>
-              <Table.HeaderCell>
-                Title
-              </Table.HeaderCell>
-              <Table.HeaderCell>
-                Company
-              </Table.HeaderCell>
-              <Table.HeaderCell>
-                Status
-              </Table.HeaderCell>
-              <Table.HeaderCell>
-                Year
-              </Table.HeaderCell>
-              <Table.HeaderCell>
-                Last Update
-              </Table.HeaderCell>
-            </Table.Row>
-          </Table.Header>
-          <Table.Body>
-            {productInstances.map((p) => <InvoiceCompactRow key={p.id} invoice={p.invoice} />)}
-          </Table.Body>
-        </Table>
-        <TablePagination
-          countTotal={countTotal}
-          countFetched={productInstances.length}
-          skip={skip}
-          take={take}
-          nextPage={this.nextPage}
-          prevPage={this.prevPage}
-          setTake={this.setTake}
-        />
+        {invoiceList}
       </>
     );
   }

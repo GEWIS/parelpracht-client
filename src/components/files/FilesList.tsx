@@ -68,23 +68,35 @@ class FilesList extends React.Component<Props, State> {
       );
     }
 
-    return (
-      <>
-        <h3>
-          Files
-          <Button
-            icon
-            labelPosition="left"
-            floated="right"
-            style={{ marginTop: '-0.5em' }}
-            basic
-            onClick={() => this.setState({ creating: true })}
-          >
-            <Icon name="plus" />
-            Upload File
-          </Button>
-          {generateModal}
-        </h3>
+    let filesList;
+    if (files.length === 0) {
+      filesList = (
+        <>
+          <h4>
+            There are no files uploaded yet.
+          </h4>
+          <Table compact>
+            <Table.Body>
+              {createRow}
+              {files
+                .sort((a, b) => { return b.updatedAt.getTime() - a.updatedAt.getTime(); })
+                .map((file) => (
+                  <SingleFile
+                    key={file.id}
+                    file={file}
+                    create={false}
+                    entity={entity}
+                    entityId={entityId}
+                    fetchEntity={fetchEntity}
+                    status={status}
+                  />
+                ))}
+            </Table.Body>
+          </Table>
+        </>
+      );
+    } else {
+      filesList = (
         <Table compact>
           <Table.Body>
             {createRow}
@@ -103,6 +115,27 @@ class FilesList extends React.Component<Props, State> {
               ))}
           </Table.Body>
         </Table>
+      );
+    }
+
+    return (
+      <>
+        <h3>
+          Files
+          <Button
+            icon
+            labelPosition="left"
+            floated="right"
+            style={{ marginTop: '-0.5em' }}
+            basic
+            onClick={() => this.setState({ creating: true })}
+          >
+            <Icon name="plus" />
+            Upload File
+          </Button>
+          {generateModal}
+        </h3>
+        {filesList}
       </>
     );
   }
