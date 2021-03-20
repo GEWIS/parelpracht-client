@@ -21,21 +21,58 @@ interface Props {
 
 function CompanySummary(props: Props) {
   const { company, status, fetchCompany } = props;
-  if (company === undefined
-    || (status !== ResourceStatus.FETCHED
-      && status !== ResourceStatus.SAVING
-      && status !== ResourceStatus.ERROR)) {
+  if (company === undefined) {
     return (
       <>
         <Header as="h1" attached="top" style={{ backgroundColor: '#eee' }}>
-          <Icon name="building" />
+          <Loader active inline style={{ marginRight: '1rem', marginLeft: '1rem', marginTop: '0.5rem' }} />
           <Header.Content>
             <Header.Subheader>Company</Header.Subheader>
-            <Loader active inline />
           </Header.Content>
         </Header>
         <Segment attached="bottom">
           <Placeholder><Placeholder.Line length="long" /></Placeholder>
+        </Segment>
+      </>
+    );
+  }
+
+  if (status === ResourceStatus.FETCHING || status === ResourceStatus.SAVING) {
+    return (
+      <>
+        <Header as="h1" attached="top" style={{ backgroundColor: '#eee' }}>
+          <Grid>
+            <Grid.Row columns="2">
+              <Grid.Column>
+                <Loader active inline style={{ marginRight: '0.75rem', marginLeft: '0.75rem', marginTop: '0.75rem' }} />
+                <Header.Content style={{ paddingLeft: '0.75rem' }}>
+                  <Header.Subheader>Company</Header.Subheader>
+                  {company.name}
+                </Header.Content>
+              </Grid.Column>
+              <Grid.Column>
+                <LogoAvatarModal
+                  entity={SingleEntities.Company}
+                  entityId={company.id}
+                  entityName={company.name}
+                  fileName={company.logoFilename}
+                  fetchEntity={fetchCompany}
+                />
+              </Grid.Column>
+            </Grid.Row>
+          </Grid>
+        </Header>
+        <Segment attached="bottom">
+          <Grid columns={4}>
+            <Grid.Column>
+              <h5>Description</h5>
+              <p>{company.comments}</p>
+            </Grid.Column>
+            <Grid.Column>
+              <h5>Status</h5>
+              <p>{formatStatus(company.status)}</p>
+            </Grid.Column>
+          </Grid>
         </Segment>
       </>
     );

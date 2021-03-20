@@ -20,12 +20,12 @@ function Credits() {
         ParelPracht was built in the winter of 2020-2021 during the second lockdown of the corona
         crisis by the 39th board of GEWIS. Special thanks to everyone who helped out:
         <ul>
-          <li>Koen de Nooij</li>
           <li>Roy Kakkenberg</li>
-          <li>Max Opperman</li>
-          <li>Irne Verwijst</li>
-          <li>Wouter van der Heijden</li>
+          <li>Koen de Nooij</li>
           <li>Jealy van den Aker</li>
+          <li>Max Opperman</li>
+          <li>Wouter van der Heijden</li>
+          <li>Irne Verwijst</li>
         </ul>
       </Modal.Content>
     </Modal>
