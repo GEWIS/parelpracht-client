@@ -49,6 +49,7 @@ class SingleCompanyPage extends React.Component<Props> {
         title: 'Success',
         message: `Company ${prevProps.company?.name} successfully deleted`,
         type: 'success',
+        displayTimeInMs: 3000,
       });
     }
     if (this.props.status === ResourceStatus.FETCHED
@@ -57,6 +58,7 @@ class SingleCompanyPage extends React.Component<Props> {
         title: 'Success',
         message: `Properties of ${this.props.company?.name} successfully updated.`,
         type: 'success',
+        displayTimeInMs: 3000,
       });
     }
   }

@@ -48,6 +48,7 @@ class ProductCategoryModal extends React.Component<Props> {
         title: 'Success',
         message: `Category ${this.props.category?.name} successfully saved`,
         type: 'success',
+        displayTimeInMs: 3000,
       });
     }
 
@@ -59,6 +60,7 @@ class ProductCategoryModal extends React.Component<Props> {
         title: 'Success',
         message: `Category ${prevProps.category?.name} successfully deleted`,
         type: 'success',
+        displayTimeInMs: 3000,
       });
     }
   }

@@ -58,14 +58,20 @@ function InvoiceSummary(props: Props) {
         <Grid>
           <Grid.Row columns="2">
             <Grid.Column>
-              <Icon name="money bill alternate outline" size="large" style={{ padding: '0.5rem 4.5rem 0.5rem 0.5rem' }} />
-              <Header.Content>
-                <Header.Subheader>Invoice</Header.Subheader>
-                F
-                {invoice.id}
-                {' '}
-                {invoice.title}
-              </Header.Content>
+              <Grid columns="equal">
+                <Grid.Column width="1">
+                  <Icon name="money bill alternate outline" size="large" style={{ padding: '0.5rem 4.5rem 0.5rem 0.5rem' }} />
+                </Grid.Column>
+                <Grid.Column>
+                  <Header.Content style={{ paddingLeft: '2.5rem' }}>
+                    <Header.Subheader>Invoice</Header.Subheader>
+                    F
+                    {invoice.id}
+                    {' '}
+                    {invoice.title}
+                  </Header.Content>
+                </Grid.Column>
+              </Grid>
             </Grid.Column>
             <Grid.Column>
               {logo}

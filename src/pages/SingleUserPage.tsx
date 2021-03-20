@@ -44,6 +44,7 @@ class SingleUserPage extends React.Component<Props> {
         title: 'Success',
         message: `User ${prevProps.user?.firstName} successfully deleted`,
         type: 'success',
+        displayTimeInMs: 3000,
       });
     }
   }

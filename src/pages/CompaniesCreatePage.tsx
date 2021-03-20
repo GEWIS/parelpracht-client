@@ -36,6 +36,7 @@ class CompaniesCreatePage extends React.Component<Props> {
         title: 'Success',
         message: 'Company successfully created',
         type: 'success',
+        displayTimeInMs: 3000,
       });
     }
   }

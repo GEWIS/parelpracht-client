@@ -64,14 +64,20 @@ function ContractSummary(props: Props) {
         <Grid>
           <Grid.Row columns="2">
             <Grid.Column>
-              <Icon name="file alternate" size="large" style={{ padding: '0.5rem' }} />
-              <Header.Content>
-                <Header.Subheader>Contract</Header.Subheader>
-                C
-                {contract.id}
-                {' '}
-                {contract.title}
-              </Header.Content>
+              <Grid columns="equal">
+                <Grid.Column width="1">
+                  <Icon name="file alternate" size="large" style={{ padding: '0.5rem' }} />
+                </Grid.Column>
+                <Grid.Column>
+                  <Header.Content style={{ paddingLeft: '1.25rem' }}>
+                    <Header.Subheader>Contract</Header.Subheader>
+                    C
+                    {contract.id}
+                    {' '}
+                    {contract.title}
+                  </Header.Content>
+                </Grid.Column>
+              </Grid>
             </Grid.Column>
             <Grid.Column>
               {logo}
