@@ -51,7 +51,7 @@ function InvoicesTable({
           <Dimmer active inverted>
             <Loader inverted />
           </Dimmer>
-          <Table singleLine selectable attached sortable>
+          <Table singleLine selectable attached sortable fixed>
             <Table.Header>
               <Table.Row>
                 <Table.HeaderCell
@@ -112,7 +112,7 @@ function InvoicesTable({
 
   return (
     <>
-      <Table singleLine selectable attached sortable>
+      <Table singleLine selectable attached sortable fixed>
         <Table.Header>
           <Table.Row>
             <Table.HeaderCell
