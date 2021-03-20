@@ -4,12 +4,13 @@ import {
 } from 'semantic-ui-react';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
-import { Client, Partial_PricingParams, ProductPricing } from '../../clients/server.generated';
+import { Client, Partial_PricingParams_ as Partial_PricingParams, ProductPricing } from '../../clients/server.generated';
 import PricingRow from './PricingRow';
 import PropsButtons from '../PropsButtons';
 import { SingleEntities } from '../../stores/single/single';
 import ResourceStatus from '../../stores/resourceStatus';
 import { fetchSingle } from '../../stores/single/actionCreators';
+import TextAreaMimic from '../TextAreaMimic';
 
 interface Props {
   pricing: ProductPricing;
@@ -145,10 +146,11 @@ class PricingTable extends React.Component<Props, State> {
           <Form>
             <TextArea
               value={description}
+              placeholder="Add a description"
               onChange={(e) => this.setState({ description: e.target.value })}
             />
           </Form>
-        ) : <p>{description}</p>}
+        ) : <TextAreaMimic content={description} />}
         <Table compact>
           <Table.Header>
             {pricingData.length > 0 ? (

@@ -3,12 +3,17 @@ import { RouteComponentProps, withRouter } from 'react-router-dom';
 import {
   Button, Container, Grid, Header, Icon, Segment,
 } from 'semantic-ui-react';
+import { Roles } from '../clients/server.generated';
+import AuthorizationComponent from '../components/AuthorizationComponent';
 import ContractsTable from '../components/contract/ContractTable';
 import ContractTableControls from '../components/contract/ContractTableControls';
 
 function ContractsPage(props: RouteComponentProps) {
   return (
-    <>
+    <AuthorizationComponent
+      roles={[Roles.SIGNEE, Roles.GENERAL, Roles.FINANCIAL, Roles.AUDIT, Roles.AUDIT]}
+      notFound
+    >
       <Segment style={{ backgroundColor: '#eee' }} vertical basic>
         <Container style={{ paddingTop: '2em' }}>
           <Grid columns={2}>
@@ -22,10 +27,12 @@ function ContractsPage(props: RouteComponentProps) {
               </Header>
             </Grid.Column>
             <Grid.Column>
-              <Button icon labelPosition="left" primary floated="right" onClick={() => props.history.push('/contract/new')}>
-                <Icon name="plus" />
-                Add Contract
-              </Button>
+              <AuthorizationComponent roles={[Roles.GENERAL, Roles.ADMIN]} notFound={false}>
+                <Button icon labelPosition="left" primary floated="right" onClick={() => props.history.push('/contract/new')}>
+                  <Icon name="plus" />
+                  Add Contract
+                </Button>
+              </AuthorizationComponent>
             </Grid.Column>
           </Grid>
 
@@ -36,7 +43,7 @@ function ContractsPage(props: RouteComponentProps) {
       <Container>
         <ContractsTable />
       </Container>
-    </>
+    </AuthorizationComponent>
   );
 }
 

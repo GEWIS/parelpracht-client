@@ -7,11 +7,11 @@
 }
 
 .ui.inverted.menu.pointing .active.item::after {
-  background: @primaryColor !important;
+  background: tint(@primaryColor, 15%) !important;
 }
 
 .ui.inverted.pointing.menu .active.item:hover::after {
-  background: @primaryColor !important;
+  background: tint(@primaryColor, 15%) !important;
 }
 
 .ui.inverted.segment.footer {

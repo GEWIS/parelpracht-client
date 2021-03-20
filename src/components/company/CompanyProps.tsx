@@ -6,7 +6,9 @@ import {
 } from 'semantic-ui-react';
 import validator from 'validator';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
-import { Company, CompanyParams, CompanyStatus } from '../../clients/server.generated';
+import {
+  Company, CompanyParams, CompanyStatus, Roles,
+} from '../../clients/server.generated';
 import { createSingle, deleteSingle, saveSingle } from '../../stores/single/actionCreators';
 import ResourceStatus from '../../stores/resourceStatus';
 import { RootState } from '../../stores/store';
@@ -16,6 +18,8 @@ import { SingleEntities } from '../../stores/single/single';
 import CountrySelector from './CountrySelector';
 import { TransientAlert } from '../../stores/alerts/actions';
 import { showTransientAlert } from '../../stores/alerts/actionCreators';
+import TextAreaMimic from '../TextAreaMimic';
+import AuthorizationComponent from '../AuthorizationComponent';
 
 interface Props extends RouteComponentProps {
   create?: boolean;
@@ -169,18 +173,19 @@ class CompanyProps extends React.Component<Props, State> {
       <>
         <h2>
           {this.props.create ? 'New Company' : 'Details'}
-
-          <PropsButtons
-            editing={editing}
-            canDelete={this.deleteButtonActive()}
-            canSave={!this.propsHaveErrors()}
-            entity={SingleEntities.Company}
-            status={this.props.status}
-            cancel={this.cancel}
-            edit={this.edit}
-            save={this.save}
-            remove={this.remove}
-          />
+          <AuthorizationComponent roles={[Roles.ADMIN, Roles.GENERAL]} notFound={false}>
+            <PropsButtons
+              editing={editing}
+              canDelete={this.deleteButtonActive()}
+              canSave={!this.propsHaveErrors()}
+              entity={SingleEntities.Company}
+              status={this.props.status}
+              cancel={this.cancel}
+              edit={this.edit}
+              save={this.save}
+              remove={this.remove}
+            />
+          </AuthorizationComponent>
         </h2>
 
         <Form style={{ marginTop: '2em' }}>
@@ -218,17 +223,21 @@ class CompanyProps extends React.Component<Props, State> {
             />
           </Form.Group>
           <Form.Group widths="equal">
-            <Form.Field disabled={!editing} fluid>
+            <Form.Field fluid>
               {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
               <label htmlFor="form-input-description">
                 Description
               </label>
-              <TextArea
-                id="form-input-description"
-                value={comments}
-                onChange={(e) => this.setState({ comments: e.target.value })}
-                placeholder="Description"
-              />
+              {editing ? (
+                <TextArea
+                  id="form-input-description"
+                  value={comments}
+                  onChange={(e) => this.setState({ comments: e.target.value })}
+                  placeholder="Description"
+                />
+              ) : (
+                <TextAreaMimic content={comments} />
+              )}
             </Form.Field>
             <Form.Field>
               {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}

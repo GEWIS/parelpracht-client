@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { NavLink, RouteComponentProps, withRouter } from 'react-router-dom';
 import {
-  Breadcrumb, Container, Grid, Segment,
+  Breadcrumb, Container, Grid, Header, Segment,
 } from 'semantic-ui-react';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
@@ -17,10 +17,13 @@ import { formatContactName } from '../helpers/contact';
 import { TransientAlert } from '../stores/alerts/actions';
 import { showTransientAlert } from '../stores/alerts/actionCreators';
 import UserMoveAssignmentsButton from '../components/user/UserMoveAssignmentsButton';
+import { isProfile } from '../stores/user/selectors';
+import UserApiKey from '../components/user/UserApiKey';
 
 interface Props extends RouteComponentProps<{ userId: string }> {
   user: User | undefined;
   status: ResourceStatus;
+  isProfilePage: boolean;
 
   fetchUser: (id: number) => void;
   clearUser: () => void;
@@ -39,7 +42,7 @@ class SingleUserPage extends React.Component<Props> {
     if (this.props.status === ResourceStatus.EMPTY
       && prevProps.status === ResourceStatus.DELETING
     ) {
-      this.props.history.push('/company');
+      this.props.history.push('/user');
       this.props.showTransientAlert({
         title: 'Success',
         message: `User ${prevProps.user?.firstName} successfully deleted`,
@@ -50,7 +53,7 @@ class SingleUserPage extends React.Component<Props> {
   }
 
   public render() {
-    const { user } = this.props;
+    const { user, isProfilePage } = this.props;
 
     if (user === undefined) return (<div />);
 
@@ -79,9 +82,31 @@ class SingleUserPage extends React.Component<Props> {
             ) : <Segment placeholder />}
           </Grid.Column>
           <Grid.Column>
-            <Segment style={{ height: '4rem' }}>
-              <UserMoveAssignmentsButton userId={user.id} />
+            <Segment>
+              <h2>
+                Responsibilities
+                <UserMoveAssignmentsButton userId={user.id} />
+              </h2>
             </Segment>
+            {isProfilePage ? (
+              <Segment>
+                <Header as="h3">
+                  API Key
+                </Header>
+                <p>
+                  You can generate an API key to use ParelPracht in external tools.
+                  With this key, actions can be performed on your behalf.
+                  To use the API key, place the entire key in the
+                  {' '}
+                  <code>Authentication</code>
+                  {' '}
+                  header of any request.
+                  <br />
+                  <b>Only generate a key if you know what you&apos;re doing!</b>
+                </p>
+                <UserApiKey />
+              </Segment>
+            ) : null}
           </Grid.Column>
         </Grid>
       </Container>
@@ -93,6 +118,7 @@ const mapStateToProps = (state: RootState) => {
   return {
     user: getSingle<User>(state, SingleEntities.User).data,
     status: getSingle<User>(state, SingleEntities.User).status,
+    isProfilePage: isProfile(state),
   };
 };
 

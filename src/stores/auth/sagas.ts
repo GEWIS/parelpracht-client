@@ -7,7 +7,7 @@ import { fetchSummaries } from '../summaries/actionCreators';
 import { SummaryCollections } from '../summaries/summaries';
 import {
   authFetchProfile, authFetchStatus, authRequestError,
-  authRequestSuccess, authSetProfile, authSetStatus,
+  authRequestSuccess, authSetApiKey, authSetProfile, authSetStatus,
 } from './actionCreators';
 import {
   AuthActionType, AuthForgotPassword, AuthLogin, AuthResetPassword,
@@ -45,6 +45,7 @@ function* login(action: AuthLogin) {
     new LoginParams({
       email: action.email,
       password: action.password,
+      rememberMe: action.rememberMe,
     }));
 
   yield put(authFetchStatus());
@@ -80,6 +81,33 @@ function* logout() {
   yield put(authFetchStatus());
 }
 
+function* generateApiKey() {
+  const client = new Client();
+
+  const apiKey = yield call([client, client.generateApiKey]);
+
+  yield put(authFetchProfile());
+  yield put(authSetApiKey(apiKey));
+}
+
+function* getApiKey() {
+  const client = new Client();
+
+  const apiKey = yield call([client, client.getApiKey]);
+
+  yield put(authFetchProfile());
+  yield put(authSetApiKey(apiKey));
+}
+
+function* revokeApiKey() {
+  const client = new Client();
+
+  yield call([client, client.revokeApiKey]);
+
+  yield put(authFetchProfile());
+  yield put(authSetApiKey(undefined));
+}
+
 export default [
   function* watchFetchAuthStatus() {
     yield takeEveryWithErrorHandling(AuthActionType.FetchStatus, fetchAuthStatus);
@@ -102,5 +130,15 @@ export default [
       AuthActionType.ResetPassword, resetPassword,
       { onErrorSaga: errorResetPassword },
     );
+  },
+
+  function* watchGenerateApiKey() {
+    yield takeEveryWithErrorHandling(AuthActionType.GenerateApiKey, generateApiKey);
+  },
+  function* watchGetApiKey() {
+    yield takeEveryWithErrorHandling(AuthActionType.GetApiKey, getApiKey);
+  },
+  function* watchRevokeApiKey() {
+    yield takeEveryWithErrorHandling(AuthActionType.RevokeApiKey, revokeApiKey);
   },
 ];

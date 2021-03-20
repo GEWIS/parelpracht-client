@@ -7,6 +7,7 @@ import {
   ProductInstance,
   ProductInstanceParams,
   ProductSummary,
+  Roles,
 } from '../../clients/server.generated';
 import ResourceStatus from '../../stores/resourceStatus';
 import { RootState } from '../../stores/store';
@@ -15,6 +16,7 @@ import { SummaryCollections } from '../../stores/summaries/summaries';
 import PropsButtons from '../PropsButtons';
 import ProductSelector from './ProductSelector';
 import { SingleEntities } from '../../stores/single/single';
+import AuthorizationComponent from '../AuthorizationComponent';
 
 interface Props {
   create?: boolean;
@@ -132,17 +134,19 @@ class ProductInstanceProps extends React.Component<Props, State> {
         <h2>
           {this.props.create ? 'New Product Instance' : 'Details'}
 
-          <PropsButtons
-            editing={editing}
-            canDelete={this.deleteButtonActive()}
-            canSave={!this.propsHaveErrors()}
-            entity={SingleEntities.Product}
-            status={this.props.status}
-            cancel={this.cancel}
-            edit={this.edit}
-            save={this.save}
-            remove={this.remove}
-          />
+          <AuthorizationComponent roles={[Roles.ADMIN, Roles.GENERAL]} notFound={false}>
+            <PropsButtons
+              editing={editing}
+              canDelete={this.deleteButtonActive()}
+              canSave={!this.propsHaveErrors()}
+              entity={SingleEntities.Product}
+              status={this.props.status}
+              cancel={this.cancel}
+              edit={this.edit}
+              save={this.save}
+              remove={this.remove}
+            />
+          </AuthorizationComponent>
         </h2>
 
         <Form style={{ marginTop: '2em' }}>

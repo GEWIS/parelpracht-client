@@ -30,6 +30,12 @@ export function getInvoiceStatus(state: RootState, id: number): InvoiceStatus {
   )?.status ?? '...';
 }
 
+export function getInvoiceValue(state: RootState, id: number): number {
+  return getSummary<InvoiceSummary>(
+    state, SummaryCollections.Invoices, id,
+  )?.value ?? undefined;
+}
+
 export function getTreasurerLastSeen(state: RootState): Date | undefined {
   return getTable(state, Tables.Invoices).lastSeen;
 }

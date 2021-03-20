@@ -7,7 +7,7 @@ import {
 import validator from 'validator';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import {
-  Contact, ContactFunction, ContactParams, Gender,
+  Contact, ContactFunction, ContactParams, Gender, Roles,
 } from '../../clients/server.generated';
 import {
   createSingle, deleteSingle, fetchSingle, saveSingle,
@@ -20,6 +20,9 @@ import { getSingle } from '../../stores/single/selectors';
 import { formatContactName, formatFunction } from '../../helpers/contact';
 import { TransientAlert } from '../../stores/alerts/actions';
 import { showTransientAlert } from '../../stores/alerts/actionCreators';
+import TextAreaMimic from '../TextAreaMimic';
+
+import AuthorizationComponent from '../AuthorizationComponent';
 
 interface Props extends RouteComponentProps {
   create?: boolean;
@@ -182,17 +185,19 @@ class ContactProps extends React.Component<Props, State> {
         <h2>
           {this.props.create ? 'New Contact' : 'Details'}
 
-          <PropsButtons
-            editing={editing}
-            canDelete={this.deleteButtonActive()}
-            canSave={!this.propsHaveErrors()}
-            entity={SingleEntities.Contact}
-            status={this.props.status}
-            cancel={this.cancel}
-            edit={this.edit}
-            save={this.save}
-            remove={this.remove}
-          />
+          <AuthorizationComponent roles={[Roles.GENERAL, Roles.ADMIN]} notFound={false}>
+            <PropsButtons
+              editing={editing}
+              canDelete={this.deleteButtonActive()}
+              canSave={!this.propsHaveErrors()}
+              entity={SingleEntities.Contact}
+              status={this.props.status}
+              cancel={this.cancel}
+              edit={this.edit}
+              save={this.save}
+              remove={this.remove}
+            />
+          </AuthorizationComponent>
         </h2>
 
         <Form style={{ marginTop: '2em' }}>
@@ -310,20 +315,24 @@ class ContactProps extends React.Component<Props, State> {
               }
             />
           </Form.Group>
-          <Form.Field disabled={!editing}>
+          <Form.Field>
             {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
             <label htmlFor="form-input-comments">
               Comments
             </label>
-            <TextArea
-              id="form-delivery-spec-english"
-              value={comments}
-              onChange={
-                (e) => this.setState({ comments: e.target.value })
-              }
-              placeholder="Comments"
-              fluid
-            />
+            {editing ? (
+              <TextArea
+                id="form-delivery-spec-english"
+                value={comments}
+                onChange={
+                  (e) => this.setState({ comments: e.target.value })
+                }
+                placeholder="Comments"
+                fluid
+              />
+            ) : (
+              <TextAreaMimic content={comments} />
+            )}
           </Form.Field>
         </Form>
       </>

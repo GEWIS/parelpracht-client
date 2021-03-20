@@ -1,7 +1,7 @@
 import React, { ChangeEvent } from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
-import { Form, Input } from 'semantic-ui-react';
+import { Form, Input, TextArea } from 'semantic-ui-react';
 import validator from 'validator';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import {
@@ -19,6 +19,7 @@ import UserSelector from '../user/UserSelector';
 import { TransientAlert } from '../../stores/alerts/actions';
 import { showTransientAlert } from '../../stores/alerts/actionCreators';
 import { formatDocumentIdTitle } from '../../helpers/documents';
+import AuthorizationComponent from '../AuthorizationComponent';
 
 interface Props extends RouteComponentProps {
   create?: boolean;
@@ -194,17 +195,19 @@ class ContractProps extends React.Component<Props, State> {
         <h2>
           {this.props.create ? 'New Contract' : 'Details'}
 
-          <PropsButtons
-            editing={editing}
-            canDelete={this.deleteButtonActive()}
-            canSave={!this.propsHaveErrors()}
-            entity={SingleEntities.Contract}
-            status={this.props.status}
-            cancel={this.cancel}
-            edit={this.edit}
-            save={this.save}
-            remove={this.remove}
-          />
+          <AuthorizationComponent roles={[Roles.GENERAL, Roles.ADMIN]} notFound={false}>
+            <PropsButtons
+              editing={editing}
+              canDelete={this.deleteButtonActive()}
+              canSave={!this.propsHaveErrors()}
+              entity={SingleEntities.Contract}
+              status={this.props.status}
+              cancel={this.cancel}
+              edit={this.edit}
+              save={this.save}
+              remove={this.remove}
+            />
+          </AuthorizationComponent>
         </h2>
 
         <Form style={{ marginTop: '2em' }}>
@@ -262,7 +265,7 @@ class ContractProps extends React.Component<Props, State> {
             disabled={!editing}
             fluid
             id="form-input-comments"
-            control={Input}
+            control={TextArea}
             label="Comments"
             value={comments}
             onChange={(e: ChangeEvent<HTMLInputElement>) => this.setState({
