@@ -4,7 +4,7 @@ import {
 } from 'semantic-ui-react';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
-import { Client, Partial_PricingParams_ as Partial_PricingParams, ProductPricing } from '../../clients/server.generated';
+import { Client, Partial_PricingParams, ProductPricing } from '../../clients/server.generated';
 import PricingRow from './PricingRow';
 import PropsButtons from '../PropsButtons';
 import { SingleEntities } from '../../stores/single/single';

@@ -6,7 +6,7 @@ import {
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import {
-  Partial_FileParams_ as Partial_FileParams, Roles,
+  Partial_FileParams, Roles,
 } from '../../clients/server.generated';
 import { FilesClient } from '../../clients/filesClient';
 import { formatLastUpdate } from '../../helpers/timestamp';

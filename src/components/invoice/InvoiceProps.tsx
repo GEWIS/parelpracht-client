@@ -6,7 +6,7 @@ import { DateInput } from 'semantic-ui-calendar-react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import validator from 'validator';
 import {
-  ActivityType, Invoice, Partial_InvoiceParams_ as Partial_InvoiceParams, Roles,
+  ActivityType, Invoice, Partial_InvoiceParams, Roles,
 } from '../../clients/server.generated';
 import { getCompanyName } from '../../stores/company/selectors';
 import ResourceStatus from '../../stores/resourceStatus';

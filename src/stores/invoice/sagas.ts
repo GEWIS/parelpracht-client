@@ -9,8 +9,8 @@ import {
   ListOrFilter,
   ListParams,
   ListSorting,
-  Partial_FileParams_ as Partial_FileParams,
-  Partial_InvoiceParams_ as Partial_InvoiceParams,
+  Partial_FileParams,
+  Partial_InvoiceParams,
   SortDirection,
 } from '../../clients/server.generated';
 import { takeEveryWithErrorHandling } from '../errorHandling';

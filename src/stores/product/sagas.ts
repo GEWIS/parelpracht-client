@@ -7,7 +7,7 @@ import {
   ListOrFilter,
   ListParams,
   ListSorting,
-  Partial_FileParams_ as Partial_FileParams,
+  Partial_FileParams,
   Product,
   ProductParams,
   SortDirection,

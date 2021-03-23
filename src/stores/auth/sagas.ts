@@ -12,6 +12,7 @@ import {
 import {
   AuthActionType, AuthForgotPassword, AuthLogin, AuthResetPassword,
 } from './actions';
+import { generalFetchInfo } from '../general/actionCreators';
 
 export function* fetchAuthStatus() {
   const client = new Client();
@@ -28,6 +29,9 @@ export function* fetchAuthStatus() {
     for (let i = 0; i < summaries.length; i++) {
       yield put(fetchSummaries(summaries[i]));
     }
+
+    // Fetch the general data
+    yield put(generalFetchInfo());
   }
 }
 
