@@ -9,6 +9,7 @@ import { prodInsStatus } from '../../helpers/statusses';
 import CompanyLink from '../company/CompanyLink';
 import ContractLink from '../contract/ContractLink';
 import ProductLink from '../product/ProductLink';
+import { dateToFullFinancialYear } from '../../helpers/timestamp';
 
 interface Props {
   company: ETCompany;
@@ -58,7 +59,13 @@ function MegaTableRow(props: Props) {
         <ProductLink id={product.productId} />
       </Table.Cell>));
     innerResult.push(<Table.Cell key={`${product.id}-2`}>{prodInsStatus(product.subType)}</Table.Cell>);
-    innerResult.push(<Table.Cell key={`${product.id}-3`}>{product.invoiceId === null ? 'Not invoiced' : 'Invoiced'}</Table.Cell>);
+    innerResult.push(
+      <Table.Cell key={`${product.id}-3`}>
+        {product.invoiceDate == null
+          ? 'Not invoiced'
+          : dateToFullFinancialYear(new Date(Date.parse(product.invoiceDate)))}
+      </Table.Cell>,
+    );
     innerResult.push((
       <Table.Cell key={`${product.id}-4`}>
         {formatPriceFull(product.basePrice - product.discount)}

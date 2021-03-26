@@ -21,5 +21,5 @@ export interface ETProductInstance {
   createdAt: Date,
   updatedAt: Date,
   subType: ProductInstanceStatus,
-  invoiceId?: number,
+  invoiceDate?: string,
 }

@@ -49,7 +49,7 @@ function MegaTable({
 }: Props) {
   useEffect(() => {
     setSort('companyName', 'ASC');
-    setTableFilter({ column: 'invoiced', values: [false] });
+    setTableFilter({ column: 'invoiced', values: [-1] });
     fetchContracts();
   }, []);
 
