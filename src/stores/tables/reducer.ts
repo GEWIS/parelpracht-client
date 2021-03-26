@@ -1,11 +1,10 @@
 import { combineReducers } from 'redux';
 import {
-  Company, Product, Contract, Contact, Invoice, User, ProductCategory,
+  Company, Product, Contract, Contact, Invoice, User, ProductCategory, ETCompany,
 } from '../../clients/server.generated';
 import createTableReducer from './tableReducer';
 import { Tables } from './tables';
 import { TableState } from './tableState';
-import { ETCompany } from '../../helpers/extensiveTableObjects';
 
 export interface TablesState {
   [Tables.Products]: TableState<Product>;

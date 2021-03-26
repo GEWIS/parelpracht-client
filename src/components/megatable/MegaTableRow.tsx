@@ -1,9 +1,10 @@
 import React from 'react';
 import { Table } from 'semantic-ui-react';
 import { connect } from 'react-redux';
-import { ETCompany, ETContract, ETProductInstance } from '../../helpers/extensiveTableObjects';
 import { formatPriceFull } from '../../helpers/monetary';
-import { ProductSummary } from '../../clients/server.generated';
+import {
+  ETCompany, ETContract, ETProductInstance, ProductSummary,
+} from '../../clients/server.generated';
 import { RootState } from '../../stores/store';
 import { prodInsStatus } from '../../helpers/statusses';
 import CompanyLink from '../company/CompanyLink';
@@ -63,14 +64,14 @@ function MegaTableRow(props: Props) {
       <Table.Cell key={`${product.id}-3`}>
         {product.invoiceDate == null
           ? 'Not invoiced'
-          : dateToFullFinancialYear(new Date(Date.parse(product.invoiceDate)))}
+          : dateToFullFinancialYear(product.invoiceDate)}
       </Table.Cell>,
     );
     innerResult.push((
       <Table.Cell key={`${product.id}-4`}>
         {formatPriceFull(product.basePrice - product.discount)}
       </Table.Cell>));
-    innerResult.push(<Table.Cell key={`${product.id}-5`}>{product.comments}</Table.Cell>);
+    innerResult.push(<Table.Cell key={`${product.id}-5`}>{product.details}</Table.Cell>);
 
     result.push(<Table.Row key={product.id}>{innerResult}</Table.Row>);
     innerResult = [];

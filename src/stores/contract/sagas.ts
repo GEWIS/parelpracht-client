@@ -35,7 +35,6 @@ import { tableActionPattern, TableActionType } from '../tables/actions';
 import { getTable } from '../tables/selectors';
 import { Tables } from '../tables/tables';
 import { TableState } from '../tables/tableState';
-import { ETCompany } from '../../helpers/extensiveTableObjects';
 
 function* fetchContracts() {
   const client = new Client();
@@ -67,32 +66,6 @@ export function* fetchContractSummaries() {
   const client = new Client();
   const summaries = yield call([client, client.getContractSummaries]);
   yield put(setSummaries(SummaryCollections.Contracts, summaries));
-}
-
-function* fetchContractsExtensive() {
-  const client = new Client();
-
-  const state: TableState<ETCompany> = yield select(getTable, Tables.ETCompanies);
-  const {
-    sortColumn, sortDirection,
-    take, skip,
-    search, filters,
-  } = state;
-
-  const { list, count } = yield call(
-    [client, client.getAllContractsExtensive],
-    new ListParams({
-      sorting: new ListSorting({
-        column: sortColumn,
-        direction: sortDirection as SortDirection,
-      }),
-      filters: filters.map((f) => new ListOrFilter(f)),
-      skip,
-      take,
-      search,
-    }),
-  );
-  yield put(setTable(Tables.ETCompanies, list, count));
 }
 
 function* fetchSingleContract(action: SingleFetchAction<SingleEntities.Contract>) {
@@ -297,13 +270,6 @@ export default [
         SummariesActionType.Fetch,
       ),
       fetchContractSummaries,
-    );
-  },
-  function* watchFetchContractsExtensive() {
-    yield throttle(
-      500,
-      tableActionPattern(Tables.ETCompanies, TableActionType.Fetch),
-      fetchContractsExtensive,
     );
   },
   function* watchFetchSingleContract() {

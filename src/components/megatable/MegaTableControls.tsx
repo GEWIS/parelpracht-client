@@ -8,7 +8,7 @@ import TableControls from '../TableControls';
 import { fetchTable, searchTable } from '../../stores/tables/actionCreators';
 import { Tables } from '../../stores/tables/tables';
 import { countFetched, countTotal, getTable } from '../../stores/tables/selectors';
-import { ETCompany } from '../../helpers/extensiveTableObjects';
+import { ETCompany } from '../../clients/server.generated';
 
 interface Props {
   status: ResourceStatus;

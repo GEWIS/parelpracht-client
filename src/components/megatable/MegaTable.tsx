@@ -4,7 +4,6 @@ import {
 } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
-import { ETCompany } from '../../helpers/extensiveTableObjects';
 import MegaTableRow from './MegaTableRow';
 import { RootState } from '../../stores/store';
 import { countFetched, countTotal, getTable } from '../../stores/tables/selectors';
@@ -22,6 +21,7 @@ import ProductFilter from '../tablefilters/ProductFilter';
 import ProductInstanceStatusFilter from '../tablefilters/ProductInstanceStatusFilter';
 import ProductInstanceInvoicedFilter from '../tablefilters/ProductInstanceInvoicedFilter';
 import ResourceStatus from '../../stores/resourceStatus';
+import { ETCompany } from '../../clients/server.generated';
 
 interface Props {
   companies: ETCompany[];
