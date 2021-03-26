@@ -59,7 +59,7 @@ function* fetchContracts() {
       search,
     }),
   );
-  yield put(setTable(Tables.Contracts, list, count));
+  yield put(setTable(Tables.Contracts, list, count, {}));
 }
 
 export function* fetchContractSummaries() {

@@ -14,6 +14,8 @@ export interface TableState<R> {
 
   filters: ListFilter[],
 
+  extra: object,
+
   // Only used for the invoices table. This attribute contains the last time at which the treasurer
   // has updated the table.
   lastSeen?: Date,

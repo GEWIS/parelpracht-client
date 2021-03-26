@@ -43,7 +43,7 @@ function* fetchContacts() {
       search,
     }),
   );
-  yield put(setTable(Tables.Contacts, list, count));
+  yield put(setTable(Tables.Contacts, list, count, {}));
 }
 
 export function* fetchContactSummaries() {

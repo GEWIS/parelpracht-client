@@ -60,7 +60,7 @@ function* fetchCompanies() {
       search,
     }),
   );
-  yield put(setTable(Tables.Companies, list, count));
+  yield put(setTable(Tables.Companies, list, count, {}));
 }
 
 export function* fetchCompanySummaries() {
@@ -79,7 +79,7 @@ function* fetchCompaniesExtensive() {
     search, filters,
   } = state;
 
-  const { list, count } = yield call(
+  const { list, count, extra } = yield call(
     [client, client.getAllContractsExtensive],
     new ListParams({
       sorting: new ListSorting({
@@ -92,7 +92,7 @@ function* fetchCompaniesExtensive() {
       search,
     }),
   );
-  yield put(setTable(Tables.ETCompanies, list, count));
+  yield put(setTable(Tables.ETCompanies, list, count, extra));
 }
 
 function* fetchSingleCompany(action: SingleFetchAction<SingleEntities.Company>) {

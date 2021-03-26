@@ -9834,6 +9834,7 @@ export interface IETCompany {
 export class ETCompanyListResponse implements IETCompanyListResponse {
     list!: ETCompany[];
     count!: number;
+    extra!: Extra;
 
     constructor(data?: IETCompanyListResponse) {
         if (data) {
@@ -9844,6 +9845,7 @@ export class ETCompanyListResponse implements IETCompanyListResponse {
         }
         if (!data) {
             this.list = [];
+            this.extra = new Extra();
         }
     }
 
@@ -9855,6 +9857,7 @@ export class ETCompanyListResponse implements IETCompanyListResponse {
                     this.list!.push(ETCompany.fromJS(item));
             }
             this.count = _data["count"];
+            this.extra = _data["extra"] ? Extra.fromJS(_data["extra"]) : new Extra();
         }
     }
 
@@ -9873,6 +9876,7 @@ export class ETCompanyListResponse implements IETCompanyListResponse {
                 data["list"].push(item.toJSON());
         }
         data["count"] = this.count;
+        data["extra"] = this.extra ? this.extra.toJSON() : <any>undefined;
         return data; 
     }
 }
@@ -9880,6 +9884,7 @@ export class ETCompanyListResponse implements IETCompanyListResponse {
 export interface IETCompanyListResponse {
     list: ETCompany[];
     count: number;
+    extra: Extra;
 }
 
 export class CompanyParams implements ICompanyParams {
@@ -12025,6 +12030,46 @@ export class Body implements IBody {
 
 export interface IBody {
     productId: number;
+}
+
+export class Extra implements IExtra {
+    nrOfProducts!: number;
+    sumProducts!: number;
+
+    constructor(data?: IExtra) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.nrOfProducts = _data["nrOfProducts"];
+            this.sumProducts = _data["sumProducts"];
+        }
+    }
+
+    static fromJS(data: any): Extra {
+        data = typeof data === 'object' ? data : {};
+        let result = new Extra();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["nrOfProducts"] = this.nrOfProducts;
+        data["sumProducts"] = this.sumProducts;
+        return data; 
+    }
+}
+
+export interface IExtra {
+    nrOfProducts: number;
+    sumProducts: number;
 }
 
 export interface FileParameter {

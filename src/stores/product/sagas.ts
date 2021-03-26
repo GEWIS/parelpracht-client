@@ -60,7 +60,7 @@ function* fetchProducts() {
       search,
     }),
   );
-  yield put(setTable(Tables.Products, list, count));
+  yield put(setTable(Tables.Products, list, count, {}));
 }
 
 export function* fetchProductSummaries() {

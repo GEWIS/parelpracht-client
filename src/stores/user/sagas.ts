@@ -54,7 +54,7 @@ function* fetchUsers() {
       search,
     }),
   );
-  yield put(setTable(Tables.Users, list, count));
+  yield put(setTable(Tables.Users, list, count, {}));
 }
 
 export function* fetchUserSummaries() {

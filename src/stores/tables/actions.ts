@@ -22,6 +22,7 @@ export type TableFetchAction<T> = TableAction<TableActionType.Fetch, T>;
 export type TableSetAction<T, R> = TableAction<TableActionType.Set, T> & {
   data: R[],
   count: number,
+  extra: object,
   lastSeen?: Date,
 };
 

@@ -22,9 +22,12 @@ import ProductInstanceStatusFilter from '../tablefilters/ProductInstanceStatusFi
 import ProductInstanceInvoicedFilter from '../tablefilters/ProductInstanceInvoicedFilter';
 import ResourceStatus from '../../stores/resourceStatus';
 import { ETCompany } from '../../clients/server.generated';
+import { formatPriceFull } from '../../helpers/monetary';
 
 interface Props {
   companies: ETCompany[];
+  nrOfProducts: number;
+  sumProducts: number;
   column: string;
   direction: 'ascending' | 'descending';
   total: number;
@@ -46,6 +49,7 @@ function MegaTable({
   companies, fetchContracts, setTableFilter, column, direction, changeSort, setSort,
   total, fetched, skip, take, status,
   prevPage, nextPage, setTake,
+  sumProducts, nrOfProducts,
 }: Props) {
   useEffect(() => {
     setSort('companyName', 'ASC');
@@ -90,6 +94,20 @@ function MegaTable({
             <Table.Body>
               {companies.map((c) => <MegaTableRow company={c} key={c.id} />)}
             </Table.Body>
+            <Table.Footer>
+              <Table.Row>
+                <Table.HeaderCell colspan="3">
+                  Totals
+                </Table.HeaderCell>
+                <Table.HeaderCell colspan="2" style={{ textAlign: 'center' }}>
+                  Number of products:
+                  {' '}
+                  {nrOfProducts || 0}
+                </Table.HeaderCell>
+                <Table.HeaderCell>{formatPriceFull(sumProducts || 0)}</Table.HeaderCell>
+                <Table.HeaderCell />
+              </Table.Row>
+            </Table.Footer>
           </Table>
           <TablePagination
             countTotal={total}
@@ -137,6 +155,20 @@ function MegaTable({
         <Table.Body>
           {companies.map((c) => <MegaTableRow company={c} key={c.id} />)}
         </Table.Body>
+        <Table.Footer>
+          <Table.Row>
+            <Table.HeaderCell colspan="3">
+              Totals
+            </Table.HeaderCell>
+            <Table.HeaderCell colspan="2" style={{ textAlign: 'center' }}>
+              Number of products:
+              {' '}
+              {nrOfProducts}
+            </Table.HeaderCell>
+            <Table.HeaderCell>{formatPriceFull(sumProducts)}</Table.HeaderCell>
+            <Table.HeaderCell />
+          </Table.Row>
+        </Table.Footer>
       </Table>
       <TablePagination
         countTotal={total}
@@ -160,6 +192,10 @@ const mapStateToProps = (state: RootState) => {
     skip: contractTable.skip,
     take: contractTable.take,
     companies: contractTable.data,
+    // @ts-ignore
+    nrOfProducts: contractTable.extra.nrOfProducts,
+    // @ts-ignore
+    sumProducts: contractTable.extra.sumProducts,
     column: contractTable.sortColumn,
     direction: contractTable.sortDirection === 'ASC'
       ? 'ascending' : 'descending' as 'ascending' | 'descending',
