@@ -57,128 +57,70 @@ function MegaTable({
     fetchContracts();
   }, []);
 
-  if (status === ResourceStatus.FETCHING || status === ResourceStatus.SAVING) {
-    return (
-      <>
-        <Segment style={{ padding: '0px' }}>
-          <Dimmer active inverted>
-            <Loader inverted />
-          </Dimmer>
-          <Table className="rowspanStriped" compact attached sortable fixed>
-            <Table.Header>
-              <Table.Row>
-                <Table.HeaderCell
-                  sorted={column === 'companyName' ? direction : undefined}
-                  onClick={() => changeSort('companyName')}
-                >
-                  Company
-                  <CompanyFilter table={Tables.ETCompanies} />
-                </Table.HeaderCell>
-                <Table.HeaderCell>Contract</Table.HeaderCell>
-                <Table.HeaderCell>
-                  Product
-                  <ProductFilter />
-                </Table.HeaderCell>
-                <Table.HeaderCell>
-                  Status
-                  <ProductInstanceStatusFilter />
-                </Table.HeaderCell>
-                <Table.HeaderCell>
-                  Invoiced
-                  <ProductInstanceInvoicedFilter />
-                </Table.HeaderCell>
-                <Table.HeaderCell>Price</Table.HeaderCell>
-                <Table.HeaderCell>Details</Table.HeaderCell>
-              </Table.Row>
-            </Table.Header>
-            <Table.Body>
-              {companies.map((c) => <MegaTableRow company={c} key={c.id} />)}
-            </Table.Body>
-            <Table.Footer>
-              <Table.Row>
-                <Table.HeaderCell colspan="3">
-                  Totals
-                </Table.HeaderCell>
-                <Table.HeaderCell colspan="2" style={{ textAlign: 'center' }}>
-                  Number of products:
-                  {' '}
-                  {nrOfProducts || 0}
-                </Table.HeaderCell>
-                <Table.HeaderCell>{formatPriceFull(sumProducts || 0)}</Table.HeaderCell>
-                <Table.HeaderCell />
-              </Table.Row>
-            </Table.Footer>
-          </Table>
-          <TablePagination
-            countTotal={total}
-            countFetched={fetched}
-            skip={skip}
-            take={take}
-            nextPage={nextPage}
-            prevPage={prevPage}
-            setTake={setTake}
-          />
-        </Segment>
-      </>
-    );
-  }
-
   return (
     <>
-      <Table className="rowspanStriped" compact attached sortable fixed>
-        <Table.Header>
-          <Table.Row>
-            <Table.HeaderCell
-              sorted={column === 'companyName' ? direction : undefined}
-              onClick={() => changeSort('companyName')}
-            >
-              Company
-              <CompanyFilter table={Tables.ETCompanies} />
-            </Table.HeaderCell>
-            <Table.HeaderCell>Contract</Table.HeaderCell>
-            <Table.HeaderCell>
-              Product
-              <ProductFilter />
-            </Table.HeaderCell>
-            <Table.HeaderCell>
-              Status
-              <ProductInstanceStatusFilter />
-            </Table.HeaderCell>
-            <Table.HeaderCell>
-              Invoiced
-              <ProductInstanceInvoicedFilter />
-            </Table.HeaderCell>
-            <Table.HeaderCell>Price</Table.HeaderCell>
-            <Table.HeaderCell>Details</Table.HeaderCell>
-          </Table.Row>
-        </Table.Header>
-        <Table.Body>
-          {companies.map((c) => <MegaTableRow company={c} key={c.id} />)}
-        </Table.Body>
-        <Table.Footer>
-          <Table.Row>
-            <Table.HeaderCell colspan="3">
-              Totals
-            </Table.HeaderCell>
-            <Table.HeaderCell colspan="2" style={{ textAlign: 'center' }}>
-              Number of products:
-              {' '}
-              {nrOfProducts}
-            </Table.HeaderCell>
-            <Table.HeaderCell>{formatPriceFull(sumProducts)}</Table.HeaderCell>
-            <Table.HeaderCell />
-          </Table.Row>
-        </Table.Footer>
-      </Table>
-      <TablePagination
-        countTotal={total}
-        countFetched={fetched}
-        skip={skip}
-        take={take}
-        nextPage={nextPage}
-        prevPage={prevPage}
-        setTake={setTake}
-      />
+      <Segment style={{ padding: '0px' }}>
+        {status === ResourceStatus.FETCHING || status === ResourceStatus.SAVING
+          ? (
+            <Dimmer active inverted>
+              <Loader inverted />
+            </Dimmer>
+          ) : null}
+        <Table className="rowspanStriped" compact attached sortable fixed>
+          <Table.Header>
+            <Table.Row>
+              <Table.HeaderCell
+                sorted={column === 'companyName' ? direction : undefined}
+                onClick={() => changeSort('companyName')}
+              >
+                Company
+                <CompanyFilter table={Tables.ETCompanies} />
+              </Table.HeaderCell>
+              <Table.HeaderCell>Contract</Table.HeaderCell>
+              <Table.HeaderCell>
+                Product
+                <ProductFilter />
+              </Table.HeaderCell>
+              <Table.HeaderCell>
+                Status
+                <ProductInstanceStatusFilter />
+              </Table.HeaderCell>
+              <Table.HeaderCell>
+                Invoiced
+                <ProductInstanceInvoicedFilter />
+              </Table.HeaderCell>
+              <Table.HeaderCell>Price</Table.HeaderCell>
+              <Table.HeaderCell>Details</Table.HeaderCell>
+            </Table.Row>
+          </Table.Header>
+          <Table.Body>
+            {companies.map((c) => <MegaTableRow company={c} key={c.id} />)}
+          </Table.Body>
+          <Table.Footer>
+            <Table.Row>
+              <Table.HeaderCell colspan="3">
+                Totals
+              </Table.HeaderCell>
+              <Table.HeaderCell colspan="2" style={{ textAlign: 'center' }}>
+                Number of products:
+                {' '}
+                {nrOfProducts || 0}
+              </Table.HeaderCell>
+              <Table.HeaderCell collapsing>{formatPriceFull(sumProducts || 0)}</Table.HeaderCell>
+              <Table.HeaderCell />
+            </Table.Row>
+          </Table.Footer>
+        </Table>
+        <TablePagination
+          countTotal={total}
+          countFetched={fetched}
+          skip={skip}
+          take={take}
+          nextPage={nextPage}
+          prevPage={prevPage}
+          setTake={setTake}
+        />
+      </Segment>
     </>
   );
 }
