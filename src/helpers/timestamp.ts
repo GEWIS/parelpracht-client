@@ -40,6 +40,10 @@ export function formatTimestampToDate(date: Date): string {
   return `${d.month} ${d.day}, ${d.year}`;
 }
 
+export function parseFinancialYear(year: number): string {
+  return `${year - 1} - ${year}`;
+}
+
 export function dateToFinancialYear(date: Date): number {
   // January up to and including June
   if (date.getMonth() < 6) {
@@ -50,5 +54,5 @@ export function dateToFinancialYear(date: Date): number {
 
 export function dateToFullFinancialYear(date: Date): string {
   const finYear = dateToFinancialYear(date);
-  return `${finYear - 1} - ${finYear}`;
+  return parseFinancialYear(finYear);
 }

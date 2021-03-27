@@ -4,7 +4,6 @@ import {
 } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
-import { ETCompany } from '../../helpers/extensiveTableObjects';
 import MegaTableRow from './MegaTableRow';
 import { RootState } from '../../stores/store';
 import { countFetched, countTotal, getTable } from '../../stores/tables/selectors';
@@ -22,9 +21,13 @@ import ProductFilter from '../tablefilters/ProductFilter';
 import ProductInstanceStatusFilter from '../tablefilters/ProductInstanceStatusFilter';
 import ProductInstanceInvoicedFilter from '../tablefilters/ProductInstanceInvoicedFilter';
 import ResourceStatus from '../../stores/resourceStatus';
+import { ETCompany } from '../../clients/server.generated';
+import { formatPriceFull } from '../../helpers/monetary';
 
 interface Props {
   companies: ETCompany[];
+  nrOfProducts: number;
+  sumProducts: number;
   column: string;
   direction: 'ascending' | 'descending';
   total: number;
@@ -46,107 +49,78 @@ function MegaTable({
   companies, fetchContracts, setTableFilter, column, direction, changeSort, setSort,
   total, fetched, skip, take, status,
   prevPage, nextPage, setTake,
+  sumProducts, nrOfProducts,
 }: Props) {
   useEffect(() => {
     setSort('companyName', 'ASC');
-    setTableFilter({ column: 'invoiced', values: [false] });
+    setTableFilter({ column: 'invoiced', values: [-1] });
     fetchContracts();
   }, []);
 
-  if (status === ResourceStatus.FETCHING || status === ResourceStatus.SAVING) {
-    return (
-      <>
-        <Segment style={{ padding: '0px' }}>
-          <Dimmer active inverted>
-            <Loader inverted />
-          </Dimmer>
-          <Table className="rowspanStriped" compact attached sortable fixed>
-            <Table.Header>
-              <Table.Row>
-                <Table.HeaderCell
-                  sorted={column === 'companyName' ? direction : undefined}
-                  onClick={() => changeSort('companyName')}
-                >
-                  Company
-                  <CompanyFilter table={Tables.ETCompanies} />
-                </Table.HeaderCell>
-                <Table.HeaderCell>Contract</Table.HeaderCell>
-                <Table.HeaderCell>
-                  Product
-                  <ProductFilter />
-                </Table.HeaderCell>
-                <Table.HeaderCell>
-                  Status
-                  <ProductInstanceStatusFilter />
-                </Table.HeaderCell>
-                <Table.HeaderCell>
-                  Invoiced
-                  <ProductInstanceInvoicedFilter />
-                </Table.HeaderCell>
-                <Table.HeaderCell>Price</Table.HeaderCell>
-                <Table.HeaderCell>Details</Table.HeaderCell>
-              </Table.Row>
-            </Table.Header>
-            <Table.Body>
-              {companies.map((c) => <MegaTableRow company={c} key={c.id} />)}
-            </Table.Body>
-          </Table>
-          <TablePagination
-            countTotal={total}
-            countFetched={fetched}
-            skip={skip}
-            take={take}
-            nextPage={nextPage}
-            prevPage={prevPage}
-            setTake={setTake}
-          />
-        </Segment>
-      </>
-    );
-  }
-
   return (
     <>
-      <Table className="rowspanStriped" compact attached sortable fixed>
-        <Table.Header>
-          <Table.Row>
-            <Table.HeaderCell
-              sorted={column === 'companyName' ? direction : undefined}
-              onClick={() => changeSort('companyName')}
-            >
-              Company
-              <CompanyFilter table={Tables.ETCompanies} />
-            </Table.HeaderCell>
-            <Table.HeaderCell>Contract</Table.HeaderCell>
-            <Table.HeaderCell>
-              Product
-              <ProductFilter />
-            </Table.HeaderCell>
-            <Table.HeaderCell>
-              Status
-              <ProductInstanceStatusFilter />
-            </Table.HeaderCell>
-            <Table.HeaderCell>
-              Invoiced
-              <ProductInstanceInvoicedFilter />
-            </Table.HeaderCell>
-            <Table.HeaderCell>Price</Table.HeaderCell>
-            <Table.HeaderCell>Details</Table.HeaderCell>
-          </Table.Row>
-        </Table.Header>
-        <Table.Body>
-          {companies.map((c) => <MegaTableRow company={c} key={c.id} />)}
-        </Table.Body>
-      </Table>
-      <TablePagination
-        countTotal={total}
-        countFetched={fetched}
-        skip={skip}
-        take={take}
-        nextPage={nextPage}
-        prevPage={prevPage}
-        setTake={setTake}
-      />
+      <Segment style={{ padding: '0px' }}>
+        {status === ResourceStatus.FETCHING || status === ResourceStatus.SAVING
+          ? (
+            <Dimmer active inverted>
+              <Loader inverted />
+            </Dimmer>
+          ) : null}
+        <Table className="rowspanStriped" attached compact sortable>
+          <Table.Header>
+            <Table.Row>
+              <Table.HeaderCell
+                sorted={column === 'companyName' ? direction : undefined}
+                onClick={() => changeSort('companyName')}
+              >
+                Company
+                <CompanyFilter table={Tables.ETCompanies} />
+              </Table.HeaderCell>
+              <Table.HeaderCell>Contract</Table.HeaderCell>
+              <Table.HeaderCell>
+                Product
+                <ProductFilter />
+              </Table.HeaderCell>
+              <Table.HeaderCell>
+                Status
+                <ProductInstanceStatusFilter />
+              </Table.HeaderCell>
+              <Table.HeaderCell>
+                Invoiced
+                <ProductInstanceInvoicedFilter />
+              </Table.HeaderCell>
+              <Table.HeaderCell>Price</Table.HeaderCell>
+              <Table.HeaderCell>Details</Table.HeaderCell>
+            </Table.Row>
+          </Table.Header>
+          <Table.Body>
+            {companies.map((c) => <MegaTableRow company={c} key={c.id} />)}
+          </Table.Body>
+          <Table.Footer>
+            <Table.Row>
+              <Table.HeaderCell colspan="3">
+                Totals
+              </Table.HeaderCell>
+              <Table.HeaderCell colspan="2" style={{ textAlign: 'center' }}>
+                Number of products:
+                {' '}
+                {nrOfProducts || 0}
+              </Table.HeaderCell>
+              <Table.HeaderCell collapsing>{formatPriceFull(sumProducts || 0)}</Table.HeaderCell>
+              <Table.HeaderCell />
+            </Table.Row>
+          </Table.Footer>
+        </Table>
+        <TablePagination
+          countTotal={total}
+          countFetched={fetched}
+          skip={skip}
+          take={take}
+          nextPage={nextPage}
+          prevPage={prevPage}
+          setTake={setTake}
+        />
+      </Segment>
     </>
   );
 }
@@ -160,6 +134,10 @@ const mapStateToProps = (state: RootState) => {
     skip: contractTable.skip,
     take: contractTable.take,
     companies: contractTable.data,
+    // @ts-ignore
+    nrOfProducts: contractTable.extra.nrOfProducts,
+    // @ts-ignore
+    sumProducts: contractTable.extra.sumProducts,
     column: contractTable.sortColumn,
     direction: contractTable.sortDirection === 'ASC'
       ? 'ascending' : 'descending' as 'ascending' | 'descending',

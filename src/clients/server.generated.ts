@@ -1553,7 +1553,7 @@ export class Client {
      * @param body List parameters to sort and filter the list
      * @return Ok
      */
-    getAllContractsExtensive(body: ListParams): Promise<any> {
+    getAllContractsExtensive(body: ListParams): Promise<ETCompanyListResponse> {
         let url_ = this.baseUrl + "/company/extensive";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -1573,14 +1573,14 @@ export class Client {
         });
     }
 
-    protected processGetAllContractsExtensive(response: Response): Promise<any> {
+    protected processGetAllContractsExtensive(response: Response): Promise<ETCompanyListResponse> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = resultData200 !== undefined ? resultData200 : <any>null;
+            result200 = ETCompanyListResponse.fromJS(resultData200);
             return result200;
             });
         } else if (status === 401) {
@@ -1595,7 +1595,7 @@ export class Client {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<any>(<any>null);
+        return Promise.resolve<ETCompanyListResponse>(<any>null);
     }
 
     /**
@@ -9653,6 +9653,240 @@ export interface ICompanySummary {
     logoFilename: string;
 }
 
+export class ETProductInstance implements IETProductInstance {
+    id!: number;
+    productId!: number;
+    details?: string;
+    basePrice!: number;
+    discount!: number;
+    createdAt!: Date;
+    updatedAt!: Date;
+    subType!: ProductInstanceStatus;
+    invoiceDate?: Date;
+
+    constructor(data?: IETProductInstance) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.productId = _data["productId"];
+            this.details = _data["details"];
+            this.basePrice = _data["basePrice"];
+            this.discount = _data["discount"];
+            this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
+            this.updatedAt = _data["updatedAt"] ? new Date(_data["updatedAt"].toString()) : <any>undefined;
+            this.subType = _data["subType"];
+            this.invoiceDate = _data["invoiceDate"] ? new Date(_data["invoiceDate"].toString()) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): ETProductInstance {
+        data = typeof data === 'object' ? data : {};
+        let result = new ETProductInstance();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["productId"] = this.productId;
+        data["details"] = this.details;
+        data["basePrice"] = this.basePrice;
+        data["discount"] = this.discount;
+        data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
+        data["updatedAt"] = this.updatedAt ? this.updatedAt.toISOString() : <any>undefined;
+        data["subType"] = this.subType;
+        data["invoiceDate"] = this.invoiceDate ? this.invoiceDate.toISOString() : <any>undefined;
+        return data; 
+    }
+}
+
+export interface IETProductInstance {
+    id: number;
+    productId: number;
+    details?: string;
+    basePrice: number;
+    discount: number;
+    createdAt: Date;
+    updatedAt: Date;
+    subType: ProductInstanceStatus;
+    invoiceDate?: Date;
+}
+
+export class ETContract implements IETContract {
+    id!: number;
+    title!: string;
+    products!: ETProductInstance[];
+
+    constructor(data?: IETContract) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+        if (!data) {
+            this.products = [];
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.title = _data["title"];
+            if (Array.isArray(_data["products"])) {
+                this.products = [] as any;
+                for (let item of _data["products"])
+                    this.products!.push(ETProductInstance.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): ETContract {
+        data = typeof data === 'object' ? data : {};
+        let result = new ETContract();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["title"] = this.title;
+        if (Array.isArray(this.products)) {
+            data["products"] = [];
+            for (let item of this.products)
+                data["products"].push(item.toJSON());
+        }
+        return data; 
+    }
+}
+
+export interface IETContract {
+    id: number;
+    title: string;
+    products: ETProductInstance[];
+}
+
+export class ETCompany implements IETCompany {
+    id!: number;
+    name!: string;
+    contracts!: ETContract[];
+
+    constructor(data?: IETCompany) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+        if (!data) {
+            this.contracts = [];
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.name = _data["name"];
+            if (Array.isArray(_data["contracts"])) {
+                this.contracts = [] as any;
+                for (let item of _data["contracts"])
+                    this.contracts!.push(ETContract.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): ETCompany {
+        data = typeof data === 'object' ? data : {};
+        let result = new ETCompany();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["name"] = this.name;
+        if (Array.isArray(this.contracts)) {
+            data["contracts"] = [];
+            for (let item of this.contracts)
+                data["contracts"].push(item.toJSON());
+        }
+        return data; 
+    }
+}
+
+export interface IETCompany {
+    id: number;
+    name: string;
+    contracts: ETContract[];
+}
+
+export class ETCompanyListResponse implements IETCompanyListResponse {
+    list!: ETCompany[];
+    count!: number;
+    extra!: Extra;
+
+    constructor(data?: IETCompanyListResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+        if (!data) {
+            this.list = [];
+            this.extra = new Extra();
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["list"])) {
+                this.list = [] as any;
+                for (let item of _data["list"])
+                    this.list!.push(ETCompany.fromJS(item));
+            }
+            this.count = _data["count"];
+            this.extra = _data["extra"] ? Extra.fromJS(_data["extra"]) : new Extra();
+        }
+    }
+
+    static fromJS(data: any): ETCompanyListResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new ETCompanyListResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.list)) {
+            data["list"] = [];
+            for (let item of this.list)
+                data["list"].push(item.toJSON());
+        }
+        data["count"] = this.count;
+        data["extra"] = this.extra ? this.extra.toJSON() : <any>undefined;
+        return data; 
+    }
+}
+
+export interface IETCompanyListResponse {
+    list: ETCompany[];
+    count: number;
+    extra: Extra;
+}
+
 export class CompanyParams implements ICompanyParams {
     name!: string;
     comments?: string;
@@ -11796,6 +12030,46 @@ export class Body implements IBody {
 
 export interface IBody {
     productId: number;
+}
+
+export class Extra implements IExtra {
+    nrOfProducts!: number;
+    sumProducts!: number;
+
+    constructor(data?: IExtra) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.nrOfProducts = _data["nrOfProducts"];
+            this.sumProducts = _data["sumProducts"];
+        }
+    }
+
+    static fromJS(data: any): Extra {
+        data = typeof data === 'object' ? data : {};
+        let result = new Extra();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["nrOfProducts"] = this.nrOfProducts;
+        data["sumProducts"] = this.sumProducts;
+        return data; 
+    }
+}
+
+export interface IExtra {
+    nrOfProducts: number;
+    sumProducts: number;
 }
 
 export interface FileParameter {

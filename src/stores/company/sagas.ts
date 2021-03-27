@@ -5,7 +5,7 @@ import {
   ActivityParams,
   Client,
   Company,
-  CompanyParams,
+  CompanyParams, ETCompany,
   ListOrFilter,
   ListParams,
   ListSorting,
@@ -60,13 +60,39 @@ function* fetchCompanies() {
       search,
     }),
   );
-  yield put(setTable(Tables.Companies, list, count));
+  yield put(setTable(Tables.Companies, list, count, {}));
 }
 
 export function* fetchCompanySummaries() {
   const client = new Client();
   const summaries = yield call([client, client.getCompanySummaries]);
   yield put(setSummaries(SummaryCollections.Companies, summaries));
+}
+
+function* fetchCompaniesExtensive() {
+  const client = new Client();
+
+  const state: TableState<ETCompany> = yield select(getTable, Tables.ETCompanies);
+  const {
+    sortColumn, sortDirection,
+    take, skip,
+    search, filters,
+  } = state;
+
+  const { list, count, extra } = yield call(
+    [client, client.getAllContractsExtensive],
+    new ListParams({
+      sorting: new ListSorting({
+        column: sortColumn,
+        direction: sortDirection as SortDirection,
+      }),
+      filters: filters.map((f) => new ListOrFilter(f)),
+      skip,
+      take,
+      search,
+    }),
+  );
+  yield put(setTable(Tables.ETCompanies, list, count, extra));
 }
 
 function* fetchSingleCompany(action: SingleFetchAction<SingleEntities.Company>) {
@@ -251,6 +277,13 @@ export default [
         SummariesActionType.Fetch,
       ),
       fetchCompanySummaries,
+    );
+  },
+  function* watchFetchContractsExtensive() {
+    yield throttle(
+      500,
+      tableActionPattern(Tables.ETCompanies, TableActionType.Fetch),
+      fetchCompaniesExtensive,
     );
   },
   function* watchFetchSingleCompany() {

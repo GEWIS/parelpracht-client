@@ -24,6 +24,8 @@ const initialState = {
   take: 10,
   search: '',
   filters: [],
+
+  extra: {},
 };
 
 const createTableReducer = <T extends Tables, R>(t: Tables) => {
@@ -57,6 +59,7 @@ const createTableReducer = <T extends Tables, R>(t: Tables) => {
           lastSeen: a.lastSeen,
           status: ResourceStatus.FETCHED,
           lastUpdated: new Date(),
+          extra: a.extra,
         };
       }
 

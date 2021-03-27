@@ -1,14 +1,16 @@
 import React from 'react';
 import { Table } from 'semantic-ui-react';
 import { connect } from 'react-redux';
-import { ETCompany, ETContract, ETProductInstance } from '../../helpers/extensiveTableObjects';
 import { formatPriceFull } from '../../helpers/monetary';
-import { ProductSummary } from '../../clients/server.generated';
+import {
+  ETCompany, ETContract, ETProductInstance, ProductSummary,
+} from '../../clients/server.generated';
 import { RootState } from '../../stores/store';
 import { prodInsStatus } from '../../helpers/statusses';
 import CompanyLink from '../company/CompanyLink';
 import ContractLink from '../contract/ContractLink';
 import ProductLink from '../product/ProductLink';
+import { dateToFullFinancialYear } from '../../helpers/timestamp';
 
 interface Props {
   company: ETCompany;
@@ -58,12 +60,18 @@ function MegaTableRow(props: Props) {
         <ProductLink id={product.productId} />
       </Table.Cell>));
     innerResult.push(<Table.Cell key={`${product.id}-2`}>{prodInsStatus(product.subType)}</Table.Cell>);
-    innerResult.push(<Table.Cell key={`${product.id}-3`}>{product.invoiceId === null ? 'Not invoiced' : 'Invoiced'}</Table.Cell>);
+    innerResult.push(
+      <Table.Cell key={`${product.id}-3`}>
+        {product.invoiceDate == null
+          ? 'Not invoiced'
+          : dateToFullFinancialYear(product.invoiceDate)}
+      </Table.Cell>,
+    );
     innerResult.push((
       <Table.Cell key={`${product.id}-4`}>
         {formatPriceFull(product.basePrice - product.discount)}
       </Table.Cell>));
-    innerResult.push(<Table.Cell key={`${product.id}-5`}>{product.comments}</Table.Cell>);
+    innerResult.push(<Table.Cell key={`${product.id}-5`}>{product.details}</Table.Cell>);
 
     result.push(<Table.Row key={product.id}>{innerResult}</Table.Row>);
     innerResult = [];

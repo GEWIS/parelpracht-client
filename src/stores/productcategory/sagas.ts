@@ -53,7 +53,7 @@ function* fetchProductCategories() {
       search,
     }),
   );
-  yield put(setTable(Tables.ProductCategories, list, count));
+  yield put(setTable(Tables.ProductCategories, list, count, {}));
 }
 
 export function* fetchProductCategorySummaries() {

@@ -15,7 +15,7 @@ interface Props {
 function UserLink(props: Props) {
   const { id, userName } = props;
   return (
-    <NavLink to={`/user/${id}`}>
+    <NavLink to={`/user/${id}`} style={{ whiteSpace: 'nowrap' }}>
       <Icon name="user" />
       {userName}
     </NavLink>

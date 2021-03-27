@@ -1,10 +1,9 @@
-import { Company, CompanySummary } from '../../clients/server.generated';
+import { Company, CompanySummary, ETCompany } from '../../clients/server.generated';
 import { RootState } from '../store';
 import { getSummary } from '../summaries/selectors';
 import { SummaryCollections } from '../summaries/summaries';
 import { getTable } from '../tables/selectors';
 import { Tables } from '../tables/tables';
-import { ETCompany } from '../../helpers/extensiveTableObjects';
 
 export function sortColumn(state: RootState): string {
   const column = getTable<Company>(state, Tables.Companies).sortColumn;
