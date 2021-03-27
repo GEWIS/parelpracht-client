@@ -14,7 +14,7 @@ import { SingleEntities } from '../single/single';
 import { fetchSummaries, setSummaries } from '../summaries/actionCreators';
 import { summariesActionPattern, SummariesActionType } from '../summaries/actions';
 import { SummaryCollections } from '../summaries/summaries';
-import { fetchTable, setTable } from '../tables/actionCreators';
+import { fetchTable, prevPageTable, setTable } from '../tables/actionCreators';
 import { tableActionPattern, TableActionType } from '../tables/actions';
 import { getTable } from '../tables/selectors';
 import { Tables } from '../tables/tables';
@@ -30,7 +30,7 @@ function* fetchContacts() {
     search, filters,
   } = state;
 
-  const { list, count } = yield call(
+  let { list, count } = yield call(
     [client, client.getAllContacts],
     new ListParams({
       sorting: new ListSorting({
@@ -43,6 +43,27 @@ function* fetchContacts() {
       search,
     }),
   );
+
+  if (list.length === 0 && count > 0) {
+    yield put(prevPageTable(Tables.Contacts));
+
+    const res = yield call(
+      [client, client.getAllContacts],
+      new ListParams({
+        sorting: new ListSorting({
+          column: sortColumn,
+          direction: sortDirection as SortDirection,
+        }),
+        filters: filters.map((f) => new ListOrFilter(f)),
+        skip,
+        take,
+        search,
+      }),
+    );
+    list = res.list;
+    count = res.count;
+  }
+
   yield put(setTable(Tables.Contacts, list, count, {}));
 }
 
