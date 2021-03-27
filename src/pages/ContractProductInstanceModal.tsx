@@ -89,7 +89,7 @@ class ContractProductInstanceModal extends React.Component<Props> {
         productId: -1,
         basePrice: 0,
         discount: 0,
-        comments: '',
+        details: '',
         status: ProductInstanceStatus.NOTDELIVERED,
       } as any as ProductInstance;
     } else {

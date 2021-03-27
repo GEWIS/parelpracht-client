@@ -103,7 +103,7 @@ class ProductProps extends React.Component<Props, State> {
       deliverySpecificationDutch: this.state.deliverySpecDutch,
       minTarget: this.state.minTarget,
       maxTarget: this.state.maxTarget,
-      targetPrice: Math.round(Number.parseFloat(this.state.targetPrice) * 100),
+      targetPrice: Math.round(Number.parseFloat(this.state.targetPrice.replace(',', '.')) * 100),
     });
   };
 
@@ -142,7 +142,7 @@ class ProductProps extends React.Component<Props, State> {
     return (validator.isEmpty(nameDutch)
       || validator.isEmpty(nameEnglish)
       || categoryId < 0
-      || (parseFloat(targetPrice) <= 0 || Number.isNaN(parseFloat(targetPrice)))
+      || (parseFloat(targetPrice.replace(',', '.')) <= 0 || Number.isNaN(parseFloat(targetPrice.replace(',', '.'))))
       || (minTarget !== undefined ? minTarget < 0 : false)
       || maxTarget < (minTarget || 0)
       || validator.isEmpty(contractTextDutch)
@@ -270,7 +270,7 @@ class ProductProps extends React.Component<Props, State> {
             <Form.Field
               disabled={!editing}
               required
-              error={parseFloat(targetPrice) <= 0 || Number.isNaN(parseFloat(targetPrice))}
+              error={parseFloat(targetPrice.replace(',', '.')) <= 0 || Number.isNaN(parseFloat(targetPrice.replace(',', '.')))}
             >
               {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
               <label htmlFor="form-input-target-price">

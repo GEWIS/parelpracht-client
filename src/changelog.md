@@ -9,6 +9,8 @@ You can find the release notes below.
   - This table is optional and completely customizable.
   - Data is stored in a JSON format, so linking it with other applications is possible.
 - Added support for the MariaDB / MySQL database system.
+- Added a total sum and number of products on the resulting query of the Insights table.
+- Added input validation on the pricing fields in product instances.
 
 ### Changes
 - Made the footer smaller and removed the 1px white line in Chrome
@@ -16,11 +18,16 @@ You can find the release notes below.
 - When selecting a signee for generating a contract, only users with the role "Signee" can be selected.
 - When selecting an assigned-to-user, only users with the role "General" can be selected.
 - Users without roles can no longer log in.
+- The actual/real price can no longer be edited for products within contracts, to prevent floating point errors or inconsistencies.
 
 ### Bugfixes
 - Fixed page numbers showing "???" in generated PDF files.
 - Fixed diamond underneath tabs being black on hover.
 - Fixed creating a product with a price of 0 euros throwing an error in the backend.
+- Fixed layout errors in the large Insights table.
+- Fixed not being able to update product instances.
+- Fixed prices separated with a comma not being saved properly.
+- Fixed returning to an empty list when removing the last entity in a paginated list.
 
 ## v0.2.1-beta2 (07-03-2021)
 

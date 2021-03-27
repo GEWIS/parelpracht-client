@@ -38,7 +38,7 @@ interface State {
   productId: number;
   basePrice: string;
   discount: string;
-  comments?: string;
+  details?: string;
 }
 
 class ProductInstanceProps extends React.Component<Props, State> {
@@ -65,16 +65,16 @@ class ProductInstanceProps extends React.Component<Props, State> {
       productId: productInstance.productId,
       basePrice: (productInstance.basePrice / 100).toString(),
       discount: (productInstance.discount / 100).toString(),
-      comments: productInstance.details,
+      details: productInstance.details,
     };
   };
 
   toParams = (): ProductInstanceParams => {
     return new ProductInstanceParams({
       productId: this.state.productId,
-      basePrice: parseInt(this.state.basePrice, 10) * 100,
-      discount: parseInt(this.state.discount, 10) * 100,
-      comments: this.state.comments,
+      basePrice: Math.round(parseFloat(this.state.basePrice.replace(',', '.')) * 100),
+      discount: Math.round(parseFloat(this.state.discount.replace(',', '.')) * 100),
+      details: this.state.details,
     });
   };
 
@@ -105,8 +105,12 @@ class ProductInstanceProps extends React.Component<Props, State> {
   };
 
   propsHaveErrors = (): boolean => {
-    const { productId } = this.state;
-    return (productId < 0);
+    const { productId, basePrice, discount } = this.state;
+    return (
+      productId < 0
+      || Number.isNaN(Math.round(parseFloat(basePrice.replace(',', '.')) * 100))
+      || Number.isNaN(Math.round(parseFloat(discount.replace(',', '.')) * 100))
+    );
   };
 
   deleteButtonActive = () => {
@@ -125,7 +129,7 @@ class ProductInstanceProps extends React.Component<Props, State> {
       editing,
       basePrice,
       discount,
-      comments,
+      details,
       productId,
     } = this.state;
 
@@ -157,7 +161,7 @@ class ProductInstanceProps extends React.Component<Props, State> {
               {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
               <label htmlFor="form-product-dropdown">Product</label>
               <ProductSelector
-                id="form-assigned-to-selector"
+                id="form-product-dropdown"
                 value={productId}
                 onChange={(id: string) => {
                   if (id === '') {
@@ -178,14 +182,14 @@ class ProductInstanceProps extends React.Component<Props, State> {
             </Form.Field>
             <Form.Field disabled={!editing}>
               {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-              <label htmlFor="form-input-comments">
+              <label htmlFor="form-input-details">
                 Details
               </label>
               <Input
-                id="form-delivery-spec-english"
-                value={comments}
+                id="form-input-details"
+                value={details}
                 onChange={
-                  (e) => this.setState({ comments: e.target.value })
+                  (e) => this.setState({ details: e.target.value })
                 }
                 placeholder="Details"
                 fluid
@@ -195,6 +199,7 @@ class ProductInstanceProps extends React.Component<Props, State> {
           <Form.Group widths="equal">
             <Form.Field
               disabled={!editing}
+              error={Number.isNaN(Math.round(parseFloat(this.state.basePrice.replace(',', '.')) * 100))}
             >
               {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
               <label htmlFor="form-input-base-price">
@@ -215,9 +220,10 @@ class ProductInstanceProps extends React.Component<Props, State> {
             </Form.Field>
             <Form.Field
               disabled={!editing}
+              error={Number.isNaN(Math.round(parseFloat(this.state.discount.replace(',', '.')) * 100))}
             >
               {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-              <label htmlFor="form-input-Discount">
+              <label htmlFor="form-input-discount">
                 Discount
               </label>
               <Input
@@ -243,15 +249,7 @@ class ProductInstanceProps extends React.Component<Props, State> {
               <Input
                 labelPosition="left"
                 id="form-input-real-price"
-                value={parseInt(basePrice, 10) - parseInt(discount, 10)}
-                onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                  // eslint-disable-next-line no-restricted-globals
-                  const value = isNaN(parseInt(e.target.value, 10)) ? 0
-                    : parseInt(e.target.value, 10);
-                  this.setState({
-                    discount: (parseInt(basePrice, 10) - value).toString(),
-                  });
-                }}
+                value={(parseFloat(basePrice.replace(',', '.')) - parseFloat(discount.replace(',', '.'))).toFixed(2)}
                 fluid
               >
                 <Label basic>€</Label>
