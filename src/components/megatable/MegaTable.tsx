@@ -66,7 +66,7 @@ function MegaTable({
               <Loader inverted />
             </Dimmer>
           ) : null}
-        <Table className="rowspanStriped" compact attached sortable fixed>
+        <Table className="rowspanStriped" attached compact sortable>
           <Table.Header>
             <Table.Row>
               <Table.HeaderCell
