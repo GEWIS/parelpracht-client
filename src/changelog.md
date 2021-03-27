@@ -5,11 +5,19 @@ You can find the release notes below.
 
 ## v0.3-dev
 ### Added
+- Added front-end authorization. Certain elements are now only visible to people that can access them in the back-end as well.
 - Added a pricing table for products.
   - This table is optional and completely customizable.
   - Data is stored in a JSON format, so linking it with other applications is possible.
 - Added support for the MariaDB / MySQL database system.
+- Added API keys.
+  - Every user can generate at most one API key and use them in the header of their request to authenticate.
+  - When generating or deleting an API key, the user is emailed about this operation.
+- Added more success notifications when operations have been executed successfully.
+- Added a fancy animation on the login page.
+- Added a "Remember me" button when logging in.
 - Added a total sum and number of products on the resulting query of the Insights table.
+- Added the value of contracts and invoices to their respective tables.
 - Added input validation on the pricing fields in product instances.
 
 ### Changes
@@ -19,15 +27,21 @@ You can find the release notes below.
 - When selecting an assigned-to-user, only users with the role "General" can be selected.
 - Users without roles can no longer log in.
 - The actual/real price can no longer be edited for products within contracts, to prevent floating point errors or inconsistencies.
+- When an entity has no files, it is properly displayed (just like contracts and invoices).
+- The footer is now a bit smaller to make it less "present".
+- When an entity is reloaded, it is now done silenty in the background, without the page "jumping" all over the place.
+- TextArea fields are now scrollable.
 
 ### Bugfixes
 - Fixed page numbers showing "???" in generated PDF files.
 - Fixed diamond underneath tabs being black on hover.
+- Fixed long company, contract or invoice names causing visual issues with the company's logo.
 - Fixed creating a product with a price of 0 euros throwing an error in the backend.
 - Fixed layout errors in the large Insights table.
 - Fixed not being able to update product instances.
 - Fixed prices separated with a comma not being saved properly.
 - Fixed returning to an empty list when removing the last entity in a paginated list.
+- Fixed footer being positioned one pixel too high in Google Chrome.
 
 ## v0.2.1-beta2 (07-03-2021)
 
