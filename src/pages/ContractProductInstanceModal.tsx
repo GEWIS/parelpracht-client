@@ -126,6 +126,7 @@ class ContractProductInstanceModal extends React.Component<Props> {
             documentType={SingleEntities.ProductInstance}
             resourceStatus={status}
             roles={[Roles.ADMIN, Roles.GENERAL]}
+            canCancel
           />
         </Segment>,
         <Segment style={{ margin: '2em 1em 1em' }} key="seg-2">

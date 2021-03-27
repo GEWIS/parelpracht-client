@@ -5,7 +5,7 @@ import {
 } from 'semantic-ui-react';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
-import { Contract, Roles } from '../clients/server.generated';
+import { Contract, ProductInstanceStatus, Roles } from '../clients/server.generated';
 import { clearSingle, fetchSingle } from '../stores/single/actionCreators';
 import { RootState } from '../stores/store';
 import ContractProps from '../components/contract/ContractProps';
@@ -137,6 +137,10 @@ class SingleContractPage extends React.Component<Props> {
                 documentType={SingleEntities.Contract}
                 resourceStatus={status}
                 roles={[Roles.ADMIN, Roles.GENERAL]}
+                canCancel={contract.products
+                  .every((p) => p.activities
+                    .find((a) => a.subType === ProductInstanceStatus.CANCELLED) !== undefined)}
+                cancelReason="Cannot cancel this contract, because not all products are marked as cancelled."
               />
             </Segment>
           </Grid.Row>

@@ -27,6 +27,9 @@ interface Props extends RouteComponentProps {
   activities: GeneralActivity[];
   documentType: SingleEntities;
 
+  canCancel: boolean;
+  cancelReason?: string;
+
   resourceStatus: ResourceStatus;
   roles: Roles[];
 }
@@ -68,6 +71,7 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
   public render() {
     const {
       activities, documentType, documentId, resourceStatus, parentId, roles,
+      canCancel, cancelReason,
     } = this.props;
     const { cancelModalOpen, deferModalOpen, irrecoverableModalOpen } = this.state;
     const allDocumentStatuses = getAllDocumentStatuses(documentType);
@@ -81,17 +85,17 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
     let leftButton;
     if (documentType === SingleEntities.ProductInstance) {
       leftButton = (
-        <Popup
-          header={`Defer ${formatDocumentType(documentType)}`}
-          content={`By defering this ${formatDocumentType(documentType)}, you indicate that it will
+        <AuthorizationComponent
+          roles={[Roles.GENERAL, Roles.ADMIN, Roles.FINANCIAL]}
+          notFound={false}
+        >
+          <Popup
+            header={`Defer ${formatDocumentType(documentType)}`}
+            content={`By defering this ${formatDocumentType(documentType)}, you indicate that it will
           not be delivered in the current academic year.`}
-          mouseEnterDelay={500}
-          wide
-          trigger={(
-            <AuthorizationComponent
-              roles={[Roles.GENERAL, Roles.ADMIN, Roles.FINANCIAL]}
-              notFound={false}
-            >
+            mouseEnterDelay={500}
+            wide
+            trigger={(
               <Button
                 floated="left"
                 labelPosition="left"
@@ -105,27 +109,27 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
                 content={`Defer ${formatDocumentType(documentType)}`}
                 disabled={lastStatusActivity?.subType !== ProductInstanceStatus.NOTDELIVERED}
               />
-            </AuthorizationComponent>
           )}
-        />
+          />
+        </AuthorizationComponent>
       );
     } else if (documentType === SingleEntities.Invoice) {
       leftButton = (
-        <Popup
-          header={`Mark
+        <AuthorizationComponent
+          roles={[Roles.GENERAL, Roles.ADMIN, Roles.FINANCIAL]}
+          notFound={false}
+        >
+          <Popup
+            header={`Mark
           irrecoverable`}
-          content={`By marking this invoice irrecoverable, you indicate that the money owed from this invoice can not collected.
+            content={`By marking this invoice irrecoverable, you indicate that the money owed from this invoice can not collected.
           Either the invoice is no longer valid
           (i.e. it was created more than 5 years ago) or the responsible party indicated to not pay the invoice.
           Note that this is different from cancelling an invoice, in which the contracted products can still be invoiced on
           another invoice.`}
-          mouseEnterDelay={500}
-          wide
-          trigger={(
-            <AuthorizationComponent
-              roles={[Roles.GENERAL, Roles.ADMIN, Roles.FINANCIAL]}
-              notFound={false}
-            >
+            mouseEnterDelay={500}
+            wide
+            trigger={(
               <Button
                 floated="left"
                 labelPosition="left"
@@ -138,9 +142,53 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
                 disabled={lastStatusActivity?.subType !== InvoiceStatus.CREATED
                 && lastStatusActivity?.subType !== InvoiceStatus.SENT}
               />
-            </AuthorizationComponent>
           )}
-        />
+          />
+        </AuthorizationComponent>
+      );
+    }
+
+    let rightButton;
+    if (canCancel) {
+      rightButton = (
+        <AuthorizationComponent roles={[Roles.GENERAL, Roles.ADMIN]} notFound={false}>
+          <Button
+            floated="right"
+            labelPosition="left"
+            icon="close"
+            basic
+            onClick={() => {
+              this.setState({
+                cancelModalOpen: true,
+              });
+            }}
+            content={`Cancel ${formatDocumentType(documentType)}`}
+            disabled={getNextStatus(lastStatusActivity!, documentType).length === 0}
+          />
+        </AuthorizationComponent>
+      );
+    } else {
+      rightButton = (
+        <AuthorizationComponent roles={[Roles.GENERAL, Roles.ADMIN]} notFound={false}>
+          <Popup
+            content={cancelReason}
+            mouseEnterDelay={500}
+            wide
+            trigger={(
+              <div style={{ display: 'inline-block', float: 'right' }}>
+                <Button
+                  floated="right"
+                  labelPosition="left"
+                  icon="close"
+                  basic
+                  content={`Cancel ${formatDocumentType(documentType)}`}
+                  disabled
+                  style={{ pointerEvents: 'auto !important' }}
+                />
+              </div>
+          )}
+          />
+        </AuthorizationComponent>
       );
     }
 
@@ -163,21 +211,7 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
                 </h3>
               </Grid.Column>
               <Grid.Column>
-                <AuthorizationComponent roles={[Roles.GENERAL, Roles.ADMIN]} notFound={false}>
-                  <Button
-                    floated="right"
-                    labelPosition="left"
-                    icon="close"
-                    basic
-                    onClick={() => {
-                      this.setState({
-                        cancelModalOpen: true,
-                      });
-                    }}
-                    content={`Cancel ${formatDocumentType(documentType)}`}
-                    disabled={getNextStatus(lastStatusActivity!, documentType).length === 0}
-                  />
-                </AuthorizationComponent>
+                {rightButton}
               </Grid.Column>
             </Grid.Row>
           </Grid>

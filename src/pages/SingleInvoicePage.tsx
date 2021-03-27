@@ -127,6 +127,7 @@ class SingleInvoicePage extends React.Component<Props> {
                   documentType={SingleEntities.Invoice}
                   resourceStatus={status}
                   roles={[Roles.ADMIN, Roles.GENERAL, Roles.FINANCIAL]}
+                  canCancel
                 />
               </Segment>
             </Grid.Row>
