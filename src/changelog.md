@@ -19,6 +19,7 @@ You can find the release notes below.
 - Added a total sum and number of products on the resulting query of the Insights table.
 - Added the value of contracts and invoices to their respective tables.
 - Added input validation on the pricing fields in product instances.
+- Added nice-looking minimal and maximal target lines in the Insights chart of products.
 
 ### Changes
 - Made the footer smaller and removed the 1px white line in Chrome
@@ -31,6 +32,7 @@ You can find the release notes below.
 - The footer is now a bit smaller to make it less "present".
 - When an entity is reloaded, it is now done silenty in the background, without the page "jumping" all over the place.
 - TextArea fields are now scrollable.
+- Deferred products now have their own bar in the next financial year in the Product Insights chart.
 
 ### Bugfixes
 - Fixed page numbers showing "???" in generated PDF files.

@@ -9,11 +9,11 @@ function TextAreaMimic(props: Props) {
     <p className="textarea-mimic">
       {props.content?.split('\n').map((line) => {
         return (
-          <>
+          <React.Fragment key={line}>
             {line}
             {' '}
             <br />
-          </>
+          </React.Fragment>
         );
       })}
     </p>
