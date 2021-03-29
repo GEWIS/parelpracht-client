@@ -92,7 +92,7 @@ class SingleFile extends React.Component<Props, State> {
     this.setState({ editing: true, ...this.extractState(this.props) });
   };
 
-  cancel= () => {
+  cancel = () => {
     if (!this.props.create) {
       this.setState({ editing: false, ...this.extractState(this.props) });
     } else if (this.props.closeCreate) {
