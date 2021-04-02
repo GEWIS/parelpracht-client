@@ -33,6 +33,8 @@ You can find the release notes below.
 - When an entity is reloaded, it is now done silenty in the background, without the page "jumping" all over the place.
 - TextArea fields are now scrollable.
 - Deferred products now have their own bar in the next financial year in the Product Insights chart.
+- Relational attributes and prices are formatted a lot more nicely when used in attribute-changed-activities.
+- A product of an existing product instance can no longer be edited.
 
 ### Bugfixes
 - Fixed page numbers showing "???" in generated PDF files.

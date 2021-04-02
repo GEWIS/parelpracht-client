@@ -132,6 +132,7 @@ class ProductInstanceProps extends React.Component<Props, State> {
       details,
       productId,
     } = this.state;
+    const { productInstance } = this.props;
 
     return (
       <>
@@ -156,7 +157,7 @@ class ProductInstanceProps extends React.Component<Props, State> {
         <Form style={{ marginTop: '2em' }}>
           <Form.Group widths="equal">
             <Form.Field
-              disabled={!editing}
+              disabled={!editing || productInstance.id >= 0}
             >
               {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
               <label htmlFor="form-product-dropdown">Product</label>
