@@ -248,7 +248,7 @@ class ContactProps extends React.Component<Props, State> {
             />
           </Form.Group>
           <Form.Group widths="equal">
-            <Form.Field required fluid disabled={!editing}>
+            <Form.Field required disabled={!editing}>
               {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
               <label htmlFor="form-input-gender">Gender</label>
               <Dropdown
@@ -267,7 +267,7 @@ class ContactProps extends React.Component<Props, State> {
                 fluid
               />
             </Form.Field>
-            <Form.Field required fluid disabled={!editing}>
+            <Form.Field required disabled={!editing}>
               {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
               <label htmlFor="form-input-function">Function</label>
               <Dropdown
@@ -328,7 +328,6 @@ class ContactProps extends React.Component<Props, State> {
                   (e) => this.setState({ comments: e.target.value })
                 }
                 placeholder="Comments"
-                fluid
               />
             ) : (
               <TextAreaMimic content={comments} />

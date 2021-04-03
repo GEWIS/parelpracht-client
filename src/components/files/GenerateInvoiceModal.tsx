@@ -173,11 +173,9 @@ function GenerateContract(props: Props) {
               <label htmlFor="form-input-Discount">Show Discount</label>
               <Checkbox
                 toggle
-                defaultChecked
                 id="form-input-Discount"
                 checked={showDiscountPercentages}
                 onChange={(e, data) => changeDiscount(data.checked as boolean)}
-                fluid
               />
             </Form.Field>
             <Form.Field>
@@ -186,10 +184,8 @@ function GenerateContract(props: Props) {
               <Checkbox
                 id="form-input-SaveToDisk"
                 toggle
-                defaultChecked
                 checked={saveToDisk}
                 onChange={(e, data) => changeSaveToDisk(data.checked as boolean)}
-                fluid
               />
             </Form.Field>
           </Form.Group>

@@ -98,10 +98,10 @@ function MegaTable({
           </Table.Body>
           <Table.Footer>
             <Table.Row>
-              <Table.HeaderCell colspan="3">
+              <Table.HeaderCell colSpan="3">
                 Totals
               </Table.HeaderCell>
-              <Table.HeaderCell colspan="2" style={{ textAlign: 'center' }}>
+              <Table.HeaderCell colSpan="2" style={{ textAlign: 'center' }}>
                 Number of products:
                 {' '}
                 {nrOfProducts || 0}

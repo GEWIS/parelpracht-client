@@ -111,6 +111,7 @@ You can find the release notes below.
 - Fixed slow performance of the company details and "Create Company" modal.
 - Fixed delete popup not being visible when in a modal.
 - Fixed the placeholder text of some dropdowns being red or black instead of grey.
+- Fixed more browser errors.
 
 ## v0.1-beta1 (01-02-2021)
 ### Added

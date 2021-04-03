@@ -223,7 +223,7 @@ class CompanyProps extends React.Component<Props, State> {
             />
           </Form.Group>
           <Form.Group widths="equal">
-            <Form.Field fluid>
+            <Form.Field>
               {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
               <label htmlFor="form-input-description">
                 Description
@@ -234,6 +234,7 @@ class CompanyProps extends React.Component<Props, State> {
                   value={comments}
                   onChange={(e) => this.setState({ comments: e.target.value })}
                   placeholder="Description"
+                  fluid
                 />
               ) : (
                 <TextAreaMimic content={comments} />
@@ -246,7 +247,6 @@ class CompanyProps extends React.Component<Props, State> {
               </label>
               <Checkbox
                 disabled={!editing}
-                fluid
                 toggle
                 id="form-check-status"
                 label={status === CompanyStatus.ACTIVE ? 'Active' : 'Inactive'}

@@ -40,7 +40,7 @@ function ForgotPasswordPage(props: Props) {
                   check your spam folder.`}
                 </p>
                 <Button as={NavLink} to="/login" style={{ marginTop: '1em' }} basic>
-                  <Icon name="arrow left" basic />
+                  <Icon name="arrow left" />
                   Back to login
                 </Button>
               </Segment>
@@ -62,7 +62,7 @@ function ForgotPasswordPage(props: Props) {
             <Segment>
               <ForgotPasswordForm />
               <Button as={NavLink} to="/login" style={{ marginTop: '1em' }} basic>
-                <Icon name="arrow left" basic />
+                <Icon name="arrow left" />
                 Back to login
               </Button>
             </Segment>
