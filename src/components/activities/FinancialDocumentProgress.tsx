@@ -11,7 +11,7 @@ import {
   formatDocumentType,
   getAllDocumentStatuses,
   getAllStatusActivities,
-  getLastStatus, getNextStatus,
+  getLastStatusNotCancelled, getNextStatus,
 } from '../../helpers/activity';
 import DocumentStatusModal from './DocumentStatusModal';
 import { SingleEntities } from '../../stores/single/single';
@@ -76,7 +76,7 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
     const { cancelModalOpen, deferModalOpen, irrecoverableModalOpen } = this.state;
     const allDocumentStatuses = getAllDocumentStatuses(documentType);
     const allStatusActivities = getAllStatusActivities(activities);
-    const lastStatusActivity = getLastStatus(allStatusActivities);
+    const lastStatusActivity = getLastStatusNotCancelled(allStatusActivities);
     let cancelledDocument: boolean = false;
     if (lastStatusActivity !== undefined) {
       cancelledDocument = allStatusActivities[allStatusActivities.length - 1].subType === 'CANCELLED';

@@ -5810,7 +5810,7 @@ export class UserParams implements IUserParams {
             for (let item of this.roles)
                 data["roles"].push(item);
         }
-        return data;
+        return data; 
     }
 }
 
@@ -5859,7 +5859,7 @@ export class SetupParams implements ISetupParams {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["admin"] = this.admin ? this.admin.toJSON() : <any>undefined;
-        return data;
+        return data; 
     }
 }
 
@@ -5895,7 +5895,7 @@ export class AuthStatus implements IAuthStatus {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["authenticated"] = this.authenticated;
-        return data;
+        return data; 
     }
 }
 
@@ -6008,7 +6008,7 @@ be sent to "email", or "replyToEmail" */
             for (let item of this.roles)
                 data["roles"].push(item.toJSON());
         }
-        return data;
+        return data; 
     }
 }
 
@@ -6094,7 +6094,7 @@ export class Role implements IRole {
             for (let item of this.users)
                 data["users"].push(item.toJSON());
         }
-        return data;
+        return data; 
     }
 }
 
@@ -6213,7 +6213,7 @@ be sent to "email", or "replyToEmail" */
                 data["roles"].push(item.toJSON());
         }
         data["hasApiKey"] = this.hasApiKey;
-        return data;
+        return data; 
     }
 }
 
@@ -6294,7 +6294,7 @@ export class ApiError implements IApiError {
         data["message"] = this.message;
         data["stack"] = this.stack;
         data["statusCode"] = this.statusCode;
-        return data;
+        return data; 
     }
 }
 
@@ -6338,7 +6338,7 @@ export class WrappedApiError implements IWrappedApiError {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["error"] = this.error ? this.error.toJSON() : <any>undefined;
-        return data;
+        return data; 
     }
 }
 
@@ -6381,7 +6381,7 @@ export class ResetPasswordRequest implements IResetPasswordRequest {
         data["password"] = this.password;
         data["repeatPassword"] = this.repeatPassword;
         data["token"] = this.token;
-        return data;
+        return data; 
     }
 }
 
@@ -6538,7 +6538,7 @@ export class Product implements IProduct {
                 data["files"].push(item.toJSON());
         }
         data["pricing"] = this.pricing ? this.pricing.toJSON() : <any>undefined;
-        return data;
+        return data; 
     }
 }
 
@@ -6652,7 +6652,7 @@ export class ProductCategory implements IProductCategory {
             for (let item of this.products)
                 data["products"].push(item.toJSON());
         }
-        return data;
+        return data; 
     }
 }
 
@@ -6802,7 +6802,7 @@ export class Contract implements IContract {
             for (let item of this.files)
                 data["files"].push(item.toJSON());
         }
-        return data;
+        return data; 
     }
 }
 
@@ -6935,7 +6935,7 @@ or a different price that is not a discount */
         data["basePrice"] = this.basePrice;
         data["discount"] = this.discount;
         data["details"] = this.details;
-        return data;
+        return data; 
     }
 }
 
@@ -7126,7 +7126,7 @@ export class Company implements ICompany {
             for (let item of this.files)
                 data["files"].push(item.toJSON());
         }
-        return data;
+        return data; 
     }
 }
 
@@ -7295,7 +7295,7 @@ export class Invoice implements IInvoice {
             for (let item of this.files)
                 data["files"].push(item.toJSON());
         }
-        return data;
+        return data; 
     }
 }
 
@@ -7425,7 +7425,7 @@ export class InvoiceActivity implements IInvoiceActivity {
         data["invoiceId"] = this.invoiceId;
         data["invoice"] = this.invoice ? this.invoice.toJSON() : <any>undefined;
         data["subType"] = this.subType;
-        return data;
+        return data; 
     }
 }
 
@@ -7529,7 +7529,7 @@ export class InvoiceFile implements IInvoiceFile {
         data["createdBy"] = this.createdBy ? this.createdBy.toJSON() : <any>undefined;
         data["invoiceId"] = this.invoiceId;
         data["invoice"] = this.invoice ? this.invoice.toJSON() : <any>undefined;
-        return data;
+        return data; 
     }
 }
 
@@ -7665,7 +7665,7 @@ export class Contact implements IContact {
             for (let item of this.contracts)
                 data["contracts"].push(item.toJSON());
         }
-        return data;
+        return data; 
     }
 }
 
@@ -7774,7 +7774,7 @@ export class CompanyActivity implements ICompanyActivity {
         data["createdBy"] = this.createdBy ? this.createdBy.toJSON() : <any>undefined;
         data["companyId"] = this.companyId;
         data["company"] = this.company ? this.company.toJSON() : <any>undefined;
-        return data;
+        return data; 
     }
 }
 
@@ -7876,7 +7876,7 @@ export class CompanyFile implements ICompanyFile {
         data["createdBy"] = this.createdBy ? this.createdBy.toJSON() : <any>undefined;
         data["companyId"] = this.companyId;
         data["company"] = this.company ? this.company.toJSON() : <any>undefined;
-        return data;
+        return data; 
     }
 }
 
@@ -7989,7 +7989,7 @@ export class ContractActivity implements IContractActivity {
         data["contractId"] = this.contractId;
         data["contract"] = this.contract ? this.contract.toJSON() : <any>undefined;
         data["subType"] = this.subType;
-        return data;
+        return data; 
     }
 }
 
@@ -8093,7 +8093,7 @@ export class ContractFile implements IContractFile {
         data["createdBy"] = this.createdBy ? this.createdBy.toJSON() : <any>undefined;
         data["contractId"] = this.contractId;
         data["contract"] = this.contract ? this.contract.toJSON() : <any>undefined;
-        return data;
+        return data; 
     }
 }
 
@@ -8204,7 +8204,7 @@ export class ProductInstanceActivity implements IProductInstanceActivity {
         data["productInstanceId"] = this.productInstanceId;
         data["productInstance"] = this.productInstance ? this.productInstance.toJSON() : <any>undefined;
         data["subType"] = this.subType;
-        return data;
+        return data; 
     }
 }
 
@@ -8304,7 +8304,7 @@ export class ProductActivity implements IProductActivity {
         data["createdBy"] = this.createdBy ? this.createdBy.toJSON() : <any>undefined;
         data["productId"] = this.productId;
         data["product"] = this.product ? this.product.toJSON() : <any>undefined;
-        return data;
+        return data; 
     }
 }
 
@@ -8406,7 +8406,7 @@ export class ProductFile implements IProductFile {
         data["createdBy"] = this.createdBy ? this.createdBy.toJSON() : <any>undefined;
         data["productId"] = this.productId;
         data["product"] = this.product ? this.product.toJSON() : <any>undefined;
-        return data;
+        return data; 
     }
 }
 
@@ -8494,7 +8494,7 @@ at which the entity has been deleted */
         data["updatedAt"] = this.updatedAt ? this.updatedAt.toISOString() : <any>undefined;
         data["deletedAt"] = this.deletedAt ? this.deletedAt.toISOString() : <any>undefined;
         data["version"] = this.version;
-        return data;
+        return data; 
     }
 }
 
@@ -8558,7 +8558,7 @@ export class ProductListResponse implements IProductListResponse {
                 data["list"].push(item.toJSON());
         }
         data["count"] = this.count;
-        return data;
+        return data; 
     }
 }
 
@@ -8603,7 +8603,7 @@ export class ListSorting implements IListSorting {
         data = typeof data === 'object' ? data : {};
         data["column"] = this.column;
         data["direction"] = this.direction;
-        return data;
+        return data; 
     }
 }
 
@@ -8654,7 +8654,7 @@ export class ListOrFilter implements IListOrFilter {
             for (let item of this.values)
                 data["values"].push(item);
         }
-        return data;
+        return data; 
     }
 }
 
@@ -8711,7 +8711,7 @@ export class ListParams implements IListParams {
             for (let item of this.filters)
                 data["filters"].push(item.toJSON());
         }
-        return data;
+        return data; 
     }
 }
 
@@ -8760,7 +8760,7 @@ export class ProductSummary implements IProductSummary {
         data["nameDutch"] = this.nameDutch;
         data["nameEnglish"] = this.nameEnglish;
         data["targetPrice"] = this.targetPrice;
-        return data;
+        return data; 
     }
 }
 
@@ -8832,7 +8832,7 @@ export class ProductParams implements IProductParams {
         data["contractTextEnglish"] = this.contractTextEnglish;
         data["deliverySpecificationDutch"] = this.deliverySpecificationDutch;
         data["deliverySpecificationEnglish"] = this.deliverySpecificationEnglish;
-        return data;
+        return data; 
     }
 }
 
@@ -8913,7 +8913,7 @@ export class Partial_ProductParams implements IPartial_ProductParams {
         data["contractTextEnglish"] = this.contractTextEnglish;
         data["deliverySpecificationDutch"] = this.deliverySpecificationDutch;
         data["deliverySpecificationEnglish"] = this.deliverySpecificationEnglish;
-        return data;
+        return data; 
     }
 }
 
@@ -8965,7 +8965,7 @@ export class Partial_PricingParams implements IPartial_PricingParams {
         data = typeof data === 'object' ? data : {};
         data["description"] = this.description;
         data["data"] = this.data;
-        return data;
+        return data; 
     }
 }
 
@@ -9017,7 +9017,7 @@ export class ProductInstanceListResponse implements IProductInstanceListResponse
                 data["list"].push(item.toJSON());
         }
         data["count"] = this.count;
-        return data;
+        return data; 
     }
 }
 
@@ -9057,7 +9057,7 @@ export class PaginationParams implements IPaginationParams {
         data = typeof data === 'object' ? data : {};
         data["skip"] = this.skip;
         data["take"] = this.take;
-        return data;
+        return data; 
     }
 }
 
@@ -9100,7 +9100,7 @@ export class AnalysisResultByYear implements IAnalysisResultByYear {
         data["amount"] = this.amount;
         data["nrOfProducts"] = this.nrOfProducts;
         data["year"] = this.year;
-        return data;
+        return data; 
     }
 }
 
@@ -9177,7 +9177,7 @@ export class BaseFile implements IBaseFile {
         data["location"] = this.location;
         data["createdById"] = this.createdById;
         data["createdBy"] = this.createdBy ? this.createdBy.toJSON() : <any>undefined;
-        return data;
+        return data; 
     }
 }
 
@@ -9232,7 +9232,7 @@ export class Partial_FileParams implements IPartial_FileParams {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["name"] = this.name;
-        return data;
+        return data; 
     }
 }
 
@@ -9304,7 +9304,7 @@ export class BaseActivity implements IBaseActivity {
         data["description"] = this.description;
         data["createdById"] = this.createdById;
         data["createdBy"] = this.createdBy ? this.createdBy.toJSON() : <any>undefined;
-        return data;
+        return data; 
     }
 }
 
@@ -9356,7 +9356,7 @@ export class ActivityParams implements IActivityParams {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["description"] = this.description;
-        return data;
+        return data; 
     }
 }
 
@@ -9393,7 +9393,7 @@ export class Partial_ActivityParams implements IPartial_ActivityParams {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["description"] = this.description;
-        return data;
+        return data; 
     }
 }
 
@@ -9433,7 +9433,7 @@ export class AnalysisResult implements IAnalysisResult {
         data = typeof data === 'object' ? data : {};
         data["amount"] = this.amount;
         data["nrOfProducts"] = this.nrOfProducts;
-        return data;
+        return data; 
     }
 }
 
@@ -9477,7 +9477,7 @@ export class InvoicedAmounts implements IInvoicedAmounts {
         data = typeof data === 'object' ? data : {};
         data["delivered"] = this.delivered ? this.delivered.toJSON() : <any>undefined;
         data["notDelivered"] = this.notDelivered ? this.notDelivered.toJSON() : <any>undefined;
-        return data;
+        return data; 
     }
 }
 
@@ -9545,7 +9545,7 @@ export class DashboardProductInstanceStats implements IDashboardProductInstanceS
             for (let item of this.financialYears)
                 data["financialYears"].push(item);
         }
-        return data;
+        return data; 
     }
 }
 
@@ -9600,7 +9600,7 @@ export class CompanyListResponse implements ICompanyListResponse {
                 data["list"].push(item.toJSON());
         }
         data["count"] = this.count;
-        return data;
+        return data; 
     }
 }
 
@@ -9643,7 +9643,7 @@ export class CompanySummary implements ICompanySummary {
         data["id"] = this.id;
         data["name"] = this.name;
         data["logoFilename"] = this.logoFilename;
-        return data;
+        return data; 
     }
 }
 
@@ -9705,7 +9705,7 @@ export class ETProductInstance implements IETProductInstance {
         data["updatedAt"] = this.updatedAt ? this.updatedAt.toISOString() : <any>undefined;
         data["subType"] = this.subType;
         data["invoiceDate"] = this.invoiceDate ? this.invoiceDate.toISOString() : <any>undefined;
-        return data;
+        return data; 
     }
 }
 
@@ -9766,7 +9766,7 @@ export class ETContract implements IETContract {
             for (let item of this.products)
                 data["products"].push(item.toJSON());
         }
-        return data;
+        return data; 
     }
 }
 
@@ -9821,7 +9821,7 @@ export class ETCompany implements IETCompany {
             for (let item of this.contracts)
                 data["contracts"].push(item.toJSON());
         }
-        return data;
+        return data; 
     }
 }
 
@@ -9877,7 +9877,7 @@ export class ETCompanyListResponse implements IETCompanyListResponse {
         }
         data["count"] = this.count;
         data["extra"] = this.extra ? this.extra.toJSON() : <any>undefined;
-        return data;
+        return data; 
     }
 }
 
@@ -9948,7 +9948,7 @@ export class CompanyParams implements ICompanyParams {
         data["invoiceAddressCity"] = this.invoiceAddressCity;
         data["invoiceAddressCountry"] = this.invoiceAddressCountry;
         data["status"] = this.status;
-        return data;
+        return data; 
     }
 }
 
@@ -10029,7 +10029,7 @@ export class Partial_CompanyParams implements IPartial_CompanyParams {
         data["invoiceAddressCity"] = this.invoiceAddressCity;
         data["invoiceAddressCountry"] = this.invoiceAddressCountry;
         data["status"] = this.status;
-        return data;
+        return data; 
     }
 }
 
@@ -10103,7 +10103,7 @@ export class ProductsPerCategory implements IProductsPerCategory {
             for (let item of this.nrOfProducts)
                 data["nrOfProducts"].push(item);
         }
-        return data;
+        return data; 
     }
 }
 
@@ -10174,7 +10174,7 @@ export class ContractedProductsAnalysis implements IContractedProductsAnalysis {
             for (let item of this.financialYears)
                 data["financialYears"].push(item);
         }
-        return data;
+        return data; 
     }
 }
 
@@ -10226,7 +10226,7 @@ export class ContractListResponse implements IContractListResponse {
                 data["list"].push(item.toJSON());
         }
         data["count"] = this.count;
-        return data;
+        return data; 
     }
 }
 
@@ -10272,7 +10272,7 @@ export class ContractSummary implements IContractSummary {
         data["title"] = this.title;
         data["value"] = this.value;
         data["status"] = this.status;
-        return data;
+        return data; 
     }
 }
 
@@ -10341,7 +10341,7 @@ export class RecentContract implements IRecentContract {
         data["description"] = this.description;
         data["createdById"] = this.createdById;
         data["subType"] = this.subType;
-        return data;
+        return data; 
     }
 }
 
@@ -10399,7 +10399,7 @@ export class ContractParams implements IContractParams {
         data["contactId"] = this.contactId;
         data["comments"] = this.comments;
         data["assignedToId"] = this.assignedToId;
-        return data;
+        return data; 
     }
 }
 
@@ -10452,7 +10452,7 @@ export class Partial_ContractParams implements IPartial_ContractParams {
         data["contactId"] = this.contactId;
         data["comments"] = this.comments;
         data["assignedToId"] = this.assignedToId;
-        return data;
+        return data; 
     }
 }
 
@@ -10502,7 +10502,7 @@ export class ProductInstanceParams implements IProductInstanceParams {
         data["basePrice"] = this.basePrice;
         data["discount"] = this.discount;
         data["details"] = this.details;
-        return data;
+        return data; 
     }
 }
 
@@ -10551,7 +10551,7 @@ export class Partial_ProductInstanceParams implements IPartial_ProductInstancePa
         data["basePrice"] = this.basePrice;
         data["discount"] = this.discount;
         data["details"] = this.details;
-        return data;
+        return data; 
     }
 }
 
@@ -10594,7 +10594,7 @@ export class ProductInstanceStatusParams implements IProductInstanceStatusParams
         data = typeof data === 'object' ? data : {};
         data["description"] = this.description;
         data["subType"] = this.subType;
-        return data;
+        return data; 
     }
 }
 
@@ -10667,7 +10667,7 @@ export class GenerateContractParams implements IGenerateContractParams {
         data["saveToDisk"] = this.saveToDisk;
         data["signee1Id"] = this.signee1Id;
         data["signee2Id"] = this.signee2Id;
-        return data;
+        return data; 
     }
 }
 
@@ -10713,7 +10713,7 @@ export class ContractStatusParams implements IContractStatusParams {
         data = typeof data === 'object' ? data : {};
         data["description"] = this.description;
         data["subType"] = this.subType;
-        return data;
+        return data; 
     }
 }
 
@@ -10767,7 +10767,7 @@ export class InvoiceListResponse implements IInvoiceListResponse {
         }
         data["count"] = this.count;
         data["lastSeen"] = this.lastSeen ? this.lastSeen.toISOString() : <any>undefined;
-        return data;
+        return data; 
     }
 }
 
@@ -10817,7 +10817,7 @@ export class InvoiceSummary implements IInvoiceSummary {
         data["companyId"] = this.companyId;
         data["value"] = this.value;
         data["status"] = this.status;
-        return data;
+        return data; 
     }
 }
 
@@ -10881,7 +10881,7 @@ export class ExpiredInvoice implements IExpiredInvoice {
         data["updatedAt"] = this.updatedAt ? this.updatedAt.toISOString() : <any>undefined;
         data["createdById"] = this.createdById;
         data["value"] = this.value;
-        return data;
+        return data; 
     }
 }
 
@@ -10954,7 +10954,7 @@ export class InvoiceCreateParams implements IInvoiceCreateParams {
                 data["productInstanceIds"].push(item);
         }
         data["companyId"] = this.companyId;
-        return data;
+        return data; 
     }
 }
 
@@ -11009,7 +11009,7 @@ export class Partial_InvoiceParams implements IPartial_InvoiceParams {
         data["comments"] = this.comments;
         data["startDate"] = this.startDate ? this.startDate.toISOString() : <any>undefined;
         data["assignedToId"] = this.assignedToId;
-        return data;
+        return data; 
     }
 }
 
@@ -11065,7 +11065,7 @@ export class GenerateInvoiceParams implements IGenerateInvoiceParams {
         data["showDiscountPercentages"] = this.showDiscountPercentages;
         data["saveToDisk"] = this.saveToDisk;
         data["recipientId"] = this.recipientId;
-        return data;
+        return data; 
     }
 }
 
@@ -11124,7 +11124,7 @@ export class CustomRecipient implements ICustomRecipient {
         data["postalCode"] = this.postalCode;
         data["city"] = this.city;
         data["country"] = this.country;
-        return data;
+        return data; 
     }
 }
 
@@ -11172,7 +11172,7 @@ export class CustomProduct implements ICustomProduct {
         data["name"] = this.name;
         data["amount"] = this.amount;
         data["pricePerOne"] = this.pricePerOne;
-        return data;
+        return data; 
     }
 }
 
@@ -11243,7 +11243,7 @@ export class CustomInvoiceGenSettings implements ICustomInvoiceGenSettings {
             for (let item of this.products)
                 data["products"].push(item.toJSON());
         }
-        return data;
+        return data; 
     }
 }
 
@@ -11289,7 +11289,7 @@ export class InvoiceStatusParams implements IInvoiceStatusParams {
         data = typeof data === 'object' ? data : {};
         data["description"] = this.description;
         data["subType"] = this.subType;
-        return data;
+        return data; 
     }
 }
 
@@ -11340,7 +11340,7 @@ export class ContactListResponse implements IContactListResponse {
                 data["list"].push(item.toJSON());
         }
         data["count"] = this.count;
-        return data;
+        return data; 
     }
 }
 
@@ -11354,7 +11354,6 @@ export class ContactSummary implements IContactSummary {
     firstName!: string;
     lastNamePreposition!: string;
     lastName!: string;
-    companyName!: string;
     companyId!: number;
 
     constructor(data?: IContactSummary) {
@@ -11372,7 +11371,6 @@ export class ContactSummary implements IContactSummary {
             this.firstName = _data["firstName"];
             this.lastNamePreposition = _data["lastNamePreposition"];
             this.lastName = _data["lastName"];
-            this.companyName = _data["companyName"];
             this.companyId = _data["companyId"];
         }
     }
@@ -11390,9 +11388,8 @@ export class ContactSummary implements IContactSummary {
         data["firstName"] = this.firstName;
         data["lastNamePreposition"] = this.lastNamePreposition;
         data["lastName"] = this.lastName;
-        data["companyName"] = this.companyName;
         data["companyId"] = this.companyId;
-        return data;
+        return data; 
     }
 }
 
@@ -11401,7 +11398,6 @@ export interface IContactSummary {
     firstName: string;
     lastNamePreposition: string;
     lastName: string;
-    companyName: string;
     companyId: number;
 }
 
@@ -11457,7 +11453,7 @@ export class ContactParams implements IContactParams {
         data["comments"] = this.comments;
         data["companyId"] = this.companyId;
         data["function"] = this.function;
-        return data;
+        return data; 
     }
 }
 
@@ -11526,7 +11522,7 @@ export class Partial_ContactParams implements IPartial_ContactParams {
         data["comments"] = this.comments;
         data["companyId"] = this.companyId;
         data["function"] = this.function;
-        return data;
+        return data; 
     }
 }
 
@@ -11585,7 +11581,7 @@ export class UserListResponse implements IUserListResponse {
                 data["list"].push(item.toJSON());
         }
         data["count"] = this.count;
-        return data;
+        return data; 
     }
 }
 
@@ -11651,7 +11647,7 @@ export class UserSummary implements IUserSummary {
             for (let item of this.roles)
                 data["roles"].push(item);
         }
-        return data;
+        return data; 
     }
 }
 
@@ -11732,7 +11728,7 @@ export class Partial_UserParams implements IPartial_UserParams {
             for (let item of this.roles)
                 data["roles"].push(item);
         }
-        return data;
+        return data; 
     }
 }
 
@@ -11779,7 +11775,7 @@ export class TransferUserParams implements ITransferUserParams {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["toUserId"] = this.toUserId;
-        return data;
+        return data; 
     }
 }
 
@@ -11829,7 +11825,7 @@ export class CategoryListResponse implements ICategoryListResponse {
                 data["list"].push(item.toJSON());
         }
         data["count"] = this.count;
-        return data;
+        return data; 
     }
 }
 
@@ -11869,7 +11865,7 @@ export class CategorySummary implements ICategorySummary {
         data = typeof data === 'object' ? data : {};
         data["id"] = this.id;
         data["name"] = this.name;
-        return data;
+        return data; 
     }
 }
 
@@ -11906,7 +11902,7 @@ export class CategoryParams implements ICategoryParams {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["name"] = this.name;
-        return data;
+        return data; 
     }
 }
 
@@ -11943,7 +11939,7 @@ export class Partial_CategoryParams implements IPartial_CategoryParams {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["name"] = this.name;
-        return data;
+        return data; 
     }
 }
 
@@ -11986,7 +11982,7 @@ export class LoginParams implements ILoginParams {
         data["email"] = this.email;
         data["password"] = this.password;
         data["rememberMe"] = this.rememberMe;
-        return data;
+        return data; 
     }
 }
 
@@ -12024,7 +12020,7 @@ export class Body implements IBody {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["productId"] = this.productId;
-        return data;
+        return data; 
     }
 }
 
@@ -12063,7 +12059,7 @@ export class Extra implements IExtra {
         data = typeof data === 'object' ? data : {};
         data["nrOfProducts"] = this.nrOfProducts;
         data["sumProducts"] = this.sumProducts;
-        return data;
+        return data; 
     }
 }
 

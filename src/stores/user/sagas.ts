@@ -6,9 +6,11 @@ import {
   ListOrFilter,
   ListParams,
   ListSorting,
+  Roles,
   SortDirection,
   User,
   UserParams,
+  UserSummary,
 } from '../../clients/server.generated';
 import { takeEveryWithErrorHandling } from '../errorHandling';
 import { clearSingle, errorSingle, setSingle } from '../single/actionCreators';
@@ -22,7 +24,7 @@ import {
 } from '../single/actions';
 import { getSingle } from '../single/selectors';
 import { SingleEntities } from '../single/single';
-import { fetchSummaries, setSummaries } from '../summaries/actionCreators';
+import { fetchSummaries, setSummaries, updateSummary } from '../summaries/actionCreators';
 import { summariesActionPattern, SummariesActionType } from '../summaries/actions';
 import { SummaryCollections } from '../summaries/summaries';
 import { fetchTable, prevPageTable, setTable } from '../tables/actionCreators';
@@ -30,6 +32,18 @@ import { tableActionPattern, TableActionType } from '../tables/actions';
 import { getTable } from '../tables/selectors';
 import { Tables } from '../tables/tables';
 import { TableState } from '../tables/tableState';
+
+function toSummary(user: User): UserSummary {
+  return {
+    id: user.id,
+    firstName: user.firstName,
+    lastNamePreposition: user.lastNamePreposition,
+    lastName: user.lastName,
+    email: user.email,
+    avatarFilename: user.avatarFilename,
+    roles: user.roles.map((r) => r.name as Roles),
+  } as UserSummary;
+}
 
 function* fetchUsers() {
   const client = new Client();
@@ -109,7 +123,7 @@ function* saveSingleUser(
   yield call([client, client.updateUser], action.id, action.data);
   const user = yield call([client, client.getUser], action.id);
   yield put(setSingle(SingleEntities.User, user));
-  yield put(fetchSummaries(SummaryCollections.Users));
+  yield put(updateSummary(SummaryCollections.Users, toSummary(user)));
 }
 
 function* errorSaveSingleUser() {

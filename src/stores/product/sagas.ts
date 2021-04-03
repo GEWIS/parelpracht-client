@@ -9,7 +9,7 @@ import {
   ListSorting,
   Partial_FileParams,
   Product,
-  ProductParams,
+  ProductParams, ProductSummary,
   SortDirection,
 } from '../../clients/server.generated';
 import { takeEveryWithErrorHandling } from '../errorHandling';
@@ -28,7 +28,7 @@ import {
   SingleSaveFileAction,
 } from '../single/actions';
 import { SingleEntities } from '../single/single';
-import { fetchSummaries, setSummaries } from '../summaries/actionCreators';
+import { fetchSummaries, setSummaries, updateSummary } from '../summaries/actionCreators';
 import { summariesActionPattern, SummariesActionType } from '../summaries/actions';
 import { SummaryCollections } from '../summaries/summaries';
 import { fetchTable, prevPageTable, setTable } from '../tables/actionCreators';
@@ -36,6 +36,15 @@ import { tableActionPattern, TableActionType } from '../tables/actions';
 import { getTable } from '../tables/selectors';
 import { Tables } from '../tables/tables';
 import { TableState } from '../tables/tableState';
+
+function* updateProductSummary(product: Product) {
+  yield put(updateSummary(SummaryCollections.Products, {
+    id: product.id,
+    nameDutch: product.nameDutch,
+    nameEnglish: product.nameEnglish,
+    targetPrice: product.targetPrice,
+  } as ProductSummary));
+}
 
 function* fetchProducts() {
   const client = new Client();
@@ -94,6 +103,7 @@ function* fetchSingleProduct(action: SingleFetchAction<SingleEntities.Product>) 
   const client = new Client();
   const product = yield call([client, client.getProduct], action.id);
   yield put(setSingle(SingleEntities.Product, product));
+  yield updateProductSummary(product);
 }
 
 function* saveSingleProduct(
@@ -103,7 +113,7 @@ function* saveSingleProduct(
   yield call([client, client.updateProduct], action.id, action.data);
   const product = yield call([client, client.getProduct], action.id);
   yield put(setSingle(SingleEntities.Product, product));
-  yield put(fetchSummaries(SummaryCollections.Products));
+  yield updateProductSummary(product);
 }
 
 function* errorSaveSingleProduct() {

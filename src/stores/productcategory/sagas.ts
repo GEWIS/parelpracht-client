@@ -3,6 +3,7 @@ import {
 } from 'redux-saga/effects';
 import {
   CategoryParams,
+  CategorySummary,
   Client,
   ListOrFilter,
   ListParams,
@@ -21,7 +22,7 @@ import {
   SingleSaveAction,
 } from '../single/actions';
 import { SingleEntities } from '../single/single';
-import { fetchSummaries, setSummaries } from '../summaries/actionCreators';
+import { fetchSummaries, setSummaries, updateSummary } from '../summaries/actionCreators';
 import { summariesActionPattern, SummariesActionType } from '../summaries/actions';
 import { SummaryCollections } from '../summaries/summaries';
 import { fetchTable, prevPageTable, setTable } from '../tables/actionCreators';
@@ -29,6 +30,13 @@ import { tableActionPattern, TableActionType } from '../tables/actions';
 import { getTable } from '../tables/selectors';
 import { Tables } from '../tables/tables';
 import { TableState } from '../tables/tableState';
+
+function toSummary(category: ProductCategory): CategorySummary {
+  return {
+    id: category.id,
+    name: category.name,
+  } as CategorySummary;
+}
 
 function* fetchProductCategories() {
   const client = new Client();
@@ -97,7 +105,7 @@ function* saveSingleProductCategory(
   const productCategory = yield call([client, client.getCategory], action.id);
   yield put(setSingle(SingleEntities.ProductCategory, productCategory));
   yield put(fetchTable(Tables.ProductCategories));
-  yield put(fetchSummaries(SummaryCollections.ProductCategories));
+  yield put(updateSummary(SummaryCollections.ProductCategories, toSummary(productCategory)));
 }
 
 function* errorSaveSingleProductCategory() {

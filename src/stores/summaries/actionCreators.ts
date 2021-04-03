@@ -1,6 +1,9 @@
 import {
-  summariesActionPattern, SummariesActionType,
-  SummariesFetchAction, SummariesSetAction,
+  summariesActionPattern,
+  SummariesActionType,
+  SummariesFetchAction,
+  SummariesSetAction,
+  SummariesUpdateAction,
 } from './actions';
 import { SummaryCollections } from './summaries';
 
@@ -15,6 +18,15 @@ export function setSummaries<S extends SummaryCollections, R>(
 ): SummariesSetAction<S, R> {
   return {
     type: summariesActionPattern(summaries, SummariesActionType.Set),
+    data,
+  };
+}
+
+export function updateSummary<S extends SummaryCollections, R>(
+  summaries: S, data: R,
+): SummariesUpdateAction<S, R> {
+  return {
+    type: summariesActionPattern(summaries, SummariesActionType.Update),
     data,
   };
 }
