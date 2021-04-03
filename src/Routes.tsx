@@ -235,10 +235,10 @@ function Routes(props: Props) {
 
           {/* Users */}
           {props.hasRole(Roles.ADMIN) ? [
-            <Route path="/user" exact>
+            <Route path="/user" exact key="1">
               <UsersPage />
             </Route>,
-            <Route path="/user/new" exact>
+            <Route path="/user/new" exact key="2">
               <UsersPage />
               <UserCreatePage />
             </Route>,

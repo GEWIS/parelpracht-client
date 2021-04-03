@@ -5,6 +5,7 @@ import { Dropdown, DropdownProps } from 'semantic-ui-react';
 import { ContactSummary } from '../../clients/server.generated';
 import { formatContactName } from '../../helpers/contact';
 import { RootState } from '../../stores/store';
+import { getCompanyName } from '../../stores/company/selectors';
 
 interface Props {
   disabled?: boolean;
@@ -13,6 +14,7 @@ interface Props {
   placeholder: string;
   options: ContactSummary[];
   onChange: (value: number | number[]) => void;
+  getCompanyName: (id: number) => string;
 }
 
 function ContactSelector(props: Props & DropdownProps) {
@@ -26,7 +28,7 @@ function ContactSelector(props: Props & DropdownProps) {
     .map((x) => ({
       key: x.id,
       text: formatContactName(x.firstName, x.lastNamePreposition, x.lastName),
-      description: x.companyName,
+      description: props.getCompanyName(x.companyId),
       value: x.id,
     }));
 
@@ -55,6 +57,7 @@ ContactSelector.defaultProps = {
 
 const mapStateToProps = (state: RootState) => ({
   options: state.summaries.Contacts.options,
+  getCompanyName: (id: number) => getCompanyName(state, id),
 });
 
 export default connect(mapStateToProps)(ContactSelector);

@@ -29,7 +29,6 @@ function LoginForm(props: Props) {
         <label htmlFor="form-input-email">Email address</label>
         <Input
           id="form-input-email"
-          control={Input}
           icon="user"
           value={email}
           iconPosition="left"
@@ -53,7 +52,6 @@ function LoginForm(props: Props) {
           id="form-input-remember-me"
           checked={rememberMe}
           onChange={(e, data) => changeRememberMe(data.checked as boolean)}
-          fluid
           label="Remember me"
         />
       </Form.Field>

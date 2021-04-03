@@ -3,6 +3,7 @@ import {
 } from 'redux-saga/effects';
 import {
   CategoryParams,
+  CategorySummary,
   Client,
   ListOrFilter,
   ListParams,
@@ -21,7 +22,9 @@ import {
   SingleSaveAction,
 } from '../single/actions';
 import { SingleEntities } from '../single/single';
-import { fetchSummaries, setSummaries } from '../summaries/actionCreators';
+import {
+  addSummary, deleteSummary, setSummaries, updateSummary,
+} from '../summaries/actionCreators';
 import { summariesActionPattern, SummariesActionType } from '../summaries/actions';
 import { SummaryCollections } from '../summaries/summaries';
 import { fetchTable, prevPageTable, setTable } from '../tables/actionCreators';
@@ -29,6 +32,13 @@ import { tableActionPattern, TableActionType } from '../tables/actions';
 import { getTable } from '../tables/selectors';
 import { Tables } from '../tables/tables';
 import { TableState } from '../tables/tableState';
+
+function toSummary(category: ProductCategory): CategorySummary {
+  return {
+    id: category.id,
+    name: category.name,
+  } as CategorySummary;
+}
 
 function* fetchProductCategories() {
   const client = new Client();
@@ -87,6 +97,7 @@ function* fetchSingleProductCategory(action: SingleFetchAction<SingleEntities.Pr
   const client = new Client();
   const productCategory = yield call([client, client.getCategory], action.id);
   yield put(setSingle(SingleEntities.ProductCategory, productCategory));
+  yield put(updateSummary(SummaryCollections.ProductCategories, toSummary(productCategory)));
 }
 
 function* saveSingleProductCategory(
@@ -97,7 +108,7 @@ function* saveSingleProductCategory(
   const productCategory = yield call([client, client.getCategory], action.id);
   yield put(setSingle(SingleEntities.ProductCategory, productCategory));
   yield put(fetchTable(Tables.ProductCategories));
-  yield put(fetchSummaries(SummaryCollections.ProductCategories));
+  yield put(updateSummary(SummaryCollections.ProductCategories, toSummary(productCategory)));
 }
 
 function* errorSaveSingleProductCategory() {
@@ -116,10 +127,10 @@ function* createSingleProductCategory(
   action: SingleCreateAction<SingleEntities.ProductCategory, CategoryParams>,
 ) {
   const client = new Client();
-  const productcategory = yield call([client, client.createCategory], action.data);
-  yield put(setSingle(SingleEntities.ProductCategory, productcategory));
+  const productCategory = yield call([client, client.createCategory], action.data);
+  yield put(setSingle(SingleEntities.ProductCategory, productCategory));
   yield put(fetchTable(Tables.ProductCategories));
-  yield put(fetchSummaries(SummaryCollections.ProductCategories));
+  yield put(addSummary(SummaryCollections.ProductCategories, toSummary(productCategory)));
 }
 
 function* errorCreateSingleProductCategory() {
@@ -139,7 +150,7 @@ function* deleteSingleProductCategory(action: SingleDeleteAction<SingleEntities.
   yield call([client, client.deleteCategory], action.id);
   yield put(clearSingle(SingleEntities.ProductCategory));
   yield put(fetchTable(Tables.ProductCategories));
-  yield put(fetchSummaries(SummaryCollections.ProductCategories));
+  yield put(deleteSummary(SummaryCollections.ProductCategories, action.id));
 }
 
 function* errorDeleteSingleProductCategory() {

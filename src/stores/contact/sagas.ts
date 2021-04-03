@@ -2,16 +2,29 @@ import {
   call, put, select, throttle,
 } from 'redux-saga/effects';
 import {
-  Client, Contact, ContactParams, ListOrFilter, ListParams, ListSorting, SortDirection,
+  Client,
+  Contact,
+  ContactParams,
+  ContactSummary,
+  ListOrFilter,
+  ListParams,
+  ListSorting,
+  SortDirection,
 } from '../../clients/server.generated';
 import { takeEveryWithErrorHandling } from '../errorHandling';
 import { clearSingle, errorSingle, setSingle } from '../single/actionCreators';
 import {
-  singleActionPattern, SingleActionType, SingleCreateAction, SingleDeleteAction,
-  SingleFetchAction, SingleSaveAction,
+  singleActionPattern,
+  SingleActionType,
+  SingleCreateAction,
+  SingleDeleteAction,
+  SingleFetchAction,
+  SingleSaveAction,
 } from '../single/actions';
 import { SingleEntities } from '../single/single';
-import { fetchSummaries, setSummaries } from '../summaries/actionCreators';
+import {
+  addSummary, deleteSummary, setSummaries, updateSummary,
+} from '../summaries/actionCreators';
 import { summariesActionPattern, SummariesActionType } from '../summaries/actions';
 import { SummaryCollections } from '../summaries/summaries';
 import { fetchTable, prevPageTable, setTable } from '../tables/actionCreators';
@@ -19,6 +32,16 @@ import { tableActionPattern, TableActionType } from '../tables/actions';
 import { getTable } from '../tables/selectors';
 import { Tables } from '../tables/tables';
 import { TableState } from '../tables/tableState';
+
+function toSummary(contact: Contact): ContactSummary {
+  return {
+    id: contact.id,
+    firstName: contact.firstName,
+    lastNamePreposition: contact.lastNamePreposition,
+    lastName: contact.lastName,
+    companyId: contact.companyId,
+  } as ContactSummary;
+}
 
 function* fetchContacts() {
   const client = new Client();
@@ -77,6 +100,7 @@ function* fetchSingleContact(action: SingleFetchAction<SingleEntities.Contact>) 
   const client = new Client();
   const contact = yield call([client, client.getContact], action.id);
   yield put(setSingle(SingleEntities.Contact, contact));
+  yield put(updateSummary(SummaryCollections.Contacts, toSummary(contact)));
 }
 
 function* saveSingleContact(
@@ -87,7 +111,7 @@ function* saveSingleContact(
   const contact = yield call([client, client.getContact], action.id);
   yield put(setSingle(SingleEntities.Contact, contact));
   yield put(fetchTable(Tables.Contacts));
-  yield put(fetchSummaries(SummaryCollections.Contacts));
+  yield put(updateSummary(SummaryCollections.Contacts, toSummary(contact)));
 }
 
 function* errorSaveSingleContact() {
@@ -109,7 +133,7 @@ function* createSingleContact(
   const contact = yield call([client, client.createContact], action.data);
   yield put(setSingle(SingleEntities.Contact, contact));
   yield put(fetchTable(Tables.Contacts));
-  yield put(fetchSummaries(SummaryCollections.Contacts));
+  yield put(addSummary(SummaryCollections.Contacts, toSummary(contact)));
 }
 
 function* errorCreateSingleContact() {
@@ -129,7 +153,7 @@ function* deleteSingleContact(action: SingleDeleteAction<SingleEntities.Contact>
   yield call([client, client.deleteContact], action.id);
   yield put(clearSingle(SingleEntities.Contact));
   yield put(fetchTable(Tables.Contacts));
-  yield put(fetchSummaries(SummaryCollections.Contacts));
+  yield put(deleteSummary(SummaryCollections.Contacts, action.id));
 }
 
 function* errorDeleteSingleContact() {

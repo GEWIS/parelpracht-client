@@ -292,12 +292,25 @@ export function statusApplied(
 /**
  * Get last status activity that is not the cancelling of the document
  */
-export function getLastStatus(allStatusActivities: GeneralActivity[]): GeneralActivity | undefined {
+export function getLastStatusNotCancelled(
+  allStatusActivities: GeneralActivity[],
+): GeneralActivity | undefined {
   if (allStatusActivities.length > 0) {
     if (allStatusActivities[allStatusActivities.length - 1].subType !== 'CANCELLED') {
       return allStatusActivities[allStatusActivities.length - 1];
     }
     return allStatusActivities[allStatusActivities.length - 2];
+  }
+  return undefined;
+}
+
+/**
+ * Get the last status activity
+ * @param allStatusActivities All activities where type=STATUS
+ */
+export function getLastStatus(allStatusActivities: GeneralActivity[]): GeneralActivity | undefined {
+  if (allStatusActivities.length > 0) {
+    return allStatusActivities[allStatusActivities.length - 1];
   }
   return undefined;
 }

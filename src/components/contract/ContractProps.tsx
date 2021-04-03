@@ -263,7 +263,6 @@ class ContractProps extends React.Component<Props, State> {
           </Form.Field>
           <Form.Field
             disabled={!editing}
-            fluid
             id="form-input-comments"
             control={TextArea}
             label="Comments"

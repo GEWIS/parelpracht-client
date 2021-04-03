@@ -3,7 +3,7 @@ import { NavLink } from 'react-router-dom';
 import {
   Container, Grid, Header, Message, Segment, Image,
 } from 'semantic-ui-react';
-import './LoginPage.css';
+import './BackgroundAnimation.css';
 import AlertContainer from '../components/alerts/AlertContainer';
 import LoginForm from '../components/auth/LoginForm';
 
