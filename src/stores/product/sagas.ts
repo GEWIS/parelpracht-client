@@ -9,7 +9,8 @@ import {
   ListSorting,
   Partial_FileParams,
   Product,
-  ProductParams, ProductSummary,
+  ProductParams,
+  ProductSummary,
   SortDirection,
 } from '../../clients/server.generated';
 import { takeEveryWithErrorHandling } from '../errorHandling';
@@ -28,7 +29,9 @@ import {
   SingleSaveFileAction,
 } from '../single/actions';
 import { SingleEntities } from '../single/single';
-import { fetchSummaries, setSummaries, updateSummary } from '../summaries/actionCreators';
+import {
+  addSummary, deleteSummary, setSummaries, updateSummary,
+} from '../summaries/actionCreators';
 import { summariesActionPattern, SummariesActionType } from '../summaries/actions';
 import { SummaryCollections } from '../summaries/summaries';
 import { fetchTable, prevPageTable, setTable } from '../tables/actionCreators';
@@ -37,13 +40,13 @@ import { getTable } from '../tables/selectors';
 import { Tables } from '../tables/tables';
 import { TableState } from '../tables/tableState';
 
-function* updateProductSummary(product: Product) {
-  yield put(updateSummary(SummaryCollections.Products, {
+function toSummary(product: Product): ProductSummary {
+  return {
     id: product.id,
     nameDutch: product.nameDutch,
     nameEnglish: product.nameEnglish,
     targetPrice: product.targetPrice,
-  } as ProductSummary));
+  } as ProductSummary;
 }
 
 function* fetchProducts() {
@@ -103,7 +106,7 @@ function* fetchSingleProduct(action: SingleFetchAction<SingleEntities.Product>) 
   const client = new Client();
   const product = yield call([client, client.getProduct], action.id);
   yield put(setSingle(SingleEntities.Product, product));
-  yield updateProductSummary(product);
+  yield put(updateSummary(SummaryCollections.Products, toSummary(product)));
 }
 
 function* saveSingleProduct(
@@ -113,7 +116,7 @@ function* saveSingleProduct(
   yield call([client, client.updateProduct], action.id, action.data);
   const product = yield call([client, client.getProduct], action.id);
   yield put(setSingle(SingleEntities.Product, product));
-  yield updateProductSummary(product);
+  yield put(updateSummary(SummaryCollections.Products, toSummary(product)));
 }
 
 function* errorSaveSingleProduct() {
@@ -135,7 +138,7 @@ function* createSingleProduct(
   const product = yield call([client, client.createProduct], action.data);
   yield put(setSingle(SingleEntities.Product, product));
   yield put(fetchTable(Tables.Products));
-  yield put(fetchSummaries(SummaryCollections.Products));
+  yield put(addSummary(SummaryCollections.Products, toSummary(product)));
 }
 
 function* errorCreateSingleProduct() {
@@ -154,7 +157,7 @@ function* deleteSingleProduct(action: SingleDeleteAction<SingleEntities.Product>
   const client = new Client();
   yield call([client, client.deleteProduct], action.id);
   yield put(clearSingle(SingleEntities.Product));
-  yield put(fetchSummaries(SummaryCollections.Products));
+  yield put(deleteSummary(SummaryCollections.Products, action.id));
 }
 
 function* errorDeleteSingleProduct() {

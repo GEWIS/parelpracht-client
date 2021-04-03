@@ -24,7 +24,9 @@ import {
 } from '../single/actions';
 import { getSingle } from '../single/selectors';
 import { SingleEntities } from '../single/single';
-import { fetchSummaries, setSummaries, updateSummary } from '../summaries/actionCreators';
+import {
+  addSummary, deleteSummary, setSummaries, updateSummary,
+} from '../summaries/actionCreators';
 import { summariesActionPattern, SummariesActionType } from '../summaries/actions';
 import { SummaryCollections } from '../summaries/summaries';
 import { fetchTable, prevPageTable, setTable } from '../tables/actionCreators';
@@ -102,13 +104,14 @@ function* fetchSingleUser(action: SingleFetchAction<SingleEntities.User>) {
   const client = new Client();
   const user = yield call([client, client.getUser], action.id);
   yield put(setSingle(SingleEntities.User, user));
+  yield put(updateSummary(SummaryCollections.Users, toSummary(user)));
 }
 
 function* deleteSingleUser(action: SingleDeleteAction<SingleEntities.User>) {
   const client = new Client();
   yield call([client, client.deleteUser], action.id);
   yield put(clearSingle(SingleEntities.User));
-  yield put(fetchSummaries(SummaryCollections.Users));
+  yield put(deleteSummary(SummaryCollections.Users, action.id));
 }
 
 function* errorDeleteSingleUser() {
@@ -145,7 +148,7 @@ function* createSingleUser(
   const user = yield call([client, client.createUser], action.data);
   yield put(setSingle(SingleEntities.User, user));
   yield put(fetchTable(Tables.Users));
-  yield put(fetchSummaries(SummaryCollections.Users));
+  yield put(addSummary(SummaryCollections.Users, toSummary(user)));
 }
 
 function* errorCreateSingleUser() {

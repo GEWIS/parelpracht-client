@@ -5,7 +5,8 @@ import {
   ActivityParams,
   Client,
   Company,
-  CompanyParams, CompanySummary,
+  CompanyParams,
+  CompanySummary,
   ETCompany,
   ListOrFilter,
   ListParams,
@@ -14,7 +15,9 @@ import {
   SortDirection,
 } from '../../clients/server.generated';
 import { takeEveryWithErrorHandling } from '../errorHandling';
-import { fetchSummaries, setSummaries, updateSummary } from '../summaries/actionCreators';
+import {
+  addSummary, deleteSummary, setSummaries, updateSummary,
+} from '../summaries/actionCreators';
 import { summariesActionPattern, SummariesActionType } from '../summaries/actions';
 import { SummaryCollections } from '../summaries/summaries';
 import { fetchTable, prevPageTable, setTable } from '../tables/actionCreators';
@@ -38,12 +41,12 @@ import {
 } from '../single/actions';
 import { SingleEntities } from '../single/single';
 
-function* updateCompanySummary(company: Company) {
-  yield put(updateSummary(SummaryCollections.Companies, {
+function toSummary(company: Company): CompanySummary {
+  return {
     id: company.id,
     name: company.name,
     logoFilename: company.logoFilename,
-  } as CompanySummary));
+  } as CompanySummary;
 }
 
 function* fetchCompanies() {
@@ -130,7 +133,7 @@ function* fetchSingleCompany(action: SingleFetchAction<SingleEntities.Company>) 
   const client = new Client();
   const company = yield call([client, client.getCompany], action.id);
   yield put(setSingle(SingleEntities.Company, company));
-  yield updateCompanySummary(company);
+  yield put(updateSummary(SummaryCollections.Companies, toSummary(company)));
 }
 
 function* saveSingleCompany(
@@ -140,7 +143,7 @@ function* saveSingleCompany(
   yield call([client, client.updateCompany], action.id, action.data);
   const company = yield call([client, client.getCompany], action.id);
   yield put(setSingle(SingleEntities.Company, company));
-  yield updateCompanySummary(company);
+  yield put(updateSummary(SummaryCollections.Companies, toSummary(company)));
 }
 
 function* errorSaveSingleCompany() {
@@ -162,7 +165,7 @@ function* createSingleCompany(
   const company = yield call([client, client.createCompany], action.data);
   yield put(setSingle(SingleEntities.Company, company));
   yield put(fetchTable(Tables.Companies));
-  yield put(fetchSummaries(SummaryCollections.Companies));
+  yield put(addSummary(SummaryCollections.Companies, toSummary(company)));
 }
 
 function* errorCreateSingleCompany() {
@@ -182,7 +185,7 @@ function* deleteSingleCompany(action: SingleDeleteAction<SingleEntities.Company>
   yield call([client, client.deleteCompany], action.id);
   yield put(clearSingle(SingleEntities.Company));
   yield put(fetchTable(Tables.Companies));
-  yield put(fetchSummaries(SummaryCollections.Companies));
+  yield put(deleteSummary(SummaryCollections.Companies, action.id));
 }
 
 function* errorDeleteSingleCompany() {

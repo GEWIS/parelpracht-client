@@ -1,6 +1,8 @@
 import {
   summariesActionPattern,
   SummariesActionType,
+  SummariesAddAction,
+  SummariesDeleteAction,
   SummariesFetchAction,
   SummariesSetAction,
   SummariesUpdateAction,
@@ -22,11 +24,29 @@ export function setSummaries<S extends SummaryCollections, R>(
   };
 }
 
+export function addSummary<S extends SummaryCollections, R>(
+  summaries: S, data: R,
+): SummariesAddAction<S, R> {
+  return {
+    type: summariesActionPattern(summaries, SummariesActionType.Add),
+    data,
+  };
+}
+
 export function updateSummary<S extends SummaryCollections, R>(
   summaries: S, data: R,
 ): SummariesUpdateAction<S, R> {
   return {
     type: summariesActionPattern(summaries, SummariesActionType.Update),
     data,
+  };
+}
+
+export function deleteSummary<S extends SummaryCollections>(
+  summaries: S, id: number,
+): SummariesDeleteAction<S> {
+  return {
+    type: summariesActionPattern(summaries, SummariesActionType.Delete),
+    id,
   };
 }

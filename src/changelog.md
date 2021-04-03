@@ -20,6 +20,7 @@ You can find the release notes below.
 - Added the value of contracts and invoices to their respective tables.
 - Added input validation on the pricing fields in product instances.
 - Added nice-looking minimal and maximal target lines in the Insights chart of products.
+- Added optimizations regarding the requests to the backend when creating, deleting or updating entities.
 
 ### Changes
 - Made the footer smaller and removed the 1px white line in Chrome
@@ -46,6 +47,7 @@ You can find the release notes below.
 - Fixed prices separated with a comma not being saved properly.
 - Fixed returning to an empty list when removing the last entity in a paginated list.
 - Fixed footer being positioned one pixel too high in Google Chrome.
+- Fixed inconsistencies when multiple people use ParelPracht and update entities.
 
 ## v0.2.1-beta2 (07-03-2021)
 

@@ -2,15 +2,19 @@ import {
   call, put, select, throttle,
 } from 'redux-saga/effects';
 import {
-  ActivityParams, ActivityType,
+  ActivityParams,
+  ActivityType,
   Client,
-  Contract, ContractActivity,
+  Contract,
+  ContractActivity,
   ContractParams,
-  ContractStatusParams, ContractSummary,
+  ContractStatusParams,
+  ContractSummary,
   ListOrFilter,
   ListParams,
   ListSorting,
-  Partial_FileParams, ProductInstance,
+  Partial_FileParams,
+  ProductInstance,
   SortDirection,
 } from '../../clients/server.generated';
 import { takeEveryWithErrorHandling } from '../errorHandling';
@@ -30,7 +34,9 @@ import {
   SingleSaveFileAction,
 } from '../single/actions';
 import { SingleEntities } from '../single/single';
-import { fetchSummaries, setSummaries, updateSummary } from '../summaries/actionCreators';
+import {
+  addSummary, deleteSummary, setSummaries, updateSummary,
+} from '../summaries/actionCreators';
 import { summariesActionPattern, SummariesActionType } from '../summaries/actions';
 import { SummaryCollections } from '../summaries/summaries';
 import { fetchTable, prevPageTable, setTable } from '../tables/actionCreators';
@@ -40,8 +46,8 @@ import { Tables } from '../tables/tables';
 import { TableState } from '../tables/tableState';
 import { getLastStatus } from '../../helpers/activity';
 
-function* updateContractSummary(contract: Contract) {
-  yield put(updateSummary(SummaryCollections.Contracts, {
+function toSummary(contract: Contract): ContractSummary {
+  return {
     id: contract.id,
     title: contract.title,
     value: contract.products.reduce(
@@ -49,7 +55,7 @@ function* updateContractSummary(contract: Contract) {
     ),
     status: getLastStatus(contract.activities
       .filter((a: ContractActivity) => a.type === ActivityType.STATUS))?.subType,
-  } as ContractSummary));
+  } as ContractSummary;
 }
 
 function* fetchContracts() {
@@ -109,7 +115,7 @@ function* fetchSingleContract(action: SingleFetchAction<SingleEntities.Contract>
   const client = new Client();
   const contract = yield call([client, client.getContract], action.id);
   yield put(setSingle(SingleEntities.Contract, contract));
-  yield updateContractSummary(contract);
+  yield put(updateSummary(SummaryCollections.Contracts, toSummary(contract)));
 }
 
 function* saveSingleContract(
@@ -119,7 +125,7 @@ function* saveSingleContract(
   yield call([client, client.updateContract], action.id, action.data);
   const contract = yield call([client, client.getContract], action.id);
   yield put(setSingle(SingleEntities.Contract, contract));
-  yield put(fetchSummaries(SummaryCollections.Contracts));
+  yield put(updateSummary(SummaryCollections.Contracts, toSummary(contract)));
 }
 
 function* errorSaveSingleContract() {
@@ -141,7 +147,7 @@ function* createSingleContract(
   const contract = yield call([client, client.createContract], action.data);
   yield put(setSingle(SingleEntities.Contract, contract));
   yield put(fetchTable(Tables.Contracts));
-  yield put(fetchSummaries(SummaryCollections.Contracts));
+  yield put(addSummary(SummaryCollections.Contracts, toSummary(contract)));
 }
 
 function* errorCreateSingleContract() {
@@ -153,7 +159,7 @@ function* deleteSingleContract(action: SingleDeleteAction<SingleEntities.Contrac
   yield call([client, client.deleteContract], action.id);
   yield put(clearSingle(SingleEntities.Contract));
   yield put(fetchTable(Tables.Contracts));
-  yield put(fetchSummaries(SummaryCollections.Contracts));
+  yield put(deleteSummary(SummaryCollections.Contracts, action.id));
 }
 
 function* errorDeleteSingleContract() {
@@ -182,7 +188,6 @@ function* saveSingleContractFile(
   yield call([client, client.updateContractFile], action.id, action.fileId, action.data);
   const contract = yield call([client, client.getContract], action.id);
   yield put(setSingle(SingleEntities.Contract, contract));
-  yield updateContractSummary(contract);
 }
 
 function* errorSaveSingleContractFile() {
@@ -221,7 +226,7 @@ function* createSingleContractStatus(
   yield call([client, client.addContractStatus], action.id, action.data);
   const contract = yield call([client, client.getContract], action.id);
   yield put(setSingle(SingleEntities.Contract, contract));
-  yield updateContractSummary(contract);
+  yield put(updateSummary(SummaryCollections.Contracts, toSummary(contract)));
 }
 
 function* errorCreateSingleContractStatus() {
@@ -282,7 +287,7 @@ function* deleteSingleContractActivity(
   yield call([client, client.deleteContractActivity], action.id, action.activityId);
   const contract = yield call([client, client.getContract], action.id);
   yield put(setSingle(SingleEntities.Contract, contract));
-  yield updateContractSummary(contract);
+  yield put(updateSummary(SummaryCollections.Contracts, toSummary(contract)));
 }
 
 function* errorDeleteSingleContractActivity() {
