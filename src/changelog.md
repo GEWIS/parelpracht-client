@@ -48,6 +48,7 @@ You can find the release notes below.
 - Fixed returning to an empty list when removing the last entity in a paginated list.
 - Fixed footer being positioned one pixel too high in Google Chrome.
 - Fixed inconsistencies when multiple people use ParelPracht and update entities.
+- Fixed "Add product" button in contracts staying enabled when a contract is marked as confirmed, until ParelPracht is refreshed.
 
 ## v0.2.1-beta2 (07-03-2021)
 
