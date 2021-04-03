@@ -11,6 +11,7 @@ import validator from 'validator';
 import queryString from 'query-string';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
+import './BackgroundAnimation.css';
 import AlertContainer from '../components/alerts/AlertContainer';
 import ResetPasswordForm from '../components/auth/ResetPasswordForm';
 import { RootState } from '../stores/store';
@@ -79,6 +80,9 @@ function ResetPasswordPage(props: Props) {
   if (props.status === ResourceStatus.FETCHED) {
     return (
       <>
+        <div className="bg" />
+        <div className="bg bg2" />
+        <div className="bg bg3" />
         <AlertContainer internal />
         <Container>
           <Grid textAlign="center" verticalAlign="middle" style={{ height: '100vh' }}>
@@ -102,6 +106,9 @@ function ResetPasswordPage(props: Props) {
 
   return (
     <>
+      <div className="bg" />
+      <div className="bg bg2" />
+      <div className="bg bg3" />
       <AlertContainer internal />
       <Container>
         <Grid textAlign="center" verticalAlign="middle" style={{ height: '100vh' }}>

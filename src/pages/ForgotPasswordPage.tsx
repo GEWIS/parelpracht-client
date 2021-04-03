@@ -6,6 +6,7 @@ import {
   Button,
   Container, Grid, Header, Icon, Segment,
 } from 'semantic-ui-react';
+import './BackgroundAnimation.css';
 import AlertContainer from '../components/alerts/AlertContainer';
 import ForgotPasswordForm from '../components/auth/ForgotPasswordForm';
 import { authRequestClear } from '../stores/auth/actionCreators';
@@ -26,6 +27,9 @@ function ForgotPasswordPage(props: Props) {
   if (props.status === ResourceStatus.FETCHED) {
     return (
       <>
+        <div className="bg" />
+        <div className="bg bg2" />
+        <div className="bg bg3" />
         <AlertContainer internal />
         <Container>
           <Grid textAlign="center" verticalAlign="middle" style={{ height: '100vh' }}>
@@ -52,6 +56,9 @@ function ForgotPasswordPage(props: Props) {
   }
   return (
     <>
+      <div className="bg" />
+      <div className="bg bg2" />
+      <div className="bg bg3" />
       <AlertContainer internal />
       <Container>
         <Grid textAlign="center" verticalAlign="middle" style={{ height: '100vh' }}>
