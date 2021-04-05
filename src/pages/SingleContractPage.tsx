@@ -33,7 +33,34 @@ interface Props extends RouteComponentProps<{ contractId: string }> {
   hasRole: (role: Roles) => boolean;
 }
 
-class SingleContractPage extends React.Component<Props> {
+interface State {
+  paneIndex: number;
+}
+
+class SingleContractPage extends React.Component<Props, State> {
+  constructor(props: Props) {
+    super(props);
+
+    const panes = this.getPanes();
+    let { hash } = this.props.location;
+    // If there is no hash, do not take the first (#) character
+    if (hash.length > 0) {
+      hash = hash.substr(1);
+    }
+    // Find the corresponding tab that has been selected
+    let index = panes.findIndex((p) => p.menuItem.toLowerCase() === hash.toLowerCase());
+    // If no parameter is given, or a parameter is given that does not exist,
+    // select the first one by default
+    if (index < 0) {
+      index = 0;
+      this.props.history.replace(`#${panes[0].menuItem.toLowerCase()}`);
+    }
+
+    this.state = {
+      paneIndex: index,
+    };
+  }
+
   componentDidMount() {
     const { contractId } = this.props.match.params;
 
@@ -55,36 +82,28 @@ class SingleContractPage extends React.Component<Props> {
     }
   }
 
-  public render() {
+  getPanes = () => {
     const {
       contract, fetchContract, status, hasRole,
     } = this.props;
 
-    if (contract === undefined) {
-      return (
-        <Container style={{ paddingTop: '2em' }}>
-          <Loader content="Loading" active />
-        </Container>
-      );
-    }
-
     const panes = [
       {
         menuItem: 'Products',
-        render: () => (
+        render: contract ? () => (
           <Tab.Pane>
             <ContractProductList
               contract={contract}
             />
           </Tab.Pane>
-        ),
+        ) : () => <Tab.Pane />,
       },
     ];
 
     if (hasRole(Roles.ADMIN) || hasRole(Roles.GENERAL) || hasRole(Roles.AUDIT)) {
       panes.push({
         menuItem: 'Activities',
-        render: () => (
+        render: contract ? () => (
           <Tab.Pane>
             <ActivitiesList
               activities={contract.activities as GeneralActivity[]}
@@ -93,12 +112,12 @@ class SingleContractPage extends React.Component<Props> {
               resourceStatus={status}
             />
           </Tab.Pane>
-        ),
+        ) : () => <Tab.Pane />,
       });
 
       panes.push({
         menuItem: 'Files',
-        render: () => (
+        render: contract ? () => (
           <Tab.Pane>
             <FilesList
               files={contract.files}
@@ -110,13 +129,30 @@ class SingleContractPage extends React.Component<Props> {
                   contractId={contract.id}
                   fetchContract={fetchContract}
                 />
-                )}
+              )}
               status={status}
             />
           </Tab.Pane>
-        ),
+        ) : () => <Tab.Pane />,
       });
     }
+
+    return panes;
+  };
+
+  public render() {
+    const { contract, status } = this.props;
+    const { paneIndex } = this.state;
+
+    if (contract === undefined) {
+      return (
+        <Container style={{ paddingTop: '2em' }}>
+          <Loader content="Loading" active />
+        </Container>
+      );
+    }
+
+    const panes = this.getPanes();
 
     return (
       <Container style={{ paddingTop: '2em' }}>
@@ -146,7 +182,15 @@ class SingleContractPage extends React.Component<Props> {
           </Grid.Row>
           <Grid.Row columns={2}>
             <Grid.Column width={10}>
-              <Tab panes={panes} menu={{ pointing: true, inverted: true }} />
+              <Tab
+                panes={panes}
+                menu={{ pointing: true, inverted: true }}
+                onTabChange={(e, data) => {
+                  this.setState({ paneIndex: data.activeIndex! as number });
+                  this.props.history.replace(`#${data.panes![data.activeIndex! as number].menuItem.toLowerCase()}`);
+                }}
+                activeIndex={paneIndex}
+              />
             </Grid.Column>
             <Grid.Column width={6}>
               <Segment secondary>
