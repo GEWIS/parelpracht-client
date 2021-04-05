@@ -35,7 +35,34 @@ interface Props extends RouteComponentProps<{ companyId: string }> {
   hasRole: (role: Roles) => boolean;
 }
 
-class SingleCompanyPage extends React.Component<Props> {
+interface State {
+  paneIndex: number;
+}
+
+class SingleCompanyPage extends React.Component<Props, State> {
+  constructor(props: Props) {
+    super(props);
+
+    const panes = this.getPanes();
+    let { hash } = this.props.location;
+    // If there is no hash, do not take the first (#) character
+    if (hash.length > 0) {
+      hash = hash.substr(1);
+    }
+    // Find the corresponding tab that has been selected
+    let index = panes.findIndex((p) => p.menuItem.toLowerCase() === hash.toLowerCase());
+    // If no parameter is given, or a parameter is given that does not exist,
+    // select the first one by default
+    if (index < 0) {
+      index = 0;
+      this.props.history.replace(`#${panes[0].menuItem.toLowerCase()}`);
+    }
+
+    this.state = {
+      paneIndex: index,
+    };
+  }
+
   componentDidMount() {
     const { companyId } = this.props.match.params;
 
@@ -66,23 +93,10 @@ class SingleCompanyPage extends React.Component<Props> {
     }
   }
 
-  public render() {
+  getPanes = () => {
     const {
       company, fetchCompany, status, hasRole,
     } = this.props;
-
-    if (company === undefined) {
-      return (
-        <AuthorizationComponent
-          roles={[Roles.GENERAL, Roles.ADMIN, Roles.AUDIT]}
-          notFound
-        >
-          <Container style={{ paddingTop: '2em' }}>
-            <Loader content="Loading" active />
-          </Container>
-        </AuthorizationComponent>
-      );
-    }
 
     const panes = [
       {
@@ -114,7 +128,7 @@ class SingleCompanyPage extends React.Component<Props> {
     if (hasRole(Roles.ADMIN) || hasRole(Roles.GENERAL) || hasRole(Roles.AUDIT)) {
       panes.push({
         menuItem: 'Activities',
-        render: () => (
+        render: company ? () => (
           <Tab.Pane>
             <ActivitiesList
               activities={company.activities as GeneralActivity[]}
@@ -123,12 +137,12 @@ class SingleCompanyPage extends React.Component<Props> {
               resourceStatus={status}
             />
           </Tab.Pane>
-        ),
+        ) : () => <Tab.Pane />,
       });
 
       panes.push({
         menuItem: 'Files',
-        render: () => (
+        render: company ? () => (
           <Tab.Pane>
             <FilesList
               files={company.files}
@@ -138,20 +152,42 @@ class SingleCompanyPage extends React.Component<Props> {
               status={status}
             />
           </Tab.Pane>
-        ),
+        ) : () => <Tab.Pane />,
       });
     }
 
     if (hasRole(Roles.ADMIN) || hasRole(Roles.GENERAL)) {
       panes.push({
         menuItem: 'Insights',
-        render: () => (
+        render: company ? () => (
           // <Tab.Pane> is set in this tab, because it needs to fetch data and
           /// therefore needs to show a loading animation
           <CompanyContractedProductsChart company={company} />
-        ),
+        ) : () => <Tab.Pane />,
       });
     }
+
+    return panes;
+  };
+
+  public render() {
+    const { company } = this.props;
+    const { paneIndex } = this.state;
+
+    if (company === undefined) {
+      return (
+        <AuthorizationComponent
+          roles={[Roles.GENERAL, Roles.ADMIN, Roles.AUDIT]}
+          notFound
+        >
+          <Container style={{ paddingTop: '2em' }}>
+            <Loader content="Loading" active />
+          </Container>
+        </AuthorizationComponent>
+      );
+    }
+
+    const panes = this.getPanes();
 
     return (
       <AuthorizationComponent
@@ -169,7 +205,15 @@ class SingleCompanyPage extends React.Component<Props> {
           <CompanySummary />
           <Grid columns={2}>
             <Grid.Column width={10}>
-              <Tab panes={panes} menu={{ pointing: true, inverted: true }} />
+              <Tab
+                panes={panes}
+                menu={{ pointing: true, inverted: true }}
+                onTabChange={(e, data) => {
+                  this.setState({ paneIndex: data.activeIndex! as number });
+                  this.props.history.replace(`#${data.panes![data.activeIndex! as number].menuItem.toLowerCase()}`);
+                }}
+                activeIndex={paneIndex}
+              />
             </Grid.Column>
             <Grid.Column width={6}>
               <Segment secondary>
