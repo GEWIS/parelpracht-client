@@ -10,7 +10,6 @@ import PropsButtons from '../PropsButtons';
 import { SingleEntities } from '../../stores/single/single';
 import ResourceStatus from '../../stores/resourceStatus';
 import { fetchSingle } from '../../stores/single/actionCreators';
-import TextAreaMimic from '../TextAreaMimic';
 
 interface Props {
   pricing: ProductPricing;
@@ -150,7 +149,7 @@ class PricingTable extends React.Component<Props, State> {
               onChange={(e) => this.setState({ description: e.target.value })}
             />
           </Form>
-        ) : <TextAreaMimic content={description} />}
+        ) : <p>{description}</p>}
         <Table compact>
           <Table.Header>
             {pricingData.length > 0 ? (

@@ -33,7 +33,34 @@ interface Props extends RouteComponentProps<{ productId: string }> {
   showTransientAlert: (alert: TransientAlert) => void;
 }
 
-class SingleProductPage extends React.Component<Props> {
+interface State {
+  paneIndex: number;
+}
+
+class SingleProductPage extends React.Component<Props, State> {
+  constructor(props: Props) {
+    super(props);
+
+    const panes = this.getPanes();
+    let { hash } = this.props.location;
+    // If there is no hash, do not take the first (#) character
+    if (hash.length > 0) {
+      hash = hash.substr(1);
+    }
+    // Find the corresponding tab that has been selected
+    let index = panes.findIndex((p) => p.menuItem.toLowerCase() === hash.toLowerCase());
+    // If no parameter is given, or a parameter is given that does not exist,
+    // select the first one by default
+    if (index < 0) {
+      index = 0;
+      this.props.history.replace(`#${panes[0].menuItem.toLowerCase()}`);
+    }
+
+    this.state = {
+      paneIndex: index,
+    };
+  }
+
   componentDidMount() {
     const { productId } = this.props.match.params;
 
@@ -63,8 +90,81 @@ class SingleProductPage extends React.Component<Props> {
     }
   }
 
-  public render() {
+  getPanes = () => {
     const { product, fetchProduct, status } = this.props;
+
+    const panes = [
+      {
+        menuItem: 'Contracts',
+        render: product ? () => (
+          <Tab.Pane>
+            <ContractCompactTable
+              product={product}
+            />
+          </Tab.Pane>
+        ) : () => <Tab.Pane />,
+      },
+      {
+        menuItem: 'Invoices',
+        render: product ? () => (
+          <Tab.Pane>
+            <InvoiceCompactTable
+              product={product}
+            />
+          </Tab.Pane>
+        ) : () => <Tab.Pane />,
+      },
+      {
+        menuItem: 'Files',
+        render: product ? () => (
+          <Tab.Pane>
+            <FilesList
+              files={product.files}
+              entityId={product.id}
+              entity={SingleEntities.Product}
+              fetchEntity={fetchProduct}
+              status={status}
+            />
+          </Tab.Pane>
+        ) : () => <Tab.Pane />,
+      },
+      {
+        menuItem: 'Activities',
+        render: product ? () => (
+          <Tab.Pane>
+            <ActivitiesList
+              activities={product.activities as GeneralActivity[]}
+              componentId={product.id}
+              componentType={SingleEntities.Product}
+              resourceStatus={status}
+            />
+          </Tab.Pane>
+        ) : () => <Tab.Pane />,
+      },
+      {
+        menuItem: 'Insights',
+        render: product ? () => <ProductsContractedGraph product={product} />
+          : () => <Tab.Pane />,
+      },
+    ];
+
+    if (product && product.pricing) {
+      panes.push({
+        menuItem: 'Pricing',
+        render: () => (
+          <Tab.Pane>
+            <PricingTable pricing={product.pricing!} productId={product.id} />
+          </Tab.Pane>
+        ),
+      });
+    }
+
+    return panes;
+  };
+
+  public render() {
+    const { product } = this.props;
+    const { paneIndex } = this.state;
 
     if (product === undefined) {
       return (
@@ -76,70 +176,7 @@ class SingleProductPage extends React.Component<Props> {
       );
     }
 
-    const panes = [
-      {
-        menuItem: 'Contracts',
-        render: () => (
-          <Tab.Pane>
-            <ContractCompactTable
-              product={product}
-            />
-          </Tab.Pane>
-        ),
-      },
-      {
-        menuItem: 'Invoices',
-        render: () => (
-          <Tab.Pane>
-            <InvoiceCompactTable
-              product={product}
-            />
-          </Tab.Pane>
-        ),
-      },
-      {
-        menuItem: 'Files',
-        render: () => (
-          <Tab.Pane>
-            <FilesList
-              files={product.files}
-              entityId={product.id}
-              entity={SingleEntities.Product}
-              fetchEntity={fetchProduct}
-              status={status}
-            />
-          </Tab.Pane>
-        ),
-      },
-      {
-        menuItem: 'Activities',
-        render: () => (
-          <Tab.Pane>
-            <ActivitiesList
-              activities={product.activities as GeneralActivity[]}
-              componentId={product.id}
-              componentType={SingleEntities.Product}
-              resourceStatus={status}
-            />
-          </Tab.Pane>
-        ),
-      },
-      {
-        menuItem: 'Insights',
-        render: () => <ProductsContractedGraph product={product} />,
-      },
-    ];
-
-    if (product.pricing !== undefined) {
-      panes.push({
-        menuItem: 'Pricing',
-        render: () => (
-          <Tab.Pane>
-            <PricingTable pricing={product.pricing!} productId={product.id} />
-          </Tab.Pane>
-        ),
-      });
-    }
+    const panes = this.getPanes();
 
     return (
       <AuthorizationComponent roles={[Roles.GENERAL, Roles.ADMIN]} notFound>
@@ -154,7 +191,15 @@ class SingleProductPage extends React.Component<Props> {
           <ProductSummary product={product} />
           <Grid columns={2}>
             <Grid.Column width={10}>
-              <Tab panes={panes} menu={{ pointing: true, inverted: true }} />
+              <Tab
+                panes={panes}
+                menu={{ pointing: true, inverted: true }}
+                onTabChange={(e, data) => {
+                  this.setState({ paneIndex: data.activeIndex! as number });
+                  this.props.history.replace(`#${data.panes![data.activeIndex! as number].menuItem.toLowerCase()}`);
+                }}
+                activeIndex={paneIndex}
+              />
             </Grid.Column>
             <Grid.Column width={6}>
               <Segment secondary>

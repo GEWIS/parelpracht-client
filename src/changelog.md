@@ -36,6 +36,7 @@ You can find the release notes below.
 - Deferred products now have their own bar in the next financial year in the Product Insights chart.
 - Relational attributes and prices are formatted a lot more nicely when used in attribute-changed-activities.
 - A product of an existing product instance can no longer be edited.
+- When going back (with the browser back button) to a single entity page, the correct tab is opened again.
 
 ### Bugfixes
 - Fixed page numbers showing "???" in generated PDF files.
