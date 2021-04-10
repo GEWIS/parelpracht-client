@@ -1,0 +1,194 @@
+import React from 'react';
+import {
+  Button, Icon, Image, Input, Modal,
+} from 'semantic-ui-react';
+import { connect } from 'react-redux';
+import { Dispatch } from 'redux';
+import { FilesClient } from '../../clients/filesClient';
+import { Client, User } from '../../clients/server.generated';
+import { SingleEntities } from '../../stores/single/single';
+import { RootState } from '../../stores/store';
+import { authFetchProfile } from '../../stores/auth/actionCreators';
+import UserBackground from '../user/UserBackground';
+
+interface Props {
+  entity: SingleEntities;
+  entityId: number;
+  entityName: string;
+  fileName: string;
+  fetchEntity: (entityId: number) => void;
+
+  loggedInUser?: User;
+  fetchAuthProfile: () => void;
+}
+
+interface State {
+  open: boolean;
+}
+
+class UserBackgroundModal extends React.Component<Props, State> {
+  constructor(props: Props) {
+    super(props);
+    this.state = {
+      open: false,
+    };
+  }
+
+  updateAuthedUser = () => {
+    const {
+      entity, entityId, loggedInUser, fetchAuthProfile,
+    } = this.props;
+
+    if (entity === SingleEntities.User && entityId === loggedInUser!.id) {
+      fetchAuthProfile();
+    }
+  };
+
+  openModal = () => {
+    this.setState({ open: true });
+  };
+
+  closeModal = () => {
+    this.setState({ open: false });
+  };
+
+  updateImage = async (fileData: any) => {
+    const client = new FilesClient();
+    const {
+      entityId, entity, fetchEntity,
+    } = this.props;
+    const formData = new FormData();
+    formData.append('file', fileData);
+    const result = await client.uploadBackground(
+      entityId, formData, entity,
+    );
+    if (result) {
+      fetchEntity(entityId);
+    }
+
+    this.updateAuthedUser();
+  };
+
+  removeImage = async () => {
+    const { entityId, fetchEntity } = this.props;
+    const client = new Client();
+    const result = await client.deleteUserBackground(entityId);
+    if (result) {
+      fetchEntity(entityId);
+    }
+
+    this.updateAuthedUser();
+  };
+
+  public renderUserBackground(): JSX.Element {
+    const { entityName, entityId, fileName } = this.props;
+    const { open } = this.state;
+    const image = fileName === '' ? (
+      <Button
+        floated="right"
+        primary
+        style={{
+          marginTop: '0.6em',
+        }}
+      >
+        <Icon
+          name="picture"
+        />
+        Add personal background
+      </Button>
+    ) : (
+      <div>
+        <UserBackground fileName={fileName} clickable />
+      </div>
+    );
+
+    const imageModal = fileName === '' ? (
+      <Image>
+        <Icon
+          name="picture"
+          size="huge"
+        />
+      </Image>
+    ) : (
+      <Image
+        src={`/static/background/${fileName}`}
+        size="medium"
+        wrapped
+      />
+    );
+
+    const deleteButton = fileName === '' ? (
+      ''
+    ) : (
+      <Button
+        color="red"
+        floated="left"
+        onClick={() => this.removeImage()}
+      >
+        <Icon name="trash" />
+        Delete
+        {' '}
+        {entityName}
+        &#39;s background
+      </Button>
+    );
+
+    return (
+      <Modal
+        onClose={() => this.closeModal()}
+        onOpen={() => this.openModal()}
+        open={open}
+        size="small"
+        trigger={image}
+      >
+        <Modal.Header>
+          {entityName}
+          &#39;s Background
+        </Modal.Header>
+        <Modal.Content image>
+          {imageModal}
+          <Modal.Description>
+            <h4>
+              Upload
+              {' '}
+              {entityName}
+              &#39;s Background
+            </h4>
+            <Input
+              type="file"
+              id={`form-file-${entityId}-file`}
+              onChange={(e) => this.updateImage(e.target.files![0])}
+              style={{ width: '80%' }}
+            />
+          </Modal.Description>
+        </Modal.Content>
+        <Modal.Actions>
+          {deleteButton}
+          <Button onClick={() => this.closeModal()}>Cancel</Button>
+        </Modal.Actions>
+      </Modal>
+    );
+  }
+
+  public render() {
+    const { entity } = this.props;
+    switch (entity) {
+      case SingleEntities.User:
+        return this.renderUserBackground();
+      default:
+        throw new Error(`Entity ${entity} does not support backgrounds`);
+    }
+  }
+}
+
+const mapStateToProps = (state: RootState) => {
+  return {
+    loggedInUser: state.auth.profile,
+  };
+};
+
+const mapDispatchToProps = (dispatch: Dispatch) => ({
+  fetchAuthProfile: () => dispatch(authFetchProfile()),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(UserBackgroundModal);

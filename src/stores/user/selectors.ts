@@ -46,6 +46,14 @@ export function getUserAvatar(state: RootState, id: number): string {
   return user.avatarFilename;
 }
 
+export function getUserBackground(state: RootState, id: number): string {
+  const user = getSummary<UserSummary>(
+    state, SummaryCollections.Users, id,
+  );
+  if (user === undefined) return '';
+  return user.backgroundFilename;
+}
+
 // Returns whether the single user inspected is the authenticated user.
 // In other words: if the user is viewing his/her profile page
 export function isProfile(state: RootState): boolean {
