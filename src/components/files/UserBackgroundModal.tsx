@@ -85,6 +85,7 @@ class UserBackgroundModal extends React.Component<Props, State> {
     const {
       entityName, entityId, fileName, adminView,
     } = this.props;
+
     const { open } = this.state;
     const image = fileName === '' ? (
       <Button
@@ -98,7 +99,7 @@ class UserBackgroundModal extends React.Component<Props, State> {
       </Button>
     ) : (
       <div>
-        <UserBackground fileName={fileName} clickable={adminView} />
+        <UserBackground fileName={fileName} clickable />
       </div>
     );
 
@@ -111,7 +112,7 @@ class UserBackgroundModal extends React.Component<Props, State> {
       </Image>
     ) : (
       <Image
-        src={`/static/background/${fileName}`}
+        src={`/static/backgrounds/${fileName}`}
         size="medium"
         wrapped
       />

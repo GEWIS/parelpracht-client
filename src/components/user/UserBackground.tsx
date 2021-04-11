@@ -12,16 +12,19 @@ function UserBackground(props: Props) {
   if (props.fileName === '') {
     return null;
   }
+
   return (
-    <div style={{
-      width: '4rem',
-      height: '4rem',
-      backgroundImage: `url("/static/backgrounds/${props.fileName}")`,
-      backgroundSize: 'cover',
-      backgroundRepeat: 'no-repeat',
-      backgroundPosition: 'center center',
-      cursor: props.clickable ? 'pointer' : '',
-    }}
+    <img
+      src={`/static/backgrounds/${props.fileName}`}
+      style={{
+        width: '100%',
+        height: '100%',
+        backgroundSize: 'cover',
+        backgroundRepeat: 'no-repeat',
+        backgroundPosition: 'center center',
+        cursor: props.clickable ? 'pointer' : '',
+      }}
+      alt="background preview"
     />
   );
 }
