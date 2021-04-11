@@ -66,12 +66,13 @@ function MegaTable({
               <Loader inverted />
             </Dimmer>
           ) : null}
-        <Table className="rowspanStriped" attached compact sortable>
+        <Table className="rowspanStriped" attached compact sortable color="brown">
           <Table.Header>
             <Table.Row>
               <Table.HeaderCell
                 sorted={column === 'companyName' ? direction : undefined}
                 onClick={() => changeSort('companyName')}
+                style={{ color: 'peach' }}
               >
                 Company
                 <CompanyFilter table={Tables.ETCompanies} />

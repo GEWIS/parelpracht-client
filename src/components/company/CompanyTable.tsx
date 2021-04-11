@@ -54,7 +54,7 @@ function CompaniesTable({
           <Dimmer active inverted>
             <Loader inverted />
           </Dimmer>
-          <Table singleLine selectable attached sortable fixed>
+          <Table singleLine selectable attached sortable fixed color="brown">
             <Table.Header>
               <Table.Row>
                 <Table.HeaderCell
@@ -98,7 +98,7 @@ function CompaniesTable({
 
   return (
     <>
-      <Table singleLine selectable attached sortable fixed>
+      <Table singleLine selectable attached sortable fixed color="brown">
         <Table.Header>
           <Table.Row>
             <Table.HeaderCell
