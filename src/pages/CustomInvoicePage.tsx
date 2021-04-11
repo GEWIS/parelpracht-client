@@ -181,18 +181,14 @@ class CustomInvoicePage extends React.Component<RouteComponentProps, State> {
         </Segment>
         <Container style={{ marginTop: '2em' }}>
           <Grid>
-            <Grid.Row columns={1}>
-              <Grid.Column>
+            <Grid.Row columns={2}>
+              <Grid.Column width={9}>
                 <CustomInvoiceText
                   invoiceReason={invoiceReason}
                   invoiceNumber={ourReference}
                   language={language}
                   setAttribute={this.setAttribute}
                 />
-              </Grid.Column>
-            </Grid.Row>
-            <Grid.Row columns={2}>
-              <Grid.Column width={9}>
                 <CustomInvoiceProducts
                   products={products}
                   addProduct={this.addProduct}
