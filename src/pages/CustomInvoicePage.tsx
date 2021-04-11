@@ -147,7 +147,7 @@ class CustomInvoicePage extends React.Component<RouteComponentProps, State> {
 
     return (
       <AuthorizationComponent roles={[Roles.FINANCIAL, Roles.ADMIN]} notFound>
-        <Segment style={{ backgroundColor: '#eee' }} vertical basic>
+        <Segment style={{ backgroundColor: 'rgba(235, 235, 235, 0.8)' }} vertical basic>
           <Container style={{ paddingTop: '1em' }}>
             <Grid columns={2}>
               <Grid.Column width={10}>

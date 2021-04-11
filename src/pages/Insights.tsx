@@ -9,8 +9,8 @@ import ContractTableExtensiveControls from '../components/megatable/MegaTableCon
 function Insights() {
   return (
     <>
-      <Segment style={{ backgroundColor: '#eee' }} vertical basic>
-        <Container style={{ paddingTop: '2em' }}>
+      <Segment style={{ backgroundColor: 'rgba(235, 235, 235, 0.8)' }} vertical basic>
+        <Container style={{ paddingTop: '1em' }}>
           <Grid columns={2}>
             <Grid.Column>
               <Header as="h1">

@@ -132,7 +132,7 @@ class SingleInvoicePage extends React.Component<Props, State> {
 
     if (invoice === undefined) {
       return (
-        <Container style={{ paddingTop: '2em' }}>
+        <Container style={{ paddingTop: '1em' }}>
           <Loader content="Loading" active />
         </Container>
       );
@@ -145,7 +145,7 @@ class SingleInvoicePage extends React.Component<Props, State> {
         roles={[Roles.GENERAL, Roles.FINANCIAL, Roles.AUDIT, Roles.ADMIN]}
         notFound
       >
-        <Container style={{ paddingTop: '2em' }}>
+        <Container style={{ paddingTop: '1em' }}>
           <Breadcrumb
             icon="right angle"
             sections={[

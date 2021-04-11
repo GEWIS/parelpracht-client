@@ -180,7 +180,7 @@ class SingleCompanyPage extends React.Component<Props, State> {
           roles={[Roles.GENERAL, Roles.ADMIN, Roles.AUDIT]}
           notFound
         >
-          <Container style={{ paddingTop: '2em' }}>
+          <Container style={{ paddingTop: '1em' }}>
             <Loader content="Loading" active />
           </Container>
         </AuthorizationComponent>
@@ -194,7 +194,7 @@ class SingleCompanyPage extends React.Component<Props, State> {
         roles={[Roles.GENERAL, Roles.ADMIN, Roles.AUDIT]}
         notFound
       >
-        <Container style={{ paddingTop: '2em' }}>
+        <Container style={{ paddingTop: '1em' }}>
           <Breadcrumb
             icon="right angle"
             sections={[

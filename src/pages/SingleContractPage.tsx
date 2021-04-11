@@ -146,7 +146,7 @@ class SingleContractPage extends React.Component<Props, State> {
 
     if (contract === undefined) {
       return (
-        <Container style={{ paddingTop: '2em' }}>
+        <Container style={{ paddingTop: '1em' }}>
           <Loader content="Loading" active />
         </Container>
       );
@@ -155,7 +155,7 @@ class SingleContractPage extends React.Component<Props, State> {
     const panes = this.getPanes();
 
     return (
-      <Container style={{ paddingTop: '2em' }}>
+      <Container style={{ paddingTop: '1em' }}>
         <Breadcrumb
           icon="right angle"
           sections={[
