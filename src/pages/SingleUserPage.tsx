@@ -60,7 +60,7 @@ class SingleUserPage extends React.Component<Props> {
     if (user === undefined) return (<div />);
 
     return (
-      <Container style={{ paddingTop: '0.5em' }}>
+      <Container style={{ paddingTop: '1em' }}>
         <Breadcrumb
           icon="right angle"
           sections={[

@@ -12,7 +12,7 @@ function ProductCategoriesPage(props: RouteComponentProps) {
   return (
     <AuthorizationComponent roles={[Roles.GENERAL, Roles.ADMIN]} notFound>
       <Segment style={{ backgroundColor: '#eee' }} vertical basic>
-        <Container style={{ paddingTop: '0.5em' }}>
+        <Container style={{ paddingTop: '1em' }}>
           <Grid columns={2}>
             <Grid.Column>
               <Header as="h1">
