@@ -112,7 +112,7 @@ function InvoicesTable({
 
   return (
     <>
-      <Table singleLine selectable attached sortable color="brown">
+      <Table singleLine selectable attached sortable fixed>
         <Table.Header>
           <Table.Row>
             <Table.HeaderCell
