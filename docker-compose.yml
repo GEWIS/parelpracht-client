@@ -3,12 +3,15 @@ services:
   frontend:
     build:
       context: ../parelpracht-client
-      dockerfile: docker/frontend/Dockerfile
+      dockerfile: Dockerfile
     image: yoronex/parelpracht-client:latest
+    ports:
+      - '39390:80'
     networks:
       - parelpracht
     volumes:
       - static:/app/build/static
+      - logos:/usr/src/app/data/logos
   backend:
     build: ../parelpracht-server
     image: yoronex/parelpracht-server:latest
