@@ -126,6 +126,68 @@ class SingleFile extends React.Component<Props, State> {
     }
   };
 
+  private getFileIcon = (fileName: string) => {
+    const fileExtension = fileName.split('.').pop();
+    if (fileExtension == null) {
+      return 'file alternate';
+    }
+    if (fileExtension.match(/(jpg|jpeg|png|bmp|gif|ico|svg|eps|ps|psd|xcf|ai|cdr|tif|tiff)$/i)) {
+      return 'file image';
+    }
+    if (fileExtension.match(/(mp4|mkv|avi|mov|flv|f4v|f4p|f4a|f4b|wmv|webm|mpg|mp2|mpeg|mpe|mpv|ogg|ogv|vob|gifv|mng|m4p|m4v|qt|swf|3gp|3g2|h264|rm)$/i)) {
+      return 'file video';
+    }
+    if (fileExtension.match(/(aa|aac|aax|act|aif|aiff|alac|amr|ape|au|awb|dss|dvf|flac|gsm|iklax|ivs|m4a|m4b|m4p|mid|midi|mmf|mpc|msv|nmf|ogg|oga|mogg|org|opus|ra|rf64|sln|tta|voc|vox|wav|wma|wv|8svx|cda|wpl)$/i)) {
+      return 'file audio';
+    }
+    if (fileExtension.match(/(pdf)$/i)) {
+      return 'file pdf';
+    }
+    if (fileExtension.match(/(zip|rar|7z|tar|arj|deb|pkg|rpm|gz|tar.gz|z)$/i)) {
+      return 'file archive';
+    }
+    if (fileExtension.match(/(docx|doc|odt|docm|dot|dotm|dotx|wps|wpd)$/i)) {
+      return 'file word';
+    }
+    if (fileExtension.match(/(bin|dmg|iso|toast|vcd)$/i)) {
+      return 'folder';
+    }
+    if (fileExtension.match(/(ppt|pptx|odp|pps|key)$/i)) {
+      return 'file powerpoint';
+    }
+    if (fileExtension.match(/(xls|xlsx|xlsm|ods)$/i)) {
+      return 'file excel';
+    }
+    if (fileExtension.match(/(csv|dat|db|dbf|log|mdb|sav|sql|tar|xml)$/i)) {
+      return 'database';
+    }
+    if (fileExtension.match(/(txt|rtf)$/i)) {
+      return 'file';
+    }
+    if (fileExtension.match(/(php)$/i)) {
+      return 'php';
+    }
+    if (fileExtension.match(/(css|asp|aspx|cer|cgi|pl|cfm|part|rss|c|class|cpp|cs|h|java|sh|swift|vb)$/i)) {
+      return 'file code';
+    }
+    if (fileExtension.match(/(js|jsp|ts|tsx)$/i)) {
+      return 'js';
+    }
+    if (fileExtension.match(/(fnt|fon|otf|ttf)$/i)) {
+      return 'font';
+    }
+    if (fileExtension.match(/(py)$/i)) {
+      return 'python';
+    }
+    if (fileExtension.match(/(xhtml|html|htm)$/i)) {
+      return 'internet explorer';
+    }
+    if (fileExtension.match(/(email|eml|emlx|msg|oft|ost|pst|vcf)$/i)) {
+      return 'mail';
+    }
+    return 'file alternate';
+  };
+
   public render() {
     const { file, create, status } = this.props;
     const { editing } = this.state;
@@ -168,7 +230,7 @@ class SingleFile extends React.Component<Props, State> {
       return (
         <Table.Row>
           <Table.Cell collapsing>
-            <Icon name="file pdf" />
+            <Icon name={this.getFileIcon(this.state.fileName)} />
             <Input
               id={`form-file-${file.id}-name`}
               value={this.state.fileName}
@@ -204,7 +266,7 @@ class SingleFile extends React.Component<Props, State> {
     return (
       <Table.Row>
         <Table.Cell collapsing>
-          <Icon name="file pdf" />
+          <Icon name={this.getFileIcon(file!.downloadName)} />
           {file!.name}
         </Table.Cell>
         <Table.Cell>{file!.downloadName}</Table.Cell>
