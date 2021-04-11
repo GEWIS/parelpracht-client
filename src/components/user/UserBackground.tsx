@@ -1,5 +1,4 @@
 import React from 'react';
-import { Button, Icon } from 'semantic-ui-react';
 
 interface Props {
   fileName: string;
@@ -10,19 +9,8 @@ function UserBackground(props: Props) {
   /**
    * Image is clickable means that it can be uploaded from there
    */
-  if (props.clickable && props.fileName === '') {
-    return (
-      <Button
-        icon
-        labelPosition="left"
-        floated="right"
-        style={{ marginTop: '-0.5em' }}
-        basic
-      >
-        <Icon name="plus" />
-        Upload Background
-      </Button>
-    );
+  if (props.fileName === '') {
+    return null;
   }
   return (
     <div style={{

@@ -13,7 +13,6 @@ import { SingleEntities } from '../../stores/single/single';
 import { RootState } from '../../stores/store';
 import LogoAvatarModal from '../files/LogoAvatarModal';
 import { fetchSingle } from '../../stores/single/actionCreators';
-import UserBackgroundModal from '../files/UserBackgroundModal';
 
 interface Props extends RouteComponentProps {
   user: User | undefined;
@@ -95,15 +94,6 @@ function UserSummary(props: Props) {
           <Grid.Column>
             <h5>Gender</h5>
             <p>{formatGender(user.gender)}</p>
-          </Grid.Column>
-          <Grid.Column>
-            <UserBackgroundModal
-              entity={SingleEntities.User}
-              entityId={user.id}
-              entityName={user.firstName}
-              fileName={user.backgroundFilename}
-              fetchEntity={fetchUser}
-            />
           </Grid.Column>
         </Grid>
       </Segment>

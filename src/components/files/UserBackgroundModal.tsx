@@ -17,6 +17,7 @@ interface Props {
   entityName: string;
   fileName: string;
   fetchEntity: (entityId: number) => void;
+  adminView: boolean;
 
   loggedInUser?: User;
   fetchAuthProfile: () => void;
@@ -81,15 +82,14 @@ class UserBackgroundModal extends React.Component<Props, State> {
   };
 
   public renderUserBackground(): JSX.Element {
-    const { entityName, entityId, fileName } = this.props;
+    const {
+      entityName, entityId, fileName, adminView,
+    } = this.props;
     const { open } = this.state;
     const image = fileName === '' ? (
       <Button
-        floated="right"
         primary
-        style={{
-          marginTop: '0.6em',
-        }}
+        disabled={adminView}
       >
         <Icon
           name="picture"
@@ -98,7 +98,7 @@ class UserBackgroundModal extends React.Component<Props, State> {
       </Button>
     ) : (
       <div>
-        <UserBackground fileName={fileName} clickable />
+        <UserBackground fileName={fileName} clickable={adminView} />
       </div>
     );
 
@@ -133,6 +133,25 @@ class UserBackgroundModal extends React.Component<Props, State> {
       </Button>
     );
 
+    const uploadButton = (adminView)
+      ? (<h4> Uploading not possible as admin</h4>)
+      : (
+        <Modal.Description>
+          <h4>
+            Upload
+            {' '}
+            {entityName}
+            &#39;s Background
+          </h4>
+          <Input
+            type="file"
+            id={`form-file-${entityId}-file`}
+            onChange={(e) => this.updateImage(e.target.files![0])}
+            style={{ width: '80%' }}
+          />
+        </Modal.Description>
+      );
+
     return (
       <Modal
         onClose={() => this.closeModal()}
@@ -147,20 +166,7 @@ class UserBackgroundModal extends React.Component<Props, State> {
         </Modal.Header>
         <Modal.Content image>
           {imageModal}
-          <Modal.Description>
-            <h4>
-              Upload
-              {' '}
-              {entityName}
-              &#39;s Background
-            </h4>
-            <Input
-              type="file"
-              id={`form-file-${entityId}-file`}
-              onChange={(e) => this.updateImage(e.target.files![0])}
-              style={{ width: '80%' }}
-            />
-          </Modal.Description>
+          {uploadButton}
         </Modal.Content>
         <Modal.Actions>
           {deleteButton}

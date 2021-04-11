@@ -5,7 +5,7 @@ import {
 } from 'semantic-ui-react';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
-import { User } from '../clients/server.generated';
+import { Roles, User } from '../clients/server.generated';
 import { fetchSingle, clearSingle } from '../stores/single/actionCreators';
 import { RootState } from '../stores/store';
 import UserProps from '../components/user/UserProps';
@@ -19,6 +19,8 @@ import { showTransientAlert } from '../stores/alerts/actionCreators';
 import UserMoveAssignmentsButton from '../components/user/UserMoveAssignmentsButton';
 import { isProfile } from '../stores/user/selectors';
 import UserApiKey from '../components/user/UserApiKey';
+import UserBackgroundModal from '../components/files/UserBackgroundModal';
+import AuthorizationComponent from '../components/AuthorizationComponent';
 
 interface Props extends RouteComponentProps<{ userId: string }> {
   user: User | undefined;
@@ -107,6 +109,38 @@ class SingleUserPage extends React.Component<Props> {
                 <UserApiKey />
               </Segment>
             ) : null}
+            {isProfilePage ? (
+              <Segment>
+                <Header as="h3">
+                  Personal User Background
+                </Header>
+                <UserBackgroundModal
+                  entity={SingleEntities.User}
+                  entityId={user.id}
+                  entityName={user.firstName}
+                  fileName={user.backgroundFilename}
+                  fetchEntity={this.props.fetchUser}
+                  adminView={false}
+                />
+              </Segment>
+            )
+              : (
+                <AuthorizationComponent roles={[Roles.ADMIN]} notFound={false}>
+                  <Segment>
+                    <Header as="h3">
+                      Personal User Background
+                    </Header>
+                    <UserBackgroundModal
+                      entity={SingleEntities.User}
+                      entityId={user.id}
+                      entityName={user.firstName}
+                      fileName={user.backgroundFilename}
+                      fetchEntity={this.props.fetchUser}
+                      adminView
+                    />
+                  </Segment>
+                </AuthorizationComponent>
+              )}
           </Grid.Column>
         </Grid>
       </Container>
