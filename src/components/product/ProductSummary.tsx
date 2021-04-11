@@ -67,7 +67,7 @@ function ProductSummary(props: Props) {
 
   return (
     <>
-      <Header as="h1" attached="top" style={{ backgroundColor: '#eee' }}>
+      <Header as="h1" attached="top" style={{ backgroundColor: 'rgba(235, 235, 235, 0.8)' }}>
         <Icon name="shopping bag" />
         <Header.Content>
           <Header.Subheader>Product</Header.Subheader>
