@@ -12,6 +12,7 @@ services:
     volumes:
       - static:/app/build/static
       - logos:/usr/src/app/data/logos
+      - backgrounds:/usr/src/app/data/backgrounds
   backend:
     build: ../parelpracht-server
     image: yoronex/parelpracht-server:latest
@@ -55,20 +56,6 @@ services:
       - POSTGRES_DB=parelpracht
     networks:
       - parelpracht
-  nginx:
-    build: docker/nginx
-    image: yoronex/parelpracht-nginx:latest
-    depends_on:
-      - backend
-      - frontend
-    ports:
-      - '39390:80'
-    networks:
-      - parelpracht
-    volumes:
-      - static:/app/build/static
-      - logos:/usr/src/app/data/logos
-      - backgrounds:/usr/src/app/data/backgrounds
 volumes:
   database-data:
     driver: local
