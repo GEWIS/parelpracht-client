@@ -68,6 +68,7 @@ class UserBackgroundModal extends React.Component<Props, State> {
     }
 
     this.updateAuthedUser();
+    this.closeModal();
   };
 
   removeImage = async () => {
@@ -79,6 +80,7 @@ class UserBackgroundModal extends React.Component<Props, State> {
     }
 
     this.updateAuthedUser();
+    this.closeModal();
   };
 
   public renderUserBackground(): JSX.Element {
