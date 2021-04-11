@@ -169,7 +169,7 @@ class SingleProductPage extends React.Component<Props, State> {
     if (product === undefined) {
       return (
         <AuthorizationComponent roles={[Roles.GENERAL, Roles.ADMIN]} notFound>
-          <Container style={{ paddingTop: '2em' }}>
+          <Container style={{ paddingTop: '0.5em' }}>
             <Loader content="Loading" active />
           </Container>
         </AuthorizationComponent>
@@ -180,7 +180,7 @@ class SingleProductPage extends React.Component<Props, State> {
 
     return (
       <AuthorizationComponent roles={[Roles.GENERAL, Roles.ADMIN]} notFound>
-        <Container style={{ paddingTop: '2em' }}>
+        <Container style={{ paddingTop: '0.5em' }}>
           <Breadcrumb
             icon="right angle"
             sections={[

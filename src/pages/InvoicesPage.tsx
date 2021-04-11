@@ -32,7 +32,7 @@ class InvoicesPage extends React.Component<Props> {
         notFound
       >
         <Segment style={{ backgroundColor: '#eee' }} vertical basic>
-          <Container style={{ paddingTop: '2em' }}>
+          <Container style={{ paddingTop: '0.5em' }}>
             <Grid columns={2}>
               <Grid.Column>
                 <Header as="h1">
