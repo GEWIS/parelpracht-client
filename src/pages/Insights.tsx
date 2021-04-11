@@ -28,7 +28,7 @@ function Insights() {
 
         </Container>
       </Segment>
-      <Container>
+      <Container style={{ marginTop: '20px' }}>
         <ContractTableExtensive />
       </Container>
     </>

@@ -82,16 +82,16 @@ function MegaTable({
                 Product
                 <ProductFilter />
               </Table.HeaderCell>
-              <Table.HeaderCell>
+              <Table.HeaderCell width={2}>
                 Status
                 <ProductInstanceStatusFilter />
               </Table.HeaderCell>
-              <Table.HeaderCell>
+              <Table.HeaderCell width={2}>
                 Invoiced
                 <ProductInstanceInvoicedFilter />
               </Table.HeaderCell>
-              <Table.HeaderCell>Price</Table.HeaderCell>
-              <Table.HeaderCell>Details</Table.HeaderCell>
+              <Table.HeaderCell collapsing>Price</Table.HeaderCell>
+              <Table.HeaderCell collapsing>Details</Table.HeaderCell>
             </Table.Row>
           </Table.Header>
           <Table.Body>

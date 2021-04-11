@@ -75,18 +75,20 @@ function ContractsTable({
                   Contact
                   <ContractContactFilter />
                 </Table.HeaderCell>
-                <Table.HeaderCell>
+                <Table.HeaderCell collapsing>
                   Status
                   <ContractStatusFilter />
                 </Table.HeaderCell>
                 <Table.HeaderCell
                   sorted={column === 'assignedTo' ? direction : undefined}
                   onClick={() => changeSort('assignedTo')}
+                  collapsing
                 >
                   Assigned to
                   <UserFilter table={Tables.Contracts} />
                 </Table.HeaderCell>
                 <Table.HeaderCell
+                  collapsing
                   sorted={column === 'updatedAt' ? direction : undefined}
                   onClick={() => changeSort('updatedAt')}
                 >
@@ -137,14 +139,15 @@ function ContractsTable({
               Contact
               <ContractContactFilter />
             </Table.HeaderCell>
-            <Table.HeaderCell>
-              Amount
-            </Table.HeaderCell>
-            <Table.HeaderCell>
+            <Table.HeaderCell width={2}>
               Status
               <ContractStatusFilter />
             </Table.HeaderCell>
+            <Table.HeaderCell collapsing>
+              Amount
+            </Table.HeaderCell>
             <Table.HeaderCell
+              collapsing
               sorted={column === 'updatedAt' ? direction : undefined}
               onClick={() => changeSort('updatedAt')}
             >

@@ -35,7 +35,7 @@ function ProductsPage(props: RouteComponentProps) {
 
         </Container>
       </Segment>
-      <Container>
+      <Container style={{ marginTop: '20px' }}>
         <ProductsTable />
       </Container>
     </AuthorizationComponent>

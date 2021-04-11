@@ -31,10 +31,10 @@ function InvoiceRow(props: Props) {
         <CompanyLink id={invoice.companyId} />
       </Table.Cell>
       <Table.Cell>
-        {formatPriceFull(value)}
+        {formatStatus(invoiceStatus)}
       </Table.Cell>
       <Table.Cell>
-        {formatStatus(invoiceStatus)}
+        {formatPriceFull(value)}
       </Table.Cell>
       <Table.Cell>
         {dateToFullFinancialYear(invoice.startDate)}

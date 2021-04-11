@@ -28,7 +28,7 @@ function ContactsPage() {
 
         </Container>
       </Segment>
-      <Container>
+      <Container style={{ marginTop: '20px' }}>
         <ContactsTable />
       </Container>
     </AuthorizationComponent>

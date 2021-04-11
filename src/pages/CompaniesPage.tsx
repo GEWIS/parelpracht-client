@@ -43,7 +43,7 @@ function CompaniesPage(props: RouteComponentProps) {
 
         </Container>
       </Segment>
-      <Container>
+      <Container style={{ marginTop: '20px' }}>
         <CompanyTable />
       </Container>
     </AuthorizationComponent>
