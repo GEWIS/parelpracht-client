@@ -5,7 +5,7 @@ import {
 } from 'semantic-ui-react';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
-import { User } from '../clients/server.generated';
+import { Roles, User } from '../clients/server.generated';
 import { fetchSingle, clearSingle } from '../stores/single/actionCreators';
 import { RootState } from '../stores/store';
 import UserProps from '../components/user/UserProps';
@@ -19,6 +19,8 @@ import { showTransientAlert } from '../stores/alerts/actionCreators';
 import UserMoveAssignmentsButton from '../components/user/UserMoveAssignmentsButton';
 import { isProfile } from '../stores/user/selectors';
 import UserApiKey from '../components/user/UserApiKey';
+import UserBackgroundModal from '../components/files/UserBackgroundModal';
+import AuthorizationComponent from '../components/AuthorizationComponent';
 
 interface Props extends RouteComponentProps<{ userId: string }> {
   user: User | undefined;
@@ -58,58 +60,96 @@ class SingleUserPage extends React.Component<Props> {
     if (user === undefined) return (<div />);
 
     return (
-      <Container style={{ paddingTop: '2em' }}>
-        <Breadcrumb
-          icon="right angle"
-          sections={[
-            { key: 'Users', content: <NavLink to="/user">Users</NavLink> },
-            {
-              key: 'User',
-              content: user
-                ? formatContactName(user.firstName, user.lastNamePreposition, user.lastName)
-                : '',
-              active: true,
-            },
-          ]}
-        />
-        <UserSummary />
-        <Grid columns={2}>
-          <Grid.Column>
-            {user ? (
+      <>
+        <Segment style={{ backgroundColor: 'rgba(255, 255, 255, 0.8)' }} vertical basic>
+          <Container>
+            <Breadcrumb
+              icon="right angle"
+              sections={[
+                { key: 'Users', content: <NavLink to="/user">Users</NavLink> },
+                {
+                  key: 'User',
+                  content: user
+                    ? formatContactName(user.firstName, user.lastNamePreposition, user.lastName)
+                    : '',
+                  active: true,
+                },
+              ]}
+            />
+          </Container>
+        </Segment>
+        <Container style={{ marginTop: '1.25em' }}>
+          <UserSummary />
+          <Grid columns={2}>
+            <Grid.Column>
+              {user ? (
+                <Segment>
+                  <UserProps user={user} />
+                </Segment>
+              ) : <Segment placeholder />}
+            </Grid.Column>
+            <Grid.Column>
               <Segment>
-                <UserProps user={user} />
+                <h2>
+                  Responsibilities
+                  <UserMoveAssignmentsButton userId={user.id} />
+                </h2>
               </Segment>
-            ) : <Segment placeholder />}
-          </Grid.Column>
-          <Grid.Column>
-            <Segment>
-              <h2>
-                Responsibilities
-                <UserMoveAssignmentsButton userId={user.id} />
-              </h2>
-            </Segment>
-            {isProfilePage ? (
-              <Segment>
-                <Header as="h3">
-                  API Key
-                </Header>
-                <p>
-                  You can generate an API key to use ParelPracht in external tools.
-                  With this key, actions can be performed on your behalf.
-                  To use the API key, place the entire key in the
-                  {' '}
-                  <code>Authentication</code>
-                  {' '}
-                  header of any request.
-                  <br />
-                  <b>Only generate a key if you know what you&apos;re doing!</b>
-                </p>
-                <UserApiKey />
-              </Segment>
-            ) : null}
-          </Grid.Column>
-        </Grid>
-      </Container>
+              {isProfilePage ? (
+                <Segment>
+                  <Header as="h3">
+                    API Key
+                  </Header>
+                  <p>
+                    You can generate an API key to use ParelPracht in external tools.
+                    With this key, actions can be performed on your behalf.
+                    To use the API key, place the entire key in the
+                    {' '}
+                    <code>Authentication</code>
+                    {' '}
+                    header of any request.
+                    <br />
+                    <b>Only generate a key if you know what you&apos;re doing!</b>
+                  </p>
+                  <UserApiKey />
+                </Segment>
+              ) : null}
+              {isProfilePage ? (
+                <Segment>
+                  <Header as="h3">
+                    Personal User Background
+                  </Header>
+                  <UserBackgroundModal
+                    entity={SingleEntities.User}
+                    entityId={user.id}
+                    entityName={user.firstName}
+                    fileName={user.backgroundFilename}
+                    fetchEntity={this.props.fetchUser}
+                    adminView={false}
+                  />
+                </Segment>
+              )
+                : (
+                  <AuthorizationComponent roles={[Roles.ADMIN]} notFound={false}>
+                    <Segment>
+                      <Header as="h3">
+                        Personal User Background
+                      </Header>
+                      <UserBackgroundModal
+                        entity={SingleEntities.User}
+                        entityId={user.id}
+                        entityName={user.firstName}
+                        fileName={user.backgroundFilename}
+                        fetchEntity={this.props.fetchUser}
+                        adminView
+                      />
+                    </Segment>
+                  </AuthorizationComponent>
+                )}
+            </Grid.Column>
+          </Grid>
+        </Container>
+      </>
     );
   }
 }

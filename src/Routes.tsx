@@ -100,6 +100,19 @@ function Routes(props: Props) {
   }
 
   if (props.profile === undefined) return loader;
+  const mainStyle = props.profile.backgroundFilename === '' ? (
+    {
+      backgroundColor: 'white',
+    }
+  ) : (
+    {
+      width: '100vw',
+      backgroundImage: `url("/static/backgrounds/${props.profile.backgroundFilename}`,
+      backgroundSize: 'cover',
+      backgroundRepeat: 'no-repeat',
+      backgroundPosition: 'center center',
+    }
+  );
 
   return (
     <div>
@@ -107,6 +120,7 @@ function Routes(props: Props) {
       <Container
         className="main"
         fluid
+        style={mainStyle}
       >
         <AlertContainer internal />
         <Switch>

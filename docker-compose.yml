@@ -17,6 +17,7 @@ services:
     volumes:
       - backend-files:/usr/src/app/data
       - logos:/usr/src/app/data/logos
+      - backgrounds:/usr/src/app/data/backgrounds
     environment:
       - NODE_ENV=production
       - PORT=3001
@@ -64,6 +65,7 @@ services:
     volumes:
       - static:/app/build/static
       - logos:/usr/src/app/data/logos
+      - backgrounds:/usr/src/app/data/backgrounds
 volumes:
   database-data:
     driver: local
@@ -72,6 +74,8 @@ volumes:
   static:
     driver: local
   logos:
+    driver: local
+  backgrounds:
     driver: local
 networks:
   parelpracht:

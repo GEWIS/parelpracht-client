@@ -8,7 +8,7 @@ import { Product } from '../../clients/server.generated';
 import TablePagination from '../TablePagination';
 import { RootState } from '../../stores/store';
 import {
-  changeSortTable, fetchTable, nextPageTable, prevPageTable, setTakeTable,
+  changeSortTable, fetchTable, nextPageTable, prevPageTable, setFilterTable, setTakeTable,
 } from '../../stores/tables/actionCreators';
 import { countFetched, countTotal, getTable } from '../../stores/tables/selectors';
 import { Tables } from '../../stores/tables/tables';
@@ -30,17 +30,19 @@ interface Props {
   fetchProducts: () => void;
   changeSort: (column: string) => void;
   setTake: (take: number) => void;
+  setTableFilter: (filter: { column: string, values: any[] }) => void;
   prevPage: () => void;
   nextPage: () => void;
 }
 
 function ProductsTable({
-  products, fetchProducts, column, direction, changeSort,
+  products, fetchProducts, column, direction, changeSort, setTableFilter,
   total, fetched, skip, take, status,
   prevPage, nextPage, setTake,
 }: Props) {
   useEffect(() => {
     fetchProducts();
+    setTableFilter({ column: 'status', values: ['ACTIVE'] });
   }, []);
 
   if (status === ResourceStatus.FETCHING || status === ResourceStatus.SAVING) {
@@ -166,6 +168,9 @@ const mapStateToProps = (state: RootState) => {
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
   fetchProducts: () => dispatch(fetchTable(Tables.Products)),
+  setTableFilter: (filter: { column: string, values: any[] }) => {
+    dispatch(setFilterTable(Tables.Products, filter));
+  },
   changeSort: (column: string) => {
     dispatch(changeSortTable(Tables.Products, column));
     dispatch(fetchTable(Tables.Products));
