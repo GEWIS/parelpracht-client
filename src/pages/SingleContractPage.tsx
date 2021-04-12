@@ -156,7 +156,7 @@ class SingleContractPage extends React.Component<Props, State> {
 
     return (
       <>
-        <Segment style={{ backgroundColor: 'rgba(255, 255, 255, 0.8)' }} vertical basic>
+        <Segment style={{ backgroundColor: 'rgba(255, 255, 255, 0.95)' }} vertical basic>
           <Container>
             <Breadcrumb
               icon="right angle"
