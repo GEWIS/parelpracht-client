@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { NavLink, RouteComponentProps, withRouter } from 'react-router-dom';
 import {
-  Breadcrumb, Container, Grid, Header, Loader, Segment, Tab,
+  Breadcrumb, Container, Grid, Loader, Segment, Tab,
 } from 'semantic-ui-react';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
