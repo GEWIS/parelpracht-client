@@ -79,7 +79,7 @@ class CustomInvoiceRecipient extends React.Component<Props, State> {
               id="form-recipient-street"
               fluid
               control={Input}
-              label="Street"
+              label="Street and Number"
               value={recipient.street}
               onChange={(e: ChangeEvent<HTMLInputElement>) => updateRecipientAttribute(
                 'street', e.target.value,
