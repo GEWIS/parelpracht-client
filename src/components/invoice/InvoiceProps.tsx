@@ -124,8 +124,10 @@ class InvoiceProps extends React.Component<Props, State> {
   };
 
   propsHaveErrors = (): boolean => {
-    const { title } = this.state;
-    return (validator.isEmpty(title));
+    const { title, startDate } = this.state;
+    return (validator.isEmpty(title)
+      || startDate.toString() === 'Invalid Date'
+      || startDate.setHours(0, 0, 0, 0) < new Date().setHours(0, 0, 0, 0));
   };
 
   deleteButtonActive = () => {
@@ -227,6 +229,7 @@ class InvoiceProps extends React.Component<Props, State> {
                 onChange={(e, { value }) => {
                   this.setState({ startDate: new Date(Date.parse(value)) });
                 }}
+                error={startDate.setHours(0, 0, 0, 0) < new Date().setHours(0, 0, 0, 0)}
                 value={formatTimestampToDate(startDate)}
                 id="form-input-startdate"
                 dateFormat="YYYY-MM-DD"
