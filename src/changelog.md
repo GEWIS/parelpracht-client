@@ -13,6 +13,7 @@ You can find the release notes below.
 - Added API keys.
   - Every user can generate at most one API key and use them in the header of their request to authenticate.
   - When generating or deleting an API key, the user is emailed about this operation.
+- Added custom personal user backgrounds.
 - Added more success notifications when operations have been executed successfully.
 - Added a fancy animation on the login page.
 - Added a "Remember me" button when logging in.
@@ -31,12 +32,15 @@ You can find the release notes below.
 - The actual/real price can no longer be edited for products within contracts, to prevent floating point errors or inconsistencies.
 - When an entity has no files, it is properly displayed (just like contracts and invoices).
 - The footer is now a bit smaller to make it less "present".
-- When an entity is reloaded, it is now done silenty in the background, without the page "jumping" all over the place.
+- When an entity is reloaded, it is now done silently in the background, without the page "jumping" all over the place.
 - TextArea fields are now scrollable.
 - Deferred products now have their own bar in the next financial year in the Product Insights chart.
 - Relational attributes and prices are formatted a lot more nicely when used in attribute-changed-activities.
 - A product of an existing product instance can no longer be edited.
 - When going back (with the browser back button) to a single entity page, the correct tab is opened again.
+- Add different icons for different types of files.
+- Add avatar in clickable user references.
+- Add favicon.
 
 ### Bugfixes
 - Fixed page numbers showing "???" in generated PDF files.
@@ -50,6 +54,8 @@ You can find the release notes below.
 - Fixed footer being positioned one pixel too high in Google Chrome.
 - Fixed inconsistencies when multiple people use ParelPracht and update entities.
 - Fixed "Add product" button in contracts staying enabled when a contract is marked as confirmed, until ParelPracht is refreshed.
+- Fixed login in with Gmail addresses due to dots inconsistencies.
+- Fixed deletion of images to preserve disk space.
 
 ## v0.2.1-beta2 (07-03-2021)
 
