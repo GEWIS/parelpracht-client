@@ -6,7 +6,7 @@ import {
 function NotFound() {
   return (
     <>
-      <Segment style={{ backgroundColor: 'rgba(235, 235, 235, 0.8)' }} vertical basic>
+      <Segment style={{ backgroundColor: 'rgba(237, 237, 237, 0.9)' }} vertical basic>
         <Container style={{ paddingTop: '1em' }}>
           <Grid columns={2}>
             <Grid.Column>
