@@ -51,7 +51,7 @@ function InvoicesTable({
           <Dimmer active inverted>
             <Loader inverted />
           </Dimmer>
-          <Table singleLine selectable attached sortable fixed>
+          <Table singleLine selectable attached sortable>
             <Table.Header>
               <Table.Row>
                 <Table.HeaderCell
@@ -67,19 +67,21 @@ function InvoicesTable({
                   Company
                   <CompanyFilter table={Tables.Invoices} />
                 </Table.HeaderCell>
-                <Table.HeaderCell>
+                <Table.HeaderCell width={2}>
                   Status
                   <InvoiceStatusFilter />
                 </Table.HeaderCell>
                 <Table.HeaderCell
                   sorted={column === 'startDate' ? direction : undefined}
                   onClick={() => changeSort('startDate')}
+                  collapsing
                 >
                   Financial year
                 </Table.HeaderCell>
                 <Table.HeaderCell
                   sorted={column === 'assignedTo' ? direction : undefined}
                   onClick={() => changeSort('assignedTo')}
+                  collapsing
                 >
                   Assigned to
                   <UserFilter table={Tables.Invoices} />
@@ -87,6 +89,7 @@ function InvoicesTable({
                 <Table.HeaderCell
                   sorted={column === 'updatedAt' ? direction : undefined}
                   onClick={() => changeSort('updatedAt')}
+                  collapsing
                 >
                   Last Update
                 </Table.HeaderCell>
@@ -112,7 +115,7 @@ function InvoicesTable({
 
   return (
     <>
-      <Table singleLine selectable attached sortable fixed>
+      <Table singleLine selectable attached sortable>
         <Table.Header>
           <Table.Row>
             <Table.HeaderCell
@@ -128,12 +131,12 @@ function InvoicesTable({
               Company
               <CompanyFilter table={Tables.Invoices} />
             </Table.HeaderCell>
+            <Table.HeaderCell collapsing>
+              Amount
+            </Table.HeaderCell>
             <Table.HeaderCell width={2}>
               Status
               <InvoiceStatusFilter />
-            </Table.HeaderCell>
-            <Table.HeaderCell collapsing>
-              Amount
             </Table.HeaderCell>
             <Table.HeaderCell
               collapsing

@@ -66,7 +66,7 @@ function MegaTable({
               <Loader inverted />
             </Dimmer>
           ) : null}
-        <Table className="rowspanStriped" attached compact sortable>
+        <Table attached compact sortable striped>
           <Table.Header>
             <Table.Row>
               <Table.HeaderCell
@@ -94,7 +94,9 @@ function MegaTable({
             </Table.Row>
           </Table.Header>
           <Table.Body>
-            {companies.map((c) => <MegaTableRow company={c} key={c.id} />)}
+            {companies.map((c) => (
+              <MegaTableRow company={c} key={c.id} />
+            ))}
           </Table.Body>
           <Table.Footer>
             <Table.Row>

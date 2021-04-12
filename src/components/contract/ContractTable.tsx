@@ -52,7 +52,7 @@ function ContractsTable({
           <Dimmer active inverted>
             <Loader inverted />
           </Dimmer>
-          <Table singleLine selectable attached sortable fixed>
+          <Table singleLine selectable attached sortable>
             <Table.Header>
               <Table.Row>
                 <Table.HeaderCell
@@ -116,7 +116,7 @@ function ContractsTable({
 
   return (
     <>
-      <Table singleLine selectable attached sortable fixed>
+      <Table singleLine selectable attached sortable>
         <Table.Header>
           <Table.Row>
             <Table.HeaderCell
