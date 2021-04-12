@@ -38,14 +38,14 @@ function ProductSummary(props: Props) {
   if (status === ResourceStatus.FETCHING || status === ResourceStatus.SAVING) {
     return (
       <>
-        <Header as="h1" attached="top" style={{ backgroundColor: '#eee' }}>
+        <Header as="h1" attached="top" style={{ backgroundColor: 'rgba(235, 235, 235, 0.8)' }}>
           <Loader active inline style={{ marginRight: '0.95rem', marginLeft: '1rem', marginTop: '0.5rem' }} />
           <Header.Content>
             <Header.Subheader>Product</Header.Subheader>
             {product.nameEnglish}
           </Header.Content>
         </Header>
-        <Segment attached="bottom">
+        <Segment attached="bottom" style={{ backgroundColor: 'rgba(255, 255, 255, 0.9)' }}>
           <Grid columns={4}>
             <Grid.Column>
               <h5>Name</h5>
@@ -74,7 +74,7 @@ function ProductSummary(props: Props) {
           {product.nameEnglish}
         </Header.Content>
       </Header>
-      <Segment attached="bottom">
+      <Segment attached="bottom" style={{ backgroundColor: 'rgba(255, 255, 255, 0.9)' }}>
         <Grid columns={4}>
           <Grid.Column>
             <h5>Name</h5>

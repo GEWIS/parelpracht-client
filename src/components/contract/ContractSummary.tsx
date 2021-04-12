@@ -33,14 +33,14 @@ function ContractSummary(props: Props) {
       && status !== ResourceStatus.ERROR)) {
     return (
       <>
-        <Header as="h1" attached="top" style={{ backgroundColor: '#eee' }}>
+        <Header as="h1" attached="top" style={{ backgroundColor: 'rgba(235, 235, 235, 0.8)' }}>
           <Icon name="shopping bag" />
           <Header.Content>
             <Header.Subheader>Contract</Header.Subheader>
             <Loader active inline />
           </Header.Content>
         </Header>
-        <Segment attached="bottom">
+        <Segment attached="bottom" style={{ backgroundColor: 'rgba(255, 255, 255, 0.9)' }}>
           <Placeholder><Placeholder.Line length="long" /></Placeholder>
         </Segment>
       </>
@@ -60,7 +60,7 @@ function ContractSummary(props: Props) {
 
   return (
     <>
-      <Header as="h1" attached="top" style={{ backgroundColor: '#eee' }}>
+      <Header as="h1" attached="top" style={{ backgroundColor: 'rgba(235, 235, 235, 0.8)' }}>
         <Grid>
           <Grid.Row columns="2">
             <Grid.Column>
@@ -85,7 +85,7 @@ function ContractSummary(props: Props) {
           </Grid.Row>
         </Grid>
       </Header>
-      <Segment attached="bottom">
+      <Segment attached="bottom" style={{ backgroundColor: 'rgba(255, 255, 255, 0.9)' }}>
         <Grid columns={4}>
           <Grid.Column>
             <h5>Company</h5>
