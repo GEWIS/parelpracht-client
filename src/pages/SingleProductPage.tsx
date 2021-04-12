@@ -180,14 +180,18 @@ class SingleProductPage extends React.Component<Props, State> {
 
     return (
       <AuthorizationComponent roles={[Roles.GENERAL, Roles.ADMIN]} notFound>
-        <Container style={{ paddingTop: '1em' }}>
-          <Breadcrumb
-            icon="right angle"
-            sections={[
-              { key: 'Products', content: <NavLink to="/product">Products</NavLink> },
-              { key: 'Product', content: product.nameDutch, active: true },
-            ]}
-          />
+        <Segment style={{ backgroundColor: 'rgba(255, 255, 255, 0.8)' }} vertical basic>
+          <Container>
+            <Breadcrumb
+              icon="right angle"
+              sections={[
+                { key: 'Products', content: <NavLink to="/product">Products</NavLink> },
+                { key: 'Product', content: product.nameEnglish, active: true },
+              ]}
+            />
+          </Container>
+        </Segment>
+        <Container style={{ marginTop: '1.25em' }}>
           <ProductSummary product={product} />
           <Grid columns={2}>
             <Grid.Column width={10}>
