@@ -41,6 +41,7 @@ You can find the release notes below.
 - Add different icons for different types of files.
 - Add avatar in clickable user references.
 - Add favicon.
+- Invoice date can now only be the current day or in the future.
 
 ### Bugfixes
 - Fixed page numbers showing "???" in generated PDF files.
