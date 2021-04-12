@@ -25,7 +25,7 @@ class CustomInvoiceRecipient extends React.Component<Props, State> {
       recipient, updateRecipientAttribute, updateRecipientGender,
     } = this.props;
     return (
-      <Segment secondary>
+      <Segment secondary style={{ backgroundColor: 'rgba(243, 244, 245, 0.98)' }}>
         <h2>Recipient details</h2>
         <Form style={{ marginTop: '2em' }}>
           <Form.Group widths="equal">

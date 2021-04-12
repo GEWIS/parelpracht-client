@@ -23,7 +23,7 @@ function CustomInvoiceText(props: Props) {
   }
 
   return (
-    <Segment secondary>
+    <Segment secondary style={{ backgroundColor: 'rgba(243, 244, 245, 0.98)' }}>
       <h2>Invoice description</h2>
       {prefix}
       <Input

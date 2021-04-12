@@ -160,7 +160,7 @@ class SingleInvoicePage extends React.Component<Props, State> {
           <InvoiceSummary />
           <Grid rows={2}>
             <Grid.Row centered columns={1} style={{ paddingLeft: '1em', paddingRight: '1em' }}>
-              <Segment secondary>
+              <Segment secondary style={{ backgroundColor: 'rgba(243, 244, 245, 0.98)' }}>
                 <FinancialDocumentProgress
                   documentId={invoice.id}
                   activities={invoice.activities as GeneralActivity[]}
@@ -184,7 +184,7 @@ class SingleInvoicePage extends React.Component<Props, State> {
                 />
               </Grid.Column>
               <Grid.Column width={6}>
-                <Segment secondary>
+                <Segment secondary style={{ backgroundColor: 'rgba(243, 244, 245, 0.98)' }}>
                   <InvoiceProps invoice={invoice} />
                 </Segment>
               </Grid.Column>

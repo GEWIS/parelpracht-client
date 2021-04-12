@@ -171,7 +171,7 @@ class SingleContractPage extends React.Component<Props, State> {
           <ContractSummary />
           <Grid rows={2}>
             <Grid.Row centered columns={1} style={{ paddingLeft: '1em', paddingRight: '1em' }}>
-              <Segment secondary>
+              <Segment secondary style={{ backgroundColor: 'rgba(243, 244, 245, 0.98)' }}>
                 <FinancialDocumentProgress
                   documentId={contract.id}
                   activities={contract.activities as GeneralActivity[]}
@@ -198,7 +198,7 @@ class SingleContractPage extends React.Component<Props, State> {
                 />
               </Grid.Column>
               <Grid.Column width={6}>
-                <Segment secondary>
+                <Segment secondary style={{ backgroundColor: 'rgba(243, 244, 245, 0.98)' }}>
                   <ContractProps contract={contract} />
                 </Segment>
               </Grid.Column>

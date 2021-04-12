@@ -19,7 +19,7 @@ interface Props {
 
 function CustomInvoiceProps(props: Props) {
   return (
-    <Segment secondary>
+    <Segment secondary style={{ backgroundColor: 'rgba(243, 244, 245, 0.98)' }}>
       <h2>Invoice details</h2>
       <Form style={{ marginTop: '2em' }}>
         <Form.Group widths="equal">

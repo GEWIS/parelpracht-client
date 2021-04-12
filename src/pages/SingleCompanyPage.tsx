@@ -220,7 +220,7 @@ class SingleCompanyPage extends React.Component<Props, State> {
               />
             </Grid.Column>
             <Grid.Column width={6}>
-              <Segment secondary>
+              <Segment secondary style={{ backgroundColor: 'rgba(243, 244, 245, 0.98)' }}>
                 <CompanyProps company={company} />
               </Segment>
             </Grid.Column>
