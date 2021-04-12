@@ -42,7 +42,7 @@ function UserSummary(props: Props) {
     || status === ResourceStatus.EMPTY || status === ResourceStatus.FETCHING) {
     return (
       <>
-        <Header as="h1" attached="top" style={{ backgroundColor: 'rgba(235, 235, 235, 0.8)' }}>
+        <Header as="h1" attached="top" style={{ backgroundColor: 'rgba(238, 238, 238, 0.95)' }}>
           <Icon name="user" />
           <Header.Content>
             <Header.Subheader>User</Header.Subheader>
@@ -58,7 +58,7 @@ function UserSummary(props: Props) {
 
   return (
     <>
-      <Header as="h1" attached="top" style={{ backgroundColor: 'rgba(235, 235, 235, 0.8)' }}>
+      <Header as="h1" attached="top" style={{ backgroundColor: 'rgba(238, 238, 238, 0.95)' }}>
         <Grid>
           <Grid.Row columns="2">
             <Grid.Column>
@@ -76,7 +76,6 @@ function UserSummary(props: Props) {
                 fileName={user.avatarFilename}
                 fetchEntity={fetchUser}
               />
-              {/* <UserDeleteButton floated="right" style={{ marginTop: '-0.5em' }} /> */}
             </Grid.Column>
           </Grid.Row>
         </Grid>

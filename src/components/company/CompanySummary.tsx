@@ -25,7 +25,7 @@ function CompanySummary(props: Props) {
   if (company === undefined) {
     return (
       <>
-        <Header as="h1" attached="top" style={{ backgroundColor: 'rgba(235, 235, 235, 0.8)' }}>
+        <Header as="h1" attached="top" style={{ backgroundColor: 'rgba(238, 238, 238, 0.95)' }}>
           <Loader active inline style={{ marginRight: '1rem', marginLeft: '1rem', marginTop: '0.5rem' }} />
           <Header.Content>
             <Header.Subheader>Company</Header.Subheader>
@@ -41,7 +41,7 @@ function CompanySummary(props: Props) {
   if (status === ResourceStatus.FETCHING || status === ResourceStatus.SAVING) {
     return (
       <>
-        <Header as="h1" attached="top" style={{ backgroundColor: 'rgba(235, 235, 235, 0.8)' }}>
+        <Header as="h1" attached="top" style={{ backgroundColor: 'rgba(238, 238, 238, 0.95)' }}>
           <Grid>
             <Grid.Row columns="2">
               <Grid.Column>
@@ -81,7 +81,7 @@ function CompanySummary(props: Props) {
 
   return (
     <>
-      <Header as="h1" attached="top" style={{ backgroundColor: 'rgba(235, 235, 235, 0.8)' }}>
+      <Header as="h1" attached="top" style={{ backgroundColor: 'rgba(238, 238, 238, 0.95)' }}>
         <Grid>
           <Grid.Row columns="2">
             <Grid.Column>

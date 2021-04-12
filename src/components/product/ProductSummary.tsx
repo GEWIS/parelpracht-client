@@ -22,7 +22,7 @@ function ProductSummary(props: Props) {
   if (product === undefined) {
     return (
       <>
-        <Header as="h1" attached="top" style={{ backgroundColor: '#eee' }}>
+        <Header as="h1" attached="top" style={{ backgroundColor: 'rgba(238, 238, 238, 0.95)' }}>
           <Loader active inline style={{ marginRight: '1rem', marginLeft: '1rem', marginTop: '0.5rem' }} />
           <Header.Content>
             <Header.Subheader>Product</Header.Subheader>
@@ -38,7 +38,7 @@ function ProductSummary(props: Props) {
   if (status === ResourceStatus.FETCHING || status === ResourceStatus.SAVING) {
     return (
       <>
-        <Header as="h1" attached="top" style={{ backgroundColor: 'rgba(235, 235, 235, 0.8)' }}>
+        <Header as="h1" attached="top" style={{ backgroundColor: 'rgba(238, 238, 238, 0.95)' }}>
           <Loader active inline style={{ marginRight: '0.95rem', marginLeft: '1rem', marginTop: '0.5rem' }} />
           <Header.Content>
             <Header.Subheader>Product</Header.Subheader>
@@ -67,7 +67,7 @@ function ProductSummary(props: Props) {
 
   return (
     <>
-      <Header as="h1" attached="top" style={{ backgroundColor: 'rgba(235, 235, 235, 0.8)' }}>
+      <Header as="h1" attached="top" style={{ backgroundColor: 'rgba(238, 238, 238, 0.95)' }}>
         <Icon name="shopping bag" />
         <Header.Content>
           <Header.Subheader>Product</Header.Subheader>

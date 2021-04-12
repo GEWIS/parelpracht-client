@@ -33,7 +33,7 @@ function ContractSummary(props: Props) {
       && status !== ResourceStatus.ERROR)) {
     return (
       <>
-        <Header as="h1" attached="top" style={{ backgroundColor: 'rgba(235, 235, 235, 0.8)' }}>
+        <Header as="h1" attached="top" style={{ backgroundColor: 'rgba(238, 238, 238, 0.95)' }}>
           <Icon name="shopping bag" />
           <Header.Content>
             <Header.Subheader>Contract</Header.Subheader>
@@ -60,7 +60,7 @@ function ContractSummary(props: Props) {
 
   return (
     <>
-      <Header as="h1" attached="top" style={{ backgroundColor: 'rgba(235, 235, 235, 0.8)' }}>
+      <Header as="h1" attached="top" style={{ backgroundColor: 'rgba(238, 238, 238, 0.95)' }}>
         <Grid>
           <Grid.Row columns="2">
             <Grid.Column>

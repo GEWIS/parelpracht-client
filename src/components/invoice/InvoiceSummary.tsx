@@ -27,7 +27,7 @@ function InvoiceSummary(props: Props) {
       && status !== ResourceStatus.ERROR)) {
     return (
       <>
-        <Header as="h1" attached="top" style={{ backgroundColor: 'rgba(235, 235, 235, 0.8)' }}>
+        <Header as="h1" attached="top" style={{ backgroundColor: 'rgba(238, 238, 238, 0.95)' }}>
           <Icon name="money bill alternate outline" />
           <Header.Content>
             <Header.Subheader>Invoice</Header.Subheader>
@@ -54,7 +54,7 @@ function InvoiceSummary(props: Props) {
 
   return (
     <>
-      <Header as="h1" attached="top" style={{ backgroundColor: 'rgba(235, 235, 235, 0.8)' }}>
+      <Header as="h1" attached="top" style={{ backgroundColor: 'rgba(238, 238, 238, 0.95)' }}>
         <Grid>
           <Grid.Row columns="2">
             <Grid.Column>
