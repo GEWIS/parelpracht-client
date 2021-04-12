@@ -180,7 +180,7 @@ class SingleProductPage extends React.Component<Props, State> {
 
     return (
       <AuthorizationComponent roles={[Roles.GENERAL, Roles.ADMIN]} notFound>
-        <Segment style={{ backgroundColor: 'rgba(255, 255, 255, 0.8)' }} vertical basic>
+        <Segment style={{ backgroundColor: 'rgba(255, 255, 255, 0.95)' }} vertical basic>
           <Container>
             <Breadcrumb
               icon="right angle"
