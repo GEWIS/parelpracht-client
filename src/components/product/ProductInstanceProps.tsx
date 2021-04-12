@@ -201,6 +201,7 @@ class ProductInstanceProps extends React.Component<Props, State> {
             <Form.Field
               disabled={!editing}
               error={Number.isNaN(Math.round(parseFloat(this.state.basePrice.replace(',', '.')) * 100))}
+              value={parseFloat(basePrice.replace(',', '.')).toFixed(2)}
             >
               {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
               <label htmlFor="form-input-base-price">

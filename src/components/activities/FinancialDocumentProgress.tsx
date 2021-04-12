@@ -92,7 +92,7 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
           <Popup
             header={`Defer ${formatDocumentType(documentType)}`}
             content={`By defering this ${formatDocumentType(documentType)}, you indicate that it will
-          not be delivered in the current academic year.`}
+          not be delivered in the current academic year and that delivery will be postponed until the next academic year.`}
             mouseEnterDelay={500}
             wide
             trigger={(
