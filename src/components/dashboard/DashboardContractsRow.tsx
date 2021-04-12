@@ -6,9 +6,8 @@ import {
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { RecentContract } from '../../clients/server.generated';
 import { RootState } from '../../stores/store';
-import UserAvatar from '../user/UserAvatar';
 import { formatActivityDate } from '../../helpers/activity';
-import { getUserAvatar, getUserName } from '../../stores/user/selectors';
+import { getUserName } from '../../stores/user/selectors';
 import { getCompanyLogo, getCompanyName } from '../../stores/company/selectors';
 
 interface Props extends RouteComponentProps {
