@@ -33,7 +33,7 @@ function UsersPage(props: RouteComponentProps) {
 
         </Container>
       </Segment>
-      <Container>
+      <Container style={{ marginTop: '20px' }}>
         <UsersTable />
       </Container>
     </>

@@ -57,7 +57,7 @@ class InvoicesPage extends React.Component<Props> {
 
           </Container>
         </Segment>
-        <Container>
+        <Container style={{ marginTop: '20px' }}>
           <InvoicesTable />
         </Container>
       </AuthorizationComponent>

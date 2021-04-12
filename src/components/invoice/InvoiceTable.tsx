@@ -128,20 +128,22 @@ function InvoicesTable({
               Company
               <CompanyFilter table={Tables.Invoices} />
             </Table.HeaderCell>
-            <Table.HeaderCell>
-              Amount
-            </Table.HeaderCell>
-            <Table.HeaderCell>
+            <Table.HeaderCell width={2}>
               Status
               <InvoiceStatusFilter />
             </Table.HeaderCell>
+            <Table.HeaderCell collapsing>
+              Amount
+            </Table.HeaderCell>
             <Table.HeaderCell
+              collapsing
               sorted={column === 'startDate' ? direction : undefined}
               onClick={() => changeSort('startDate')}
             >
-              Financial year
+              Financial Year
             </Table.HeaderCell>
             <Table.HeaderCell
+              collapsing
               sorted={column === 'updatedAt' ? direction : undefined}
               onClick={() => changeSort('updatedAt')}
             >

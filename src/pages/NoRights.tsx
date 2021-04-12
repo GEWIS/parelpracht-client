@@ -25,7 +25,7 @@ function NoRights() {
       <Container style={{ paddingTop: '4em' }}>
         <Grid columns={2}>
           <Grid.Column textAlign="left" width="4">
-            <Image src="./peach.webp" fluid />
+            <Image src="/peach.png" fluid />
           </Grid.Column>
           <Grid.Column textAlign="left" verticalAlign="middle" width="12">
             <h1 style={{ fontSize: '70px' }}>

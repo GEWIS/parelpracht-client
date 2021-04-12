@@ -37,10 +37,10 @@ function ContractRow(props: Props) {
         {contactName}
       </Table.Cell>
       <Table.Cell>
-        {formatPriceFull(value)}
+        {formatStatus(contractStatus)}
       </Table.Cell>
       <Table.Cell>
-        {formatStatus(contractStatus)}
+        {formatPriceFull(value)}
       </Table.Cell>
       <Table.Cell>
         {formatLastUpdate(contract.updatedAt)}
