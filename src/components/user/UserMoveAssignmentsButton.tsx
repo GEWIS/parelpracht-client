@@ -49,13 +49,9 @@ class UserMoveAssignmentsButton extends React.Component<Props, State> {
 
   public render() {
     const trigger = (
-      <Button
-        icon
-        labelPosition="left"
-        floated="right"
-        primary
-      >
-        <Icon name="arrow right" />
+      <Button>
+        <Icon name="arrow up" />
+        {' '}
         Transfer assignments
       </Button>
     );

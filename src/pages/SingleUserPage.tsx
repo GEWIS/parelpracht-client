@@ -90,10 +90,15 @@ class SingleUserPage extends React.Component<Props> {
             </Grid.Column>
             <Grid.Column>
               <Segment>
-                <h2>
+                <h3>
                   Responsibilities
-                  <UserMoveAssignmentsButton userId={user.id} />
-                </h2>
+                </h3>
+                <p>
+                  You can transfer your responsibilities to another ParelPracht user.
+                  By doing this, their name will appear
+                  on all your contracts and invoices.
+                </p>
+                <UserMoveAssignmentsButton userId={user.id} />
               </Segment>
               {isProfilePage ? (
                 <Segment>
