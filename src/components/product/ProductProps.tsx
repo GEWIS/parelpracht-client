@@ -182,6 +182,7 @@ class ProductProps extends React.Component<Props, State> {
 
           <PropsButtons
             editing={editing}
+            canEdit
             canDelete={this.deleteButtonActive()}
             canSave={!this.propsHaveErrors()}
             entity={SingleEntities.Product}
