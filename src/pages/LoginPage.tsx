@@ -6,6 +6,7 @@ import {
 import './BackgroundAnimation.css';
 import AlertContainer from '../components/alerts/AlertContainer';
 import LoginForm from '../components/auth/LoginForm';
+import ParelPrachtFullLogo from '../components/ParelPrachtFullLogo';
 
 function LoginPage() {
   return (
@@ -19,10 +20,7 @@ function LoginPage() {
           <Grid.Column width={6}>
             <Segment>
               <Image src="./gewis-logo.png" size="small" centered />
-              <Header as="h1">
-                <Image src="./ParelPracht-black.png" size="mini" style={{ marginBottom: '5.5px', marginRight: '-3px', paddingRight: '-4px' }} />
-                <span style={{ marginBottom: '0px', verticalAlign: 'bottom', fontFamily: 'Recursive' }}>arelPracht</span>
-              </Header>
+              <ParelPrachtFullLogo />
               <LoginForm />
             </Segment>
             <Message>
