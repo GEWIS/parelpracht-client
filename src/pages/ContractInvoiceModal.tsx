@@ -90,6 +90,7 @@ class ContractInvoiceModal extends React.Component<Props, State> {
         search
         selection
         options={dropdownOptions}
+        defaultValue={-1}
         value={selectedInvoice}
         onChange={(e, data) => this.setState({ selectedInvoice: data.value as any })}
       />
