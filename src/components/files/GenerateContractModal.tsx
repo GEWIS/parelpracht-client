@@ -119,17 +119,6 @@ function GenerateContractModal(props: Props) {
         <Form style={{ marginTop: '2em' }}>
           <Form.Group widths="equal">
             <Form.Field
-              label="Label"
-              control={Input}
-              required
-              error={
-                validator.isEmpty(name)
-              }
-              value={name}
-              onChange={(e: ChangeEvent<HTMLInputElement>) => changeName(e.target.value)}
-              fluid
-            />
-            <Form.Field
               required
             >
               {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
@@ -147,6 +136,13 @@ function GenerateContractModal(props: Props) {
                 fluid
               />
             </Form.Field>
+            <Form.Field
+              label="Comment"
+              control={Input}
+              value={name}
+              onChange={(e: ChangeEvent<HTMLInputElement>) => changeName(e.target.value)}
+              fluid
+            />
           </Form.Group>
           <Form.Group widths="equal">
             <Form.Field

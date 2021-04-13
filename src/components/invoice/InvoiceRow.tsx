@@ -24,7 +24,12 @@ function InvoiceRow(props: Props) {
     <Table.Row>
       <Table.Cell>
         <NavLink to={`/invoice/${invoice.id}`}>
-          {`F${invoice.id} ${invoice.title}`}
+          {`F${invoice.id}`}
+        </NavLink>
+      </Table.Cell>
+      <Table.Cell>
+        <NavLink to={`/invoice/${invoice.id}`}>
+          {invoice.title}
         </NavLink>
       </Table.Cell>
       <Table.Cell>
