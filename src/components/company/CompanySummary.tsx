@@ -67,7 +67,7 @@ function CompanySummary(props: Props) {
           <Grid columns={4}>
             <Grid.Column>
               <h5>Description</h5>
-              <p>{company.comments}</p>
+              <p style={{ wordWrap: 'break-word' }}>{company.comments}</p>
             </Grid.Column>
             <Grid.Column>
               <h5>Status</h5>
@@ -118,7 +118,7 @@ function CompanySummary(props: Props) {
         <Grid columns={4}>
           <Grid.Column>
             <h5>Description</h5>
-            <p>{company.comments}</p>
+            <p style={{ wordWrap: 'break-word' }}>{company.comments}</p>
           </Grid.Column>
           <Grid.Column>
             <h5>Status</h5>
