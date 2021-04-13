@@ -126,15 +126,16 @@ class ProductInstanceProps extends React.Component<Props, State> {
       || this.props.productInstance.invoiceId === undefined);
   };
 
-  EditButtonActive = () => {
+  editButtonActive = () => {
     if (this.props.create) {
       return undefined;
     }
     const status = getLastStatus(this.props.contract.activities
       .filter((a) => a.type === ActivityType.STATUS));
     return !(status!.subType === ContractStatus.CONFIRMED
-       || status!.subType === ContractStatus.FINISHED
-        || status!.subType === ContractStatus.CANCELLED);
+      || status!.subType === ContractStatus.FINISHED
+      || status!.subType === ContractStatus.CANCELLED
+      || this.props.productInstance.invoiceId !== undefined);
   };
 
   render() {
@@ -155,7 +156,7 @@ class ProductInstanceProps extends React.Component<Props, State> {
           <AuthorizationComponent roles={[Roles.ADMIN, Roles.GENERAL]} notFound={false}>
             <PropsButtons
               editing={editing}
-              canEdit={this.EditButtonActive()}
+              canEdit={this.editButtonActive()}
               canDelete={this.deleteButtonActive()}
               canSave={!this.propsHaveErrors()}
               entity={SingleEntities.Product}

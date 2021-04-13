@@ -50,6 +50,7 @@ interface State {
   assignedToId: number;
   poNumber: string;
   startDate: Date;
+  dateValue: string;
 }
 
 class InvoiceProps extends React.Component<Props, State> {
@@ -90,6 +91,7 @@ class InvoiceProps extends React.Component<Props, State> {
       assignedToId: invoice.assignedToId,
       poNumber: invoice.poNumber ?? '',
       startDate: invoice.startDate,
+      dateValue: this.formatDate(invoice.startDate),
     };
   };
 
@@ -132,7 +134,6 @@ class InvoiceProps extends React.Component<Props, State> {
     const { title, startDate } = this.state;
     const statusActivities = this.props.invoice.activities
       .filter((a) => a.type === ActivityType.STATUS);
-    console.log(statusActivities);
     return (validator.isEmpty(title)
       || startDate.toString() === 'Invalid Date'
       || (startDate.setHours(0, 0, 0, 0) < new Date().setHours(0, 0, 0, 0)
@@ -149,6 +150,17 @@ class InvoiceProps extends React.Component<Props, State> {
       || this.props.invoice.activities.filter((a) => a.type === ActivityType.STATUS).length > 1);
   };
 
+  formatDate(date: Date) {
+    let day = date.getDate().toString();
+    let month = (date.getMonth() + 1).toString();
+    const year = date.getFullYear().toString();
+
+    if (Number(day) < 10) { day = `0${day}`; }
+    if (Number(month) < 10) { month = `0${month}`; }
+
+    return `${year}-${month}-${day}`;
+  }
+
   render() {
     const {
       editing,
@@ -156,9 +168,19 @@ class InvoiceProps extends React.Component<Props, State> {
       title,
       poNumber,
       startDate,
+      dateValue,
       assignedToId,
     } = this.state;
     const { companyName } = this.props;
+
+    const dateFormatterHelper = (date: Date) => {
+      let formattedDate: string = this.formatDate(date);
+
+      if (dateValue.length !== 10) {
+        formattedDate = dateValue;
+      }
+      return formattedDate;
+    };
 
     return (
       <>
@@ -238,13 +260,18 @@ class InvoiceProps extends React.Component<Props, State> {
               {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
               <label htmlFor="form-input-startdate">Invoice date</label>
               <DateInput
+                // onChange={(e, { value }) => {
+                //   this.setState({ startDate: value });
+                // }}
                 onChange={(e, { value }) => {
-                  this.setState({ startDate: new Date(Date.parse(value)) });
+                  // eslint-disable-next-line no-new
+                  if (value.length === 10) { this.setState({ startDate: new Date(value) }); }
+                  this.setState({ dateValue: value });
                 }}
                 error={startDate.setHours(0, 0, 0, 0) < new Date().setHours(0, 0, 0, 0)
                 && startDate.setHours(0, 0, 0, 0)
                 < this.props.invoice.startDate.setHours(0, 0, 0, 0)}
-                value={formatTimestampToDate(startDate)}
+                value={dateFormatterHelper(startDate)}
                 id="form-input-startdate"
                 dateFormat="YYYY-MM-DD"
                 fluid

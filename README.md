@@ -1,46 +1,32 @@
-# Getting Started with Create React App
+<h1 style="text-align: center">
+  <img alt="" src="https://raw.githubusercontent.com/GEWIS/parelpracht-client/develop/public/ParelPracht-blacksvg.svg?raw=true" style="width: 25%">
+  <br>
+  ParelPracht
+</h1>
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+ParelPracht is the successor of Goudglans, the custom Customer Relation Management system of Study Association GEWIS.
+This new system is built during the second lockdown of the corona pandemic.
+Its main goal is to automate tedious tasks and to keep a clear and concise overview of the current collaborations.
+This is achieved by creating nice structured insights tables and graphs and automating the generation of contracts, proposals and invoices.
 
-## Available Scripts
+This is the front-end of ParelPracht. [The back-end can be found here](https://github.com/GEWIS/parelpracht-server).
 
-In the project directory, you can run:
+## Installation
+1. Clone the repository.
+2. Run `npm install`.
+3. Run `npm run start`. This runs the client in development mode. You can view it at [http://localhost:3000](http://localhost:3000).
 
-### `npm start`
+You can also build the application with `npm run build`. This puts a production build in the `./build` directory.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## Deployment
+*To be added later*
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## Copyright
 
-### `npm test`
+Copyright © 2020 The 39th board of GEWIS - Some rights reserved. Created by Roy Kakkenberg, Koen de Nooij, Jealy van den
+Aker, Max Opperman, Wouter van der Heijden en Irne Verwijst. You can use our software freely within the limits of
+our license. However, we worked very hard on this project and invested a lot of time in it, so we ask you to leave our
+copyright mark in place when modifying our software. Of course, you are free to add your own.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+## License
+[GNU AGPLv3](./LICENSE)
