@@ -41,7 +41,7 @@ You can find the release notes below.
 - Add different icons for different types of files.
 - Add avatar in clickable user references.
 - Add favicon.
-- Invoice date can now only be the current day or in the future.
+- Invoice date can now only be after the day the invoice has been created.
 
 ### Bugfixes
 - Fixed page numbers showing "???" in generated PDF files.
@@ -57,6 +57,7 @@ You can find the release notes below.
 - Fixed "Add product" button in contracts staying enabled when a contract is marked as confirmed, until ParelPracht is refreshed.
 - Fixed login in with Gmail addresses due to dots inconsistencies.
 - Fixed deletion of images to preserve disk space.
+- Fixed major bugs in the document progress bar. This was due to sorting issues.
 
 ## v0.2.1-beta2 (07-03-2021)
 
