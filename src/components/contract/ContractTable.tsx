@@ -15,7 +15,6 @@ import { Tables } from '../../stores/tables/tables';
 import ContractRow from './ContractRow';
 import ContractContactFilter from '../tablefilters/ContractContactFilter';
 import CompanyFilter from '../tablefilters/CompanyFilter';
-import UserFilter from '../tablefilters/UserFilter';
 import ContractStatusFilter from '../tablefilters/ContractStatusFilter';
 import ResourceStatus from '../../stores/resourceStatus';
 
@@ -52,18 +51,27 @@ function ContractsTable({
           <Dimmer active inverted>
             <Loader inverted />
           </Dimmer>
-          <Table singleLine selectable attached sortable>
+          <Table singleLine selectable attached sortable fixed>
             <Table.Header>
               <Table.Row>
                 <Table.HeaderCell
+                  sorted={column === 'id' ? direction : undefined}
+                  onClick={() => changeSort('id')}
+                  width={1}
+                >
+                  ID
+                </Table.HeaderCell>
+                <Table.HeaderCell
                   sorted={column === 'title' ? direction : undefined}
                   onClick={() => changeSort('title')}
+                  width={3}
                 >
                   Title
                 </Table.HeaderCell>
                 <Table.HeaderCell
                   sorted={column === 'company' ? direction : undefined}
                   onClick={() => changeSort('company')}
+                  width={3}
                 >
                   Company
                   <CompanyFilter table={Tables.Contracts} />
@@ -71,26 +79,23 @@ function ContractsTable({
                 <Table.HeaderCell
                   sorted={column === 'contact' ? direction : undefined}
                   onClick={() => changeSort('contact')}
+                  width={2}
                 >
                   Contact
                   <ContractContactFilter />
                 </Table.HeaderCell>
-                <Table.HeaderCell collapsing>
+                <Table.HeaderCell width={2} collapsing>
                   Status
                   <ContractStatusFilter />
                 </Table.HeaderCell>
-                <Table.HeaderCell
-                  sorted={column === 'assignedTo' ? direction : undefined}
-                  onClick={() => changeSort('assignedTo')}
-                  collapsing
-                >
-                  Assigned to
-                  <UserFilter table={Tables.Contracts} />
+                <Table.HeaderCell width={2}>
+                  Amount
                 </Table.HeaderCell>
                 <Table.HeaderCell
                   collapsing
                   sorted={column === 'updatedAt' ? direction : undefined}
                   onClick={() => changeSort('updatedAt')}
+                  width={3}
                 >
                   Last Update
                 </Table.HeaderCell>
@@ -116,18 +121,27 @@ function ContractsTable({
 
   return (
     <>
-      <Table singleLine selectable attached sortable>
+      <Table singleLine selectable attached sortable fixed>
         <Table.Header>
           <Table.Row>
             <Table.HeaderCell
+              sorted={column === 'id' ? direction : undefined}
+              onClick={() => changeSort('id')}
+              width={1}
+            >
+              ID
+            </Table.HeaderCell>
+            <Table.HeaderCell
               sorted={column === 'title' ? direction : undefined}
               onClick={() => changeSort('title')}
+              width={3}
             >
               Title
             </Table.HeaderCell>
             <Table.HeaderCell
               sorted={column === 'company' ? direction : undefined}
               onClick={() => changeSort('company')}
+              width={3}
             >
               Company
               <CompanyFilter table={Tables.Contracts} />
@@ -135,21 +149,23 @@ function ContractsTable({
             <Table.HeaderCell
               sorted={column === 'contact' ? direction : undefined}
               onClick={() => changeSort('contact')}
+              width={2}
             >
               Contact
               <ContractContactFilter />
             </Table.HeaderCell>
-            <Table.HeaderCell width={2}>
+            <Table.HeaderCell width={2} collapsing>
               Status
               <ContractStatusFilter />
             </Table.HeaderCell>
-            <Table.HeaderCell collapsing>
+            <Table.HeaderCell width={2}>
               Amount
             </Table.HeaderCell>
             <Table.HeaderCell
               collapsing
               sorted={column === 'updatedAt' ? direction : undefined}
               onClick={() => changeSort('updatedAt')}
+              width={3}
             >
               Last Update
             </Table.HeaderCell>

@@ -1,7 +1,7 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import {
-  Container, Grid, Header, Message, Segment, Image,
+  Container, Grid, Message, Segment, Image,
 } from 'semantic-ui-react';
 import './BackgroundAnimation.css';
 import AlertContainer from '../components/alerts/AlertContainer';
