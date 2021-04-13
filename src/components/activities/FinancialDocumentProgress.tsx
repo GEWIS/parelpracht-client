@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import {
-  Button, Grid, Popup, Step,
+  Button, Grid, Icon, Popup, Step,
 } from 'semantic-ui-react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { GeneralActivity } from './GeneralActivity';
@@ -11,13 +11,16 @@ import {
   formatDocumentType,
   getAllDocumentStatuses,
   getAllStatusActivities,
-  getStatusesFromActivities, getToDoStatus,
+  getCompletedDocumentStatuses,
+  getLastStatusNotCancelled,
+  getStatusesFromActivities,
+  getToDoStatus,
 } from '../../helpers/activity';
 import DocumentStatusModal from './DocumentStatusModal';
 import { SingleEntities } from '../../stores/single/single';
 import { DocumentStatus } from './DocumentStatus';
 import ResourceStatus from '../../stores/resourceStatus';
-import { InvoiceStatus, ProductInstanceStatus, Roles } from '../../clients/server.generated';
+import { Roles } from '../../clients/server.generated';
 import AuthorizationComponent from '../AuthorizationComponent';
 
 interface Props extends RouteComponentProps {
@@ -76,8 +79,10 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
     const { cancelModalOpen, deferModalOpen, irrecoverableModalOpen } = this.state;
     const allPossibleDocumentStatuses = getAllDocumentStatuses(documentType);
     const allStatusActivities = getAllStatusActivities(activities);
-    const allCompletedStatuses = getStatusesFromActivities(allStatusActivities);
-    const cancelledDocument = allCompletedStatuses.includes(DocumentStatus.CANCELLED);
+    const completedStatuses = getStatusesFromActivities(allStatusActivities);
+    const lastActiveStatus = getLastStatusNotCancelled(completedStatuses);
+    const allCompletedStatuses = getCompletedDocumentStatuses(lastActiveStatus, documentType);
+    const realLastStatus = completedStatuses[completedStatuses.length - 1];
 
     let leftButton;
     if (documentType === SingleEntities.ProductInstance) {
@@ -147,7 +152,6 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
     }
 
     let rightButton;
-
     if (canCancel) {
       rightButton = documentType === SingleEntities.Invoice ? (
         <AuthorizationComponent roles={[Roles.GENERAL, Roles.ADMIN]} notFound={false}>
@@ -216,102 +220,137 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
       );
     }
 
-    if (!cancelledDocument) {
-      return (
-        <>
-          <Grid columns={3}>
-            <Grid.Row>
-              <Grid.Column>
-                {leftButton}
-              </Grid.Column>
-              <Grid.Column>
-                <h3
-                  style={{ marginBottom: '0.3em', marginTop: '0.2em', textAlign: 'center' }}
-                >
-                  {formatDocumentStatusTitle(
-                    allStatusActivities[allStatusActivities.length - 1],
-                    formatDocumentType(documentType),
-                  )}
-                </h3>
-              </Grid.Column>
-              <Grid.Column>
-                {rightButton}
-              </Grid.Column>
-            </Grid.Row>
-          </Grid>
+    const topButtonsGrid = (!completedStatuses.includes(DocumentStatus.CANCELLED)) ? (
+      <Grid columns={3}>
+        <Grid.Row>
+          <Grid.Column>
+            {leftButton}
+          </Grid.Column>
+          <Grid.Column>
+            <h3
+              style={{ marginTop: '0.3em', textAlign: 'center' }}
+            >
+              {formatDocumentStatusTitle(
+                allStatusActivities[allStatusActivities.length - 1],
+                formatDocumentType(documentType),
+              )}
+            </h3>
+          </Grid.Column>
+          <Grid.Column>
+            {rightButton}
+          </Grid.Column>
+        </Grid.Row>
+      </Grid>
+    ) : (
+      <h3 style={{ textAlign: 'center' }}>
+        {formatDocumentStatusTitle(
+          allStatusActivities[allStatusActivities.length - 1],
+          formatDocumentType(documentType),
+        )}
+      </h3>
+    );
+    const topButtonsModals = (!completedStatuses.includes(DocumentStatus.CANCELLED)) ? (
+      <>
+        <DocumentStatusModal
+          open={deferModalOpen}
+          documentId={documentId}
+          parentId={parentId}
+          documentType={documentType}
+          documentStatus={DocumentStatus.DEFERRED}
+          close={this.closeDeferModal}
+          resourceStatus={resourceStatus}
+        />
+        <DocumentStatusModal
+          open={cancelModalOpen}
+          documentId={documentId}
+          parentId={parentId}
+          documentType={documentType}
+          documentStatus={DocumentStatus.CANCELLED}
+          close={this.closeCancelModal}
+          resourceStatus={resourceStatus}
+        />
+        <DocumentStatusModal
+          open={irrecoverableModalOpen}
+          documentId={documentId}
+          parentId={parentId}
+          documentType={documentType}
+          documentStatus={DocumentStatus.IRRECOVERABLE}
+          close={this.closeIrrecoverableModal}
+          resourceStatus={resourceStatus}
+        />
+      </>
+    ) : undefined;
 
-          <Step.Group
-            widths={5}
-            fluid
-            style={{ marginTop: '0.5em' }}
-          >
-            {allPossibleDocumentStatuses.map((currentStatus, i) => (
-              <FinancialDocumentStep
-                key={i.toString()}
-                documentId={documentId}
-                documentType={documentType}
-                allStatusActivities={allStatusActivities}
-                status={currentStatus}
-                cancelled={cancelledDocument}
-                resourceStatus={resourceStatus}
-                parentId={parentId}
-                roles={roles}
-              />
-            ))}
-          </Step.Group>
-          <DocumentStatusModal
-            open={deferModalOpen}
-            documentId={documentId}
-            parentId={parentId}
-            documentType={documentType}
-            documentStatus={DocumentStatus.DEFERRED}
-            close={this.closeDeferModal}
-            resourceStatus={resourceStatus}
-          />
-          <DocumentStatusModal
-            open={cancelModalOpen}
-            documentId={documentId}
-            parentId={parentId}
-            documentType={documentType}
-            documentStatus={DocumentStatus.CANCELLED}
-            close={this.closeCancelModal}
-            resourceStatus={resourceStatus}
-          />
-          <DocumentStatusModal
-            open={irrecoverableModalOpen}
-            documentId={documentId}
-            parentId={parentId}
-            documentType={documentType}
-            documentStatus={DocumentStatus.IRRECOVERABLE}
-            close={this.closeIrrecoverableModal}
-            resourceStatus={resourceStatus}
-          />
-        </>
-      );
+    // define the variables for the document step
+    const statusDoneList: boolean[] = [];
+    const statusDisabledList: boolean[] = [];
+    const statusClickableList: boolean[] = [];
+    const statusDescriptionList: string[] = [];
+    const statusIconsList: JSX.Element[] = [];
+
+    for (let i = 0; i < allPossibleDocumentStatuses.length; i++) {
+      const documentStatus = allPossibleDocumentStatuses[i];
+      const nextDocumentStatus = getToDoStatus(lastActiveStatus, documentType);
+      const documentStatusActivity = allStatusActivities.find((a) => a.subType === documentStatus);
+
+      // push whether the status has been completed
+      statusDoneList.push(allCompletedStatuses.includes(documentStatus));
+
+      // push the description of the status if it has a status
+      if (documentStatusActivity !== undefined) {
+        statusDescriptionList.push(documentStatusActivity.description);
+      } else {
+        statusDescriptionList.push('');
+      }
+
+      // push whether the document status can be clicked
+      if (nextDocumentStatus.includes(documentStatus)
+        // FINISHED is set by delivering all products
+        && documentStatus !== DocumentStatus.FINISHED) {
+        statusClickableList.push(true);
+      } else {
+        statusClickableList.push(false);
+      }
+
+      // push the icon and whether the status has to be disabled.
+      if (realLastStatus === DocumentStatus.DEFERRED) {
+        statusIconsList.push(<Icon color="orange" name="stopwatch" />);
+        statusDisabledList.push(true);
+      } else if (realLastStatus === DocumentStatus.CANCELLED
+        || realLastStatus === DocumentStatus.IRRECOVERABLE) {
+        statusIconsList.push(<Icon color="red" name="close" />);
+        statusDisabledList.push(true);
+      } else {
+        statusDisabledList.push(false);
+        statusIconsList.push(<Icon />);
+      }
     }
+
     return (
       <>
-        <h3 style={{ textAlign: 'center' }}>
-          {formatDocumentStatusTitle(
-            allStatusActivities[allStatusActivities.length - 1],
-            formatDocumentType(documentType),
-          )}
-        </h3>
-        <Step.Group widths={5} fluid>
+        {topButtonsGrid}
+        <Step.Group
+          widths={5}
+          fluid
+        >
           {allPossibleDocumentStatuses.map((currentStatus, i) => (
             <FinancialDocumentStep
               key={i.toString()}
               documentId={documentId}
               documentType={documentType}
-              allStatusActivities={allStatusActivities}
+              statusChecked={statusDoneList[i]}
+              statusClickable={statusClickableList[i]}
+              statusDescription={statusDescriptionList[i]}
+              statusDisabled={statusDisabledList[i]}
+              statusIcon={statusIconsList[i]}
               status={currentStatus}
-              cancelled={cancelledDocument}
               resourceStatus={resourceStatus}
               parentId={parentId}
               roles={roles}
             />
           ))}
         </Step.Group>
+        {topButtonsModals}
       </>
     );
   }

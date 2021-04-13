@@ -1,16 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Icon, Step } from 'semantic-ui-react';
+import { Step } from 'semantic-ui-react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { Dispatch } from 'redux';
-import { GeneralActivity } from './GeneralActivity';
 import {
   formatStatus,
-  getCompletedDocumentStatuses,
-  getLastStatusNotCancelled,
-  getStatusActivity,
-  getStatusesFromActivities,
-  getToDoStatus,
 } from '../../helpers/activity';
 import DocumentStatusModal from './DocumentStatusModal';
 import { SingleEntities } from '../../stores/single/single';
@@ -30,11 +24,12 @@ interface Props extends RouteComponentProps {
   documentType: SingleEntities;
   // If the document is a ProductInstance, the parentId is the contract ID
   parentId?: number;
-
-  allStatusActivities: GeneralActivity[];
-
   status: DocumentStatus;
-  cancelled: boolean;
+  statusChecked: boolean;
+  statusClickable: boolean;
+  statusDescription: string;
+  statusDisabled: boolean;
+  statusIcon: JSX.Element;
 
   resourceStatus: ResourceStatus;
   showTransientAlert: (alert: TransientAlert) => void;
@@ -64,75 +59,40 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
 
   public render() {
     const {
-      documentId,
-      cancelled,
-      allStatusActivities,
-      documentType,
-      status,
-      resourceStatus,
-      parentId,
-      hasRole,
-      roles,
+      documentId, documentType, status,
+      statusChecked, statusClickable, statusDescription, statusDisabled, statusIcon,
+      resourceStatus, parentId, hasRole, roles,
     } = this.props;
     const { stepModalOpen } = this.state;
-    const completedStatuses = getStatusesFromActivities(allStatusActivities);
-    const lastActiveStatus = getLastStatusNotCancelled(completedStatuses);
-    const realLastStatus = completedStatuses[completedStatuses.length - 1];
-    const allCompletedStatuses = getCompletedDocumentStatuses(lastActiveStatus, documentType);
 
-    /**
-     * Activity with the status update that has been last been completed last.
-     * Null if not completed.
-     */
-    const statusCompletedActivity: GeneralActivity | undefined = getStatusActivity(
-      allStatusActivities,
-      status,
-    );
-    const nextActiveStatus = lastActiveStatus === undefined
-      ? [DocumentStatus.CREATED] : getToDoStatus(lastActiveStatus, documentType);
-
-    const title = formatStatus(status);
-    const description = statusCompletedActivity?.description;
-    const completedStatus = allCompletedStatuses.includes(status);
-
-    let disabledStep = false;
-    let clickableString = '';
+    // check if status can be clicked and give properties depending on that
+    let statusClickableString = '';
     let onStepClick;
     const permissionToClick = roles.some(hasRole);
-    if (nextActiveStatus.includes(status)) {
-      clickableString = 'clickable';
+    if (statusClickable) {
+      statusClickableString = 'clickable';
       onStepClick = () => {
         this.setState({
           stepModalOpen: true,
         });
       };
     }
-    let stepIcon = <Icon />;
-    if (realLastStatus === DocumentStatus.DEFERRED) {
-      stepIcon = <Icon color="orange" name="stopwatch" />;
-      disabledStep = true;
-    } else if (realLastStatus === DocumentStatus.CANCELLED
-      || realLastStatus === DocumentStatus.IRRECOVERABLE) {
-      stepIcon = <Icon color="red" name="close" />;
-      disabledStep = true;
-    }
-    console.log(status, realLastStatus);
 
     return (
       <>
         <Step
-          completed={completedStatus}
-          className={clickableString}
+          completed={statusChecked}
+          className={statusClickableString}
           onClick={onStepClick}
-          disabled={!permissionToClick || disabledStep}
+          disabled={!permissionToClick || statusDisabled}
         >
-          {stepIcon}
+          {statusIcon}
           <Step.Content>
             <Step.Title>
-              {title}
+              {formatStatus(status)}
             </Step.Title>
             <Step.Description>
-              {description}
+              {statusDescription}
             </Step.Description>
           </Step.Content>
         </Step>
