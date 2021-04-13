@@ -1,6 +1,9 @@
-![ParelPracht](./public/ParelPracht-blacksvg.svg)
+<h1 style="text-align: center">
+  <img alt="" src="https://raw.githubusercontent.com/GEWIS/parelpracht-client/develop/public/ParelPracht-blacksvg.svg?raw=true" style="width: 25%">
+  <br>
+  ParelPracht
+</h1>
 
-#ParelPracht
 ParelPracht is the successor of Goudglans, the custom Customer Relation Management system of Study Association GEWIS.
 This new system is built during the second lockdown of the corona pandemic.
 Its main goal is to automate tedious tasks and to keep a clear and concise overview of the current collaborations.
@@ -20,7 +23,8 @@ You can also build the application with `npm run build`. This puts a production 
 
 ## Copyright
 
-Copyright © 2020 The 39th board of GEWIS - Some rights reserved. You can use our software freely within the limits of
+Copyright © 2020 The 39th board of GEWIS - Some rights reserved. Created by Roy Kakkenberg, Koen de Nooij, Jealy van den
+Aker, Max Opperman, Wouter van der Heijden en Irne Verwijst. You can use our software freely within the limits of
 our license. However, we worked very hard on this project and invested a lot of time in it, so we ask you to leave our
 copyright mark in place when modifying our software. Of course, you are free to add your own.
 

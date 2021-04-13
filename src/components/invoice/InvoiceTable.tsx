@@ -8,7 +8,7 @@ import { Invoice } from '../../clients/server.generated';
 import TablePagination from '../TablePagination';
 import { RootState } from '../../stores/store';
 import {
-  changeSortTable, fetchTable, nextPageTable, prevPageTable, setTakeTable,
+  changeSortTable, fetchTable, nextPageTable, prevPageTable, setSortTable, setTakeTable,
 } from '../../stores/tables/actionCreators';
 import { countFetched, countTotal, getTable } from '../../stores/tables/selectors';
 import { Tables } from '../../stores/tables/tables';
@@ -29,17 +29,19 @@ interface Props {
 
   fetchInvoices: () => void;
   changeSort: (column: string) => void;
+  setSort: (column: string, direction: 'ASC' | 'DESC') => void;
   setTake: (take: number) => void;
   prevPage: () => void;
   nextPage: () => void;
 }
 
 function InvoicesTable({
-  invoices, fetchInvoices, column, direction, changeSort,
+  invoices, fetchInvoices, column, direction, changeSort, setSort,
   total, fetched, skip, take, status,
   prevPage, nextPage, setTake,
 }: Props) {
   useEffect(() => {
+    setSort('id', 'DESC');
     fetchInvoices();
   }, []);
 
@@ -202,6 +204,10 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   fetchInvoices: () => dispatch(fetchTable(Tables.Invoices)),
   changeSort: (column: string) => {
     dispatch(changeSortTable(Tables.Invoices, column));
+    dispatch(fetchTable(Tables.Invoices));
+  },
+  setSort: (column: string, direction: 'ASC' | 'DESC') => {
+    dispatch(setSortTable(Tables.Invoices, column, direction));
     dispatch(fetchTable(Tables.Invoices));
   },
   setTake: (take: number) => {
