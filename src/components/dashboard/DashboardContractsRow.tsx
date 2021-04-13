@@ -33,7 +33,7 @@ class DashboardContractsRow extends React.Component<Props> {
           padding: '0px',
         }}
       />
-    ) : <Icon name="briefcase" size="big" floated="middle" />;
+    ) : <Icon name="briefcase" size="big" style={{ marginLeft: '0.3em' }} />;
 
     return (
       <Segment.Group
