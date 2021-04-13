@@ -38,7 +38,7 @@ class ContractInvoiceModal extends React.Component<Props, State> {
     super(props);
     this.state = {
       open: false,
-      selectedInvoice: undefined,
+      selectedInvoice: -1,
       loading: false,
     };
   }
@@ -90,7 +90,6 @@ class ContractInvoiceModal extends React.Component<Props, State> {
         search
         selection
         options={dropdownOptions}
-        defaultValue={-1}
         value={selectedInvoice}
         onChange={(e, data) => this.setState({ selectedInvoice: data.value as any })}
       />
