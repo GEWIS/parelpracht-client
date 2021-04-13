@@ -149,24 +149,52 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
     }
 
     let rightButton;
+
     if (canCancel) {
-      rightButton = (
-        <AuthorizationComponent roles={[Roles.GENERAL, Roles.ADMIN]} notFound={false}>
-          <Button
-            floated="right"
-            labelPosition="left"
-            icon="close"
-            basic
-            onClick={() => {
-              this.setState({
-                cancelModalOpen: true,
-              });
-            }}
-            content={`Cancel ${formatDocumentType(documentType)}`}
-            disabled={getNextStatus(lastStatusActivity!, documentType).length === 0}
-          />
-        </AuthorizationComponent>
-      );
+      if (documentType === SingleEntities.Invoice) {
+        rightButton = (
+          <AuthorizationComponent roles={[Roles.GENERAL, Roles.ADMIN]} notFound={false}>
+            <Popup
+              trigger={(
+                <Button
+                  floated="right"
+                  labelPosition="left"
+                  icon="close"
+                  basic
+                  onClick={() => {
+                    this.setState({
+                      cancelModalOpen: true,
+                    });
+                  }}
+                  content={`Cancel ${formatDocumentType(documentType).toLocaleLowerCase()}`}
+                  disabled={getNextStatus(lastStatusActivity!, documentType).length === 0}
+                />
+              )}
+              header="Cancel invoice"
+              content="By cancelling an invoice, you indicate the invoice or any of the products on this invoice will be charged to the company.
+              Please only cancel an invoice after consultation with the external affairs officer and the treasurer."
+            />
+          </AuthorizationComponent>
+        );
+      } else {
+        rightButton = (
+          <AuthorizationComponent roles={[Roles.GENERAL, Roles.ADMIN]} notFound={false}>
+            <Button
+              floated="right"
+              labelPosition="left"
+              icon="close"
+              basic
+              onClick={() => {
+                this.setState({
+                  cancelModalOpen: true,
+                });
+              }}
+              content={`Cancel ${formatDocumentType(documentType).toLocaleLowerCase()}`}
+              disabled={getNextStatus(lastStatusActivity!, documentType).length === 0}
+            />
+          </AuthorizationComponent>
+        );
+      }
     } else {
       rightButton = (
         <AuthorizationComponent roles={[Roles.GENERAL, Roles.ADMIN]} notFound={false}>
@@ -181,7 +209,7 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
                   labelPosition="left"
                   icon="close"
                   basic
-                  content={`Cancel ${formatDocumentType(documentType)}`}
+                  content={`Cancel ${formatDocumentType(documentType).toLocaleLowerCase()}`}
                   disabled
                   style={{ pointerEvents: 'auto !important' }}
                 />
