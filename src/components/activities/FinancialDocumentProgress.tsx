@@ -11,7 +11,7 @@ import {
   formatDocumentType,
   getAllDocumentStatuses,
   getAllStatusActivities,
-  getLastStatusNotCancelled, getNextStatus,
+  getStatusesFromActivities, getToDoStatus,
 } from '../../helpers/activity';
 import DocumentStatusModal from './DocumentStatusModal';
 import { SingleEntities } from '../../stores/single/single';
@@ -74,13 +74,10 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
       canCancel, cancelReason,
     } = this.props;
     const { cancelModalOpen, deferModalOpen, irrecoverableModalOpen } = this.state;
-    const allDocumentStatuses = getAllDocumentStatuses(documentType);
+    const allPossibleDocumentStatuses = getAllDocumentStatuses(documentType);
     const allStatusActivities = getAllStatusActivities(activities);
-    const lastStatusActivity = getLastStatusNotCancelled(allStatusActivities);
-    let cancelledDocument: boolean = false;
-    if (lastStatusActivity !== undefined) {
-      cancelledDocument = allStatusActivities[allStatusActivities.length - 1].subType === 'CANCELLED';
-    }
+    const allCompletedStatuses = getStatusesFromActivities(allStatusActivities);
+    const cancelledDocument = allCompletedStatuses.includes(DocumentStatus.CANCELLED);
 
     let leftButton;
     if (documentType === SingleEntities.ProductInstance) {
@@ -107,7 +104,8 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
                   });
                 }}
                 content={`Defer ${formatDocumentType(documentType)}`}
-                disabled={lastStatusActivity?.subType !== ProductInstanceStatus.NOTDELIVERED}
+                disabled={allCompletedStatuses[allCompletedStatuses.length - 1]
+                !== DocumentStatus.NOTDELIVERED}
               />
           )}
           />
@@ -139,8 +137,8 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
                   this.setState({ irrecoverableModalOpen: true });
                 }}
                 content="Mark irrecoverable"
-                disabled={lastStatusActivity?.subType !== InvoiceStatus.CREATED
-                && lastStatusActivity?.subType !== InvoiceStatus.SENT}
+                disabled={!(allCompletedStatuses.includes(DocumentStatus.CREATED)
+                || allCompletedStatuses.includes(DocumentStatus.SENT))}
               />
           )}
           />
@@ -163,7 +161,8 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
               });
             }}
             content={`Cancel ${formatDocumentType(documentType)}`}
-            disabled={getNextStatus(lastStatusActivity!, documentType).length === 0}
+            disabled={getToDoStatus(allCompletedStatuses[allCompletedStatuses.length - 1],
+              documentType).length === 0}
           />
         </AuthorizationComponent>
       );
@@ -217,17 +216,15 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
           </Grid>
 
           <Step.Group
-            stackable="tablet"
             widths={5}
             fluid
             style={{ marginTop: '0.5em' }}
           >
-            {allDocumentStatuses.map((currentStatus, i) => (
+            {allPossibleDocumentStatuses.map((currentStatus, i) => (
               <FinancialDocumentStep
                 key={i.toString()}
                 documentId={documentId}
                 documentType={documentType}
-                lastStatusActivity={lastStatusActivity}
                 allStatusActivities={allStatusActivities}
                 status={currentStatus}
                 cancelled={cancelledDocument}
@@ -275,13 +272,12 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
             formatDocumentType(documentType),
           )}
         </h3>
-        <Step.Group stackable="tablet" widths={5} fluid>
-          {allDocumentStatuses.map((currentStatus, i) => (
+        <Step.Group widths={5} fluid>
+          {allPossibleDocumentStatuses.map((currentStatus, i) => (
             <FinancialDocumentStep
               key={i.toString()}
               documentId={documentId}
               documentType={documentType}
-              lastStatusActivity={lastStatusActivity}
               allStatusActivities={allStatusActivities}
               status={currentStatus}
               cancelled={cancelledDocument}

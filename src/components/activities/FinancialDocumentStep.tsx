@@ -1,14 +1,16 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Step, Icon } from 'semantic-ui-react';
+import { Icon, Step } from 'semantic-ui-react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { Dispatch } from 'redux';
 import { GeneralActivity } from './GeneralActivity';
 import {
-  formatDocumentType,
-  formatStatus, getCompletedDocumentStatuses, getNextStatus,
+  formatStatus,
+  getCompletedDocumentStatuses,
+  getLastStatusNotCancelled,
   getStatusActivity,
-  statusApplied,
+  getStatusesFromActivities,
+  getToDoStatus,
 } from '../../helpers/activity';
 import DocumentStatusModal from './DocumentStatusModal';
 import { SingleEntities } from '../../stores/single/single';
@@ -29,11 +31,9 @@ interface Props extends RouteComponentProps {
   // If the document is a ProductInstance, the parentId is the contract ID
   parentId?: number;
 
-  lastStatusActivity: GeneralActivity | undefined;
   allStatusActivities: GeneralActivity[];
 
   status: DocumentStatus;
-
   cancelled: boolean;
 
   resourceStatus: ResourceStatus;
@@ -65,202 +65,87 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
   public render() {
     const {
       documentId,
-      lastStatusActivity,
-      status,
       cancelled,
       allStatusActivities,
       documentType,
+      status,
       resourceStatus,
       parentId,
       hasRole,
       roles,
     } = this.props;
     const { stepModalOpen } = this.state;
+    const completedStatuses = getStatusesFromActivities(allStatusActivities);
+    const lastActiveStatus = getLastStatusNotCancelled(completedStatuses);
+    const realLastStatus = completedStatuses[completedStatuses.length - 1];
+    const allCompletedStatuses = getCompletedDocumentStatuses(lastActiveStatus, documentType);
 
     /**
      * Activity with the status update that has been last been completed last.
      * Null if not completed.
      */
-    const statusCompletedActivity: GeneralActivity | null = getStatusActivity(
+    const statusCompletedActivity: GeneralActivity | undefined = getStatusActivity(
       allStatusActivities,
       status,
     );
-    let nextStatus: string[] = [DocumentStatus.CREATED];
-    if (lastStatusActivity !== undefined) {
-      nextStatus = getNextStatus(lastStatusActivity, documentType);
+    const nextActiveStatus = lastActiveStatus === undefined
+      ? [DocumentStatus.CREATED] : getToDoStatus(lastActiveStatus, documentType);
+
+    const title = formatStatus(status);
+    const description = statusCompletedActivity?.description;
+    const completedStatus = allCompletedStatuses.includes(status);
+
+    let disabledStep = false;
+    let clickableString = '';
+    let onStepClick;
+    const permissionToClick = roles.some(hasRole);
+    if (nextActiveStatus.includes(status)) {
+      clickableString = 'clickable';
+      onStepClick = () => {
+        this.setState({
+          stepModalOpen: true,
+        });
+      };
     }
-
-    // check if the document has been cancelled
-    if (cancelled) {
-      // if it has been cancelled, then we check if the status has been completed
-      if (statusApplied(status, lastStatusActivity, documentType)) {
-        // if the status has been completed
-        if (statusCompletedActivity != null) {
-          return (
-            <Step completed disabled>
-              <Icon />
-              <Step.Content>
-                <Step.Title>
-                  {formatStatus(status)}
-                </Step.Title>
-                <Step.Description>
-                  {statusCompletedActivity.description}
-                </Step.Description>
-              </Step.Content>
-            </Step>
-          );
-        }
-
-        // if the status has been completed but it was not logged
-        if (lastStatusActivity !== undefined && getCompletedDocumentStatuses(
-          lastStatusActivity.subType,
-          documentType,
-        ).includes(status)) {
-          return (
-            <Step completed disabled>
-              <Icon />
-              <Step.Content>
-                <Step.Title>
-                  {formatStatus(status)}
-                </Step.Title>
-              </Step.Content>
-            </Step>
-          );
-        }
-      }
-
-      // if the status has not been completed and cancelled
-      return (
-        <Step disabled>
-          <Icon color="red" name="close" />
-          <Step.Content>
-            <Step.Title>
-              {formatStatus(status)}
-            </Step.Title>
-            <Step.Description>
-              {formatDocumentType(documentType)}
-              &nbsp;cancelled.
-            </Step.Description>
-          </Step.Content>
-        </Step>
-      );
+    let stepIcon = <Icon />;
+    if (realLastStatus === DocumentStatus.DEFERRED) {
+      stepIcon = <Icon color="orange" name="stopwatch" />;
+      disabledStep = true;
+    } else if (realLastStatus === DocumentStatus.CANCELLED
+      || realLastStatus === DocumentStatus.IRRECOVERABLE) {
+      stepIcon = <Icon color="red" name="close" />;
+      disabledStep = true;
     }
+    console.log(status, realLastStatus);
 
-    // the document has not been cancelled and the status updated is not logged
-    if (statusCompletedActivity == null) {
-      // the logging of this status has not been put in the CRM system
-      if (statusApplied(status, lastStatusActivity, documentType)) {
-        return (
-          <Step completed>
-            <Icon />
-            <Step.Content>
-              <Step.Title>
-                {formatStatus(status)}
-              </Step.Title>
-            </Step.Content>
-          </Step>
-        );
-      }
-
-      // the invoice is irrecoverable
-      if (lastStatusActivity !== undefined
-        && lastStatusActivity.subType === DocumentStatus.IRRECOVERABLE) {
-        return (
-          <Step disabled>
-            <Icon color="red" name="close" />
-            <Step.Content>
-              <Step.Title>
-                {formatStatus(lastStatusActivity.subType)}
-              </Step.Title>
-              <Step.Description>
-                {lastStatusActivity.description}
-              </Step.Description>
-            </Step.Content>
-          </Step>
-        );
-      }
-
-      // the product instance is deferred
-      if (lastStatusActivity !== undefined
-        && lastStatusActivity.subType === DocumentStatus.DEFERRED) {
-        return (
-          <Step disabled>
-            <Icon color="orange" name="stopwatch" />
-            <Step.Content>
-              <Step.Title>
-                {formatStatus(lastStatusActivity.subType)}
-              </Step.Title>
-              <Step.Description>
-                {lastStatusActivity.description}
-              </Step.Description>
-            </Step.Content>
-          </Step>
-        );
-      }
-
-      // the status of the document has not been reached yet and can be completed
-      if (nextStatus.includes(status) && status !== DocumentStatus.FINISHED) {
-        return (
-          <>
-            <Step
-              className="clickable"
-              onClick={() => {
-                this.setState({
-                  stepModalOpen: true,
-                });
-              }}
-              disabled={!(roles.some(hasRole))}
-            >
-              <Step.Content>
-                <Step.Title>
-                  {formatStatus(status)}
-                </Step.Title>
-              </Step.Content>
-            </Step>
-            <DocumentStatusModal
-              open={stepModalOpen}
-              documentId={documentId}
-              parentId={parentId}
-              documentType={documentType}
-              documentStatus={status}
-              close={this.closeStepModal}
-              resourceStatus={resourceStatus}
-            />
-          </>
-        );
-      }
-
-      // the status of the document has not been reached yet and cannot be completed yet
-      return (
-        <Step>
-          <Step.Content>
-            <Step.Title>
-              {formatStatus(status)}
-            </Step.Title>
-            <Step.Description>
-              {formatDocumentType(documentType)}
-              &nbsp;has yet to be &nbsp;
-              {status.toLowerCase()}
-              .
-            </Step.Description>
-          </Step.Content>
-        </Step>
-      );
-    }
-
-    // the status has been completed and logged.
     return (
-      <Step completed>
-        <Icon />
-        <Step.Content>
-          <Step.Title>
-            {formatStatus(status)}
-          </Step.Title>
-          <Step.Description>
-            {statusCompletedActivity.description}
-          </Step.Description>
-        </Step.Content>
-      </Step>
+      <>
+        <Step
+          completed={completedStatus}
+          className={clickableString}
+          onClick={onStepClick}
+          disabled={!permissionToClick || disabledStep}
+        >
+          {stepIcon}
+          <Step.Content>
+            <Step.Title>
+              {title}
+            </Step.Title>
+            <Step.Description>
+              {description}
+            </Step.Description>
+          </Step.Content>
+        </Step>
+        <DocumentStatusModal
+          open={stepModalOpen}
+          documentId={documentId}
+          parentId={parentId}
+          documentType={documentType}
+          documentStatus={status}
+          close={this.closeStepModal}
+          resourceStatus={resourceStatus}
+        />
+      </>
     );
   }
 }
