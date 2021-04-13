@@ -16,7 +16,7 @@ function CompaniesMenu() {
         item
         icon={null}
         trigger={(
-          <NavLink to="/company">
+          <NavLink to="/company" style={{ whiteSpace: 'nowrap' }}>
             <Icon name="building" />
             {' '}
             Companies

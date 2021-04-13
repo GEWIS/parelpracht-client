@@ -114,6 +114,7 @@ class DocumentStatusProps extends React.Component<Props, State> {
           <PropsButtons
             editing={editing}
             canDelete={undefined}
+            canEdit
             canSave
             entity={documentType}
             status={this.props.resourceStatus}

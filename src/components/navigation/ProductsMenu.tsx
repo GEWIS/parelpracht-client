@@ -18,7 +18,7 @@ function ProductsMenu() {
         item
         icon={null}
         trigger={(
-          <NavLink to="/product">
+          <NavLink to="/product" style={{ whiteSpace: 'nowrap' }}>
             <Icon name="shopping bag" />
             {' '}
             Products

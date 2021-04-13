@@ -89,7 +89,7 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
           <Popup
             header={`Defer ${formatDocumentType(documentType)}`}
             content={`By defering this ${formatDocumentType(documentType)}, you indicate that it will
-          not be delivered in the current academic year.`}
+          not be delivered in the current academic year and that delivery will be postponed until the next academic year.`}
             mouseEnterDelay={500}
             wide
             trigger={(
@@ -147,8 +147,33 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
     }
 
     let rightButton;
+
     if (canCancel) {
-      rightButton = (
+      rightButton = documentType === SingleEntities.Invoice ? (
+        <AuthorizationComponent roles={[Roles.GENERAL, Roles.ADMIN]} notFound={false}>
+          <Popup
+            trigger={(
+              <Button
+                floated="right"
+                labelPosition="left"
+                icon="close"
+                basic
+                onClick={() => {
+                  this.setState({
+                    cancelModalOpen: true,
+                  });
+                }}
+                content={`Cancel ${formatDocumentType(documentType).toLocaleLowerCase()}`}
+                disabled={getToDoStatus(allCompletedStatuses[allCompletedStatuses.length - 1],
+                  documentType).length === 0}
+              />
+            )}
+            header="Cancel invoice"
+            content="By cancelling an invoice, you indicate the invoice or any of the products on this invoice will be charged to the company.
+            Please only cancel an invoice after consultation with the external affairs officer and the treasurer."
+          />
+        </AuthorizationComponent>
+      ) : (
         <AuthorizationComponent roles={[Roles.GENERAL, Roles.ADMIN]} notFound={false}>
           <Button
             floated="right"
@@ -160,7 +185,7 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
                 cancelModalOpen: true,
               });
             }}
-            content={`Cancel ${formatDocumentType(documentType)}`}
+            content={`Cancel ${formatDocumentType(documentType).toLocaleLowerCase()}`}
             disabled={getToDoStatus(allCompletedStatuses[allCompletedStatuses.length - 1],
               documentType).length === 0}
           />
@@ -180,7 +205,7 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
                   labelPosition="left"
                   icon="close"
                   basic
-                  content={`Cancel ${formatDocumentType(documentType)}`}
+                  content={`Cancel ${formatDocumentType(documentType).toLocaleLowerCase()}`}
                   disabled
                   style={{ pointerEvents: 'auto !important' }}
                 />

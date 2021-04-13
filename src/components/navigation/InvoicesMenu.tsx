@@ -18,7 +18,7 @@ function InvoicesMenu() {
         item
         icon={null}
         trigger={(
-          <NavLink to="/invoice">
+          <NavLink to="/invoice" style={{ whiteSpace: 'nowrap' }}>
             <Icon name="money bill alternate outline" />
             {' '}
             Invoices

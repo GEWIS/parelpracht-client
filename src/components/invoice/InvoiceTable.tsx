@@ -15,7 +15,6 @@ import { Tables } from '../../stores/tables/tables';
 import InvoiceRow from './InvoiceRow';
 import CompanyFilter from '../tablefilters/CompanyFilter';
 import InvoiceStatusFilter from '../tablefilters/InvoiceStatusFilter';
-import UserFilter from '../tablefilters/UserFilter';
 import ResourceStatus from '../../stores/resourceStatus';
 
 interface Props {
@@ -51,18 +50,27 @@ function InvoicesTable({
           <Dimmer active inverted>
             <Loader inverted />
           </Dimmer>
-          <Table singleLine selectable attached sortable>
+          <Table singleLine selectable attached sortable fixed>
             <Table.Header>
               <Table.Row>
                 <Table.HeaderCell
+                  sorted={column === 'id' ? direction : undefined}
+                  onClick={() => changeSort('id')}
+                  width={1}
+                >
+                  ID
+                </Table.HeaderCell>
+                <Table.HeaderCell
                   sorted={column === 'title' ? direction : undefined}
                   onClick={() => changeSort('title')}
+                  width={4}
                 >
                   Title
                 </Table.HeaderCell>
                 <Table.HeaderCell
                   sorted={column === 'company' ? direction : undefined}
                   onClick={() => changeSort('company')}
+                  width={3}
                 >
                   Company
                   <CompanyFilter table={Tables.Invoices} />
@@ -71,25 +79,20 @@ function InvoicesTable({
                   Status
                   <InvoiceStatusFilter />
                 </Table.HeaderCell>
+                <Table.HeaderCell width={2}>
+                  Amount
+                </Table.HeaderCell>
                 <Table.HeaderCell
+                  width={2}
                   sorted={column === 'startDate' ? direction : undefined}
                   onClick={() => changeSort('startDate')}
-                  collapsing
                 >
-                  Financial year
+                  Financial Year
                 </Table.HeaderCell>
                 <Table.HeaderCell
-                  sorted={column === 'assignedTo' ? direction : undefined}
-                  onClick={() => changeSort('assignedTo')}
-                  collapsing
-                >
-                  Assigned to
-                  <UserFilter table={Tables.Invoices} />
-                </Table.HeaderCell>
-                <Table.HeaderCell
+                  width={3}
                   sorted={column === 'updatedAt' ? direction : undefined}
                   onClick={() => changeSort('updatedAt')}
-                  collapsing
                 >
                   Last Update
                 </Table.HeaderCell>
@@ -115,38 +118,47 @@ function InvoicesTable({
 
   return (
     <>
-      <Table singleLine selectable attached sortable>
+      <Table singleLine selectable attached sortable fixed>
         <Table.Header>
           <Table.Row>
             <Table.HeaderCell
+              sorted={column === 'id' ? direction : undefined}
+              onClick={() => changeSort('id')}
+              width={1}
+            >
+              ID
+            </Table.HeaderCell>
+            <Table.HeaderCell
               sorted={column === 'title' ? direction : undefined}
               onClick={() => changeSort('title')}
+              width={4}
             >
               Title
             </Table.HeaderCell>
             <Table.HeaderCell
               sorted={column === 'company' ? direction : undefined}
               onClick={() => changeSort('company')}
+              width={3}
             >
               Company
               <CompanyFilter table={Tables.Invoices} />
-            </Table.HeaderCell>
-            <Table.HeaderCell collapsing>
-              Amount
             </Table.HeaderCell>
             <Table.HeaderCell width={2}>
               Status
               <InvoiceStatusFilter />
             </Table.HeaderCell>
+            <Table.HeaderCell width={2}>
+              Amount
+            </Table.HeaderCell>
             <Table.HeaderCell
-              collapsing
+              width={2}
               sorted={column === 'startDate' ? direction : undefined}
               onClick={() => changeSort('startDate')}
             >
               Financial Year
             </Table.HeaderCell>
             <Table.HeaderCell
-              collapsing
+              width={3}
               sorted={column === 'updatedAt' ? direction : undefined}
               onClick={() => changeSort('updatedAt')}
             >

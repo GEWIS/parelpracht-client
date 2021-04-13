@@ -66,7 +66,8 @@ class ActivityComponent extends React.Component<Props> {
     );
     const deleteMessage = `Delete ${activity.type.toLowerCase()}`;
     let deleteButton;
-    if (!(activity.type === ActivityType.STATUS && (activity.subType === ContractStatus.CREATED
+
+    if (componentType !== 'Invoice' && !(activity.type === ActivityType.STATUS && (activity.subType === ContractStatus.CREATED
       || activity.subType === InvoiceStatus.CREATED
       || activity.subType === ProductInstanceStatus.NOTDELIVERED))) {
       const headerString = 'Are you sure you want to delete this activity?';
@@ -115,7 +116,7 @@ class ActivityComponent extends React.Component<Props> {
         <Feed.Label>
           {feedLabel}
         </Feed.Label>
-        <Feed.Content style={{ marginBottom: '1em' }}>
+        <Feed.Content style={{ marginBottom: '1em', width: '85%' }}>
           <Feed.Date>
             {formatLastUpdate(activity.createdAt)}
           </Feed.Date>

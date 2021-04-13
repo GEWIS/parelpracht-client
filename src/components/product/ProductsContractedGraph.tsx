@@ -79,124 +79,218 @@ class ProductsContractedGraph extends React.Component<Props, State> {
     let options: chartjs.ChartOptions;
     switch (dataSetSelection) {
       case DataSet.VALUES:
-        options = {
-          legend: {
-            display: false,
-          },
-          scales: {
-            xAxes: [{
-              stacked: true,
-            }],
-            yAxes: [{
-              stacked: true,
-              ticks: {
-                beginAtZero: true,
-                callback(value: number) {
-                  return formatPriceFull(value);
+        if (product.minTarget === 0) {
+          options = {
+            legend: {
+              display: false,
+            },
+            scales: {
+              xAxes: [{
+                stacked: true,
+              }],
+              yAxes: [{
+                stacked: true,
+                ticks: {
+                  beginAtZero: true,
+                  callback(value: number) {
+                    return formatPriceFull(value);
+                  },
                 },
-              },
-            }],
-          },
-          tooltips: {
-            callbacks: {
-              label(tooltipItem: any) {
-                return formatPriceFull(tooltipItem.yLabel);
+              }],
+            },
+            tooltips: {
+              callbacks: {
+                label(tooltipItem: any) {
+                  return formatPriceFull(tooltipItem.yLabel);
+                },
               },
             },
-          },
-          annotation: {
-            annotations: [
-              {
-                id: 'minTarget',
-                type: 'line',
-                value: product.minTarget * product.targetPrice,
-                mode: 'horizontal',
-                scaleID: 'y-axis-0',
-                borderColor: 'rgba(41, 48, 101, 1)',
-                borderWidth: 2,
-                label: {
-                  backgroundColor: 'rgba(41, 48, 101, 0.8)',
-                  content: 'Minimal target',
-                  enabled: true,
+            annotation: {
+              annotations: [
+                {
+                  id: 'maxTarget',
+                  type: 'line',
+                  value: product.maxTarget * product.targetPrice,
+                  mode: 'horizontal',
+                  scaleID: 'y-axis-0',
+                  borderColor: 'rgba(41, 48, 101, 1)',
+                  borderWidth: 2,
+                  label: {
+                    backgroundColor: 'rgba(41, 48, 101, 0.8)',
+                    content: 'Maximal target',
+                    enabled: true,
+                  },
+                },
+              ],
+            },
+          };
+        } else {
+          options = {
+            legend: {
+              display: false,
+            },
+            scales: {
+              xAxes: [{
+                stacked: true,
+              }],
+              yAxes: [{
+                stacked: true,
+                ticks: {
+                  beginAtZero: true,
+                  callback(value: number) {
+                    return formatPriceFull(value);
+                  },
+                },
+              }],
+            },
+            tooltips: {
+              callbacks: {
+                label(tooltipItem: any) {
+                  return formatPriceFull(tooltipItem.yLabel);
                 },
               },
-              {
-                id: 'maxTarget',
-                type: 'line',
-                value: product.maxTarget * product.targetPrice,
-                mode: 'horizontal',
-                scaleID: 'y-axis-0',
-                borderColor: 'rgba(41, 48, 101, 1)',
-                borderWidth: 2,
-                label: {
-                  backgroundColor: 'rgba(41, 48, 101, 0.8)',
-                  content: 'Maximal target',
-                  enabled: true,
+            },
+            annotation: {
+              annotations: [
+                {
+                  id: 'minTarget',
+                  type: 'line',
+                  value: product.minTarget * product.targetPrice,
+                  mode: 'horizontal',
+                  scaleID: 'y-axis-0',
+                  borderColor: 'rgba(41, 48, 101, 1)',
+                  borderWidth: 2,
+                  label: {
+                    backgroundColor: 'rgba(41, 48, 101, 0.8)',
+                    content: 'Minimal target',
+                    enabled: true,
+                  },
                 },
-              },
-            ],
-          },
-        };
+                {
+                  id: 'maxTarget',
+                  type: 'line',
+                  value: product.maxTarget * product.targetPrice,
+                  mode: 'horizontal',
+                  scaleID: 'y-axis-0',
+                  borderColor: 'rgba(41, 48, 101, 1)',
+                  borderWidth: 2,
+                  label: {
+                    backgroundColor: 'rgba(41, 48, 101, 0.8)',
+                    content: 'Maximal target',
+                    enabled: true,
+                  },
+                },
+              ],
+            },
+          };
+        }
         break;
       case DataSet.AMOUNTS:
-        options = {
-          legend: {
-            display: false,
-          },
-          scales: {
-            xAxes: [{
-              stacked: true,
-            }],
-            yAxes: [{
-              stacked: true,
-              ticks: {
-                beginAtZero: true,
-                callback(value: number) {
-                  return value;
+        if (product.minTarget === 0) {
+          options = {
+            legend: {
+              display: false,
+            },
+            scales: {
+              xAxes: [{
+                stacked: true,
+              }],
+              yAxes: [{
+                stacked: true,
+                ticks: {
+                  beginAtZero: true,
+                  callback(value: number) {
+                    return value;
+                  },
                 },
-              },
-            }],
-          },
-          annotation: {
-            annotations: [
-              {
-                id: 'minTarget',
-                type: 'line',
-                value: product.minTarget,
-                mode: 'horizontal',
-                scaleID: 'y-axis-0',
-                borderColor: 'rgba(41, 48, 101, 1)',
-                borderWidth: 2,
-                label: {
-                  backgroundColor: 'rgba(41, 48, 101, 0.8)',
-                  content: 'Minimal target',
-                  enabled: true,
+              }],
+            },
+            annotation: {
+              annotations: [
+                {
+                  id: 'maxTarget',
+                  type: 'line',
+                  value: product.maxTarget,
+                  mode: 'horizontal',
+                  scaleID: 'y-axis-0',
+                  borderColor: 'rgba(41, 48, 101, 1)',
+                  borderWidth: 2,
+                  label: {
+                    backgroundColor: 'rgba(41, 48, 101, 0.8)',
+                    content: 'Maximal target',
+                    enabled: true,
+                  },
                 },
-              },
-              {
-                id: 'maxTarget',
-                type: 'line',
-                value: product.maxTarget,
-                mode: 'horizontal',
-                scaleID: 'y-axis-0',
-                borderColor: 'rgba(41, 48, 101, 1)',
-                borderWidth: 2,
-                label: {
-                  backgroundColor: 'rgba(41, 48, 101, 0.8)',
-                  content: 'Maximal target',
-                  enabled: true,
+              ],
+            },
+            tooltips: {
+              callbacks: {
+                label(tooltipItem: any) {
+                  return formatPriceFull(tooltipItem.yLabel);
                 },
-              },
-            ],
-          },
-          tooltips: {
-            callbacks: {
-              label(tooltipItem: any) {
-                return formatPriceFull(tooltipItem.yLabel);
               },
             },
-          },
-        };
+          };
+        } else {
+          options = {
+            legend: {
+              display: false,
+            },
+            scales: {
+              xAxes: [{
+                stacked: true,
+              }],
+              yAxes: [{
+                stacked: true,
+                ticks: {
+                  beginAtZero: true,
+                  callback(value: number) {
+                    return value;
+                  },
+                },
+              }],
+            },
+            annotation: {
+              annotations: [
+                {
+                  id: 'minTarget',
+                  type: 'line',
+                  value: product.minTarget,
+                  mode: 'horizontal',
+                  scaleID: 'y-axis-0',
+                  borderColor: 'rgba(41, 48, 101, 1)',
+                  borderWidth: 2,
+                  label: {
+                    backgroundColor: 'rgba(41, 48, 101, 0.8)',
+                    content: 'Minimal target',
+                    enabled: true,
+                  },
+                },
+                {
+                  id: 'maxTarget',
+                  type: 'line',
+                  value: product.maxTarget,
+                  mode: 'horizontal',
+                  scaleID: 'y-axis-0',
+                  borderColor: 'rgba(41, 48, 101, 1)',
+                  borderWidth: 2,
+                  label: {
+                    backgroundColor: 'rgba(41, 48, 101, 0.8)',
+                    content: 'Maximal target',
+                    enabled: true,
+                  },
+                },
+              ],
+            },
+            tooltips: {
+              callbacks: {
+                label(tooltipItem: any) {
+                  return formatPriceFull(tooltipItem.yLabel);
+                },
+              },
+            },
+          };
+        }
         break;
       default:
         options = {};

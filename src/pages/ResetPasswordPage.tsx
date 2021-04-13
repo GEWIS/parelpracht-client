@@ -87,10 +87,10 @@ function ResetPasswordPage(props: Props) {
         <Container>
           <Grid textAlign="center" verticalAlign="middle" style={{ height: '100vh' }}>
             <Grid.Column width={6}>
-              <Header as="h1">
-                {newUser ? 'Set your password' : 'Reset your password'}
-              </Header>
               <Segment color="green" size="large">
+                <Header as="h1">
+                  {newUser ? 'Set your password' : 'Reset your password'}
+                </Header>
                 <p>Password successfully changed!</p>
                 <Button as={NavLink} to="/login" style={{ marginTop: '1em' }} basic>
                   <Icon name="arrow left" basic />

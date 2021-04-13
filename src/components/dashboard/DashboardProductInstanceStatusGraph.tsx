@@ -141,11 +141,63 @@ class DashboardProductInstanceStatusGraph extends React.Component<Props, State> 
           <Table.Header>
             <Table.Row>
               <Table.HeaderCell />
-              <Table.HeaderCell>Suggested</Table.HeaderCell>
-              <Table.HeaderCell>Contracted</Table.HeaderCell>
-              <Table.HeaderCell>Delivered</Table.HeaderCell>
-              <Table.HeaderCell>Invoiced</Table.HeaderCell>
-              <Table.HeaderCell>Paid</Table.HeaderCell>
+              <Table.HeaderCell>
+                <Popup
+                  trigger={(
+                    <span>
+                      Suggested
+                    </span>
+                  )}
+                  header="Suggested"
+                  content="The total value of contracts that have not been confirmed by a company."
+                />
+              </Table.HeaderCell>
+              <Table.HeaderCell>
+                <Popup
+                  trigger={(
+                    <span>
+                      Contracted
+                    </span>
+                  )}
+                  header="Contracted"
+                  content="The total value of all delivered and not-delivered products on confirmed contracts.
+                  Note that products that are already invoiced in a previous academic year
+                  or products that are deferred to next academic year, are not included here."
+                />
+              </Table.HeaderCell>
+              <Table.HeaderCell>
+                <Popup
+                  trigger={(
+                    <span>
+                      Delivered
+                    </span>
+                  )}
+                  header="Delivered"
+                  content="The total value of delivered products on confirmed contracts in the current academic year."
+                />
+              </Table.HeaderCell>
+              <Table.HeaderCell>
+                <Popup
+                  trigger={(
+                    <span>
+                      Invoiced
+                    </span>
+                  )}
+                  header="Invoiced"
+                  content="The total value of all products invoiced in the current academic year."
+                />
+              </Table.HeaderCell>
+              <Table.HeaderCell>
+                <Popup
+                  trigger={(
+                    <span>
+                      Paid
+                    </span>
+                  )}
+                  header="Paid"
+                  content="The total value of all paid invoices in the current academic year."
+                />
+              </Table.HeaderCell>
             </Table.Row>
           </Table.Header>
           <Table.Body>

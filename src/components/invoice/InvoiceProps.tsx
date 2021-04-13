@@ -6,7 +6,12 @@ import { DateInput } from 'semantic-ui-calendar-react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import validator from 'validator';
 import {
-  ActivityType, Invoice, Partial_InvoiceParams, Roles,
+  ActivityType,
+  Invoice,
+  InvoiceActivity,
+  InvoiceStatus,
+  Partial_InvoiceParams,
+  Roles,
 } from '../../clients/server.generated';
 import { getCompanyName } from '../../stores/company/selectors';
 import ResourceStatus from '../../stores/resourceStatus';
@@ -125,9 +130,15 @@ class InvoiceProps extends React.Component<Props, State> {
 
   propsHaveErrors = (): boolean => {
     const { title, startDate } = this.state;
+    const statusActivities = this.props.invoice.activities
+      .filter((a) => a.type === ActivityType.STATUS);
+    console.log(statusActivities);
     return (validator.isEmpty(title)
       || startDate.toString() === 'Invalid Date'
-      || startDate.setHours(0, 0, 0, 0) < new Date().setHours(0, 0, 0, 0));
+      || (startDate.setHours(0, 0, 0, 0) < new Date().setHours(0, 0, 0, 0)
+      && startDate.setHours(0, 0, 0, 0)
+      < this.props.invoice.startDate.setHours(0, 0, 0, 0))
+      || statusActivities[statusActivities.length - 1].subType === InvoiceStatus.PAID);
   };
 
   deleteButtonActive = () => {
@@ -157,6 +168,7 @@ class InvoiceProps extends React.Component<Props, State> {
           <AuthorizationComponent roles={[Roles.GENERAL, Roles.ADMIN]} notFound={false}>
             <PropsButtons
               editing={editing}
+              canEdit
               canDelete={this.deleteButtonActive()}
               canSave={!this.propsHaveErrors()}
               entity={SingleEntities.Invoice}
@@ -229,7 +241,9 @@ class InvoiceProps extends React.Component<Props, State> {
                 onChange={(e, { value }) => {
                   this.setState({ startDate: new Date(Date.parse(value)) });
                 }}
-                error={startDate.setHours(0, 0, 0, 0) < new Date().setHours(0, 0, 0, 0)}
+                error={startDate.setHours(0, 0, 0, 0) < new Date().setHours(0, 0, 0, 0)
+                && startDate.setHours(0, 0, 0, 0)
+                < this.props.invoice.startDate.setHours(0, 0, 0, 0)}
                 value={formatTimestampToDate(startDate)}
                 id="form-input-startdate"
                 dateFormat="YYYY-MM-DD"

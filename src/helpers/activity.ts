@@ -50,15 +50,21 @@ export function formatActivityType(
     case ActivityType.COMMENT:
       return 'Comment added';
     case ActivityType.STATUS:
+      if (subType?.toLowerCase() === 'created') {
+        return `${formatDocumentType(entity)} was created`;
+      }
+      if (subType?.toLowerCase() === 'notdelivered') {
+        return `${formatDocumentType(entity)} was added`;
+      }
       return `Status changed to ${subType?.toLowerCase()}`;
     case ActivityType.EDIT:
       return `${formatDocumentType(entity)} updated`;
     case ActivityType.REASSIGN:
       return 'Assignment changed';
     case ActivityType.ADDPRODUCT:
-      return `Products added to ${formatDocumentType(entity)}`;
+      return `Products added to ${formatDocumentType(entity).toLowerCase()}`;
     case ActivityType.DELPRODUCT:
-      return `Product removed from ${formatDocumentType(entity)}`;
+      return `Product removed from ${formatDocumentType(entity).toLowerCase()}`;
     default:
       throw new Error(`Unknown activity type ${activityType}`);
   }

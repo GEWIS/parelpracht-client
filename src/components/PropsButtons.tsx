@@ -6,6 +6,7 @@ import { SingleEntities } from '../stores/single/single';
 
 interface Props {
   editing: boolean;
+  canEdit: boolean | undefined;
   canDelete: boolean | undefined;
   canSave: boolean;
   entity: SingleEntities;
@@ -21,7 +22,7 @@ interface Props {
 function PropsButtons(props: Props) {
   const {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    editing, canDelete, canSave, entity, status, cancel, edit, save, remove, style,
+    editing, canEdit, canDelete, canSave, entity, status, cancel, edit, save, remove, style,
   } = props;
 
   switch (status) {
@@ -57,7 +58,7 @@ function PropsButtons(props: Props) {
       }
       return (
         <>
-          <Button icon labelPosition="left" floated="right" onClick={edit} style={style}>
+          <Button icon labelPosition="left" floated="right" onClick={edit} style={style} disabled={!canEdit}>
             <Icon name="pencil" />
             Edit
           </Button>

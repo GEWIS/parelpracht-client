@@ -27,7 +27,12 @@ function ContractRow(props: Props) {
     <Table.Row>
       <Table.Cell>
         <NavLink to={`/contract/${contract.id}`}>
-          {`C${contract.id} ${contract.title}`}
+          {`C${contract.id}`}
+        </NavLink>
+      </Table.Cell>
+      <Table.Cell>
+        <NavLink to={`/contract/${contract.id}`}>
+          {contract.title}
         </NavLink>
       </Table.Cell>
       <Table.Cell>
