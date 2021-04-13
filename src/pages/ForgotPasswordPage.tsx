@@ -34,10 +34,10 @@ function ForgotPasswordPage(props: Props) {
         <Container>
           <Grid textAlign="center" verticalAlign="middle" style={{ height: '100vh' }}>
             <Grid.Column width={6}>
-              <Header as="h1">
-                Reset your password
-              </Header>
               <Segment color="green" size="large">
+                <Header as="h1">
+                  Reset your password
+                </Header>
                 <p>
                   {`Check your email for a link to reset your password.
                   If it doesn't appear within a few minutes,
@@ -63,10 +63,10 @@ function ForgotPasswordPage(props: Props) {
       <Container>
         <Grid textAlign="center" verticalAlign="middle" style={{ height: '100vh' }}>
           <Grid.Column width={6}>
-            <Header as="h1">
-              Reset your password
-            </Header>
             <Segment>
+              <Header as="h1">
+                Reset your password
+              </Header>
               <ForgotPasswordForm />
               <Button as={NavLink} to="/login" style={{ marginTop: '1em' }} basic>
                 <Icon name="arrow left" />

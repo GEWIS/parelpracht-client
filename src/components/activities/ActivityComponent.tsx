@@ -115,7 +115,7 @@ class ActivityComponent extends React.Component<Props> {
         <Feed.Label>
           {feedLabel}
         </Feed.Label>
-        <Feed.Content style={{ marginBottom: '1em' }}>
+        <Feed.Content style={{ marginBottom: '1em', width: '85%' }}>
           <Feed.Date>
             {formatLastUpdate(activity.createdAt)}
           </Feed.Date>

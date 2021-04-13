@@ -147,7 +147,7 @@ class ContractProductInstanceModal extends React.Component<Props> {
         open
         closeIcon
         dimmer="blurring"
-        size={create ? 'tiny' : 'large'}
+        size={create ? 'tiny' : 'small'}
       >
         <div style={{ margin: '1em' }}>
           <AlertContainer />

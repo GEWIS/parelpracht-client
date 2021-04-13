@@ -116,9 +116,8 @@ class CreateCommentRow extends React.Component<Props, State> {
         <Input
           fluid
           id="form-input-comment"
-          placeholder="Comment"
+          placeholder="Write a new comment..."
           onChange={(e) => this.setState({ comment: e.target.value })}
-          error={validator.isEmpty(comment)}
         />
       </>
     );
