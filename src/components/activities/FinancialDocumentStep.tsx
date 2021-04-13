@@ -91,7 +91,7 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
             <Step.Title>
               {formatStatus(status)}
             </Step.Title>
-            <Step.Description>
+            <Step.Description style={{ maxWidth: '20ch', wordWrap: 'break-word' }}>
               {statusDescription}
             </Step.Description>
           </Step.Content>
