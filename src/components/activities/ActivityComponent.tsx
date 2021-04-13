@@ -66,7 +66,8 @@ class ActivityComponent extends React.Component<Props> {
     );
     const deleteMessage = `Delete ${activity.type.toLowerCase()}`;
     let deleteButton;
-    if (!(activity.type === ActivityType.STATUS && (activity.subType === ContractStatus.CREATED
+
+    if (componentType !== 'Invoice' && !(activity.type === ActivityType.STATUS && (activity.subType === ContractStatus.CREATED
       || activity.subType === InvoiceStatus.CREATED
       || activity.subType === ProductInstanceStatus.NOTDELIVERED))) {
       const headerString = 'Are you sure you want to delete this activity?';
