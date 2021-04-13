@@ -49,17 +49,17 @@ class ActivitiesList extends React.Component<Props, State> {
       );
     }
 
-    let activitiesList;
+    let activitiesComponent;
     if (activities.length === 0) {
-      activitiesList = (
+      activitiesComponent = (
         <h4>
           There are no activities logged yet.
         </h4>
       );
     } else {
-      activitiesList = (
+      activitiesComponent = (
         <Feed>
-          {activities
+          {[...activities]
             .sort((a, b) => { return b.updatedAt.getTime() - a.updatedAt.getTime(); })
             .map((activity) => (
               <ActivityComponent
@@ -114,7 +114,7 @@ class ActivitiesList extends React.Component<Props, State> {
           </AuthorizationComponent>
         </h3>
         {createRow}
-        {activitiesList}
+        {activitiesComponent}
       </>
     );
   }
