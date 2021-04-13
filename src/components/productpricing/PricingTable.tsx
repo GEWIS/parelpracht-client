@@ -130,6 +130,7 @@ class PricingTable extends React.Component<Props, State> {
           ) : null}
           <PropsButtons
             editing={editing}
+            canEdit
             canDelete
             canSave
             entity={SingleEntities.Product}
