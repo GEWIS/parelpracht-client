@@ -57,25 +57,22 @@ class ContractCompactTable extends React.Component<Props, State> {
   nextPage = async () => {
     const { skip, take, countTotal } = this.state;
     if (skip + take <= countTotal) {
-      this.setState({ skip: skip + take });
-      await this.getProductAttributes();
+      this.setState({ skip: skip + take }, () => this.getProductAttributes());
     }
   };
 
   prevPage = async () => {
     const { skip, take } = this.state;
     if (skip - take >= 0) {
-      this.setState({ skip: skip - take });
-      await this.getProductAttributes();
+      this.setState({ skip: skip - take }, () => this.getProductAttributes());
     }
   };
 
   setTake = async (take: number) => {
-    await this.setState({
+    this.setState({
       take,
       skip: 0,
-    });
-    await this.getProductAttributes();
+    }, () => this.getProductAttributes());
   };
 
   render() {
