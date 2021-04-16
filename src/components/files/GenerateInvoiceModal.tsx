@@ -105,17 +105,6 @@ function GenerateContract(props: Props) {
         </h2>
         <Form style={{ marginTop: '2em' }}>
           <Form.Group widths="equal">
-            <Form.Field
-              label="Label"
-              required
-              error={
-                validator.isEmpty(name)
-              }
-              control={Input}
-              value={name}
-              onChange={(e: ChangeEvent<HTMLInputElement>) => changeName(e.target.value)}
-              fluid
-            />
             <Form.Field required>
               {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
               <label htmlFor="form-contact-selector">Recipient</label>
@@ -128,6 +117,13 @@ function GenerateContract(props: Props) {
                 placeholder="Recipient"
               />
             </Form.Field>
+            <Form.Field
+              label="Comment"
+              control={Input}
+              value={name}
+              onChange={(e: ChangeEvent<HTMLInputElement>) => changeName(e.target.value)}
+              fluid
+            />
           </Form.Group>
           <Form.Group widths="equal">
             <Form.Field

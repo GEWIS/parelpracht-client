@@ -194,14 +194,18 @@ class SingleCompanyPage extends React.Component<Props, State> {
         roles={[Roles.GENERAL, Roles.ADMIN, Roles.AUDIT]}
         notFound
       >
-        <Container style={{ paddingTop: '1em' }}>
-          <Breadcrumb
-            icon="right angle"
-            sections={[
-              { key: 'Companies', content: <NavLink to="/company">Companies</NavLink> },
-              { key: 'Company', content: company.name, active: true },
-            ]}
-          />
+        <Segment style={{ backgroundColor: 'rgba(255, 255, 255, 0.95)' }} vertical basic>
+          <Container>
+            <Breadcrumb
+              icon="right angle"
+              sections={[
+                { key: 'Companies', content: <NavLink to="/company">Companies</NavLink> },
+                { key: 'Company', content: company.name, active: true },
+              ]}
+            />
+          </Container>
+        </Segment>
+        <Container style={{ marginTop: '1.25em' }}>
           <CompanySummary />
           <Grid columns={2}>
             <Grid.Column width={10}>
@@ -216,7 +220,7 @@ class SingleCompanyPage extends React.Component<Props, State> {
               />
             </Grid.Column>
             <Grid.Column width={6}>
-              <Segment secondary>
+              <Segment secondary style={{ backgroundColor: 'rgba(243, 244, 245, 0.98)' }}>
                 <CompanyProps company={company} />
               </Segment>
             </Grid.Column>

@@ -119,6 +119,7 @@ class ProductCategoryProps extends React.Component<Props, State> {
           <AuthorizationComponent roles={[Roles.ADMIN]} notFound={false}>
             <PropsButtons
               editing={editing}
+              canEdit
               canDelete={this.deleteButtonActive()}
               canSave={!this.propsHaveErrors()}
               entity={SingleEntities.ProductCategory}

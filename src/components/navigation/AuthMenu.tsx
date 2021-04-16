@@ -66,17 +66,16 @@ function AuthMenu(props: Props) {
         className="icon"
       >
         <Dropdown.Menu>
+          <Dropdown.Item as={NavLink} to={`/user/${props.profile.id}`}>
+            <Icon name="user circle" />
+            My profile
+          </Dropdown.Item>
           {isAdmin ? (
             <Dropdown.Item as={NavLink} to="/user">
               <Icon name="users" />
               Users
             </Dropdown.Item>
-          ) : (
-            <Dropdown.Item as={NavLink} to={`/user/${props.profile.id}`}>
-              <Icon name="users" />
-              My profile
-            </Dropdown.Item>
-          )}
+          ) : undefined}
           <Dropdown.Item onClick={logout}>
             <Icon name="sign-out" />
             Logout

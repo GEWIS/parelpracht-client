@@ -176,6 +176,7 @@ class CompanyProps extends React.Component<Props, State> {
           <AuthorizationComponent roles={[Roles.ADMIN, Roles.GENERAL]} notFound={false}>
             <PropsButtons
               editing={editing}
+              canEdit
               canDelete={this.deleteButtonActive()}
               canSave={!this.propsHaveErrors()}
               entity={SingleEntities.Company}

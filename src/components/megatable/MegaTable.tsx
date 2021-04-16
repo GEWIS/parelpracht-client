@@ -66,26 +66,29 @@ function MegaTable({
               <Loader inverted />
             </Dimmer>
           ) : null}
-        <Table className="rowspanStriped" attached compact sortable>
+        <Table attached compact sortable striped fixed>
           <Table.Header>
             <Table.Row>
               <Table.HeaderCell
                 sorted={column === 'companyName' ? direction : undefined}
                 onClick={() => changeSort('companyName')}
+                width={3}
               >
                 Company
                 <CompanyFilter table={Tables.ETCompanies} />
               </Table.HeaderCell>
-              <Table.HeaderCell>Contract</Table.HeaderCell>
-              <Table.HeaderCell>
+              <Table.HeaderCell width={3}>
+                Contract
+              </Table.HeaderCell>
+              <Table.HeaderCell width={2}>
                 Product
                 <ProductFilter />
               </Table.HeaderCell>
-              <Table.HeaderCell>
+              <Table.HeaderCell width={2}>
                 Status
                 <ProductInstanceStatusFilter />
               </Table.HeaderCell>
-              <Table.HeaderCell>
+              <Table.HeaderCell width={2}>
                 Invoiced
                 <ProductInstanceInvoicedFilter />
               </Table.HeaderCell>
@@ -94,7 +97,9 @@ function MegaTable({
             </Table.Row>
           </Table.Header>
           <Table.Body>
-            {companies.map((c) => <MegaTableRow company={c} key={c.id} />)}
+            {companies.map((c) => (
+              <MegaTableRow company={c} key={c.id} />
+            ))}
           </Table.Body>
           <Table.Footer>
             <Table.Row>

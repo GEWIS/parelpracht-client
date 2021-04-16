@@ -29,7 +29,7 @@ function Navigation() {
         <AuthorizationComponent roles={[Roles.GENERAL, Roles.ADMIN, Roles.AUDIT]} notFound={false}>
           <CompaniesMenu />
         </AuthorizationComponent>
-        <Menu.Item as={NavLink} to="/contract">
+        <Menu.Item as={NavLink} to="/contract" style={{ whiteSpace: 'nowrap' }}>
           <Icon name="file alternate" />
           Contracts
         </Menu.Item>
@@ -39,7 +39,7 @@ function Navigation() {
         >
           <InvoicesMenu />
         </AuthorizationComponent>
-        <Menu.Item as={NavLink} to="/insights">
+        <Menu.Item as={NavLink} to="/insights" style={{ whiteSpace: 'nowrap' }}>
           <Icon name="line graph" />
           Insights
         </Menu.Item>

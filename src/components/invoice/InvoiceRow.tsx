@@ -24,17 +24,22 @@ function InvoiceRow(props: Props) {
     <Table.Row>
       <Table.Cell>
         <NavLink to={`/invoice/${invoice.id}`}>
-          {`F${invoice.id} ${invoice.title}`}
+          {`F${invoice.id}`}
+        </NavLink>
+      </Table.Cell>
+      <Table.Cell>
+        <NavLink to={`/invoice/${invoice.id}`}>
+          {invoice.title}
         </NavLink>
       </Table.Cell>
       <Table.Cell>
         <CompanyLink id={invoice.companyId} />
       </Table.Cell>
       <Table.Cell>
-        {formatPriceFull(value)}
+        {formatStatus(invoiceStatus)}
       </Table.Cell>
       <Table.Cell>
-        {formatStatus(invoiceStatus)}
+        {formatPriceFull(value)}
       </Table.Cell>
       <Table.Cell>
         {dateToFullFinancialYear(invoice.startDate)}

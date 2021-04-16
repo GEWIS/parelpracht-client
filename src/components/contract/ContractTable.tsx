@@ -8,14 +8,13 @@ import { Contract } from '../../clients/server.generated';
 import TablePagination from '../TablePagination';
 import { RootState } from '../../stores/store';
 import {
-  changeSortTable, fetchTable, nextPageTable, prevPageTable, setTakeTable,
+  changeSortTable, fetchTable, nextPageTable, prevPageTable, setSortTable, setTakeTable,
 } from '../../stores/tables/actionCreators';
 import { countFetched, countTotal, getTable } from '../../stores/tables/selectors';
 import { Tables } from '../../stores/tables/tables';
 import ContractRow from './ContractRow';
 import ContractContactFilter from '../tablefilters/ContractContactFilter';
 import CompanyFilter from '../tablefilters/CompanyFilter';
-import UserFilter from '../tablefilters/UserFilter';
 import ContractStatusFilter from '../tablefilters/ContractStatusFilter';
 import ResourceStatus from '../../stores/resourceStatus';
 
@@ -31,17 +30,19 @@ interface Props {
 
   fetchContracts: () => void;
   changeSort: (column: string) => void;
+  setSort: (column: string, direction: 'ASC' | 'DESC') => void;
   setTake: (take: number) => void;
   prevPage: () => void;
   nextPage: () => void;
 }
 
 function ContractsTable({
-  contracts, fetchContracts, column, direction, changeSort,
+  contracts, fetchContracts, column, direction, changeSort, setSort,
   total, fetched, skip, take, status,
   prevPage, nextPage, setTake,
 }: Props) {
   useEffect(() => {
+    setSort('id', 'DESC');
     fetchContracts();
   }, []);
 
@@ -56,14 +57,23 @@ function ContractsTable({
             <Table.Header>
               <Table.Row>
                 <Table.HeaderCell
+                  sorted={column === 'id' ? direction : undefined}
+                  onClick={() => changeSort('id')}
+                  width={1}
+                >
+                  ID
+                </Table.HeaderCell>
+                <Table.HeaderCell
                   sorted={column === 'title' ? direction : undefined}
                   onClick={() => changeSort('title')}
+                  width={3}
                 >
                   Title
                 </Table.HeaderCell>
                 <Table.HeaderCell
                   sorted={column === 'company' ? direction : undefined}
                   onClick={() => changeSort('company')}
+                  width={3}
                 >
                   Company
                   <CompanyFilter table={Tables.Contracts} />
@@ -71,24 +81,23 @@ function ContractsTable({
                 <Table.HeaderCell
                   sorted={column === 'contact' ? direction : undefined}
                   onClick={() => changeSort('contact')}
+                  width={2}
                 >
                   Contact
                   <ContractContactFilter />
                 </Table.HeaderCell>
-                <Table.HeaderCell>
+                <Table.HeaderCell width={2} collapsing>
                   Status
                   <ContractStatusFilter />
                 </Table.HeaderCell>
-                <Table.HeaderCell
-                  sorted={column === 'assignedTo' ? direction : undefined}
-                  onClick={() => changeSort('assignedTo')}
-                >
-                  Assigned to
-                  <UserFilter table={Tables.Contracts} />
+                <Table.HeaderCell width={2}>
+                  Amount
                 </Table.HeaderCell>
                 <Table.HeaderCell
+                  collapsing
                   sorted={column === 'updatedAt' ? direction : undefined}
                   onClick={() => changeSort('updatedAt')}
+                  width={3}
                 >
                   Last Update
                 </Table.HeaderCell>
@@ -118,14 +127,23 @@ function ContractsTable({
         <Table.Header>
           <Table.Row>
             <Table.HeaderCell
+              sorted={column === 'id' ? direction : undefined}
+              onClick={() => changeSort('id')}
+              width={1}
+            >
+              ID
+            </Table.HeaderCell>
+            <Table.HeaderCell
               sorted={column === 'title' ? direction : undefined}
               onClick={() => changeSort('title')}
+              width={3}
             >
               Title
             </Table.HeaderCell>
             <Table.HeaderCell
               sorted={column === 'company' ? direction : undefined}
               onClick={() => changeSort('company')}
+              width={3}
             >
               Company
               <CompanyFilter table={Tables.Contracts} />
@@ -133,20 +151,23 @@ function ContractsTable({
             <Table.HeaderCell
               sorted={column === 'contact' ? direction : undefined}
               onClick={() => changeSort('contact')}
+              width={2}
             >
               Contact
               <ContractContactFilter />
             </Table.HeaderCell>
-            <Table.HeaderCell>
-              Amount
-            </Table.HeaderCell>
-            <Table.HeaderCell>
+            <Table.HeaderCell width={2} collapsing>
               Status
               <ContractStatusFilter />
             </Table.HeaderCell>
+            <Table.HeaderCell width={2}>
+              Amount
+            </Table.HeaderCell>
             <Table.HeaderCell
+              collapsing
               sorted={column === 'updatedAt' ? direction : undefined}
               onClick={() => changeSort('updatedAt')}
+              width={3}
             >
               Last Update
             </Table.HeaderCell>
@@ -188,6 +209,10 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   fetchContracts: () => dispatch(fetchTable(Tables.Contracts)),
   changeSort: (column: string) => {
     dispatch(changeSortTable(Tables.Contracts, column));
+    dispatch(fetchTable(Tables.Contracts));
+  },
+  setSort: (column: string, direction: 'ASC' | 'DESC') => {
+    dispatch(setSortTable(Tables.Contracts, column, direction));
     dispatch(fetchTable(Tables.Contracts));
   },
   setTake: (take: number) => {

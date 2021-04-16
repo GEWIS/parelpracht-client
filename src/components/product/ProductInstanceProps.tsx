@@ -4,6 +4,7 @@ import { Form, Input, Label } from 'semantic-ui-react';
 import {
   ActivityType,
   Contract,
+  ContractStatus,
   ProductInstance,
   ProductInstanceParams,
   ProductSummary,
@@ -17,6 +18,7 @@ import PropsButtons from '../PropsButtons';
 import ProductSelector from './ProductSelector';
 import { SingleEntities } from '../../stores/single/single';
 import AuthorizationComponent from '../AuthorizationComponent';
+import { getLastStatus } from '../../helpers/activity';
 
 interface Props {
   create?: boolean;
@@ -124,6 +126,18 @@ class ProductInstanceProps extends React.Component<Props, State> {
       || this.props.productInstance.invoiceId === undefined);
   };
 
+  editButtonActive = () => {
+    if (this.props.create) {
+      return undefined;
+    }
+    const status = getLastStatus(this.props.contract.activities
+      .filter((a) => a.type === ActivityType.STATUS));
+    return !(status!.subType === ContractStatus.CONFIRMED
+      || status!.subType === ContractStatus.FINISHED
+      || status!.subType === ContractStatus.CANCELLED
+      || this.props.productInstance.invoiceId !== undefined);
+  };
+
   render() {
     const {
       editing,
@@ -142,6 +156,7 @@ class ProductInstanceProps extends React.Component<Props, State> {
           <AuthorizationComponent roles={[Roles.ADMIN, Roles.GENERAL]} notFound={false}>
             <PropsButtons
               editing={editing}
+              canEdit={this.editButtonActive()}
               canDelete={this.deleteButtonActive()}
               canSave={!this.propsHaveErrors()}
               entity={SingleEntities.Product}
@@ -201,6 +216,7 @@ class ProductInstanceProps extends React.Component<Props, State> {
             <Form.Field
               disabled={!editing}
               error={Number.isNaN(Math.round(parseFloat(this.state.basePrice.replace(',', '.')) * 100))}
+              value={parseFloat(basePrice.replace(',', '.')).toFixed(2)}
             >
               {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
               <label htmlFor="form-input-base-price">

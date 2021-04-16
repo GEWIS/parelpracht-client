@@ -6,7 +6,12 @@ import { DateInput } from 'semantic-ui-calendar-react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import validator from 'validator';
 import {
-  ActivityType, Invoice, Partial_InvoiceParams, Roles,
+  ActivityType,
+  Invoice,
+  InvoiceActivity,
+  InvoiceStatus,
+  Partial_InvoiceParams,
+  Roles,
 } from '../../clients/server.generated';
 import { getCompanyName } from '../../stores/company/selectors';
 import ResourceStatus from '../../stores/resourceStatus';
@@ -45,6 +50,7 @@ interface State {
   assignedToId: number;
   poNumber: string;
   startDate: Date;
+  dateValue: string;
 }
 
 class InvoiceProps extends React.Component<Props, State> {
@@ -85,6 +91,7 @@ class InvoiceProps extends React.Component<Props, State> {
       assignedToId: invoice.assignedToId,
       poNumber: invoice.poNumber ?? '',
       startDate: invoice.startDate,
+      dateValue: this.formatDate(invoice.startDate),
     };
   };
 
@@ -124,8 +131,15 @@ class InvoiceProps extends React.Component<Props, State> {
   };
 
   propsHaveErrors = (): boolean => {
-    const { title } = this.state;
-    return (validator.isEmpty(title));
+    const { title, startDate } = this.state;
+    const statusActivities = this.props.invoice.activities
+      .filter((a) => a.type === ActivityType.STATUS);
+    return (validator.isEmpty(title)
+      || startDate.toString() === 'Invalid Date'
+      || (startDate.setHours(0, 0, 0, 0) < new Date().setHours(0, 0, 0, 0)
+      && startDate.setHours(0, 0, 0, 0)
+      < this.props.invoice.startDate.setHours(0, 0, 0, 0))
+      || statusActivities[statusActivities.length - 1].subType === InvoiceStatus.PAID);
   };
 
   deleteButtonActive = () => {
@@ -136,6 +150,17 @@ class InvoiceProps extends React.Component<Props, State> {
       || this.props.invoice.activities.filter((a) => a.type === ActivityType.STATUS).length > 1);
   };
 
+  formatDate(date: Date) {
+    let day = date.getDate().toString();
+    let month = (date.getMonth() + 1).toString();
+    const year = date.getFullYear().toString();
+
+    if (Number(day) < 10) { day = `0${day}`; }
+    if (Number(month) < 10) { month = `0${month}`; }
+
+    return `${year}-${month}-${day}`;
+  }
+
   render() {
     const {
       editing,
@@ -143,9 +168,19 @@ class InvoiceProps extends React.Component<Props, State> {
       title,
       poNumber,
       startDate,
+      dateValue,
       assignedToId,
     } = this.state;
     const { companyName } = this.props;
+
+    const dateFormatterHelper = (date: Date) => {
+      let formattedDate: string = this.formatDate(date);
+
+      if (dateValue.length !== 10) {
+        formattedDate = dateValue;
+      }
+      return formattedDate;
+    };
 
     return (
       <>
@@ -155,6 +190,7 @@ class InvoiceProps extends React.Component<Props, State> {
           <AuthorizationComponent roles={[Roles.GENERAL, Roles.ADMIN]} notFound={false}>
             <PropsButtons
               editing={editing}
+              canEdit
               canDelete={this.deleteButtonActive()}
               canSave={!this.propsHaveErrors()}
               entity={SingleEntities.Invoice}
@@ -224,10 +260,18 @@ class InvoiceProps extends React.Component<Props, State> {
               {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
               <label htmlFor="form-input-startdate">Invoice date</label>
               <DateInput
+                // onChange={(e, { value }) => {
+                //   this.setState({ startDate: value });
+                // }}
                 onChange={(e, { value }) => {
-                  this.setState({ startDate: new Date(Date.parse(value)) });
+                  // eslint-disable-next-line no-new
+                  if (value.length === 10) { this.setState({ startDate: new Date(value) }); }
+                  this.setState({ dateValue: value });
                 }}
-                value={formatTimestampToDate(startDate)}
+                error={startDate.setHours(0, 0, 0, 0) < new Date().setHours(0, 0, 0, 0)
+                && startDate.setHours(0, 0, 0, 0)
+                < this.props.invoice.startDate.setHours(0, 0, 0, 0)}
+                value={dateFormatterHelper(startDate)}
                 id="form-input-startdate"
                 dateFormat="YYYY-MM-DD"
                 fluid

@@ -118,7 +118,7 @@ class ContractProductInstanceModal extends React.Component<Props> {
     let activities;
     if (!create) {
       activities = [
-        <Segment secondary style={{ margin: '2em 1em 1em' }} key="seg-1">
+        <Segment secondary style={{ backgroundColor: 'rgba(243, 244, 245, 0.98)', margin: '2em 1em 1em' }} key="seg-1">
           <FinancialDocumentProgress
             documentId={productInstance.id}
             parentId={productInstance.contractId}
@@ -147,7 +147,7 @@ class ContractProductInstanceModal extends React.Component<Props> {
         open
         closeIcon
         dimmer="blurring"
-        size={create ? 'tiny' : 'large'}
+        size={create ? 'tiny' : 'small'}
       >
         <div style={{ margin: '1em' }}>
           <AlertContainer />

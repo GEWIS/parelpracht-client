@@ -43,6 +43,7 @@ import ProductCategoryModal from './pages/ProductCategoryModal';
 import CustomInvoicePage from './pages/CustomInvoicePage';
 import { authedUserHasRole } from './stores/auth/selectors';
 import AuthorizationComponent from './components/AuthorizationComponent';
+import ParelPrachtFullLogo from './components/ParelPrachtFullLogo';
 
 interface Props extends RouteComponentProps {
   // eslint-disable-next-line react/no-unused-prop-types
@@ -59,7 +60,11 @@ function Routes(props: Props) {
       <Dimmer active page inverted>
 
         <Header as="h2" icon>
-          <Loader inline content="ParelPracht" size="large" />
+          <Loader
+            inline
+            content={(<ParelPrachtFullLogo />)}
+            size="large"
+          />
           <Header.Subheader>Checking login information...</Header.Subheader>
         </Header>
       </Dimmer>

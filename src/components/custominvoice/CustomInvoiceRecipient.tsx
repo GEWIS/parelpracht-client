@@ -25,7 +25,7 @@ class CustomInvoiceRecipient extends React.Component<Props, State> {
       recipient, updateRecipientAttribute, updateRecipientGender,
     } = this.props;
     return (
-      <Segment secondary>
+      <Segment secondary style={{ backgroundColor: 'rgba(255, 255, 255, 0.95)', color: 'black' }}>
         <h2>Recipient details</h2>
         <Form style={{ marginTop: '2em' }}>
           <Form.Group widths="equal">
@@ -79,7 +79,7 @@ class CustomInvoiceRecipient extends React.Component<Props, State> {
               id="form-recipient-street"
               fluid
               control={Input}
-              label="Street"
+              label="Street and Number"
               value={recipient.street}
               onChange={(e: ChangeEvent<HTMLInputElement>) => updateRecipientAttribute(
                 'street', e.target.value,

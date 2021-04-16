@@ -3,12 +3,14 @@ import {
   Dimmer,
   Header,
   Loader,
-  Modal, Segment,
+  Modal, Segment, Table,
 } from 'semantic-ui-react';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import { NavLink, RouteComponentProps, withRouter } from 'react-router-dom';
-import { Contact, ContactFunction, Gender } from '../clients/server.generated';
+import {
+  Contact, ContactFunction, ContractStatus, Gender,
+} from '../clients/server.generated';
 import { clearSingle, fetchSingle } from '../stores/single/actionCreators';
 import { RootState } from '../stores/store';
 import ContactProps from '../components/contact/ContactProps';
@@ -19,12 +21,16 @@ import { SingleEntities } from '../stores/single/single';
 import { TransientAlert } from '../stores/alerts/actions';
 import { showTransientAlert } from '../stores/alerts/actionCreators';
 import { formatContactName } from '../helpers/contact';
+import { formatStatus } from '../helpers/activity';
+import { getContractStatus } from '../stores/contract/selectors';
+import CompanyLink from '../components/company/CompanyLink';
 
 interface Props extends RouteComponentProps<{ companyId: string, contactId?: string }> {
   create?: boolean;
   onCompanyPage: boolean;
   contact: Contact | undefined;
   status: ResourceStatus;
+  getContractStatus: (id: number) => ContractStatus;
 
   clearContact: () => void;
   fetchContact: (id: number) => void;
@@ -135,15 +141,34 @@ class ContactModal extends React.Component<Props> {
       contractOverview = (
         <Segment>
           <Header>Contracts</Header>
-          <ul>
+          <Table>
+            <Table.Header>
+              <Table.HeaderCell>
+                Title
+              </Table.HeaderCell>
+              <Table.HeaderCell>
+                Company
+              </Table.HeaderCell>
+              <Table.HeaderCell>
+                Status
+              </Table.HeaderCell>
+            </Table.Header>
             {contact.contracts.map((contract) => {
               return (
-                <li key={contract.id}>
-                  <NavLink to={`/contract/${contract.id}`}>{contract.title}</NavLink>
-                </li>
+                <Table.Row>
+                  <Table.Cell>
+                    <NavLink to={`/contract/${contract.id}`}>{contract.title}</NavLink>
+                  </Table.Cell>
+                  <Table.Cell>
+                    <CompanyLink id={contract.companyId} />
+                  </Table.Cell>
+                  <Table.Cell>
+                    {formatStatus(this.props.getContractStatus(contract.id))}
+                  </Table.Cell>
+                </Table.Row>
               );
             })}
-          </ul>
+          </Table>
         </Segment>
       );
     }
@@ -175,6 +200,7 @@ const mapStateToProps = (state: RootState) => {
   return {
     contact: getSingle<Contact>(state, SingleEntities.Contact).data,
     status: getSingle<Contact>(state, SingleEntities.Contact).status,
+    getContractStatus: (id: number) => getContractStatus(state, id),
   };
 };
 

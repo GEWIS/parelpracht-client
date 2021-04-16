@@ -145,18 +145,22 @@ class SingleInvoicePage extends React.Component<Props, State> {
         roles={[Roles.GENERAL, Roles.FINANCIAL, Roles.AUDIT, Roles.ADMIN]}
         notFound
       >
-        <Container style={{ paddingTop: '1em' }}>
-          <Breadcrumb
-            icon="right angle"
-            sections={[
-              { key: 'Invoices', content: <NavLink to="/invoice">Invoices</NavLink> },
-              { key: 'Invoice', content: invoice.id, active: true },
-            ]}
-          />
+        <Segment style={{ backgroundColor: 'rgba(255, 255, 255, 0.95)' }} vertical basic>
+          <Container>
+            <Breadcrumb
+              icon="right angle"
+              sections={[
+                { key: 'Invoices', content: <NavLink to="/invoice">Invoices</NavLink> },
+                { key: 'Invoice', content: `F${invoice.id} ${invoice.title}`, active: true },
+              ]}
+            />
+          </Container>
+        </Segment>
+        <Container style={{ marginTop: '1.25em' }}>
           <InvoiceSummary />
           <Grid rows={2}>
             <Grid.Row centered columns={1} style={{ paddingLeft: '1em', paddingRight: '1em' }}>
-              <Segment secondary>
+              <Segment secondary style={{ backgroundColor: 'rgba(243, 244, 245, 0.98)' }}>
                 <FinancialDocumentProgress
                   documentId={invoice.id}
                   activities={invoice.activities as GeneralActivity[]}
@@ -180,7 +184,7 @@ class SingleInvoicePage extends React.Component<Props, State> {
                 />
               </Grid.Column>
               <Grid.Column width={6}>
-                <Segment secondary>
+                <Segment secondary style={{ backgroundColor: 'rgba(243, 244, 245, 0.98)' }}>
                   <InvoiceProps invoice={invoice} />
                 </Segment>
               </Grid.Column>

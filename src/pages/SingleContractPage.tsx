@@ -155,51 +155,57 @@ class SingleContractPage extends React.Component<Props, State> {
     const panes = this.getPanes();
 
     return (
-      <Container style={{ paddingTop: '1em' }}>
-        <Breadcrumb
-          icon="right angle"
-          sections={[
-            { key: 'Contracts', content: <NavLink to="/contract">Contracts</NavLink> },
-            { key: 'Contract', content: contract.title, active: true },
-          ]}
-        />
-        <ContractSummary />
-        <Grid rows={2}>
-          <Grid.Row centered columns={1} style={{ paddingLeft: '1em', paddingRight: '1em' }}>
-            <Segment secondary>
-              <FinancialDocumentProgress
-                documentId={contract.id}
-                activities={contract.activities as GeneralActivity[]}
-                documentType={SingleEntities.Contract}
-                resourceStatus={status}
-                roles={[Roles.ADMIN, Roles.GENERAL]}
-                canCancel={contract.products
-                  .every((p) => p.activities
-                    .find((a) => a.subType === ProductInstanceStatus.CANCELLED) !== undefined)}
-                cancelReason="Cannot cancel this contract, because not all products are marked as cancelled."
-              />
-            </Segment>
-          </Grid.Row>
-          <Grid.Row columns={2}>
-            <Grid.Column width={10}>
-              <Tab
-                panes={panes}
-                menu={{ pointing: true, inverted: true }}
-                onTabChange={(e, data) => {
-                  this.setState({ paneIndex: data.activeIndex! as number });
-                  this.props.history.replace(`#${data.panes![data.activeIndex! as number].menuItem.toLowerCase()}`);
-                }}
-                activeIndex={paneIndex}
-              />
-            </Grid.Column>
-            <Grid.Column width={6}>
-              <Segment secondary>
-                <ContractProps contract={contract} />
+      <>
+        <Segment style={{ backgroundColor: 'rgba(255, 255, 255, 0.95)' }} vertical basic>
+          <Container>
+            <Breadcrumb
+              icon="right angle"
+              sections={[
+                { key: 'Contracts', content: <NavLink to="/contract">Contracts</NavLink> },
+                { key: 'Contract', content: `C${contract.id} ${contract.title}`, active: true },
+              ]}
+            />
+          </Container>
+        </Segment>
+        <Container style={{ marginTop: '1.25em' }}>
+          <ContractSummary />
+          <Grid rows={2}>
+            <Grid.Row centered columns={1} style={{ paddingLeft: '1em', paddingRight: '1em' }}>
+              <Segment secondary style={{ backgroundColor: 'rgba(243, 244, 245, 0.98)' }}>
+                <FinancialDocumentProgress
+                  documentId={contract.id}
+                  activities={contract.activities as GeneralActivity[]}
+                  documentType={SingleEntities.Contract}
+                  resourceStatus={status}
+                  roles={[Roles.ADMIN, Roles.GENERAL]}
+                  canCancel={contract.products
+                    .every((p) => p.activities
+                      .find((a) => a.subType === ProductInstanceStatus.CANCELLED) !== undefined)}
+                  cancelReason="Cannot cancel this contract, because not all products are marked as cancelled."
+                />
               </Segment>
-            </Grid.Column>
-          </Grid.Row>
-        </Grid>
-      </Container>
+            </Grid.Row>
+            <Grid.Row columns={2}>
+              <Grid.Column width={10}>
+                <Tab
+                  panes={panes}
+                  menu={{ pointing: true, inverted: true }}
+                  onTabChange={(e, data) => {
+                    this.setState({ paneIndex: data.activeIndex! as number });
+                    this.props.history.replace(`#${data.panes![data.activeIndex! as number].menuItem.toLowerCase()}`);
+                  }}
+                  activeIndex={paneIndex}
+                />
+              </Grid.Column>
+              <Grid.Column width={6}>
+                <Segment secondary style={{ backgroundColor: 'rgba(243, 244, 245, 0.98)' }}>
+                  <ContractProps contract={contract} />
+                </Segment>
+              </Grid.Column>
+            </Grid.Row>
+          </Grid>
+        </Container>
+      </>
     );
   }
 }
