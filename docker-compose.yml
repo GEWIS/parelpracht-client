@@ -3,12 +3,15 @@ services:
   frontend:
     build:
       context: ../parelpracht-client
-      dockerfile: docker/frontend/Dockerfile
+      dockerfile: Dockerfile
     image: yoronex/parelpracht-client:latest
+    ports:
+      - '9639:80'
     networks:
       - parelpracht
     volumes:
-      - static:/app/build/static
+      - logos:/usr/src/app/data/logos
+      - backgrounds:/usr/src/app/data/backgrounds
   backend:
     build: ../parelpracht-server
     image: yoronex/parelpracht-server:latest
@@ -39,39 +42,31 @@ services:
       - MAIL_PORT=465
       - MAIL_USER=parelpracht@example.com
       - MAIL_PASSWORD=password
-      - MAIL_FROM="ParelPracht <parelpracht@example.com>"
+      - MAIL_FROM=ParelPracht <parelpracht@example.com>
+      # The following environment variables are used by the DirectMail plugin
+      # This is optional and thus these variables can be removed (if not used)
+      - DIRECTMAIL_URL=
+      - DIRECTMAIL_USERNAME=
+      - DIRECTMAIL_PASSWORD=
+      - DIRECTMAIL_PRODUCT_ID=
     depends_on:
       - database
-  database:
-    image: postgres
-    volumes:
-      - database-data:/var/lib/postgresql/data
-    environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=ParelPassword3939
-      - POSTGRES_DB=parelpracht
-    networks:
-      - parelpracht
-  nginx:
-    build: docker/nginx
-    image: yoronex/parelpracht-nginx:latest
-    depends_on:
-      - backend
-      - frontend
-    ports:
-      - '39390:80'
-    networks:
-      - parelpracht
-    volumes:
-      - static:/app/build/static
-      - logos:/usr/src/app/data/logos
-      - backgrounds:/usr/src/app/data/backgrounds
+# If you do not have a database available somewhere on the server, you can use this one. Do
+# not forget to enable the database-data volume to make sure the database remains persistent.
+#  database:
+#    image: postgres
+#    volumes:
+#      - database-data:/var/lib/postgresql/data
+#    environment:
+#      - POSTGRES_USER=postgres
+#      - POSTGRES_PASSWORD=ParelPassword3939
+#      - POSTGRES_DB=parelpracht
+#    networks:
+#      - parelpracht
 volumes:
-  database-data:
-    driver: local
+#  database-data:
+#    driver: local
   backend-files:
-    driver: local
-  static:
     driver: local
   logos:
     driver: local
