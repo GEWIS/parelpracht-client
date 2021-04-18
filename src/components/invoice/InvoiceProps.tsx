@@ -8,7 +8,6 @@ import validator from 'validator';
 import {
   ActivityType,
   Invoice,
-  InvoiceActivity,
   InvoiceStatus,
   Partial_InvoiceParams,
   Roles,

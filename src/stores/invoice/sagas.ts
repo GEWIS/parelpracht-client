@@ -30,7 +30,6 @@ import {
   SingleCreateCommentAction,
   SingleCreateStatusAction,
   SingleDeleteAction,
-  SingleDeleteActivityAction,
   SingleDeleteFileAction,
   SingleFetchAction,
   SingleSaveAction,
@@ -292,27 +291,6 @@ function* watchSaveSingleInvoiceActivity() {
   );
 }
 
-function* deleteSingleInvoiceActivity(
-  action: SingleDeleteActivityAction<SingleEntities.Invoice>,
-) {
-  const client = new Client();
-  yield call([client, client.deleteInvoiceActivity], action.id, action.activityId);
-  const invoice = yield call([client, client.getInvoice], action.id);
-  yield put(setSingle(SingleEntities.Invoice, invoice));
-  yield put(updateSummary(SummaryCollections.Invoices, toSummary(invoice)));
-}
-
-function* errorDeleteSingleInvoiceActivity() {
-  yield put(errorSingle(SingleEntities.Invoice));
-}
-
-function* watchDeleteSingleInvoiceActivity() {
-  yield takeEveryWithErrorHandling(
-    singleActionPattern(SingleEntities.Invoice, SingleActionType.DeleteActivity),
-    deleteSingleInvoiceActivity, { onErrorSaga: errorDeleteSingleInvoiceActivity },
-  );
-}
-
 export default [
   function* watchFetchInvoices() {
     yield throttle(
@@ -344,5 +322,4 @@ export default [
   watchCreateSingleInvoiceStatus,
   watchCreateSingleInvoiceComment,
   watchSaveSingleInvoiceActivity,
-  watchDeleteSingleInvoiceActivity,
 ];

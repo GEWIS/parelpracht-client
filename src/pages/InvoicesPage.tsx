@@ -54,7 +54,7 @@ class InvoicesPage extends React.Component<Props> {
                     )}
                     mouseEnterDelay={500}
                     header="Update Last Seen"
-                    content="By updating the last seen, you indicate that all invoice statusses have been updated."
+                    content="By updating the last seen, you indicate that all invoice statuses have been updated."
                   />
                 </AuthorizationComponent>
               </Grid.Column>

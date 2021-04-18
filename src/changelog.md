@@ -5,6 +5,7 @@ You can find the release notes below.
 
 ## v0.3-dev
 ### Added
+- Added the ParelPracht logo to the login page, loading page and main menu.
 - Added front-end authorization. Certain elements are now only visible to people that can access them in the back-end as well.
 - Added a pricing table for products.
   - This table is optional and completely customizable.
@@ -13,14 +14,21 @@ You can find the release notes below.
 - Added API keys.
   - Every user can generate at most one API key and use them in the header of their request to authenticate.
   - When generating or deleting an API key, the user is emailed about this operation.
+- Added timed events in the backend.
+  - Temporary files are removed every night to preserve disk space.
+  - Deferred statuses are removed every year at July 1st 00:00.
+  - The DirectMail mailing lists are fetched and put in a "Product pricing" table every night.
+    - This feature requires an endpoint with basic auth that returns this information. It is therefore optional.
 - Added custom personal user backgrounds.
 - Added more success notifications when operations have been executed successfully.
 - Added a fancy animation on the login page.
 - Added a "Remember me" button when logging in.
+- Added a "My profile" button to directly go to your own user information.
 - Added a total sum and number of products on the resulting query of the Insights table.
 - Added the value of contracts and invoices to their respective tables.
 - Added input validation on the pricing fields in product instances.
 - Added nice-looking minimal and maximal target lines in the Insights chart of products.
+- Added better protection against SQL injection attacks.
 - Added optimizations regarding the requests to the backend when creating, deleting or updating entities.
 
 ### Changes
@@ -39,9 +47,23 @@ You can find the release notes below.
 - A product of an existing product instance can no longer be edited.
 - When going back (with the browser back button) to a single entity page, the correct tab is opened again.
 - Add different icons for different types of files.
-- Add avatar in clickable user references.
-- Add favicon.
+- Replaced the user-icon with their avatar in clickable user references.
+- Changed the favicon to a non-development one.
 - Invoice date can now only be after the day the invoice has been created.
+- Slightly changed the layout of the Custom Invoice generator page.
+- Prices, names and dates are now properly formatted in Changed-activities.
+- The breadcrumbs now show the entity's name instead of only IDs.
+- Table columns have now proper widths and no longer go out of bounds with too long entity names.
+- Added company logos to "Recent Contracts" on the dashboard.
+- Added explainer popups to the "Transfer assignments", "Cancel invoice", "Insights" and "Update Last Seen Treasurer"
+  buttons.
+- Comment-fields in activities are no longer red when no text has been filled in.
+- The contact-modal now has a nice table of contracts instead of a list of bullet points.
+- Products in a contract can no longer be edited when the product is in an invoice.
+- Activities can no longer be removed from invoices.
+- The invoice date of an invoice can no longer be set to a date in the past.
+- In the insights table, one can now filter on financial year instead of just "invoiced".
+- Refactored the entity status components to make them better maintainable in the future.
 
 ### Bugfixes
 - Fixed page numbers showing "???" in generated PDF files.
@@ -58,6 +80,12 @@ You can find the release notes below.
 - Fixed login in with Gmail addresses due to dots inconsistencies.
 - Fixed deletion of images to preserve disk space.
 - Fixed major bugs in the document progress bar. This was due to sorting issues.
+- Fixed logos and avatars not being deleted when its entity was deleted.
+- Fixed not being able to disable the comapny status filter.
+- Fixed Gmail addresses not being handled properly.
+- Fixed not being able to scroll in TextArea fields.
+- Fixed the generator using the internal comments of a product instead of "details" when generating a PDF file.
+- Fixed pagination not working properly in the product's contracts table.
 
 ## v0.2.1-beta2 (07-03-2021)
 
@@ -98,7 +126,7 @@ You can find the release notes below.
 
 ### Changes
 - The list of recent contracts on the dashboard now only shows your own assigned contracts, except for admins.
-- Cancel and Defer buttons for entity statuses are now disabled when the entity is "finished" (so no more statusses are possible).
+- Cancel and Defer buttons for entity statuses are now disabled when the entity is "finished" (so no more statuses are possible).
 - Selecting signees when creating a contract proposal is disabled and thus no longer necessary.
 - All emails sent by ParelPracht are now nicely formatted.
 - It is no longer possible to create empty comments.
