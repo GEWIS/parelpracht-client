@@ -123,6 +123,8 @@ function GenerateContract(props: Props) {
               value={name}
               onChange={(e: ChangeEvent<HTMLInputElement>) => changeName(e.target.value)}
               fluid
+              required
+              error={validator.isEmpty(name)}
             />
           </Form.Group>
           <Form.Group widths="equal">

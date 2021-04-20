@@ -86,6 +86,7 @@ You can find the release notes below.
 - Fixed not being able to scroll in TextArea fields.
 - Fixed the generator using the internal comments of a product instead of "details" when generating a PDF file.
 - Fixed pagination not working properly in the product's contracts table.
+- Fixed character errors when generating a .tex file with utf8 code to a PDF in a docker container.
 
 ## v0.2.1-beta2 (07-03-2021)
 
