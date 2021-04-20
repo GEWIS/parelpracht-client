@@ -18,7 +18,7 @@ function Credits() {
       <Modal.Header>About ParelPracht</Modal.Header>
       <Modal.Content>
         ParelPracht was built in the winter of 2020-2021 during the second lockdown of the corona
-        crisis by the 39th board of GEWIS. Special thanks to everyone who helped out:
+        crisis by the 39th board of GEWIS. Special thanks to everyone who contributed:
         <ul>
           <li>Roy Kakkenberg</li>
           <li>Koen de Nooij</li>
@@ -27,6 +27,9 @@ function Credits() {
           <li>Wouter van der Heijden</li>
           <li>Irne Verwijst</li>
         </ul>
+        <br />
+        Also special thanks to Gijs de Man and everyone at Stijl for their help with the PDF
+        template and Wout de Ruiter for sharing his knowledge regarding Docker containers.
       </Modal.Content>
     </Modal>
   );

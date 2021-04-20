@@ -1,9 +1,16 @@
 # Change log
-The current version of ParelPracht is **v0.2.1-beta2**, released on March 7nd, 2021.
+The current version of ParelPracht is **v1.0.0**, released on April 20th, 2021.
 You can find the release notes below.
 ----------------------
 
-## v0.3-dev
+## v1.0.0 (20-04-2021)
+After 127 days, 926 commits and many, many hours of work, the first production-ready release of ParelPracht is finally
+finished. Of course, some minor bugs and issues probably remain. However, we as the board worked very hard on this
+project and are really proud of the work, goals and knowledge that we have achieved. We hope you will enjoy the result
+just as much as we had building it!
+
+~Roy, Treasurer and "Beunhaas" of the 39th board.
+
 ### Added
 - Added the ParelPracht logo to the login page, loading page and main menu.
 - Added front-end authorization. Certain elements are now only visible to people that can access them in the back-end as well.
