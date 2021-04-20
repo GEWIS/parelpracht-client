@@ -15,7 +15,7 @@ interface Props {
 
 function CustomInvoiceProducts(props: Props) {
   return (
-    <Segment secondary>
+    <Segment secondary style={{ backgroundColor: 'rgba(255, 255, 255, 0.95)', color: 'black' }}>
       <h2>
         Products
         <Button

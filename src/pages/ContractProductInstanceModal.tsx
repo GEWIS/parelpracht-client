@@ -6,7 +6,7 @@ import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import {
-  Contract, ProductInstance, ProductInstanceParams, ProductInstanceStatus,
+  Contract, ProductInstance, ProductInstanceParams, ProductInstanceStatus, Roles,
 } from '../clients/server.generated';
 import { fetchSingle } from '../stores/single/actionCreators';
 import { RootState } from '../stores/store';
@@ -23,9 +23,13 @@ import {
   deleteInstanceSingle,
   saveInstanceSingle,
 } from '../stores/productinstance/actionCreator';
+import { TransientAlert } from '../stores/alerts/actions';
+import { showTransientAlert } from '../stores/alerts/actionCreators';
+import { getProductName } from '../stores/product/selectors';
 
-interface SelfProps extends
-  RouteComponentProps<{ contractId: string, productInstanceId?: string }> {
+interface SelfProps extends RouteComponentProps<{
+  contractId: string, productInstanceId?: string
+}> {
   create?: boolean;
 }
 
@@ -33,11 +37,13 @@ interface Props extends SelfProps {
   productInstance: ProductInstance | undefined;
   status: ResourceStatus;
   contract?: Contract;
+  productName: string;
 
   fetchContract: (id: number) => void;
   saveProductInstance: (contractId: number, id: number, inst: ProductInstanceParams) => void;
   createProductInstance: (contractId: number, inst: ProductInstanceParams) => void;
   removeProductInstance: (contractId: number, id: number) => void;
+  showTransientAlert: (alert: TransientAlert) => void;
 }
 
 class ContractProductInstanceModal extends React.Component<Props> {
@@ -83,7 +89,7 @@ class ContractProductInstanceModal extends React.Component<Props> {
         productId: -1,
         basePrice: 0,
         discount: 0,
-        comments: '',
+        details: '',
         status: ProductInstanceStatus.NOTDELIVERED,
       } as any as ProductInstance;
     } else {
@@ -112,13 +118,15 @@ class ContractProductInstanceModal extends React.Component<Props> {
     let activities;
     if (!create) {
       activities = [
-        <Segment secondary style={{ margin: '2em 1em 1em' }} key="seg-1">
+        <Segment secondary style={{ backgroundColor: 'rgba(243, 244, 245, 0.98)', margin: '2em 1em 1em' }} key="seg-1">
           <FinancialDocumentProgress
             documentId={productInstance.id}
             parentId={productInstance.contractId}
             activities={productInstance.activities as GeneralActivity[]}
             documentType={SingleEntities.ProductInstance}
             resourceStatus={status}
+            roles={[Roles.ADMIN, Roles.GENERAL]}
+            canCancel
           />
         </Segment>,
         <Segment style={{ margin: '2em 1em 1em' }} key="seg-2">
@@ -139,7 +147,7 @@ class ContractProductInstanceModal extends React.Component<Props> {
         open
         closeIcon
         dimmer="blurring"
-        size={create ? 'tiny' : 'large'}
+        size={create ? 'tiny' : 'small'}
       >
         <div style={{ margin: '1em' }}>
           <AlertContainer />
@@ -161,14 +169,20 @@ class ContractProductInstanceModal extends React.Component<Props> {
 }
 
 const mapStateToProps = (state: RootState, props: SelfProps) => {
+  const prodInstance = !props.create
+    ? getSingle<Contract>(state, SingleEntities.Contract).data?.products.find(
+      (p) => p.id === parseInt(props.match.params.productInstanceId!, 10),
+    )
+    : undefined;
+  let prodName = '';
+  if (prodInstance !== undefined) {
+    prodName = getProductName(state, prodInstance.productId);
+  }
   return {
-    productInstance: !props.create
-      ? getSingle<Contract>(state, SingleEntities.Contract).data?.products.find(
-        (p) => p.id === parseInt(props.match.params.productInstanceId!, 10),
-      )
-      : undefined,
+    productInstance: prodInstance,
     status: getSingle<Contract>(state, SingleEntities.Contract).status,
     contract: getSingle<Contract>(state, SingleEntities.Contract).data,
+    productName: prodName,
   };
 };
 
@@ -183,6 +197,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   removeProductInstance: (contractId: number, id: number) => dispatch(
     deleteInstanceSingle(contractId, id),
   ),
+  showTransientAlert: (alert: TransientAlert) => dispatch(showTransientAlert(alert)),
 });
 
 export default withRouter(connect(mapStateToProps,

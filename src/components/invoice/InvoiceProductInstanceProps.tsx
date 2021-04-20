@@ -9,6 +9,7 @@ import { RootState } from '../../stores/store';
 import { getSummary } from '../../stores/summaries/selectors';
 import { SummaryCollections } from '../../stores/summaries/summaries';
 import ProductSelector from '../product/ProductSelector';
+import TextAreaMimic from '../TextAreaMimic';
 
 interface Props {
   create?: boolean;
@@ -28,7 +29,7 @@ interface State {
   productId: number;
   basePrice: string;
   discount: string;
-  comments?: string;
+  details?: string;
 }
 
 class ProductInstanceProps extends React.Component<Props, State> {
@@ -55,7 +56,7 @@ class ProductInstanceProps extends React.Component<Props, State> {
       productId: productInstance.productId,
       basePrice: (productInstance.basePrice / 100).toString(),
       discount: (productInstance.discount / 100).toString(),
-      comments: productInstance.details,
+      details: productInstance.details,
     };
   };
 
@@ -64,7 +65,7 @@ class ProductInstanceProps extends React.Component<Props, State> {
       productId: this.state.productId,
       basePrice: parseInt(this.state.basePrice, 10) * 100,
       discount: parseInt(this.state.discount, 10) * 100,
-      comments: this.state.comments,
+      details: this.state.details,
     });
   };
 
@@ -93,7 +94,7 @@ class ProductInstanceProps extends React.Component<Props, State> {
       editing,
       basePrice,
       discount,
-      comments,
+      details,
       productId,
     } = this.state;
 
@@ -160,19 +161,23 @@ class ProductInstanceProps extends React.Component<Props, State> {
               </Input>
             </Form.Field>
           </Form.Group>
-          <Form.Field disabled={!editing}>
+          <Form.Field>
             {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-            <label htmlFor="form-input-comments">
-              Comments
+            <label htmlFor="form-input-details">
+              Details
             </label>
-            <TextArea
-              id="form-delivery-spec-english"
-              value={comments}
-              onChange={
-                (e) => this.setState({ comments: e.target.value })
-              }
-              placeholder="Comments"
-            />
+            {editing ? (
+              <TextArea
+                id="form-input-details"
+                value={details}
+                onChange={
+                  (e) => this.setState({ details: e.target.value })
+                }
+                placeholder="Details"
+              />
+            ) : (
+              <TextAreaMimic content={details} />
+            )}
           </Form.Field>
         </Form>
       </>

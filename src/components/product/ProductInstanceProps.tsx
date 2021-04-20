@@ -4,9 +4,11 @@ import { Form, Input, Label } from 'semantic-ui-react';
 import {
   ActivityType,
   Contract,
+  ContractStatus,
   ProductInstance,
   ProductInstanceParams,
   ProductSummary,
+  Roles,
 } from '../../clients/server.generated';
 import ResourceStatus from '../../stores/resourceStatus';
 import { RootState } from '../../stores/store';
@@ -15,6 +17,8 @@ import { SummaryCollections } from '../../stores/summaries/summaries';
 import PropsButtons from '../PropsButtons';
 import ProductSelector from './ProductSelector';
 import { SingleEntities } from '../../stores/single/single';
+import AuthorizationComponent from '../AuthorizationComponent';
+import { getLastStatus } from '../../helpers/activity';
 
 interface Props {
   create?: boolean;
@@ -36,7 +40,7 @@ interface State {
   productId: number;
   basePrice: string;
   discount: string;
-  comments?: string;
+  details?: string;
 }
 
 class ProductInstanceProps extends React.Component<Props, State> {
@@ -63,16 +67,16 @@ class ProductInstanceProps extends React.Component<Props, State> {
       productId: productInstance.productId,
       basePrice: (productInstance.basePrice / 100).toString(),
       discount: (productInstance.discount / 100).toString(),
-      comments: productInstance.details,
+      details: productInstance.details,
     };
   };
 
   toParams = (): ProductInstanceParams => {
     return new ProductInstanceParams({
       productId: this.state.productId,
-      basePrice: parseInt(this.state.basePrice, 10) * 100,
-      discount: parseInt(this.state.discount, 10) * 100,
-      comments: this.state.comments,
+      basePrice: Math.round(parseFloat(this.state.basePrice.replace(',', '.')) * 100),
+      discount: Math.round(parseFloat(this.state.discount.replace(',', '.')) * 100),
+      details: this.state.details,
     });
   };
 
@@ -103,8 +107,12 @@ class ProductInstanceProps extends React.Component<Props, State> {
   };
 
   propsHaveErrors = (): boolean => {
-    const { productId } = this.state;
-    return (productId < 0);
+    const { productId, basePrice, discount } = this.state;
+    return (
+      productId < 0
+      || Number.isNaN(Math.round(parseFloat(basePrice.replace(',', '.')) * 100))
+      || Number.isNaN(Math.round(parseFloat(discount.replace(',', '.')) * 100))
+    );
   };
 
   deleteButtonActive = () => {
@@ -118,42 +126,58 @@ class ProductInstanceProps extends React.Component<Props, State> {
       || this.props.productInstance.invoiceId === undefined);
   };
 
+  editButtonActive = () => {
+    if (this.props.create) {
+      return undefined;
+    }
+    const status = getLastStatus(this.props.contract.activities
+      .filter((a) => a.type === ActivityType.STATUS));
+    return !(status!.subType === ContractStatus.CONFIRMED
+      || status!.subType === ContractStatus.FINISHED
+      || status!.subType === ContractStatus.CANCELLED
+      || this.props.productInstance.invoiceId !== undefined);
+  };
+
   render() {
     const {
       editing,
       basePrice,
       discount,
-      comments,
+      details,
       productId,
     } = this.state;
+    const { productInstance } = this.props;
 
     return (
       <>
         <h2>
           {this.props.create ? 'New Product Instance' : 'Details'}
 
-          <PropsButtons
-            editing={editing}
-            canDelete={this.deleteButtonActive()}
-            canSave={!this.propsHaveErrors()}
-            entity={SingleEntities.Product}
-            status={this.props.status}
-            cancel={this.cancel}
-            edit={this.edit}
-            save={this.save}
-            remove={this.remove}
-          />
+          <AuthorizationComponent roles={[Roles.ADMIN, Roles.GENERAL]} notFound={false}>
+            <PropsButtons
+              editing={editing}
+              canEdit={this.editButtonActive()}
+              canDelete={this.deleteButtonActive()}
+              canSave={!this.propsHaveErrors()}
+              entity={SingleEntities.Product}
+              status={this.props.status}
+              cancel={this.cancel}
+              edit={this.edit}
+              save={this.save}
+              remove={this.remove}
+            />
+          </AuthorizationComponent>
         </h2>
 
         <Form style={{ marginTop: '2em' }}>
           <Form.Group widths="equal">
             <Form.Field
-              disabled={!editing}
+              disabled={!editing || productInstance.id >= 0}
             >
               {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
               <label htmlFor="form-product-dropdown">Product</label>
               <ProductSelector
-                id="form-assigned-to-selector"
+                id="form-product-dropdown"
                 value={productId}
                 onChange={(id: string) => {
                   if (id === '') {
@@ -174,14 +198,14 @@ class ProductInstanceProps extends React.Component<Props, State> {
             </Form.Field>
             <Form.Field disabled={!editing}>
               {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-              <label htmlFor="form-input-comments">
+              <label htmlFor="form-input-details">
                 Details
               </label>
               <Input
-                id="form-delivery-spec-english"
-                value={comments}
+                id="form-input-details"
+                value={details}
                 onChange={
-                  (e) => this.setState({ comments: e.target.value })
+                  (e) => this.setState({ details: e.target.value })
                 }
                 placeholder="Details"
                 fluid
@@ -191,6 +215,8 @@ class ProductInstanceProps extends React.Component<Props, State> {
           <Form.Group widths="equal">
             <Form.Field
               disabled={!editing}
+              error={Number.isNaN(Math.round(parseFloat(this.state.basePrice.replace(',', '.')) * 100))}
+              value={parseFloat(basePrice.replace(',', '.')).toFixed(2)}
             >
               {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
               <label htmlFor="form-input-base-price">
@@ -211,9 +237,10 @@ class ProductInstanceProps extends React.Component<Props, State> {
             </Form.Field>
             <Form.Field
               disabled={!editing}
+              error={Number.isNaN(Math.round(parseFloat(this.state.discount.replace(',', '.')) * 100))}
             >
               {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-              <label htmlFor="form-input-Discount">
+              <label htmlFor="form-input-discount">
                 Discount
               </label>
               <Input
@@ -239,15 +266,7 @@ class ProductInstanceProps extends React.Component<Props, State> {
               <Input
                 labelPosition="left"
                 id="form-input-real-price"
-                value={parseInt(basePrice, 10) - parseInt(discount, 10)}
-                onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                  // eslint-disable-next-line no-restricted-globals
-                  const value = isNaN(parseInt(e.target.value, 10)) ? 0
-                    : parseInt(e.target.value, 10);
-                  this.setState({
-                    discount: (parseInt(basePrice, 10) - value).toString(),
-                  });
-                }}
+                value={(parseFloat(basePrice.replace(',', '.')) - parseFloat(discount.replace(',', '.'))).toFixed(2)}
                 fluid
               >
                 <Label basic>€</Label>

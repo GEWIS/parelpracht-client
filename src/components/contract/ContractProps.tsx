@@ -1,10 +1,12 @@
 import React, { ChangeEvent } from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
-import { Form, Input } from 'semantic-ui-react';
+import { Form, Input, TextArea } from 'semantic-ui-react';
 import validator from 'validator';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
-import { ActivityType, Contract, ContractParams } from '../../clients/server.generated';
+import {
+  ActivityType, Contract, ContractParams, Roles,
+} from '../../clients/server.generated';
 import { createSingle, deleteSingle, saveSingle } from '../../stores/single/actionCreators';
 import ResourceStatus from '../../stores/resourceStatus';
 import { RootState } from '../../stores/store';
@@ -14,6 +16,10 @@ import PropsButtons from '../PropsButtons';
 import { SingleEntities } from '../../stores/single/single';
 import { getSingle } from '../../stores/single/selectors';
 import UserSelector from '../user/UserSelector';
+import { TransientAlert } from '../../stores/alerts/actions';
+import { showTransientAlert } from '../../stores/alerts/actionCreators';
+import { formatDocumentIdTitle } from '../../helpers/documents';
+import AuthorizationComponent from '../AuthorizationComponent';
 
 interface Props extends RouteComponentProps {
   create?: boolean;
@@ -26,6 +32,7 @@ interface Props extends RouteComponentProps {
   saveContract: (id: number, contract: ContractParams) => void;
   createContract: (contract: ContractParams) => void;
   deleteContract: (id: number) => void;
+  showTransientAlert: (alert: TransientAlert) => void;
 }
 
 interface State {
@@ -53,6 +60,16 @@ class ContractProps extends React.Component<Props, State> {
       && this.props.status === ResourceStatus.FETCHED) {
       // eslint-disable-next-line react/no-did-update-set-state
       this.setState({ editing: false });
+      this.props.showTransientAlert({
+        title: 'Success',
+        message: `Properties of ${formatDocumentIdTitle(
+          this.props.contract.id,
+          this.props.contract.title,
+          SingleEntities.Contract,
+        )} successfully updated.`,
+        type: 'success',
+        displayTimeInMs: 3000,
+      });
     }
   }
 
@@ -178,17 +195,20 @@ class ContractProps extends React.Component<Props, State> {
         <h2>
           {this.props.create ? 'New Contract' : 'Details'}
 
-          <PropsButtons
-            editing={editing}
-            canDelete={this.deleteButtonActive()}
-            canSave={!this.propsHaveErrors()}
-            entity={SingleEntities.Contract}
-            status={this.props.status}
-            cancel={this.cancel}
-            edit={this.edit}
-            save={this.save}
-            remove={this.remove}
-          />
+          <AuthorizationComponent roles={[Roles.GENERAL, Roles.ADMIN]} notFound={false}>
+            <PropsButtons
+              editing={editing}
+              canEdit
+              canDelete={this.deleteButtonActive()}
+              canSave={!this.propsHaveErrors()}
+              entity={SingleEntities.Contract}
+              status={this.props.status}
+              cancel={this.cancel}
+              edit={this.edit}
+              save={this.save}
+              remove={this.remove}
+            />
+          </AuthorizationComponent>
         </h2>
 
         <Form style={{ marginTop: '2em' }}>
@@ -220,6 +240,7 @@ class ContractProps extends React.Component<Props, State> {
                   assignedToSelection: val === '' ? undefined : val,
                 })}
                 clearable
+                role={Roles.GENERAL}
               />
             </Form.Field>
           </Form.Group>
@@ -243,9 +264,8 @@ class ContractProps extends React.Component<Props, State> {
           </Form.Field>
           <Form.Field
             disabled={!editing}
-            fluid
             id="form-input-comments"
-            control={Input}
+            control={TextArea}
             label="Comments"
             value={comments}
             onChange={(e: ChangeEvent<HTMLInputElement>) => this.setState({
@@ -275,6 +295,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   deleteContract: (id: number) => dispatch(
     deleteSingle(SingleEntities.Contract, id),
   ),
+  showTransientAlert: (alert: TransientAlert) => dispatch(showTransientAlert(alert)),
 });
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ContractProps));

@@ -6,7 +6,9 @@ import {
 } from 'semantic-ui-react';
 import validator from 'validator';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
-import { Product, ProductParams, ProductStatus } from '../../clients/server.generated';
+import {
+  Product, ProductParams, ProductStatus, Roles,
+} from '../../clients/server.generated';
 import ProductCategorySelector from '../productcategories/ProductCategorySelector';
 import { formatPrice } from '../../helpers/monetary';
 import ResourceStatus from '../../stores/resourceStatus';
@@ -15,17 +17,24 @@ import { getSingle } from '../../stores/single/selectors';
 import { SingleEntities } from '../../stores/single/single';
 import { RootState } from '../../stores/store';
 import PropsButtons from '../PropsButtons';
+import { TransientAlert } from '../../stores/alerts/actions';
+import { showTransientAlert } from '../../stores/alerts/actionCreators';
+import TextAreaMimic from '../TextAreaMimic';
+import CreatePricing from '../productpricing/CreatePricing';
+import AuthorizationComponent from '../AuthorizationComponent';
 
 interface Props extends RouteComponentProps {
   create?: boolean;
   onCancel?: () => void;
 
   product: Product;
+  productPricingActive?: boolean;
   status: ResourceStatus;
 
   saveProduct: (id: number, product: ProductParams) => void;
   createProduct: (product: ProductParams) => void;
   deleteProduct: (id: number) => void;
+  showTransientAlert: (alert: TransientAlert) => void;
 }
 
 interface State {
@@ -94,7 +103,7 @@ class ProductProps extends React.Component<Props, State> {
       deliverySpecificationDutch: this.state.deliverySpecDutch,
       minTarget: this.state.minTarget,
       maxTarget: this.state.maxTarget,
-      targetPrice: Math.round(Number.parseFloat(this.state.targetPrice) * 100),
+      targetPrice: Math.round(Number.parseFloat(this.state.targetPrice.replace(',', '.')) * 100),
     });
   };
 
@@ -133,7 +142,7 @@ class ProductProps extends React.Component<Props, State> {
     return (validator.isEmpty(nameDutch)
       || validator.isEmpty(nameEnglish)
       || categoryId < 0
-      || (parseFloat(targetPrice) < 0 || Number.isNaN(parseFloat(targetPrice)))
+      || (parseFloat(targetPrice.replace(',', '.')) <= 0 || Number.isNaN(parseFloat(targetPrice.replace(',', '.'))))
       || (minTarget !== undefined ? minTarget < 0 : false)
       || maxTarget < (minTarget || 0)
       || validator.isEmpty(contractTextDutch)
@@ -173,6 +182,7 @@ class ProductProps extends React.Component<Props, State> {
 
           <PropsButtons
             editing={editing}
+            canEdit
             canDelete={this.deleteButtonActive()}
             canSave={!this.propsHaveErrors()}
             entity={SingleEntities.Product}
@@ -219,44 +229,24 @@ class ProductProps extends React.Component<Props, State> {
               }
             />
           </Form.Group>
-          <Form.Field
-            disabled={!editing}
-            required
-          >
-            {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-            <label htmlFor="form-input-category">
-              Product category
-            </label>
-            <ProductCategorySelector
-              id="form-input-category"
-              value={categoryId}
-              onChange={(val: number) => {
-                this.setState({
-                  categoryId: val,
-                });
-              }}
-            />
-          </Form.Field>
           <Form.Group widths="equal">
             <Form.Field
               disabled={!editing}
               required
-              error={parseFloat(targetPrice) < 0 || Number.isNaN(parseFloat(targetPrice))}
             >
               {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-              <label htmlFor="form-input-target-price">
-                Target Price
+              <label htmlFor="form-input-category">
+                Product category
               </label>
-              <Input
-                labelPosition="left"
-                id="form-input-target-price"
-                value={targetPrice}
-                onChange={(e) => this.setState({ targetPrice: e.target.value })}
-                fluid
-              >
-                <Label basic>€</Label>
-                <input />
-              </Input>
+              <ProductCategorySelector
+                id="form-input-category"
+                value={categoryId}
+                onChange={(val: number) => {
+                  this.setState({
+                    categoryId: val,
+                  });
+                }}
+              />
             </Form.Field>
             <Form.Field
               disabled={!editing}
@@ -276,6 +266,41 @@ class ProductProps extends React.Component<Props, State> {
                 })}
               />
             </Form.Field>
+          </Form.Group>
+          <Form.Group widths="equal">
+            <Form.Field
+              disabled={!editing}
+              required
+              error={parseFloat(targetPrice.replace(',', '.')) <= 0 || Number.isNaN(parseFloat(targetPrice.replace(',', '.')))}
+            >
+              {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
+              <label htmlFor="form-input-target-price">
+                Target Price
+              </label>
+              <Input
+                labelPosition="left"
+                id="form-input-target-price"
+                value={targetPrice}
+                onChange={(e) => this.setState({ targetPrice: e.target.value })}
+                fluid
+              >
+                <Label basic>€</Label>
+                <input />
+              </Input>
+            </Form.Field>
+            {this.props.productPricingActive ? (
+              <AuthorizationComponent roles={[Roles.ADMIN]} notFound={false}>
+                <Form.Field
+                  disabled={!editing}
+                >
+                  {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
+                  <label htmlFor="form-check-status">
+                    Pricing Tab
+                  </label>
+                  <CreatePricing productId={this.props.product.id} />
+                </Form.Field>
+              </AuthorizationComponent>
+            ) : null }
           </Form.Group>
           <Form.Group widths="equal">
             <Form.Field
@@ -317,75 +342,93 @@ class ProductProps extends React.Component<Props, State> {
               />
             </Form.Field>
           </Form.Group>
-          <Form.Field
-            disabled={!editing}
-          >
+          <Form.Field>
             {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
             <label htmlFor="form-input-description">
               Comments (internal)
             </label>
-            <TextArea
-              id="form-input-description"
-              value={description}
-              onChange={(e) => this.setState({ description: e.target.value })}
-              placeholder="Internal comments"
-            />
+            {editing ? (
+              <TextArea
+                id="form-input-description"
+                value={description}
+                onChange={(e) => this.setState({ description: e.target.value })}
+                placeholder="Internal comments"
+              />
+            ) : (
+              <TextAreaMimic content={description} />
+            )}
           </Form.Field>
-          <Form.Field disabled={!editing} required error={validator.isEmpty(contractTextDutch)}>
+          <Form.Field required error={validator.isEmpty(contractTextDutch)}>
             {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
             <label htmlFor="form-input-contract-text-dutch">
               Contract Text (Dutch)
             </label>
-            <TextArea
-              id="form-input-contract-text-dutch"
-              value={contractTextDutch}
-              onChange={
-                (e) => this.setState({ contractTextDutch: e.target.value })
-              }
-              placeholder="Contract text in Dutch"
-            />
+            {editing ? (
+              <TextArea
+                id="form-input-contract-text-dutch"
+                value={contractTextDutch}
+                onChange={
+                  (e) => this.setState({ contractTextDutch: e.target.value })
+                }
+                placeholder="Contract text in Dutch"
+              />
+            ) : (
+              <TextAreaMimic content={contractTextDutch} />
+            )}
           </Form.Field>
-          <Form.Field disabled={!editing} required error={validator.isEmpty(contractTextEnglish)}>
+          <Form.Field required error={validator.isEmpty(contractTextEnglish)}>
             {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
             <label htmlFor="form-input-contract-text-english">
               Contract Text (English)
             </label>
-            <TextArea
-              id="form-input-contract-text-english"
-              value={contractTextEnglish}
-              onChange={
-                (e) => this.setState({ contractTextEnglish: e.target.value })
-              }
-              placeholder="Contract text in English"
-            />
+            {editing ? (
+              <TextArea
+                id="form-input-contract-text-english"
+                value={contractTextEnglish}
+                onChange={
+                  (e) => this.setState({ contractTextEnglish: e.target.value })
+                }
+                placeholder="Contract text in English"
+              />
+            ) : (
+              <TextAreaMimic content={contractTextEnglish} />
+            )}
           </Form.Field>
-          <Form.Field disabled={!editing}>
+          <Form.Field>
             {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
             <label htmlFor="form-input-delivery-spec-dutch">
               Delivery Specification (Dutch)
             </label>
-            <TextArea
-              id="form-input-delivery-spec-dutch"
-              value={deliverySpecDutch}
-              onChange={
-                (e) => this.setState({ deliverySpecDutch: e.target.value })
-              }
-              placeholder="Delivery specifications in Dutch"
-            />
+            {editing ? (
+              <TextArea
+                id="form-input-delivery-spec-dutch"
+                value={deliverySpecDutch}
+                onChange={
+                  (e) => this.setState({ deliverySpecDutch: e.target.value })
+                }
+                placeholder="Delivery specifications in Dutch"
+              />
+            ) : (
+              <TextAreaMimic content={deliverySpecDutch} />
+            )}
           </Form.Field>
-          <Form.Field disabled={!editing}>
+          <Form.Field>
             {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
             <label htmlFor="form-input-delivery-spec-english">
               Delivery Specification (English)
             </label>
-            <TextArea
-              id="form-delivery-spec-english"
-              value={deliverySpecEnglish}
-              onChange={
-                (e) => this.setState({ deliverySpecEnglish: e.target.value })
-              }
-              placeholder="Delivery specifications in English"
-            />
+            {editing ? (
+              <TextArea
+                id="form-delivery-spec-english"
+                value={deliverySpecEnglish}
+                onChange={
+                  (e) => this.setState({ deliverySpecEnglish: e.target.value })
+                }
+                placeholder="Delivery specifications in English"
+              />
+            ) : (
+              <TextAreaMimic content={deliverySpecEnglish} />
+            )}
           </Form.Field>
         </Form>
       </>
@@ -409,6 +452,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   deleteProduct: (id: number) => dispatch(
     deleteSingle(SingleEntities.Product, id),
   ),
+  showTransientAlert: (alert: TransientAlert) => dispatch(showTransientAlert(alert)),
 });
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ProductProps));

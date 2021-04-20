@@ -1,7 +1,8 @@
 import React from 'react';
 import { Dropdown, Grid, Tab } from 'semantic-ui-react';
 import { Bar } from 'react-chartjs-2';
-import { ChartOptions } from 'chart.js';
+import * as chartjs from 'chart.js';
+import 'chartjs-plugin-annotation';
 import { AnalysisResultByYear, Client, Product } from '../../clients/server.generated';
 import { DataSet } from '../chart/CategoryLineChart';
 import { formatPriceFull } from '../../helpers/monetary';
@@ -42,8 +43,6 @@ class ProductsContractedGraph extends React.Component<Props, State> {
 
   createBarChartDataObject = (data: AnalysisResultByYear[]): object => {
     const { dataSetSelection } = this.state;
-    const { product } = this.props;
-
     const labels = data.map((x) => x.year);
     let datasets;
     switch (dataSetSelection) {
@@ -56,61 +55,18 @@ class ProductsContractedGraph extends React.Component<Props, State> {
           hoverBackgroundColor: 'rgba(255, 148, 128, 0.8)',
           hoverBorderColor: 'rgba(41, 48, 101, 1)',
           data: data.map((x) => x.amount),
-        }, {
-          label: 'Minimum Target (€)',
-          labelString: 'Minimum Target',
-          type: 'line',
-          borderColor: 'rgba(41, 48, 101, 1)',
-          borderWidth: 2,
-          radius: 2,
-          data: [product.targetPrice * product.minTarget, product.targetPrice * product.minTarget],
-          fill: false,
-          cubicInterpolationMode: 'monotone',
-        }, {
-          label: 'Maximum Target (€)',
-          labelString: 'Maximum Target',
-          type: 'line',
-          borderColor: 'rgba(41, 48, 101, 1)',
-          borderWidth: 2,
-          radius: 2,
-          data: [product.targetPrice * product.maxTarget, product.targetPrice * product.maxTarget],
-          fill: false,
-          cubicInterpolationMode: 'monotone',
-        },
-        ];
+        }];
         break;
       case DataSet.AMOUNTS:
-        datasets = [
-          {
-            label: 'Amounts',
-            backgroundColor: 'rgba(41, 48, 101, 0.8)',
-            borderColor: 'rgba(41, 48, 101, 1)',
-            borderWidth: 1,
-            hoverBackgroundColor: 'rgba(255, 148, 128, 0.8)',
-            hoverBorderColor: 'rgba(41, 48, 101, 1)',
-            data: data.map((x) => x.nrOfProducts),
-          }, {
-            label: 'Minimum Target',
-            labelString: 'Minimum Target',
-            type: 'line',
-            backgroundColor: 'rgba(41, 48, 101, 0.8)',
-            borderColor: 'rgba(41, 48, 101, 1)',
-            borderWidth: 2,
-            data: [product.minTarget, product.minTarget],
-            fill: false,
-            cubicInterpolationMode: 'monotone',
-          }, {
-            label: 'Maximum Target',
-            labelString: 'Maximum Target',
-            type: 'line',
-            backgroundColor: 'rgba(41, 48, 101, 0.8)',
-            borderColor: 'rgba(41, 48, 101, 1)',
-            borderWidth: 2,
-            data: [product.maxTarget, product.maxTarget],
-            fill: false,
-            cubicInterpolationMode: 'monotone',
-          },
-        ];
+        datasets = [{
+          label: 'Amounts',
+          backgroundColor: 'rgba(41, 48, 101, 0.8)',
+          borderColor: 'rgba(41, 48, 101, 1)',
+          borderWidth: 1,
+          hoverBackgroundColor: 'rgba(255, 148, 128, 0.8)',
+          hoverBorderColor: 'rgba(41, 48, 101, 1)',
+          data: data.map((x) => x.nrOfProducts),
+        }];
         break;
       default:
     }
@@ -118,65 +74,223 @@ class ProductsContractedGraph extends React.Component<Props, State> {
   };
 
   createBarChartOptionsObject = () => {
-    const { dataSetSelection } = this.state;
     const { product } = this.props;
-    let options: ChartOptions;
+    const { dataSetSelection } = this.state;
+    let options: chartjs.ChartOptions;
     switch (dataSetSelection) {
       case DataSet.VALUES:
-        options = {
-          legend: {
-            display: true,
-          },
-          scales: {
-            xAxes: [{
-              stacked: true,
-            }],
-            yAxes: [{
-              stacked: true,
-              ticks: {
-                beginAtZero: true,
-                callback(value: number) {
-                  return formatPriceFull(value);
+        if (product.minTarget === 0) {
+          options = {
+            legend: {
+              display: false,
+            },
+            scales: {
+              xAxes: [{
+                stacked: true,
+              }],
+              yAxes: [{
+                stacked: true,
+                ticks: {
+                  beginAtZero: true,
+                  callback(value: number) {
+                    return formatPriceFull(value);
+                  },
                 },
-              },
-            }],
-          },
-          tooltips: {
-            callbacks: {
-              label(tooltipItem: any) {
-                return formatPriceFull(tooltipItem.yLabel);
+              }],
+            },
+            tooltips: {
+              callbacks: {
+                label(tooltipItem: any) {
+                  return formatPriceFull(tooltipItem.yLabel);
+                },
               },
             },
-          },
-        };
-        break;
-      case DataSet.AMOUNTS:
-        options = {
-          legend: {
-            display: true,
-          },
-          scales: {
-            xAxes: [{
-              stacked: true,
-            }],
-            yAxes: [{
-              stacked: true,
-              ticks: {
-                beginAtZero: true,
-                callback(value: number) {
-                  return value;
+            annotation: {
+              annotations: [
+                {
+                  id: 'maxTarget',
+                  type: 'line',
+                  value: product.maxTarget * product.targetPrice,
+                  mode: 'horizontal',
+                  scaleID: 'y-axis-0',
+                  borderColor: 'rgba(41, 48, 101, 1)',
+                  borderWidth: 2,
+                  label: {
+                    backgroundColor: 'rgba(41, 48, 101, 0.8)',
+                    content: 'Maximal target',
+                    enabled: true,
+                  },
+                },
+              ],
+            },
+          };
+        } else {
+          options = {
+            legend: {
+              display: false,
+            },
+            scales: {
+              xAxes: [{
+                stacked: true,
+              }],
+              yAxes: [{
+                stacked: true,
+                ticks: {
+                  beginAtZero: true,
+                  callback(value: number) {
+                    return formatPriceFull(value);
+                  },
+                },
+              }],
+            },
+            tooltips: {
+              callbacks: {
+                label(tooltipItem: any) {
+                  return formatPriceFull(tooltipItem.yLabel);
                 },
               },
-            }],
-          },
-          // tooltips: {
-          //   callbacks: {
-          //     label(tooltipItem: any) {
-          //       return formatPriceFull(tooltipItem.yLabel);
-          //     },
-          //   },
-          // },
-        };
+            },
+            annotation: {
+              annotations: [
+                {
+                  id: 'minTarget',
+                  type: 'line',
+                  value: product.minTarget * product.targetPrice,
+                  mode: 'horizontal',
+                  scaleID: 'y-axis-0',
+                  borderColor: 'rgba(41, 48, 101, 1)',
+                  borderWidth: 2,
+                  label: {
+                    backgroundColor: 'rgba(41, 48, 101, 0.8)',
+                    content: 'Minimal target',
+                    enabled: true,
+                  },
+                },
+                {
+                  id: 'maxTarget',
+                  type: 'line',
+                  value: product.maxTarget * product.targetPrice,
+                  mode: 'horizontal',
+                  scaleID: 'y-axis-0',
+                  borderColor: 'rgba(41, 48, 101, 1)',
+                  borderWidth: 2,
+                  label: {
+                    backgroundColor: 'rgba(41, 48, 101, 0.8)',
+                    content: 'Maximal target',
+                    enabled: true,
+                  },
+                },
+              ],
+            },
+          };
+        }
+        break;
+      case DataSet.AMOUNTS:
+        if (product.minTarget === 0) {
+          options = {
+            legend: {
+              display: false,
+            },
+            scales: {
+              xAxes: [{
+                stacked: true,
+              }],
+              yAxes: [{
+                stacked: true,
+                ticks: {
+                  beginAtZero: true,
+                  callback(value: number) {
+                    return value;
+                  },
+                },
+              }],
+            },
+            annotation: {
+              annotations: [
+                {
+                  id: 'maxTarget',
+                  type: 'line',
+                  value: product.maxTarget,
+                  mode: 'horizontal',
+                  scaleID: 'y-axis-0',
+                  borderColor: 'rgba(41, 48, 101, 1)',
+                  borderWidth: 2,
+                  label: {
+                    backgroundColor: 'rgba(41, 48, 101, 0.8)',
+                    content: 'Maximal target',
+                    enabled: true,
+                  },
+                },
+              ],
+            },
+            tooltips: {
+              callbacks: {
+                label(tooltipItem: any) {
+                  return formatPriceFull(tooltipItem.yLabel);
+                },
+              },
+            },
+          };
+        } else {
+          options = {
+            legend: {
+              display: false,
+            },
+            scales: {
+              xAxes: [{
+                stacked: true,
+              }],
+              yAxes: [{
+                stacked: true,
+                ticks: {
+                  beginAtZero: true,
+                  callback(value: number) {
+                    return value;
+                  },
+                },
+              }],
+            },
+            annotation: {
+              annotations: [
+                {
+                  id: 'minTarget',
+                  type: 'line',
+                  value: product.minTarget,
+                  mode: 'horizontal',
+                  scaleID: 'y-axis-0',
+                  borderColor: 'rgba(41, 48, 101, 1)',
+                  borderWidth: 2,
+                  label: {
+                    backgroundColor: 'rgba(41, 48, 101, 0.8)',
+                    content: 'Minimal target',
+                    enabled: true,
+                  },
+                },
+                {
+                  id: 'maxTarget',
+                  type: 'line',
+                  value: product.maxTarget,
+                  mode: 'horizontal',
+                  scaleID: 'y-axis-0',
+                  borderColor: 'rgba(41, 48, 101, 1)',
+                  borderWidth: 2,
+                  label: {
+                    backgroundColor: 'rgba(41, 48, 101, 0.8)',
+                    content: 'Maximal target',
+                    enabled: true,
+                  },
+                },
+              ],
+            },
+            tooltips: {
+              callbacks: {
+                label(tooltipItem: any) {
+                  return formatPriceFull(tooltipItem.yLabel);
+                },
+              },
+            },
+          };
+        }
         break;
       default:
         options = {};
@@ -220,6 +334,7 @@ class ProductsContractedGraph extends React.Component<Props, State> {
           <Bar
             data={chartData}
             options={chartOptions}
+            redraw
           />
         </div>
         <p style={{ textAlign: 'center', fontStyle: 'italic', marginTop: '0.5em' }}>

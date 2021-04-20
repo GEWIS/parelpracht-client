@@ -5,7 +5,7 @@ import { Dispatch } from 'redux';
 import {
   Button, ButtonProps, Icon, Modal,
 } from 'semantic-ui-react';
-import { Client, TransferUserParams } from '../../clients/server.generated';
+import { Client, Roles, TransferUserParams } from '../../clients/server.generated';
 import { clearSingle, fetchSingle } from '../../stores/single/actionCreators';
 import { SingleEntities } from '../../stores/single/single';
 import UserSelector from './UserSelector';
@@ -49,14 +49,9 @@ class UserMoveAssignmentsButton extends React.Component<Props, State> {
 
   public render() {
     const trigger = (
-      <Button
-        icon
-        labelPosition="left"
-        floated="right"
-        style={{ marginTop: '-0.5em' }}
-        primary
-      >
-        <Icon name="arrow right" />
+      <Button>
+        <Icon name="arrow up" />
+        {' '}
         Transfer assignments
       </Button>
     );
@@ -100,6 +95,7 @@ class UserMoveAssignmentsButton extends React.Component<Props, State> {
               selectedUser: val === '' ? undefined : val,
             })}
             clearable
+            role={Roles.GENERAL}
           />
         </Modal.Content>
       </Modal>

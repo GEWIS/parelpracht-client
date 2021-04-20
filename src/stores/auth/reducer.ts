@@ -1,6 +1,6 @@
 import ResourceStatus from '../resourceStatus';
 import * as actionCreators from './actionCreators';
-import { AuthActionType } from './actions';
+import { AuthActionType, AuthSetApiKey } from './actions';
 import { AuthState } from './state';
 
 const initialState: AuthState = {
@@ -9,8 +9,12 @@ const initialState: AuthState = {
 
   profile: undefined,
   profileStatus: ResourceStatus.EMPTY,
+  roles: [],
 
   passwordRequest: ResourceStatus.EMPTY,
+
+  apiKey: undefined,
+  apiKeyRequest: ResourceStatus.EMPTY,
 };
 
 type AuthAction = ReturnType<typeof actionCreators[keyof typeof actionCreators]>;
@@ -39,12 +43,14 @@ export default function authReducer(
       return {
         ...state,
         profile: action.profile,
+        roles: action.profile.roles.map((r) => r.name),
         profileStatus: ResourceStatus.FETCHED,
       };
     case AuthActionType.Logout:
       return {
         ...state,
         profile: undefined,
+        roles: [],
         profileStatus: ResourceStatus.EMPTY,
       };
     case AuthActionType.ResetPassword:
@@ -67,6 +73,23 @@ export default function authReducer(
       return {
         ...state,
         passwordRequest: ResourceStatus.ERROR,
+      };
+    case AuthActionType.GetApiKey:
+    case AuthActionType.GenerateApiKey:
+      return {
+        ...state,
+        apiKeyRequest: ResourceStatus.FETCHING,
+      };
+    case AuthActionType.RevokeApiKey:
+      return {
+        ...state,
+        apiKeyRequest: ResourceStatus.DELETING,
+      };
+    case AuthActionType.SetApiKey:
+      return {
+        ...state,
+        apiKey: (action as AuthSetApiKey).apiKey,
+        apiKeyRequest: ResourceStatus.FETCHED,
       };
     default:
       return state;

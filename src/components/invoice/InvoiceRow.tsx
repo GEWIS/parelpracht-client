@@ -6,26 +6,30 @@ import { Invoice, InvoiceStatus } from '../../clients/server.generated';
 import { RootState } from '../../stores/store';
 import { dateToFullFinancialYear, formatLastUpdate } from '../../helpers/timestamp';
 import { formatStatus } from '../../helpers/activity';
-import { getUserName } from '../../stores/user/selectors';
-import { getInvoiceStatus } from '../../stores/invoice/selectors';
+import { getInvoiceStatus, getInvoiceValue } from '../../stores/invoice/selectors';
 import CompanyLink from '../company/CompanyLink';
+import { formatPriceFull } from '../../helpers/monetary';
 
 interface Props {
   invoice: Invoice;
-
-  assignedName: string;
   invoiceStatus: InvoiceStatus;
+  value: number;
 }
 
 function InvoiceRow(props: Props) {
   const {
-    invoice, assignedName, invoiceStatus,
+    invoice, value, invoiceStatus,
   } = props;
   return (
     <Table.Row>
       <Table.Cell>
         <NavLink to={`/invoice/${invoice.id}`}>
-          {`F${invoice.id} ${invoice.title}`}
+          {`F${invoice.id}`}
+        </NavLink>
+      </Table.Cell>
+      <Table.Cell>
+        <NavLink to={`/invoice/${invoice.id}`}>
+          {invoice.title}
         </NavLink>
       </Table.Cell>
       <Table.Cell>
@@ -35,10 +39,10 @@ function InvoiceRow(props: Props) {
         {formatStatus(invoiceStatus)}
       </Table.Cell>
       <Table.Cell>
-        {dateToFullFinancialYear(invoice.startDate)}
+        {formatPriceFull(value)}
       </Table.Cell>
       <Table.Cell>
-        {assignedName}
+        {dateToFullFinancialYear(invoice.startDate)}
       </Table.Cell>
       <Table.Cell>
         {formatLastUpdate(invoice.updatedAt)}
@@ -49,8 +53,8 @@ function InvoiceRow(props: Props) {
 
 const mapStateToProps = (state: RootState, props: { invoice: Invoice }) => {
   return {
-    assignedName: getUserName(state, props.invoice.assignedToId),
     invoiceStatus: getInvoiceStatus(state, props.invoice.id),
+    value: getInvoiceValue(state, props.invoice.id),
   };
 };
 

@@ -1,20 +1,20 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import { NavLink, RouteComponentProps, withRouter } from 'react-router-dom';
 import {
   Button, Icon, Loader, Table,
 } from 'semantic-ui-react';
 import _ from 'lodash';
 import ContractProductRow from './ContractProductRow';
-import { Contract, ContractStatus } from '../../clients/server.generated';
-import { RootState } from '../../stores/store';
+import {
+  ActivityType, Contract, ContractStatus, Roles,
+} from '../../clients/server.generated';
 import { formatPriceFull } from '../../helpers/monetary';
 import ContractInvoiceModal from '../../pages/ContractInvoiceModal';
-import { getContractStatus } from '../../stores/contract/selectors';
+import AuthorizationComponent from '../AuthorizationComponent';
+import { getLastStatus } from '../../helpers/activity';
 
 interface Props extends RouteComponentProps {
   contract: Contract;
-  contractStatus: ContractStatus;
 }
 
 interface State {
@@ -50,7 +50,7 @@ class ContractProductList extends React.Component<Props, State> {
   };
 
   public render() {
-    const { contract, contractStatus } = this.props;
+    const { contract } = this.props;
     const { selected } = this.state;
 
     if (contract === undefined) {
@@ -58,6 +58,9 @@ class ContractProductList extends React.Component<Props, State> {
         <Loader content="Loading" active />
       );
     }
+
+    const contractStatus = getLastStatus(contract.activities
+      .filter((a) => a.type === ActivityType.STATUS))?.subType;
 
     const { products } = contract;
     let priceSum = 0;
@@ -82,24 +85,26 @@ class ContractProductList extends React.Component<Props, State> {
       <>
         <h3>
           Products
-          <Button
-            icon
-            labelPosition="left"
-            floated="right"
-            style={{ marginTop: '-0.5em' }}
-            basic
-            as={NavLink}
-            to={`${this.props.location.pathname}/product/new`}
-            disabled={!canChangeProducts}
-          >
-            <Icon name="plus" />
-            Add Product
-          </Button>
-          <ContractInvoiceModal
-            contract={contract}
-            productInstanceIds={selected}
-            clearSelection={this.clearSelection}
-          />
+          <AuthorizationComponent roles={[Roles.GENERAL, Roles.ADMIN]} notFound={false}>
+            <Button
+              icon
+              labelPosition="left"
+              floated="right"
+              style={{ marginTop: '-0.5em' }}
+              basic
+              as={NavLink}
+              to={`${this.props.location.pathname}/product/new`}
+              disabled={!canChangeProducts}
+            >
+              <Icon name="plus" />
+              Add Product
+            </Button>
+            <ContractInvoiceModal
+              contract={contract}
+              productInstanceIds={selected}
+              clearSelection={this.clearSelection}
+            />
+          </AuthorizationComponent>
 
         </h3>
         <Table compact>
@@ -115,7 +120,7 @@ class ContractProductList extends React.Component<Props, State> {
 
           </Table.Header>
           <Table.Body>
-            {products.map((product) => (
+            {products.sort((a, b) => a.id - b.id).map((product) => (
               <ContractProductRow
                 key={product.id}
                 productInstance={product}
@@ -148,11 +153,4 @@ class ContractProductList extends React.Component<Props, State> {
   }
 }
 
-const mapStateToProps = (state: RootState, props: { contract: Contract }) => ({
-  contractStatus: getContractStatus(state, props.contract.id),
-});
-
-const mapDispatchToProps = () => ({
-});
-
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ContractProductList));
+export default withRouter(ContractProductList);

@@ -42,14 +42,14 @@ function UserSummary(props: Props) {
     || status === ResourceStatus.EMPTY || status === ResourceStatus.FETCHING) {
     return (
       <>
-        <Header as="h1" attached="top" style={{ backgroundColor: '#eee' }}>
+        <Header as="h1" attached="top" style={{ backgroundColor: 'rgba(238, 238, 238, 0.98)' }}>
           <Icon name="user" />
           <Header.Content>
             <Header.Subheader>User</Header.Subheader>
             <Loader active inline />
           </Header.Content>
         </Header>
-        <Segment attached="bottom">
+        <Segment attached="bottom" style={{ backgroundColor: 'rgba(255, 255, 255, 0.95)' }}>
           <Placeholder><Placeholder.Line length="long" /></Placeholder>
         </Segment>
       </>
@@ -58,7 +58,7 @@ function UserSummary(props: Props) {
 
   return (
     <>
-      <Header as="h1" attached="top" style={{ backgroundColor: '#eee' }}>
+      <Header as="h1" attached="top" style={{ backgroundColor: 'rgba(238, 238, 238, 0.98)' }}>
         <Grid>
           <Grid.Row columns="2">
             <Grid.Column>
@@ -76,12 +76,11 @@ function UserSummary(props: Props) {
                 fileName={user.avatarFilename}
                 fetchEntity={fetchUser}
               />
-              {/* <UserDeleteButton floated="right" style={{ marginTop: '-0.5em' }} /> */}
             </Grid.Column>
           </Grid.Row>
         </Grid>
       </Header>
-      <Segment attached="bottom">
+      <Segment attached="bottom" style={{ backgroundColor: 'rgba(255, 255, 255, 0.95)' }}>
         <Grid columns={4}>
           <Grid.Column>
             <h5>Name</h5>

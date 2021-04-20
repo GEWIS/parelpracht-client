@@ -6,10 +6,14 @@
   background-color: @primaryColor;
 }
 
-.ui.inverted.menu.pointing  .active.item::after {
-  background: @primaryColor !important;
+.ui.inverted.menu.pointing .active.item::after {
+  background: tint(@primaryColor, 15%) !important;
 }
 
-.footer .ui.inverted.segment {
+.ui.inverted.pointing.menu .active.item:hover::after {
+  background: tint(@primaryColor, 15%) !important;
+}
+
+.ui.inverted.segment.footer {
   background-color: @secondaryColor;
 }

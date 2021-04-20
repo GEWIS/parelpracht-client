@@ -43,21 +43,31 @@ class ProductCategoryModal extends React.Component<Props> {
     if (this.props.status === ResourceStatus.FETCHED
       && prevProps.status === ResourceStatus.SAVING
     ) {
-      this.close();
+      this.closeWithPopupMessage();
+      this.props.showTransientAlert({
+        title: 'Success',
+        message: `Category ${this.props.category?.name} successfully saved`,
+        type: 'success',
+        displayTimeInMs: 3000,
+      });
     }
 
     if (this.props.status === ResourceStatus.EMPTY
       && prevProps.status === ResourceStatus.DELETING
     ) {
-      this.close();
-      // TODO: Fix alert not showing up, because it seems to get dismissed when closing the modal
+      this.closeWithPopupMessage();
       this.props.showTransientAlert({
         title: 'Success',
         message: `Category ${prevProps.category?.name} successfully deleted`,
         type: 'success',
+        displayTimeInMs: 3000,
       });
     }
   }
+
+  closeWithPopupMessage = () => {
+    this.props.history.push('/category');
+  };
 
   close = () => {
     this.props.history.goBack();

@@ -11,6 +11,7 @@ import validator from 'validator';
 import queryString from 'query-string';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
+import './BackgroundAnimation.css';
 import AlertContainer from '../components/alerts/AlertContainer';
 import ResetPasswordForm from '../components/auth/ResetPasswordForm';
 import { RootState } from '../stores/store';
@@ -79,14 +80,17 @@ function ResetPasswordPage(props: Props) {
   if (props.status === ResourceStatus.FETCHED) {
     return (
       <>
+        <div className="bg" />
+        <div className="bg bg2" />
+        <div className="bg bg3" />
         <AlertContainer internal />
         <Container>
           <Grid textAlign="center" verticalAlign="middle" style={{ height: '100vh' }}>
             <Grid.Column width={6}>
-              <Header as="h1">
-                {newUser ? 'Set your password' : 'Reset your password'}
-              </Header>
               <Segment color="green" size="large">
+                <Header as="h1">
+                  {newUser ? 'Set your password' : 'Reset your password'}
+                </Header>
                 <p>Password successfully changed!</p>
                 <Button as={NavLink} to="/login" style={{ marginTop: '1em' }} basic>
                   <Icon name="arrow left" basic />
@@ -102,6 +106,9 @@ function ResetPasswordPage(props: Props) {
 
   return (
     <>
+      <div className="bg" />
+      <div className="bg bg2" />
+      <div className="bg bg3" />
       <AlertContainer internal />
       <Container>
         <Grid textAlign="center" verticalAlign="middle" style={{ height: '100vh' }}>
@@ -125,7 +132,7 @@ function ResetPasswordPage(props: Props) {
                     <td>
                       {eightCharacters ? <Icon name="check" color="green" /> : <Icon name="close" color="red" />}
                     </td>
-                    <td>Eight characters in lengtd</td>
+                    <td>Eight characters in length</td>
                   </tr>
                   <tr>
                     <td>

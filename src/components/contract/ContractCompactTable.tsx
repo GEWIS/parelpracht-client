@@ -57,25 +57,22 @@ class ContractCompactTable extends React.Component<Props, State> {
   nextPage = async () => {
     const { skip, take, countTotal } = this.state;
     if (skip + take <= countTotal) {
-      this.setState({ skip: skip + take });
-      await this.getProductAttributes();
+      this.setState({ skip: skip + take }, () => this.getProductAttributes());
     }
   };
 
   prevPage = async () => {
     const { skip, take } = this.state;
     if (skip - take >= 0) {
-      this.setState({ skip: skip - take });
-      await this.getProductAttributes();
+      this.setState({ skip: skip - take }, () => this.getProductAttributes());
     }
   };
 
   setTake = async (take: number) => {
-    await this.setState({
+    this.setState({
       take,
       skip: 0,
-    });
-    await this.getProductAttributes();
+    }, () => this.getProductAttributes());
   };
 
   render() {
@@ -83,40 +80,55 @@ class ContractCompactTable extends React.Component<Props, State> {
       productInstances, countTotal, skip, take, loading,
     } = this.state;
 
+    let contractList;
+    if (productInstances.length === 0) {
+      contractList = (
+        <h4>
+          There are no contracts created yet.
+        </h4>
+      );
+    } else {
+      contractList = (
+        <>
+          <Table striped compact>
+            <Table.Header>
+              <Table.Row>
+                <Table.HeaderCell>
+                  Title
+                </Table.HeaderCell>
+                <Table.HeaderCell>
+                  Company
+                </Table.HeaderCell>
+                <Table.HeaderCell>
+                  Status
+                </Table.HeaderCell>
+                <Table.HeaderCell>
+                  Last Update
+                </Table.HeaderCell>
+              </Table.Row>
+            </Table.Header>
+            <Table.Body>
+              {productInstances.map((p) => <ContractCompactRow key={p.id} contract={p.contract} />)}
+            </Table.Body>
+          </Table>
+          <TablePagination
+            countTotal={countTotal}
+            countFetched={productInstances.length}
+            skip={skip}
+            take={take}
+            nextPage={this.nextPage}
+            prevPage={this.prevPage}
+            setTake={this.setTake}
+          />
+        </>
+      );
+    }
+
     return (
       <>
         <h3>Contracts</h3>
         <Loader active={loading} />
-        <Table striped compact>
-          <Table.Header>
-            <Table.Row>
-              <Table.HeaderCell>
-                Title
-              </Table.HeaderCell>
-              <Table.HeaderCell>
-                Company
-              </Table.HeaderCell>
-              <Table.HeaderCell>
-                Status
-              </Table.HeaderCell>
-              <Table.HeaderCell>
-                Last Update
-              </Table.HeaderCell>
-            </Table.Row>
-          </Table.Header>
-          <Table.Body>
-            {productInstances.map((p) => <ContractCompactRow key={p.id} contract={p.contract} />)}
-          </Table.Body>
-        </Table>
-        <TablePagination
-          countTotal={countTotal}
-          countFetched={productInstances.length}
-          skip={skip}
-          take={take}
-          nextPage={this.nextPage}
-          prevPage={this.prevPage}
-          setTake={this.setTake}
-        />
+        {contractList}
       </>
     );
   }

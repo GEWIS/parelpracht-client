@@ -2,10 +2,11 @@ import React from 'react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { Button, Icon, Table } from 'semantic-ui-react';
 import { SingleEntities } from '../../stores/single/single';
-import { ContractFile } from '../../clients/server.generated';
+import { ContractFile, Roles } from '../../clients/server.generated';
 import ResourceStatus from '../../stores/resourceStatus';
 import { GeneralFile } from './GeneralFile';
 import SingleFile from './SingleFile';
+import AuthorizationComponent from '../AuthorizationComponent';
 
 interface Props extends RouteComponentProps {
   files: GeneralFile[];
@@ -68,23 +69,35 @@ class FilesList extends React.Component<Props, State> {
       );
     }
 
-    return (
-      <>
-        <h3>
-          Files
-          <Button
-            icon
-            labelPosition="left"
-            floated="right"
-            style={{ marginTop: '-0.5em' }}
-            basic
-            onClick={() => this.setState({ creating: true })}
-          >
-            <Icon name="plus" />
-            Upload File
-          </Button>
-          {generateModal}
-        </h3>
+    let filesList;
+    if (files.length === 0) {
+      filesList = (
+        <>
+          <h4>
+            There are no files uploaded yet.
+          </h4>
+          <Table compact>
+            <Table.Body>
+              {createRow}
+              {files
+                .sort((a, b) => { return b.updatedAt.getTime() - a.updatedAt.getTime(); })
+                .map((file) => (
+                  <SingleFile
+                    key={file.id}
+                    file={file}
+                    create={false}
+                    entity={entity}
+                    entityId={entityId}
+                    fetchEntity={fetchEntity}
+                    status={status}
+                  />
+                ))}
+            </Table.Body>
+          </Table>
+        </>
+      );
+    } else {
+      filesList = (
         <Table compact>
           <Table.Body>
             {createRow}
@@ -103,7 +116,33 @@ class FilesList extends React.Component<Props, State> {
               ))}
           </Table.Body>
         </Table>
-      </>
+      );
+    }
+
+    return (
+      <AuthorizationComponent roles={[Roles.GENERAL, Roles.ADMIN, Roles.AUDIT]} notFound={false}>
+        <h3>
+          Files
+          <AuthorizationComponent
+            roles={[Roles.GENERAL, Roles.ADMIN]}
+            notFound={false}
+          >
+            <Button
+              icon
+              labelPosition="left"
+              floated="right"
+              style={{ marginTop: '-0.5em' }}
+              basic
+              onClick={() => this.setState({ creating: true })}
+            >
+              <Icon name="plus" />
+              Upload File
+            </Button>
+          </AuthorizationComponent>
+          {generateModal}
+        </h3>
+        {filesList}
+      </AuthorizationComponent>
     );
   }
 }

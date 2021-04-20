@@ -7,7 +7,6 @@ function CompanyStatusFilter() {
     <ColumnFilter
       column="status"
       columnName="Status"
-      multiple={false}
       table={Tables.Companies}
       options={[
         { key: 0, value: 'ACTIVE', text: 'Active' },

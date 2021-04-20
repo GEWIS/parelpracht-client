@@ -6,8 +6,8 @@ import {
 function NotFound() {
   return (
     <>
-      <Segment style={{ backgroundColor: '#eee' }} vertical basic>
-        <Container style={{ paddingTop: '2em' }}>
+      <Segment style={{ backgroundColor: 'rgba(237, 237, 237, 0.98)' }} vertical basic>
+        <Container style={{ paddingTop: '1em' }}>
           <Grid columns={2}>
             <Grid.Column>
               <Header as="h1">
@@ -25,7 +25,7 @@ function NotFound() {
       <Container style={{ paddingTop: '4em' }}>
         <Grid columns={2}>
           <Grid.Column textAlign="left" width="4">
-            <Image src="https://gewis.nl/~ceb/public/2021/peach.webp" fluid />
+            <Image src="/peach.png" fluid />
           </Grid.Column>
           <Grid.Column textAlign="left" verticalAlign="middle" width="12">
             <h1 style={{ fontSize: '70px' }}>

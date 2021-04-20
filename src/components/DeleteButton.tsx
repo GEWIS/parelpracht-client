@@ -11,11 +11,12 @@ interface DeleteProps {
   status: ResourceStatus;
   size?: SemanticSIZES;
   color?: SemanticCOLORS;
+  style?: Partial<CSSStyleDeclaration>;
 }
 
 function DeleteButton(props: DeleteProps) {
   const {
-    canDelete, entity, remove, status, size, color,
+    canDelete, entity, remove, status, size, color, style,
   } = props;
   if (canDelete === true) {
     return (
@@ -27,9 +28,11 @@ function DeleteButton(props: DeleteProps) {
             floated="right"
             size={size}
             color={color}
+            style={style}
           />
         )}
         on="click"
+        hideOnScroll
         content={(
           <Button
             color="red"
@@ -42,7 +45,7 @@ function DeleteButton(props: DeleteProps) {
             {entity.replace(/([a-z])([A-Z])/g, '$1 $2').trim().toLowerCase()}
           </Button>
         )}
-        header={`Are you sure you want to delete this ${entity.replace(/([a-z])([A-Z])/g, '$1 $2').trim().toLowerCase()}?`}
+        header="Are you sure you want to delete this?"
       />
     );
   }
@@ -89,12 +92,13 @@ function DeleteButton(props: DeleteProps) {
               icon="trash"
               loading={status === ResourceStatus.DELETING}
               color={color}
+              style={style}
             />
           </Button.Group>
         )}
         on="hover"
         mouseEnterDelay={500}
-        content={`You cannot delete this ${entity.replace(/([a-z])([A-Z])/g, '$1 $2').trim().toLowerCase()}, because ${deleteError}.`}
+        content={`You cannot delete this, because ${deleteError}.`}
       />
     );
   }
@@ -104,6 +108,7 @@ function DeleteButton(props: DeleteProps) {
 DeleteButton.defaultProps = {
   size: 'medium',
   color: undefined,
+  style: {},
 };
 
 export default DeleteButton;

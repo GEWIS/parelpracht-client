@@ -9,8 +9,8 @@ import UserTableControls from '../components/user/UserTableControls';
 function UsersPage(props: RouteComponentProps) {
   return (
     <>
-      <Segment style={{ backgroundColor: '#eee' }} vertical basic>
-        <Container style={{ paddingTop: '2em' }}>
+      <Segment style={{ backgroundColor: 'rgba(237, 237, 237, 0.98)' }} vertical basic>
+        <Container style={{ paddingTop: '1em' }}>
           <Grid columns={2}>
             <Grid.Column>
               <Header as="h1">
@@ -33,7 +33,7 @@ function UsersPage(props: RouteComponentProps) {
 
         </Container>
       </Segment>
-      <Container>
+      <Container style={{ marginTop: '20px' }}>
         <UsersTable />
       </Container>
     </>

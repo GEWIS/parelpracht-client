@@ -1,11 +1,11 @@
 import * as React from 'react';
 import { NavLink, RouteComponentProps, withRouter } from 'react-router-dom';
 import {
-  Breadcrumb, Container, Grid, Segment,
+  Breadcrumb, Container, Grid, Header, Segment,
 } from 'semantic-ui-react';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
-import { User } from '../clients/server.generated';
+import { Roles, User } from '../clients/server.generated';
 import { fetchSingle, clearSingle } from '../stores/single/actionCreators';
 import { RootState } from '../stores/store';
 import UserProps from '../components/user/UserProps';
@@ -17,10 +17,15 @@ import { formatContactName } from '../helpers/contact';
 import { TransientAlert } from '../stores/alerts/actions';
 import { showTransientAlert } from '../stores/alerts/actionCreators';
 import UserMoveAssignmentsButton from '../components/user/UserMoveAssignmentsButton';
+import { isProfile } from '../stores/user/selectors';
+import UserApiKey from '../components/user/UserApiKey';
+import UserBackgroundModal from '../components/files/UserBackgroundModal';
+import AuthorizationComponent from '../components/AuthorizationComponent';
 
 interface Props extends RouteComponentProps<{ userId: string }> {
   user: User | undefined;
   status: ResourceStatus;
+  isProfilePage: boolean;
 
   fetchUser: (id: number) => void;
   clearUser: () => void;
@@ -39,51 +44,117 @@ class SingleUserPage extends React.Component<Props> {
     if (this.props.status === ResourceStatus.EMPTY
       && prevProps.status === ResourceStatus.DELETING
     ) {
-      this.props.history.push('/company');
+      this.props.history.push('/user');
       this.props.showTransientAlert({
         title: 'Success',
         message: `User ${prevProps.user?.firstName} successfully deleted`,
         type: 'success',
+        displayTimeInMs: 3000,
       });
     }
   }
 
   public render() {
-    const { user } = this.props;
+    const { user, isProfilePage } = this.props;
 
     if (user === undefined) return (<div />);
 
     return (
-      <Container style={{ paddingTop: '2em' }}>
-        <Breadcrumb
-          icon="right angle"
-          sections={[
-            { key: 'Users', content: <NavLink to="/user">Users</NavLink> },
-            {
-              key: 'User',
-              content: user
-                ? formatContactName(user.firstName, user.lastNamePreposition, user.lastName)
-                : '',
-              active: true,
-            },
-          ]}
-        />
-        <UserSummary />
-        <Grid columns={2}>
-          <Grid.Column>
-            {user ? (
+      <>
+        <Segment style={{ backgroundColor: 'rgba(255, 255, 255, 0.95)' }} vertical basic>
+          <Container>
+            <Breadcrumb
+              icon="right angle"
+              sections={[
+                { key: 'Users', content: <NavLink to="/user">Users</NavLink> },
+                {
+                  key: 'User',
+                  content: user
+                    ? formatContactName(user.firstName, user.lastNamePreposition, user.lastName)
+                    : '',
+                  active: true,
+                },
+              ]}
+            />
+          </Container>
+        </Segment>
+        <Container style={{ marginTop: '1.25em' }}>
+          <UserSummary />
+          <Grid columns={2}>
+            <Grid.Column>
+              {user ? (
+                <Segment>
+                  <UserProps user={user} />
+                </Segment>
+              ) : <Segment placeholder />}
+            </Grid.Column>
+            <Grid.Column>
               <Segment>
-                <UserProps user={user} />
+                <h3>
+                  Responsibilities
+                </h3>
+                <p>
+                  You can transfer your responsibilities to another ParelPracht user.
+                  By doing this, their name will appear
+                  on all your contracts and invoices.
+                </p>
+                <UserMoveAssignmentsButton userId={user.id} />
               </Segment>
-            ) : <Segment placeholder />}
-          </Grid.Column>
-          <Grid.Column>
-            <Segment style={{ height: '4rem' }}>
-              <UserMoveAssignmentsButton userId={user.id} />
-            </Segment>
-          </Grid.Column>
-        </Grid>
-      </Container>
+              {isProfilePage ? (
+                <Segment>
+                  <Header as="h3">
+                    API Key
+                  </Header>
+                  <p>
+                    You can generate an API key to use ParelPracht in external tools.
+                    With this key, actions can be performed on your behalf.
+                    To use the API key, place the entire key in the
+                    {' '}
+                    <code>Authentication</code>
+                    {' '}
+                    header of any request.
+                    <br />
+                    <b>Only generate a key if you know what you&apos;re doing!</b>
+                  </p>
+                  <UserApiKey />
+                </Segment>
+              ) : null}
+              {isProfilePage ? (
+                <Segment>
+                  <Header as="h3">
+                    Personal User Background
+                  </Header>
+                  <UserBackgroundModal
+                    entity={SingleEntities.User}
+                    entityId={user.id}
+                    entityName={user.firstName}
+                    fileName={user.backgroundFilename}
+                    fetchEntity={this.props.fetchUser}
+                    adminView={false}
+                  />
+                </Segment>
+              )
+                : (
+                  <AuthorizationComponent roles={[Roles.ADMIN]} notFound={false}>
+                    <Segment>
+                      <Header as="h3">
+                        Personal User Background
+                      </Header>
+                      <UserBackgroundModal
+                        entity={SingleEntities.User}
+                        entityId={user.id}
+                        entityName={user.firstName}
+                        fileName={user.backgroundFilename}
+                        fetchEntity={this.props.fetchUser}
+                        adminView
+                      />
+                    </Segment>
+                  </AuthorizationComponent>
+                )}
+            </Grid.Column>
+          </Grid>
+        </Container>
+      </>
     );
   }
 }
@@ -92,6 +163,7 @@ const mapStateToProps = (state: RootState) => {
   return {
     user: getSingle<User>(state, SingleEntities.User).data,
     status: getSingle<User>(state, SingleEntities.User).status,
+    isProfilePage: isProfile(state),
   };
 };
 

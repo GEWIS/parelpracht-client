@@ -1,0 +1,24 @@
+@font-face {
+  font-family: 'Recursive';
+  style: normal;
+  font-weight: bold;
+  src: url(./RobotoSlab-Bold.ttf);
+}
+@font-face {
+  font-family: 'Recursive';
+  style: normal;
+  font-weight: 100;
+  src: url(./RobotoSlab-Light.ttf);
+}
+@font-face {
+  font-family: 'Recursive';
+  style: normal;
+  font-weight: normal;
+  src: url(./RobotoSlab-Regular.ttf);
+}
+@font-face {
+  font-family: 'Recursive';
+  style: normal;
+  font-weight: 200;
+  src: url(./RobotoSlab-Thin.ttf);
+}

@@ -33,14 +33,14 @@ function ContractSummary(props: Props) {
       && status !== ResourceStatus.ERROR)) {
     return (
       <>
-        <Header as="h1" attached="top" style={{ backgroundColor: '#eee' }}>
+        <Header as="h1" attached="top" style={{ backgroundColor: 'rgba(238, 238, 238, 0.98)' }}>
           <Icon name="shopping bag" />
           <Header.Content>
             <Header.Subheader>Contract</Header.Subheader>
             <Loader active inline />
           </Header.Content>
         </Header>
-        <Segment attached="bottom">
+        <Segment attached="bottom" style={{ backgroundColor: 'rgba(255, 255, 255, 0.95)' }}>
           <Placeholder><Placeholder.Line length="long" /></Placeholder>
         </Segment>
       </>
@@ -60,18 +60,24 @@ function ContractSummary(props: Props) {
 
   return (
     <>
-      <Header as="h1" attached="top" style={{ backgroundColor: '#eee' }}>
+      <Header as="h1" attached="top" style={{ backgroundColor: 'rgba(238, 238, 238, 0.98)' }}>
         <Grid>
           <Grid.Row columns="2">
             <Grid.Column>
-              <Icon name="file alternate" size="large" style={{ padding: '0.5rem' }} />
-              <Header.Content>
-                <Header.Subheader>Contract</Header.Subheader>
-                C
-                {contract.id}
-                {' '}
-                {contract.title}
-              </Header.Content>
+              <Grid columns="equal">
+                <Grid.Column width="1">
+                  <Icon name="file alternate" size="large" style={{ padding: '0.5rem' }} />
+                </Grid.Column>
+                <Grid.Column>
+                  <Header.Content style={{ paddingLeft: '1.25rem' }}>
+                    <Header.Subheader>Contract</Header.Subheader>
+                    C
+                    {contract.id}
+                    {' '}
+                    {contract.title}
+                  </Header.Content>
+                </Grid.Column>
+              </Grid>
             </Grid.Column>
             <Grid.Column>
               {logo}
@@ -79,7 +85,7 @@ function ContractSummary(props: Props) {
           </Grid.Row>
         </Grid>
       </Header>
-      <Segment attached="bottom">
+      <Segment attached="bottom" style={{ backgroundColor: 'rgba(255, 255, 255, 0.95)' }}>
         <Grid columns={4}>
           <Grid.Column>
             <h5>Company</h5>

@@ -2,8 +2,10 @@ import { AuthStatus, User } from '../../clients/server.generated';
 import {
   AuthActionType, AuthFetchProfile, AuthFetchStatus,
   AuthForgotPassword,
+  AuthGenerateApiKey,
+  AuthGetApiKey,
   AuthLogin, AuthLogout, AuthRequestClear, AuthRequestError, AuthRequestSuccess,
-  AuthResetPassword, AuthSetProfile, AuthSetStatus,
+  AuthResetPassword, AuthRevokeApiKey, AuthSetApiKey, AuthSetProfile, AuthSetStatus,
 } from './actions';
 
 export function authFetchStatus(): AuthFetchStatus {
@@ -22,8 +24,10 @@ export function authSetProfile(profile: User): AuthSetProfile {
   return { type: AuthActionType.SetProfile, profile };
 }
 
-export function authLogin(email: string, password: string): AuthLogin {
-  return { type: AuthActionType.Login, email, password };
+export function authLogin(email: string, password: string, rememberMe: boolean): AuthLogin {
+  return {
+    type: AuthActionType.Login, email, password, rememberMe,
+  };
 }
 
 export function authLogout(): AuthLogout {
@@ -52,4 +56,20 @@ export function authRequestError(): AuthRequestError {
 
 export function authRequestClear(): AuthRequestClear {
   return { type: AuthActionType.RequestClear };
+}
+
+export function authGenerateApiKey(): AuthGenerateApiKey {
+  return { type: AuthActionType.GenerateApiKey };
+}
+
+export function authGetApiKey(): AuthGetApiKey {
+  return { type: AuthActionType.GetApiKey };
+}
+
+export function authRevokeApiKey(): AuthRevokeApiKey {
+  return { type: AuthActionType.RevokeApiKey };
+}
+
+export function authSetApiKey(apiKey: string | undefined): AuthSetApiKey {
+  return { type: AuthActionType.SetApiKey, apiKey };
 }

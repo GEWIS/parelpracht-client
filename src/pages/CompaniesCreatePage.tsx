@@ -13,11 +13,14 @@ import ResourceStatus from '../stores/resourceStatus';
 import AlertContainer from '../components/alerts/AlertContainer';
 import { getSingle } from '../stores/single/selectors';
 import { SingleEntities } from '../stores/single/single';
+import { TransientAlert } from '../stores/alerts/actions';
+import { showTransientAlert } from '../stores/alerts/actionCreators';
 
 interface Props extends RouteComponentProps {
   status: ResourceStatus;
 
   clearCompany: () => void;
+  showTransientAlert: (alert: TransientAlert) => void;
 }
 
 class CompaniesCreatePage extends React.Component<Props> {
@@ -28,15 +31,20 @@ class CompaniesCreatePage extends React.Component<Props> {
   componentDidUpdate(prevProps: Props) {
     if (prevProps.status === ResourceStatus.SAVING
       && this.props.status === ResourceStatus.FETCHED) {
-      this.close();
+      this.props.history.push('/company');
+      this.props.showTransientAlert({
+        title: 'Success',
+        message: 'Company successfully created',
+        type: 'success',
+        displayTimeInMs: 3000,
+      });
     }
   }
 
   close = () => { this.props.history.goBack(); };
 
   public render() {
-    let company = new Company();
-    company = {
+    const company = {
       id: 0,
       name: '',
       description: '',
@@ -76,6 +84,7 @@ const mapStateToProps = (state: RootState) => {
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
   clearCompany: () => dispatch(clearSingle(SingleEntities.Company)),
+  showTransientAlert: (alert: TransientAlert) => dispatch(showTransientAlert(alert)),
 });
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(CompaniesCreatePage));

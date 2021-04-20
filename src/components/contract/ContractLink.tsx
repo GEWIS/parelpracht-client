@@ -18,7 +18,7 @@ function ContractLink(props: Props) {
     id, showId, showName, contractTitle,
   } = props;
   return (
-    <NavLink to={`/contract/${id}`}>
+    <NavLink to={`/contract/${id}`} style={{ whiteSpace: 'nowrap' }}>
       <Icon name="file alternate" />
       {showId ? `C${id} ` : ''}
       {showName ? contractTitle : ''}

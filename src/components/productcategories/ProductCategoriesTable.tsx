@@ -1,7 +1,9 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
-import { Table } from 'semantic-ui-react';
+import {
+  Dimmer, Loader, Segment, Table,
+} from 'semantic-ui-react';
 import { ProductCategory } from '../../clients/server.generated';
 import TablePagination from '../TablePagination';
 import { RootState } from '../../stores/store';
@@ -11,6 +13,7 @@ import {
 import { countFetched, countTotal, getTable } from '../../stores/tables/selectors';
 import { Tables } from '../../stores/tables/tables';
 import ProductCategoryRow from './ProductCategoryRow';
+import ResourceStatus from '../../stores/resourceStatus';
 
 interface Props {
   categories: ProductCategory[];
@@ -20,6 +23,7 @@ interface Props {
   fetched: number;
   skip: number;
   take: number;
+  status: ResourceStatus;
 
   fetchCategories: () => void;
   changeSort: (column: string) => void;
@@ -30,12 +34,48 @@ interface Props {
 
 function ProductCategoriesTable({
   categories, fetchCategories, column, direction, changeSort,
-  total, fetched, skip, take,
+  total, fetched, skip, take, status,
   prevPage, nextPage, setTake,
 }: Props) {
   useEffect(() => {
     fetchCategories();
   }, []);
+
+  if (status === ResourceStatus.FETCHING || status === ResourceStatus.SAVING) {
+    return (
+      <>
+        <Segment style={{ padding: '0px' }}>
+          <Dimmer active inverted>
+            <Loader inverted />
+          </Dimmer>
+          <Table singleLine selectable attached sortable fixed>
+            <Table.Header>
+              <Table.Row>
+                <Table.HeaderCell
+                  sorted={column === 'name' ? direction : undefined}
+                  onClick={() => changeSort('name')}
+                >
+                  Name
+                </Table.HeaderCell>
+              </Table.Row>
+            </Table.Header>
+            <Table.Body>
+              {categories.map((x) => <ProductCategoryRow category={x} key={x.id} />)}
+            </Table.Body>
+          </Table>
+          <TablePagination
+            countTotal={total}
+            countFetched={fetched}
+            skip={skip}
+            take={take}
+            nextPage={nextPage}
+            prevPage={prevPage}
+            setTake={setTake}
+          />
+        </Segment>
+      </>
+    );
+  }
 
   return (
     <>
@@ -72,6 +112,7 @@ const mapStateToProps = (state: RootState) => {
   return {
     total: countTotal(state, Tables.ProductCategories),
     fetched: countFetched(state, Tables.ProductCategories),
+    status: categoryTable.status,
     skip: categoryTable.skip,
     take: categoryTable.take,
     categories: categoryTable.data,

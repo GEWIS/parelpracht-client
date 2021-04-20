@@ -15,7 +15,7 @@ interface Props {
 function ProductLink(props: Props) {
   const { id, productName } = props;
   return (
-    <NavLink to={`/product/${id}`}>
+    <NavLink to={`/product/${id}`} style={{ whiteSpace: 'nowrap' }}>
       <Icon name="shopping bag" />
       {productName}
     </NavLink>

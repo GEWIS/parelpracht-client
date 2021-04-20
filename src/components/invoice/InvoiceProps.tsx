@@ -5,7 +5,13 @@ import { Form, Input, TextArea } from 'semantic-ui-react';
 import { DateInput } from 'semantic-ui-calendar-react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import validator from 'validator';
-import { ActivityType, Invoice, Partial_InvoiceParams } from '../../clients/server.generated';
+import {
+  ActivityType,
+  Invoice,
+  InvoiceStatus,
+  Partial_InvoiceParams,
+  Roles,
+} from '../../clients/server.generated';
 import { getCompanyName } from '../../stores/company/selectors';
 import ResourceStatus from '../../stores/resourceStatus';
 import { deleteSingle, saveSingle } from '../../stores/single/actionCreators';
@@ -15,6 +21,10 @@ import { RootState } from '../../stores/store';
 import PropsButtons from '../PropsButtons';
 import { formatTimestampToDate } from '../../helpers/timestamp';
 import UserSelector from '../user/UserSelector';
+import { formatDocumentIdTitle } from '../../helpers/documents';
+import { TransientAlert } from '../../stores/alerts/actions';
+import { showTransientAlert } from '../../stores/alerts/actionCreators';
+import AuthorizationComponent from '../AuthorizationComponent';
 
 interface Props extends RouteComponentProps {
   create?: boolean;
@@ -27,6 +37,7 @@ interface Props extends RouteComponentProps {
 
   saveInvoice: (id: number, invoice: Partial_InvoiceParams) => void;
   deleteInvoice: (id: number) => void;
+  showTransientAlert: (alert: TransientAlert) => void;
 }
 
 interface State {
@@ -38,6 +49,7 @@ interface State {
   assignedToId: number;
   poNumber: string;
   startDate: Date;
+  dateValue: string;
 }
 
 class InvoiceProps extends React.Component<Props, State> {
@@ -55,6 +67,16 @@ class InvoiceProps extends React.Component<Props, State> {
       && this.props.status === ResourceStatus.FETCHED) {
       // eslint-disable-next-line react/no-did-update-set-state
       this.setState({ editing: false });
+      this.props.showTransientAlert({
+        title: 'Success',
+        message: `Properties of ${formatDocumentIdTitle(
+          this.props.invoice.id,
+          this.props.invoice.title,
+          SingleEntities.Invoice,
+        )} successfully updated.`,
+        type: 'success',
+        displayTimeInMs: 3000,
+      });
     }
   }
 
@@ -68,6 +90,7 @@ class InvoiceProps extends React.Component<Props, State> {
       assignedToId: invoice.assignedToId,
       poNumber: invoice.poNumber ?? '',
       startDate: invoice.startDate,
+      dateValue: this.formatDate(invoice.startDate),
     };
   };
 
@@ -107,8 +130,15 @@ class InvoiceProps extends React.Component<Props, State> {
   };
 
   propsHaveErrors = (): boolean => {
-    const { title } = this.state;
-    return (validator.isEmpty(title));
+    const { title, startDate } = this.state;
+    const statusActivities = this.props.invoice.activities
+      .filter((a) => a.type === ActivityType.STATUS);
+    return (validator.isEmpty(title)
+      || startDate.toString() === 'Invalid Date'
+      || (startDate.setHours(0, 0, 0, 0) < new Date().setHours(0, 0, 0, 0)
+      && startDate.setHours(0, 0, 0, 0)
+      < this.props.invoice.startDate.setHours(0, 0, 0, 0))
+      || statusActivities[statusActivities.length - 1].subType === InvoiceStatus.PAID);
   };
 
   deleteButtonActive = () => {
@@ -119,6 +149,17 @@ class InvoiceProps extends React.Component<Props, State> {
       || this.props.invoice.activities.filter((a) => a.type === ActivityType.STATUS).length > 1);
   };
 
+  formatDate(date: Date) {
+    let day = date.getDate().toString();
+    let month = (date.getMonth() + 1).toString();
+    const year = date.getFullYear().toString();
+
+    if (Number(day) < 10) { day = `0${day}`; }
+    if (Number(month) < 10) { month = `0${month}`; }
+
+    return `${year}-${month}-${day}`;
+  }
+
   render() {
     const {
       editing,
@@ -126,25 +167,39 @@ class InvoiceProps extends React.Component<Props, State> {
       title,
       poNumber,
       startDate,
+      dateValue,
       assignedToId,
     } = this.state;
     const { companyName } = this.props;
+
+    const dateFormatterHelper = (date: Date) => {
+      let formattedDate: string = this.formatDate(date);
+
+      if (dateValue.length !== 10) {
+        formattedDate = dateValue;
+      }
+      return formattedDate;
+    };
 
     return (
       <>
         <h2>
           {this.props.create ? 'New Invoice' : 'Details'}
-          <PropsButtons
-            editing={editing}
-            canDelete={this.deleteButtonActive()}
-            canSave={!this.propsHaveErrors()}
-            entity={SingleEntities.Invoice}
-            status={this.props.status}
-            cancel={this.cancel}
-            edit={this.edit}
-            save={this.save}
-            remove={this.remove}
-          />
+
+          <AuthorizationComponent roles={[Roles.GENERAL, Roles.ADMIN]} notFound={false}>
+            <PropsButtons
+              editing={editing}
+              canEdit
+              canDelete={this.deleteButtonActive()}
+              canSave={!this.propsHaveErrors()}
+              entity={SingleEntities.Invoice}
+              status={this.props.status}
+              cancel={this.cancel}
+              edit={this.edit}
+              save={this.save}
+              remove={this.remove}
+            />
+          </AuthorizationComponent>
         </h2>
         <Form style={{ marginTop: '2em' }}>
           <Form.Group widths="equal">
@@ -171,6 +226,7 @@ class InvoiceProps extends React.Component<Props, State> {
                 onChange={(val: number) => this.setState({
                   assignedToId: val,
                 })}
+                role={Roles.GENERAL}
               />
             </Form.Field>
           </Form.Group>
@@ -203,10 +259,18 @@ class InvoiceProps extends React.Component<Props, State> {
               {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
               <label htmlFor="form-input-startdate">Invoice date</label>
               <DateInput
+                // onChange={(e, { value }) => {
+                //   this.setState({ startDate: value });
+                // }}
                 onChange={(e, { value }) => {
-                  this.setState({ startDate: new Date(Date.parse(value)) });
+                  // eslint-disable-next-line no-new
+                  if (value.length === 10) { this.setState({ startDate: new Date(value) }); }
+                  this.setState({ dateValue: value });
                 }}
-                value={formatTimestampToDate(startDate)}
+                error={startDate.setHours(0, 0, 0, 0) < new Date().setHours(0, 0, 0, 0)
+                && startDate.setHours(0, 0, 0, 0)
+                < this.props.invoice.startDate.setHours(0, 0, 0, 0)}
+                value={dateFormatterHelper(startDate)}
                 id="form-input-startdate"
                 dateFormat="YYYY-MM-DD"
                 fluid
@@ -245,6 +309,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   deleteInvoice: (id: number) => dispatch(
     deleteSingle(SingleEntities.Invoice, id),
   ),
+  showTransientAlert: (alert: TransientAlert) => dispatch(showTransientAlert(alert)),
 });
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(InvoiceProps));

@@ -7,7 +7,7 @@ import {
 import validator from 'validator';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import {
-  Contact, ContactFunction, ContactParams, Gender,
+  Contact, ContactFunction, ContactParams, Gender, Roles,
 } from '../../clients/server.generated';
 import {
   createSingle, deleteSingle, fetchSingle, saveSingle,
@@ -17,7 +17,12 @@ import { RootState } from '../../stores/store';
 import PropsButtons from '../PropsButtons';
 import { SingleEntities } from '../../stores/single/single';
 import { getSingle } from '../../stores/single/selectors';
-import { formatFunction } from '../../helpers/contact';
+import { formatContactName, formatFunction } from '../../helpers/contact';
+import { TransientAlert } from '../../stores/alerts/actions';
+import { showTransientAlert } from '../../stores/alerts/actionCreators';
+import TextAreaMimic from '../TextAreaMimic';
+
+import AuthorizationComponent from '../AuthorizationComponent';
 
 interface Props extends RouteComponentProps {
   create?: boolean;
@@ -30,6 +35,7 @@ interface Props extends RouteComponentProps {
   saveContact: (id: number, contact: ContactParams) => void;
   createContact: (contact: ContactParams) => void;
   deleteContact: (id: number) => void;
+  showTransientAlert: (alert: TransientAlert) => void;
   fetchCompany: (id: number) => void;
 }
 
@@ -61,6 +67,25 @@ class ContactProps extends React.Component<Props, State> {
       && this.props.status === ResourceStatus.FETCHED) {
       // eslint-disable-next-line react/no-did-update-set-state
       this.setState({ editing: false });
+      if (this.props.create) {
+        this.props.showTransientAlert({
+          title: 'Success',
+          message: 'Successfully created new contact.',
+          type: 'success',
+          displayTimeInMs: 3000,
+        });
+      } else {
+        this.props.showTransientAlert({
+          title: 'Success',
+          message: `Properties of ${formatContactName(
+            this.props.contact?.firstName,
+            this.props.contact?.lastNamePreposition,
+            this.props.contact?.lastName,
+          )} successfully updated.`,
+          type: 'success',
+          displayTimeInMs: 3000,
+        });
+      }
     }
   }
 
@@ -160,17 +185,20 @@ class ContactProps extends React.Component<Props, State> {
         <h2>
           {this.props.create ? 'New Contact' : 'Details'}
 
-          <PropsButtons
-            editing={editing}
-            canDelete={this.deleteButtonActive()}
-            canSave={!this.propsHaveErrors()}
-            entity={SingleEntities.Contact}
-            status={this.props.status}
-            cancel={this.cancel}
-            edit={this.edit}
-            save={this.save}
-            remove={this.remove}
-          />
+          <AuthorizationComponent roles={[Roles.GENERAL, Roles.ADMIN]} notFound={false}>
+            <PropsButtons
+              editing={editing}
+              canEdit
+              canDelete={this.deleteButtonActive()}
+              canSave={!this.propsHaveErrors()}
+              entity={SingleEntities.Contact}
+              status={this.props.status}
+              cancel={this.cancel}
+              edit={this.edit}
+              save={this.save}
+              remove={this.remove}
+            />
+          </AuthorizationComponent>
         </h2>
 
         <Form style={{ marginTop: '2em' }}>
@@ -221,7 +249,7 @@ class ContactProps extends React.Component<Props, State> {
             />
           </Form.Group>
           <Form.Group widths="equal">
-            <Form.Field required fluid disabled={!editing}>
+            <Form.Field required disabled={!editing}>
               {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
               <label htmlFor="form-input-gender">Gender</label>
               <Dropdown
@@ -240,7 +268,7 @@ class ContactProps extends React.Component<Props, State> {
                 fluid
               />
             </Form.Field>
-            <Form.Field required fluid disabled={!editing}>
+            <Form.Field required disabled={!editing}>
               {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
               <label htmlFor="form-input-function">Function</label>
               <Dropdown
@@ -288,20 +316,23 @@ class ContactProps extends React.Component<Props, State> {
               }
             />
           </Form.Group>
-          <Form.Field disabled={!editing}>
+          <Form.Field>
             {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
             <label htmlFor="form-input-comments">
               Comments
             </label>
-            <TextArea
-              id="form-delivery-spec-english"
-              value={comments}
-              onChange={
-                (e) => this.setState({ comments: e.target.value })
-              }
-              placeholder="Comments"
-              fluid
-            />
+            {editing ? (
+              <TextArea
+                id="form-delivery-spec-english"
+                value={comments}
+                onChange={
+                  (e) => this.setState({ comments: e.target.value })
+                }
+                placeholder="Comments"
+              />
+            ) : (
+              <TextAreaMimic content={comments} />
+            )}
           </Form.Field>
         </Form>
       </>
@@ -326,6 +357,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   deleteContact: (id: number) => dispatch(
     deleteSingle(SingleEntities.Contact, id),
   ),
+  showTransientAlert: (alert: TransientAlert) => dispatch(showTransientAlert(alert)),
   fetchCompany: (id: number) => dispatch(
     fetchSingle(SingleEntities.Company, id),
   ),

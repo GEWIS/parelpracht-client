@@ -4,17 +4,18 @@ import React, {
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import {
-  Button, Form, Input,
+  Button, Checkbox, Form, Input,
 } from 'semantic-ui-react';
 import { authLogin } from '../../stores/auth/actionCreators';
 
 interface Props {
-  login: (email: string, password: string) => void,
+  login: (email: string, password: string, rememberMe: boolean) => void,
 }
 
 function LoginForm(props: Props) {
   const [email, changeEmail] = useState('');
   const [password, changePassword] = useState('');
+  const [rememberMe, changeRememberMe] = useState(false);
 
   const inputRef = useRef<Input>(null);
   useEffect(() => {
@@ -28,7 +29,6 @@ function LoginForm(props: Props) {
         <label htmlFor="form-input-email">Email address</label>
         <Input
           id="form-input-email"
-          control={Input}
           icon="user"
           value={email}
           iconPosition="left"
@@ -46,12 +46,21 @@ function LoginForm(props: Props) {
         label="Password"
         onChange={(e: ChangeEvent<HTMLInputElement>) => changePassword(e.target.value)}
       />
+      <Form.Field>
+        <Checkbox
+          toggle
+          id="form-input-remember-me"
+          checked={rememberMe}
+          onChange={(e, data) => changeRememberMe(data.checked as boolean)}
+          label="Remember me"
+        />
+      </Form.Field>
       <Button
         fluid
         primary
         size="large"
         type="submit"
-        onClick={() => props.login(email, password)}
+        onClick={() => props.login(email, password, rememberMe)}
       >
         Login
       </Button>
@@ -64,8 +73,8 @@ const mapStateToProps = () => ({
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
-  login: (email: string, password: string) => dispatch(
-    authLogin(email, password),
+  login: (email: string, password: string, rememberMe: boolean) => dispatch(
+    authLogin(email, password, rememberMe),
   ),
 });
 

@@ -13,9 +13,10 @@ interface Props {
 }
 
 function CategoryLink(props: Props) {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { id, categoryName, ...rest } = props;
   return (
-    <NavLink to={`/category/${id}`}>
+    <NavLink to={`/category/${id}`} style={{ whiteSpace: 'nowrap' }}>
       <Icon name="tags" />
       {categoryName}
     </NavLink>

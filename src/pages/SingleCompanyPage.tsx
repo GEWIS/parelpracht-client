@@ -1,12 +1,11 @@
 import * as React from 'react';
 import { NavLink, RouteComponentProps, withRouter } from 'react-router-dom';
 import {
-  Breadcrumb,
-  Container, Grid, Loader, Segment, Tab,
+  Breadcrumb, Container, Grid, Loader, Segment, Tab,
 } from 'semantic-ui-react';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
-import { Company } from '../clients/server.generated';
+import { Company, Roles } from '../clients/server.generated';
 import { fetchSingle, clearSingle } from '../stores/single/actionCreators';
 import { RootState } from '../stores/store';
 import CompanyProps from '../components/company/CompanyProps';
@@ -23,6 +22,8 @@ import { showTransientAlert } from '../stores/alerts/actionCreators';
 import InvoiceList from '../components/invoice/InvoiceList';
 import CompanyContractedProductsChart from '../components/company/CompanyContractedProductsChart';
 import FilesList from '../components/files/FilesList';
+import { authedUserHasRole } from '../stores/auth/selectors';
+import AuthorizationComponent from '../components/AuthorizationComponent';
 
 interface Props extends RouteComponentProps<{ companyId: string }> {
   company: Company | undefined;
@@ -31,9 +32,37 @@ interface Props extends RouteComponentProps<{ companyId: string }> {
   fetchCompany: (id: number) => void;
   clearCompany: () => void;
   showTransientAlert: (alert: TransientAlert) => void;
+  hasRole: (role: Roles) => boolean;
 }
 
-class SingleCompanyPage extends React.Component<Props> {
+interface State {
+  paneIndex: number;
+}
+
+class SingleCompanyPage extends React.Component<Props, State> {
+  constructor(props: Props) {
+    super(props);
+
+    const panes = this.getPanes();
+    let { hash } = this.props.location;
+    // If there is no hash, do not take the first (#) character
+    if (hash.length > 0) {
+      hash = hash.substr(1);
+    }
+    // Find the corresponding tab that has been selected
+    let index = panes.findIndex((p) => p.menuItem.toLowerCase() === hash.toLowerCase());
+    // If no parameter is given, or a parameter is given that does not exist,
+    // select the first one by default
+    if (index < 0) {
+      index = 0;
+      this.props.history.replace(`#${panes[0].menuItem.toLowerCase()}`);
+    }
+
+    this.state = {
+      paneIndex: index,
+    };
+  }
+
   componentDidMount() {
     const { companyId } = this.props.match.params;
 
@@ -50,20 +79,24 @@ class SingleCompanyPage extends React.Component<Props> {
         title: 'Success',
         message: `Company ${prevProps.company?.name} successfully deleted`,
         type: 'success',
+        displayTimeInMs: 3000,
+      });
+    }
+    if (this.props.status === ResourceStatus.FETCHED
+    && prevProps.status === ResourceStatus.SAVING) {
+      this.props.showTransientAlert({
+        title: 'Success',
+        message: `Properties of ${this.props.company?.name} successfully updated.`,
+        type: 'success',
+        displayTimeInMs: 3000,
       });
     }
   }
 
-  public render() {
-    const { company, fetchCompany, status } = this.props;
-
-    if (company === undefined) {
-      return (
-        <Container style={{ paddingTop: '2em' }}>
-          <Loader content="Loading" active />
-        </Container>
-      );
-    }
+  getPanes = () => {
+    const {
+      company, fetchCompany, status, hasRole,
+    } = this.props;
 
     const panes = [
       {
@@ -90,9 +123,12 @@ class SingleCompanyPage extends React.Component<Props> {
           </Tab.Pane>
         ),
       },
-      {
+    ];
+
+    if (hasRole(Roles.ADMIN) || hasRole(Roles.GENERAL) || hasRole(Roles.AUDIT)) {
+      panes.push({
         menuItem: 'Activities',
-        render: () => (
+        render: company ? () => (
           <Tab.Pane>
             <ActivitiesList
               activities={company.activities as GeneralActivity[]}
@@ -101,11 +137,12 @@ class SingleCompanyPage extends React.Component<Props> {
               resourceStatus={status}
             />
           </Tab.Pane>
-        ),
-      },
-      {
+        ) : () => <Tab.Pane />,
+      });
+
+      panes.push({
         menuItem: 'Files',
-        render: () => (
+        render: company ? () => (
           <Tab.Pane>
             <FilesList
               files={company.files}
@@ -115,39 +152,81 @@ class SingleCompanyPage extends React.Component<Props> {
               status={status}
             />
           </Tab.Pane>
-        ),
-      },
-      {
+        ) : () => <Tab.Pane />,
+      });
+    }
+
+    if (hasRole(Roles.ADMIN) || hasRole(Roles.GENERAL)) {
+      panes.push({
         menuItem: 'Insights',
-        render: () => (
+        render: company ? () => (
           // <Tab.Pane> is set in this tab, because it needs to fetch data and
           /// therefore needs to show a loading animation
           <CompanyContractedProductsChart company={company} />
-        ),
-      },
-    ];
+        ) : () => <Tab.Pane />,
+      });
+    }
+
+    return panes;
+  };
+
+  public render() {
+    const { company } = this.props;
+    const { paneIndex } = this.state;
+
+    if (company === undefined) {
+      return (
+        <AuthorizationComponent
+          roles={[Roles.GENERAL, Roles.ADMIN, Roles.AUDIT]}
+          notFound
+        >
+          <Container style={{ paddingTop: '1em' }}>
+            <Loader content="Loading" active />
+          </Container>
+        </AuthorizationComponent>
+      );
+    }
+
+    const panes = this.getPanes();
 
     return (
-      <Container style={{ paddingTop: '2em' }}>
-        <Breadcrumb
-          icon="right angle"
-          sections={[
-            { key: 'Companies', content: <NavLink to="/company">Companies</NavLink> },
-            { key: 'Company', content: company.name, active: true },
-          ]}
-        />
-        <CompanySummary />
-        <Grid columns={2}>
-          <Grid.Column width={10}>
-            <Tab panes={panes} menu={{ pointing: true, inverted: true }} />
-          </Grid.Column>
-          <Grid.Column width={6}>
-            <Segment secondary>
-              <CompanyProps company={company} />
-            </Segment>
-          </Grid.Column>
-        </Grid>
-      </Container>
+      <AuthorizationComponent
+        roles={[Roles.GENERAL, Roles.ADMIN, Roles.AUDIT]}
+        notFound
+      >
+        <Segment style={{ backgroundColor: 'rgba(255, 255, 255, 0.95)' }} vertical basic>
+          <Container>
+            <Breadcrumb
+              icon="right angle"
+              sections={[
+                { key: 'Companies', content: <NavLink to="/company">Companies</NavLink> },
+                { key: 'Company', content: company.name, active: true },
+              ]}
+            />
+          </Container>
+        </Segment>
+        <Container style={{ marginTop: '1.25em' }}>
+          <CompanySummary />
+          <Grid columns={2}>
+            <Grid.Column width={10}>
+              <Tab
+                panes={panes}
+                menu={{ pointing: true, inverted: true }}
+                onTabChange={(e, data) => {
+                  this.setState({ paneIndex: data.activeIndex! as number });
+                  this.props.history.replace(`#${data.panes![data.activeIndex! as number].menuItem.toLowerCase()}`);
+                }}
+                activeIndex={paneIndex}
+              />
+            </Grid.Column>
+            <Grid.Column width={6}>
+              <Segment secondary style={{ backgroundColor: 'rgba(243, 244, 245, 0.98)' }}>
+                <CompanyProps company={company} />
+              </Segment>
+            </Grid.Column>
+          </Grid>
+        </Container>
+      </AuthorizationComponent>
     );
   }
 }
@@ -156,6 +235,7 @@ const mapStateToProps = (state: RootState) => {
   return {
     company: getSingle<Company>(state, SingleEntities.Company).data,
     status: getSingle<Company>(state, SingleEntities.Company).status,
+    hasRole: (role: Roles): boolean => authedUserHasRole(state, role),
   };
 };
 

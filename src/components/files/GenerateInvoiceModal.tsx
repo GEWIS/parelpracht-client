@@ -8,7 +8,7 @@ import validator from 'validator';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import {
-  Language, ReturnFileType, GenerateInvoiceParams, Invoice, ContractType,
+  Language, ReturnFileType, GenerateInvoiceParams, Invoice,
 } from '../../clients/server.generated';
 import AlertContainer from '../alerts/AlertContainer';
 import { FilesClient } from '../../clients/filesClient';
@@ -105,17 +105,6 @@ function GenerateContract(props: Props) {
         </h2>
         <Form style={{ marginTop: '2em' }}>
           <Form.Group widths="equal">
-            <Form.Field
-              label="Label"
-              required
-              error={
-                validator.isEmpty(name)
-              }
-              control={Input}
-              value={name}
-              onChange={(e: ChangeEvent<HTMLInputElement>) => changeName(e.target.value)}
-              fluid
-            />
             <Form.Field required>
               {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
               <label htmlFor="form-contact-selector">Recipient</label>
@@ -128,6 +117,15 @@ function GenerateContract(props: Props) {
                 placeholder="Recipient"
               />
             </Form.Field>
+            <Form.Field
+              label="Comment"
+              control={Input}
+              value={name}
+              onChange={(e: ChangeEvent<HTMLInputElement>) => changeName(e.target.value)}
+              fluid
+              required
+              error={validator.isEmpty(name)}
+            />
           </Form.Group>
           <Form.Group widths="equal">
             <Form.Field
@@ -173,11 +171,9 @@ function GenerateContract(props: Props) {
               <label htmlFor="form-input-Discount">Show Discount</label>
               <Checkbox
                 toggle
-                defaultChecked
                 id="form-input-Discount"
                 checked={showDiscountPercentages}
                 onChange={(e, data) => changeDiscount(data.checked as boolean)}
-                fluid
               />
             </Form.Field>
             <Form.Field>
@@ -186,10 +182,8 @@ function GenerateContract(props: Props) {
               <Checkbox
                 id="form-input-SaveToDisk"
                 toggle
-                defaultChecked
                 checked={saveToDisk}
                 onChange={(e, data) => changeSaveToDisk(data.checked as boolean)}
-                fluid
               />
             </Form.Field>
           </Form.Group>

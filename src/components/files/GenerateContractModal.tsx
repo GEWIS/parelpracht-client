@@ -6,7 +6,7 @@ import validator from 'validator';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import {
-  ContractType, GenerateContractParams, Language, ReturnFileType,
+  ContractType, GenerateContractParams, Language, ReturnFileType, Roles,
 } from '../../clients/server.generated';
 import AlertContainer from '../alerts/AlertContainer';
 import UserSelector from '../user/UserSelector';
@@ -119,17 +119,6 @@ function GenerateContractModal(props: Props) {
         <Form style={{ marginTop: '2em' }}>
           <Form.Group widths="equal">
             <Form.Field
-              label="Label"
-              control={Input}
-              required
-              error={
-                validator.isEmpty(name)
-              }
-              value={name}
-              onChange={(e: ChangeEvent<HTMLInputElement>) => changeName(e.target.value)}
-              fluid
-            />
-            <Form.Field
               required
             >
               {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
@@ -147,6 +136,15 @@ function GenerateContractModal(props: Props) {
                 fluid
               />
             </Form.Field>
+            <Form.Field
+              label="Comment"
+              control={Input}
+              value={name}
+              onChange={(e: ChangeEvent<HTMLInputElement>) => changeName(e.target.value)}
+              fluid
+              required
+              error={validator.isEmpty(name)}
+            />
           </Form.Group>
           <Form.Group widths="equal">
             <Form.Field
@@ -198,6 +196,7 @@ function GenerateContractModal(props: Props) {
               hideEmail
               correct={contentType === ContractType.PROPOSAL}
               fluid
+              role={Roles.SIGNEE}
             />
             <Form.Field
               label="Signee 2"
@@ -210,6 +209,7 @@ function GenerateContractModal(props: Props) {
               hideEmail
               correct={contentType === ContractType.PROPOSAL}
               fluid
+              role={Roles.SIGNEE}
             />
           </Form.Group>
           <Form.Group>
@@ -218,11 +218,9 @@ function GenerateContractModal(props: Props) {
               <label htmlFor="form-input-Discount">Show Discount</label>
               <Checkbox
                 toggle
-                defaultChecked
                 id="form-input-Discount"
                 checked={showDiscountPercentages}
                 onChange={(e, data) => changeDiscount(data.checked as boolean)}
-                fluid
               />
             </Form.Field>
             <Form.Field>
@@ -231,10 +229,8 @@ function GenerateContractModal(props: Props) {
               <Checkbox
                 id="form-input-SaveToDisk"
                 toggle
-                defaultChecked
                 checked={saveToDisk}
                 onChange={(e, data) => changeSaveToDisk(data.checked as boolean)}
-                fluid
               />
             </Form.Field>
           </Form.Group>

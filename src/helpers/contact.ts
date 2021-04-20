@@ -1,6 +1,10 @@
 import { ContactFunction, Gender } from '../clients/server.generated';
 
-export function formatContactName(fName: string, mName: string, lName: string): string {
+export function formatContactName(
+  fName: string | undefined,
+  mName: string | undefined,
+  lName: string | undefined,
+): string {
   let contactName: string = '';
   if (mName == null) {
     contactName = `${fName} ${lName}`;

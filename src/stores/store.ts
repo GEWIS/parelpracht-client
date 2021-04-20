@@ -7,9 +7,11 @@ import { connectRouter, routerMiddleware, RouterState } from 'connected-react-ro
 
 import authReducer from './auth/reducer';
 import alertsReducer from './alerts/reducer';
+import generalReducer from './general/reducer';
 
 import authSagas, { fetchAuthStatus } from './auth/sagas';
 import alertsSagas from './alerts/sagas';
+import generalSagas from './general/sagas';
 import productSagas from './product/sagas';
 import productCategorySagas from './productcategory/sagas';
 import productInstanceSagas from './productinstance/sagas';
@@ -27,6 +29,7 @@ import { summariesReducer } from './summaries/reducer';
 const watchSagas = [
   ...authSagas,
   ...alertsSagas,
+  ...generalSagas,
   ...productSagas,
   ...productCategorySagas,
   ...productInstanceSagas,
@@ -41,6 +44,7 @@ const watchSagas = [
 const reducers = {
   auth: authReducer,
   alerts: alertsReducer,
+  general: generalReducer,
   tables: tablesReducer,
   summaries: summariesReducer,
   single: singleEntitiesReducer,

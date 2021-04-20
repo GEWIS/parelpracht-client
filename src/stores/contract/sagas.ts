@@ -3,14 +3,18 @@ import {
 } from 'redux-saga/effects';
 import {
   ActivityParams,
+  ActivityType,
   Client,
   Contract,
+  ContractActivity,
   ContractParams,
   ContractStatusParams,
+  ContractSummary,
   ListOrFilter,
   ListParams,
   ListSorting,
   Partial_FileParams,
+  ProductInstance,
   SortDirection,
 } from '../../clients/server.generated';
 import { takeEveryWithErrorHandling } from '../errorHandling';
@@ -18,24 +22,41 @@ import { clearSingle, errorSingle, setSingle } from '../single/actionCreators';
 import {
   singleActionPattern,
   SingleActionType,
-  SingleCreateAction, SingleCreateCommentAction,
+  SingleCreateAction,
+  SingleCreateCommentAction,
   SingleCreateStatusAction,
-  SingleDeleteAction, SingleDeleteActivityAction,
+  SingleDeleteAction,
+  SingleDeleteActivityAction,
   SingleDeleteFileAction,
   SingleFetchAction,
-  SingleSaveAction, SingleSaveActivityAction,
+  SingleSaveAction,
+  SingleSaveActivityAction,
   SingleSaveFileAction,
 } from '../single/actions';
 import { SingleEntities } from '../single/single';
-import { fetchSummaries, setSummaries } from '../summaries/actionCreators';
+import {
+  addSummary, deleteSummary, setSummaries, updateSummary,
+} from '../summaries/actionCreators';
 import { summariesActionPattern, SummariesActionType } from '../summaries/actions';
 import { SummaryCollections } from '../summaries/summaries';
-import { fetchTable, setTable } from '../tables/actionCreators';
+import { fetchTable, prevPageTable, setTable } from '../tables/actionCreators';
 import { tableActionPattern, TableActionType } from '../tables/actions';
 import { getTable } from '../tables/selectors';
 import { Tables } from '../tables/tables';
 import { TableState } from '../tables/tableState';
-import { ETCompany } from '../../helpers/extensiveTableObjects';
+import { getLastStatus } from '../../helpers/activity';
+
+function toSummary(contract: Contract): ContractSummary {
+  return {
+    id: contract.id,
+    title: contract.title,
+    value: contract.products.reduce(
+      (r: number, p: ProductInstance) => r + p.basePrice - p.discount, 0,
+    ),
+    status: getLastStatus(contract.activities
+      .filter((a: ContractActivity) => a.type === ActivityType.STATUS))?.subType,
+  } as ContractSummary;
+}
 
 function* fetchContracts() {
   const client = new Client();
@@ -47,7 +68,7 @@ function* fetchContracts() {
     search, filters,
   } = state;
 
-  const { list, count } = yield call(
+  let { list, count } = yield call(
     [client, client.getAllContracts],
     new ListParams({
       sorting: new ListSorting({
@@ -60,7 +81,28 @@ function* fetchContracts() {
       search,
     }),
   );
-  yield put(setTable(Tables.Contracts, list, count));
+
+  if (list.length === 0 && list.count > 0) {
+    yield put(prevPageTable(Tables.Contracts));
+
+    const res = yield call(
+      [client, client.getAllContracts],
+      new ListParams({
+        sorting: new ListSorting({
+          column: sortColumn,
+          direction: sortDirection as SortDirection,
+        }),
+        filters: filters.map((f) => new ListOrFilter(f)),
+        skip,
+        take,
+        search,
+      }),
+    );
+    list = res.list;
+    count = res.count;
+  }
+
+  yield put(setTable(Tables.Contracts, list, count, {}));
 }
 
 export function* fetchContractSummaries() {
@@ -69,36 +111,11 @@ export function* fetchContractSummaries() {
   yield put(setSummaries(SummaryCollections.Contracts, summaries));
 }
 
-function* fetchContractsExtensive() {
-  const client = new Client();
-
-  const state: TableState<ETCompany> = yield select(getTable, Tables.ETCompanies);
-  const {
-    sortColumn, sortDirection,
-    take, skip,
-    search, filters,
-  } = state;
-
-  const { list, count } = yield call(
-    [client, client.getAllContractsExtensive],
-    new ListParams({
-      sorting: new ListSorting({
-        column: sortColumn,
-        direction: sortDirection as SortDirection,
-      }),
-      filters: filters.map((f) => new ListOrFilter(f)),
-      skip,
-      take,
-      search,
-    }),
-  );
-  yield put(setTable(Tables.ETCompanies, list, count));
-}
-
 function* fetchSingleContract(action: SingleFetchAction<SingleEntities.Contract>) {
   const client = new Client();
   const contract = yield call([client, client.getContract], action.id);
   yield put(setSingle(SingleEntities.Contract, contract));
+  yield put(updateSummary(SummaryCollections.Contracts, toSummary(contract)));
 }
 
 function* saveSingleContract(
@@ -108,7 +125,7 @@ function* saveSingleContract(
   yield call([client, client.updateContract], action.id, action.data);
   const contract = yield call([client, client.getContract], action.id);
   yield put(setSingle(SingleEntities.Contract, contract));
-  yield put(fetchSummaries(SummaryCollections.Contracts));
+  yield put(updateSummary(SummaryCollections.Contracts, toSummary(contract)));
 }
 
 function* errorSaveSingleContract() {
@@ -130,7 +147,7 @@ function* createSingleContract(
   const contract = yield call([client, client.createContract], action.data);
   yield put(setSingle(SingleEntities.Contract, contract));
   yield put(fetchTable(Tables.Contracts));
-  yield put(fetchSummaries(SummaryCollections.Contracts));
+  yield put(addSummary(SummaryCollections.Contracts, toSummary(contract)));
 }
 
 function* errorCreateSingleContract() {
@@ -142,7 +159,7 @@ function* deleteSingleContract(action: SingleDeleteAction<SingleEntities.Contrac
   yield call([client, client.deleteContract], action.id);
   yield put(clearSingle(SingleEntities.Contract));
   yield put(fetchTable(Tables.Contracts));
-  yield put(fetchSummaries(SummaryCollections.Contracts));
+  yield put(deleteSummary(SummaryCollections.Contracts, action.id));
 }
 
 function* errorDeleteSingleContract() {
@@ -209,6 +226,7 @@ function* createSingleContractStatus(
   yield call([client, client.addContractStatus], action.id, action.data);
   const contract = yield call([client, client.getContract], action.id);
   yield put(setSingle(SingleEntities.Contract, contract));
+  yield put(updateSummary(SummaryCollections.Contracts, toSummary(contract)));
 }
 
 function* errorCreateSingleContractStatus() {
@@ -269,6 +287,7 @@ function* deleteSingleContractActivity(
   yield call([client, client.deleteContractActivity], action.id, action.activityId);
   const contract = yield call([client, client.getContract], action.id);
   yield put(setSingle(SingleEntities.Contract, contract));
+  yield put(updateSummary(SummaryCollections.Contracts, toSummary(contract)));
 }
 
 function* errorDeleteSingleContractActivity() {
@@ -297,13 +316,6 @@ export default [
         SummariesActionType.Fetch,
       ),
       fetchContractSummaries,
-    );
-  },
-  function* watchFetchContractsExtensive() {
-    yield throttle(
-      500,
-      tableActionPattern(Tables.ETCompanies, TableActionType.Fetch),
-      fetchContractsExtensive,
     );
   },
   function* watchFetchSingleContract() {

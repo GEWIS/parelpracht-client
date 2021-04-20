@@ -16,6 +16,7 @@ import { RootState } from '../../stores/store';
 import PropsButtons from '../PropsButtons';
 import { SingleEntities } from '../../stores/single/single';
 import { getSingle } from '../../stores/single/selectors';
+import TextAreaMimic from '../TextAreaMimic';
 
 interface Props extends RouteComponentProps {
   create?: boolean;
@@ -187,17 +188,6 @@ class UserProps extends React.Component<Props, State> {
             })}
           />
         </Form.Field>
-        <Form.Field>
-          <Checkbox
-            label="I want to receive email on my reply-to email address"
-            disabled={!editing}
-            id="form-send-emails-to-reply-to"
-            checked={sendEmailsToReplyToEmail}
-            onChange={(e, data) => this.setState({
-              sendEmailsToReplyToEmail: data.checked!,
-            })}
-          />
-        </Form.Field>
       </>
     ) : (
       ' '
@@ -210,6 +200,7 @@ class UserProps extends React.Component<Props, State> {
 
           <PropsButtons
             editing={editing}
+            canEdit
             canDelete={this.deleteButtonActive()}
             canSave={!this.propsHaveErrors()}
             entity={SingleEntities.User}
@@ -307,7 +298,6 @@ class UserProps extends React.Component<Props, State> {
               }
             />
           </Form.Group>
-          {receiveEmailsCheckbox}
           <Form.Group widths="equal">
             <Form.Field
               disabled={!editing}
@@ -336,6 +326,18 @@ class UserProps extends React.Component<Props, State> {
               })}
             />
           </Form.Group>
+          <Form.Field>
+            <Checkbox
+              label="I want to receive all emails on my reply-to email address"
+              disabled={!editing}
+              id="form-send-emails-to-reply-to"
+              checked={sendEmailsToReplyToEmail}
+              onChange={(e, data) => this.setState({
+                sendEmailsToReplyToEmail: data.checked!,
+              })}
+            />
+          </Form.Field>
+          {receiveEmailsCheckbox}
           <Segment>
             <h3>Permissions</h3>
             <Form.Group widths="equal">
@@ -421,14 +423,18 @@ class UserProps extends React.Component<Props, State> {
             <label htmlFor="form-input-comment">
               Comments
             </label>
-            <TextArea
-              id="form-delivery-spec-english"
-              value={comment}
-              onChange={
-                (e) => this.setState({ comment: e.target.value })
-              }
-              placeholder="Comment"
-            />
+            {editing ? (
+              <TextArea
+                id="form-delivery-spec-english"
+                value={comment}
+                onChange={
+                  (e) => this.setState({ comment: e.target.value })
+                }
+                placeholder="Comment"
+              />
+            ) : (
+              <TextAreaMimic content={comment} />
+            )}
           </Form.Field>
         </Form>
       </>

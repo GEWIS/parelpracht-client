@@ -50,15 +50,21 @@ export function formatActivityType(
     case ActivityType.COMMENT:
       return 'Comment added';
     case ActivityType.STATUS:
+      if (subType?.toLowerCase() === 'created') {
+        return `${formatDocumentType(entity)} was created`;
+      }
+      if (subType?.toLowerCase() === 'notdelivered') {
+        return `${formatDocumentType(entity)} was added`;
+      }
       return `Status changed to ${subType?.toLowerCase()}`;
     case ActivityType.EDIT:
       return `${formatDocumentType(entity)} updated`;
     case ActivityType.REASSIGN:
       return 'Assignment changed';
     case ActivityType.ADDPRODUCT:
-      return `Products added to ${formatDocumentType(entity)}`;
+      return `Products added to ${formatDocumentType(entity).toLowerCase()}`;
     case ActivityType.DELPRODUCT:
-      return `Product removed from ${formatDocumentType(entity)}`;
+      return `Product removed from ${formatDocumentType(entity).toLowerCase()}`;
     default:
       throw new Error(`Unknown activity type ${activityType}`);
   }
@@ -100,7 +106,7 @@ export function formatStatus(status: string | undefined): string {
 }
 
 /**
- * Get all the contract statuses that applied to a certain status.
+ * Get all the contract/invoice activities that set a status.
  */
 export function getAllStatusActivities(activities: GeneralActivity[]): GeneralActivity[] {
   const statusActivities: GeneralActivity[] = [];
@@ -109,7 +115,20 @@ export function getAllStatusActivities(activities: GeneralActivity[]): GeneralAc
       statusActivities.push(activities[i]);
     }
   }
+  statusActivities.sort((a, b) => { return a.updatedAt.getTime() - b.updatedAt.getTime(); });
   return statusActivities;
+}
+
+/**
+ * Get all the statuses from a list of status activities
+ */
+export function getStatusesFromActivities(activities: GeneralActivity[]): DocumentStatus[] {
+  activities.sort((a, b) => { return a.updatedAt.getTime() - b.updatedAt.getTime(); });
+  const statuses: DocumentStatus[] = [];
+  for (let i = 0; i < activities.length; i++) {
+    statuses.push(activities[i].subType as DocumentStatus);
+  }
+  return statuses;
 }
 
 /**
@@ -141,7 +160,7 @@ export function getAllDocumentStatuses(
  * Get all the contract statuses that applied to a certain status.
  */
 export function getCompletedDocumentStatuses(
-  status: string | undefined,
+  status: DocumentStatus,
   type: SingleEntities,
 ): DocumentStatus[] {
   if (status === undefined) {
@@ -149,66 +168,66 @@ export function getCompletedDocumentStatuses(
   }
   if (type === SingleEntities.Invoice) {
     switch (status) {
-      case InvoiceStatus.CREATED:
-        return [InvoiceStatus.CREATED] as any as DocumentStatus[];
-      case InvoiceStatus.SENT:
-        return [InvoiceStatus.CREATED,
-          InvoiceStatus.SENT] as any as DocumentStatus[];
-      case InvoiceStatus.PAID:
-        return [InvoiceStatus.CREATED,
-          InvoiceStatus.SENT,
-          InvoiceStatus.PAID] as any as DocumentStatus[];
-      case InvoiceStatus.IRRECOVERABLE:
-        return [InvoiceStatus.CREATED,
-          InvoiceStatus.SENT,
-          InvoiceStatus.IRRECOVERABLE] as any as DocumentStatus[];
-      case InvoiceStatus.CANCELLED:
-        return [InvoiceStatus.CANCELLED] as any as DocumentStatus[];
+      case DocumentStatus.CREATED:
+        return [DocumentStatus.CREATED] as any as DocumentStatus[];
+      case DocumentStatus.SENT:
+        return [DocumentStatus.CREATED,
+          DocumentStatus.SENT] as any as DocumentStatus[];
+      case DocumentStatus.PAID:
+        return [DocumentStatus.CREATED,
+          DocumentStatus.SENT,
+          DocumentStatus.PAID] as any as DocumentStatus[];
+      case DocumentStatus.IRRECOVERABLE:
+        return [DocumentStatus.CREATED,
+          DocumentStatus.SENT,
+          DocumentStatus.IRRECOVERABLE] as any as DocumentStatus[];
+      case DocumentStatus.CANCELLED:
+        return [DocumentStatus.CANCELLED] as any as DocumentStatus[];
       default:
         return [];
     }
   }
   if (type === SingleEntities.Contract) {
     switch (status) {
-      case ContractStatus.CREATED:
-        return [ContractStatus.CREATED] as any as DocumentStatus[];
-      case ContractStatus.PROPOSED:
-        return [ContractStatus.CREATED,
-          ContractStatus.PROPOSED] as any as DocumentStatus[];
-      case ContractStatus.SENT:
-        return [ContractStatus.CREATED,
-          ContractStatus.PROPOSED,
-          ContractStatus.SENT] as any as DocumentStatus[];
-      case ContractStatus.CONFIRMED:
-        return [ContractStatus.CREATED,
-          ContractStatus.PROPOSED,
-          ContractStatus.SENT,
-          ContractStatus.CONFIRMED] as any as DocumentStatus[];
-      case ContractStatus.FINISHED:
-        return [ContractStatus.CREATED,
-          ContractStatus.PROPOSED,
-          ContractStatus.SENT,
-          ContractStatus.CONFIRMED,
-          ContractStatus.FINISHED] as any as DocumentStatus[];
-      case ContractStatus.CANCELLED:
-        return [ContractStatus.CANCELLED] as any as DocumentStatus[];
+      case DocumentStatus.CREATED:
+        return [DocumentStatus.CREATED] as any as DocumentStatus[];
+      case DocumentStatus.PROPOSED:
+        return [DocumentStatus.CREATED,
+          DocumentStatus.PROPOSED] as any as DocumentStatus[];
+      case DocumentStatus.SENT:
+        return [DocumentStatus.CREATED,
+          DocumentStatus.PROPOSED,
+          DocumentStatus.SENT] as any as DocumentStatus[];
+      case DocumentStatus.CONFIRMED:
+        return [DocumentStatus.CREATED,
+          DocumentStatus.PROPOSED,
+          DocumentStatus.SENT,
+          DocumentStatus.CONFIRMED] as any as DocumentStatus[];
+      case DocumentStatus.FINISHED:
+        return [DocumentStatus.CREATED,
+          DocumentStatus.PROPOSED,
+          DocumentStatus.SENT,
+          DocumentStatus.CONFIRMED,
+          DocumentStatus.FINISHED] as any as DocumentStatus[];
+      case DocumentStatus.CANCELLED:
+        return [DocumentStatus.CANCELLED] as any as DocumentStatus[];
       default:
         return [];
     }
   }
   if (type === SingleEntities.ProductInstance) {
     switch (status) {
-      case ProductInstanceStatus.NOTDELIVERED:
-        return [ProductInstanceStatus.NOTDELIVERED] as any as DocumentStatus[];
-      case ProductInstanceStatus.DELIVERED:
-        return [ProductInstanceStatus.NOTDELIVERED,
-          ProductInstanceStatus.DELIVERED] as any as DocumentStatus[];
-      case ProductInstanceStatus.CANCELLED:
-        return [ProductInstanceStatus.NOTDELIVERED,
-          ProductInstanceStatus.CANCELLED] as any as DocumentStatus[];
-      case ProductInstanceStatus.DEFERRED:
-        return [ProductInstanceStatus.NOTDELIVERED,
-          ProductInstanceStatus.DEFERRED] as any as DocumentStatus[];
+      case DocumentStatus.NOTDELIVERED:
+        return [DocumentStatus.NOTDELIVERED] as any as DocumentStatus[];
+      case DocumentStatus.DELIVERED:
+        return [DocumentStatus.NOTDELIVERED,
+          DocumentStatus.DELIVERED] as any as DocumentStatus[];
+      case DocumentStatus.CANCELLED:
+        return [DocumentStatus.NOTDELIVERED,
+          DocumentStatus.CANCELLED] as any as DocumentStatus[];
+      case DocumentStatus.DEFERRED:
+        return [DocumentStatus.NOTDELIVERED,
+          DocumentStatus.DEFERRED] as any as DocumentStatus[];
       default:
         return [];
     }
@@ -223,38 +242,34 @@ export function getCompletedDocumentStatuses(
 export function getStatusActivity(
   activities: GeneralActivity[],
   status: string,
-): GeneralActivity | null {
+): GeneralActivity | undefined {
   for (let i = 0; i < activities.length; i++) {
     if (activities[activities.length - i - 1].subType === status.toUpperCase()) {
       return activities[activities.length - i - 1];
     }
   }
-  return null;
+  return undefined;
 }
 
 /**
  * Return the status that can be completed next in array. Note that PROPOSED
  * status can be skipped, so we have an array with PROPOSED and the status after that
  */
-export function getNextStatus(
-  currentStatusActivity: GeneralActivity,
+export function getToDoStatus(
+  currentStatus: DocumentStatus,
   documentType: SingleEntities,
-): string[] {
-  const currentStatus = currentStatusActivity.subType;
-  if (currentStatus == null) {
-    return [];
-  }
+): DocumentStatus[] {
   // fetch all possible statuses
   const allStatuses = getAllDocumentStatuses(documentType);
-  const result: string[] = [];
+  const result: DocumentStatus[] = [];
   // loop over all statuses
   for (let i = 0; i < allStatuses.length; i++) {
     // check if the status is the current status
-    if (allStatuses[i].toUpperCase() === currentStatus) {
-      // next item does exist
+    if (allStatuses[i] === currentStatus) {
+      // if the next item does exist
       if (typeof allStatuses[i + 1] !== 'undefined') {
         result.push(allStatuses[i + 1]);
-        if (result[0].toUpperCase() === 'PROPOSED') {
+        if (result[0] === DocumentStatus.PROPOSED) {
           result.push(allStatuses[i + 2]);
         }
       }
@@ -265,39 +280,49 @@ export function getNextStatus(
   return result;
 }
 
-/**
- * Check if the status has applied to a document.
- * @return boolean true if status applied and false if it did not apply
- */
-export function statusApplied(
-  status: string,
-  lastStatusActivity: GeneralActivity | undefined,
-  documentType: SingleEntities,
-): boolean {
-  if (lastStatusActivity == null || lastStatusActivity.subType == null) {
-    return false;
-  }
-  const completedStatuses = getCompletedDocumentStatuses(
-    lastStatusActivity.subType.toUpperCase(),
-    documentType,
-  );
-  for (let i = 0; i < completedStatuses.length; i++) {
-    if (completedStatuses[i].toUpperCase() === status.toUpperCase()) {
-      return true;
-    }
-  }
-  return false;
-}
+// /**
+//  * Check if the status has applied to a document.
+//  * @return boolean true if status applied and false if it did not apply
+//  */
+// export function statusApplied(
+//   status: string,
+//   lastStatusActivity: GeneralActivity | undefined,
+//   documentType: SingleEntities,
+// ): boolean {
+//   if (lastStatusActivity == null || lastStatusActivity.subType == null) {
+//     return false;
+//   }
+//   const completedStatuses = getCompletedDocumentStatuses(
+//     lastStatusActivity.subType.toUpperCase(),
+//     documentType,
+//   );
+//   for (let i = 0; i < completedStatuses.length; i++) {
+//     if (completedStatuses[i].toUpperCase() === status.toUpperCase()) {
+//       return true;
+//     }
+//   }
+//   return false;
+// }
 
 /**
  * Get last status activity that is not the cancelling of the document
  */
+export function getLastStatusNotCancelled(
+  allStatuses: DocumentStatus[],
+): DocumentStatus {
+  if (allStatuses[allStatuses.length - 1] !== DocumentStatus.CANCELLED) {
+    return allStatuses[allStatuses.length - 1];
+  }
+  return allStatuses[allStatuses.length - 2];
+}
+
+/**
+ * Get the last status activity
+ * @param allStatusActivities All activities where type=STATUS
+ */
 export function getLastStatus(allStatusActivities: GeneralActivity[]): GeneralActivity | undefined {
   if (allStatusActivities.length > 0) {
-    if (allStatusActivities[allStatusActivities.length - 1].subType !== 'CANCELLED') {
-      return allStatusActivities[allStatusActivities.length - 1];
-    }
-    return allStatusActivities[allStatusActivities.length - 2];
+    return allStatusActivities[allStatusActivities.length - 1];
   }
   return undefined;
 }

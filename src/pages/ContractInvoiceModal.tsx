@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {
-  Button, Dropdown, Icon, Modal, Segment,
+  Button, Dropdown, Icon, Modal,
 } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
@@ -13,7 +13,6 @@ import { SummaryCollections } from '../stores/summaries/summaries';
 import { getSummaryCollection } from '../stores/summaries/selectors';
 import { createSingle, fetchSingle } from '../stores/single/actionCreators';
 import { SingleEntities } from '../stores/single/single';
-import PropsButtons from '../components/PropsButtons';
 
 interface SelfProps extends RouteComponentProps<{ contractId: string }> {
 }
@@ -39,7 +38,7 @@ class ContractInvoiceModal extends React.Component<Props, State> {
     super(props);
     this.state = {
       open: false,
-      selectedInvoice: undefined,
+      selectedInvoice: -1,
       loading: false,
     };
   }

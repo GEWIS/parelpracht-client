@@ -3,6 +3,8 @@ import { NavLink } from 'react-router-dom';
 import {
   Dropdown, Icon, Menu,
 } from 'semantic-ui-react';
+import { Roles } from '../../clients/server.generated';
+import AuthorizationComponent from '../AuthorizationComponent';
 
 function ProductsMenu() {
   const [isOpen, changeOpen] = useState(false);
@@ -16,7 +18,7 @@ function ProductsMenu() {
         item
         icon={null}
         trigger={(
-          <NavLink to="/product">
+          <NavLink to="/product" style={{ whiteSpace: 'nowrap' }}>
             <Icon name="shopping bag" />
             {' '}
             Products
@@ -24,10 +26,12 @@ function ProductsMenu() {
         ) as any}
       >
         <Dropdown.Menu>
-          <Dropdown.Item as={NavLink} to="/category">
-            <Icon name="tags" />
-            Categories
-          </Dropdown.Item>
+          <AuthorizationComponent roles={[Roles.GENERAL, Roles.ADMIN]} notFound={false}>
+            <Dropdown.Item as={NavLink} to="/category">
+              <Icon name="tags" />
+              Categories
+            </Dropdown.Item>
+          </AuthorizationComponent>
         </Dropdown.Menu>
       </Dropdown>
     </Menu.Menu>

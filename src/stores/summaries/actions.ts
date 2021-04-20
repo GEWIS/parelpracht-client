@@ -4,6 +4,9 @@ import { SummaryCollections } from './summaries';
 export enum SummariesActionType {
   Fetch = 'Summaries/Fetch',
   Set = 'Summaries/Set',
+  Add = 'Summaries/Add',
+  Update = 'Summaries/Update',
+  Delete = 'Summaries/Delete',
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -14,8 +17,18 @@ export type SummariesSetAction<S, R> = SummariesAction<SummariesActionType.Set, 
   data: R[],
 };
 
+export type SummariesAddAction<S, R> = SummariesAction<SummariesActionType.Add, S> & {
+  data: R,
+};
+export type SummariesUpdateAction<S, R> = SummariesAction<SummariesActionType.Update, S> & {
+  data: R,
+};
+export type SummariesDeleteAction<S> = SummariesAction<SummariesActionType.Delete, S> & {
+  id: number,
+};
+
 export type SummariesActions<S extends SummaryCollections, R> =
-  SummariesFetchAction<S> | SummariesSetAction<S, R>;
+  SummariesFetchAction<S> | SummariesSetAction<S, R> | SummariesUpdateAction<S, R>;
 
 export const summariesActionPattern = <S extends SummaryCollections>(
   summaries: S, action: SummariesActionType,

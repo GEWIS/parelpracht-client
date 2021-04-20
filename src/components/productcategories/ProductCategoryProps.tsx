@@ -6,13 +6,14 @@ import {
 } from 'semantic-ui-react';
 import validator from 'validator';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
-import { CategoryParams, ProductCategory } from '../../clients/server.generated';
+import { CategoryParams, ProductCategory, Roles } from '../../clients/server.generated';
 import { createSingle, deleteSingle, saveSingle } from '../../stores/single/actionCreators';
 import ResourceStatus from '../../stores/resourceStatus';
 import { RootState } from '../../stores/store';
 import PropsButtons from '../PropsButtons';
 import { getSingle } from '../../stores/single/selectors';
 import { SingleEntities } from '../../stores/single/single';
+import AuthorizationComponent from '../AuthorizationComponent';
 
 interface Props extends RouteComponentProps {
   create?: boolean;
@@ -115,17 +116,20 @@ class ProductCategoryProps extends React.Component<Props, State> {
         <h2>
           {this.props.create ? 'New Product Category' : 'Details'}
 
-          <PropsButtons
-            editing={editing}
-            canDelete={this.deleteButtonActive()}
-            canSave={!this.propsHaveErrors()}
-            entity={SingleEntities.ProductCategory}
-            status={this.props.status}
-            cancel={this.cancel}
-            edit={this.edit}
-            save={this.save}
-            remove={this.remove}
-          />
+          <AuthorizationComponent roles={[Roles.ADMIN]} notFound={false}>
+            <PropsButtons
+              editing={editing}
+              canEdit
+              canDelete={this.deleteButtonActive()}
+              canSave={!this.propsHaveErrors()}
+              entity={SingleEntities.ProductCategory}
+              status={this.props.status}
+              cancel={this.cancel}
+              edit={this.edit}
+              save={this.save}
+              remove={this.remove}
+            />
+          </AuthorizationComponent>
         </h2>
 
         <Form style={{ marginTop: '2em' }}>

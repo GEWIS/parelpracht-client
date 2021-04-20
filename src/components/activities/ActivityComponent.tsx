@@ -1,11 +1,13 @@
 import React from 'react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
-import { Feed, Segment } from 'semantic-ui-react';
+import {
+  Button, Feed, Popup, Segment,
+} from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import './Activity.scss';
 import { Dispatch } from 'redux';
 import { RootState } from '../../stores/store';
-import { getUserAvatar, getUserName } from '../../stores/user/selectors';
+import { getUserAvatar } from '../../stores/user/selectors';
 import { formatActivitySummary } from '../../helpers/activity';
 import { GeneralActivity } from './GeneralActivity';
 import { formatLastUpdate } from '../../helpers/timestamp';
@@ -14,9 +16,12 @@ import { deleteActivitySingle } from '../../stores/single/actionCreators';
 import UserLinkWithoutImage from '../user/UserLinkWithoutImage';
 import { deleteInstanceActivitySingle } from '../../stores/productinstance/actionCreator';
 import {
-  ActivityType, ContractStatus, InvoiceStatus, ProductInstanceStatus,
+  ActivityType, ContractStatus, InvoiceStatus, ProductInstanceStatus, Roles,
 } from '../../clients/server.generated';
 import UserAvatar from '../user/UserAvatar';
+import { TransientAlert } from '../../stores/alerts/actions';
+import { showTransientAlert } from '../../stores/alerts/actionCreators';
+import AuthorizationComponent from '../AuthorizationComponent';
 
 interface Props extends RouteComponentProps {
   activity: GeneralActivity;
@@ -25,10 +30,11 @@ interface Props extends RouteComponentProps {
   // If the document is a ProductInstance, the parentId is the contract ID
   parentId?: number;
 
-  userName: string;
   avatarUrl: string;
+
   deleteActivitySingle: (entity: SingleEntities, id: number, activityId: number) => void;
   deleteInstanceActivitySingle: (id: number, instanceId: number, activityId: number) => void;
+  showTransientAlert: (alert: TransientAlert) => void;
 }
 
 class ActivityComponent extends React.Component<Props> {
@@ -58,18 +64,34 @@ class ActivityComponent extends React.Component<Props> {
     const summaryUser = (
       <UserLinkWithoutImage id={this.props.activity.createdById} />
     );
-
+    const deleteMessage = `Delete ${activity.type.toLowerCase()}`;
     let deleteButton;
-    if (!(activity.type === ActivityType.STATUS && (activity.subType === ContractStatus.CREATED
+
+    if (componentType !== 'Invoice' && !(activity.type === ActivityType.STATUS && (activity.subType === ContractStatus.CREATED
       || activity.subType === InvoiceStatus.CREATED
       || activity.subType === ProductInstanceStatus.NOTDELIVERED))) {
+      const headerString = 'Are you sure you want to delete this activity?';
       deleteButton = (
-        <>
-          {/* eslint-disable-next-line */}
-          <a onClick={() => this.deleteComment()}>
-            Delete
-          </a>
-        </>
+        <AuthorizationComponent roles={[Roles.ADMIN]} notFound={false}>
+          <Popup
+            trigger={(
+            // eslint-disable-next-line jsx-a11y/anchor-is-valid
+              <a>Delete</a>
+          )}
+            on="click"
+            hideOnScroll
+            content={(
+              <Button
+                color="red"
+                onClick={() => this.deleteComment()}
+                style={{ marginTop: '0.5em' }}
+              >
+                {deleteMessage}
+              </Button>
+          )}
+            header={headerString}
+          />
+        </AuthorizationComponent>
       );
     }
 
@@ -83,14 +105,6 @@ class ActivityComponent extends React.Component<Props> {
       feedDescription = (<Feed.Extra style={{ fontStyle: 'italic' }}>{activity.description}</Feed.Extra>);
     }
 
-    // const feedDescription = activity.description !== '' ? (
-    //   <Feed.Extra
-    //     style={activity.type !== ActivityType.COMMENT ? { fontStyle: 'italic' } : {}}
-    //   >
-    //     {activity.description}
-    //   </Feed.Extra>
-    // ) : undefined;
-
     const feedButtons = deleteButton !== undefined ? (
       <Feed.Meta>
         {deleteButton}
@@ -102,7 +116,7 @@ class ActivityComponent extends React.Component<Props> {
         <Feed.Label>
           {feedLabel}
         </Feed.Label>
-        <Feed.Content style={{ marginBottom: '1em' }}>
+        <Feed.Content style={{ marginBottom: '1em', width: '85%' }}>
           <Feed.Date>
             {formatLastUpdate(activity.createdAt)}
           </Feed.Date>
@@ -121,7 +135,6 @@ class ActivityComponent extends React.Component<Props> {
 
 const mapStateToProps = (state: RootState, props: { activity: GeneralActivity }) => {
   return {
-    userName: getUserName(state, props.activity.createdById),
     avatarUrl: getUserAvatar(state, props.activity.createdById),
   };
 };
@@ -133,6 +146,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   deleteInstanceActivitySingle: (id: number, instanceId: number, activityId: number) => dispatch(
     deleteInstanceActivitySingle(id, instanceId, activityId),
   ),
+  showTransientAlert: (alert: TransientAlert) => dispatch(showTransientAlert(alert)),
 });
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ActivityComponent));

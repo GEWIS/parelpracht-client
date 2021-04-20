@@ -16,6 +16,11 @@ export enum AuthActionType {
   RequestSuccess = 'Auth/RequestSucess',
   RequestError = 'Auth/RequestError',
   RequestClear = 'Auth/RequestClear',
+
+  GenerateApiKey = 'Auth/GenerateApiKey',
+  GetApiKey = 'Auth/GetApiKey',
+  SetApiKey = 'Auth/SetApiKey',
+  RevokeApiKey = 'Auth/RevokeApiKey',
 }
 
 export type AuthFetchStatus = Action<AuthActionType.FetchStatus>;
@@ -31,6 +36,7 @@ export type AuthSetProfile = Action<AuthActionType.SetProfile> & {
 export type AuthLogin = Action<AuthActionType.Login> & {
   email: string;
   password: string;
+  rememberMe: boolean;
 };
 export type AuthLogout = Action<AuthActionType.Logout>;
 
@@ -46,3 +52,10 @@ export type AuthResetPassword = Action<AuthActionType.ResetPassword> & {
 export type AuthRequestSuccess = Action<AuthActionType.RequestSuccess>;
 export type AuthRequestError = Action<AuthActionType.RequestError>;
 export type AuthRequestClear = Action<AuthActionType.RequestClear>;
+
+export type AuthGenerateApiKey = Action<AuthActionType.GenerateApiKey>;
+export type AuthGetApiKey = Action<AuthActionType.GetApiKey>;
+export type AuthSetApiKey = Action<AuthActionType.SetApiKey> & {
+  apiKey: string | undefined;
+};
+export type AuthRevokeApiKey = Action<AuthActionType.RevokeApiKey>;

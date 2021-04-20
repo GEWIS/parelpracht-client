@@ -8,6 +8,8 @@ import { GeneralActivity } from './GeneralActivity';
 import { SingleEntities } from '../../stores/single/single';
 import CreateCommentRow from './CreateCommentRow';
 import ResourceStatus from '../../stores/resourceStatus';
+import AuthorizationComponent from '../AuthorizationComponent';
+import { Roles } from '../../clients/server.generated';
 
 interface Props extends RouteComponentProps {
   activities: GeneralActivity[];
@@ -47,17 +49,17 @@ class ActivitiesList extends React.Component<Props, State> {
       );
     }
 
-    let activitiesList;
+    let activitiesComponent;
     if (activities.length === 0) {
-      activitiesList = (
+      activitiesComponent = (
         <h4>
           There are no activities logged yet.
         </h4>
       );
     } else {
-      activitiesList = (
+      activitiesComponent = (
         <Feed>
-          {activities
+          {[...activities]
             .sort((a, b) => { return b.updatedAt.getTime() - a.updatedAt.getTime(); })
             .map((activity) => (
               <ActivityComponent
@@ -94,20 +96,25 @@ class ActivitiesList extends React.Component<Props, State> {
       <>
         <h3>
           Activities
-          <Button
-            icon
-            labelPosition="left"
-            floated="right"
-            style={{ marginTop: '-0.5em' }}
-            basic
-            onClick={() => this.setState({ creating: true })}
+          <AuthorizationComponent
+            roles={[Roles.GENERAL, Roles.ADMIN, Roles.FINANCIAL]}
+            notFound={false}
           >
-            <Icon name="pencil" />
-            Write comment
-          </Button>
+            <Button
+              icon
+              labelPosition="left"
+              floated="right"
+              style={{ marginTop: '-0.5em' }}
+              basic
+              onClick={() => this.setState({ creating: true })}
+            >
+              <Icon name="pencil" />
+              Write comment
+            </Button>
+          </AuthorizationComponent>
         </h3>
         {createRow}
-        {activitiesList}
+        {activitiesComponent}
       </>
     );
   }

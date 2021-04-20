@@ -39,7 +39,7 @@ function UsersTable({
 
   return (
     <>
-      <Table singleLine selectable attached sortable fixed>
+      <Table singleLine selectable attached sortable>
         <Table.Header>
           <Table.Row>
             <Table.HeaderCell

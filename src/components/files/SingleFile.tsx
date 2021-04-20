@@ -6,7 +6,7 @@ import {
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import {
-  Partial_FileParams,
+  Partial_FileParams, Roles,
 } from '../../clients/server.generated';
 import { FilesClient } from '../../clients/filesClient';
 import { formatLastUpdate } from '../../helpers/timestamp';
@@ -14,6 +14,9 @@ import { deleteFileSingle, saveSingleFile } from '../../stores/single/actionCrea
 import { SingleEntities } from '../../stores/single/single';
 import { GeneralFile } from './GeneralFile';
 import ResourceStatus from '../../stores/resourceStatus';
+import { TransientAlert } from '../../stores/alerts/actions';
+import { showTransientAlert } from '../../stores/alerts/actionCreators';
+import AuthorizationComponent from '../AuthorizationComponent';
 
 interface Props extends RouteComponentProps {
   file: GeneralFile;
@@ -28,6 +31,7 @@ interface Props extends RouteComponentProps {
   deleteFile: (entityId: number, fileId: number, entity: SingleEntities) => void;
   fetchEntity: (entityId: number) => void;
   status: ResourceStatus;
+  showTransientAlert: (alert: TransientAlert) => void;
 }
 
 interface State {
@@ -88,7 +92,7 @@ class SingleFile extends React.Component<Props, State> {
     this.setState({ editing: true, ...this.extractState(this.props) });
   };
 
-  cancel= () => {
+  cancel = () => {
     if (!this.props.create) {
       this.setState({ editing: false, ...this.extractState(this.props) });
     } else if (this.props.closeCreate) {
@@ -120,6 +124,68 @@ class SingleFile extends React.Component<Props, State> {
     if (!this.props.create && !this.state.editing) {
       this.props.deleteFile(this.props.entityId, this.props.file.id, this.props.entity);
     }
+  };
+
+  private getFileIcon = (fileName: string) => {
+    const fileExtension = fileName.split('.').pop();
+    if (fileExtension == null) {
+      return 'file alternate';
+    }
+    if (fileExtension.match(/(jpg|jpeg|png|bmp|gif|ico|svg|eps|ps|psd|xcf|ai|cdr|tif|tiff)$/i)) {
+      return 'file image';
+    }
+    if (fileExtension.match(/(mp4|mkv|avi|mov|flv|f4v|f4p|f4a|f4b|wmv|webm|mpg|mp2|mpeg|mpe|mpv|ogg|ogv|vob|gifv|mng|m4p|m4v|qt|swf|3gp|3g2|h264|rm)$/i)) {
+      return 'file video';
+    }
+    if (fileExtension.match(/(aa|aac|aax|act|aif|aiff|alac|amr|ape|au|awb|dss|dvf|flac|gsm|iklax|ivs|m4a|m4b|m4p|mid|midi|mmf|mpc|msv|nmf|ogg|oga|mogg|org|opus|ra|rf64|sln|tta|voc|vox|wav|wma|wv|8svx|cda|wpl)$/i)) {
+      return 'file audio';
+    }
+    if (fileExtension.match(/(pdf)$/i)) {
+      return 'file pdf';
+    }
+    if (fileExtension.match(/(zip|rar|7z|tar|arj|deb|pkg|rpm|gz|tar.gz|z)$/i)) {
+      return 'file archive';
+    }
+    if (fileExtension.match(/(docx|doc|odt|docm|dot|dotm|dotx|wps|wpd)$/i)) {
+      return 'file word';
+    }
+    if (fileExtension.match(/(bin|dmg|iso|toast|vcd)$/i)) {
+      return 'folder';
+    }
+    if (fileExtension.match(/(ppt|pptx|odp|pps|key)$/i)) {
+      return 'file powerpoint';
+    }
+    if (fileExtension.match(/(xls|xlsx|xlsm|ods)$/i)) {
+      return 'file excel';
+    }
+    if (fileExtension.match(/(csv|dat|db|dbf|log|mdb|sav|sql|tar|xml)$/i)) {
+      return 'database';
+    }
+    if (fileExtension.match(/(txt|rtf)$/i)) {
+      return 'file';
+    }
+    if (fileExtension.match(/(php)$/i)) {
+      return 'php';
+    }
+    if (fileExtension.match(/(css|asp|aspx|cer|cgi|pl|cfm|part|rss|c|class|cpp|cs|h|java|sh|swift|vb)$/i)) {
+      return 'file code';
+    }
+    if (fileExtension.match(/(js|jsp|ts|tsx)$/i)) {
+      return 'js';
+    }
+    if (fileExtension.match(/(fnt|fon|otf|ttf)$/i)) {
+      return 'font';
+    }
+    if (fileExtension.match(/(py)$/i)) {
+      return 'python';
+    }
+    if (fileExtension.match(/(xhtml|html|htm)$/i)) {
+      return 'internet explorer';
+    }
+    if (fileExtension.match(/(email|eml|emlx|msg|oft|ost|pst|vcf)$/i)) {
+      return 'mail';
+    }
+    return 'file alternate';
   };
 
   public render() {
@@ -164,7 +230,7 @@ class SingleFile extends React.Component<Props, State> {
       return (
         <Table.Row>
           <Table.Cell collapsing>
-            <Icon name="file pdf" />
+            <Icon name={this.getFileIcon(this.state.fileName)} />
             <Input
               id={`form-file-${file.id}-name`}
               value={this.state.fileName}
@@ -200,38 +266,41 @@ class SingleFile extends React.Component<Props, State> {
     return (
       <Table.Row>
         <Table.Cell collapsing>
-          <Icon name="file pdf" />
+          <Icon name={this.getFileIcon(file!.downloadName)} />
           {file!.name}
         </Table.Cell>
         <Table.Cell>{file!.downloadName}</Table.Cell>
         <Table.Cell>{formatLastUpdate(file!.updatedAt)}</Table.Cell>
         <Table.Cell textAlign="right" collapsing>
-          <Popup
-            trigger={(
-              <Button
-                icon="trash"
-                negative
-                loading={status === ResourceStatus.DELETING}
-              />
+          <AuthorizationComponent roles={[Roles.GENERAL, Roles.ADMIN]} notFound={false}>
+            <Popup
+              trigger={(
+                <Button
+                  icon="trash"
+                  negative
+                  loading={status === ResourceStatus.DELETING}
+                />
             )}
-            on="click"
-            content={(
-              <Button
-                color="red"
-                onClick={() => this.remove()}
-                loading={status === ResourceStatus.DELETING}
-                style={{ marginTop: '0.5em' }}
-              >
-                Delete file
-              </Button>
+              on="click"
+              hideOnScroll
+              content={(
+                <Button
+                  color="red"
+                  onClick={() => this.remove()}
+                  loading={status === ResourceStatus.DELETING}
+                  style={{ marginTop: '0.5em' }}
+                >
+                  Delete file
+                </Button>
             )}
-            header="Are you sure you want to delete this file?"
-          />
-          <Button
-            icon="pencil"
-            primary
-            onClick={() => this.setState({ editing: true })}
-          />
+              header="Are you sure you want to delete this file?"
+            />
+            <Button
+              icon="pencil"
+              primary
+              onClick={() => this.setState({ editing: true })}
+            />
+          </AuthorizationComponent>
           <Button
             icon="download"
             primary
@@ -251,6 +320,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   deleteFile: (entityId: number, fileId: number, entity: SingleEntities) => dispatch(
     deleteFileSingle(entity, entityId, fileId),
   ),
+  showTransientAlert: (alert: TransientAlert) => dispatch(showTransientAlert(alert)),
 });
 
 export default withRouter(connect(null, mapDispatchToProps)(SingleFile));

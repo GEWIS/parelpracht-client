@@ -1,7 +1,5 @@
 import * as React from 'react';
-import {
-  Modal, Segment,
-} from 'semantic-ui-react';
+import { Modal } from 'semantic-ui-react';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
@@ -12,12 +10,15 @@ import ResourceStatus from '../stores/resourceStatus';
 import AlertContainer from '../components/alerts/AlertContainer';
 import { SingleEntities } from '../stores/single/single';
 import { getSingle } from '../stores/single/selectors';
-import { clearSingle, fetchSingle } from '../stores/single/actionCreators';
+import { clearSingle } from '../stores/single/actionCreators';
+import { TransientAlert } from '../stores/alerts/actions';
+import { showTransientAlert } from '../stores/alerts/actionCreators';
 
 interface Props extends RouteComponentProps {
   status: ResourceStatus;
 
   clearProduct: () => void;
+  showTransientAlert: (alert: TransientAlert) => void;
 }
 
 class ProductCreatePage extends React.Component<Props> {
@@ -28,7 +29,13 @@ class ProductCreatePage extends React.Component<Props> {
   componentDidUpdate(prevProps: Props) {
     if (prevProps.status === ResourceStatus.SAVING
       && this.props.status === ResourceStatus.FETCHED) {
-      this.close();
+      this.props.history.push('/product');
+      this.props.showTransientAlert({
+        title: 'Success',
+        message: 'Product successfully created',
+        type: 'success',
+        displayTimeInMs: 3000,
+      });
     }
   }
 
@@ -75,8 +82,8 @@ const mapStateToProps = (state: RootState) => {
 };
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
-  fetchProduct: (id: number) => dispatch(fetchSingle(SingleEntities.Product, id)),
   clearProduct: () => dispatch(clearSingle(SingleEntities.Product)),
+  showTransientAlert: (alert: TransientAlert) => dispatch(showTransientAlert(alert)),
 });
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ProductCreatePage));

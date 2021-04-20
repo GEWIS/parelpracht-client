@@ -114,6 +114,27 @@ export class FilesClient {
     });
   }
 
+  async uploadBackground(
+    entityId: number, file: FormData, entity: SingleEntities,
+  ): Promise<Boolean> {
+    let url = `${this.getBaseUrl(entity)}/background`;
+
+    if (entityId === undefined || entityId === null) throw new Error("The parameter 'id' must be defined.");
+    url = url.replace('{id}', encodeURIComponent(`${entityId}`));
+    url = url.replace(/[?&]$/, '');
+
+    if (file === null || file === undefined) throw new Error("The parameter 'file' cannot be null.");
+
+    const options = <RequestInit>{
+      body: file,
+      method: 'PUT',
+    };
+
+    return this.http.fetch(url, options).then((response: Response) => {
+      return this.processUploadFile(response);
+    });
+  }
+
   private processUploadFile(response: Response): boolean {
     return response.status === 200 || response.status === 204;
   }

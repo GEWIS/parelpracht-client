@@ -3,14 +3,16 @@ import { RouteComponentProps, withRouter } from 'react-router-dom';
 import {
   Button, Container, Grid, Header, Icon, Segment,
 } from 'semantic-ui-react';
+import { Roles } from '../clients/server.generated';
+import AuthorizationComponent from '../components/AuthorizationComponent';
 import ProductsTable from '../components/product/ProductTable';
 import ProductTableControls from '../components/product/ProductTableControls';
 
 function ProductsPage(props: RouteComponentProps) {
   return (
-    <>
-      <Segment style={{ backgroundColor: '#eee' }} vertical basic>
-        <Container style={{ paddingTop: '2em' }}>
+    <AuthorizationComponent roles={[Roles.GENERAL, Roles.ADMIN]} notFound>
+      <Segment style={{ backgroundColor: 'rgba(237, 237, 237, 0.98)' }} vertical basic>
+        <Container style={{ paddingTop: '1em' }}>
           <Grid columns={2}>
             <Grid.Column>
               <Header as="h1">
@@ -33,10 +35,10 @@ function ProductsPage(props: RouteComponentProps) {
 
         </Container>
       </Segment>
-      <Container>
+      <Container style={{ marginTop: '20px' }}>
         <ProductsTable />
       </Container>
-    </>
+    </AuthorizationComponent>
   );
 }
 

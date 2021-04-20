@@ -3,13 +3,20 @@ import {
 } from 'redux-saga/effects';
 import {
   ActivityParams,
-  Client, Contract,
-  Invoice, InvoiceCreateParams,
+  ActivityType,
+  Client,
+  Contract,
+  Invoice,
+  InvoiceActivity,
+  InvoiceCreateParams,
   InvoiceStatusParams,
+  InvoiceSummary,
   ListOrFilter,
   ListParams,
   ListSorting,
-  Partial_FileParams, Partial_InvoiceParams,
+  Partial_FileParams,
+  Partial_InvoiceParams,
+  ProductInstance,
   SortDirection,
 } from '../../clients/server.generated';
 import { takeEveryWithErrorHandling } from '../errorHandling';
@@ -23,7 +30,6 @@ import {
   SingleCreateCommentAction,
   SingleCreateStatusAction,
   SingleDeleteAction,
-  SingleDeleteActivityAction,
   SingleDeleteFileAction,
   SingleFetchAction,
   SingleSaveAction,
@@ -31,16 +37,32 @@ import {
   SingleSaveFileAction,
 } from '../single/actions';
 import { SingleEntities } from '../single/single';
-import { fetchSummaries, setSummaries } from '../summaries/actionCreators';
+import {
+  addSummary, deleteSummary, setSummaries, updateSummary,
+} from '../summaries/actionCreators';
 import { summariesActionPattern, SummariesActionType } from '../summaries/actions';
 import { SummaryCollections } from '../summaries/summaries';
-import { setTable } from '../tables/actionCreators';
+import { prevPageTable, setTable } from '../tables/actionCreators';
 import { tableActionPattern, TableActionType } from '../tables/actions';
 import { getTable } from '../tables/selectors';
 import { Tables } from '../tables/tables';
 import { TableState } from '../tables/tableState';
 import { SingleEntityState } from '../single/singleState';
 import { getSingle } from '../single/selectors';
+import { getLastStatus } from '../../helpers/activity';
+
+function toSummary(invoice: Invoice): InvoiceSummary {
+  return {
+    id: invoice.id,
+    title: invoice.title,
+    companyId: invoice.companyId,
+    value: invoice.products.reduce(
+      (r: number, p: ProductInstance) => r + p.basePrice - p.discount, 0,
+    ),
+    status: getLastStatus(invoice.activities
+      .filter((a: InvoiceActivity) => a.type === ActivityType.STATUS))?.subType,
+  } as InvoiceSummary;
+}
 
 function* fetchInvoices() {
   const client = new Client();
@@ -52,7 +74,7 @@ function* fetchInvoices() {
     search, filters,
   } = state;
 
-  const { list, count, lastSeen } = yield call(
+  let { list, count, lastSeen } = yield call(
     [client, client.getAllInvoices],
     new ListParams({
       sorting: new ListSorting({
@@ -65,6 +87,28 @@ function* fetchInvoices() {
       search,
     }),
   );
+
+  if (list.length === 0 && count > 0) {
+    yield put(prevPageTable(Tables.Invoices));
+
+    const res = yield call(
+      [client, client.getAllInvoices],
+      new ListParams({
+        sorting: new ListSorting({
+          column: sortColumn,
+          direction: sortDirection as SortDirection,
+        }),
+        filters: filters.map((f) => new ListOrFilter(f)),
+        skip,
+        take,
+        search,
+      }),
+    );
+    list = res.list;
+    count = res.count;
+    lastSeen = res.lastSeen;
+  }
+
   yield put(setTable(Tables.Invoices, list, count, lastSeen));
 }
 
@@ -78,6 +122,7 @@ function* fetchSingleInvoice(action: SingleFetchAction<SingleEntities.Invoice>) 
   const client = new Client();
   const invoice = yield call([client, client.getInvoice], action.id);
   yield put(setSingle(SingleEntities.Invoice, invoice));
+  yield put(updateSummary(SummaryCollections.Invoices, toSummary(invoice)));
 }
 
 function* saveSingleInvoice(
@@ -87,7 +132,7 @@ function* saveSingleInvoice(
   yield call([client, client.updateInvoice], action.id, action.data);
   const invoice = yield call([client, client.getInvoice], action.id);
   yield put(setSingle(SingleEntities.Invoice, invoice));
-  yield put(fetchSummaries(SummaryCollections.Invoices));
+  yield put(updateSummary(SummaryCollections.Invoices, toSummary(invoice)));
 }
 
 function* errorSaveSingleInvoice() {
@@ -108,7 +153,7 @@ function* createSingleInvoice(
   const client = new Client();
   const invoice = yield call([client, client.createInvoice], action.data);
   yield put(setSingle(SingleEntities.Invoice, invoice));
-  yield put(fetchSummaries(SummaryCollections.Invoices));
+  yield put(addSummary(SummaryCollections.Invoices, toSummary(invoice)));
 
   const contractState: SingleEntityState<Contract> = yield select(getSingle,
     SingleEntities.Contract);
@@ -133,7 +178,7 @@ function* deleteSingleInvoice(action: SingleDeleteAction<SingleEntities.Invoice>
   const client = new Client();
   yield call([client, client.deleteInvoice], action.id);
   yield put(clearSingle(SingleEntities.Invoice));
-  yield put(fetchSummaries(SummaryCollections.Invoices));
+  yield put(deleteSummary(SummaryCollections.Invoices, action.id));
 }
 
 function* errorDeleteSingleInvoice() {
@@ -192,6 +237,7 @@ function* createSingleInvoiceStatus(
   yield call([client, client.addInvoiceStatus], action.id, action.data);
   const invoice = yield call([client, client.getInvoice], action.id);
   yield put(setSingle(SingleEntities.Invoice, invoice));
+  yield put(updateSummary(SummaryCollections.Invoices, toSummary(invoice)));
 }
 
 function* errorCreateSingleInvoiceStatus() {
@@ -245,26 +291,6 @@ function* watchSaveSingleInvoiceActivity() {
   );
 }
 
-function* deleteSingleInvoiceActivity(
-  action: SingleDeleteActivityAction<SingleEntities.Invoice>,
-) {
-  const client = new Client();
-  yield call([client, client.deleteInvoiceActivity], action.id, action.activityId);
-  const invoice = yield call([client, client.getInvoice], action.id);
-  yield put(setSingle(SingleEntities.Invoice, invoice));
-}
-
-function* errorDeleteSingleInvoiceActivity() {
-  yield put(errorSingle(SingleEntities.Invoice));
-}
-
-function* watchDeleteSingleInvoiceActivity() {
-  yield takeEveryWithErrorHandling(
-    singleActionPattern(SingleEntities.Invoice, SingleActionType.DeleteActivity),
-    deleteSingleInvoiceActivity, { onErrorSaga: errorDeleteSingleInvoiceActivity },
-  );
-}
-
 export default [
   function* watchFetchInvoices() {
     yield throttle(
@@ -296,5 +322,4 @@ export default [
   watchCreateSingleInvoiceStatus,
   watchCreateSingleInvoiceComment,
   watchSaveSingleInvoiceActivity,
-  watchDeleteSingleInvoiceActivity,
 ];

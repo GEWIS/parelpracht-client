@@ -11,11 +11,13 @@ import {
   Gender,
   Language,
   ReturnFileType,
+  Roles,
 } from '../clients/server.generated';
 import CustomInvoiceProducts from '../components/custominvoice/CustomInvoiceProducts';
 import CustomInvoiceProps from '../components/custominvoice/CustomInvoiceProps';
 import CustomInvoiceRecipient from '../components/custominvoice/CustomInvoiceRecipient';
 import { FilesClient } from '../clients/filesClient';
+import AuthorizationComponent from '../components/AuthorizationComponent';
 
 interface State {
   language: Language;
@@ -144,8 +146,8 @@ class CustomInvoicePage extends React.Component<RouteComponentProps, State> {
     } = this.state;
 
     return (
-      <>
-        <Segment style={{ backgroundColor: '#eee' }} vertical basic>
+      <AuthorizationComponent roles={[Roles.FINANCIAL, Roles.ADMIN]} notFound>
+        <Segment style={{ backgroundColor: 'rgba(237, 237, 237, 0.98)' }} vertical basic>
           <Container style={{ paddingTop: '1em' }}>
             <Grid columns={2}>
               <Grid.Column width={10}>
@@ -179,18 +181,14 @@ class CustomInvoicePage extends React.Component<RouteComponentProps, State> {
         </Segment>
         <Container style={{ marginTop: '2em' }}>
           <Grid>
-            <Grid.Row columns={1}>
-              <Grid.Column>
+            <Grid.Row columns={2}>
+              <Grid.Column width={9}>
                 <CustomInvoiceText
                   invoiceReason={invoiceReason}
                   invoiceNumber={ourReference}
                   language={language}
                   setAttribute={this.setAttribute}
                 />
-              </Grid.Column>
-            </Grid.Row>
-            <Grid.Row columns={2}>
-              <Grid.Column width={9}>
                 <CustomInvoiceProducts
                   products={products}
                   addProduct={this.addProduct}
@@ -218,7 +216,7 @@ class CustomInvoicePage extends React.Component<RouteComponentProps, State> {
             </Grid.Row>
           </Grid>
         </Container>
-      </>
+      </AuthorizationComponent>
     );
   }
 }
