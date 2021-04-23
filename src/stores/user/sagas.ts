@@ -8,7 +8,7 @@ import {
   ListSorting,
   Roles,
   SortDirection,
-  User,
+  User, UserListResponse,
   UserParams,
   UserSummary,
 } from '../../clients/server.generated';
@@ -74,7 +74,7 @@ function* fetchUsers() {
   if (list.length === 0 && count > 0) {
     yield put(prevPageTable(Tables.Users));
 
-    const res = yield call(
+    const res: UserListResponse = yield call(
       [client, client.getAllUsers],
       new ListParams({
         sorting: new ListSorting({
@@ -96,13 +96,13 @@ function* fetchUsers() {
 
 export function* fetchUserSummaries() {
   const client = new Client();
-  const summaries = yield call([client, client.getUserSummaries]);
+  const summaries: UserSummary[] = yield call([client, client.getUserSummaries]);
   yield put(setSummaries(SummaryCollections.Users, summaries));
 }
 
 function* fetchSingleUser(action: SingleFetchAction<SingleEntities.User>) {
   const client = new Client();
-  const user = yield call([client, client.getUser], action.id);
+  const user: User = yield call([client, client.getUser], action.id);
   yield put(setSingle(SingleEntities.User, user));
   yield put(updateSummary(SummaryCollections.Users, toSummary(user)));
 }
@@ -115,6 +115,7 @@ function* deleteSingleUser(action: SingleDeleteAction<SingleEntities.User>) {
 }
 
 function* errorDeleteSingleUser() {
+  // @ts-ignore
   const user = yield select(getSingle, SingleEntities.User);
   yield put(setSingle(SingleEntities.User, user.data));
 }
@@ -124,7 +125,7 @@ function* saveSingleUser(
 ) {
   const client = new Client();
   yield call([client, client.updateUser], action.id, action.data);
-  const user = yield call([client, client.getUser], action.id);
+  const user: User = yield call([client, client.getUser], action.id);
   yield put(setSingle(SingleEntities.User, user));
   yield put(updateSummary(SummaryCollections.Users, toSummary(user)));
 }
@@ -145,7 +146,7 @@ function* createSingleUser(
   action: SingleCreateAction<SingleEntities.User, UserParams>,
 ) {
   const client = new Client();
-  const user = yield call([client, client.createUser], action.data);
+  const user: User = yield call([client, client.createUser], action.data);
   yield put(setSingle(SingleEntities.User, user));
   yield put(fetchTable(Tables.Users));
   yield put(addSummary(SummaryCollections.Users, toSummary(user)));

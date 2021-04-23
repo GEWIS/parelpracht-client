@@ -3,7 +3,7 @@ import {
 } from 'redux-saga/effects';
 import {
   Client,
-  Contact,
+  Contact, ContactListResponse,
   ContactParams,
   ContactSummary,
   ListOrFilter,
@@ -70,7 +70,7 @@ function* fetchContacts() {
   if (list.length === 0 && count > 0) {
     yield put(prevPageTable(Tables.Contacts));
 
-    const res = yield call(
+    const res: ContactListResponse = yield call(
       [client, client.getAllContacts],
       new ListParams({
         sorting: new ListSorting({
@@ -92,13 +92,13 @@ function* fetchContacts() {
 
 export function* fetchContactSummaries() {
   const client = new Client();
-  const summaries = yield call([client, client.getContactSummaries]);
+  const summaries: ContactSummary[] = yield call([client, client.getContactSummaries]);
   yield put(setSummaries(SummaryCollections.Contacts, summaries));
 }
 
 function* fetchSingleContact(action: SingleFetchAction<SingleEntities.Contact>) {
   const client = new Client();
-  const contact = yield call([client, client.getContact], action.id);
+  const contact: Contact = yield call([client, client.getContact], action.id);
   yield put(setSingle(SingleEntities.Contact, contact));
   yield put(updateSummary(SummaryCollections.Contacts, toSummary(contact)));
 }
@@ -108,7 +108,7 @@ function* saveSingleContact(
 ) {
   const client = new Client();
   yield call([client, client.updateContact], action.id, action.data);
-  const contact = yield call([client, client.getContact], action.id);
+  const contact: Contact = yield call([client, client.getContact], action.id);
   yield put(setSingle(SingleEntities.Contact, contact));
   yield put(fetchTable(Tables.Contacts));
   yield put(updateSummary(SummaryCollections.Contacts, toSummary(contact)));
@@ -130,7 +130,7 @@ function* createSingleContact(
   action: SingleCreateAction<SingleEntities.Contact, ContactParams>,
 ) {
   const client = new Client();
-  const contact = yield call([client, client.createContact], action.data);
+  const contact: Contact = yield call([client, client.createContact], action.data);
   yield put(setSingle(SingleEntities.Contact, contact));
   yield put(fetchTable(Tables.Contacts));
   yield put(addSummary(SummaryCollections.Contacts, toSummary(contact)));
