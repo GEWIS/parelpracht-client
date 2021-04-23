@@ -7,7 +7,7 @@ import {
   Company,
   CompanyParams,
   CompanySummary,
-  ETCompany,
+  ETCompany, ETCompanyListResponse,
   ListOrFilter,
   ListParams,
   ListSorting,
@@ -77,6 +77,8 @@ function* fetchCompanies() {
 
 export function* fetchCompanySummaries() {
   const client = new Client();
+
+  // @ts-ignore
   const summaries = yield call([client, client.getCompanySummaries]);
   yield put(setSummaries(SummaryCollections.Companies, summaries));
 }
@@ -108,7 +110,7 @@ function* fetchCompaniesExtensive() {
   if (list.length === 0 && count > 0) {
     yield put(prevPageTable(Tables.Companies));
 
-    const res = yield call(
+    const res: ETCompanyListResponse = yield call(
       [client, client.getAllContractsExtensive],
       new ListParams({
         sorting: new ListSorting({
@@ -131,7 +133,7 @@ function* fetchCompaniesExtensive() {
 
 function* fetchSingleCompany(action: SingleFetchAction<SingleEntities.Company>) {
   const client = new Client();
-  const company = yield call([client, client.getCompany], action.id);
+  const company: Company = yield call([client, client.getCompany], action.id);
   yield put(setSingle(SingleEntities.Company, company));
   yield put(updateSummary(SummaryCollections.Companies, toSummary(company)));
 }
@@ -141,7 +143,7 @@ function* saveSingleCompany(
 ) {
   const client = new Client();
   yield call([client, client.updateCompany], action.id, action.data);
-  const company = yield call([client, client.getCompany], action.id);
+  const company: Company = yield call([client, client.getCompany], action.id);
   yield put(setSingle(SingleEntities.Company, company));
   yield put(updateSummary(SummaryCollections.Companies, toSummary(company)));
 }
@@ -162,7 +164,7 @@ function* createSingleCompany(
   action: SingleCreateAction<SingleEntities.Company, CompanyParams>,
 ) {
   const client = new Client();
-  const company = yield call([client, client.createCompany], action.data);
+  const company: Company = yield call([client, client.createCompany], action.data);
   yield put(setSingle(SingleEntities.Company, company));
   yield put(fetchTable(Tables.Companies));
   yield put(addSummary(SummaryCollections.Companies, toSummary(company)));
@@ -204,7 +206,7 @@ function* saveSingleCompanyFile(
 ) {
   const client = new Client();
   yield call([client, client.updateCompanyFile], action.id, action.fileId, action.data);
-  const company = yield call([client, client.getCompany], action.id);
+  const company: Company = yield call([client, client.getCompany], action.id);
   yield put(setSingle(SingleEntities.Company, company));
 }
 
@@ -222,7 +224,7 @@ function* watchSaveSingleCompanyFile() {
 function* deleteSingleCompanyFile(action: SingleDeleteFileAction<SingleEntities.Company>) {
   const client = new Client();
   yield call([client, client.deleteCompanyFile], action.id, action.fileId);
-  const company = yield call([client, client.getCompany], action.id);
+  const company: Company = yield call([client, client.getCompany], action.id);
   yield put(setSingle(SingleEntities.Company, company));
 }
 
@@ -242,7 +244,7 @@ function* createSingleCompanyComment(
 ) {
   const client = new Client();
   yield call([client, client.addCompanyComment], action.id, action.data);
-  const company = yield call([client, client.getCompany], action.id);
+  const company: Company = yield call([client, client.getCompany], action.id);
   yield put(setSingle(SingleEntities.Company, company));
 }
 
@@ -262,7 +264,7 @@ function* saveSingleCompanyActivity(
 ) {
   const client = new Client();
   yield call([client, client.updateCompanyActivity], action.id, action.activityId, action.data);
-  const company = yield call([client, client.getCompany], action.id);
+  const company: Company = yield call([client, client.getCompany], action.id);
   yield put(setSingle(SingleEntities.Company, company));
 }
 
@@ -282,7 +284,7 @@ function* deleteSingleCompanyActivity(
 ) {
   const client = new Client();
   yield call([client, client.deleteCompanyActivity], action.id, action.activityId);
-  const company = yield call([client, client.getCompany], action.id);
+  const company: Company = yield call([client, client.getCompany], action.id);
   yield put(setSingle(SingleEntities.Company, company));
 }
 

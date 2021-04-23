@@ -2,7 +2,7 @@ import { call, put } from 'redux-saga/effects';
 import { SingleEntities } from '../single/single';
 import {
   ActivityParams,
-  Client,
+  Client, ProductInstance,
   ProductInstanceParams,
   ProductInstanceStatusParams,
 } from '../../clients/server.generated';
@@ -43,7 +43,8 @@ function* createSingleProductInstance(
   action: SingleCreateInstanceAction<ProductInstanceParams>,
 ) {
   const client = new Client();
-  const instance = yield call([client, client.addProductInstance], action.id, action.data);
+  const instance: ProductInstance = yield call([client, client.addProductInstance],
+    action.id, action.data);
   yield put(fetchSingle(SingleEntities.Contract, instance.contractId));
 }
 
