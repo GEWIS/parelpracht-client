@@ -1,7 +1,17 @@
 # Change log
-The current version of ParelPracht is **v1.0.0**, released on April 20th, 2021.
+The current version of ParelPracht is **v1.0.1**, released on April 23rd, 2021.
 You can find the release notes below.
 ----------------------
+
+## v1.0.1 (23-04-2021)
+### Added
+- Added support for 'mysql_clear_password' authentication method.
+
+### Changes
+- Updated the node packages
+
+### Bugfixes
+- Fixed the backend docker container failing to build.
 
 ## v1.0.0 (20-04-2021)
 After 127 days, 926 commits and many, many hours of work, the first production-ready release of ParelPracht is finally

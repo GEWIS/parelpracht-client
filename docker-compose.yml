@@ -4,7 +4,8 @@ services:
     build:
       context: ../parelpracht-client
       dockerfile: Dockerfile
-    image: yoronex/parelpracht-client:latest
+    image: board.docker-registry.gewis.nl/parelpracht-client:latest
+    restart: 'unless-stopped'
     ports:
       - '9639:80'
     networks:
@@ -14,7 +15,8 @@ services:
       - backgrounds:/usr/src/app/data/backgrounds
   backend:
     build: ../parelpracht-server
-    image: yoronex/parelpracht-server:latest
+    image: board.docker-registry.gewis.nl/parelpracht-server:latest
+    restart: 'unless-stopped'
     networks:
       - parelpracht
     volumes:
@@ -24,7 +26,7 @@ services:
     environment:
       - PORT=3001
       - USE_HTTPS=false
-      - SERVER_HOST=localhost:39390
+      - SERVER_HOST=localhost:9639
       - TYPEORM_CONNECTION=postgres
       - TYPEORM_HOST=database
       - TYPEORM_PORT=5432
@@ -48,8 +50,8 @@ services:
       - DIRECTMAIL_USERNAME=
       - DIRECTMAIL_PASSWORD=
       - DIRECTMAIL_PRODUCT_ID=
-    depends_on:
-      - database
+#    depends_on:
+#      - database
 # If you do not have a database available somewhere on the server, you can use this one. Do
 # not forget to enable the database-data volume to make sure the database remains persistent.
 #  database:
