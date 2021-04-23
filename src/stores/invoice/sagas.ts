@@ -8,7 +8,7 @@ import {
   Contract,
   Invoice,
   InvoiceActivity,
-  InvoiceCreateParams,
+  InvoiceCreateParams, InvoiceListResponse,
   InvoiceStatusParams,
   InvoiceSummary,
   ListOrFilter,
@@ -91,7 +91,7 @@ function* fetchInvoices() {
   if (list.length === 0 && count > 0) {
     yield put(prevPageTable(Tables.Invoices));
 
-    const res = yield call(
+    const res: InvoiceListResponse = yield call(
       [client, client.getAllInvoices],
       new ListParams({
         sorting: new ListSorting({
@@ -114,13 +114,14 @@ function* fetchInvoices() {
 
 export function* fetchInvoiceSummaries() {
   const client = new Client();
+  // @ts-ignore
   const summaries = yield call([client, client.getInvoiceSummaries]);
   yield put(setSummaries(SummaryCollections.Invoices, summaries));
 }
 
 function* fetchSingleInvoice(action: SingleFetchAction<SingleEntities.Invoice>) {
   const client = new Client();
-  const invoice = yield call([client, client.getInvoice], action.id);
+  const invoice: Invoice = yield call([client, client.getInvoice], action.id);
   yield put(setSingle(SingleEntities.Invoice, invoice));
   yield put(updateSummary(SummaryCollections.Invoices, toSummary(invoice)));
 }
@@ -130,7 +131,7 @@ function* saveSingleInvoice(
 ) {
   const client = new Client();
   yield call([client, client.updateInvoice], action.id, action.data);
-  const invoice = yield call([client, client.getInvoice], action.id);
+  const invoice: Invoice = yield call([client, client.getInvoice], action.id);
   yield put(setSingle(SingleEntities.Invoice, invoice));
   yield put(updateSummary(SummaryCollections.Invoices, toSummary(invoice)));
 }
@@ -151,7 +152,7 @@ function* createSingleInvoice(
   action: SingleCreateAction<SingleEntities.Invoice, InvoiceCreateParams>,
 ) {
   const client = new Client();
-  const invoice = yield call([client, client.createInvoice], action.data);
+  const invoice: Invoice = yield call([client, client.createInvoice], action.data);
   yield put(setSingle(SingleEntities.Invoice, invoice));
   yield put(addSummary(SummaryCollections.Invoices, toSummary(invoice)));
 
@@ -197,7 +198,7 @@ function* saveSingleInvoiceFile(
 ) {
   const client = new Client();
   yield call([client, client.updateInvoiceFile], action.id, action.fileId, action.data);
-  const invoice = yield call([client, client.getInvoice], action.id);
+  const invoice: Invoice = yield call([client, client.getInvoice], action.id);
   yield put(setSingle(SingleEntities.Invoice, invoice));
 }
 
@@ -215,7 +216,7 @@ function* watchSaveSingleInvoiceFile() {
 function* deleteSingleInvoiceFile(action: SingleDeleteFileAction<SingleEntities.Invoice>) {
   const client = new Client();
   yield call([client, client.deleteInvoiceFile], action.id, action.fileId);
-  const invoice = yield call([client, client.getInvoice], action.id);
+  const invoice: Invoice = yield call([client, client.getInvoice], action.id);
   yield put(setSingle(SingleEntities.Invoice, invoice));
 }
 
@@ -235,7 +236,7 @@ function* createSingleInvoiceStatus(
 ) {
   const client = new Client();
   yield call([client, client.addInvoiceStatus], action.id, action.data);
-  const invoice = yield call([client, client.getInvoice], action.id);
+  const invoice: Invoice = yield call([client, client.getInvoice], action.id);
   yield put(setSingle(SingleEntities.Invoice, invoice));
   yield put(updateSummary(SummaryCollections.Invoices, toSummary(invoice)));
 }
@@ -256,7 +257,7 @@ function* createSingleInvoiceComment(
 ) {
   const client = new Client();
   yield call([client, client.addInvoiceComment], action.id, action.data);
-  const invoice = yield call([client, client.getInvoice], action.id);
+  const invoice: Invoice = yield call([client, client.getInvoice], action.id);
   yield put(setSingle(SingleEntities.Invoice, invoice));
 }
 
@@ -276,7 +277,7 @@ function* saveSingleInvoiceActivity(
 ) {
   const client = new Client();
   yield call([client, client.updateInvoiceActivity], action.id, action.activityId, action.data);
-  const invoice = yield call([client, client.getInvoice], action.id);
+  const invoice: Invoice = yield call([client, client.getInvoice], action.id);
   yield put(setSingle(SingleEntities.Invoice, invoice));
 }
 

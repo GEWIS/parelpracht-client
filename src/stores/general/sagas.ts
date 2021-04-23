@@ -7,7 +7,7 @@ import { GeneralActionType } from './actions';
 export function* fetchGeneralInfo() {
   const client = new Client();
 
-  const financialYears = yield call([client, client.getGeneralInfo]);
+  const financialYears: number[] = yield call([client, client.getGeneralInfo]);
 
   yield put(generalSetInfo(financialYears));
 }

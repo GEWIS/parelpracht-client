@@ -8,7 +8,7 @@ import {
   ListParams,
   ListSorting,
   Partial_FileParams,
-  Product,
+  Product, ProductListResponse,
   ProductParams,
   ProductSummary,
   SortDirection,
@@ -76,7 +76,7 @@ function* fetchProducts() {
   if (list.length === 0 && count > 0) {
     yield put(prevPageTable(Tables.Products));
 
-    const res = yield call(
+    const res: ProductListResponse = yield call(
       [client, client.getAllProducts],
       new ListParams({
         sorting: new ListSorting({
@@ -98,13 +98,13 @@ function* fetchProducts() {
 
 export function* fetchProductSummaries() {
   const client = new Client();
-  const summaries = yield call([client, client.getProductSummaries]);
+  const summaries: ProductSummary[] = yield call([client, client.getProductSummaries]);
   yield put(setSummaries(SummaryCollections.Products, summaries));
 }
 
 function* fetchSingleProduct(action: SingleFetchAction<SingleEntities.Product>) {
   const client = new Client();
-  const product = yield call([client, client.getProduct], action.id);
+  const product: Product = yield call([client, client.getProduct], action.id);
   yield put(setSingle(SingleEntities.Product, product));
   yield put(updateSummary(SummaryCollections.Products, toSummary(product)));
 }
@@ -114,7 +114,7 @@ function* saveSingleProduct(
 ) {
   const client = new Client();
   yield call([client, client.updateProduct], action.id, action.data);
-  const product = yield call([client, client.getProduct], action.id);
+  const product: Product = yield call([client, client.getProduct], action.id);
   yield put(setSingle(SingleEntities.Product, product));
   yield put(updateSummary(SummaryCollections.Products, toSummary(product)));
 }
@@ -135,7 +135,7 @@ function* createSingleProduct(
   action: SingleCreateAction<SingleEntities.Product, ProductParams>,
 ) {
   const client = new Client();
-  const product = yield call([client, client.createProduct], action.data);
+  const product: Product = yield call([client, client.createProduct], action.data);
   yield put(setSingle(SingleEntities.Product, product));
   yield put(fetchTable(Tables.Products));
   yield put(addSummary(SummaryCollections.Products, toSummary(product)));
@@ -176,7 +176,7 @@ function* saveSingleProductFile(
 ) {
   const client = new Client();
   yield call([client, client.updateProductFile], action.id, action.fileId, action.data);
-  const product = yield call([client, client.getProduct], action.id);
+  const product: Product = yield call([client, client.getProduct], action.id);
   yield put(setSingle(SingleEntities.Product, product));
 }
 
@@ -194,7 +194,7 @@ function* watchSaveSingleProductFile() {
 function* deleteSingleProductFile(action: SingleDeleteFileAction<SingleEntities.Product>) {
   const client = new Client();
   yield call([client, client.deleteProductFile], action.id, action.fileId);
-  const product = yield call([client, client.getProduct], action.id);
+  const product: Product = yield call([client, client.getProduct], action.id);
   yield put(setSingle(SingleEntities.Product, product));
 }
 
@@ -214,7 +214,7 @@ function* createSingleProductComment(
 ) {
   const client = new Client();
   yield call([client, client.addProductComment], action.id, action.data);
-  const product = yield call([client, client.getProduct], action.id);
+  const product: Product = yield call([client, client.getProduct], action.id);
   yield put(setSingle(SingleEntities.Product, product));
 }
 
@@ -234,7 +234,7 @@ function* saveSingleProductActivity(
 ) {
   const client = new Client();
   yield call([client, client.updateProductActivity], action.id, action.activityId, action.data);
-  const product = yield call([client, client.getProduct], action.id);
+  const product: Product = yield call([client, client.getProduct], action.id);
   yield put(setSingle(SingleEntities.Product, product));
 }
 
@@ -254,7 +254,7 @@ function* deleteSingleProductActivity(
 ) {
   const client = new Client();
   yield call([client, client.deleteProductActivity], action.id, action.activityId);
-  const product = yield call([client, client.getProduct], action.id);
+  const product: Product = yield call([client, client.getProduct], action.id);
   yield put(setSingle(SingleEntities.Product, product));
 }
 

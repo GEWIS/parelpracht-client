@@ -2,6 +2,7 @@ import {
   call, put, select, throttle,
 } from 'redux-saga/effects';
 import {
+  CategoryListResponse,
   CategoryParams,
   CategorySummary,
   Client,
@@ -67,7 +68,7 @@ function* fetchProductCategories() {
   if (list.length === 0 && count > 0) {
     yield put(prevPageTable(Tables.ProductCategories));
 
-    const res = yield call(
+    const res: CategoryListResponse = yield call(
       [client, client.getAllCategories],
       new ListParams({
         sorting: new ListSorting({
@@ -89,13 +90,13 @@ function* fetchProductCategories() {
 
 export function* fetchProductCategorySummaries() {
   const client = new Client();
-  const summaries = yield call([client, client.getCategorySummaries]);
+  const summaries: CategorySummary[] = yield call([client, client.getCategorySummaries]);
   yield put(setSummaries(SummaryCollections.ProductCategories, summaries));
 }
 
 function* fetchSingleProductCategory(action: SingleFetchAction<SingleEntities.ProductCategory>) {
   const client = new Client();
-  const productCategory = yield call([client, client.getCategory], action.id);
+  const productCategory: ProductCategory = yield call([client, client.getCategory], action.id);
   yield put(setSingle(SingleEntities.ProductCategory, productCategory));
   yield put(updateSummary(SummaryCollections.ProductCategories, toSummary(productCategory)));
 }
@@ -105,7 +106,7 @@ function* saveSingleProductCategory(
 ) {
   const client = new Client();
   yield call([client, client.updateCategory], action.id, action.data);
-  const productCategory = yield call([client, client.getCategory], action.id);
+  const productCategory: ProductCategory = yield call([client, client.getCategory], action.id);
   yield put(setSingle(SingleEntities.ProductCategory, productCategory));
   yield put(fetchTable(Tables.ProductCategories));
   yield put(updateSummary(SummaryCollections.ProductCategories, toSummary(productCategory)));
@@ -127,7 +128,7 @@ function* createSingleProductCategory(
   action: SingleCreateAction<SingleEntities.ProductCategory, CategoryParams>,
 ) {
   const client = new Client();
-  const productCategory = yield call([client, client.createCategory], action.data);
+  const productCategory: ProductCategory = yield call([client, client.createCategory], action.data);
   yield put(setSingle(SingleEntities.ProductCategory, productCategory));
   yield put(fetchTable(Tables.ProductCategories));
   yield put(addSummary(SummaryCollections.ProductCategories, toSummary(productCategory)));

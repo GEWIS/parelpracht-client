@@ -38,6 +38,7 @@ export function* fetchAuthStatus() {
 function* fetchProfile() {
   const client = new Client();
 
+  // @ts-ignore
   const profile = yield call([client, client.getProfile]);
   yield put(authSetProfile(profile));
 }
@@ -88,7 +89,7 @@ function* logout() {
 function* generateApiKey() {
   const client = new Client();
 
-  const apiKey = yield call([client, client.generateApiKey]);
+  const apiKey: string | undefined = yield call([client, client.generateApiKey]);
 
   yield put(authFetchProfile());
   yield put(authSetApiKey(apiKey));
@@ -97,7 +98,7 @@ function* generateApiKey() {
 function* getApiKey() {
   const client = new Client();
 
-  const apiKey = yield call([client, client.getApiKey]);
+  const apiKey: string | undefined = yield call([client, client.getApiKey]);
 
   yield put(authFetchProfile());
   yield put(authSetApiKey(apiKey));
