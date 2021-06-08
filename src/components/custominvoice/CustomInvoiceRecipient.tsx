@@ -75,7 +75,6 @@ class CustomInvoiceRecipient extends React.Component<Props, State> {
           </Form.Group>
           <Form.Group widths="equal">
             <Form.Field
-              required
               id="form-recipient-street"
               fluid
               control={Input}
@@ -84,10 +83,8 @@ class CustomInvoiceRecipient extends React.Component<Props, State> {
               onChange={(e: ChangeEvent<HTMLInputElement>) => updateRecipientAttribute(
                 'street', e.target.value,
               )}
-              error={validator.isEmpty(recipient.street)}
             />
             <Form.Field
-              required
               id="form-recipient-postal-code"
               fluid
               control={Input}
@@ -96,12 +93,10 @@ class CustomInvoiceRecipient extends React.Component<Props, State> {
               onChange={(e: ChangeEvent<HTMLInputElement>) => updateRecipientAttribute(
                 'postalCode', e.target.value,
               )}
-              error={!validator.isPostalCode(recipient.postalCode, 'any')}
             />
           </Form.Group>
           <Form.Group widths="equal">
             <Form.Field
-              required
               id="form-recipient-city"
               fluid
               control={Input}
@@ -110,7 +105,6 @@ class CustomInvoiceRecipient extends React.Component<Props, State> {
               onChange={(e: ChangeEvent<HTMLInputElement>) => updateRecipientAttribute(
                 'city', e.target.value,
               )}
-              error={validator.isEmpty(recipient.city)}
             />
             <Form.Field
               id="form-recipient-country"
