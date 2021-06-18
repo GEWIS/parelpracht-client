@@ -3,6 +3,11 @@ The current version of ParelPracht is **v1.0.1**, released on April 23rd, 2021.
 You can find the release notes below.
 ----------------------
 
+## v1.1.0
+### Added
+
+### Changes
+
 ## v1.0.1 (23-04-2021)
 ### Added
 - Added support for 'mysql_clear_password' authentication method.

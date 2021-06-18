@@ -126,7 +126,7 @@ class SingleContractPage extends React.Component<Props, State> {
               fetchEntity={fetchContract}
               generateModal={(
                 <GenerateContractModal
-                  contractId={contract.id}
+                  contract={contract}
                   fetchContract={fetchContract}
                 />
               )}

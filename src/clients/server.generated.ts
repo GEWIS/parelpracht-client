@@ -10683,6 +10683,7 @@ export class GenerateContractParams implements IGenerateContractParams {
     saveToDisk!: boolean;
     signee1Id!: number;
     signee2Id!: number;
+    recipientId!: number;
 
     constructor(data?: IGenerateContractParams) {
         if (data) {
@@ -10703,6 +10704,7 @@ export class GenerateContractParams implements IGenerateContractParams {
             this.saveToDisk = _data["saveToDisk"];
             this.signee1Id = _data["signee1Id"];
             this.signee2Id = _data["signee2Id"];
+            this.recipientId = _data["recipientId"];
         }
     }
 
@@ -10723,6 +10725,7 @@ export class GenerateContractParams implements IGenerateContractParams {
         data["saveToDisk"] = this.saveToDisk;
         data["signee1Id"] = this.signee1Id;
         data["signee2Id"] = this.signee2Id;
+        data["recipientId"] = this.recipientId;
         return data; 
     }
 }
@@ -10736,6 +10739,7 @@ export interface IGenerateContractParams {
     saveToDisk: boolean;
     signee1Id: number;
     signee2Id: number;
+    recipientId: number;
 }
 
 export class ContractStatusParams implements IContractStatusParams {
@@ -11138,9 +11142,9 @@ export class CustomRecipient implements ICustomRecipient {
     name!: string;
     gender!: Gender;
     organizationName?: string;
-    street!: string;
-    postalCode!: string;
-    city!: string;
+    street?: string;
+    postalCode?: string;
+    city?: string;
     country?: string;
 
     constructor(data?: ICustomRecipient) {
@@ -11188,9 +11192,9 @@ export interface ICustomRecipient {
     name: string;
     gender: Gender;
     organizationName?: string;
-    street: string;
-    postalCode: string;
-    city: string;
+    street?: string;
+    postalCode?: string;
+    city?: string;
     country?: string;
 }
 

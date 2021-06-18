@@ -118,7 +118,7 @@ function GenerateContract(props: Props) {
               />
             </Form.Field>
             <Form.Field
-              label="Comment"
+              label="Label"
               control={Input}
               value={name}
               onChange={(e: ChangeEvent<HTMLInputElement>) => changeName(e.target.value)}
