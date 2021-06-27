@@ -20,7 +20,6 @@ function ProductCategorySelector(props: Props & DropdownProps) {
   const dropdownOptions = options.map((x) => ({
     key: x.id,
     text: x.name,
-    description: x.name,
     value: x.id,
   }));
 

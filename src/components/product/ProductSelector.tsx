@@ -19,8 +19,7 @@ function ProductSelector(props: Props & DropdownProps) {
   } = props;
   const dropdownOptions = options.map((x) => ({
     key: x.id,
-    text: x.nameDutch,
-    description: x.nameEnglish,
+    text: x.nameEnglish,
     value: x.id,
   }));
 
