@@ -4,7 +4,6 @@ import {
   Checkbox,
   Dropdown, Form, Icon, Input, Modal, Segment,
 } from 'semantic-ui-react';
-import validator from 'validator';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import {
@@ -90,7 +89,7 @@ function GenerateContract(props: Props) {
             color="green"
             icon
             labelPosition="left"
-            disabled={validator.isEmpty(name) || recipientId === 0}
+            disabled={recipientId === 0}
           >
             <Icon name="download" />
             Generate
@@ -118,13 +117,11 @@ function GenerateContract(props: Props) {
               />
             </Form.Field>
             <Form.Field
-              label="Comment"
+              label="Label"
               control={Input}
               value={name}
               onChange={(e: ChangeEvent<HTMLInputElement>) => changeName(e.target.value)}
               fluid
-              required
-              error={validator.isEmpty(name)}
             />
           </Form.Group>
           <Form.Group widths="equal">

@@ -10,6 +10,10 @@ You can find the release notes below.
 ### Changes
 - Selectors no longer have a unnecessary description.
   - The only exception is the Contact selector: company is replaced by the contact's function as a contact.
+- The name of a generated file now also includes the company.
+- When creating a PDF or .tex file from a contract or invoice, a recipient other than the contact can be chosen.
+- Contacts no require need a first name.
+- Files no longer require a label/comment.
 
 ### Bugfixes
 - Fixed "Treasurer Last Seen" not being shown properly.

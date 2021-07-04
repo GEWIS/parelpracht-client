@@ -229,8 +229,11 @@ class SingleFile extends React.Component<Props, State> {
     if (editing) {
       return (
         <Table.Row>
-          <Table.Cell collapsing>
+          <Table.Cell>
             <Icon name={this.getFileIcon(this.state.fileName)} />
+            {file!.downloadName}
+          </Table.Cell>
+          <Table.Cell collapsing>
             <Input
               id={`form-file-${file.id}-name`}
               value={this.state.fileName}
@@ -239,7 +242,6 @@ class SingleFile extends React.Component<Props, State> {
               onChange={(e) => this.setState({ fileName: e.target.value })}
             />
           </Table.Cell>
-          <Table.Cell>{file!.downloadName}</Table.Cell>
           <Table.Cell>{formatLastUpdate(file!.updatedAt)}</Table.Cell>
           <Table.Cell textAlign="right" collapsing>
             <Button
@@ -265,11 +267,11 @@ class SingleFile extends React.Component<Props, State> {
 
     return (
       <Table.Row>
-        <Table.Cell collapsing>
+        <Table.Cell>
           <Icon name={this.getFileIcon(file!.downloadName)} />
-          {file!.name}
+          {file!.downloadName}
         </Table.Cell>
-        <Table.Cell>{file!.downloadName}</Table.Cell>
+        <Table.Cell>{file!.name}</Table.Cell>
         <Table.Cell>{formatLastUpdate(file!.updatedAt)}</Table.Cell>
         <Table.Cell textAlign="right" collapsing>
           <AuthorizationComponent roles={[Roles.GENERAL, Roles.ADMIN]} notFound={false}>

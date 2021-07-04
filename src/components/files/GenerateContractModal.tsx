@@ -2,10 +2,10 @@ import React, { ChangeEvent, useState } from 'react';
 import {
   Button, Checkbox, Dropdown, Form, Icon, Input, Modal, Segment,
 } from 'semantic-ui-react';
-import validator from 'validator';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import {
+  Contract,
   ContractType, GenerateContractParams, Language, ReturnFileType, Roles,
 } from '../../clients/server.generated';
 import AlertContainer from '../alerts/AlertContainer';
@@ -13,9 +13,10 @@ import UserSelector from '../user/UserSelector';
 import { FilesClient } from '../../clients/filesClient';
 import { TransientAlert } from '../../stores/alerts/actions';
 import { showTransientAlert } from '../../stores/alerts/actionCreators';
+import ContactSelector from '../contact/ContactSelector';
 
 interface Props {
-  contractId: number;
+  contract: Contract;
   fetchContract: (id: number) => void;
   showTransientAlert: (alert: TransientAlert) => void;
 }
@@ -29,6 +30,7 @@ function GenerateContractModal(props: Props) {
   const [fileType, changeFileType] = useState(ReturnFileType.PDF);
   const [showDiscountPercentages, changeDiscount] = useState(true);
   const [saveToDisk, changeSaveToDisk] = useState(false);
+  const [recipientId, changeRecipientId] = useState(props.contract.contactId);
   const [signee1Id, changeSignee1] = useState(0);
   const [signee2Id, changeSignee2] = useState(0);
   const [loading, changeLoading] = useState(false);
@@ -44,21 +46,23 @@ function GenerateContractModal(props: Props) {
   const save = async () => {
     changeLoading(true);
     const client = new FilesClient();
-    const success = await client.generateContractFile(props.contractId, new GenerateContractParams({
-      name,
-      language,
-      contentType,
-      fileType,
-      showDiscountPercentages,
-      saveToDisk,
-      signee1Id,
-      signee2Id,
-    }));
+    const success = await client
+      .generateContractFile(props.contract.id, new GenerateContractParams({
+        name,
+        language,
+        contentType,
+        fileType,
+        showDiscountPercentages,
+        saveToDisk,
+        signee1Id,
+        signee2Id,
+        recipientId,
+      }));
     changeLoading(false);
 
     if (success) {
       setOpen(false);
-      props.fetchContract(props.contractId);
+      props.fetchContract(props.contract.id);
     } else {
       props.showTransientAlert({
         title: 'Error',
@@ -101,8 +105,7 @@ function GenerateContractModal(props: Props) {
             color="green"
             icon
             labelPosition="left"
-            disabled={validator.isEmpty(name)
-              || (signee1Id === 0 && contentType === ContractType.CONTRACT)
+            disabled={(signee1Id === 0 && contentType === ContractType.CONTRACT)
               || (signee2Id === 0 && contentType === ContractType.CONTRACT)}
           >
             <Icon name="download" />
@@ -136,14 +139,26 @@ function GenerateContractModal(props: Props) {
                 fluid
               />
             </Form.Field>
+            <Form.Field required>
+              {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
+              <label htmlFor="form-contact-selector">Recipient</label>
+              <ContactSelector
+                id="form-contact-selector"
+                disabled={false}
+                companyId={props.contract.companyId}
+                value={recipientId}
+                onChange={(id: number) => changeRecipientId(id)}
+                placeholder="Recipient"
+              />
+            </Form.Field>
+          </Form.Group>
+          <Form.Group widths="equal">
             <Form.Field
-              label="Comment"
+              label="Label"
               control={Input}
               value={name}
               onChange={(e: ChangeEvent<HTMLInputElement>) => changeName(e.target.value)}
               fluid
-              required
-              error={validator.isEmpty(name)}
             />
           </Form.Group>
           <Form.Group widths="equal">
