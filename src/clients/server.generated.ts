@@ -7521,7 +7521,7 @@ export class InvoiceFile implements IInvoiceFile {
     deletedAt?: Date;
     /** Version number of this entity */
     version!: number;
-    /** Name of the file as shown in the front-end */
+    /** Label of the file as shown in the front-end */
     name!: string;
     /** Name of the file as shown when downloaded */
     downloadName!: string;
@@ -7600,7 +7600,7 @@ export interface IInvoiceFile {
     deletedAt?: Date;
     /** Version number of this entity */
     version: number;
-    /** Name of the file as shown in the front-end */
+    /** Label of the file as shown in the front-end */
     name: string;
     /** Name of the file as shown when downloaded */
     downloadName: string;
@@ -7868,7 +7868,7 @@ export class CompanyFile implements ICompanyFile {
     deletedAt?: Date;
     /** Version number of this entity */
     version!: number;
-    /** Name of the file as shown in the front-end */
+    /** Label of the file as shown in the front-end */
     name!: string;
     /** Name of the file as shown when downloaded */
     downloadName!: string;
@@ -7947,7 +7947,7 @@ export interface ICompanyFile {
     deletedAt?: Date;
     /** Version number of this entity */
     version: number;
-    /** Name of the file as shown in the front-end */
+    /** Label of the file as shown in the front-end */
     name: string;
     /** Name of the file as shown when downloaded */
     downloadName: string;
@@ -8085,7 +8085,7 @@ export class ContractFile implements IContractFile {
     deletedAt?: Date;
     /** Version number of this entity */
     version!: number;
-    /** Name of the file as shown in the front-end */
+    /** Label of the file as shown in the front-end */
     name!: string;
     /** Name of the file as shown when downloaded */
     downloadName!: string;
@@ -8164,7 +8164,7 @@ export interface IContractFile {
     deletedAt?: Date;
     /** Version number of this entity */
     version: number;
-    /** Name of the file as shown in the front-end */
+    /** Label of the file as shown in the front-end */
     name: string;
     /** Name of the file as shown when downloaded */
     downloadName: string;
@@ -8398,7 +8398,7 @@ export class ProductFile implements IProductFile {
     deletedAt?: Date;
     /** Version number of this entity */
     version!: number;
-    /** Name of the file as shown in the front-end */
+    /** Label of the file as shown in the front-end */
     name!: string;
     /** Name of the file as shown when downloaded */
     downloadName!: string;
@@ -8477,7 +8477,7 @@ export interface IProductFile {
     deletedAt?: Date;
     /** Version number of this entity */
     version: number;
-    /** Name of the file as shown in the front-end */
+    /** Label of the file as shown in the front-end */
     name: string;
     /** Name of the file as shown when downloaded */
     downloadName: string;
@@ -9177,7 +9177,7 @@ export class BaseFile implements IBaseFile {
     deletedAt?: Date;
     /** Version number of this entity */
     version!: number;
-    /** Name of the file as shown in the front-end */
+    /** Label of the file as shown in the front-end */
     name!: string;
     /** Name of the file as shown when downloaded */
     downloadName!: string;
@@ -9248,7 +9248,7 @@ export interface IBaseFile {
     deletedAt?: Date;
     /** Version number of this entity */
     version: number;
-    /** Name of the file as shown in the front-end */
+    /** Label of the file as shown in the front-end */
     name: string;
     /** Name of the file as shown when downloaded */
     downloadName: string;
@@ -10675,7 +10675,7 @@ export enum ReturnFileType {
 }
 
 export class GenerateContractParams implements IGenerateContractParams {
-    name!: string;
+    name?: string;
     language!: Language;
     contentType!: ContractType;
     fileType!: ReturnFileType;
@@ -10731,7 +10731,7 @@ export class GenerateContractParams implements IGenerateContractParams {
 }
 
 export interface IGenerateContractParams {
-    name: string;
+    name?: string;
     language: Language;
     contentType: ContractType;
     fileType: ReturnFileType;
@@ -11083,7 +11083,7 @@ export interface IPartial_InvoiceParams {
 }
 
 export class GenerateInvoiceParams implements IGenerateInvoiceParams {
-    name!: string;
+    name?: string;
     language!: Language;
     fileType!: ReturnFileType;
     showDiscountPercentages!: boolean;
@@ -11130,7 +11130,7 @@ export class GenerateInvoiceParams implements IGenerateInvoiceParams {
 }
 
 export interface IGenerateInvoiceParams {
-    name: string;
+    name?: string;
     language: Language;
     fileType: ReturnFileType;
     showDiscountPercentages: boolean;

@@ -2,7 +2,6 @@ import React, { ChangeEvent, useState } from 'react';
 import {
   Button, Checkbox, Dropdown, Form, Icon, Input, Modal, Segment,
 } from 'semantic-ui-react';
-import validator from 'validator';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import {
@@ -106,8 +105,7 @@ function GenerateContractModal(props: Props) {
             color="green"
             icon
             labelPosition="left"
-            disabled={validator.isEmpty(name)
-              || (signee1Id === 0 && contentType === ContractType.CONTRACT)
+            disabled={(signee1Id === 0 && contentType === ContractType.CONTRACT)
               || (signee2Id === 0 && contentType === ContractType.CONTRACT)}
           >
             <Icon name="download" />
@@ -161,8 +159,6 @@ function GenerateContractModal(props: Props) {
               value={name}
               onChange={(e: ChangeEvent<HTMLInputElement>) => changeName(e.target.value)}
               fluid
-              required
-              error={validator.isEmpty(name)}
             />
           </Form.Group>
           <Form.Group widths="equal">

@@ -151,10 +151,9 @@ class ContactProps extends React.Component<Props, State> {
 
   propsHaveErrors = (): boolean => {
     const {
-      firstName, lastName, email, telephone,
+      lastName, email, telephone,
     } = this.state;
-    return (validator.isEmpty(firstName)
-      || validator.isEmpty(lastName)
+    return (validator.isEmpty(lastName)
       || !validator.isEmail(email)
       || (!validator.isEmpty(telephone!) && !validator.isMobilePhone(telephone!))
     );
@@ -205,7 +204,6 @@ class ContactProps extends React.Component<Props, State> {
           <Form.Group>
             <Form.Field
               disabled={!editing}
-              required
               id="form-input-first-name"
               fluid
               control={Input}
@@ -215,9 +213,6 @@ class ContactProps extends React.Component<Props, State> {
                 firstName: e.target.value,
               })}
               width={6}
-              error={
-                validator.isEmpty(firstName)
-              }
             />
             <Form.Field
               disabled={!editing}

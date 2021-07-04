@@ -7,13 +7,17 @@ You can find the release notes below.
 ### Added
 
 ### Changes
+- The name of a generated file now also includes the company.
+- When creating a PDF or .tex file from a contract or invoice, a recipient other than the contact can be chosen.
+- Contacts no require need a first name.
+- Files no longer require a label/comment.
 
 ## v1.0.1 (23-04-2021)
 ### Added
 - Added support for 'mysql_clear_password' authentication method.
 
 ### Changes
-- Updated the node packages
+- Updated the node packages.
 
 ### Bugfixes
 - Fixed the backend docker container failing to build.
