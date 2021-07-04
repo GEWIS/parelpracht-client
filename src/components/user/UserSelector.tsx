@@ -10,7 +10,6 @@ interface Props {
   value: number;
   options: UserSummary[];
   onChange: (value: number | number[]) => void;
-  hideEmail?: boolean;
   correct?: boolean;
   role?: Roles;
 }
@@ -19,7 +18,7 @@ function UserSelector(props: Props & DropdownProps) {
   const [open, changeOpen] = useState(false);
 
   const {
-    value, onChange, options, hideEmail, correct, role,
+    value, onChange, options, correct, role,
   } = props;
 
   const filteredOptions = role !== undefined
@@ -28,7 +27,6 @@ function UserSelector(props: Props & DropdownProps) {
   const dropdownOptions = filteredOptions.map((x) => ({
     key: x.id,
     text: formatContactName(x.firstName, x.lastNamePreposition, x.lastName),
-    description: hideEmail ? undefined : x.email,
     value: x.id,
   }));
 
@@ -54,7 +52,6 @@ const mapStateToProps = (state: RootState) => ({
 
 UserSelector.defaultProps = {
   correct: undefined,
-  hideEmail: undefined,
   role: undefined,
 };
 

@@ -24,6 +24,16 @@ export function formatFunction(func: ContactFunction) {
   }
 }
 
+export function formatFunctionShort(func: ContactFunction) {
+  switch (func) {
+    case ContactFunction.NORMAL: return 'Normal';
+    case ContactFunction.PRIMARY: return 'Primary';
+    case ContactFunction.FINANCIAL: return 'Financial';
+    case ContactFunction.OLD: return 'Old';
+    default: return 'Unknown';
+  }
+}
+
 export function formatGender(gender: Gender) {
   switch (gender) {
     case Gender.MALE: return 'Male';

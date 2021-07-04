@@ -109,7 +109,7 @@ function* fetchInvoices() {
     lastSeen = res.lastSeen;
   }
 
-  yield put(setTable(Tables.Invoices, list, count, lastSeen));
+  yield put(setTable(Tables.Invoices, list, count, {}, lastSeen));
 }
 
 export function* fetchInvoiceSummaries() {

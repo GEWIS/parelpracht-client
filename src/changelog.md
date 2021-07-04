@@ -3,14 +3,21 @@ The current version of ParelPracht is **v1.0.1**, released on April 23rd, 2021.
 You can find the release notes below.
 ----------------------
 
-## v1.1.0
+## v1.1.0-dev
 ### Added
+- Added a database validator command to the backend to validate the database and fix any issues.
 
 ### Changes
+- Selectors no longer have a unnecessary description.
+  - The only exception is the Contact selector: company is replaced by the contact's function as a contact.
 - The name of a generated file now also includes the company.
 - When creating a PDF or .tex file from a contract or invoice, a recipient other than the contact can be chosen.
 - Contacts no require need a first name.
 - Files no longer require a label/comment.
+
+### Bugfixes
+- Fixed "Treasurer Last Seen" not being shown properly.
+- An address is no longer required when creating a custom invoice.
 
 ## v1.0.1 (23-04-2021)
 ### Added
