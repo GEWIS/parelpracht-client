@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { Dropdown, DropdownProps } from 'semantic-ui-react';
-import { ProductSummary } from '../../clients/server.generated';
+import { ProductStatus, ProductSummary } from '../../clients/server.generated';
 import { RootState } from '../../stores/store';
 
 interface Props {
@@ -17,11 +17,20 @@ function ProductSelector(props: Props & DropdownProps) {
   const {
     value, onChange, options,
   } = props;
-  const dropdownOptions = options.map((x) => ({
-    key: x.id,
-    text: x.nameEnglish,
-    value: x.id,
-  }));
+  const dropdownOptions = options
+    .filter((p) => p.status === ProductStatus.ACTIVE)
+    .sort((p1, p2) => {
+      const n1 = p1.nameEnglish.toUpperCase();
+      const n2 = p2.nameEnglish.toUpperCase();
+      if (n1 < n2) return -1;
+      if (n1 > n2) return 1;
+      return 0;
+    })
+    .map((x) => ({
+      key: x.id,
+      text: x.nameEnglish,
+      value: x.id,
+    }));
 
   return (
     <Dropdown

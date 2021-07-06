@@ -8784,6 +8784,7 @@ export class ProductSummary implements IProductSummary {
     nameDutch!: string;
     nameEnglish!: string;
     targetPrice!: number;
+    status!: ProductStatus;
 
     constructor(data?: IProductSummary) {
         if (data) {
@@ -8800,6 +8801,7 @@ export class ProductSummary implements IProductSummary {
             this.nameDutch = _data["nameDutch"];
             this.nameEnglish = _data["nameEnglish"];
             this.targetPrice = _data["targetPrice"];
+            this.status = _data["status"];
         }
     }
 
@@ -8816,6 +8818,7 @@ export class ProductSummary implements IProductSummary {
         data["nameDutch"] = this.nameDutch;
         data["nameEnglish"] = this.nameEnglish;
         data["targetPrice"] = this.targetPrice;
+        data["status"] = this.status;
         return data; 
     }
 }
@@ -8825,6 +8828,7 @@ export interface IProductSummary {
     nameDutch: string;
     nameEnglish: string;
     targetPrice: number;
+    status: ProductStatus;
 }
 
 export class ProductParams implements IProductParams {
@@ -11467,7 +11471,7 @@ export interface IContactSummary {
 
 export class ContactParams implements IContactParams {
     gender!: Gender;
-    firstName!: string;
+    firstName?: string;
     lastNamePreposition?: string;
     lastName!: string;
     email!: string;
@@ -11523,7 +11527,7 @@ export class ContactParams implements IContactParams {
 
 export interface IContactParams {
     gender: Gender;
-    firstName: string;
+    firstName?: string;
     lastNamePreposition?: string;
     lastName: string;
     email: string;
