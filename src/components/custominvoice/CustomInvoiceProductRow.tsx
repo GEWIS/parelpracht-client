@@ -35,7 +35,7 @@ function CustomInvoiceProductRow(props: Props) {
           placeholder="Price"
           value={pricePerOne}
           onChange={(e: ChangeEvent<HTMLInputElement>) => {
-            props.updateProduct(props.id, 'pricePerOne', parseFloat(e.target.value) * 100);
+            props.updateProduct(props.id, 'pricePerOne', parseFloat(e.target.value.replace(',', '.')) * 100);
             changePricePerOne(e.target.value);
           }}
           error={props.product.pricePerOne === 0}
