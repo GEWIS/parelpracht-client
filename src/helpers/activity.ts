@@ -1,7 +1,11 @@
 import { GeneralActivity } from '../components/activities/GeneralActivity';
 import { formatLastUpdate } from './timestamp';
 import {
-  ActivityType, ContractStatus, InvoiceStatus, ProductInstanceStatus,
+  ActivityType,
+  BaseActivity,
+  ContractStatus,
+  InvoiceStatus,
+  ProductInstanceStatus,
 } from '../clients/server.generated';
 import { SingleEntities } from '../stores/single/single';
 import { DocumentStatus } from '../components/activities/DocumentStatus';
@@ -318,11 +322,12 @@ export function getLastStatusNotCancelled(
 
 /**
  * Get the last status activity
- * @param allStatusActivities All activities where type=STATUS
+ * @param activities All activities
  */
-export function getLastStatus(allStatusActivities: GeneralActivity[]): GeneralActivity | undefined {
-  if (allStatusActivities.length > 0) {
-    return allStatusActivities[allStatusActivities.length - 1];
+export function getLastStatus<T extends BaseActivity>(activities: T[]): T | undefined {
+  const filtered = activities.filter((a) => a.type === ActivityType.STATUS);
+  if (filtered.length > 0) {
+    return filtered[filtered.length - 1];
   }
   return undefined;
 }

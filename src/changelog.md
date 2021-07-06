@@ -14,10 +14,14 @@ You can find the release notes below.
 - When creating a PDF or .tex file from a contract or invoice, a recipient other than the contact can be chosen.
 - Contacts no require need a first name.
 - Files no longer require a label/comment.
+- "Save to disk" is no longer selected by default when generating files.
+- An address is no longer required when creating a custom invoice.
 
 ### Bugfixes
 - Fixed "Treasurer Last Seen" not being shown properly.
-- An address is no longer required when creating a custom invoice.
+- Fixed compiling errors when generating a PDF of an empty contract or invoice.
+- Fixed all sent invoices showing as expired invoices, not only the actually expired ones.
+- Fixed not being able to update a property of an invoice without changing the invoice date as well.
 
 ## v1.0.1 (23-04-2021)
 ### Added

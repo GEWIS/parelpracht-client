@@ -1,12 +1,12 @@
 import React from 'react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { Checkbox, Table } from 'semantic-ui-react';
-import { ActivityType, ProductInstance } from '../../clients/server.generated';
+import { ActivityType, ProductInstance, ProductInstanceStatus } from '../../clients/server.generated';
 import './ContractComponent.scss';
 import { formatPriceDiscount, formatPriceFull } from '../../helpers/monetary';
 import ProductInstanceLink from '../product/ProductInstanceLink';
 import { SingleEntities } from '../../stores/single/single';
-import { formatStatus } from '../../helpers/activity';
+import { formatStatus, getLastStatus } from '../../helpers/activity';
 import InvoiceLink from '../invoice/InvoiceLink';
 
 interface Props extends RouteComponentProps {
@@ -47,7 +47,9 @@ class ContractProductRow extends React.Component<Props> {
             onChange={() => {
               selectFunction(productInstance.id);
             }}
-            disabled={productInstance.invoiceId !== null}
+            disabled={productInstance.invoiceId !== null
+              || getLastStatus(productInstance.activities)?.subType
+                   === ProductInstanceStatus.CANCELLED}
             checked={selected}
           />
         </Table.Cell>
