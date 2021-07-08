@@ -10,6 +10,7 @@ import { SingleEntities } from '../../stores/single/single';
 import { RootState } from '../../stores/store';
 import AuthorizationComponent from '../AuthorizationComponent';
 import CompanyContact from './CompanyContact';
+import { sortContactsByFunction } from '../../helpers/contact';
 
 interface Props extends RouteComponentProps {
   company: Company | undefined;
@@ -34,6 +35,7 @@ class CompanyContactList extends React.Component<Props, State> {
     }
 
     const { contacts } = company;
+    sortContactsByFunction(contacts, true);
 
     if (contacts.length === 0) {
       return (

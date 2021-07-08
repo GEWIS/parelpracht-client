@@ -52,7 +52,7 @@ import { getSingle } from '../single/selectors';
 import { getLastStatus } from '../../helpers/activity';
 
 function toSummary(invoice: Invoice): InvoiceSummary {
-  return {
+  return new InvoiceSummary({
     id: invoice.id,
     title: invoice.title,
     companyId: invoice.companyId,
@@ -60,8 +60,8 @@ function toSummary(invoice: Invoice): InvoiceSummary {
       (r: number, p: ProductInstance) => r + p.basePrice - p.discount, 0,
     ),
     status: getLastStatus(invoice.activities
-      .filter((a: InvoiceActivity) => a.type === ActivityType.STATUS))?.subType,
-  } as InvoiceSummary;
+      .filter((a: InvoiceActivity) => a.type === ActivityType.STATUS))?.subType!,
+  });
 }
 
 function* fetchInvoices() {

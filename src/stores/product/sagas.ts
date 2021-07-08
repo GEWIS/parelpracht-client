@@ -41,12 +41,13 @@ import { Tables } from '../tables/tables';
 import { TableState } from '../tables/tableState';
 
 function toSummary(product: Product): ProductSummary {
-  return {
+  return new ProductSummary({
     id: product.id,
     nameDutch: product.nameDutch,
     nameEnglish: product.nameEnglish,
     targetPrice: product.targetPrice,
-  } as ProductSummary;
+    status: product.status,
+  });
 }
 
 function* fetchProducts() {

@@ -42,11 +42,11 @@ import {
 import { SingleEntities } from '../single/single';
 
 function toSummary(company: Company): CompanySummary {
-  return {
+  return new CompanySummary({
     id: company.id,
     name: company.name,
     logoFilename: company.logoFilename,
-  } as CompanySummary;
+  });
 }
 
 function* fetchCompanies() {

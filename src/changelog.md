@@ -17,6 +17,7 @@ You can find the release notes below.
 - "Save to disk" is no longer selected by default when generating files.
 - An address is no longer required when creating a custom invoice.
 - The list of products when adding one to a contract, is now sorted alphabetically.
+- Contacts are now nicely sorted in Primary, Normal, Financial and Old-order.
 
 ### Bugfixes
 - Fixed "Treasurer Last Seen" not being shown properly.
@@ -25,6 +26,7 @@ You can find the release notes below.
 - Fixed not being able to update a property of an invoice without changing the invoice date as well.
 - Fixed inactive products showing up in the list of products when adding a product to a contract.
 - Fixed not being able to use commas in prices when creating a custom invoice
+- Fixed being able to select an Old contact for a contract in the front-end, but not in the back-end.
 
 ## v1.0.1 (23-04-2021)
 ### Added

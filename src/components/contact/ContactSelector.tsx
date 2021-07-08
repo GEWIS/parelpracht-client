@@ -2,8 +2,8 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { Dropdown, DropdownProps } from 'semantic-ui-react';
-import { ContactSummary } from '../../clients/server.generated';
-import { formatContactName, formatFunctionShort } from '../../helpers/contact';
+import { ContactFunction, ContactSummary } from '../../clients/server.generated';
+import { formatContactName, formatFunctionShort, sortContactsByFunction } from '../../helpers/contact';
 import { RootState } from '../../stores/store';
 
 interface Props {
@@ -21,8 +21,9 @@ function ContactSelector(props: Props & DropdownProps) {
   const {
     value, onChange, options, disabled, companyId, placeholder,
   } = props;
-  const dropdownOptions = options
-    .filter((c) => c.companyId === companyId)
+
+  const dropdownOptions = sortContactsByFunction(options, true)
+    .filter((c) => c.companyId === companyId && c.function !== ContactFunction.OLD)
     .map((x) => ({
       key: x.id,
       text: formatContactName(x.firstName, x.lastNamePreposition, x.lastName),

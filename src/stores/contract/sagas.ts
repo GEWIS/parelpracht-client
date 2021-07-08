@@ -47,15 +47,15 @@ import { TableState } from '../tables/tableState';
 import { getLastStatus } from '../../helpers/activity';
 
 function toSummary(contract: Contract): ContractSummary {
-  return {
+  return new ContractSummary({
     id: contract.id,
     title: contract.title,
     value: contract.products.reduce(
       (r: number, p: ProductInstance) => r + p.basePrice - p.discount, 0,
     ),
     status: getLastStatus(contract.activities
-      .filter((a: ContractActivity) => a.type === ActivityType.STATUS))?.subType,
-  } as ContractSummary;
+      .filter((a: ContractActivity) => a.type === ActivityType.STATUS))?.subType!,
+  });
 }
 
 function* fetchContracts() {

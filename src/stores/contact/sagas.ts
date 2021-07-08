@@ -34,13 +34,14 @@ import { Tables } from '../tables/tables';
 import { TableState } from '../tables/tableState';
 
 function toSummary(contact: Contact): ContactSummary {
-  return {
+  return new ContactSummary({
     id: contact.id,
     firstName: contact.firstName,
     lastNamePreposition: contact.lastNamePreposition,
     lastName: contact.lastName,
     companyId: contact.companyId,
-  } as ContactSummary;
+    function: contact.function,
+  });
 }
 
 function* fetchContacts() {

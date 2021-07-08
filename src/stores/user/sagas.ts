@@ -36,15 +36,16 @@ import { Tables } from '../tables/tables';
 import { TableState } from '../tables/tableState';
 
 function toSummary(user: User): UserSummary {
-  return {
+  return new UserSummary({
     id: user.id,
     firstName: user.firstName,
     lastNamePreposition: user.lastNamePreposition,
     lastName: user.lastName,
     email: user.email,
     avatarFilename: user.avatarFilename,
+    backgroundFilename: user.backgroundFilename,
     roles: user.roles.map((r) => r.name as Roles),
-  } as UserSummary;
+  });
 }
 
 function* fetchUsers() {

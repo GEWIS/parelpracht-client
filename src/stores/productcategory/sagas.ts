@@ -35,10 +35,10 @@ import { Tables } from '../tables/tables';
 import { TableState } from '../tables/tableState';
 
 function toSummary(category: ProductCategory): CategorySummary {
-  return {
+  return new CategorySummary({
     id: category.id,
     name: category.name,
-  } as CategorySummary;
+  });
 }
 
 function* fetchProductCategories() {
