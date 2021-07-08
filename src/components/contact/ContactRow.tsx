@@ -2,7 +2,7 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { Table } from 'semantic-ui-react';
 import { Contact } from '../../clients/server.generated';
-import { formatContactName } from '../../helpers/contact';
+import { formatContactName, formatFunction } from '../../helpers/contact';
 import CompanyLink from '../company/CompanyLink';
 
 interface Props {
@@ -23,6 +23,9 @@ function ContactRow(props: Props) {
       </Table.Cell>
       <Table.Cell>
         {contact.email}
+      </Table.Cell>
+      <Table.Cell>
+        {formatFunction(contact.function)}
       </Table.Cell>
     </Table.Row>
   );

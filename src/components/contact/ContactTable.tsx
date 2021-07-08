@@ -15,6 +15,7 @@ import { Tables } from '../../stores/tables/tables';
 import ContactRow from './ContactRow';
 import ContactCompanyFilter from '../tablefilters/CompanyFilter';
 import ResourceStatus from '../../stores/resourceStatus';
+import ContactFunctionFilter from '../tablefilters/ContactFunctionFilter';
 
 interface Props {
   contacts: Contact[];
@@ -42,56 +43,7 @@ function ContactsTable({
     fetchContacts();
   }, []);
 
-  if (status === ResourceStatus.FETCHING || status === ResourceStatus.SAVING) {
-    return (
-      <>
-        <Segment style={{ padding: '0px' }}>
-          <Dimmer active inverted>
-            <Loader inverted />
-          </Dimmer>
-          <Table singleLine selectable attached sortable fixed>
-            <Table.Header>
-              <Table.Row>
-                <Table.HeaderCell
-                  sorted={column === 'firstName' ? direction : undefined}
-                  onClick={() => changeSort('firstName')}
-                >
-                  Name
-                </Table.HeaderCell>
-                <Table.HeaderCell
-                  sorted={column === 'company' ? direction : undefined}
-                  onClick={() => changeSort('company')}
-                >
-                  Company
-                  <ContactCompanyFilter table={Tables.Contacts} />
-                </Table.HeaderCell>
-                <Table.HeaderCell
-                  sorted={column === 'email' ? direction : undefined}
-                  onClick={() => changeSort('email')}
-                >
-                  E-mail
-                </Table.HeaderCell>
-              </Table.Row>
-            </Table.Header>
-            <Table.Body>
-              {contacts.map((x) => <ContactRow contact={x} key={x.id} />)}
-            </Table.Body>
-          </Table>
-          <TablePagination
-            countTotal={total}
-            countFetched={fetched}
-            skip={skip}
-            take={take}
-            nextPage={nextPage}
-            prevPage={prevPage}
-            setTake={setTake}
-          />
-        </Segment>
-      </>
-    );
-  }
-
-  return (
+  const table = (
     <>
       <Table singleLine selectable attached sortable fixed>
         <Table.Header>
@@ -115,6 +67,13 @@ function ContactsTable({
             >
               E-mail
             </Table.HeaderCell>
+            <Table.HeaderCell
+              sorted={column === 'function' ? direction : undefined}
+              onClick={() => changeSort('function')}
+            >
+              Function
+              <ContactFunctionFilter table={Tables.Contacts} />
+            </Table.HeaderCell>
           </Table.Row>
         </Table.Header>
         <Table.Body>
@@ -131,7 +90,23 @@ function ContactsTable({
         setTake={setTake}
       />
     </>
+
   );
+
+  if (status === ResourceStatus.FETCHING || status === ResourceStatus.SAVING) {
+    return (
+      <>
+        <Segment style={{ padding: '0px' }}>
+          <Dimmer active inverted>
+            <Loader inverted />
+          </Dimmer>
+          {table}
+        </Segment>
+      </>
+    );
+  }
+
+  return table;
 }
 
 const mapStateToProps = (state: RootState) => {

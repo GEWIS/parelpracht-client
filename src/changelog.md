@@ -6,6 +6,7 @@ You can find the release notes below.
 ## v1.1.0-dev
 ### Added
 - Added a database validator command to the backend to validate the database and fix any issues.
+- Added column "Function" to the Contacts table with sorting and filtering by this column.
 
 ### Changes
 - Selectors no longer have a unnecessary description.
