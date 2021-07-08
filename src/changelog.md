@@ -32,6 +32,7 @@ You can find the release notes below.
 - Fixed being redirected to a non-existing company when closing a contact modal from the All Contacts-list.
 - Fixed not being able to scroll the "Comments" field of contracts and invoices.
 - Fixed ParelPracht logo missing on loading screen.
+- Fixed trash can icon working on contracts while a contract still has one or more files.
 
 ## v1.0.1 (23-04-2021)
 ### Added

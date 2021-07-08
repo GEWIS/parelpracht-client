@@ -133,13 +133,15 @@ class ContractProps extends React.Component<Props, State> {
   };
 
   deleteButtonActive = () => {
+    const { create, contract } = this.props;
+
     // If we create a contract, do not show the button
-    if (this.props.create) {
+    if (create) {
       return undefined;
     }
     // If we violate any preconditions, disable the button
-    return !(this.props.contract.activities.filter((a) => a.type === ActivityType.STATUS).length > 1
-      || this.props.contract.products.length > 0);
+    return !(contract.activities.filter((a) => a.type === ActivityType.STATUS).length > 1
+      || contract.products.length > 0 || contract.files.length > 0);
   };
 
   render() {
