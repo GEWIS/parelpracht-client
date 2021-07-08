@@ -80,7 +80,11 @@ class ContactModal extends React.Component<Props> {
     if (companyId !== undefined) {
       this.props.fetchCompany(parseInt(companyId, 10));
     }
-    this.props.history.push(`/company/${companyId}`);
+    if (companyId === undefined) {
+      this.props.history.push('/contact');
+    } else {
+      this.props.history.push(`/company/${companyId}`);
+    }
   };
 
   close = () => {

@@ -25,8 +25,9 @@ You can find the release notes below.
 - Fixed all sent invoices showing as expired invoices, not only the actually expired ones.
 - Fixed not being able to update a property of an invoice without changing the invoice date as well.
 - Fixed inactive products showing up in the list of products when adding a product to a contract.
-- Fixed not being able to use commas in prices when creating a custom invoice
+- Fixed not being able to use commas in prices when creating a custom invoice.
 - Fixed being able to select an Old contact for a contract in the front-end, but not in the back-end.
+- Fixed being redirected to a non-existing company when closing a contact modal from the All Contacts-list.
 
 ## v1.0.1 (23-04-2021)
 ### Added
