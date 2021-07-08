@@ -53,10 +53,10 @@ function DeleteButton(props: DeleteProps) {
     let deleteError: string;
     switch (entity) {
       case SingleEntities.Contract:
-        deleteError = 'it has a different status than "Created", has products attached to it or has files attached to it';
+        deleteError = 'it has a different status than "Created" or has products or files attached to it';
         break;
       case SingleEntities.Invoice:
-        deleteError = 'it has a different status than "Created" or has products attached to it';
+        deleteError = 'it has a different status than "Created" or has products or files attached to it';
         break;
       case SingleEntities.Company:
         deleteError = 'this company has contracts, invoices and/or contacts';

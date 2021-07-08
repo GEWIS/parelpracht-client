@@ -143,11 +143,12 @@ class InvoiceProps extends React.Component<Props, State> {
   };
 
   deleteButtonActive = () => {
-    if (this.props.create) {
+    const { create, invoice } = this.props;
+    if (create) {
       return undefined;
     }
-    return !(this.props.invoice.products.length > 0 || this.props.invoice.files.length > 0
-      || this.props.invoice.activities.filter((a) => a.type === ActivityType.STATUS).length > 1);
+    return !(invoice.products.length > 0 || invoice.files.length > 0
+      || invoice.activities.filter((a) => a.type === ActivityType.STATUS).length > 1);
   };
 
   formatDate(date: Date) {
