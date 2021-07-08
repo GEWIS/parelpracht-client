@@ -29,6 +29,7 @@ You can find the release notes below.
 - Fixed not being able to use commas in prices when creating a custom invoice.
 - Fixed being able to select an Old contact for a contract in the front-end, but not in the back-end.
 - Fixed being redirected to a non-existing company when closing a contact modal from the All Contacts-list.
+- Fixed not being able to scroll the "Comments" field of contracts and invoices.
 
 ## v1.0.1 (23-04-2021)
 ### Added
