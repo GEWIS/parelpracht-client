@@ -9673,6 +9673,7 @@ export class CompanySummary implements ICompanySummary {
     id!: number;
     name!: string;
     logoFilename!: string;
+    status!: CompanyStatus;
 
     constructor(data?: ICompanySummary) {
         if (data) {
@@ -9688,6 +9689,7 @@ export class CompanySummary implements ICompanySummary {
             this.id = _data["id"];
             this.name = _data["name"];
             this.logoFilename = _data["logoFilename"];
+            this.status = _data["status"];
         }
     }
 
@@ -9703,6 +9705,7 @@ export class CompanySummary implements ICompanySummary {
         data["id"] = this.id;
         data["name"] = this.name;
         data["logoFilename"] = this.logoFilename;
+        data["status"] = this.status;
         return data; 
     }
 }
@@ -9711,6 +9714,7 @@ export interface ICompanySummary {
     id: number;
     name: string;
     logoFilename: string;
+    status: CompanyStatus;
 }
 
 export class ETProductInstance implements IETProductInstance {

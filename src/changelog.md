@@ -20,6 +20,8 @@ You can find the release notes below.
 - An address is no longer required when creating a custom invoice.
 - The list of products when adding one to a contract, is now sorted alphabetically.
 - Contacts are now nicely sorted in Primary, Normal, Financial and Old-order.
+- When generating a PDF invoice, the date on the letter is now the "Invoice date" instead of the date of today.
+- All entity-dropdowns are now properly sorted alphabetically.
 
 ### Bugfixes
 - Fixed "Treasurer Last Seen" not being shown properly.
@@ -29,10 +31,12 @@ You can find the release notes below.
 - Fixed inactive products showing up in the list of products when adding a product to a contract.
 - Fixed not being able to use commas in prices when creating a custom invoice.
 - Fixed being able to select an Old contact for a contract in the front-end, but not in the back-end.
+- Fixed being able to select an inactive company for a contract.
 - Fixed being redirected to a non-existing company when closing a contact modal from the All Contacts-list.
 - Fixed not being able to scroll the "Comments" field of contracts and invoices.
 - Fixed ParelPracht logo missing on loading screen.
 - Fixed trash can icon working on contracts while a contract still has one or more files.
+- Fixed several small issues with generating PDF files, like missing dots/commas for 1000's, missing euro signs and weird spaces.
 
 ## v1.0.1 (23-04-2021)
 ### Added

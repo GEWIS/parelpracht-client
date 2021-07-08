@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { Dropdown, DropdownProps } from 'semantic-ui-react';
-import { CompanySummary } from '../../clients/server.generated';
+import { CompanyStatus, CompanySummary } from '../../clients/server.generated';
 import { RootState } from '../../stores/store';
 
 interface Props {
@@ -18,11 +18,18 @@ function CompanySelector(props: Props & DropdownProps) {
   const {
     value, onChange, options, disabled,
   } = props;
-  const dropdownOptions = options.map((x) => ({
-    key: x.id,
-    text: x.name,
-    value: x.id,
-  }));
+  const dropdownOptions = options.filter((c) => c.status !== CompanyStatus.INACTIVE)
+    .sort((c1, c2) => {
+      const n1 = c1.name.toUpperCase();
+      const n2 = c2.name.toUpperCase();
+      if (n1 < n2) return -1;
+      if (n1 > n2) return 1;
+      return 0;
+    }).map((x) => ({
+      key: x.id,
+      text: x.name,
+      value: x.id,
+    }));
 
   return (
     <Dropdown

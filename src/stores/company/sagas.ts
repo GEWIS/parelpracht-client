@@ -46,6 +46,7 @@ function toSummary(company: Company): CompanySummary {
     id: company.id,
     name: company.name,
     logoFilename: company.logoFilename,
+    status: company.status,
   });
 }
 
