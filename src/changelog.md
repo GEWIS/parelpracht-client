@@ -7,6 +7,7 @@ You can find the release notes below.
 ### Added
 - Added a database validator command to the backend to validate the database and fix any issues.
 - Added column "Function" to the Contacts table with sorting and filtering by this column.
+- Added favicons for all browser and operating system types.
 
 ### Changes
 - Selectors no longer have a unnecessary description.
@@ -30,6 +31,7 @@ You can find the release notes below.
 - Fixed being able to select an Old contact for a contract in the front-end, but not in the back-end.
 - Fixed being redirected to a non-existing company when closing a contact modal from the All Contacts-list.
 - Fixed not being able to scroll the "Comments" field of contracts and invoices.
+- Fixed ParelPracht logo missing on loading screen.
 
 ## v1.0.1 (23-04-2021)
 ### Added
