@@ -4560,6 +4560,54 @@ export class Client {
     }
 
     /**
+     * @param id ID of the invoice
+     * @param activityId ID of the activity
+     * @return No content
+     */
+    deleteInvoiceActivity(id: number, activityId: number): Promise<void> {
+        let url_ = this.baseUrl + "/invoice/{id}/activity/{activityId}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        if (activityId === undefined || activityId === null)
+            throw new Error("The parameter 'activityId' must be defined.");
+        url_ = url_.replace("{activityId}", encodeURIComponent("" + activityId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <RequestInit>{
+            method: "DELETE",
+            headers: {
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processDeleteInvoiceActivity(_response);
+        });
+    }
+
+    protected processDeleteInvoiceActivity(response: Response): Promise<void> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 204) {
+            return response.text().then((_responseText) => {
+            return;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<void>(<any>null);
+    }
+
+    /**
      * @param body List parameters to sort and filter the list
      * @return Ok
      */
@@ -7521,7 +7569,7 @@ export class InvoiceFile implements IInvoiceFile {
     deletedAt?: Date;
     /** Version number of this entity */
     version!: number;
-    /** Label of the file as shown in the front-end */
+    /** Name of the file as shown in the front-end */
     name!: string;
     /** Name of the file as shown when downloaded */
     downloadName!: string;
@@ -7600,7 +7648,7 @@ export interface IInvoiceFile {
     deletedAt?: Date;
     /** Version number of this entity */
     version: number;
-    /** Label of the file as shown in the front-end */
+    /** Name of the file as shown in the front-end */
     name: string;
     /** Name of the file as shown when downloaded */
     downloadName: string;
@@ -7868,7 +7916,7 @@ export class CompanyFile implements ICompanyFile {
     deletedAt?: Date;
     /** Version number of this entity */
     version!: number;
-    /** Label of the file as shown in the front-end */
+    /** Name of the file as shown in the front-end */
     name!: string;
     /** Name of the file as shown when downloaded */
     downloadName!: string;
@@ -7947,7 +7995,7 @@ export interface ICompanyFile {
     deletedAt?: Date;
     /** Version number of this entity */
     version: number;
-    /** Label of the file as shown in the front-end */
+    /** Name of the file as shown in the front-end */
     name: string;
     /** Name of the file as shown when downloaded */
     downloadName: string;
@@ -8085,7 +8133,7 @@ export class ContractFile implements IContractFile {
     deletedAt?: Date;
     /** Version number of this entity */
     version!: number;
-    /** Label of the file as shown in the front-end */
+    /** Name of the file as shown in the front-end */
     name!: string;
     /** Name of the file as shown when downloaded */
     downloadName!: string;
@@ -8164,7 +8212,7 @@ export interface IContractFile {
     deletedAt?: Date;
     /** Version number of this entity */
     version: number;
-    /** Label of the file as shown in the front-end */
+    /** Name of the file as shown in the front-end */
     name: string;
     /** Name of the file as shown when downloaded */
     downloadName: string;
@@ -8398,7 +8446,7 @@ export class ProductFile implements IProductFile {
     deletedAt?: Date;
     /** Version number of this entity */
     version!: number;
-    /** Label of the file as shown in the front-end */
+    /** Name of the file as shown in the front-end */
     name!: string;
     /** Name of the file as shown when downloaded */
     downloadName!: string;
@@ -8477,7 +8525,7 @@ export interface IProductFile {
     deletedAt?: Date;
     /** Version number of this entity */
     version: number;
-    /** Label of the file as shown in the front-end */
+    /** Name of the file as shown in the front-end */
     name: string;
     /** Name of the file as shown when downloaded */
     downloadName: string;
@@ -8784,7 +8832,6 @@ export class ProductSummary implements IProductSummary {
     nameDutch!: string;
     nameEnglish!: string;
     targetPrice!: number;
-    status!: ProductStatus;
 
     constructor(data?: IProductSummary) {
         if (data) {
@@ -8801,7 +8848,6 @@ export class ProductSummary implements IProductSummary {
             this.nameDutch = _data["nameDutch"];
             this.nameEnglish = _data["nameEnglish"];
             this.targetPrice = _data["targetPrice"];
-            this.status = _data["status"];
         }
     }
 
@@ -8818,7 +8864,6 @@ export class ProductSummary implements IProductSummary {
         data["nameDutch"] = this.nameDutch;
         data["nameEnglish"] = this.nameEnglish;
         data["targetPrice"] = this.targetPrice;
-        data["status"] = this.status;
         return data; 
     }
 }
@@ -8828,7 +8873,6 @@ export interface IProductSummary {
     nameDutch: string;
     nameEnglish: string;
     targetPrice: number;
-    status: ProductStatus;
 }
 
 export class ProductParams implements IProductParams {
@@ -9181,7 +9225,7 @@ export class BaseFile implements IBaseFile {
     deletedAt?: Date;
     /** Version number of this entity */
     version!: number;
-    /** Label of the file as shown in the front-end */
+    /** Name of the file as shown in the front-end */
     name!: string;
     /** Name of the file as shown when downloaded */
     downloadName!: string;
@@ -9252,7 +9296,7 @@ export interface IBaseFile {
     deletedAt?: Date;
     /** Version number of this entity */
     version: number;
-    /** Label of the file as shown in the front-end */
+    /** Name of the file as shown in the front-end */
     name: string;
     /** Name of the file as shown when downloaded */
     downloadName: string;
@@ -9673,7 +9717,6 @@ export class CompanySummary implements ICompanySummary {
     id!: number;
     name!: string;
     logoFilename!: string;
-    status!: CompanyStatus;
 
     constructor(data?: ICompanySummary) {
         if (data) {
@@ -9689,7 +9732,6 @@ export class CompanySummary implements ICompanySummary {
             this.id = _data["id"];
             this.name = _data["name"];
             this.logoFilename = _data["logoFilename"];
-            this.status = _data["status"];
         }
     }
 
@@ -9705,7 +9747,6 @@ export class CompanySummary implements ICompanySummary {
         data["id"] = this.id;
         data["name"] = this.name;
         data["logoFilename"] = this.logoFilename;
-        data["status"] = this.status;
         return data; 
     }
 }
@@ -9714,7 +9755,6 @@ export interface ICompanySummary {
     id: number;
     name: string;
     logoFilename: string;
-    status: CompanyStatus;
 }
 
 export class ETProductInstance implements IETProductInstance {
@@ -10683,7 +10723,7 @@ export enum ReturnFileType {
 }
 
 export class GenerateContractParams implements IGenerateContractParams {
-    name?: string;
+    name!: string;
     language!: Language;
     contentType!: ContractType;
     fileType!: ReturnFileType;
@@ -10691,7 +10731,6 @@ export class GenerateContractParams implements IGenerateContractParams {
     saveToDisk!: boolean;
     signee1Id!: number;
     signee2Id!: number;
-    recipientId!: number;
 
     constructor(data?: IGenerateContractParams) {
         if (data) {
@@ -10712,7 +10751,6 @@ export class GenerateContractParams implements IGenerateContractParams {
             this.saveToDisk = _data["saveToDisk"];
             this.signee1Id = _data["signee1Id"];
             this.signee2Id = _data["signee2Id"];
-            this.recipientId = _data["recipientId"];
         }
     }
 
@@ -10733,13 +10771,12 @@ export class GenerateContractParams implements IGenerateContractParams {
         data["saveToDisk"] = this.saveToDisk;
         data["signee1Id"] = this.signee1Id;
         data["signee2Id"] = this.signee2Id;
-        data["recipientId"] = this.recipientId;
         return data; 
     }
 }
 
 export interface IGenerateContractParams {
-    name?: string;
+    name: string;
     language: Language;
     contentType: ContractType;
     fileType: ReturnFileType;
@@ -10747,7 +10784,6 @@ export interface IGenerateContractParams {
     saveToDisk: boolean;
     signee1Id: number;
     signee2Id: number;
-    recipientId: number;
 }
 
 export class ContractStatusParams implements IContractStatusParams {
@@ -11091,7 +11127,7 @@ export interface IPartial_InvoiceParams {
 }
 
 export class GenerateInvoiceParams implements IGenerateInvoiceParams {
-    name?: string;
+    name!: string;
     language!: Language;
     fileType!: ReturnFileType;
     showDiscountPercentages!: boolean;
@@ -11138,7 +11174,7 @@ export class GenerateInvoiceParams implements IGenerateInvoiceParams {
 }
 
 export interface IGenerateInvoiceParams {
-    name?: string;
+    name: string;
     language: Language;
     fileType: ReturnFileType;
     showDiscountPercentages: boolean;
@@ -11150,9 +11186,9 @@ export class CustomRecipient implements ICustomRecipient {
     name!: string;
     gender!: Gender;
     organizationName?: string;
-    street?: string;
-    postalCode?: string;
-    city?: string;
+    street!: string;
+    postalCode!: string;
+    city!: string;
     country?: string;
 
     constructor(data?: ICustomRecipient) {
@@ -11200,9 +11236,9 @@ export interface ICustomRecipient {
     name: string;
     gender: Gender;
     organizationName?: string;
-    street?: string;
-    postalCode?: string;
-    city?: string;
+    street: string;
+    postalCode: string;
+    city: string;
     country?: string;
 }
 
@@ -11423,7 +11459,6 @@ export class ContactSummary implements IContactSummary {
     lastNamePreposition!: string;
     lastName!: string;
     companyId!: number;
-    function!: ContactFunction;
 
     constructor(data?: IContactSummary) {
         if (data) {
@@ -11441,7 +11476,6 @@ export class ContactSummary implements IContactSummary {
             this.lastNamePreposition = _data["lastNamePreposition"];
             this.lastName = _data["lastName"];
             this.companyId = _data["companyId"];
-            this.function = _data["function"];
         }
     }
 
@@ -11459,7 +11493,6 @@ export class ContactSummary implements IContactSummary {
         data["lastNamePreposition"] = this.lastNamePreposition;
         data["lastName"] = this.lastName;
         data["companyId"] = this.companyId;
-        data["function"] = this.function;
         return data; 
     }
 }
@@ -11470,12 +11503,11 @@ export interface IContactSummary {
     lastNamePreposition: string;
     lastName: string;
     companyId: number;
-    function: ContactFunction;
 }
 
 export class ContactParams implements IContactParams {
     gender!: Gender;
-    firstName?: string;
+    firstName!: string;
     lastNamePreposition?: string;
     lastName!: string;
     email!: string;
@@ -11531,7 +11563,7 @@ export class ContactParams implements IContactParams {
 
 export interface IContactParams {
     gender: Gender;
-    firstName?: string;
+    firstName: string;
     lastNamePreposition?: string;
     lastName: string;
     email: string;
