@@ -20,6 +20,7 @@ import { SingleEntities } from '../../stores/single/single';
 import AuthorizationComponent from '../AuthorizationComponent';
 import { getLastStatus } from '../../helpers/activity';
 import { authedUserHasRole } from '../../stores/auth/selectors';
+import ProductLink from './ProductLink';
 
 interface Props {
   create?: boolean;
@@ -122,7 +123,7 @@ class ProductInstanceProps extends React.Component<Props, State> {
       return undefined;
     }
     return !(this.props.contract.activities
-      .filter((a) => a.type === ActivityType.STATUS).length > 1
+        .filter((a) => a.type === ActivityType.STATUS).length > 1
       || this.props.productInstance.activities
         .filter((a) => a.type === ActivityType.STATUS).length > 1
       || this.props.productInstance.invoiceId === undefined);
@@ -154,6 +155,43 @@ class ProductInstanceProps extends React.Component<Props, State> {
     } = this.state;
     const { productInstance } = this.props;
 
+    let productNameElement = (
+      <>
+        {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
+        <label htmlFor="form-product-dropdown">Product</label>
+        <br />
+        <ProductLink id={productId} />
+      </>
+    );
+    if (this.props.create) {
+      productNameElement = (
+        <Form.Field
+          disabled={!editing || productInstance.id >= 0}
+        >
+          {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
+          <label htmlFor="form-product-dropdown">Product</label>
+          <ProductSelector
+            id="form-product-dropdown"
+            value={productId}
+            onChange={(id: string) => {
+              if (id === '') {
+                this.setState({
+                  productId: -1,
+                  basePrice: '0',
+                });
+              } else {
+                this.setState({
+                  productId: parseInt(id, 10),
+                  basePrice: (this.props.getBasePrice(parseInt(id, 10)) / 100).toString(),
+                });
+              }
+            }}
+            clearable
+            fluid
+          />
+        </Form.Field>
+      );
+    }
     return (
       <>
         <h2>
@@ -177,31 +215,7 @@ class ProductInstanceProps extends React.Component<Props, State> {
 
         <Form style={{ marginTop: '2em' }}>
           <Form.Group widths="equal">
-            <Form.Field
-              disabled={!editing || productInstance.id >= 0}
-            >
-              {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-              <label htmlFor="form-product-dropdown">Product</label>
-              <ProductSelector
-                id="form-product-dropdown"
-                value={productId}
-                onChange={(id: string) => {
-                  if (id === '') {
-                    this.setState({
-                      productId: -1,
-                      basePrice: '0',
-                    });
-                  } else {
-                    this.setState({
-                      productId: parseInt(id, 10),
-                      basePrice: (this.props.getBasePrice(parseInt(id, 10)) / 100).toString(),
-                    });
-                  }
-                }}
-                clearable
-                fluid
-              />
-            </Form.Field>
+            {productNameElement}
             <Form.Field disabled={!editing}>
               {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
               <label htmlFor="form-input-details">
