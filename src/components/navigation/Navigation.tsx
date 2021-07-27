@@ -3,6 +3,7 @@ import { NavLink } from 'react-router-dom';
 import {
   Container, Icon, Menu, Image,
 } from 'semantic-ui-react';
+import { useTranslation } from 'react-i18next';
 import AuthMenu from './AuthMenu';
 import CompaniesMenu from './CompaniesMenu';
 import ProductsMenu from './ProductsMenu';
@@ -11,6 +12,8 @@ import AuthorizationComponent from '../AuthorizationComponent';
 import { Roles } from '../../clients/server.generated';
 
 function Navigation() {
+  const { t } = useTranslation();
+
   return (
     <Menu fixed="top" inverted size="large" className="main-menu">
       <Container>
@@ -31,7 +34,7 @@ function Navigation() {
         </AuthorizationComponent>
         <Menu.Item as={NavLink} to="/contract" style={{ whiteSpace: 'nowrap' }}>
           <Icon name="file alternate" />
-          Contracts
+          {t('mainMenu.contracts')}
         </Menu.Item>
         <AuthorizationComponent
           roles={[Roles.GENERAL, Roles.ADMIN, Roles.AUDIT, Roles.FINANCIAL]}
@@ -41,7 +44,7 @@ function Navigation() {
         </AuthorizationComponent>
         <Menu.Item as={NavLink} to="/insights" style={{ whiteSpace: 'nowrap' }}>
           <Icon name="line graph" />
-          Insights
+          {t('mainMenu.insights')}
         </Menu.Item>
         <AuthMenu />
       </Container>

@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import TimeAgo from 'javascript-time-ago';
 import en from 'javascript-time-ago/locale/en';
 import './index.scss';
+import './localization/i18n';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import 'semantic-ui-less/semantic.less';
