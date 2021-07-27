@@ -122,6 +122,7 @@ function* saveSingleContract(
   action: SingleSaveAction<SingleEntities.Contract, ContractParams>,
 ) {
   const client = new Client();
+  console.log(action.data);
   yield call([client, client.updateContract], action.id, action.data);
   const contract: Contract = yield call([client, client.getContract], action.id);
   yield put(setSingle(SingleEntities.Contract, contract));

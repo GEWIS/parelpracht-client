@@ -108,7 +108,9 @@ class ContractCompactTable extends React.Component<Props, State> {
               </Table.Row>
             </Table.Header>
             <Table.Body>
-              {productInstances.map((p) => <ContractCompactRow key={p.id} contract={p.contract} />)}
+              {productInstances
+                .sort((a, b) => { return b.updatedAt.getTime() - a.updatedAt.getTime(); })
+                .map((p) => <ContractCompactRow key={p.id} contract={p.contract} />)}
             </Table.Body>
           </Table>
           <TablePagination
