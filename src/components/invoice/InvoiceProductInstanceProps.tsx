@@ -127,7 +127,7 @@ class ProductInstanceProps extends React.Component<Props, State> {
             >
               {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
               <label htmlFor="form-input-base-price">
-                Base Price
+                Base price
               </label>
               <Input
                 labelPosition="left"

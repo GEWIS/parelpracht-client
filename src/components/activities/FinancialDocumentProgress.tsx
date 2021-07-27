@@ -92,8 +92,8 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
           notFound={false}
         >
           <Popup
-            header={`Defer ${formatDocumentType(documentType)}`}
-            content={`By defering this ${formatDocumentType(documentType)}, you indicate that it will
+            header={`Defer ${formatDocumentType(documentType).toLowerCase()}`}
+            content={`By defering this ${formatDocumentType(documentType).toLowerCase()}, you indicate that it will
           not be delivered in the current academic year and that delivery will be postponed until the next academic year.`}
             mouseEnterDelay={500}
             wide
@@ -108,7 +108,7 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
                     deferModalOpen: true,
                   });
                 }}
-                content={`Defer ${formatDocumentType(documentType)}`}
+                content={`Defer ${formatDocumentType(documentType).toLowerCase()}`}
                 disabled={allCompletedStatuses[allCompletedStatuses.length - 1]
                 !== DocumentStatus.NOTDELIVERED}
               />
@@ -125,7 +125,7 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
           <Popup
             header={`Mark
           irrecoverable`}
-            content={`By marking this invoice irrecoverable, you indicate that the money owed from this invoice can not collected.
+            content={`By marking this invoice irrecoverable, you indicate that the money owed from this invoice can not be collected.
           Either the invoice is no longer valid
           (i.e. it was created more than 5 years ago) or the responsible party indicated to not pay the invoice.
           Note that this is different from cancelling an invoice, in which the contracted products can still be invoiced on
@@ -173,25 +173,34 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
               />
             )}
             header="Cancel invoice"
-            content="By cancelling an invoice, you indicate the invoice or any of the products on this invoice will be charged to the company.
+            content="By cancelling an invoice, you indicate that the invoice or any of the products on this invoice will not be sent to the company.
             Please only cancel an invoice after consultation with the external affairs officer and the treasurer."
           />
         </AuthorizationComponent>
       ) : (
         <AuthorizationComponent roles={[Roles.GENERAL, Roles.ADMIN]} notFound={false}>
-          <Button
-            floated="right"
-            labelPosition="left"
-            icon="close"
-            basic
-            onClick={() => {
-              this.setState({
-                cancelModalOpen: true,
-              });
-            }}
-            content={`Cancel ${formatDocumentType(documentType).toLocaleLowerCase()}`}
-            disabled={getToDoStatus(allCompletedStatuses[allCompletedStatuses.length - 1],
-              documentType).length === 0}
+          <Popup
+            trigger={(
+              <Button
+                floated="right"
+                labelPosition="left"
+                icon="close"
+                basic
+                onClick={() => {
+                  this.setState({
+                    cancelModalOpen: true,
+                  });
+                }}
+                content={`Cancel ${formatDocumentType(documentType).toLocaleLowerCase()}`}
+                disabled={getToDoStatus(allCompletedStatuses[allCompletedStatuses.length - 1],
+                  documentType).length === 0}
+              />
+            )}
+            header={`Cancel ${formatDocumentType(documentType).toLocaleLowerCase()}`}
+            content={`By cancelling this ${formatDocumentType(documentType).toLocaleLowerCase()}, you indicate
+             that the ${formatDocumentType(documentType).toLocaleLowerCase()} will not be delivered. Note that other products from the contract
+             might still be delivered and invoiced. \n
+             Only cancel a ${formatDocumentType(documentType).toLocaleLowerCase()} in consultation with the external affairs officer.`}
           />
         </AuthorizationComponent>
       );

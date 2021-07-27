@@ -181,7 +181,7 @@ class SingleContractPage extends React.Component<Props, State> {
                   canCancel={contract.products
                     .every((p) => p.activities
                       .find((a) => a.subType === ProductInstanceStatus.CANCELLED) !== undefined)}
-                  cancelReason="Cannot cancel this contract, because not all products are marked as cancelled."
+                  cancelReason="You can not cancel this contract, because not all products are marked as cancelled."
                 />
               </Segment>
             </Grid.Row>
