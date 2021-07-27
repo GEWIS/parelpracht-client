@@ -4,11 +4,17 @@ import { Dispatch } from 'redux';
 import {
   Dimmer, Loader, Segment, Table,
 } from 'semantic-ui-react';
-import { Invoice } from '../../clients/server.generated';
+import { Invoice, Roles } from '../../clients/server.generated';
 import TablePagination from '../TablePagination';
 import { RootState } from '../../stores/store';
 import {
-  changeSortTable, fetchTable, nextPageTable, prevPageTable, setSortTable, setTakeTable,
+  changeSortTable,
+  fetchTable,
+  nextPageTable,
+  prevPageTable,
+  setFilterTable,
+  setSortTable,
+  setTakeTable,
 } from '../../stores/tables/actionCreators';
 import { countFetched, countTotal, getTable } from '../../stores/tables/selectors';
 import { Tables } from '../../stores/tables/tables';
@@ -16,6 +22,7 @@ import InvoiceRow from './InvoiceRow';
 import CompanyFilter from '../tablefilters/CompanyFilter';
 import InvoiceStatusFilter from '../tablefilters/InvoiceStatusFilter';
 import ResourceStatus from '../../stores/resourceStatus';
+import { authedUserHasRole } from '../../stores/auth/selectors';
 
 interface Props {
   invoices: Invoice[];
@@ -28,23 +35,32 @@ interface Props {
   status: ResourceStatus;
 
   fetchInvoices: () => void;
+  setTableFilter: (filter: { column: string, values: any[] }) => void;
   changeSort: (column: string) => void;
   setSort: (column: string, direction: 'ASC' | 'DESC') => void;
   setTake: (take: number) => void;
   prevPage: () => void;
   nextPage: () => void;
+  hasRole: (role: Roles) => boolean;
 }
 
 function InvoicesTable({
-  invoices, fetchInvoices, column, direction, changeSort, setSort,
+  invoices, fetchInvoices, column, direction, changeSort, setSort, setTableFilter,
   total, fetched, skip, take, status,
-  prevPage, nextPage, setTake,
+  prevPage, nextPage, setTake, hasRole,
 }: Props) {
-  useEffect(() => {
-    setSort('id', 'DESC');
-    fetchInvoices();
-  }, []);
-
+  if ([Roles.FINANCIAL].some(hasRole)) {
+    useEffect(() => {
+      setSort('id', 'DESC');
+      setTableFilter({ column: 'activityStatus', values: ['SENT'] });
+      fetchInvoices();
+    }, []);
+  } else {
+    useEffect(() => {
+      setSort('id', 'DESC');
+      fetchInvoices();
+    }, []);
+  }
   if (status === ResourceStatus.FETCHING || status === ResourceStatus.SAVING) {
     return (
       <>
@@ -197,11 +213,15 @@ const mapStateToProps = (state: RootState) => {
     column: invoiceTable.sortColumn,
     direction: invoiceTable.sortDirection === 'ASC'
       ? 'ascending' : 'descending' as 'ascending' | 'descending',
+    hasRole: (role: Roles): boolean => authedUserHasRole(state, role),
   };
 };
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
   fetchInvoices: () => dispatch(fetchTable(Tables.Invoices)),
+  setTableFilter: (filter: { column: string, values: any[] }) => {
+    dispatch(setFilterTable(Tables.Invoices, filter));
+  },
   changeSort: (column: string) => {
     dispatch(changeSortTable(Tables.Invoices, column));
     dispatch(fetchTable(Tables.Invoices));
