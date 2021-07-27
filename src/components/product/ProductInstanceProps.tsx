@@ -19,6 +19,7 @@ import ProductSelector from './ProductSelector';
 import { SingleEntities } from '../../stores/single/single';
 import AuthorizationComponent from '../AuthorizationComponent';
 import { getLastStatus } from '../../helpers/activity';
+import { authedUserHasRole } from '../../stores/auth/selectors';
 
 interface Props {
   create?: boolean;
@@ -32,6 +33,7 @@ interface Props {
   createProductInstance: (productInstance: ProductInstanceParams) => void;
   removeProductInstance: () => void;
   getBasePrice: (id: number) => number;
+  hasRole: (role: Roles) => boolean;
 }
 
 interface State {
@@ -127,6 +129,10 @@ class ProductInstanceProps extends React.Component<Props, State> {
   };
 
   editButtonActive = () => {
+    if (this.props.hasRole(Roles.ADMIN)) {
+      return true;
+    }
+
     if (this.props.create) {
       return undefined;
     }
@@ -156,7 +162,7 @@ class ProductInstanceProps extends React.Component<Props, State> {
           <AuthorizationComponent roles={[Roles.ADMIN, Roles.GENERAL]} notFound={false}>
             <PropsButtons
               editing={editing}
-              canEdit={this.editButtonActive()}
+              canEdit={this.editButtonActive() || this.props.hasRole(Roles.ADMIN)}
               canDelete={this.deleteButtonActive()}
               canSave={!this.propsHaveErrors()}
               entity={SingleEntities.Product}
@@ -282,6 +288,7 @@ class ProductInstanceProps extends React.Component<Props, State> {
 
 const mapStateToProps = (state: RootState) => ({
   options: state.summaries.Products.options,
+  hasRole: (role: Roles): boolean => authedUserHasRole(state, role),
   getBasePrice: (id: number) => getSummary<ProductSummary>(state,
     SummaryCollections.Products, id).targetPrice,
 });
