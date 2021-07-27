@@ -123,7 +123,7 @@ class ProductInstanceProps extends React.Component<Props, State> {
       return undefined;
     }
     return !(this.props.contract.activities
-        .filter((a) => a.type === ActivityType.STATUS).length > 1
+      .filter((a) => a.type === ActivityType.STATUS).length > 1
       || this.props.productInstance.activities
         .filter((a) => a.type === ActivityType.STATUS).length > 1
       || this.props.productInstance.invoiceId === undefined);
@@ -156,12 +156,12 @@ class ProductInstanceProps extends React.Component<Props, State> {
     const { productInstance } = this.props;
 
     let productNameElement = (
-      <>
+      <Form.Field>
         {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
         <label htmlFor="form-product-dropdown">Product</label>
         <br />
         <ProductLink id={productId} />
-      </>
+      </Form.Field>
     );
     if (this.props.create) {
       productNameElement = (
