@@ -48,7 +48,7 @@ function TablePagination({
               options={takeOptions}
               button
               basic
-              text={`${selectedAll ? 'All' : take} items`}
+              text={`${selectedAll ? 'All' : countTotal} items`}
               value={take}
               onChange={(_, data) => {
                 if (data.value === 'All') {
