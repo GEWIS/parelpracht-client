@@ -145,7 +145,6 @@ class ContractProps extends React.Component<Props, State> {
   };
 
   render() {
-    const { create } = this.props;
     const {
       editing,
       title,
