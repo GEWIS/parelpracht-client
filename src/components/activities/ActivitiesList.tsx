@@ -60,7 +60,7 @@ class ActivitiesList extends React.Component<Props, State> {
       activitiesComponent = (
         <Feed>
           {[...activities]
-            .sort((a, b) => { return b.updatedAt.getTime() - a.updatedAt.getTime(); })
+            .sort((a, b) => { return b.createdAt.getTime() - a.createdAt.getTime(); })
             .map((activity) => (
               <ActivityComponent
                 key={activity.id}
