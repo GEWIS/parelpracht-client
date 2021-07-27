@@ -177,7 +177,7 @@ class ContractProps extends React.Component<Props, State> {
     } else {
       companySelector = (
         <Form.Field
-          disabled={!editing || !create}
+          disabled
           required
         >
           {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
@@ -249,19 +249,20 @@ class ContractProps extends React.Component<Props, State> {
           </Form.Group>
           {companySelector}
           <Form.Field
-            disabled={!editing || !create}
+            disabled={!editing}
             required
           >
             {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
             <label htmlFor="form-contact-selector">Contact</label>
             <ContactSelector
               id="form-contact-selector"
-              disabled={editing && (companySelection === -1)}
+              // disabled={editing && (companySelection === -1)}
               companyId={companySelection}
               value={contactSelection}
               onChange={(val: number) => this.setState({
                 contactSelection: val,
               })}
+              clearable
               placeholder="Contact"
             />
           </Form.Field>
