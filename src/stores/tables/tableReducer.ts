@@ -21,7 +21,7 @@ const initialState = {
   sortColumn: 'id',
   sortDirection: 'ASC' as 'ASC' | 'DESC',
   skip: 0,
-  take: 10,
+  take: 100,
   search: '',
   filters: [],
 
