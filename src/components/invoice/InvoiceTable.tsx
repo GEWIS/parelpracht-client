@@ -49,7 +49,7 @@ function InvoicesTable({
   total, fetched, skip, take, status,
   prevPage, nextPage, setTake, hasRole,
 }: Props) {
-  if ([Roles.FINANCIAL].some(hasRole)) {
+  if ([Roles.FINANCIAL].some(hasRole) && ![Roles.ADMIN].some(hasRole)) {
     useEffect(() => {
       setSort('id', 'DESC');
       setTableFilter({ column: 'activityStatus', values: ['SENT'] });

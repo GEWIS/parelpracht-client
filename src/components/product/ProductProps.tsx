@@ -103,7 +103,7 @@ class ProductProps extends React.Component<Props, State> {
       deliverySpecificationDutch: this.state.deliverySpecDutch,
       minTarget: this.state.minTarget,
       maxTarget: this.state.maxTarget,
-      targetPrice: Math.round(Number.parseFloat(this.state.targetPrice.replace(',', '.')) * 100),
+      targetPrice: Math.round(Number.parseFloat(this.state.targetPrice.replace(',', '')) * 100),
     });
   };
 
