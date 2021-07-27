@@ -21,5 +21,5 @@ export function sortColumn(state: RootState): string {
 export function getProductName(state: RootState, id: number): string {
   return getSummary<ProductSummary>(
     state, SummaryCollections.Products, id,
-  )?.nameDutch ?? '...';
+  )?.nameEnglish ?? '...';
 }
