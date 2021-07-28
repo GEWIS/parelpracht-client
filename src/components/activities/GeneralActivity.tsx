@@ -20,7 +20,10 @@ export class GeneralActivity {
   type!: ActivityType;
 
   /** Description of this activity */
-  description!: string;
+  descriptionDutch!: string;
+
+  /** Description of this activity */
+  descriptionEnglish!: string;
 
   /** Id of the creator of the activity */
   createdById!: number;

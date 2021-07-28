@@ -96,13 +96,13 @@ class ActivityComponent extends React.Component<Props> {
     }
 
     let feedDescription;
-    if (activity.description === '') {
+    if (activity.descriptionEnglish === '') {
       feedDescription = undefined;
     } else if (activity.type === ActivityType.COMMENT || activity.type === ActivityType.STATUS) {
       feedDescription = (
-        <Feed.Extra><Segment raised>{activity.description}</Segment></Feed.Extra>);
+        <Feed.Extra><Segment raised>{activity.descriptionEnglish}</Segment></Feed.Extra>);
     } else {
-      feedDescription = (<Feed.Extra style={{ fontStyle: 'italic' }}>{activity.description}</Feed.Extra>);
+      feedDescription = (<Feed.Extra style={{ fontStyle: 'italic' }}>{activity.descriptionEnglish}</Feed.Extra>);
     }
 
     const feedButtons = deleteButton !== undefined ? (

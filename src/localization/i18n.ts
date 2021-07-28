@@ -37,6 +37,5 @@ export const changeLanguage = (language: locales) => {
 };
 
 export const getLanguage = (): locales => {
-  console.log(i18n.language);
   return i18n.language as locales;
 };

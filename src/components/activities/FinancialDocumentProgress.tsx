@@ -307,7 +307,7 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
 
       // push the description of the status if it has a status
       if (documentStatusActivity !== undefined) {
-        statusDescriptionList.push(documentStatusActivity.description);
+        statusDescriptionList.push(documentStatusActivity.descriptionEnglish);
       } else {
         statusDescriptionList.push('');
       }

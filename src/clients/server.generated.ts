@@ -7419,8 +7419,10 @@ export class InvoiceActivity implements IInvoiceActivity {
     version!: number;
     /** Type of the activity (status or comment) */
     type!: ActivityType;
-    /** Description of this activity */
-    description!: string;
+    /** Description of this activity (English) */
+    descriptionEnglish!: string;
+    /** Description of this activity (Dutch) */
+    descriptionDutch!: string;
     createdById!: number;
     /** User who created this activity */
     createdBy!: User;
@@ -7451,7 +7453,8 @@ export class InvoiceActivity implements IInvoiceActivity {
             this.deletedAt = _data["deletedAt"] ? new Date(_data["deletedAt"].toString()) : <any>undefined;
             this.version = _data["version"];
             this.type = _data["type"];
-            this.description = _data["description"];
+            this.descriptionEnglish = _data["descriptionEnglish"];
+            this.descriptionDutch = _data["descriptionDutch"];
             this.createdById = _data["createdById"];
             this.createdBy = _data["createdBy"] ? User.fromJS(_data["createdBy"]) : new User();
             this.invoiceId = _data["invoiceId"];
@@ -7475,7 +7478,8 @@ export class InvoiceActivity implements IInvoiceActivity {
         data["deletedAt"] = this.deletedAt ? this.deletedAt.toISOString() : <any>undefined;
         data["version"] = this.version;
         data["type"] = this.type;
-        data["description"] = this.description;
+        data["descriptionEnglish"] = this.descriptionEnglish;
+        data["descriptionDutch"] = this.descriptionDutch;
         data["createdById"] = this.createdById;
         data["createdBy"] = this.createdBy ? this.createdBy.toJSON() : <any>undefined;
         data["invoiceId"] = this.invoiceId;
@@ -7498,8 +7502,10 @@ export interface IInvoiceActivity {
     version: number;
     /** Type of the activity (status or comment) */
     type: ActivityType;
-    /** Description of this activity */
-    description: string;
+    /** Description of this activity (English) */
+    descriptionEnglish: string;
+    /** Description of this activity (Dutch) */
+    descriptionDutch: string;
     createdById: number;
     /** User who created this activity */
     createdBy: User;
@@ -7772,8 +7778,10 @@ export class CompanyActivity implements ICompanyActivity {
     version!: number;
     /** Type of the activity (status or comment) */
     type!: ActivityType;
-    /** Description of this activity */
-    description!: string;
+    /** Description of this activity (English) */
+    descriptionEnglish!: string;
+    /** Description of this activity (Dutch) */
+    descriptionDutch!: string;
     createdById!: number;
     /** User who created this activity */
     createdBy!: User;
@@ -7802,7 +7810,8 @@ export class CompanyActivity implements ICompanyActivity {
             this.deletedAt = _data["deletedAt"] ? new Date(_data["deletedAt"].toString()) : <any>undefined;
             this.version = _data["version"];
             this.type = _data["type"];
-            this.description = _data["description"];
+            this.descriptionEnglish = _data["descriptionEnglish"];
+            this.descriptionDutch = _data["descriptionDutch"];
             this.createdById = _data["createdById"];
             this.createdBy = _data["createdBy"] ? User.fromJS(_data["createdBy"]) : new User();
             this.companyId = _data["companyId"];
@@ -7825,7 +7834,8 @@ export class CompanyActivity implements ICompanyActivity {
         data["deletedAt"] = this.deletedAt ? this.deletedAt.toISOString() : <any>undefined;
         data["version"] = this.version;
         data["type"] = this.type;
-        data["description"] = this.description;
+        data["descriptionEnglish"] = this.descriptionEnglish;
+        data["descriptionDutch"] = this.descriptionDutch;
         data["createdById"] = this.createdById;
         data["createdBy"] = this.createdBy ? this.createdBy.toJSON() : <any>undefined;
         data["companyId"] = this.companyId;
@@ -7847,8 +7857,10 @@ export interface ICompanyActivity {
     version: number;
     /** Type of the activity (status or comment) */
     type: ActivityType;
-    /** Description of this activity */
-    description: string;
+    /** Description of this activity (English) */
+    descriptionEnglish: string;
+    /** Description of this activity (Dutch) */
+    descriptionDutch: string;
     createdById: number;
     /** User who created this activity */
     createdBy: User;
@@ -7983,8 +7995,10 @@ export class ContractActivity implements IContractActivity {
     version!: number;
     /** Type of the activity (status or comment) */
     type!: ActivityType;
-    /** Description of this activity */
-    description!: string;
+    /** Description of this activity (English) */
+    descriptionEnglish!: string;
+    /** Description of this activity (Dutch) */
+    descriptionDutch!: string;
     createdById!: number;
     /** User who created this activity */
     createdBy!: User;
@@ -8015,7 +8029,8 @@ export class ContractActivity implements IContractActivity {
             this.deletedAt = _data["deletedAt"] ? new Date(_data["deletedAt"].toString()) : <any>undefined;
             this.version = _data["version"];
             this.type = _data["type"];
-            this.description = _data["description"];
+            this.descriptionEnglish = _data["descriptionEnglish"];
+            this.descriptionDutch = _data["descriptionDutch"];
             this.createdById = _data["createdById"];
             this.createdBy = _data["createdBy"] ? User.fromJS(_data["createdBy"]) : new User();
             this.contractId = _data["contractId"];
@@ -8039,7 +8054,8 @@ export class ContractActivity implements IContractActivity {
         data["deletedAt"] = this.deletedAt ? this.deletedAt.toISOString() : <any>undefined;
         data["version"] = this.version;
         data["type"] = this.type;
-        data["description"] = this.description;
+        data["descriptionEnglish"] = this.descriptionEnglish;
+        data["descriptionDutch"] = this.descriptionDutch;
         data["createdById"] = this.createdById;
         data["createdBy"] = this.createdBy ? this.createdBy.toJSON() : <any>undefined;
         data["contractId"] = this.contractId;
@@ -8062,8 +8078,10 @@ export interface IContractActivity {
     version: number;
     /** Type of the activity (status or comment) */
     type: ActivityType;
-    /** Description of this activity */
-    description: string;
+    /** Description of this activity (English) */
+    descriptionEnglish: string;
+    /** Description of this activity (Dutch) */
+    descriptionDutch: string;
     createdById: number;
     /** User who created this activity */
     createdBy: User;
@@ -8198,8 +8216,10 @@ export class ProductInstanceActivity implements IProductInstanceActivity {
     version!: number;
     /** Type of the activity (status or comment) */
     type!: ActivityType;
-    /** Description of this activity */
-    description!: string;
+    /** Description of this activity (English) */
+    descriptionEnglish!: string;
+    /** Description of this activity (Dutch) */
+    descriptionDutch!: string;
     createdById!: number;
     /** User who created this activity */
     createdBy!: User;
@@ -8230,7 +8250,8 @@ export class ProductInstanceActivity implements IProductInstanceActivity {
             this.deletedAt = _data["deletedAt"] ? new Date(_data["deletedAt"].toString()) : <any>undefined;
             this.version = _data["version"];
             this.type = _data["type"];
-            this.description = _data["description"];
+            this.descriptionEnglish = _data["descriptionEnglish"];
+            this.descriptionDutch = _data["descriptionDutch"];
             this.createdById = _data["createdById"];
             this.createdBy = _data["createdBy"] ? User.fromJS(_data["createdBy"]) : new User();
             this.productInstanceId = _data["productInstanceId"];
@@ -8254,7 +8275,8 @@ export class ProductInstanceActivity implements IProductInstanceActivity {
         data["deletedAt"] = this.deletedAt ? this.deletedAt.toISOString() : <any>undefined;
         data["version"] = this.version;
         data["type"] = this.type;
-        data["description"] = this.description;
+        data["descriptionEnglish"] = this.descriptionEnglish;
+        data["descriptionDutch"] = this.descriptionDutch;
         data["createdById"] = this.createdById;
         data["createdBy"] = this.createdBy ? this.createdBy.toJSON() : <any>undefined;
         data["productInstanceId"] = this.productInstanceId;
@@ -8277,8 +8299,10 @@ export interface IProductInstanceActivity {
     version: number;
     /** Type of the activity (status or comment) */
     type: ActivityType;
-    /** Description of this activity */
-    description: string;
+    /** Description of this activity (English) */
+    descriptionEnglish: string;
+    /** Description of this activity (Dutch) */
+    descriptionDutch: string;
     createdById: number;
     /** User who created this activity */
     createdBy: User;
@@ -8302,8 +8326,10 @@ export class ProductActivity implements IProductActivity {
     version!: number;
     /** Type of the activity (status or comment) */
     type!: ActivityType;
-    /** Description of this activity */
-    description!: string;
+    /** Description of this activity (English) */
+    descriptionEnglish!: string;
+    /** Description of this activity (Dutch) */
+    descriptionDutch!: string;
     createdById!: number;
     /** User who created this activity */
     createdBy!: User;
@@ -8332,7 +8358,8 @@ export class ProductActivity implements IProductActivity {
             this.deletedAt = _data["deletedAt"] ? new Date(_data["deletedAt"].toString()) : <any>undefined;
             this.version = _data["version"];
             this.type = _data["type"];
-            this.description = _data["description"];
+            this.descriptionEnglish = _data["descriptionEnglish"];
+            this.descriptionDutch = _data["descriptionDutch"];
             this.createdById = _data["createdById"];
             this.createdBy = _data["createdBy"] ? User.fromJS(_data["createdBy"]) : new User();
             this.productId = _data["productId"];
@@ -8355,7 +8382,8 @@ export class ProductActivity implements IProductActivity {
         data["deletedAt"] = this.deletedAt ? this.deletedAt.toISOString() : <any>undefined;
         data["version"] = this.version;
         data["type"] = this.type;
-        data["description"] = this.description;
+        data["descriptionEnglish"] = this.descriptionEnglish;
+        data["descriptionDutch"] = this.descriptionDutch;
         data["createdById"] = this.createdById;
         data["createdBy"] = this.createdBy ? this.createdBy.toJSON() : <any>undefined;
         data["productId"] = this.productId;
@@ -8377,8 +8405,10 @@ export interface IProductActivity {
     version: number;
     /** Type of the activity (status or comment) */
     type: ActivityType;
-    /** Description of this activity */
-    description: string;
+    /** Description of this activity (English) */
+    descriptionEnglish: string;
+    /** Description of this activity (Dutch) */
+    descriptionDutch: string;
     createdById: number;
     /** User who created this activity */
     createdBy: User;
@@ -9314,8 +9344,10 @@ export class BaseActivity implements IBaseActivity {
     version!: number;
     /** Type of the activity (status or comment) */
     type!: ActivityType;
-    /** Description of this activity */
-    description!: string;
+    /** Description of this activity (English) */
+    descriptionEnglish!: string;
+    /** Description of this activity (Dutch) */
+    descriptionDutch!: string;
     createdById!: number;
     /** User who created this activity */
     createdBy!: User;
@@ -9340,7 +9372,8 @@ export class BaseActivity implements IBaseActivity {
             this.deletedAt = _data["deletedAt"] ? new Date(_data["deletedAt"].toString()) : <any>undefined;
             this.version = _data["version"];
             this.type = _data["type"];
-            this.description = _data["description"];
+            this.descriptionEnglish = _data["descriptionEnglish"];
+            this.descriptionDutch = _data["descriptionDutch"];
             this.createdById = _data["createdById"];
             this.createdBy = _data["createdBy"] ? User.fromJS(_data["createdBy"]) : new User();
         }
@@ -9361,7 +9394,8 @@ export class BaseActivity implements IBaseActivity {
         data["deletedAt"] = this.deletedAt ? this.deletedAt.toISOString() : <any>undefined;
         data["version"] = this.version;
         data["type"] = this.type;
-        data["description"] = this.description;
+        data["descriptionEnglish"] = this.descriptionEnglish;
+        data["descriptionDutch"] = this.descriptionDutch;
         data["createdById"] = this.createdById;
         data["createdBy"] = this.createdBy ? this.createdBy.toJSON() : <any>undefined;
         return data; 
@@ -9381,8 +9415,10 @@ export interface IBaseActivity {
     version: number;
     /** Type of the activity (status or comment) */
     type: ActivityType;
-    /** Description of this activity */
-    description: string;
+    /** Description of this activity (English) */
+    descriptionEnglish: string;
+    /** Description of this activity (Dutch) */
+    descriptionDutch: string;
     createdById: number;
     /** User who created this activity */
     createdBy: User;
