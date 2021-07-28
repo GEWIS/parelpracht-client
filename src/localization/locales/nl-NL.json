@@ -1,0 +1,19 @@
+{
+  "translation": {
+    "Welcome to React": "Welkom bij React en react-i18next",
+    "mainMenu": {
+      "products": "Producten",
+      "categories": "Categorieën",
+      "companies": "Bedrijven",
+      "contacts": "Contactpersonen",
+      "contracts": "Contracten",
+      "invoices": "Facturen",
+      "custom": "Handmatig",
+      "insights": "Inzicht",
+      "myProfile": "Mijn profiel",
+      "users": "Gebruikers",
+      "admin": "Admin",
+      "logout": "Uitloggen"
+    }
+  }
+}

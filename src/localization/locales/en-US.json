@@ -1,0 +1,19 @@
+{
+  "translation": {
+    "Welcome to React": "Welcome to React and react-i18next",
+    "mainMenu": {
+      "products": "Products",
+      "categories": "Categories",
+      "companies": "Companies",
+      "contacts": "Contacts",
+      "contracts": "Contracts",
+      "invoices": "Invoices",
+      "custom": "Custom",
+      "insights": "Insights",
+      "myProfile": "My Profile",
+      "users": "Users",
+      "admin": "Admin",
+      "logout": "Logout"
+    }
+  }
+}
