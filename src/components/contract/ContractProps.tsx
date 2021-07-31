@@ -176,7 +176,7 @@ class ContractProps extends React.Component<Props, State> {
     } else {
       companySelector = (
         <Form.Field
-          disabled
+          disabled={!this.props.create}
           required
         >
           {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
