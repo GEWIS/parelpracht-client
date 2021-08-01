@@ -14,6 +14,29 @@
       "users": "Users",
       "admin": "Admin",
       "logout": "Logout"
+    },
+    "buttons": {
+      "files": {
+        "delete": "Delete file",
+        "edit": "Edit file",
+        "download": "Download file",
+        "save": "Save file",
+        "cancel": "Cancel upload"
+      }
+    },
+    "dashboard": {
+      "financialOverview": {
+        "header": "Financial Overview",
+        "suggested": "Suggested",
+        "contractedShort": "Contracted",
+        "contracted": "Contracted",
+        "delivered": "Delivered",
+        "notDelivered": "Not delivered",
+        "invoiced": "Invoiced",
+        "paid": "Paid",
+        "value": "Value",
+        "nrOfProducts": "# Products"
+      }
     }
   }
 }

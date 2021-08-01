@@ -8,7 +8,7 @@ import { User } from '../clients/server.generated';
 import { RootState } from '../stores/store';
 import DashboardInvoices from '../components/dashboard/DashboardInvoices';
 import DashboardContracts from '../components/dashboard/DashboardContracts';
-import DashboardProductInstanceStatusGraph from '../components/dashboard/DashboardProductInstanceStatusGraph';
+import FinancialOverview from '../components/dashboard/FinancialOverview';
 import DashboardContractedCategoryGraph from '../components/dashboard/DashboardContractedCategoryGraph';
 
 interface Props extends RouteComponentProps {
@@ -45,7 +45,7 @@ function DashboardPage(props: Props) {
         <Grid>
           <Grid.Row columns={2}>
             <Grid.Column width={9}>
-              <DashboardProductInstanceStatusGraph />
+              <FinancialOverview />
               <DashboardContractedCategoryGraph />
             </Grid.Column>
             <Grid.Column width={7}>

@@ -1,0 +1,46 @@
+.ui.table.files tbody tr {
+  td div.ui.input {
+    display: block;
+
+    input {
+      width: 100%;
+    }
+  }
+
+  @media screen and (max-width: 1200px) {
+    td:nth-child(1) {
+      width: 42%;
+
+      .label {
+        font-style: italic;
+      }
+    }
+
+    td:nth-child(2) {
+      width: 50%;
+    }
+
+    td:nth-child(3) {
+      width: 33%;
+    }
+  }
+
+  @media screen and (min-width: 1200px) {
+    td:nth-child(1) {
+      width: 52%;
+
+      .label {
+        font-style: italic;
+      }
+    }
+
+    td:nth-child(2) {
+      width: 38%;
+    }
+
+    td:nth-child(3) {
+      width: 25%;
+    }
+  }
+}
+

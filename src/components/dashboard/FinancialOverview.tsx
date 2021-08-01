@@ -2,12 +2,15 @@ import React from 'react';
 import {
   Dropdown, Grid, Popup, Segment, Table,
 } from 'semantic-ui-react';
+import { WithTranslation, withTranslation } from 'react-i18next';
 import { Bar } from 'react-chartjs-2';
 import { Client, DashboardProductInstanceStats } from '../../clients/server.generated';
 import { dateToFinancialYear } from '../../helpers/timestamp';
 import { formatPriceFull } from '../../helpers/monetary';
+import './FinancialOverview.scss';
+import { FinancialOverviewField } from './FinancialOverviewField';
 
-interface Props {}
+interface Props extends WithTranslation {}
 
 interface State {
   data?: DashboardProductInstanceStats;
@@ -15,7 +18,7 @@ interface State {
   loading: boolean;
 }
 
-class DashboardProductInstanceStatusGraph extends React.Component<Props, State> {
+class FinancialOverview extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
@@ -41,9 +44,15 @@ class DashboardProductInstanceStatusGraph extends React.Component<Props, State> 
   }
 
   createBarChartDataObject(): object {
+    const { t } = this.props;
     const { data } = this.state;
     return {
-      labels: ['Suggested', 'Contracted', 'Delivered', 'Invoiced', 'Paid'],
+      labels: [
+        t('dashboard.financialOverview.suggested'),
+        t('dashboard.financialOverview.contractedShort'),
+        t('dashboard.financialOverview.delivered'),
+        t('dashboard.financialOverview.invoiced'),
+        t('dashboard.financialOverview.paid')],
       datasets: [
         {
           label: 'Amount',
@@ -56,7 +65,7 @@ class DashboardProductInstanceStatusGraph extends React.Component<Props, State> 
             data?.invoiced.delivered.amount, data?.paid.amount],
         },
         {
-          label: 'Not delivered',
+          label: t('dashboard.financialOverview.delivered'),
           backgroundColor: 'rgba(41, 48, 101, 0.8)',
           borderColor: 'rgba(41, 48, 101, 1)',
           borderWidth: 1,
@@ -86,14 +95,15 @@ class DashboardProductInstanceStatusGraph extends React.Component<Props, State> 
   }
 
   render() {
+    const { t } = this.props;
     const { loading, data, financialYear } = this.state;
     const chartData = this.createBarChartDataObject();
     return (
-      <Segment loading={loading}>
+      <Segment loading={loading} className="financial-overview">
         <Grid style={{ marginBottom: '1em' }}>
           <Grid.Row columns={2}>
             <Grid.Column textAlign="left">
-              <h3>Financial Overview</h3>
+              <h3>{t('dashboard.financialOverview.header')}</h3>
             </Grid.Column>
             <Grid.Column textAlign="right" verticalAlign="bottom" style={{ fontSize: '1.2em' }}>
               <Dropdown
@@ -145,10 +155,10 @@ class DashboardProductInstanceStatusGraph extends React.Component<Props, State> 
                 <Popup
                   trigger={(
                     <span>
-                      Suggested
+                      {t('dashboard.financialOverview.suggested')}
                     </span>
                   )}
-                  header="Suggested"
+                  header={t('dashboard.financialOverview.suggested')}
                   content="The total value of contracts that have not been confirmed by a company."
                 />
               </Table.HeaderCell>
@@ -156,10 +166,10 @@ class DashboardProductInstanceStatusGraph extends React.Component<Props, State> 
                 <Popup
                   trigger={(
                     <span>
-                      Contracted
+                      {t('dashboard.financialOverview.contracted')}
                     </span>
                   )}
-                  header="Contracted"
+                  header={t('dashboard.financialOverview.contracted')}
                   content="The total value of all delivered and not-delivered products on confirmed contracts.
                   Note that products that are already invoiced in a previous academic year
                   or products that are deferred to next academic year, are not included here."
@@ -169,10 +179,10 @@ class DashboardProductInstanceStatusGraph extends React.Component<Props, State> 
                 <Popup
                   trigger={(
                     <span>
-                      Delivered
+                      {t('dashboard.financialOverview.delivered')}
                     </span>
                   )}
-                  header="Delivered"
+                  header={t('dashboard.financialOverview.delivered')}
                   content="The total value of delivered products on confirmed contracts in the current academic year."
                 />
               </Table.HeaderCell>
@@ -180,10 +190,10 @@ class DashboardProductInstanceStatusGraph extends React.Component<Props, State> 
                 <Popup
                   trigger={(
                     <span>
-                      Invoiced
+                      {t('dashboard.financialOverview.invoiced')}
                     </span>
                   )}
-                  header="Invoiced"
+                  header={t('dashboard.financialOverview.invoiced')}
                   content="The total value of all products invoiced in the current academic year."
                 />
               </Table.HeaderCell>
@@ -191,10 +201,10 @@ class DashboardProductInstanceStatusGraph extends React.Component<Props, State> 
                 <Popup
                   trigger={(
                     <span>
-                      Paid
+                      {t('dashboard.financialOverview.paid')}
                     </span>
                   )}
-                  header="Paid"
+                  header={t('dashboard.financialOverview.paid')}
                   content="The total value of all paid invoices in the current academic year."
                 />
               </Table.HeaderCell>
@@ -202,62 +212,85 @@ class DashboardProductInstanceStatusGraph extends React.Component<Props, State> 
           </Table.Header>
           <Table.Body>
             <Table.Row>
-              <Table.Cell>Value</Table.Cell>
-              <Table.Cell>{formatPriceFull(data?.suggested.amount || 0)}</Table.Cell>
-              <Table.Cell>{formatPriceFull(data?.contracted.amount || 0)}</Table.Cell>
-              <Table.Cell>{formatPriceFull(data?.delivered.amount || 0)}</Table.Cell>
+              <Table.Cell>{t('dashboard.financialOverview.value')}</Table.Cell>
               <Table.Cell>
-                <Popup
-                  content={(
-                    <>
-                      Delivered:
-                      {' '}
-                      {formatPriceFull(data?.invoiced.delivered.amount || 0)}
-                      <br />
-                      Not delivered:
-                      {' '}
-                      {formatPriceFull(data?.invoiced.notDelivered.amount || 0)}
-                    </>
-                  )}
-                  trigger={(
-                    <span>
-                      {formatPriceFull(
-                        (data?.invoiced.delivered.amount || 0)
-                        + (data?.invoiced.notDelivered.amount || 0),
-                      )}
-                    </span>
-                  )}
+                <FinancialOverviewField
+                  fields={[t('dashboard.financialOverview.suggested')]}
+                  values={[data?.suggested.amount || 0]}
+                  type="value"
                 />
               </Table.Cell>
-              <Table.Cell>{formatPriceFull(data?.suggested.amount || 0)}</Table.Cell>
+              <Table.Cell>
+                <FinancialOverviewField
+                  fields={[t('dashboard.financialOverview.contracted')]}
+                  values={[data?.contracted.amount || 0]}
+                  type="value"
+                />
+              </Table.Cell>
+              <Table.Cell>
+                <FinancialOverviewField
+                  fields={[t('dashboard.financialOverview.delivered')]}
+                  values={[data?.delivered.amount || 0]}
+                  type="value"
+                />
+              </Table.Cell>
+              <Table.Cell>
+                <FinancialOverviewField
+                  fields={[t('dashboard.financialOverview.delivered'), t('dashboard.financialOverview.notDelivered')]}
+                  values={[
+                    data?.invoiced.delivered.amount || 0, data?.invoiced.notDelivered.amount || 0]}
+                  type="value"
+                  header={t('dashboard.financialOverview.invoiced')}
+                />
+              </Table.Cell>
+              <Table.Cell>
+                <FinancialOverviewField
+                  fields={[t('dashboard.financialOverview.paid')]}
+                  values={[data?.paid.amount || 0]}
+                  type="value"
+                />
+              </Table.Cell>
             </Table.Row>
             <Table.Row>
-              <Table.Cell># Products</Table.Cell>
-              <Table.Cell>{data?.suggested.nrOfProducts}</Table.Cell>
-              <Table.Cell>{data?.contracted.nrOfProducts}</Table.Cell>
-              <Table.Cell>{data?.delivered.nrOfProducts}</Table.Cell>
+              <Table.Cell>{t('dashboard.financialOverview.nrOfProducts')}</Table.Cell>
               <Table.Cell>
-                <Popup
-                  content={(
-                    <>
-                      Delivered:
-                      {' '}
-                      {data?.invoiced.delivered.nrOfProducts}
-                      <br />
-                      Not delivered:
-                      {' '}
-                      {data?.invoiced.notDelivered.nrOfProducts}
-                    </>
-                  )}
-                  trigger={(
-                    <span>
-                      {(data?.invoiced.delivered.nrOfProducts || 0)
-                      + (data?.invoiced.notDelivered.nrOfProducts || 0)}
-                    </span>
-                  )}
+                <FinancialOverviewField
+                  fields={[t('dashboard.financialOverview.suggested')]}
+                  values={[data?.suggested.nrOfProducts || 0]}
+                  type="amount"
                 />
               </Table.Cell>
-              <Table.Cell>{data?.paid.nrOfProducts}</Table.Cell>
+              <Table.Cell>
+                <FinancialOverviewField
+                  fields={[t('dashboard.financialOverview.contracted')]}
+                  values={[data?.contracted.nrOfProducts || 0]}
+                  type="amount"
+                />
+              </Table.Cell>
+              <Table.Cell>
+                <FinancialOverviewField
+                  fields={[t('dashboard.financialOverview.delivered')]}
+                  values={[data?.delivered.nrOfProducts || 0]}
+                  type="amount"
+                />
+              </Table.Cell>
+              <Table.Cell>
+                <FinancialOverviewField
+                  fields={[t('dashboard.financialOverview.delivered'), t('dashboard.financialOverview.notDelivered')]}
+                  values={[
+                    data?.invoiced.delivered.nrOfProducts || 0,
+                    data?.invoiced.notDelivered.nrOfProducts || 0]}
+                  type="amount"
+                  header={t('dashboard.financialOverview.invoiced')}
+                />
+              </Table.Cell>
+              <Table.Cell>
+                <FinancialOverviewField
+                  fields={[t('dashboard.financialOverview.paid')]}
+                  values={[data?.paid.nrOfProducts || 0]}
+                  type="amount"
+                />
+              </Table.Cell>
             </Table.Row>
           </Table.Body>
         </Table>
@@ -267,4 +300,4 @@ class DashboardProductInstanceStatusGraph extends React.Component<Props, State> 
   }
 }
 
-export default DashboardProductInstanceStatusGraph;
+export default withTranslation()(FinancialOverview);

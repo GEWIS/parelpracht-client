@@ -1,0 +1,8 @@
+.financial-overview .ui.table {
+  white-space: nowrap;
+  font-size: 0.9em;
+
+  @media screen and (max-width: 1200px) {
+    font-size: 0.75em;
+  }
+}

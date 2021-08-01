@@ -40,6 +40,10 @@ export function formatTimestampToDate(date: Date): string {
   return `${d.month} ${d.day}, ${d.year}`;
 }
 
+export function formatTimestampToDateShort(date: Date): string {
+  return `${date.getDate().toString().padStart(2, '0')}-${(date.getDate() + 1).toString().padStart(2, '0')}-${date.getFullYear()}`;
+}
+
 export function parseFinancialYear(year: number): string {
   return `${year - 1} - ${year}`;
 }

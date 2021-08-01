@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Segment, Table } from 'semantic-ui-react';
 import { Client, ExpiredInvoice } from '../../clients/server.generated';
 import DashboardInvoicesRow from './DashboardInvoicesRow';
+import './DashboardInvoices.scss';
 
 interface Props {
 }
@@ -36,7 +37,7 @@ class DashboardInvoices extends Component<Props, State> {
     return (
       <Segment loading={this.state.loading}>
         <h3>Expired invoices</h3>
-        <Table striped compact>
+        <Table striped compact fixed singleLine className="expired-invoices">
           <Table.Body>
             {invoices.map((i) => <DashboardInvoicesRow invoice={i} key={i.id} />)}
           </Table.Body>

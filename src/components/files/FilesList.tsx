@@ -7,6 +7,7 @@ import ResourceStatus from '../../stores/resourceStatus';
 import { GeneralFile } from './GeneralFile';
 import SingleFile from './SingleFile';
 import AuthorizationComponent from '../AuthorizationComponent';
+import './FilesList.scss';
 
 interface Props extends RouteComponentProps {
   files: GeneralFile[];
@@ -76,29 +77,11 @@ class FilesList extends React.Component<Props, State> {
           <h4>
             There are no files uploaded yet.
           </h4>
-          <Table compact>
-            <Table.Body>
-              {createRow}
-              {files
-                .sort((a, b) => { return b.updatedAt.getTime() - a.updatedAt.getTime(); })
-                .map((file) => (
-                  <SingleFile
-                    key={file.id}
-                    file={file}
-                    create={false}
-                    entity={entity}
-                    entityId={entityId}
-                    fetchEntity={fetchEntity}
-                    status={status}
-                  />
-                ))}
-            </Table.Body>
-          </Table>
         </>
       );
     } else {
       filesList = (
-        <Table compact>
+        <Table compact fixed singleLine className="files">
           <Table.Body>
             {createRow}
             {files

@@ -34,6 +34,7 @@ export const changeLanguage = (language: locales) => {
     default:
       throw new TypeError(`Unknown i18n translation language: ${language}`);
   }
+  window.location.reload();
 };
 
 export const getLanguage = (): locales => {

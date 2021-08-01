@@ -14,6 +14,29 @@
       "users": "Gebruikers",
       "admin": "Admin",
       "logout": "Uitloggen"
+    },
+    "buttons": {
+      "files": {
+        "delete": "Verwijder bestand",
+        "edit": "Bewerk bestand",
+        "download": "Download bestand",
+        "save": "Bestand opslaan",
+        "cancel": "Annuleren"
+      }
+    },
+    "dashboard": {
+      "financialOverview": {
+        "header": "Financieel overzicht",
+        "suggested": "Voorgesteld",
+        "contractedShort": "Gecontract.",
+        "contracted": "Gecontracteerd",
+        "delivered": "Geleverd",
+        "notDelivered": "Niet geleverd",
+        "invoiced": "Gefactureerd",
+        "paid": "Voldaan",
+        "value": "Waarde",
+        "nrOfProducts": "# Producten"
+      }
     }
   }
 }

@@ -5,6 +5,7 @@ import {
 } from 'semantic-ui-react';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
+import { WithTranslation, withTranslation } from 'react-i18next';
 import {
   Partial_FileParams, Roles,
 } from '../../clients/server.generated';
@@ -18,7 +19,7 @@ import { TransientAlert } from '../../stores/alerts/actions';
 import { showTransientAlert } from '../../stores/alerts/actionCreators';
 import AuthorizationComponent from '../AuthorizationComponent';
 
-interface Props extends RouteComponentProps {
+interface Props extends RouteComponentProps, WithTranslation {
   file: GeneralFile;
   create: boolean;
   closeCreate?: (shouldUpdate: boolean) => void;
@@ -189,8 +190,11 @@ class SingleFile extends React.Component<Props, State> {
   };
 
   public render() {
-    const { file, create, status } = this.props;
+    const {
+      file, create, status, t,
+    } = this.props;
     const { editing } = this.state;
+
     if (create) {
       return (
         <Table.Row>
@@ -202,24 +206,26 @@ class SingleFile extends React.Component<Props, State> {
               onChange={(e) => this.setState({ fileName: e.target.value })}
             />
           </Table.Cell>
-          <Table.Cell colSpan="2">
+          <Table.Cell>
             <Input
               type="file"
               id={`form-file-${file.id}-file`}
               onChange={(e) => this.setState({ fileData: e.target.files![0] })}
             />
           </Table.Cell>
-          <Table.Cell textAlign="right" collapsing>
+          <Table.Cell>
             <Button
               icon="x"
               negative
               onClick={() => this.cancel()}
+              title={t('buttons.files.cancel')}
             />
             <Button
               icon="save"
               positive
               onClick={() => this.save()}
               loading={this.state.saveLoading}
+              title={t('buttons.files.save')}
             />
           </Table.Cell>
         </Table.Row>
@@ -229,11 +235,11 @@ class SingleFile extends React.Component<Props, State> {
     if (editing) {
       return (
         <Table.Row>
+          {/* <Table.Cell> */}
+          {/*  <Icon name={this.getFileIcon(this.state.fileName)} /> */}
+          {/*  {file!.downloadName} */}
+          {/* </Table.Cell> */}
           <Table.Cell>
-            <Icon name={this.getFileIcon(this.state.fileName)} />
-            {file!.downloadName}
-          </Table.Cell>
-          <Table.Cell collapsing>
             <Input
               id={`form-file-${file.id}-name`}
               value={this.state.fileName}
@@ -243,37 +249,47 @@ class SingleFile extends React.Component<Props, State> {
             />
           </Table.Cell>
           <Table.Cell>{formatLastUpdate(file!.updatedAt)}</Table.Cell>
-          <Table.Cell textAlign="right" collapsing>
+          <Table.Cell>
             <Button
               icon="x"
               negative
               onClick={() => this.cancel()}
+              title={t('buttons.files.cancel')}
             />
             <Button
               icon="save"
               positive
               onClick={() => this.save()}
               loading={this.state.saveLoading}
+              title={t('buttons.files.save')}
             />
             <Button
               icon="download"
               primary
               onClick={() => this.getFile()}
+              title={t('buttons.files.download')}
             />
           </Table.Cell>
         </Table.Row>
       );
     }
 
+    const fileHasLabel = file!.name !== undefined && file!.name !== '';
+
     return (
       <Table.Row>
         <Table.Cell>
           <Icon name={this.getFileIcon(file!.downloadName)} />
-          {file!.downloadName}
+          <span title={file!.downloadName}>{file!.downloadName}</span>
+          {fileHasLabel ? (
+            <>
+              <br />
+              <span className="label" title={file!.name}>{file!.name}</span>
+            </>
+          ) : undefined}
         </Table.Cell>
-        <Table.Cell>{file!.name}</Table.Cell>
         <Table.Cell>{formatLastUpdate(file!.updatedAt)}</Table.Cell>
-        <Table.Cell textAlign="right" collapsing>
+        <Table.Cell>
           <AuthorizationComponent roles={[Roles.GENERAL, Roles.ADMIN]} notFound={false}>
             <Popup
               trigger={(
@@ -281,6 +297,7 @@ class SingleFile extends React.Component<Props, State> {
                   icon="trash"
                   negative
                   loading={status === ResourceStatus.DELETING}
+                  title={t('buttons.files.delete')}
                 />
             )}
               on="click"
@@ -301,12 +318,14 @@ class SingleFile extends React.Component<Props, State> {
               icon="pencil"
               primary
               onClick={() => this.setState({ editing: true })}
+              title={t('buttons.files.edit')}
             />
           </AuthorizationComponent>
           <Button
             icon="download"
             primary
             onClick={() => this.getFile()}
+            title={t('buttons.files.download')}
           />
         </Table.Cell>
       </Table.Row>
@@ -325,4 +344,4 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   showTransientAlert: (alert: TransientAlert) => dispatch(showTransientAlert(alert)),
 });
 
-export default withRouter(connect(null, mapDispatchToProps)(SingleFile));
+export default withTranslation()(withRouter(connect(null, mapDispatchToProps)(SingleFile)));

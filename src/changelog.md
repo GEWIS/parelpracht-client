@@ -8,6 +8,8 @@ You can find the release notes below.
 - Added a database validator command to the backend to validate the database and fix any issues.
 - Added column "Function" to the Contacts table with sorting and filtering by this column.
 - Added favicons for all browser and operating system types.
+- Added localization.
+  - Added the Dutch language.
 
 ### Changes
 - Selectors no longer have a unnecessary description.
@@ -37,6 +39,7 @@ You can find the release notes below.
 - Fixed ParelPracht logo missing on loading screen.
 - Fixed trash can icon working on contracts while a contract still has one or more files.
 - Fixed several small issues with generating PDF files, like missing dots/commas for 1000's, missing euro signs and weird spaces.
+- Fixed several tables going "out of bounds" when they had too much content, namely the "Financial overview", "Expired ivnoices", and "Files" tables.
 
 ## v1.0.1 (23-04-2021)
 ### Added
