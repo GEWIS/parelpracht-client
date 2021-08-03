@@ -21,10 +21,12 @@ function InvoicesMenu() {
         item
         icon={null}
         trigger={(
-          <NavLink to="/invoice" style={{ whiteSpace: 'nowrap' }}>
+          <NavLink to="/invoice" title={t('mainMenu.invoices')}>
             <Icon name="money bill alternate outline" />
-            {' '}
-            {t('mainMenu.invoices')}
+            <span>
+              {' '}
+              {t('mainMenu.invoices')}
+            </span>
           </NavLink>
         ) as any}
       >

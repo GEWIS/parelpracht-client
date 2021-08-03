@@ -20,10 +20,12 @@ function ProductsMenu() {
         item
         icon={null}
         trigger={(
-          <NavLink to="/product" style={{ whiteSpace: 'nowrap' }}>
+          <NavLink to="/product" title={t('mainMenu.products')}>
             <Icon name="shopping bag" />
-            {' '}
-            {t('mainMenu.products')}
+            <span>
+              {' '}
+              {t('mainMenu.products')}
+            </span>
           </NavLink>
         ) as any}
       >

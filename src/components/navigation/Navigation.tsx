@@ -10,6 +10,7 @@ import ProductsMenu from './ProductsMenu';
 import InvoicesMenu from './InvoicesMenu';
 import AuthorizationComponent from '../AuthorizationComponent';
 import { Roles } from '../../clients/server.generated';
+import './Navigation.scss';
 
 function Navigation() {
   const { t } = useTranslation();
@@ -17,8 +18,9 @@ function Navigation() {
   return (
     <Menu fixed="top" inverted size="large" className="main-menu">
       <Container>
-        <Menu.Item as={NavLink} header to="/" exact>
+        <Menu.Item as={NavLink} header to="/" exact title="Home">
           <Image
+            className="logo"
             src="/ParelPracht-whitesvg.svg"
             width="26px"
             style={{
@@ -32,9 +34,9 @@ function Navigation() {
         <AuthorizationComponent roles={[Roles.GENERAL, Roles.ADMIN, Roles.AUDIT]} notFound={false}>
           <CompaniesMenu />
         </AuthorizationComponent>
-        <Menu.Item as={NavLink} to="/contract" style={{ whiteSpace: 'nowrap' }}>
+        <Menu.Item as={NavLink} to="/contract" title={t('mainMenu.contracts')}>
           <Icon name="file alternate" />
-          {t('mainMenu.contracts')}
+          <span>{t('mainMenu.contracts')}</span>
         </Menu.Item>
         <AuthorizationComponent
           roles={[Roles.GENERAL, Roles.ADMIN, Roles.AUDIT, Roles.FINANCIAL]}
@@ -42,9 +44,9 @@ function Navigation() {
         >
           <InvoicesMenu />
         </AuthorizationComponent>
-        <Menu.Item as={NavLink} to="/insights" style={{ whiteSpace: 'nowrap' }}>
+        <Menu.Item as={NavLink} to="/insights" title={t('mainMenu.insights')}>
           <Icon name="line graph" />
-          {t('mainMenu.insights')}
+          <span>{t('mainMenu.insights')}</span>
         </Menu.Item>
         <AuthMenu />
       </Container>

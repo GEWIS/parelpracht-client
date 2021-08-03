@@ -19,10 +19,12 @@ function CompaniesMenu() {
         item
         icon={null}
         trigger={(
-          <NavLink to="/company" style={{ whiteSpace: 'nowrap' }}>
+          <NavLink to="/company" title={t('mainMenu.companies')}>
             <Icon name="building" />
-            {' '}
-            {t('mainMenu.companies')}
+            <span>
+              {' '}
+              {t('mainMenu.companies')}
+            </span>
           </NavLink>
         ) as any}
       >
