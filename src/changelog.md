@@ -40,6 +40,7 @@ You can find the release notes below.
 - Fixed trash can icon working on contracts while a contract still has one or more files.
 - Fixed several small issues with generating PDF files, like missing dots/commas for 1000's, missing euro signs and weird spaces.
 - Fixed several tables going "out of bounds" when they had too much content, namely the "Financial overview", "Expired ivnoices", and "Files" tables.
+- Fixed weird formatting of long text in all entity's summaries.
 
 ## v1.0.1 (23-04-2021)
 ### Added

@@ -13,7 +13,7 @@ import {
 } from '../clients/server.generated';
 import { clearSingle, fetchSingle } from '../stores/single/actionCreators';
 import { RootState } from '../stores/store';
-import ContactProps from '../components/contact/ContactProps';
+import ContactProps from '../components/entities/contact/ContactProps';
 import ResourceStatus from '../stores/resourceStatus';
 import AlertContainer from '../components/alerts/AlertContainer';
 import { getSingle } from '../stores/single/selectors';
@@ -23,7 +23,7 @@ import { showTransientAlert } from '../stores/alerts/actionCreators';
 import { formatContactName } from '../helpers/contact';
 import { formatStatus } from '../helpers/activity';
 import { getContractStatus } from '../stores/contract/selectors';
-import CompanyLink from '../components/company/CompanyLink';
+import CompanyLink from '../components/entities/company/CompanyLink';
 
 interface Props extends RouteComponentProps<{ companyId: string, contactId?: string }> {
   create?: boolean;

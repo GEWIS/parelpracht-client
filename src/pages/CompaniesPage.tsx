@@ -5,8 +5,8 @@ import {
 } from 'semantic-ui-react';
 import { Roles } from '../clients/server.generated';
 import AuthorizationComponent from '../components/AuthorizationComponent';
-import CompanyTable from '../components/company/CompanyTable';
-import CompanyTableControls from '../components/company/CompanyTableControls';
+import CompanyTable from '../components/entities/company/CompanyTable';
+import CompanyTableControls from '../components/entities/company/CompanyTableControls';
 
 function CompaniesPage(props: RouteComponentProps) {
   return (

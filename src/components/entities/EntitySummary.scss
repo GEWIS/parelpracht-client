@@ -1,0 +1,30 @@
+.header-container {
+  display: flex;
+  width: 100%;
+
+  div.icon {
+    margin-top: 0.25em;
+  }
+
+  div.name {
+    flex-grow: 1;
+
+    div.content {
+      padding: 0 !important;
+    }
+  }
+
+  div.logo {}
+}
+
+.summary-container {
+  display: flex;
+  width: 100%;
+
+  & > div {
+    min-width: 20%;
+    flex-basis: auto;
+    flex-grow: 1;
+    padding: 0 0.5em;
+  }
+}

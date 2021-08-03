@@ -5,8 +5,8 @@ import {
 } from 'semantic-ui-react';
 import { Roles } from '../clients/server.generated';
 import AuthorizationComponent from '../components/AuthorizationComponent';
-import ProductCategoriesTable from '../components/productcategories/ProductCategoriesTable';
-import ProductCategoriesTableControls from '../components/productcategories/ProductCategoriesTableControls';
+import ProductCategoriesTable from '../components/entities/productcategories/ProductCategoriesTable';
+import ProductCategoriesTableControls from '../components/entities/productcategories/ProductCategoriesTableControls';
 
 function ProductCategoriesPage(props: RouteComponentProps) {
   return (

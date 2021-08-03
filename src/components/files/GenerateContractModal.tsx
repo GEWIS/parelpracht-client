@@ -9,11 +9,11 @@ import {
   ContractType, GenerateContractParams, Language, ReturnFileType, Roles,
 } from '../../clients/server.generated';
 import AlertContainer from '../alerts/AlertContainer';
-import UserSelector from '../user/UserSelector';
+import UserSelector from '../entities/user/UserSelector';
 import { FilesClient } from '../../clients/filesClient';
 import { TransientAlert } from '../../stores/alerts/actions';
 import { showTransientAlert } from '../../stores/alerts/actionCreators';
-import ContactSelector from '../contact/ContactSelector';
+import ContactSelector from '../entities/contact/ContactSelector';
 
 interface Props {
   contract: Contract;

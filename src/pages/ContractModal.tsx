@@ -6,7 +6,7 @@ import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { Contract } from '../clients/server.generated';
 import { fetchSingle, clearSingle } from '../stores/single/actionCreators';
 import { RootState } from '../stores/store';
-import ContractProps from '../components/contract/ContractProps';
+import ContractProps from '../components/entities/contract/ContractProps';
 import ResourceStatus from '../stores/resourceStatus';
 import AlertContainer from '../components/alerts/AlertContainer';
 import { SingleEntities } from '../stores/single/single';

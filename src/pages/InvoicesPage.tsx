@@ -6,8 +6,8 @@ import {
 } from 'semantic-ui-react';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
-import InvoicesTable from '../components/invoice/InvoiceTable';
-import InvoiceTableControls from '../components/invoice/InvoiceTableControls';
+import InvoicesTable from '../components/entities/invoice/InvoiceTable';
+import InvoiceTableControls from '../components/entities/invoice/InvoiceTableControls';
 import { Client, Roles } from '../clients/server.generated';
 import { fetchTable } from '../stores/tables/actionCreators';
 import { Tables } from '../stores/tables/tables';

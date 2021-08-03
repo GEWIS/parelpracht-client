@@ -9,7 +9,7 @@ import { Client, User } from '../../clients/server.generated';
 import { SingleEntities } from '../../stores/single/single';
 import { RootState } from '../../stores/store';
 import { authFetchProfile } from '../../stores/auth/actionCreators';
-import UserBackground from '../user/UserBackground';
+import UserBackground from '../entities/user/UserBackground';
 
 interface Props {
   entity: SingleEntities;

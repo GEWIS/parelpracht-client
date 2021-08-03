@@ -37,6 +37,16 @@
         "value": "Waarde",
         "nrOfProducts": "# Producten"
       }
+    },
+    "entity": {
+      "company": "Bedrijf",
+      "contact": "Contact",
+      "contract": "Contract",
+      "product": "Product",
+      "productcategory": "Product Categorie",
+      "productinstance": "Product Instantie",
+      "invoice": "Factuur",
+      "user": "Gebruiker"
     }
   }
 }

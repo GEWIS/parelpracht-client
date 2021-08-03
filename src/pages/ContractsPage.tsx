@@ -5,8 +5,8 @@ import {
 } from 'semantic-ui-react';
 import { Roles } from '../clients/server.generated';
 import AuthorizationComponent from '../components/AuthorizationComponent';
-import ContractsTable from '../components/contract/ContractTable';
-import ContractTableControls from '../components/contract/ContractTableControls';
+import ContractsTable from '../components/entities/contract/ContractTable';
+import ContractTableControls from '../components/entities/contract/ContractTableControls';
 
 function ContractsPage(props: RouteComponentProps) {
   return (

@@ -3,8 +3,8 @@ import { RouteComponentProps, withRouter } from 'react-router-dom';
 import {
   Button, Container, Grid, Header, Icon, Segment,
 } from 'semantic-ui-react';
-import UsersTable from '../components/user/UserTable';
-import UserTableControls from '../components/user/UserTableControls';
+import UsersTable from '../components/entities/user/UserTable';
+import UserTableControls from '../components/entities/user/UserTableControls';
 
 function UsersPage(props: RouteComponentProps) {
   return (

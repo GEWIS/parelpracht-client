@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { Gender, User } from '../clients/server.generated';
 import { RootState } from '../stores/store';
-import UserProps from '../components/user/UserProps';
+import UserProps from '../components/entities/user/UserProps';
 import ResourceStatus from '../stores/resourceStatus';
 import AlertContainer from '../components/alerts/AlertContainer';
 import { SingleEntities } from '../stores/single/single';

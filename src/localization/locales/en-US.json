@@ -37,6 +37,16 @@
         "value": "Value",
         "nrOfProducts": "# Products"
       }
+    },
+    "entity": {
+      "company": "Company",
+      "contact": "Contact",
+      "contract": "Contract",
+      "product": "Product",
+      "productcategory": "Product Category",
+      "productinstance": "Product Instance",
+      "invoice": "Invoice",
+      "user": "User"
     }
   }
 }

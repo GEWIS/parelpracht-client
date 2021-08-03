@@ -4,8 +4,8 @@ import {
 } from 'semantic-ui-react';
 import { Roles } from '../clients/server.generated';
 import AuthorizationComponent from '../components/AuthorizationComponent';
-import ContactsTable from '../components/contact/ContactTable';
-import ContactTableControls from '../components/contact/ContactTableControls';
+import ContactsTable from '../components/entities/contact/ContactTable';
+import ContactTableControls from '../components/entities/contact/ContactTableControls';
 
 function ContactsPage() {
   return (

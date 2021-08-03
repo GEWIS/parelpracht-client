@@ -13,12 +13,12 @@ import { GeneralActivity } from './GeneralActivity';
 import { formatLastUpdate } from '../../helpers/timestamp';
 import { SingleEntities } from '../../stores/single/single';
 import { deleteActivitySingle } from '../../stores/single/actionCreators';
-import UserLinkWithoutImage from '../user/UserLinkWithoutImage';
+import UserLinkWithoutImage from '../entities/user/UserLinkWithoutImage';
 import { deleteInstanceActivitySingle } from '../../stores/productinstance/actionCreator';
 import {
   ActivityType, ContractStatus, InvoiceStatus, ProductInstanceStatus, Roles,
 } from '../../clients/server.generated';
-import UserAvatar from '../user/UserAvatar';
+import UserAvatar from '../entities/user/UserAvatar';
 import { TransientAlert } from '../../stores/alerts/actions';
 import { showTransientAlert } from '../../stores/alerts/actionCreators';
 import AuthorizationComponent from '../AuthorizationComponent';

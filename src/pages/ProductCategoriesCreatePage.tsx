@@ -10,7 +10,7 @@ import ResourceStatus from '../stores/resourceStatus';
 import AlertContainer from '../components/alerts/AlertContainer';
 import { getSingle } from '../stores/single/selectors';
 import { SingleEntities } from '../stores/single/single';
-import ProductCategoryProps from '../components/productcategories/ProductCategoryProps';
+import ProductCategoryProps from '../components/entities/productcategories/ProductCategoryProps';
 import { TransientAlert } from '../stores/alerts/actions';
 import { showTransientAlert } from '../stores/alerts/actionCreators';
 

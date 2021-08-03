@@ -11,7 +11,7 @@ import { formatContactName } from '../../helpers/contact';
 import { authLogout } from '../../stores/auth/actionCreators';
 import ResourceStatus from '../../stores/resourceStatus';
 import { RootState } from '../../stores/store';
-import UserAvatar from '../user/UserAvatar';
+import UserAvatar from '../entities/user/UserAvatar';
 import { authedUserHasRole } from '../../stores/auth/selectors';
 import { changeLanguage } from '../../localization/i18n';
 

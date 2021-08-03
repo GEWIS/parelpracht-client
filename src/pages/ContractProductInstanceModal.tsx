@@ -10,7 +10,7 @@ import {
 } from '../clients/server.generated';
 import { fetchSingle } from '../stores/single/actionCreators';
 import { RootState } from '../stores/store';
-import ProductInstanceProps from '../components/product/ProductInstanceProps';
+import ProductInstanceProps from '../components/entities/product/ProductInstanceProps';
 import ResourceStatus from '../stores/resourceStatus';
 import AlertContainer from '../components/alerts/AlertContainer';
 import { getSingle } from '../stores/single/selectors';

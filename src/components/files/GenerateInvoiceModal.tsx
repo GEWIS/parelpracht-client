@@ -11,7 +11,7 @@ import {
 } from '../../clients/server.generated';
 import AlertContainer from '../alerts/AlertContainer';
 import { FilesClient } from '../../clients/filesClient';
-import ContactSelector from '../contact/ContactSelector';
+import ContactSelector from '../entities/contact/ContactSelector';
 import { TransientAlert } from '../../stores/alerts/actions';
 import { showTransientAlert } from '../../stores/alerts/actionCreators';
 

@@ -7,7 +7,7 @@ import { Dispatch } from 'redux';
 import { FilesClient } from '../../clients/filesClient';
 import { Client, User } from '../../clients/server.generated';
 import { SingleEntities } from '../../stores/single/single';
-import UserAvatar from '../user/UserAvatar';
+import UserAvatar from '../entities/user/UserAvatar';
 import { RootState } from '../../stores/store';
 import { authFetchProfile } from '../../stores/auth/actionCreators';
 
@@ -94,6 +94,7 @@ class LogoAvatarModal extends React.Component<Props, State> {
         primary
         style={{
           marginTop: '10px',
+          whiteSpace: 'nowrap',
         }}
       >
         <Icon
@@ -184,6 +185,7 @@ class LogoAvatarModal extends React.Component<Props, State> {
         primary
         style={{
           marginTop: '10px',
+          whiteSpace: 'nowrap',
         }}
       >
         <Icon

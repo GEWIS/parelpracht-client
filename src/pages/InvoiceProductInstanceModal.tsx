@@ -10,7 +10,7 @@ import {
   Contract, Invoice, ProductInstance,
 } from '../clients/server.generated';
 import { RootState } from '../stores/store';
-import InvoiceProductInstanceProps from '../components/invoice/InvoiceProductInstanceProps';
+import InvoiceProductInstanceProps from '../components/entities/invoice/InvoiceProductInstanceProps';
 import ResourceStatus from '../stores/resourceStatus';
 import AlertContainer from '../components/alerts/AlertContainer';
 import { getSingle } from '../stores/single/selectors';

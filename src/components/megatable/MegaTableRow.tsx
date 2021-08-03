@@ -7,9 +7,9 @@ import {
 } from '../../clients/server.generated';
 import { RootState } from '../../stores/store';
 import { prodInsStatus } from '../../helpers/statusses';
-import CompanyLink from '../company/CompanyLink';
-import ContractLink from '../contract/ContractLink';
-import ProductLink from '../product/ProductLink';
+import CompanyLink from '../entities/company/CompanyLink';
+import ContractLink from '../entities/contract/ContractLink';
+import ProductLink from '../entities/product/ProductLink';
 import { dateToFullFinancialYear } from '../../helpers/timestamp';
 
 interface Props {
