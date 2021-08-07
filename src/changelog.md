@@ -7,6 +7,8 @@ You can find the release notes below.
 ### Added
 - Added a database validator command to the backend to validate the database and fix any issues.
 - Added column "Function" to the Contacts table with sorting and filtering by this column.
+- Added a contract status filter to the Insights table.
+  - Added a partial circle as symbol for a contract's status to the ContractLink.
 - Added favicons for all browser and operating system types.
 - Added localization.
   - Added the Dutch language.

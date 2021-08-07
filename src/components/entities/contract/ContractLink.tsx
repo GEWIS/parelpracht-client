@@ -4,6 +4,10 @@ import { Icon } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import { RootState } from '../../../stores/store';
 import { getContractTitle } from '../../../stores/contract/selectors';
+import { formatStatus } from '../../../helpers/activity';
+import './ContactLink.scss';
+import { ContractStatus } from '../../../clients/server.generated';
+import PartialCircle from '../../PartialCircle';
 
 interface Props {
   id: number;
@@ -11,20 +15,56 @@ interface Props {
   showName: boolean;
 
   contractTitle: string;
+  status?: ContractStatus;
 }
 
 function ContractLink(props: Props) {
   const {
-    id, showId, showName, contractTitle,
+    id, showId, showName, contractTitle, status,
   } = props;
+
+  let statusCircle;
+  switch (status) {
+    case ContractStatus.CREATED:
+      statusCircle = <PartialCircle endAngle={72} startAngle={0} />;
+      break;
+    case ContractStatus.PROPOSED:
+      statusCircle = <PartialCircle endAngle={144} startAngle={0} />;
+      break;
+    case ContractStatus.SENT:
+      statusCircle = <PartialCircle endAngle={216} startAngle={0} />;
+      break;
+    case ContractStatus.CONFIRMED:
+      statusCircle = <PartialCircle endAngle={288} startAngle={0} />;
+      break;
+    case ContractStatus.FINISHED:
+      statusCircle = <PartialCircle endAngle={359.99999} startAngle={0} fillColor="lightgreen" />;
+      break;
+    case ContractStatus.CANCELLED:
+      statusCircle = <PartialCircle endAngle={359.99999} startAngle={0} fillColor="#ff6966" />;
+      break;
+    default:
+      throw new TypeError(`Unknown contract status: ${status}`);
+  }
+
   return (
-    <NavLink to={`/contract/${id}`} style={{ whiteSpace: 'nowrap' }}>
+    <NavLink
+      to={`/contract/${id}`}
+      style={{ whiteSpace: 'nowrap' }}
+      className="contact-link"
+      title={`C${id} ${contractTitle}${status ? ` (${formatStatus(status)})` : ''}`}
+    >
       <Icon name="file alternate" />
       {showId ? `C${id} ` : ''}
       {showName ? contractTitle : ''}
+      { statusCircle }
     </NavLink>
   );
 }
+
+ContractLink.defaultProps = {
+  status: undefined,
+};
 
 const mapStateToProps = (state: RootState, props: { id: number }) => {
   return {

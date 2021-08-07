@@ -9759,8 +9759,6 @@ export class ETProductInstance implements IETProductInstance {
     details?: string;
     basePrice!: number;
     discount!: number;
-    createdAt!: Date;
-    updatedAt!: Date;
     subType!: ProductInstanceStatus;
     invoiceDate?: Date;
 
@@ -9780,8 +9778,6 @@ export class ETProductInstance implements IETProductInstance {
             this.details = _data["details"];
             this.basePrice = _data["basePrice"];
             this.discount = _data["discount"];
-            this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
-            this.updatedAt = _data["updatedAt"] ? new Date(_data["updatedAt"].toString()) : <any>undefined;
             this.subType = _data["subType"];
             this.invoiceDate = _data["invoiceDate"] ? new Date(_data["invoiceDate"].toString()) : <any>undefined;
         }
@@ -9801,8 +9797,6 @@ export class ETProductInstance implements IETProductInstance {
         data["details"] = this.details;
         data["basePrice"] = this.basePrice;
         data["discount"] = this.discount;
-        data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
-        data["updatedAt"] = this.updatedAt ? this.updatedAt.toISOString() : <any>undefined;
         data["subType"] = this.subType;
         data["invoiceDate"] = this.invoiceDate ? this.invoiceDate.toISOString() : <any>undefined;
         return data; 
@@ -9815,8 +9809,6 @@ export interface IETProductInstance {
     details?: string;
     basePrice: number;
     discount: number;
-    createdAt: Date;
-    updatedAt: Date;
     subType: ProductInstanceStatus;
     invoiceDate?: Date;
 }
@@ -9824,6 +9816,7 @@ export interface IETProductInstance {
 export class ETContract implements IETContract {
     id!: number;
     title!: string;
+    subType!: ContractStatus;
     products!: ETProductInstance[];
 
     constructor(data?: IETContract) {
@@ -9842,6 +9835,7 @@ export class ETContract implements IETContract {
         if (_data) {
             this.id = _data["id"];
             this.title = _data["title"];
+            this.subType = _data["subType"];
             if (Array.isArray(_data["products"])) {
                 this.products = [] as any;
                 for (let item of _data["products"])
@@ -9861,6 +9855,7 @@ export class ETContract implements IETContract {
         data = typeof data === 'object' ? data : {};
         data["id"] = this.id;
         data["title"] = this.title;
+        data["subType"] = this.subType;
         if (Array.isArray(this.products)) {
             data["products"] = [];
             for (let item of this.products)
@@ -9873,6 +9868,7 @@ export class ETContract implements IETContract {
 export interface IETContract {
     id: number;
     title: string;
+    subType: ContractStatus;
     products: ETProductInstance[];
 }
 

@@ -3,11 +3,15 @@ import ColumnFilter from '../ColumnFilter';
 import { Tables } from '../../stores/tables/tables';
 import { ProductInstanceStatus } from '../../clients/server.generated';
 
-function ProductInstanceStatusFilter() {
+interface Props {
+  columnName?: string;
+}
+
+function ProductInstanceStatusFilter(props: Props) {
   return (
     <ColumnFilter
       column="status"
-      columnName="Status"
+      columnName={props.columnName!}
       table={Tables.ETCompanies}
       options={[
         { key: 0, value: ProductInstanceStatus.NOTDELIVERED, text: 'Not delivered' },
@@ -18,5 +22,9 @@ function ProductInstanceStatusFilter() {
     />
   );
 }
+
+ProductInstanceStatusFilter.defaultProps = {
+  columnName: 'Status',
+};
 
 export default ProductInstanceStatusFilter;
