@@ -15,7 +15,7 @@ interface Props {
 function InvoiceLink(props: Props) {
   const { id, invoiceTitle, short } = props;
   return (
-    <NavLink to={`/invoice/${id}`} style={{ whiteSpace: 'nowrap' }}>
+    <NavLink to={`/invoice/${id}`}>
       <Icon name="money bill alternate" />
       F
       {id}

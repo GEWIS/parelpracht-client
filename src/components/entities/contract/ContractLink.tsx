@@ -51,7 +51,6 @@ function ContractLink(props: Props) {
   return (
     <NavLink
       to={`/contract/${id}`}
-      style={{ whiteSpace: 'nowrap' }}
       className="contact-link"
       title={`C${id} ${contractTitle}${status ? ` (${formatStatus(status)})` : ''}`}
     >

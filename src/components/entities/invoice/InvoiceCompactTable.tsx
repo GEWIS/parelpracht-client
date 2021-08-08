@@ -105,7 +105,7 @@ class ContractCompactTable extends React.Component<Props, State> {
                 <Table.HeaderCell>
                   Status
                 </Table.HeaderCell>
-                <Table.HeaderCell>
+                <Table.HeaderCell style={{ width: '15%' }}>
                   Year
                 </Table.HeaderCell>
                 <Table.HeaderCell>

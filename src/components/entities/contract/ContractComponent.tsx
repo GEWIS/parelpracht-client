@@ -1,5 +1,4 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
 import {
   Table,
 } from 'semantic-ui-react';
@@ -8,11 +7,11 @@ import { Contract, ContractStatus } from '../../../clients/server.generated';
 import { getCompanyName } from '../../../stores/company/selectors';
 import './ContractComponent.scss';
 import { RootState } from '../../../stores/store';
-/* import TablePagination from '../TablePagination'; */
 import { getContactName } from '../../../stores/contact/selectors';
 import { getContractStatus } from '../../../stores/contract/selectors';
 import { formatLastUpdate } from '../../../helpers/timestamp';
 import { formatStatus } from '../../../helpers/activity';
+import ContractLink from './ContractLink';
 
 interface Props {
   contract: Contract;
@@ -27,9 +26,7 @@ function ContractComponent(props: Props) {
     <>
       <Table.Row>
         <Table.Cell>
-          <NavLink to={`/contract/${contract.id}`}>
-            {contract.title}
-          </NavLink>
+          <ContractLink id={contract.id} showId showName />
         </Table.Cell>
         <Table.Cell>
           {contactName}

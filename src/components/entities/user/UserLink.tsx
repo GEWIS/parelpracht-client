@@ -1,4 +1,3 @@
-/* eslint-disable react/jsx-props-no-spreading */
 import React from 'react';
 import { connect } from 'react-redux';
 import { NavLink } from 'react-router-dom';
@@ -18,7 +17,7 @@ function UserLink(props: Props) {
   const { id, userName, avatarUrl } = props;
   // the avatarUrl is an empty string if the user does not have an avatar
   return (
-    <NavLink to={`/user/${id}`} style={{ whiteSpace: 'nowrap' }}>
+    <NavLink to={`/user/${id}`}>
       {((avatarUrl === '') ? <Icon name="user" /> : (
         <UserAvatar
           size="1.5em"

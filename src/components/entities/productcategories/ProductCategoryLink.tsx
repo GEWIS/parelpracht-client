@@ -1,4 +1,3 @@
-/* eslint-disable react/jsx-props-no-spreading */
 import React from 'react';
 import { connect } from 'react-redux';
 import { NavLink } from 'react-router-dom';
@@ -13,10 +12,9 @@ interface Props {
 }
 
 function CategoryLink(props: Props) {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { id, categoryName, ...rest } = props;
+  const { id, categoryName } = props;
   return (
-    <NavLink to={`/category/${id}`} style={{ whiteSpace: 'nowrap' }}>
+    <NavLink to={`/category/${id}`}>
       <Icon name="tags" />
       {categoryName}
     </NavLink>

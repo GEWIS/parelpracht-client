@@ -11,6 +11,8 @@ import { Invoice, InvoiceStatus } from '../../../clients/server.generated';
 import { formatStatus } from '../../../helpers/activity';
 import { getInvoiceStatus, getInvoiceValue } from '../../../stores/invoice/selectors';
 import { formatPriceFull } from '../../../helpers/monetary';
+import InvoiceCompactRow from './InvoiceCompactRow';
+import InvoiceLink from './InvoiceLink';
 
 interface Props {
   invoice: Invoice;
@@ -26,9 +28,7 @@ function InvoiceComponent(props: Props) {
   return (
     <Table.Row>
       <Table.Cell>
-        <NavLink to={`/invoice/${invoice.id}`}>
-          {`F${invoice.id} ${invoice.title}`}
-        </NavLink>
+        <InvoiceLink id={invoice.id} short={false} />
       </Table.Cell>
       <Table.Cell>
         {formatPriceFull(invoiceValue)}

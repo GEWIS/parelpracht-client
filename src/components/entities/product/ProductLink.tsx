@@ -1,4 +1,3 @@
-/* eslint-disable react/jsx-props-no-spreading */
 import React from 'react';
 import { connect } from 'react-redux';
 import { NavLink } from 'react-router-dom';
@@ -15,7 +14,7 @@ interface Props {
 function ProductLink(props: Props) {
   const { id, productName } = props;
   return (
-    <NavLink to={`/product/${id}`} style={{ whiteSpace: 'nowrap' }}>
+    <NavLink to={`/product/${id}`}>
       <Icon name="shopping bag" />
       {productName}
     </NavLink>

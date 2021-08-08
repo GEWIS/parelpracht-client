@@ -15,7 +15,7 @@ interface Props {
 function CompanyLink(props: Props) {
   const { id, companyName } = props;
   return (
-    <NavLink to={`/company/${id}`} style={{ whiteSpace: 'nowrap' }}>
+    <NavLink to={`/company/${id}`}>
       <Icon name="building" />
       {companyName}
     </NavLink>
