@@ -2,6 +2,7 @@ import {
   call, put, select, throttle,
 } from 'redux-saga/effects';
 import {
+  ApiException,
   Client,
   ListOrFilter,
   ListParams,
@@ -13,7 +14,9 @@ import {
   UserSummary,
 } from '../../clients/server.generated';
 import { takeEveryWithErrorHandling } from '../errorHandling';
-import { clearSingle, errorSingle, setSingle } from '../single/actionCreators';
+import {
+  clearSingle, errorSingle, notFoundSingle, setSingle,
+} from '../single/actionCreators';
 import {
   singleActionPattern,
   SingleActionType,
@@ -108,6 +111,16 @@ function* fetchSingleUser(action: SingleFetchAction<SingleEntities.User>) {
   yield put(updateSummary(SummaryCollections.Users, toSummary(user)));
 }
 
+function* errorFetchSingleUser(
+  error: ApiException,
+) {
+  if (error.status === 404) {
+    yield put(notFoundSingle(SingleEntities.User));
+  } else {
+    yield put(errorSingle(SingleEntities.User));
+  }
+}
+
 function* deleteSingleUser(action: SingleDeleteAction<SingleEntities.User>) {
   const client = new Client();
   yield call([client, client.deleteUser], action.id);
@@ -193,6 +206,7 @@ export default [
     yield takeEveryWithErrorHandling(
       singleActionPattern(SingleEntities.User, SingleActionType.Fetch),
       fetchSingleUser,
+      { onErrorSaga: errorFetchSingleUser },
     );
   },
   watchSaveSingleUser,

@@ -2,7 +2,7 @@ import {
   call, put, select, throttle,
 } from 'redux-saga/effects';
 import {
-  ActivityParams,
+  ActivityParams, ApiException,
   Client,
   ListOrFilter,
   ListParams,
@@ -14,7 +14,9 @@ import {
   SortDirection,
 } from '../../clients/server.generated';
 import { takeEveryWithErrorHandling } from '../errorHandling';
-import { clearSingle, errorSingle, setSingle } from '../single/actionCreators';
+import {
+  clearSingle, errorSingle, notFoundSingle, setSingle,
+} from '../single/actionCreators';
 import {
   singleActionPattern,
   SingleActionType,
@@ -108,6 +110,16 @@ function* fetchSingleProduct(action: SingleFetchAction<SingleEntities.Product>) 
   const product: Product = yield call([client, client.getProduct], action.id);
   yield put(setSingle(SingleEntities.Product, product));
   yield put(updateSummary(SummaryCollections.Products, toSummary(product)));
+}
+
+function* errorFetchSingleProduct(
+  error: ApiException,
+) {
+  if (error.status === 404) {
+    yield put(notFoundSingle(SingleEntities.Product));
+  } else {
+    yield put(errorSingle(SingleEntities.Product));
+  }
 }
 
 function* saveSingleProduct(
@@ -291,6 +303,7 @@ export default [
     yield takeEveryWithErrorHandling(
       singleActionPattern(SingleEntities.Product, SingleActionType.Fetch),
       fetchSingleProduct,
+      { onErrorSaga: errorFetchSingleProduct },
     );
   },
   watchSaveSingleProduct,

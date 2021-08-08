@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { NavLink, RouteComponentProps, withRouter } from 'react-router-dom';
 import {
-  Breadcrumb, Container, Grid, Header, Segment,
+  Breadcrumb, Container, Grid, Header, Loader, Segment,
 } from 'semantic-ui-react';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
@@ -21,6 +21,7 @@ import { isProfile } from '../stores/user/selectors';
 import UserApiKey from '../components/entities/user/UserApiKey';
 import UserBackgroundModal from '../components/files/UserBackgroundModal';
 import AuthorizationComponent from '../components/AuthorizationComponent';
+import NotFound from './NotFound';
 
 interface Props extends RouteComponentProps<{ userId: string }> {
   user: User | undefined;
@@ -55,9 +56,19 @@ class SingleUserPage extends React.Component<Props> {
   }
 
   public render() {
-    const { user, isProfilePage } = this.props;
+    const { user, isProfilePage, status } = this.props;
 
-    if (user === undefined) return (<div />);
+    if (status === ResourceStatus.NOTFOUND) {
+      return <NotFound />;
+    }
+
+    if (user === undefined) {
+      return (
+        <Container style={{ paddingTop: '1em' }}>
+          <Loader content="Loading" active />
+        </Container>
+      );
+    }
 
     return (
       <>

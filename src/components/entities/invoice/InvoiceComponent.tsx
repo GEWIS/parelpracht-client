@@ -1,5 +1,4 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
 import {
   Table,
 } from 'semantic-ui-react';
@@ -11,7 +10,6 @@ import { Invoice, InvoiceStatus } from '../../../clients/server.generated';
 import { formatStatus } from '../../../helpers/activity';
 import { getInvoiceStatus, getInvoiceValue } from '../../../stores/invoice/selectors';
 import { formatPriceFull } from '../../../helpers/monetary';
-import InvoiceCompactRow from './InvoiceCompactRow';
 import InvoiceLink from './InvoiceLink';
 
 interface Props {

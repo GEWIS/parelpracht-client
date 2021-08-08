@@ -23,6 +23,7 @@ import InvoiceCompactTable from '../components/entities/invoice/InvoiceCompactTa
 import ProductsContractedGraph from '../components/entities/product/ProductsContractedGraph';
 import PricingTable from '../components/productpricing/PricingTable';
 import AuthorizationComponent from '../components/AuthorizationComponent';
+import NotFound from './NotFound';
 
 interface Props extends RouteComponentProps<{ productId: string }> {
   product: Product | undefined;
@@ -163,8 +164,12 @@ class SingleProductPage extends React.Component<Props, State> {
   };
 
   public render() {
-    const { product } = this.props;
+    const { product, status } = this.props;
     const { paneIndex } = this.state;
+
+    if (status === ResourceStatus.NOTFOUND) {
+      return <NotFound />;
+    }
 
     if (product === undefined) {
       return (

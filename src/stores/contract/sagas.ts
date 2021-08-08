@@ -3,7 +3,7 @@ import {
 } from 'redux-saga/effects';
 import {
   ActivityParams,
-  ActivityType,
+  ActivityType, ApiException,
   Client,
   Contract,
   ContractActivity, ContractListResponse,
@@ -18,7 +18,9 @@ import {
   SortDirection,
 } from '../../clients/server.generated';
 import { takeEveryWithErrorHandling } from '../errorHandling';
-import { clearSingle, errorSingle, setSingle } from '../single/actionCreators';
+import {
+  clearSingle, errorSingle, notFoundSingle, setSingle,
+} from '../single/actionCreators';
 import {
   singleActionPattern,
   SingleActionType,
@@ -116,6 +118,16 @@ function* fetchSingleContract(action: SingleFetchAction<SingleEntities.Contract>
   const contract: Contract = yield call([client, client.getContract], action.id);
   yield put(setSingle(SingleEntities.Contract, contract));
   yield put(updateSummary(SummaryCollections.Contracts, toSummary(contract)));
+}
+
+function* errorFetchSingleContract(
+  error: ApiException,
+) {
+  if (error.status === 404) {
+    yield put(notFoundSingle(SingleEntities.Contract));
+  } else {
+    yield put(errorSingle(SingleEntities.Contract));
+  }
 }
 
 function* saveSingleContract(
@@ -322,6 +334,7 @@ export default [
     yield takeEveryWithErrorHandling(
       singleActionPattern(SingleEntities.Contract, SingleActionType.Fetch),
       fetchSingleContract,
+      { onErrorSaga: errorFetchSingleContract },
     );
   },
   watchSaveSingleContract,

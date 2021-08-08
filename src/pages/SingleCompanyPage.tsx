@@ -24,6 +24,7 @@ import CompanyContractedProductsChart from '../components/entities/company/Compa
 import FilesList from '../components/files/FilesList';
 import { authedUserHasRole } from '../stores/auth/selectors';
 import AuthorizationComponent from '../components/AuthorizationComponent';
+import NotFound from './NotFound';
 
 interface Props extends RouteComponentProps<{ companyId: string }> {
   company: Company | undefined;
@@ -171,8 +172,12 @@ class SingleCompanyPage extends React.Component<Props, State> {
   };
 
   public render() {
-    const { company } = this.props;
+    const { company, status } = this.props;
     const { paneIndex } = this.state;
+
+    if (status === ResourceStatus.NOTFOUND) {
+      return <NotFound />;
+    }
 
     if (company === undefined) {
       return (

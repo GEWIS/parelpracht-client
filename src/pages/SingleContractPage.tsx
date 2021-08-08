@@ -22,6 +22,7 @@ import { TransientAlert } from '../stores/alerts/actions';
 import FilesList from '../components/files/FilesList';
 import GenerateContractModal from '../components/files/GenerateContractModal';
 import { authedUserHasRole } from '../stores/auth/selectors';
+import NotFound from './NotFound';
 
 interface Props extends RouteComponentProps<{ contractId: string }> {
   contract: Contract | undefined;
@@ -143,6 +144,10 @@ class SingleContractPage extends React.Component<Props, State> {
   public render() {
     const { contract, status } = this.props;
     const { paneIndex } = this.state;
+
+    if (status === ResourceStatus.NOTFOUND) {
+      return <NotFound />;
+    }
 
     if (contract === undefined) {
       return (

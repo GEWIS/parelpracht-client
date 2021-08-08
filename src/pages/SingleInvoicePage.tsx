@@ -22,6 +22,7 @@ import FilesList from '../components/files/FilesList';
 import GenerateInvoiceModal from '../components/files/GenerateInvoiceModal';
 import AuthorizationComponent from '../components/AuthorizationComponent';
 import { authedUserHasRole } from '../stores/auth/selectors';
+import NotFound from './NotFound';
 
 interface Props extends RouteComponentProps<{ invoiceId: string }> {
   invoice: Invoice | undefined;
@@ -129,6 +130,10 @@ class SingleInvoicePage extends React.Component<Props, State> {
   public render() {
     const { invoice, status } = this.props;
     const { paneIndex } = this.state;
+
+    if (status === ResourceStatus.NOTFOUND) {
+      return <NotFound />;
+    }
 
     if (invoice === undefined) {
       return (

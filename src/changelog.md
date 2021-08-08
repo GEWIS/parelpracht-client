@@ -26,6 +26,7 @@ You can find the release notes below.
 - Contacts are now nicely sorted in Primary, Normal, Financial and Old-order.
 - When generating a PDF invoice, the date on the letter is now the "Invoice date" instead of the date of today.
 - All entity-dropdowns are now properly sorted alphabetically.
+- Error messages now show the actual error, instead of "An unexpected error occurred" message.
 
 ### Bugfixes
 - Fixed "Treasurer Last Seen" not being shown properly.
@@ -43,6 +44,7 @@ You can find the release notes below.
 - Fixed several small issues with generating PDF files, like missing dots/commas for 1000's, missing euro signs and weird spaces.
 - Fixed several tables going "out of bounds" when they had too much content, namely the "Financial overview", "Expired ivnoices", and "Files" tables.
 - Fixed weird formatting of long text in all entity's summaries.
+- Fixed infinite loading screen instead of a 404 page when an entity does not exist.
 
 ## v1.0.1 (23-04-2021)
 ### Added

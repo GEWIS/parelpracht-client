@@ -3,7 +3,7 @@ import {
 } from 'redux-saga/effects';
 import {
   ActivityParams,
-  ActivityType,
+  ActivityType, ApiException,
   Client,
   Contract,
   Invoice,
@@ -21,7 +21,7 @@ import {
 } from '../../clients/server.generated';
 import { takeEveryWithErrorHandling } from '../errorHandling';
 import {
-  clearSingle, errorSingle, fetchSingle, setSingle,
+  clearSingle, errorSingle, fetchSingle, notFoundSingle, setSingle,
 } from '../single/actionCreators';
 import {
   singleActionPattern,
@@ -124,6 +124,16 @@ function* fetchSingleInvoice(action: SingleFetchAction<SingleEntities.Invoice>) 
   const invoice: Invoice = yield call([client, client.getInvoice], action.id);
   yield put(setSingle(SingleEntities.Invoice, invoice));
   yield put(updateSummary(SummaryCollections.Invoices, toSummary(invoice)));
+}
+
+function* errorFetchSingleInvoice(
+  error: ApiException,
+) {
+  if (error.status === 404) {
+    yield put(notFoundSingle(SingleEntities.Invoice));
+  } else {
+    yield put(errorSingle(SingleEntities.Invoice));
+  }
 }
 
 function* saveSingleInvoice(
@@ -313,6 +323,7 @@ export default [
     yield takeEveryWithErrorHandling(
       singleActionPattern(SingleEntities.Invoice, SingleActionType.Fetch),
       fetchSingleInvoice,
+      { onErrorSaga: errorFetchSingleInvoice },
     );
   },
   watchSaveSingleInvoice,

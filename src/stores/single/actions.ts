@@ -8,6 +8,7 @@ export enum SingleActionType {
   Save = 'Single/Save',
   Delete = 'Single/Delete',
   Error = 'Single/Error',
+  NotFound = 'Single/NotFound',
   Create = 'Single/Create',
   Clear = 'Single/Clear',
   SaveFile = 'Single/SaveFile',
@@ -50,6 +51,8 @@ export type SingleDeleteFileAction<S> = SingleAction<SingleActionType.DeleteFile
 };
 
 export type SingleErrorAction<S> = SingleAction<SingleActionType.Error, S>;
+
+export type SingleNotFoundAction<S> = SingleAction<SingleActionType.NotFound, S>;
 
 export type SingleCreateAction<S, RCreate> = SingleAction<SingleActionType.Create, S> & {
   data: RCreate,
