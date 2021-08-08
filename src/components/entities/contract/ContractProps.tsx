@@ -20,7 +20,6 @@ import { TransientAlert } from '../../../stores/alerts/actions';
 import { showTransientAlert } from '../../../stores/alerts/actionCreators';
 import { formatDocumentIdTitle } from '../../../helpers/documents';
 import AuthorizationComponent from '../../AuthorizationComponent';
-import TextAreaMimic from '../../TextAreaMimic';
 
 interface Props extends RouteComponentProps {
   create?: boolean;
@@ -265,27 +264,18 @@ class ContractProps extends React.Component<Props, State> {
               placeholder="Contact"
             />
           </Form.Field>
-          {editing
-            ? (
-              <Form.Field
-                disabled={!editing}
-                id="form-input-comments"
-                control={TextArea}
-                label="Comments"
-                value={comments}
-                onChange={(e: ChangeEvent<HTMLInputElement>) => this.setState({
-                  comments: e.target.value,
-                })}
-              />
-            ) : (
-              <Form.Field>
-                {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-                <label htmlFor="form-input-comments">
-                  Comments
-                </label>
-                <TextAreaMimic content={comments} />
-              </Form.Field>
-            )}
+          <Form.Field disabled={!editing}>
+            {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
+            <label htmlFor="form-input-comments">
+              Comments
+            </label>
+            <TextArea
+              id="form-input-comments"
+              value={comments}
+              onChange={(e) => this.setState({ comments: e.target.value })}
+              placeholder="Internal comments"
+            />
+          </Form.Field>
         </Form>
       </>
     );

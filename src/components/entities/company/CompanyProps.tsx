@@ -2,7 +2,7 @@ import React, { ChangeEvent } from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import {
-  Checkbox, Form, Input, TextArea,
+  Checkbox, Form, Input,
 } from 'semantic-ui-react';
 import validator from 'validator';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
@@ -18,8 +18,8 @@ import { SingleEntities } from '../../../stores/single/single';
 import CountrySelector from './CountrySelector';
 import { TransientAlert } from '../../../stores/alerts/actions';
 import { showTransientAlert } from '../../../stores/alerts/actionCreators';
-import TextAreaMimic from '../../TextAreaMimic';
 import AuthorizationComponent from '../../AuthorizationComponent';
+import TextArea from '../../TextArea';
 
 interface Props extends RouteComponentProps {
   create?: boolean;
@@ -226,23 +226,6 @@ class CompanyProps extends React.Component<Props, State> {
           <Form.Group widths="equal">
             <Form.Field>
               {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-              <label htmlFor="form-input-description">
-                Description
-              </label>
-              {editing ? (
-                <TextArea
-                  id="form-input-description"
-                  value={comments}
-                  onChange={(e) => this.setState({ comments: e.target.value })}
-                  placeholder="Description"
-                  fluid
-                />
-              ) : (
-                <TextAreaMimic content={comments} />
-              )}
-            </Form.Field>
-            <Form.Field>
-              {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
               <label htmlFor="form-check-status">
                 Status
               </label>
@@ -256,6 +239,21 @@ class CompanyProps extends React.Component<Props, State> {
                   status:
                     data.checked ? CompanyStatus.ACTIVE : CompanyStatus.INACTIVE,
                 })}
+              />
+            </Form.Field>
+          </Form.Group>
+          <Form.Group widths="equal">
+            <Form.Field disabled={!editing}>
+              {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
+              <label htmlFor="form-input-description">
+                Description
+              </label>
+              <TextArea
+                id="form-input-description"
+                value={comments}
+                onChange={(e) => this.setState({ comments: e.target.value })}
+                placeholder="Description"
+                fluid
               />
             </Form.Field>
           </Form.Group>

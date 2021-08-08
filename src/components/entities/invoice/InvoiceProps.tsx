@@ -25,7 +25,6 @@ import { formatDocumentIdTitle } from '../../../helpers/documents';
 import { TransientAlert } from '../../../stores/alerts/actions';
 import { showTransientAlert } from '../../../stores/alerts/actionCreators';
 import AuthorizationComponent from '../../AuthorizationComponent';
-import TextAreaMimic from '../../TextAreaMimic';
 
 interface Props extends RouteComponentProps {
   create?: boolean;
@@ -280,26 +279,18 @@ class InvoiceProps extends React.Component<Props, State> {
             </Form.Field>
           </Form.Group>
           <Form.Group widths="equal">
-            {editing ? (
-              <Form.Field
-                disabled={!editing}
+            <Form.Field disabled={!editing}>
+              {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
+              <label htmlFor="form-input-comments">
+                Comments
+              </label>
+              <TextArea
                 id="form-input-comments"
-                control={TextArea}
-                label="Comments"
                 value={comments}
-                onChange={(e: ChangeEvent<HTMLInputElement>) => this.setState({
-                  comments: e.target.value,
-                })}
+                onChange={(e) => this.setState({ comments: e.target.value })}
+                placeholder="Internal comments"
               />
-            ) : (
-              <Form.Field>
-                {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-                <label htmlFor="form-input-comments">
-                  Comments
-                </label>
-                <TextAreaMimic content={comments} />
-              </Form.Field>
-            ) }
+            </Form.Field>
           </Form.Group>
         </Form>
       </>

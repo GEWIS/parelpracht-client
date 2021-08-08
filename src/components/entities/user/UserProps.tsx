@@ -2,7 +2,7 @@ import React, { ChangeEvent } from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import {
-  Checkbox, Dropdown, Form, Input, Segment, TextArea,
+  Checkbox, Dropdown, Form, Input, Segment,
 } from 'semantic-ui-react';
 import validator from 'validator';
 import _ from 'lodash';
@@ -16,7 +16,7 @@ import { RootState } from '../../../stores/store';
 import PropsButtons from '../../PropsButtons';
 import { SingleEntities } from '../../../stores/single/single';
 import { getSingle } from '../../../stores/single/selectors';
-import TextAreaMimic from '../../TextAreaMimic';
+import TextArea from '../../TextArea';
 
 interface Props extends RouteComponentProps {
   create?: boolean;
@@ -423,18 +423,14 @@ class UserProps extends React.Component<Props, State> {
             <label htmlFor="form-input-comment">
               Comments
             </label>
-            {editing ? (
-              <TextArea
-                id="form-delivery-spec-english"
-                value={comment}
-                onChange={
-                  (e) => this.setState({ comment: e.target.value })
-                }
-                placeholder="Comment"
-              />
-            ) : (
-              <TextAreaMimic content={comment} />
-            )}
+            <TextArea
+              id="form-delivery-spec-english"
+              value={comment}
+              onChange={
+                (e) => this.setState({ comment: e.target.value })
+              }
+              placeholder="Comment"
+            />
           </Form.Field>
         </Form>
       </>

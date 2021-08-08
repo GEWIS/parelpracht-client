@@ -1,7 +1,7 @@
 import React, { ChangeEvent } from 'react';
 import { connect } from 'react-redux';
 import {
-  Form, Input, Label, TextArea,
+  Form, Input, Label,
 } from 'semantic-ui-react';
 import { ProductInstance, ProductInstanceParams, ProductSummary } from '../../../clients/server.generated';
 import ResourceStatus from '../../../stores/resourceStatus';
@@ -9,7 +9,7 @@ import { RootState } from '../../../stores/store';
 import { getSummary } from '../../../stores/summaries/selectors';
 import { SummaryCollections } from '../../../stores/summaries/summaries';
 import ProductSelector from '../product/ProductSelector';
-import TextAreaMimic from '../../TextAreaMimic';
+import TextArea from '../../TextArea';
 
 interface Props {
   create?: boolean;
@@ -166,18 +166,14 @@ class ProductInstanceProps extends React.Component<Props, State> {
             <label htmlFor="form-input-details">
               Details
             </label>
-            {editing ? (
-              <TextArea
-                id="form-input-details"
-                value={details}
-                onChange={
-                  (e) => this.setState({ details: e.target.value })
-                }
-                placeholder="Details"
-              />
-            ) : (
-              <TextAreaMimic content={details} />
-            )}
+            <TextArea
+              id="form-input-details"
+              value={details}
+              onChange={
+                (e) => this.setState({ details: e.target.value })
+              }
+              placeholder="Details"
+            />
           </Form.Field>
         </Form>
       </>

@@ -20,7 +20,6 @@ import { getSingle } from '../../../stores/single/selectors';
 import { formatContactName, formatFunction } from '../../../helpers/contact';
 import { TransientAlert } from '../../../stores/alerts/actions';
 import { showTransientAlert } from '../../../stores/alerts/actionCreators';
-import TextAreaMimic from '../../TextAreaMimic';
 
 import AuthorizationComponent from '../../AuthorizationComponent';
 
@@ -316,18 +315,14 @@ class ContactProps extends React.Component<Props, State> {
             <label htmlFor="form-input-comments">
               Comments
             </label>
-            {editing ? (
-              <TextArea
-                id="form-delivery-spec-english"
-                value={comments}
-                onChange={
-                  (e) => this.setState({ comments: e.target.value })
-                }
-                placeholder="Comments"
-              />
-            ) : (
-              <TextAreaMimic content={comments} />
-            )}
+            <TextArea
+              id="form-delivery-spec-english"
+              value={comments}
+              onChange={
+                (e) => this.setState({ comments: e.target.value })
+              }
+              placeholder="Comments"
+            />
           </Form.Field>
         </Form>
       </>

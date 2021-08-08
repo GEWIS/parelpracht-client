@@ -25,6 +25,7 @@ function ContractLink(props: Props) {
 
   let statusCircle;
   switch (status) {
+    case undefined: break;
     case ContractStatus.CREATED:
       statusCircle = <PartialCircle endAngle={72} startAngle={0} />;
       break;
