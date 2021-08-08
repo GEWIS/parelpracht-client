@@ -45,6 +45,7 @@ You can find the release notes below.
 - Fixed several tables going "out of bounds" when they had too much content, namely the "Financial overview", "Expired ivnoices", and "Files" tables.
 - Fixed weird formatting of long text in all entity's summaries.
 - Fixed infinite loading screen instead of a 404 page when an entity does not exist.
+- Fixed timestamps not being in the correct timezone.
 
 ## v1.0.1 (23-04-2021)
 ### Added
