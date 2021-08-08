@@ -54,7 +54,7 @@ function CompanySummary(props: Props) {
     >
       <div>
         <h5>Description</h5>
-        <p style={{ wordWrap: 'break-word' }}>{company.comments}</p>
+        <p style={{ wordWrap: 'break-word', whiteSpace: 'pre-line' }}>{company.comments}</p>
       </div>
       <div>
         <h5>Status</h5>
