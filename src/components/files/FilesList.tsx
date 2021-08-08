@@ -70,37 +70,31 @@ class FilesList extends React.Component<Props, State> {
       );
     }
 
-    let filesList;
-    if (files.length === 0) {
-      filesList = (
-        <>
-          <h4>
-            There are no files uploaded yet.
-          </h4>
-        </>
-      );
-    } else {
-      filesList = (
-        <Table compact fixed singleLine className="files">
-          <Table.Body>
-            {createRow}
-            {files
-              .sort((a, b) => { return b.updatedAt.getTime() - a.updatedAt.getTime(); })
-              .map((file) => (
-                <SingleFile
-                  key={file.id}
-                  file={file}
-                  create={false}
-                  entity={entity}
-                  entityId={entityId}
-                  fetchEntity={fetchEntity}
-                  status={status}
-                />
-              ))}
-          </Table.Body>
-        </Table>
-      );
-    }
+    const noFilesHeader = (
+      <h4>
+        There are no files uploaded yet.
+      </h4>
+    );
+    const filesList = (
+      <Table compact fixed singleLine className="files">
+        <Table.Body>
+          {createRow}
+          {files
+            .sort((a, b) => { return b.updatedAt.getTime() - a.updatedAt.getTime(); })
+            .map((file) => (
+              <SingleFile
+                key={file.id}
+                file={file}
+                create={false}
+                entity={entity}
+                entityId={entityId}
+                fetchEntity={fetchEntity}
+                status={status}
+              />
+            ))}
+        </Table.Body>
+      </Table>
+    );
 
     return (
       <AuthorizationComponent roles={[Roles.GENERAL, Roles.ADMIN, Roles.AUDIT]} notFound={false}>
@@ -124,7 +118,8 @@ class FilesList extends React.Component<Props, State> {
           </AuthorizationComponent>
           {generateModal}
         </h3>
-        {filesList}
+        {files.length === 0 ? noFilesHeader : undefined}
+        {files.length > 0 || createRow ? filesList : undefined}
       </AuthorizationComponent>
     );
   }

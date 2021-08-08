@@ -27,6 +27,7 @@ You can find the release notes below.
 - When generating a PDF invoice, the date on the letter is now the "Invoice date" instead of the date of today.
 - All entity-dropdowns are now properly sorted alphabetically.
 - Error messages now show the actual error, instead of "An unexpected error occurred" message.
+- Updated node packages in the front-end and back-end.
 
 ### Bugfixes
 - Fixed "Treasurer Last Seen" not being shown properly.

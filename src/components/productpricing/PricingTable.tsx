@@ -30,7 +30,7 @@ class PricingTable extends React.Component<Props, State> {
   public constructor(props: Props) {
     super(props);
     this.state = {
-      pricingData: JSON.parse(props.pricing.data),
+      pricingData: props.pricing.data,
       description: props.pricing.description,
       editing: false,
       status: ResourceStatus.FETCHED,
@@ -89,7 +89,7 @@ class PricingTable extends React.Component<Props, State> {
     const client = new Client();
     await client.updatePricing(productId, {
       description,
-      data: JSON.stringify(pricingData),
+      data: pricingData,
     } as Partial_PricingParams);
     fetchProduct(productId);
     this.setState({ editing: false });

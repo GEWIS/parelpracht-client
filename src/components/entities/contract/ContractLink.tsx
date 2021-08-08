@@ -45,7 +45,7 @@ function ContractLink(props: Props) {
       statusCircle = <PartialCircle endAngle={359.99999} startAngle={0} fillColor="#ff6966" />;
       break;
     default:
-      throw new TypeError(`Unknown contract status: ${status}`);
+      throw new TypeError(`Unknown contract status: ${status} from contract ${id}`);
   }
 
   return (

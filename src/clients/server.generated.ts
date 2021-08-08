@@ -8526,7 +8526,7 @@ export class ProductPricing implements IProductPricing {
     /** Piece of text to be placed above the table */
     description!: string;
     /** Table parsed as a JSON object */
-    data!: string;
+    data!: string[][];
     product!: Product;
     /** Date at which this entity has been created */
     createdAt!: Date;
@@ -8546,6 +8546,7 @@ at which the entity has been deleted */
             }
         }
         if (!data) {
+            this.data = [];
             this.product = new Product();
         }
     }
@@ -8554,7 +8555,11 @@ at which the entity has been deleted */
         if (_data) {
             this.id = _data["id"];
             this.description = _data["description"];
-            this.data = _data["data"];
+            if (Array.isArray(_data["data"])) {
+                this.data = [] as any;
+                for (let item of _data["data"])
+                    this.data!.push(item);
+            }
             this.product = _data["product"] ? Product.fromJS(_data["product"]) : new Product();
             this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
             this.updatedAt = _data["updatedAt"] ? new Date(_data["updatedAt"].toString()) : <any>undefined;
@@ -8574,7 +8579,11 @@ at which the entity has been deleted */
         data = typeof data === 'object' ? data : {};
         data["id"] = this.id;
         data["description"] = this.description;
-        data["data"] = this.data;
+        if (Array.isArray(this.data)) {
+            data["data"] = [];
+            for (let item of this.data)
+                data["data"].push(item);
+        }
         data["product"] = this.product ? this.product.toJSON() : <any>undefined;
         data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
         data["updatedAt"] = this.updatedAt ? this.updatedAt.toISOString() : <any>undefined;
@@ -8589,7 +8598,7 @@ export interface IProductPricing {
     /** Piece of text to be placed above the table */
     description: string;
     /** Table parsed as a JSON object */
-    data: string;
+    data: string[][];
     product: Product;
     /** Date at which this entity has been created */
     createdAt: Date;
@@ -9026,7 +9035,7 @@ export interface IPartial_ProductParams {
 /** Make all properties in T optional */
 export class Partial_PricingParams implements IPartial_PricingParams {
     description?: string;
-    data?: string;
+    data?: string[][];
 
     constructor(data?: IPartial_PricingParams) {
         if (data) {
@@ -9040,7 +9049,11 @@ export class Partial_PricingParams implements IPartial_PricingParams {
     init(_data?: any) {
         if (_data) {
             this.description = _data["description"];
-            this.data = _data["data"];
+            if (Array.isArray(_data["data"])) {
+                this.data = [] as any;
+                for (let item of _data["data"])
+                    this.data!.push(item);
+            }
         }
     }
 
@@ -9054,7 +9067,11 @@ export class Partial_PricingParams implements IPartial_PricingParams {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["description"] = this.description;
-        data["data"] = this.data;
+        if (Array.isArray(this.data)) {
+            data["data"] = [];
+            for (let item of this.data)
+                data["data"].push(item);
+        }
         return data; 
     }
 }
@@ -9062,7 +9079,7 @@ export class Partial_PricingParams implements IPartial_PricingParams {
 /** Make all properties in T optional */
 export interface IPartial_PricingParams {
     description?: string;
-    data?: string;
+    data?: string[][];
 }
 
 export class ProductInstanceListResponse implements IProductInstanceListResponse {

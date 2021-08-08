@@ -114,7 +114,7 @@ class ContractCompactTable extends React.Component<Props, State> {
               </Table.Row>
             </Table.Header>
             <Table.Body>
-              {productInstances.map((p) => <InvoiceCompactRow key={p.id} invoice={p.invoice} />)}
+              {productInstances.map((p) => <InvoiceCompactRow key={p.id} invoice={p.invoice!} />)}
             </Table.Body>
           </Table>
           <TablePagination
