@@ -13,7 +13,7 @@ import ResourceStatus from '../../stores/resourceStatus';
 import { RootState } from '../../stores/store';
 import UserAvatar from '../entities/user/UserAvatar';
 import { authedUserHasRole } from '../../stores/auth/selectors';
-import { changeLanguage } from '../../localization/i18n';
+import { changeLanguage } from '../../localization';
 
 interface Props extends RouteComponentProps {
   authStatus: AuthStatus | undefined;
