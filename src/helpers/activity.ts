@@ -50,6 +50,7 @@ export function formatActivityType(
   activityType: ActivityType,
   subType: string | undefined,
   entity: SingleEntities,
+  t: TFunction,
 ): string {
   switch (activityType) {
     case ActivityType.COMMENT:
@@ -82,7 +83,7 @@ export function formatActivityType(
  */
 export function formatActivityDate(date: Date, userName: string, t: TFunction): string {
   const dateString = formatLastUpdate(date, t);
-  return `${dateString} by ${userName}`;
+  return `${dateString} ${t('other.dateTime.by')} ${userName}`;
 }
 
 /**
@@ -92,9 +93,10 @@ export function formatActivitySummary(
   activityType: ActivityType,
   subType: string | undefined,
   entity: SingleEntities,
+  t: TFunction,
 ): string {
-  const activity = formatActivityType(activityType, subType, entity);
-  return `${activity} by `;
+  const activity = formatActivityType(activityType, subType, entity, t);
+  return `${activity} ${t('other.dateTime.by')} `;
 }
 
 /**

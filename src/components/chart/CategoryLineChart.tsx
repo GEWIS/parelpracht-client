@@ -1,5 +1,6 @@
 import React from 'react';
 import { Dropdown, Grid } from 'semantic-ui-react';
+import { withTranslation, WithTranslation } from 'react-i18next';
 import { Line } from 'react-chartjs-2';
 import { connect } from 'react-redux';
 import { ChartOptions } from 'chart.js';
@@ -14,7 +15,7 @@ export enum DataSet {
   AMOUNTS,
 }
 
-interface Props {
+interface Props extends WithTranslation {
   getCatName: (id: number) => string;
   data: ProductsPerCategory[];
   labels: string[];
@@ -41,7 +42,9 @@ class CategoryLineChart extends React.Component<Props, State> {
   };
 
   createLineChartDataObject(): object {
-    const { data, labels, getCatName } = this.props;
+    const {
+      t, data, labels, getCatName,
+    } = this.props;
     const { dataSetSelection } = this.state;
 
     let valueArray: 'amount' | 'nrOfProducts';
@@ -72,6 +75,7 @@ class CategoryLineChart extends React.Component<Props, State> {
   }
 
   render() {
+    const { t } = this.props;
     const { extraDropdown } = this.props;
     const { dataSetSelection } = this.state;
     const chartData = this.createLineChartDataObject();
@@ -133,14 +137,14 @@ class CategoryLineChart extends React.Component<Props, State> {
         <Grid style={{ marginBottom: '1em' }}>
           <Grid.Row columns={2}>
             <Grid.Column textAlign="left">
-              <h3>Contracted products</h3>
+              <h3>{t('dashboard.categoryLinechart.header')}</h3>
             </Grid.Column>
             <Grid.Column textAlign="right" verticalAlign="bottom" style={{ fontSize: '1.2em' }}>
               {extraDropdown}
               <Dropdown
                 options={[
-                  { key: 1, value: DataSet.VALUES, text: 'Values (€)' },
-                  { key: 2, value: DataSet.AMOUNTS, text: 'Amounts' },
+                  { key: 1, value: DataSet.VALUES, text: t('entities.graph.label.value') },
+                  { key: 2, value: DataSet.AMOUNTS, text: t('entities.graph.label.amount') },
                 ]}
                 basic
                 value={dataSetSelection}
@@ -173,4 +177,4 @@ const mapStateToProps = (state: RootState) => ({
   getCatName: (id: number): string => getCategoryName(state, id),
 });
 
-export default connect(mapStateToProps)(CategoryLineChart);
+export default withTranslation()(connect(mapStateToProps)(CategoryLineChart));

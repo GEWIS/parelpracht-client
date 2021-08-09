@@ -4,6 +4,7 @@ import { Dispatch } from 'redux';
 import {
   Dimmer, Loader, Segment, Table,
 } from 'semantic-ui-react';
+import { useTranslation } from 'react-i18next';
 import { Product } from '../../../clients/server.generated';
 import TablePagination from '../../TablePagination';
 import { RootState } from '../../../stores/store';
@@ -47,6 +48,7 @@ function ProductsTable({
     setSort('nameEnglish', 'ASC');
     fetchProducts();
   }, []);
+  const { t } = useTranslation();
 
   if (status === ResourceStatus.FETCHING || status === ResourceStatus.SAVING) {
     return (
@@ -62,26 +64,26 @@ function ProductsTable({
                   sorted={column === 'nameEnglish' ? direction : undefined}
                   onClick={() => changeSort('nameEnglish')}
                 >
-                  Name
+                  {t('pages.tables.generalColumns.name')}
                 </Table.HeaderCell>
                 <Table.HeaderCell
                   sorted={column === 'targetPrice' ? direction : undefined}
                   onClick={() => changeSort('targetPrice')}
                 >
-                  Target price
+                  {t('pages.tables.generalColumns.price')}
                 </Table.HeaderCell>
                 <Table.HeaderCell
                   sorted={column === 'status' ? direction : undefined}
                   onClick={() => changeSort('status')}
                 >
-                  Status
+                  {t('pages.tables.generalColumns.status')}
                   <ProductStatusFilter />
                 </Table.HeaderCell>
                 <Table.HeaderCell
                   sorted={column === 'category' ? direction : undefined}
                   onClick={() => changeSort('category')}
                 >
-                  Category
+                  {t('pages.tables.products.columns.category')}
                   <ProductCategoryFilter />
                 </Table.HeaderCell>
               </Table.Row>
@@ -113,26 +115,26 @@ function ProductsTable({
               sorted={column === 'nameEnglish' ? direction : undefined}
               onClick={() => changeSort('nameEnglish')}
             >
-              Name
+              {t('pages.tables.generalColumns.name')}
             </Table.HeaderCell>
             <Table.HeaderCell
               sorted={column === 'targetPrice' ? direction : undefined}
               onClick={() => changeSort('targetPrice')}
             >
-              Target price
+              {t('pages.tables.generalColumns.price')}
             </Table.HeaderCell>
             <Table.HeaderCell
               sorted={column === 'status' ? direction : undefined}
               onClick={() => changeSort('status')}
             >
-              Status
+              {t('pages.tables.generalColumns.status')}
               <ProductStatusFilter />
             </Table.HeaderCell>
             <Table.HeaderCell
               sorted={column === 'category' ? direction : undefined}
               onClick={() => changeSort('category')}
             >
-              Category
+              {t('pages.tables.products.columns.category')}
               <ProductCategoryFilter />
             </Table.HeaderCell>
           </Table.Row>

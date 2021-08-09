@@ -63,7 +63,7 @@ class ActivityComponent extends React.Component<Props> {
       <UserAvatar size="3em" fileName={avatarUrl} clickable={false} />
     );
 
-    const summaryType = formatActivitySummary(activity.type, activity.subType, componentType);
+    const summaryType = formatActivitySummary(activity.type, activity.subType, componentType, t);
     const summaryUser = (
       <UserLinkWithoutImage id={this.props.activity.createdById} />
     );

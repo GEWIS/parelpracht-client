@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation, withTranslation, WithTranslation } from 'react-i18next';
 import { Loader, Table } from 'semantic-ui-react';
 import {
   Client, PaginationParams, Product, ProductInstance,
@@ -6,7 +7,7 @@ import {
 import TablePagination from '../../TablePagination';
 import ContractCompactRow from './ContractCompactRow';
 
-interface Props {
+interface Props extends WithTranslation {
   product: Product;
 }
 
@@ -79,12 +80,13 @@ class ContractCompactTable extends React.Component<Props, State> {
     const {
       productInstances, countTotal, skip, take, loading,
     } = this.state;
+    const { t } = this.props;
 
     let contractList;
     if (productInstances.length === 0) {
       contractList = (
         <h4>
-          There are no contracts created yet.
+          {t('products.noContract')}
         </h4>
       );
     } else {
@@ -94,16 +96,16 @@ class ContractCompactTable extends React.Component<Props, State> {
             <Table.Header>
               <Table.Row>
                 <Table.HeaderCell>
-                  Title
+                  {t('pages.tables.generalColumns.title')}
                 </Table.HeaderCell>
                 <Table.HeaderCell>
-                  Company
+                  {t('pages.tables.generalColumns.company')}
                 </Table.HeaderCell>
                 <Table.HeaderCell>
-                  Status
+                  {t('pages.tables.generalColumns.status')}
                 </Table.HeaderCell>
                 <Table.HeaderCell>
-                  Last Update
+                  {t('pages.tables.generalColumns.lastUpdate')}
                 </Table.HeaderCell>
               </Table.Row>
             </Table.Header>
@@ -128,7 +130,7 @@ class ContractCompactTable extends React.Component<Props, State> {
 
     return (
       <>
-        <h3>Contracts</h3>
+        <h3>{t('entity.contracts')}</h3>
         <Loader active={loading} />
         {contractList}
       </>
@@ -136,4 +138,4 @@ class ContractCompactTable extends React.Component<Props, State> {
   }
 }
 
-export default ContractCompactTable;
+export default withTranslation()(ContractCompactTable);

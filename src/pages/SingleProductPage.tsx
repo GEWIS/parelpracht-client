@@ -5,6 +5,7 @@ import {
 } from 'semantic-ui-react';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
+import { WithTranslation, withTranslation } from 'react-i18next';
 import { Product, Roles } from '../clients/server.generated';
 import { RootState } from '../stores/store';
 import ProductProps from '../components/entities/product/ProductProps';
@@ -25,7 +26,7 @@ import PricingTable from '../components/productpricing/PricingTable';
 import AuthorizationComponent from '../components/AuthorizationComponent';
 import NotFound from './NotFound';
 
-interface Props extends RouteComponentProps<{ productId: string }> {
+interface Props extends WithTranslation, RouteComponentProps<{ productId: string }> {
   product: Product | undefined;
   status: ResourceStatus;
 
@@ -92,11 +93,12 @@ class SingleProductPage extends React.Component<Props, State> {
   }
 
   getPanes = () => {
-    const { product, fetchProduct, status } = this.props;
-
+    const {
+      t, product, fetchProduct, status,
+    } = this.props;
     const panes = [
       {
-        menuItem: 'Contracts',
+        menuItem: t('entity.contracts'),
         render: product ? () => (
           <Tab.Pane>
             <ContractCompactTable
@@ -106,7 +108,7 @@ class SingleProductPage extends React.Component<Props, State> {
         ) : () => <Tab.Pane />,
       },
       {
-        menuItem: 'Invoices',
+        menuItem: t('entity.invoices'),
         render: product ? () => (
           <Tab.Pane>
             <InvoiceCompactTable
@@ -116,7 +118,7 @@ class SingleProductPage extends React.Component<Props, State> {
         ) : () => <Tab.Pane />,
       },
       {
-        menuItem: 'Files',
+        menuItem: t('entity.files'),
         render: product ? () => (
           <Tab.Pane>
             <FilesList
@@ -130,7 +132,7 @@ class SingleProductPage extends React.Component<Props, State> {
         ) : () => <Tab.Pane />,
       },
       {
-        menuItem: 'Activities',
+        menuItem: t('entity.activities'),
         render: product ? () => (
           <Tab.Pane>
             <ActivitiesList
@@ -143,7 +145,7 @@ class SingleProductPage extends React.Component<Props, State> {
         ) : () => <Tab.Pane />,
       },
       {
-        menuItem: 'Insights',
+        menuItem: t('entity.insights'),
         render: product ? () => <ProductsContractedGraph product={product} />
           : () => <Tab.Pane />,
       },
@@ -151,7 +153,7 @@ class SingleProductPage extends React.Component<Props, State> {
 
     if (product && product.pricing) {
       panes.push({
-        menuItem: 'Pricing',
+        menuItem: t('products.props.customPrice'),
         render: () => (
           <Tab.Pane>
             <PricingTable pricing={product.pricing!} productId={product.id} />
@@ -238,4 +240,6 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   showTransientAlert: (alert: TransientAlert) => dispatch(showTransientAlert(alert)),
 });
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(SingleProductPage));
+export default withTranslation()(
+  withRouter(connect(mapStateToProps, mapDispatchToProps)(SingleProductPage)),
+);

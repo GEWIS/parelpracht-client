@@ -1,15 +1,30 @@
 {
   "Welcome to React": "Welcome to React and react-i18next",
+  "activities": {
+    "button": {
+      "details": "Comment details",
+      "postComment": "Post comment",
+      "writeComment": "Write comment"
+    },
+    "newComment": "Write a new comment..."
+  },
   "buttons": {
     "files": {
       "cancel": "Cancel upload",
       "delete": "Delete file",
       "download": "Download file",
       "edit": "Edit file",
-      "save": "Save file"
+      "save": "Save file",
+      "upload": "Upload files"
     }
   },
   "dashboard": {
+    "categoryLinechart": {
+      "header": "Contracted products"
+    },
+    "expiredInvoices": {
+      "header": "Expired invoices"
+    },
     "financialOverview": {
       "contracted": "Contracted",
       "contractedShort": "Contracted",
@@ -21,9 +36,38 @@
       "paid": "Paid",
       "suggested": "Suggested",
       "value": "Value"
-    }
+    },
+    "recentContracts": {
+      "allContracts": "All contracts...",
+      "header": "Recent contracts"
+    },
+    "welcome": "Welcome back,"
   },
   "entities": {
+    "graph": {
+      "label": {
+        "amount": "Amount",
+        "value": "Value (€)"
+      },
+      "month": {
+        "apr": "April",
+        "aug": "August",
+        "dec": "December",
+        "feb": "February",
+        "jan": "January",
+        "jul": "July",
+        "jun": "June",
+        "maa": "March",
+        "mei": "May",
+        "nov": "November",
+        "okt": "October",
+        "sep": "September"
+      },
+      "target": {
+        "maximum": "Maximum target",
+        "minimum": "Minimum target"
+      }
+    },
     "status": {
       "cancelled": "Cancelled",
       "confirmed": "Confirmed",
@@ -40,13 +84,19 @@
     }
   },
   "entity": {
+    "activities": "Activities",
     "company": "Company",
     "contact": "Contact",
     "contract": "Contract",
+    "contracts": "Contracts",
+    "files": "Files",
+    "insights": "Insights",
     "invoice": "Invoice",
+    "invoices": "Invoices",
     "product": "Product",
     "productcategory": "Product Category",
     "productinstance": "Product Instance",
+    "products": "Products",
     "user": "User"
   },
   "mainMenu": {
@@ -65,10 +115,16 @@
   },
   "other": {
     "dateTime": {
-      "at": "at"
+      "at": "at",
+      "by": "by"
     }
   },
   "pages": {
+    "customInvoice": {
+      "descriptionHeader": "Factuur omschrijving",
+      "header": "Custom invoice",
+      "subheader": "Making the treasurer's life easier"
+    },
     "tables": {
       "footer": {
         "items": "Showing {{begin}} to {{end}} of {{total}}",
@@ -81,8 +137,16 @@
         }
       },
       "generalColumns": {
+        "amount": "Amount",
+        "company": "Company",
         "id": "ID",
-        "lastUpdate": "Last update"
+        "lastUpdate": "Last update",
+        "name": "Name",
+        "price": "Price",
+        "status": "Status",
+        "title": "Title",
+        "total": "Total",
+        "year": "Year"
       },
       "header": {
         "clear": "Clear search",
@@ -105,6 +169,41 @@
         "lastSeenMessageNever": "Never updated by the treasurer",
         "updateLastSeen": "Update Last Seen",
         "updateLastSeenDescription": "By updating the last seen, you indicate that all invoice statuses have been updated."
+      },
+      "products": {
+        "addProduct": "Add product",
+        "columns": {
+          "category": "Category"
+        },
+        "header": "All products",
+        "subheader": "Products"
+      }
+    }
+  },
+  "products": {
+    "noActivities": "There are no activities logged yet.",
+    "noContract": "There are no contracts created yet.",
+    "noFiles": "There are no invoices created yet.",
+    "noInvoice": "There are nu files uploaded yet.",
+    "props": {
+      "category": "Product category",
+      "comments": "Comments (internal)",
+      "contractTextEn": "Contract text (English)",
+      "contractTextNl": "Contract text (Dutch)",
+      "customPrice": "Custom pricing",
+      "customPriceButton": "Add pricing",
+      "header": "New product",
+      "maxTarget": "Maximum target",
+      "minTarget": "Minimum target",
+      "nameEn": "Title (English)",
+      "nameNl": "Title (Dutch)",
+      "price": "Target price",
+      "specsEn": "Delivery specifications (English)",
+      "specsNl": "Delivery specifications (Dutch)",
+      "status": {
+        "active": "Inactief",
+        "header": "Status",
+        "inactive": "Inactive"
       }
     }
   }

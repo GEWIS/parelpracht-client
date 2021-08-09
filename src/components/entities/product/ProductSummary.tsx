@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { withTranslation, WithTranslation } from 'react-i18next';
 import { Product } from '../../../clients/server.generated';
 import { formatPriceFull } from '../../../helpers/monetary';
 import ResourceStatus from '../../../stores/resourceStatus';
@@ -9,7 +10,7 @@ import { RootState } from '../../../stores/store';
 import { getCategoryName } from '../../../stores/productcategory/selectors';
 import { EntitySummary } from '../EntitySummary';
 
-interface Props {
+interface Props extends WithTranslation {
   product: Product | undefined;
   status: ResourceStatus;
   categoryName: string;
@@ -26,6 +27,7 @@ function ProductSummary(props: Props) {
       />
     );
   }
+  const { t } = props;
 
   const loading = (status !== ResourceStatus.FETCHED
     && status !== ResourceStatus.SAVING
@@ -39,15 +41,15 @@ function ProductSummary(props: Props) {
       title={product.nameEnglish}
     >
       <div>
-        <h5>Name (Dutch)</h5>
+        <h5>{t('products.props.nameNl')}</h5>
         <p>{product.nameDutch}</p>
       </div>
       <div>
-        <h5>Target price</h5>
+        <h5>{t('products.props.price')}</h5>
         <p>{formatPriceFull(product.targetPrice)}</p>
       </div>
       <div>
-        <h5>Category</h5>
+        <h5>{t('products.props.category')}</h5>
         <p>{categoryName}</p>
       </div>
     </EntitySummary>
@@ -62,4 +64,4 @@ const mapStateToProps = (state: RootState, props: { product: Product }) => {
   };
 };
 
-export default connect(mapStateToProps)(ProductSummary);
+export default withTranslation()(connect(mapStateToProps)(ProductSummary));

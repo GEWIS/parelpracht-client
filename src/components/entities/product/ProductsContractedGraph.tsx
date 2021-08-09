@@ -1,5 +1,6 @@
 import React from 'react';
 import { Dropdown, Grid, Tab } from 'semantic-ui-react';
+import { withTranslation, WithTranslation } from 'react-i18next';
 import { Bar } from 'react-chartjs-2';
 import * as chartjs from 'chart.js';
 import 'chartjs-plugin-annotation';
@@ -7,7 +8,7 @@ import { AnalysisResultByYear, Client, Product } from '../../../clients/server.g
 import { DataSet } from '../../chart/CategoryLineChart';
 import { formatPriceFull } from '../../../helpers/monetary';
 
-interface Props {
+interface Props extends WithTranslation {
   product: Product;
 }
 
@@ -42,13 +43,14 @@ class ProductsContractedGraph extends React.Component<Props, State> {
   };
 
   createBarChartDataObject = (data: AnalysisResultByYear[]): object => {
+    const { t } = this.props;
     const { dataSetSelection } = this.state;
     const labels = data.map((x) => x.year);
     let datasets;
     switch (dataSetSelection) {
       case DataSet.VALUES:
         datasets = [{
-          label: 'Values (€)',
+          text: t('entities.graph.label.value'),
           backgroundColor: 'rgba(41, 48, 101, 0.8)',
           borderColor: 'rgba(41, 48, 101, 1)',
           borderWidth: 1,
@@ -59,7 +61,7 @@ class ProductsContractedGraph extends React.Component<Props, State> {
         break;
       case DataSet.AMOUNTS:
         datasets = [{
-          label: 'Amounts',
+          text: t('entities.graph.label.amount'),
           backgroundColor: 'rgba(41, 48, 101, 0.8)',
           borderColor: 'rgba(41, 48, 101, 1)',
           borderWidth: 1,
@@ -74,6 +76,7 @@ class ProductsContractedGraph extends React.Component<Props, State> {
   };
 
   createBarChartOptionsObject = () => {
+    const { t } = this.props;
     const { product } = this.props;
     const { dataSetSelection } = this.state;
     let options: chartjs.ChartOptions;
@@ -117,7 +120,7 @@ class ProductsContractedGraph extends React.Component<Props, State> {
                   borderWidth: 2,
                   label: {
                     backgroundColor: 'rgba(41, 48, 101, 0.8)',
-                    content: 'Maximal target',
+                    content: t('entities.graph.target.maximum'),
                     enabled: true,
                   },
                 },
@@ -162,7 +165,7 @@ class ProductsContractedGraph extends React.Component<Props, State> {
                   borderWidth: 2,
                   label: {
                     backgroundColor: 'rgba(41, 48, 101, 0.8)',
-                    content: 'Minimal target',
+                    content: t('entities.graph.target.minimum'),
                     enabled: true,
                   },
                 },
@@ -176,7 +179,7 @@ class ProductsContractedGraph extends React.Component<Props, State> {
                   borderWidth: 2,
                   label: {
                     backgroundColor: 'rgba(41, 48, 101, 0.8)',
-                    content: 'Maximal target',
+                    content: t('entities.graph.target.maximum'),
                     enabled: true,
                   },
                 },
@@ -217,7 +220,7 @@ class ProductsContractedGraph extends React.Component<Props, State> {
                   borderWidth: 2,
                   label: {
                     backgroundColor: 'rgba(41, 48, 101, 0.8)',
-                    content: 'Maximal target',
+                    content: t('entities.graph.target.maximum'),
                     enabled: true,
                   },
                 },
@@ -262,7 +265,7 @@ class ProductsContractedGraph extends React.Component<Props, State> {
                   borderWidth: 2,
                   label: {
                     backgroundColor: 'rgba(41, 48, 101, 0.8)',
-                    content: 'Minimal target',
+                    content: t('entities.graph.target.minimum'),
                     enabled: true,
                   },
                 },
@@ -276,7 +279,7 @@ class ProductsContractedGraph extends React.Component<Props, State> {
                   borderWidth: 2,
                   label: {
                     backgroundColor: 'rgba(41, 48, 101, 0.8)',
-                    content: 'Maximal target',
+                    content: t('entities.graph.target.maximum'),
                     enabled: true,
                   },
                 },
@@ -299,6 +302,7 @@ class ProductsContractedGraph extends React.Component<Props, State> {
   };
 
   render() {
+    const { t } = this.props;
     const { data, loading, dataSetSelection } = this.state;
 
     if (data === undefined || loading) {
@@ -318,8 +322,8 @@ class ProductsContractedGraph extends React.Component<Props, State> {
             <Grid.Column textAlign="right" verticalAlign="bottom" style={{ fontSize: '1.2em' }}>
               <Dropdown
                 options={[
-                  { key: 1, value: DataSet.VALUES, text: 'Values (€)' },
-                  { key: 2, value: DataSet.AMOUNTS, text: 'Amounts' },
+                  { key: 1, value: DataSet.VALUES, text: t('entities.graph.label.value') },
+                  { key: 2, value: DataSet.AMOUNTS, text: t('entities.graph.label.amount') },
                 ]}
                 basic
                 value={dataSetSelection}
@@ -346,4 +350,4 @@ class ProductsContractedGraph extends React.Component<Props, State> {
   }
 }
 
-export default ProductsContractedGraph;
+export default withTranslation()(ProductsContractedGraph);

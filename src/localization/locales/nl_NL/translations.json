@@ -1,15 +1,30 @@
 {
   "Welcome to React": "Welkom bij React en react-i18next",
+  "activities": {
+    "button": {
+      "details": "Opmerking details",
+      "postComment": "Plaats opmerking",
+      "writeComment": "Voeg opmerking toe"
+    },
+    "newComment": "Schrijf een nieuwe opmerking..."
+  },
   "buttons": {
     "files": {
       "cancel": "Annuleren",
       "delete": "Verwijder bestand",
       "download": "Download bestand",
       "edit": "Bewerk bestand",
-      "save": "Bestand opslaan"
+      "save": "Bestand opslaan",
+      "upload": "Upload bestanden"
     }
   },
   "dashboard": {
+    "categoryLinechart": {
+      "header": "Gecontracteerde producten"
+    },
+    "expiredInvoices": {
+      "header": "Verlopen facturen"
+    },
     "financialOverview": {
       "contracted": "Gecontracteerd",
       "contractedShort": "Gecontract.",
@@ -21,9 +36,38 @@
       "paid": "Voldaan",
       "suggested": "Voorgesteld",
       "value": "Waarde"
-    }
+    },
+    "recentContracts": {
+      "allContracts": "Alle contracten...",
+      "header": "Recente contracten"
+    },
+    "welcome": "Welkom terug,"
   },
   "entities": {
+    "graph": {
+      "label": {
+        "amount": "Aantal",
+        "value": "Waarde (€)"
+      },
+      "month": {
+        "apr": "April",
+        "aug": "Augustus",
+        "dec": "December",
+        "feb": "Februari",
+        "jan": "Januari",
+        "jul": "Juli",
+        "jun": "Juni",
+        "maa": "Maart",
+        "mei": "Mei",
+        "nov": "November",
+        "okt": "Oktober",
+        "sep": "September"
+      },
+      "target": {
+        "maximum": "Maximum target",
+        "minimum": "Minimum target"
+      }
+    },
     "status": {
       "cancelled": "Geannuleerd",
       "confirmed": "Bevestigd",
@@ -40,13 +84,19 @@
     }
   },
   "entity": {
+    "activities": "Activiteiten",
     "company": "Bedrijf",
     "contact": "Contact",
     "contract": "Contract",
+    "contracts": "Contracten",
+    "files": "Bestanden",
+    "insights": "Inzichten",
     "invoice": "Factuur",
+    "invoices": "Facturen",
     "product": "Product",
     "productcategory": "Product Categorie",
     "productinstance": "Product Instantie",
+    "products": "Producten",
     "user": "Gebruiker"
   },
   "mainMenu": {
@@ -65,10 +115,16 @@
   },
   "other": {
     "dateTime": {
-      "at": "om"
+      "at": "om",
+      "by": "door"
     }
   },
   "pages": {
+    "customInvoice": {
+      "descriptionHeader": "Invoice description",
+      "header": "Handmatige factuur",
+      "subheader": "Het leven van de penno vermakkelijken"
+    },
     "tables": {
       "footer": {
         "items": "Items {{begin}} tot {{end}} van {{total}} geladen",
@@ -81,8 +137,16 @@
         }
       },
       "generalColumns": {
+        "amount": "Aantal",
+        "company": "Bedrijf",
         "id": "ID",
-        "lastUpdate": "Laatste update"
+        "lastUpdate": "Laatste update",
+        "name": "Naam",
+        "price": "Prijs",
+        "status": "Status",
+        "title": "Titel",
+        "total": "Totaal",
+        "year": "Jaar"
       },
       "header": {
         "clear": "Wis zoekopdracht",
@@ -105,6 +169,41 @@
         "lastSeenMessageNever": "Nooit bijgewerkt door de penningmeester",
         "updateLastSeen": "Update Laatst Gezien",
         "updateLastSeenDescription": "Door \"laatst gezien\" te updaten, laat je weten dat alle factuurstatussen zijn bijgewerkt."
+      },
+      "products": {
+        "addProduct": "Voeg product toe",
+        "columns": {
+          "category": "Categorie"
+        },
+        "header": "Alle producten",
+        "subheader": "Producten"
+      }
+    }
+  },
+  "products": {
+    "noActivities": "Er zjin nog geen activiteiten.",
+    "noContract": "Er zijn nog geen contracten aangemaakt.",
+    "noFiles": "Er zijn nog geen facturen toegevoegd.",
+    "noInvoice": "Er zijn nog geen bestanden geupload.",
+    "props": {
+      "category": "Product categorie",
+      "comments": "Opmerkingen (intern)",
+      "contractTextEn": "Contracttekst (Engels)",
+      "contractTextNl": "Contracttekst (Nederlands)",
+      "customPrice": "Prijslijst",
+      "customPriceButton": "Voeg prijslijst toe",
+      "header": "Nieuw product",
+      "maxTarget": "Maximum target",
+      "minTarget": "Minimum target",
+      "nameEn": "Titel (Engels)",
+      "nameNl": "Titel (Nederlands)",
+      "price": "Prijs",
+      "specsEn": "Aanleverspecificaties (Engels)",
+      "specsNl": "Aanleverspecificaties (Nederlands)",
+      "status": {
+        "active": "Actief",
+        "header": "Status",
+        "inactive": "Inactief"
       }
     }
   }

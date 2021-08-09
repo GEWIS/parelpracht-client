@@ -55,7 +55,7 @@ class FinancialOverview extends React.Component<Props, State> {
         t('dashboard.financialOverview.paid')],
       datasets: [
         {
-          label: 'Amount',
+          label: t('entities.graph.label.amount'),
           backgroundColor: 'rgba(41, 48, 101, 0.8)',
           borderColor: 'rgba(41, 48, 101, 1)',
           borderWidth: 1,
