@@ -248,7 +248,7 @@ class SingleFile extends React.Component<Props, State> {
               onChange={(e) => this.setState({ fileName: e.target.value })}
             />
           </Table.Cell>
-          <Table.Cell>{formatLastUpdate(file!.updatedAt)}</Table.Cell>
+          <Table.Cell>{formatLastUpdate(file!.updatedAt, t)}</Table.Cell>
           <Table.Cell>
             <Button
               icon="x"
@@ -288,7 +288,7 @@ class SingleFile extends React.Component<Props, State> {
             </>
           ) : undefined}
         </Table.Cell>
-        <Table.Cell>{formatLastUpdate(file!.updatedAt)}</Table.Cell>
+        <Table.Cell>{formatLastUpdate(file!.updatedAt, t)}</Table.Cell>
         <Table.Cell>
           <AuthorizationComponent roles={[Roles.GENERAL, Roles.ADMIN]} notFound={false}>
             <Popup

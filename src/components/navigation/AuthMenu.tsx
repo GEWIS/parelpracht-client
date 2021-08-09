@@ -93,13 +93,13 @@ function AuthMenu(props: Props) {
       >
         <Dropdown.Menu>
           <Dropdown.Item
-            onClick={() => changeLanguage('en_US')}
+            onClick={() => changeLanguage('en-US')}
           >
             <Flag name="us" />
             English
           </Dropdown.Item>
           <Dropdown.Item
-            onClick={() => changeLanguage('nl_NL')}
+            onClick={() => changeLanguage('nl-NL')}
           >
             <Flag name="nl" />
             Nederlands

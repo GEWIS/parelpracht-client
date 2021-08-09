@@ -4,6 +4,7 @@ import { Dispatch } from 'redux';
 import {
   Dimmer, Loader, Segment, Table,
 } from 'semantic-ui-react';
+import { useTranslation } from 'react-i18next';
 import { Invoice, Roles } from '../../../clients/server.generated';
 import TablePagination from '../../TablePagination';
 import { RootState } from '../../../stores/store';
@@ -49,6 +50,8 @@ function InvoicesTable({
   total, fetched, skip, take, status,
   prevPage, nextPage, setTake, hasRole,
 }: Props) {
+  const { t } = useTranslation();
+
   if ([Roles.FINANCIAL].some(hasRole) && ![Roles.ADMIN].some(hasRole)) {
     useEffect(() => {
       setSort('id', 'DESC');
@@ -61,80 +64,8 @@ function InvoicesTable({
       fetchInvoices();
     }, []);
   }
-  if (status === ResourceStatus.FETCHING || status === ResourceStatus.SAVING) {
-    return (
-      <>
-        <Segment style={{ padding: '0px' }}>
-          <Dimmer active inverted>
-            <Loader inverted />
-          </Dimmer>
-          <Table singleLine selectable attached sortable fixed>
-            <Table.Header>
-              <Table.Row>
-                <Table.HeaderCell
-                  sorted={column === 'id' ? direction : undefined}
-                  onClick={() => changeSort('id')}
-                  width={1}
-                >
-                  ID
-                </Table.HeaderCell>
-                <Table.HeaderCell
-                  sorted={column === 'title' ? direction : undefined}
-                  onClick={() => changeSort('title')}
-                  width={4}
-                >
-                  Title
-                </Table.HeaderCell>
-                <Table.HeaderCell
-                  sorted={column === 'company' ? direction : undefined}
-                  onClick={() => changeSort('company')}
-                  width={3}
-                >
-                  Company
-                  <CompanyFilter table={Tables.Invoices} />
-                </Table.HeaderCell>
-                <Table.HeaderCell width={2}>
-                  Status
-                  <InvoiceStatusFilter />
-                </Table.HeaderCell>
-                <Table.HeaderCell width={2}>
-                  Amount
-                </Table.HeaderCell>
-                <Table.HeaderCell
-                  width={2}
-                  sorted={column === 'startDate' ? direction : undefined}
-                  onClick={() => changeSort('startDate')}
-                >
-                  Financial Year
-                </Table.HeaderCell>
-                <Table.HeaderCell
-                  width={3}
-                  sorted={column === 'updatedAt' ? direction : undefined}
-                  onClick={() => changeSort('updatedAt')}
-                >
-                  Last Update
-                </Table.HeaderCell>
-              </Table.Row>
-            </Table.Header>
-            <Table.Body>
-              {invoices.map((x) => <InvoiceRow invoice={x} key={x.id} />)}
-            </Table.Body>
-          </Table>
-          <TablePagination
-            countTotal={total}
-            countFetched={fetched}
-            skip={skip}
-            take={take}
-            nextPage={nextPage}
-            prevPage={prevPage}
-            setTake={setTake}
-          />
-        </Segment>
-      </>
-    );
-  }
 
-  return (
+  const table = (
     <>
       <Table singleLine selectable attached sortable fixed>
         <Table.Header>
@@ -144,43 +75,43 @@ function InvoicesTable({
               onClick={() => changeSort('id')}
               width={1}
             >
-              ID
+              {t('pages.tables.generalColumns.id')}
             </Table.HeaderCell>
             <Table.HeaderCell
               sorted={column === 'title' ? direction : undefined}
               onClick={() => changeSort('title')}
               width={4}
             >
-              Title
+              {t('pages.tables.invoices.columns.title')}
             </Table.HeaderCell>
             <Table.HeaderCell
               sorted={column === 'company' ? direction : undefined}
               onClick={() => changeSort('company')}
               width={3}
             >
-              Company
+              {t('pages.tables.invoices.columns.company')}
               <CompanyFilter table={Tables.Invoices} />
             </Table.HeaderCell>
             <Table.HeaderCell width={2}>
-              Status
+              {t('pages.tables.invoices.columns.status')}
               <InvoiceStatusFilter />
             </Table.HeaderCell>
             <Table.HeaderCell width={2}>
-              Amount
+              {t('pages.tables.invoices.columns.amount')}
             </Table.HeaderCell>
             <Table.HeaderCell
               width={2}
               sorted={column === 'startDate' ? direction : undefined}
               onClick={() => changeSort('startDate')}
             >
-              Financial Year
+              {t('pages.tables.invoices.columns.financialYear')}
             </Table.HeaderCell>
             <Table.HeaderCell
               width={3}
               sorted={column === 'updatedAt' ? direction : undefined}
               onClick={() => changeSort('updatedAt')}
             >
-              Last Update
+              {t('pages.tables.generalColumns.lastUpdate')}
             </Table.HeaderCell>
           </Table.Row>
         </Table.Header>
@@ -199,6 +130,21 @@ function InvoicesTable({
       />
     </>
   );
+
+  if (status === ResourceStatus.FETCHING || status === ResourceStatus.SAVING) {
+    return (
+      <>
+        <Segment style={{ padding: '0px' }}>
+          <Dimmer active inverted>
+            <Loader inverted />
+          </Dimmer>
+          {table}
+        </Segment>
+      </>
+    );
+  }
+
+  return table;
 }
 
 const mapStateToProps = (state: RootState) => {

@@ -2,6 +2,7 @@ import { connect } from 'react-redux';
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { Table } from 'semantic-ui-react';
+import { useTranslation } from 'react-i18next';
 import { Invoice, InvoiceStatus } from '../../../clients/server.generated';
 import { RootState } from '../../../stores/store';
 import { dateToFullFinancialYear, formatLastUpdate } from '../../../helpers/timestamp';
@@ -20,6 +21,13 @@ function InvoiceRow(props: Props) {
   const {
     invoice, value, invoiceStatus,
   } = props;
+  const { t } = useTranslation();
+
+  const status = formatStatus(invoiceStatus, t);
+  const amount = formatPriceFull(value);
+  const financialYear = dateToFullFinancialYear(invoice.startDate);
+  const lastUpdate = formatLastUpdate(invoice.updatedAt, t);
+
   return (
     <Table.Row>
       <Table.Cell>
@@ -35,17 +43,17 @@ function InvoiceRow(props: Props) {
       <Table.Cell>
         <CompanyLink id={invoice.companyId} />
       </Table.Cell>
-      <Table.Cell>
-        {formatStatus(invoiceStatus)}
+      <Table.Cell title={status}>
+        {status}
       </Table.Cell>
-      <Table.Cell>
-        {formatPriceFull(value)}
+      <Table.Cell title={amount}>
+        {amount}
       </Table.Cell>
-      <Table.Cell>
-        {dateToFullFinancialYear(invoice.startDate)}
+      <Table.Cell title={financialYear}>
+        {financialYear}
       </Table.Cell>
-      <Table.Cell>
-        {formatLastUpdate(invoice.updatedAt)}
+      <Table.Cell title={lastUpdate}>
+        {lastUpdate}
       </Table.Cell>
     </Table.Row>
   );

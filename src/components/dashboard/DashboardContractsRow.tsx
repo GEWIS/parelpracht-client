@@ -4,13 +4,14 @@ import {
   Button, Header, Icon, Segment, Image, Table,
 } from 'semantic-ui-react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
+import { withTranslation, WithTranslation } from 'react-i18next';
 import { RecentContract } from '../../clients/server.generated';
 import { RootState } from '../../stores/store';
 import { formatActivityDate } from '../../helpers/activity';
 import { getUserName } from '../../stores/user/selectors';
 import { getCompanyLogo, getCompanyName } from '../../stores/company/selectors';
 
-interface Props extends RouteComponentProps {
+interface Props extends RouteComponentProps, WithTranslation {
   contract: RecentContract;
   company: string;
   user: string;
@@ -20,7 +21,7 @@ interface Props extends RouteComponentProps {
 class DashboardContractsRow extends React.Component<Props> {
   render() {
     const {
-      contract, logoFilename, company, user,
+      contract, logoFilename, company, user, t,
     } = this.props;
     const logo = logoFilename !== '' ? (
       <Image
@@ -60,7 +61,7 @@ class DashboardContractsRow extends React.Component<Props> {
                     {' - '}
                     {contract.title}
                     <Header.Subheader>
-                      {formatActivityDate(contract.updatedAt, user)}
+                      {formatActivityDate(contract.updatedAt, user, t)}
                     </Header.Subheader>
                   </Header.Content>
                 </Header>
@@ -79,4 +80,4 @@ const mapStateToProps = (state: RootState, props: { contract: RecentContract }) 
   logoFilename: getCompanyLogo(state, props.contract.companyId),
 });
 
-export default withRouter(connect(mapStateToProps)(DashboardContractsRow));
+export default withTranslation()(withRouter(connect(mapStateToProps)(DashboardContractsRow)));

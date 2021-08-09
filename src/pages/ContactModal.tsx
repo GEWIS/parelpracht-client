@@ -8,6 +8,7 @@ import {
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import { NavLink, RouteComponentProps, withRouter } from 'react-router-dom';
+import { withTranslation, WithTranslation } from 'react-i18next';
 import {
   Contact, ContactFunction, ContractStatus, Gender,
 } from '../clients/server.generated';
@@ -25,7 +26,8 @@ import { formatStatus } from '../helpers/activity';
 import { getContractStatus } from '../stores/contract/selectors';
 import CompanyLink from '../components/entities/company/CompanyLink';
 
-interface Props extends RouteComponentProps<{ companyId: string, contactId?: string }> {
+interface Props extends RouteComponentProps<{ companyId: string, contactId?: string }>,
+  WithTranslation {
   create?: boolean;
   onCompanyPage: boolean;
   contact: Contact | undefined;
@@ -167,7 +169,7 @@ class ContactModal extends React.Component<Props> {
                     <CompanyLink id={contract.companyId} />
                   </Table.Cell>
                   <Table.Cell>
-                    {formatStatus(this.props.getContractStatus(contract.id))}
+                    {formatStatus(this.props.getContractStatus(contract.id), this.props.t)}
                   </Table.Cell>
                 </Table.Row>
               );
@@ -215,4 +217,5 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   showTransientAlert: (alert: TransientAlert) => dispatch(showTransientAlert(alert)),
 });
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ContactModal));
+export default withTranslation()(withRouter(connect(mapStateToProps,
+  mapDispatchToProps)(ContactModal)));

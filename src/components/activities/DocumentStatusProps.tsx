@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Form } from 'semantic-ui-react';
 import { Dispatch } from 'redux';
+import { withTranslation, WithTranslation } from 'react-i18next';
 import {
   ContractStatusParams,
   InvoiceStatusParams,
@@ -15,7 +16,7 @@ import { DocumentStatus } from './DocumentStatus';
 import { createInstanceStatusSingle } from '../../stores/productinstance/actionCreator';
 import TextArea from '../TextArea';
 
-interface Props {
+interface Props extends WithTranslation {
   create?: boolean;
   createSingleStatus: (entity: SingleEntities, id: number, statusParams: object) => void;
   createSingleInstanceStatus: (id: number, instanceId: number, statusParam: object) => void;
@@ -103,13 +104,13 @@ class DocumentStatusProps extends React.Component<Props, State> {
       editing,
       description,
     } = this.state;
-    const { documentStatus, documentType } = this.props;
+    const { documentStatus, documentType, t } = this.props;
 
     return (
       <>
         <h2>
-          {this.props.create ? `Post ${formatStatus(documentStatus)} Status`
-            : `${formatStatus(documentStatus)} Details} `}
+          {this.props.create ? `Post ${formatStatus(documentStatus, t)} Status`
+            : `${formatStatus(documentStatus, t)} Details} `}
 
           <PropsButtons
             editing={editing}
@@ -156,4 +157,4 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   ),
 });
 
-export default connect(null, mapDispatchToProps)(DocumentStatusProps);
+export default withTranslation()(connect(null, mapDispatchToProps)(DocumentStatusProps));

@@ -1,3 +1,4 @@
+import { TFunction } from 'react-i18next';
 import { GeneralActivity } from '../components/activities/GeneralActivity';
 import { formatLastUpdate } from './timestamp';
 import {
@@ -79,8 +80,8 @@ export function formatActivityType(
  * @param date date of the activity
  * @param userName of the user who performed the activity
  */
-export function formatActivityDate(date: Date, userName: string): string {
-  const dateString = formatLastUpdate(date);
+export function formatActivityDate(date: Date, userName: string, t: TFunction): string {
+  const dateString = formatLastUpdate(date, t);
   return `${dateString} by ${userName}`;
 }
 
@@ -99,14 +100,15 @@ export function formatActivitySummary(
 /**
  * Get the status in a string with the first character as uppercase and the rest lowercase.
  */
-export function formatStatus(status: string | undefined): string {
+export function formatStatus(status: string | undefined, t: TFunction): string {
   if (status === undefined) {
-    return 'Unknown';
+    return t('entities.status.unknown');
   }
   if (status === ProductInstanceStatus.NOTDELIVERED) {
-    return 'Not delivered';
+    return t('entities.status.notDelivered');
   }
-  return status.substring(0, 1).toUpperCase() + status.slice(1).toLowerCase();
+
+  return t(`entities.status.${status.toLowerCase()}`);
 }
 
 /**

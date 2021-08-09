@@ -1,0 +1,111 @@
+{
+  "Welcome to React": "Welkom bij React en react-i18next",
+  "buttons": {
+    "files": {
+      "cancel": "Annuleren",
+      "delete": "Verwijder bestand",
+      "download": "Download bestand",
+      "edit": "Bewerk bestand",
+      "save": "Bestand opslaan"
+    }
+  },
+  "dashboard": {
+    "financialOverview": {
+      "contracted": "Gecontracteerd",
+      "contractedShort": "Gecontract.",
+      "delivered": "Geleverd",
+      "header": "Financieel overzicht",
+      "invoiced": "Gefactureerd",
+      "notDelivered": "Niet geleverd",
+      "nrOfProducts": "# Producten",
+      "paid": "Voldaan",
+      "suggested": "Voorgesteld",
+      "value": "Waarde"
+    }
+  },
+  "entities": {
+    "status": {
+      "cancelled": "Geannuleerd",
+      "confirmed": "Bevestigd",
+      "created": "Aangemaakt",
+      "deferred": "Uitgesteld",
+      "delivered": "Geleverd",
+      "finished": "Afgerond",
+      "irrecoverable": "Oninbaar",
+      "notDelivered": "Niet geleverd",
+      "paid": "Betaald",
+      "proposed": "Voorgesteld",
+      "sent": "Verstuurd",
+      "unknown": "Onbekend"
+    }
+  },
+  "entity": {
+    "company": "Bedrijf",
+    "contact": "Contact",
+    "contract": "Contract",
+    "invoice": "Factuur",
+    "product": "Product",
+    "productcategory": "Product Categorie",
+    "productinstance": "Product Instantie",
+    "user": "Gebruiker"
+  },
+  "mainMenu": {
+    "admin": "Admin",
+    "categories": "Categorieën",
+    "companies": "Bedrijven",
+    "contacts": "Contactpersonen",
+    "contracts": "Contracten",
+    "custom": "Handmatig",
+    "insights": "Inzicht",
+    "invoices": "Facturen",
+    "logout": "Uitloggen",
+    "myProfile": "Mijn profiel",
+    "products": "Producten",
+    "users": "Gebruikers"
+  },
+  "other": {
+    "dateTime": {
+      "at": "om"
+    }
+  },
+  "pages": {
+    "tables": {
+      "footer": {
+        "items": "Items {{begin}} tot {{end}} van {{total}} geladen",
+        "pagination": {
+          "all": "Alles",
+          "allItems": "Alle items",
+          "next": "Volgende pagina",
+          "nrItems": "{{take}} items",
+          "previous": "Vorige pagina"
+        }
+      },
+      "generalColumns": {
+        "id": "ID",
+        "lastUpdate": "Laatste update"
+      },
+      "header": {
+        "clear": "Wis zoekopdracht",
+        "items": "{{items}} van {{total}} item(s) geladen",
+        "refresh": "Herlaad tabel",
+        "search": "Zoeken...",
+        "sorting": "gesorteerd op {{column}}",
+        "update": "{{time}} bijgewerkt"
+      },
+      "invoices": {
+        "columns": {
+          "amount": "Bedrag",
+          "company": "Bedrijf",
+          "financialYear": "Boekjaar",
+          "status": "Status",
+          "title": "Titel"
+        },
+        "header": "Alle facturen",
+        "lastSeenMessage": "{{timeAgo}} bijgewerkt door de penningmeester",
+        "lastSeenMessageNever": "Nooit bijgewerkt door de penningmeester",
+        "updateLastSeen": "Update Laatst Gezien",
+        "updateLastSeenDescription": "Door \"laatst gezien\" te updaten, laat je weten dat alle factuurstatussen zijn bijgewerkt."
+      }
+    }
+  }
+}

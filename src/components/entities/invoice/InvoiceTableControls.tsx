@@ -1,6 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
+import TimeAgo from 'javascript-time-ago';
+import { useTranslation } from 'react-i18next';
 import { sortColumn } from '../../../stores/invoice/selectors';
 import ResourceStatus from '../../../stores/resourceStatus';
 import { RootState } from '../../../stores/store';
@@ -9,7 +11,6 @@ import { fetchTable, searchTable } from '../../../stores/tables/actionCreators';
 import { Tables } from '../../../stores/tables/tables';
 import { Invoice } from '../../../clients/server.generated';
 import { countFetched, countTotal, getTable } from '../../../stores/tables/selectors';
-import { formatLastUpdate } from '../../../helpers/timestamp';
 
 interface Props {
   status: ResourceStatus;
@@ -26,10 +27,13 @@ interface Props {
 }
 
 function InvoiceTableControls(props: Props) {
+  const timeAgo = new TimeAgo();
+  const { t } = useTranslation();
+
   const formatLastSeenDate = (): string => {
     return props.lastSeenDate
-      ? `Last updated by the treasurer at ${formatLastUpdate(props.lastSeenDate)}`
-      : 'Never updated by the treasurer';
+      ? t('pages.tables.invoices.lastSeenMessage', { timeAgo: timeAgo.format(props.lastSeenDate) })
+      : t('pages.tables.invoices.lastSeenMessageNever');
   };
 
   return (

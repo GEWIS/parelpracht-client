@@ -6,6 +6,7 @@ import {
 import { connect } from 'react-redux';
 import './Activity.scss';
 import { Dispatch } from 'redux';
+import { withTranslation, WithTranslation } from 'react-i18next';
 import { RootState } from '../../stores/store';
 import { getUserAvatar } from '../../stores/user/selectors';
 import { formatActivitySummary } from '../../helpers/activity';
@@ -23,7 +24,7 @@ import { TransientAlert } from '../../stores/alerts/actions';
 import { showTransientAlert } from '../../stores/alerts/actionCreators';
 import AuthorizationComponent from '../AuthorizationComponent';
 
-interface Props extends RouteComponentProps {
+interface Props extends RouteComponentProps, WithTranslation {
   activity: GeneralActivity;
   componentId: number;
   componentType: SingleEntities;
@@ -55,7 +56,9 @@ class ActivityComponent extends React.Component<Props> {
   };
 
   public render() {
-    const { activity, avatarUrl, componentType } = this.props;
+    const {
+      activity, avatarUrl, componentType, t,
+    } = this.props;
     const feedLabel = (
       <UserAvatar size="3em" fileName={avatarUrl} clickable={false} />
     );
@@ -118,7 +121,7 @@ class ActivityComponent extends React.Component<Props> {
         </Feed.Label>
         <Feed.Content style={{ marginBottom: '1em', width: '85%' }}>
           <Feed.Date>
-            {formatLastUpdate(activity.createdAt)}
+            {formatLastUpdate(activity.createdAt, t)}
           </Feed.Date>
           <Feed.Summary>
             {summaryType}
@@ -149,4 +152,5 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   showTransientAlert: (alert: TransientAlert) => dispatch(showTransientAlert(alert)),
 });
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ActivityComponent));
+export default withTranslation()(withRouter(connect(mapStateToProps,
+  mapDispatchToProps)(ActivityComponent)));

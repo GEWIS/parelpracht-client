@@ -1,0 +1,111 @@
+{
+  "Welcome to React": "Welcome to React and react-i18next",
+  "buttons": {
+    "files": {
+      "cancel": "Cancel upload",
+      "delete": "Delete file",
+      "download": "Download file",
+      "edit": "Edit file",
+      "save": "Save file"
+    }
+  },
+  "dashboard": {
+    "financialOverview": {
+      "contracted": "Contracted",
+      "contractedShort": "Contracted",
+      "delivered": "Delivered",
+      "header": "Financial Overview",
+      "invoiced": "Invoiced",
+      "notDelivered": "Not delivered",
+      "nrOfProducts": "# Products",
+      "paid": "Paid",
+      "suggested": "Suggested",
+      "value": "Value"
+    }
+  },
+  "entities": {
+    "status": {
+      "cancelled": "Cancelled",
+      "confirmed": "Confirmed",
+      "created": "Created",
+      "deferred": "Deferred",
+      "delivered": "Delivered",
+      "finished": "Finished",
+      "irrecoverable": "Irrecoverable",
+      "notDelivered": "Not delivered",
+      "paid": "Paid",
+      "proposed": "Proposed",
+      "sent": "Sent",
+      "unknown": "Unknown"
+    }
+  },
+  "entity": {
+    "company": "Company",
+    "contact": "Contact",
+    "contract": "Contract",
+    "invoice": "Invoice",
+    "product": "Product",
+    "productcategory": "Product Category",
+    "productinstance": "Product Instance",
+    "user": "User"
+  },
+  "mainMenu": {
+    "admin": "Admin",
+    "categories": "Categories",
+    "companies": "Companies",
+    "contacts": "Contacts",
+    "contracts": "Contracts",
+    "custom": "Custom",
+    "insights": "Insights",
+    "invoices": "Invoices",
+    "logout": "Logout",
+    "myProfile": "My Profile",
+    "products": "Products",
+    "users": "Users"
+  },
+  "other": {
+    "dateTime": {
+      "at": "at"
+    }
+  },
+  "pages": {
+    "tables": {
+      "footer": {
+        "items": "Showing {{begin}} to {{end}} of {{total}}",
+        "pagination": {
+          "all": "All",
+          "allItems": "All items",
+          "next": "Next page",
+          "nrItems": "{{take}} items",
+          "previous": "Previous page"
+        }
+      },
+      "generalColumns": {
+        "id": "ID",
+        "lastUpdate": "Last update"
+      },
+      "header": {
+        "clear": "Clear search",
+        "items": "{{items}} of {{total}} item(s) shown",
+        "refresh": "Refresh table",
+        "search": "Search...",
+        "sorting": "sorted on {{column}}",
+        "update": "updated {{time}}"
+      },
+      "invoices": {
+        "columns": {
+          "amount": "Amount",
+          "company": "Company",
+          "financialYear": "Financial Year",
+          "status": "Status",
+          "title": "Title"
+        },
+        "header": "All invoices",
+        "lastSeenMessage": "Last updated by the treasurer {{timeAgo}}",
+        "lastSeenMessageNever": "Never updated by the treasurer",
+        "updateLastSeen": "Update Last Seen",
+        "updateLastSeenDescription": "By updating the last seen, you indicate that all invoice statuses have been updated."
+      }
+    }
+  }
+}

@@ -6,6 +6,7 @@ import {
 } from 'semantic-ui-react';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
+import { WithTranslation, withTranslation } from 'react-i18next';
 import InvoicesTable from '../components/entities/invoice/InvoiceTable';
 import InvoiceTableControls from '../components/entities/invoice/InvoiceTableControls';
 import { Client, Roles } from '../clients/server.generated';
@@ -13,7 +14,7 @@ import { fetchTable } from '../stores/tables/actionCreators';
 import { Tables } from '../stores/tables/tables';
 import AuthorizationComponent from '../components/AuthorizationComponent';
 
-interface Props extends RouteComponentProps {
+interface Props extends RouteComponentProps, WithTranslation {
   refresh: () => void;
 }
 
@@ -26,6 +27,8 @@ class InvoicesPage extends React.Component<Props> {
   };
 
   render() {
+    const { t } = this.props;
+
     return (
       <AuthorizationComponent
         roles={[Roles.FINANCIAL, Roles.GENERAL, Roles.ADMIN, Roles.AUDIT]}
@@ -38,8 +41,8 @@ class InvoicesPage extends React.Component<Props> {
                 <Header as="h1">
                   <Icon name="file alternate" />
                   <Header.Content>
-                    <Header.Subheader>Invoices</Header.Subheader>
-                    All Invoices
+                    <Header.Subheader>{t('mainMenu.invoices')}</Header.Subheader>
+                    {t('pages.tables.invoices.header')}
                   </Header.Content>
                 </Header>
               </Grid.Column>
@@ -49,12 +52,12 @@ class InvoicesPage extends React.Component<Props> {
                     trigger={(
                       <Button icon labelPosition="left" primary floated="right" onClick={() => this.updateTreasurerLastSeen()}>
                         <Icon name="eye" />
-                        Update Last Seen
+                        {t('pages.tables.invoices.updateLastSeen')}
                       </Button>
                     )}
                     mouseEnterDelay={500}
-                    header="Update Last Seen"
-                    content="By updating the last seen, you indicate that all invoice statuses have been updated."
+                    header={t('pages.tables.invoices.updateLastSeen')}
+                    content={t('pages.tables.invoices.updateLastSeenDescription')}
                   />
                 </AuthorizationComponent>
               </Grid.Column>
@@ -76,4 +79,4 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   refresh: () => dispatch(fetchTable(Tables.Invoices)),
 });
 
-export default withRouter(connect(null, mapDispatchToProps)(InvoicesPage));
+export default withTranslation()(withRouter(connect(null, mapDispatchToProps)(InvoicesPage)));

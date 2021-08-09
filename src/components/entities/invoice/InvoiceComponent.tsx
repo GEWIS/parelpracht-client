@@ -3,6 +3,7 @@ import {
   Table,
 } from 'semantic-ui-react';
 import { connect } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 import { getCompanyName } from '../../../stores/company/selectors';
 import { RootState } from '../../../stores/store';
 import { dateToFullFinancialYear, formatLastUpdate } from '../../../helpers/timestamp';
@@ -22,6 +23,7 @@ function InvoiceComponent(props: Props) {
   const {
     invoice, invoiceStatus, invoiceValue,
   } = props;
+  const { t } = useTranslation();
 
   return (
     <Table.Row>
@@ -32,13 +34,13 @@ function InvoiceComponent(props: Props) {
         {formatPriceFull(invoiceValue)}
       </Table.Cell>
       <Table.Cell>
-        {formatStatus(invoiceStatus)}
+        {formatStatus(invoiceStatus, t)}
       </Table.Cell>
       <Table.Cell>
         {dateToFullFinancialYear(invoice.startDate)}
       </Table.Cell>
       <Table.Cell>
-        {formatLastUpdate(invoice.updatedAt)}
+        {formatLastUpdate(invoice.updatedAt, t)}
       </Table.Cell>
     </Table.Row>
   );

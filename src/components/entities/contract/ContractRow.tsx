@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { NavLink, RouteComponentProps, withRouter } from 'react-router-dom';
 import { Table } from 'semantic-ui-react';
+import { useTranslation } from 'react-i18next';
 import { Contract, ContractStatus } from '../../../clients/server.generated';
 import { getCompanyName } from '../../../stores/company/selectors';
 import { getContactName } from '../../../stores/contact/selectors';
@@ -23,6 +24,8 @@ function ContractRow(props: Props) {
   const {
     contract, value, contactName, contractStatus,
   } = props;
+  const { t } = useTranslation();
+
   return (
     <Table.Row>
       <Table.Cell>
@@ -42,13 +45,13 @@ function ContractRow(props: Props) {
         {contactName}
       </Table.Cell>
       <Table.Cell>
-        {formatStatus(contractStatus)}
+        {formatStatus(contractStatus, t)}
       </Table.Cell>
       <Table.Cell>
         {formatPriceFull(value)}
       </Table.Cell>
       <Table.Cell>
-        {formatLastUpdate(contract.updatedAt)}
+        {formatLastUpdate(contract.updatedAt, t)}
       </Table.Cell>
     </Table.Row>
   );

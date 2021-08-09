@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { Step } from 'semantic-ui-react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { Dispatch } from 'redux';
+import { WithTranslation, withTranslation } from 'react-i18next';
 import {
   formatStatus,
 } from '../../helpers/activity';
@@ -19,7 +20,7 @@ import { authedUserHasRole } from '../../stores/auth/selectors';
 /**
  * Definition of used variables
  */
-interface Props extends RouteComponentProps {
+interface Props extends RouteComponentProps, WithTranslation {
   documentId: number;
   documentType: SingleEntities;
   // If the document is a ProductInstance, the parentId is the contract ID
@@ -61,7 +62,7 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
     const {
       documentId, documentType, status,
       statusChecked, statusClickable, statusDescription, statusDisabled, statusIcon,
-      resourceStatus, parentId, hasRole, roles,
+      resourceStatus, parentId, hasRole, roles, t,
     } = this.props;
     const { stepModalOpen } = this.state;
 
@@ -89,7 +90,7 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
           {statusIcon}
           <Step.Content>
             <Step.Title>
-              {formatStatus(status)}
+              {formatStatus(status, t)}
             </Step.Title>
             <Step.Description style={{ maxWidth: '20ch', wordWrap: 'break-word' }}>
               {statusDescription}
@@ -120,4 +121,5 @@ const mapStateToProps = (state: RootState) => {
   };
 };
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(FinancialDocumentProgress));
+export default withTranslation()(withRouter(connect(mapStateToProps,
+  mapDispatchToProps)(FinancialDocumentProgress)));
