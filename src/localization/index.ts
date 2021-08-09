@@ -42,4 +42,10 @@ export const getLanguage = (): locales => {
   return i18n.language as locales;
 };
 
-TimeAgo.setDefaultLocale(i18n.language);
+const currentLanguage = i18n.language;
+// @ts-ignore
+if (currentLanguage !== 'nl-NL' || currentLanguage !== 'en-US') {
+  TimeAgo.setDefaultLocale('en-US');
+} else {
+  TimeAgo.setDefaultLocale(i18n.language);
+}
