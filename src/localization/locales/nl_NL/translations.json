@@ -21,7 +21,8 @@
   "categories": {
     "addCategory": "Nieuwe categorie",
     "header": "Alle categorieën",
-    "newCategory": "Nieuwe productcategorie"
+    "newCategory": "Nieuwe productcategorie",
+    "noProduct": "Deze categorie heeft geen producten."
   },
   "companies": {
     "header": "Alle bedrijven",

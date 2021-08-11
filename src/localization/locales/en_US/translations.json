@@ -21,7 +21,8 @@
   "categories": {
     "addCategory": "Add category",
     "header": "All categories",
-    "newCategory": "New product category"
+    "newCategory": "New product category",
+    "noProduct": "This category has no products."
   },
   "companies": {
     "header": "All companies",
