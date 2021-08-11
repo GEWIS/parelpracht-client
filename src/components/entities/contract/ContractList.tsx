@@ -4,6 +4,7 @@ import { NavLink, RouteComponentProps, withRouter } from 'react-router-dom';
 import {
   Button, Icon, Loader, Table,
 } from 'semantic-ui-react';
+import { WithTranslation, withTranslation } from 'react-i18next';
 import ContractComponent from './ContractComponent';
 import { Company, Roles } from '../../../clients/server.generated';
 import { getSingle } from '../../../stores/single/selectors';
@@ -11,7 +12,7 @@ import { SingleEntities } from '../../../stores/single/single';
 import { RootState } from '../../../stores/store';
 import AuthorizationComponent from '../../AuthorizationComponent';
 
-interface Props extends RouteComponentProps {
+interface Props extends WithTranslation, RouteComponentProps {
   company: Company | undefined;
 }
 
@@ -25,7 +26,7 @@ class ContractList extends React.Component<Props, State> {
   }
 
   public render() {
-    const { company } = this.props;
+    const { company, t } = this.props;
 
     if (company === undefined) {
       return (
@@ -39,7 +40,7 @@ class ContractList extends React.Component<Props, State> {
       return (
         <>
           <h3>
-            Contracts
+            {t('entity.contracts')}
             <Button
               icon
               labelPosition="left"
@@ -50,11 +51,11 @@ class ContractList extends React.Component<Props, State> {
               to={`${this.props.location.pathname}/contract/new`}
             >
               <Icon name="plus" />
-              Add Contract
+              {t('pages.contracts.addContract')}
             </Button>
           </h3>
           <h4>
-            There are no contracts yet.
+            {t('products.noContract')}
           </h4>
         </>
       );
@@ -63,7 +64,7 @@ class ContractList extends React.Component<Props, State> {
     return (
       <>
         <h3>
-          Contracts
+          {t('entity.contracts')}
 
           <AuthorizationComponent roles={[Roles.GENERAL, Roles.ADMIN]} notFound={false}>
             <Button
@@ -76,7 +77,7 @@ class ContractList extends React.Component<Props, State> {
               to={`${this.props.location.pathname}/contract/new`}
             >
               <Icon name="plus" />
-              Add Contract
+              {t('pages.contracts.addContract')}
             </Button>
           </AuthorizationComponent>
         </h3>
@@ -84,16 +85,16 @@ class ContractList extends React.Component<Props, State> {
           <Table.Header>
             <Table.Row>
               <Table.HeaderCell>
-                Title
+                {t('pages.tables.generalColumns.title')}
               </Table.HeaderCell>
               <Table.HeaderCell>
-                Contact
+                {t('pages.tables.generalColumns.contact')}
               </Table.HeaderCell>
               <Table.HeaderCell>
-                Status
+                {t('pages.tables.generalColumns.status')}
               </Table.HeaderCell>
               <Table.HeaderCell>
-                Last Update
+                {t('pages.tables.generalColumns.lastUpdate')}
               </Table.HeaderCell>
             </Table.Row>
           </Table.Header>
@@ -117,4 +118,6 @@ const mapStateToProps = (state: RootState) => {
 const mapDispatchToProps = () => ({
 });
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ContractList));
+export default withTranslation()(
+  withRouter(connect(mapStateToProps, mapDispatchToProps)(ContractList)),
+);

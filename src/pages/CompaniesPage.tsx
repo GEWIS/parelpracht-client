@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useTranslation } from 'react-i18next';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import {
   Button, Container, Grid, Header, Icon, Segment,
@@ -9,6 +10,8 @@ import CompanyTable from '../components/entities/company/CompanyTable';
 import CompanyTableControls from '../components/entities/company/CompanyTableControls';
 
 function CompaniesPage(props: RouteComponentProps) {
+  const { t } = useTranslation();
+
   return (
     <AuthorizationComponent
       roles={[Roles.GENERAL, Roles.ADMIN, Roles.AUDIT]}
@@ -21,8 +24,8 @@ function CompaniesPage(props: RouteComponentProps) {
               <Header as="h1">
                 <Icon name="building" />
                 <Header.Content>
-                  <Header.Subheader>Companies</Header.Subheader>
-                  All Companies
+                  <Header.Subheader>{t('entity.companies')}</Header.Subheader>
+                  {t('pages.tables.companies.subheader')}
                 </Header.Content>
               </Header>
             </Grid.Column>
@@ -33,7 +36,7 @@ function CompaniesPage(props: RouteComponentProps) {
               >
                 <Button icon labelPosition="left" primary floated="right" onClick={() => props.history.push('/company/new')}>
                   <Icon name="plus" />
-                  Add Company
+                  {t('pages.tables.companies.addCompany')}
                 </Button>
               </AuthorizationComponent>
             </Grid.Column>

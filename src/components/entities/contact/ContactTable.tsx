@@ -4,6 +4,7 @@ import { Dispatch } from 'redux';
 import {
   Dimmer, Loader, Segment, Table,
 } from 'semantic-ui-react';
+import { useTranslation, withTranslation, WithTranslation } from 'react-i18next';
 import { Contact } from '../../../clients/server.generated';
 import TablePagination from '../../TablePagination';
 import { RootState } from '../../../stores/store';
@@ -17,7 +18,7 @@ import ContactCompanyFilter from '../../tablefilters/CompanyFilter';
 import ResourceStatus from '../../../stores/resourceStatus';
 import ContactFunctionFilter from '../../tablefilters/ContactFunctionFilter';
 
-interface Props {
+interface Props extends WithTranslation {
   contacts: Contact[];
   column: string;
   direction: 'ascending' | 'descending';
@@ -42,6 +43,7 @@ function ContactsTable({
   useEffect(() => {
     fetchContacts();
   }, []);
+  const { t } = useTranslation();
 
   const table = (
     <>
@@ -52,26 +54,26 @@ function ContactsTable({
               sorted={column === 'firstName' ? direction : undefined}
               onClick={() => changeSort('firstName')}
             >
-              Name
+              {t('pages.tables.generalColumns.name')}
             </Table.HeaderCell>
             <Table.HeaderCell
               sorted={column === 'company' ? direction : undefined}
               onClick={() => changeSort('company')}
             >
-              Company
+              {t('pages.tables.generalColumns.company')}
               <ContactCompanyFilter table={Tables.Contacts} />
             </Table.HeaderCell>
             <Table.HeaderCell
               sorted={column === 'email' ? direction : undefined}
               onClick={() => changeSort('email')}
             >
-              E-mail
+              {t('contacts.props.email')}
             </Table.HeaderCell>
             <Table.HeaderCell
               sorted={column === 'function' ? direction : undefined}
               onClick={() => changeSort('function')}
             >
-              Function
+              {t('contacts.props.function')}
               <ContactFunctionFilter table={Tables.Contacts} />
             </Table.HeaderCell>
           </Table.Row>
@@ -144,4 +146,6 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   },
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(ContactsTable);
+export default withTranslation()(
+  connect(mapStateToProps, mapDispatchToProps)(ContactsTable),
+);

@@ -1,4 +1,5 @@
 import React, { SyntheticEvent } from 'react';
+import { withTranslation, WithTranslation } from 'react-i18next';
 import { Dropdown, DropdownProps, Form } from 'semantic-ui-react';
 import COUNTRY_OPTIONS from './countries.json';
 
@@ -9,7 +10,7 @@ interface Country {
   text: string,
 }
 
-interface Props {
+interface Props extends WithTranslation {
   editing: boolean;
   country: string;
   updateValue: (e: SyntheticEvent<HTMLElement>, data: DropdownProps) => void;
@@ -25,17 +26,18 @@ class CountrySelector extends React.Component<Props> {
   }
 
   render() {
+    const { t } = this.props;
     return (
       <Form.Field
         disabled={!this.props.editing}
       >
         {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
         <label htmlFor={this.props.id}>
-          Country
+          {t('companies.props.country')}
         </label>
         <Dropdown
           id={this.props.id}
-          placeholder="Country"
+          placeholder={t('companies.props.country')}
           fluid
           search
           selection
@@ -50,4 +52,4 @@ class CountrySelector extends React.Component<Props> {
   }
 }
 
-export default CountrySelector;
+export default withTranslation()(CountrySelector);

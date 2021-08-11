@@ -138,25 +138,26 @@ class ContactModal extends React.Component<Props> {
     }
 
     let contractOverview;
+    const { t } = this.props;
 
     if (this.props.create) {
       contractOverview = '';
     } else if (contact.contracts === undefined || contact.contracts.length === 0) {
-      contractOverview = <p>This user has no contracts</p>;
+      contractOverview = <p>{t('products.noContract')}</p>;
     } else {
       contractOverview = (
         <Segment>
-          <Header>Contracts</Header>
+          <Header>{t('entity.contracts')}</Header>
           <Table>
             <Table.Header>
               <Table.HeaderCell>
-                Title
+                {t('pages.tables.generalColumns.title')}
               </Table.HeaderCell>
               <Table.HeaderCell>
-                Company
+                {t('pages.tables.generalColumns.company')}
               </Table.HeaderCell>
               <Table.HeaderCell>
-                Status
+                {t('pages.tables.generalColumns.status')}
               </Table.HeaderCell>
             </Table.Header>
             {contact.contracts.map((contract) => {

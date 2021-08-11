@@ -4,6 +4,7 @@ import { Dispatch } from 'redux';
 import {
   Dimmer, Loader, Segment, Table,
 } from 'semantic-ui-react';
+import { useTranslation, WithTranslation } from 'react-i18next';
 import { Company } from '../../../clients/server.generated';
 import TablePagination from '../../TablePagination';
 import { RootState } from '../../../stores/store';
@@ -46,6 +47,7 @@ function CompaniesTable({
     setTableFilter({ column: 'status', values: ['ACTIVE'] });
     fetchCompanies();
   }, []);
+  const { t } = useTranslation();
 
   if (status === ResourceStatus.FETCHING || status === ResourceStatus.SAVING) {
     return (
@@ -61,20 +63,20 @@ function CompaniesTable({
                   sorted={column === 'name' ? direction : undefined}
                   onClick={() => changeSort('name')}
                 >
-                  Name
+                  {t('pages.tables.generalColumns.name')}
                 </Table.HeaderCell>
                 <Table.HeaderCell
                   sorted={column === 'status' ? direction : undefined}
                   onClick={() => changeSort('status')}
                 >
-                  Status
+                  {t('pages.tables.generalColumns.status')}
                   <CompanyStatusFilter />
                 </Table.HeaderCell>
                 <Table.HeaderCell
                   sorted={column === 'updatedAt' ? direction : undefined}
                   onClick={() => changeSort('updatedAt')}
                 >
-                  Last Update
+                  {t('pages.tables.generalColumns.lastUpdate')}
                 </Table.HeaderCell>
               </Table.Row>
             </Table.Header>
@@ -105,20 +107,20 @@ function CompaniesTable({
               sorted={column === 'name' ? direction : undefined}
               onClick={() => changeSort('name')}
             >
-              Name
+              {t('pages.tables.generalColumns.name')}
             </Table.HeaderCell>
             <Table.HeaderCell
               sorted={column === 'status' ? direction : undefined}
               onClick={() => changeSort('status')}
             >
-              Status
+              {t('pages.tables.generalColumns.status')}
               <CompanyStatusFilter />
             </Table.HeaderCell>
             <Table.HeaderCell
               sorted={column === 'updatedAt' ? direction : undefined}
               onClick={() => changeSort('updatedAt')}
             >
-              Last Update
+              {t('pages.tables.generalColumns.lastUpdate')}
             </Table.HeaderCell>
           </Table.Row>
         </Table.Header>

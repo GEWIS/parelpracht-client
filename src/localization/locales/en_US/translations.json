@@ -18,6 +18,46 @@
       "upload": "Upload files"
     }
   },
+  "categories": {
+    "addCategory": "Add category",
+    "header": "All categories",
+    "newCategory": "New product category"
+  },
+  "companies": {
+    "header": "All companies",
+    "newCompany": "New company",
+    "props": {
+      "addressInformation": "Address information",
+      "city": "City",
+      "country": "Country",
+      "description": "Description",
+      "details": "Details",
+      "invoiceAddress": "Invoice address",
+      "name": "Name",
+      "number": "Telephone number",
+      "postalCode": "Postal code",
+      "street": "Street and number"
+    }
+  },
+  "contacts": {
+    "header": "All contacts",
+    "newContact": "New contact",
+    "props": {
+      "comments": "Comments",
+      "email": "Email address",
+      "firstName": "First name",
+      "function": "Function",
+      "gender": {
+        "female": "Female",
+        "gender": "Gender",
+        "male": "Male",
+        "unknown": "Unknown"
+      },
+      "lastName": "Last name",
+      "middleName": "Middle name",
+      "number": "Telephone number"
+    }
+  },
   "dashboard": {
     "categoryLinechart": {
       "header": "Contracted products"
@@ -85,8 +125,11 @@
   },
   "entity": {
     "activities": "Activities",
+    "categories": "Product categories",
+    "companies": "Companies",
     "company": "Company",
     "contact": "Contact",
+    "contacts": "Contacts",
     "contract": "Contract",
     "contracts": "Contracts",
     "files": "Files",
@@ -120,12 +163,23 @@
     }
   },
   "pages": {
+    "contacts": {
+      "addContact": "Add contact",
+      "noContact": "There are no contacts yet."
+    },
+    "contracts": {
+      "addContract": "Add contract"
+    },
     "customInvoice": {
       "descriptionHeader": "Factuur omschrijving",
       "header": "Custom invoice",
       "subheader": "Making the treasurer's life easier"
     },
     "tables": {
+      "companies": {
+        "addCompany": "Add company",
+        "subheader": "All companies"
+      },
       "footer": {
         "items": "Showing {{begin}} to {{end}} of {{total}}",
         "pagination": {
@@ -181,10 +235,19 @@
     }
   },
   "products": {
+    "contractedProducts": "Contracted products",
+    "insights": {
+      "addColumn": "Add column",
+      "addDescription": "Add a description",
+      "addRow": "Add row",
+      "header": "Pricing information",
+      "placeholderHeader": "Header",
+      "placeholderValue": "Value"
+    },
     "noActivities": "There are no activities logged yet.",
     "noContract": "There are no contracts created yet.",
-    "noFiles": "There are no invoices created yet.",
-    "noInvoice": "There are nu files uploaded yet.",
+    "noFiles": "There are no files uploaded yet.",
+    "noInvoices": "There are no invoices yet.",
     "props": {
       "category": "Product category",
       "comments": "Comments (internal)",
@@ -205,6 +268,7 @@
         "header": "Status",
         "inactive": "Inactive"
       }
-    }
+    },
+    "warningFinancialYear": "* Note that these years are the financial years so 2021 means the association year 2020-2021."
   }
 }

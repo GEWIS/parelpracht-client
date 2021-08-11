@@ -18,6 +18,46 @@
       "upload": "Upload bestanden"
     }
   },
+  "categories": {
+    "addCategory": "Nieuwe categorie",
+    "header": "Alle categorieën",
+    "newCategory": "Nieuwe productcategorie"
+  },
+  "companies": {
+    "header": "Alle bedrijven",
+    "newCompany": "Nieuw bedrijf",
+    "props": {
+      "addressInformation": "Adres",
+      "city": "Stad",
+      "country": "Land",
+      "description": "Omschrijving",
+      "details": "Details",
+      "invoiceAddress": "Factuuradres",
+      "name": "Naam",
+      "number": "Telefoonnummer",
+      "postalCode": "Postcode",
+      "street": "Straat en huisnummer"
+    }
+  },
+  "contacts": {
+    "header": "Alle contactpersonen",
+    "newContact": "Nieuw contactpersoon",
+    "props": {
+      "comments": "Opmerkingen",
+      "email": "Emailadres",
+      "firstName": "Voornaam",
+      "function": "Functie",
+      "gender": {
+        "female": "Vrouw",
+        "gender": "Gender",
+        "male": "Man",
+        "unknown": "Onbekend"
+      },
+      "lastName": "Achternaam",
+      "middleName": "Tussenvoegsel",
+      "number": "Telefoonnummer"
+    }
+  },
   "dashboard": {
     "categoryLinechart": {
       "header": "Gecontracteerde producten"
@@ -85,8 +125,11 @@
   },
   "entity": {
     "activities": "Activiteiten",
+    "categories": "Product categorieën",
+    "companies": "Bedrijven",
     "company": "Bedrijf",
     "contact": "Contact",
+    "contacts": "Contactpersonen",
     "contract": "Contract",
     "contracts": "Contracten",
     "files": "Bestanden",
@@ -120,12 +163,23 @@
     }
   },
   "pages": {
+    "contacts": {
+      "addContact": "Nieuw contactpersoon",
+      "noContact": "Er zijn nog geen contactpersonen."
+    },
+    "contracts": {
+      "addContract": "Nieuw contract"
+    },
     "customInvoice": {
       "descriptionHeader": "Invoice description",
       "header": "Handmatige factuur",
       "subheader": "Het leven van de penno vermakkelijken"
     },
     "tables": {
+      "companies": {
+        "addCompany": "Voeg bedrijf toe",
+        "subheader": "Alle bedrijven"
+      },
       "footer": {
         "items": "Items {{begin}} tot {{end}} van {{total}} geladen",
         "pagination": {
@@ -181,10 +235,19 @@
     }
   },
   "products": {
-    "noActivities": "Er zjin nog geen activiteiten.",
+    "contractedProducts": "Gecontracteerde producten",
+    "insights": {
+      "addColumn": "Voeg kolom toe",
+      "addDescription": "Voeg een beschrijving toe",
+      "addRow": "Voeg rij toe",
+      "header": "Prijslijst",
+      "placeholderHeader": "Titel",
+      "placeholderValue": "Waarde"
+    },
+    "noActivities": "Er zijn nog geen activiteiten.",
     "noContract": "Er zijn nog geen contracten aangemaakt.",
-    "noFiles": "Er zijn nog geen facturen toegevoegd.",
-    "noInvoice": "Er zijn nog geen bestanden geupload.",
+    "noFiles": "Er zijn nog geen bestanden geupload.",
+    "noInvoices": "Er zijn nog geen facturen toegevoegd.",
     "props": {
       "category": "Product categorie",
       "comments": "Opmerkingen (intern)",
@@ -205,6 +268,7 @@
         "header": "Status",
         "inactive": "Inactief"
       }
-    }
+    },
+    "warningFinancialYear": "* In bovenstaand overzicht staan boekjaren, dus 2021 betekent het verenigingsjaar 2020-2021."
   }
 }

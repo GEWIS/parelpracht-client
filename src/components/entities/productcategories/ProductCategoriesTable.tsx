@@ -4,6 +4,7 @@ import { Dispatch } from 'redux';
 import {
   Dimmer, Loader, Segment, Table,
 } from 'semantic-ui-react';
+import { useTranslation } from 'react-i18next';
 import { ProductCategory } from '../../../clients/server.generated';
 import TablePagination from '../../TablePagination';
 import { RootState } from '../../../stores/store';
@@ -40,6 +41,7 @@ function ProductCategoriesTable({
   useEffect(() => {
     fetchCategories();
   }, []);
+  const { t } = useTranslation();
 
   if (status === ResourceStatus.FETCHING || status === ResourceStatus.SAVING) {
     return (
@@ -55,7 +57,7 @@ function ProductCategoriesTable({
                   sorted={column === 'name' ? direction : undefined}
                   onClick={() => changeSort('name')}
                 >
-                  Name
+                  {t('pages.tables.generalColumns.name')}
                 </Table.HeaderCell>
               </Table.Row>
             </Table.Header>
@@ -86,7 +88,7 @@ function ProductCategoriesTable({
               sorted={column === 'name' ? direction : undefined}
               onClick={() => changeSort('name')}
             >
-              Name
+              {t('pages.tables.generalColumns.name')}
             </Table.HeaderCell>
           </Table.Row>
         </Table.Header>
