@@ -7,6 +7,7 @@ import {
 import validator from 'validator';
 import _ from 'lodash';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
+import { withTranslation, WithTranslation } from 'react-i18next';
 import {
   User, UserParams, Gender, Roles,
 } from '../../../clients/server.generated';
@@ -18,7 +19,7 @@ import { SingleEntities } from '../../../stores/single/single';
 import { getSingle } from '../../../stores/single/selectors';
 import TextArea from '../../TextArea';
 
-interface Props extends RouteComponentProps {
+interface Props extends RouteComponentProps, WithTranslation {
   create?: boolean;
   onCancel?: () => void;
 
@@ -159,6 +160,7 @@ class UserProps extends React.Component<Props, State> {
   };
 
   render() {
+    const { t } = this.props;
     const {
       editing,
       firstName,
@@ -179,7 +181,7 @@ class UserProps extends React.Component<Props, State> {
       <>
         <Form.Field>
           <Checkbox
-            label="I want to receive an email each time an invoice is created"
+            label={t('entities.user.props.mailOnInvoice')}
             disabled={!editing}
             id="form-receive-emails"
             checked={receiveEmails}
@@ -220,7 +222,7 @@ class UserProps extends React.Component<Props, State> {
               id="form-input-first-name"
               fluid
               control={Input}
-              label="First Name"
+              label={t('entities.user.props.firstName')}
               value={firstName}
               onChange={(e: ChangeEvent<HTMLInputElement>) => this.setState({
                 firstName: e.target.value,
@@ -235,7 +237,7 @@ class UserProps extends React.Component<Props, State> {
               id="form-input-middle-name"
               fluid
               control={Input}
-              label="Preposition"
+              label={t('entities.user.props.preposition')}
               value={lastNamePreposition}
               onChange={(e: ChangeEvent<HTMLInputElement>) => this.setState({
                 lastNamePreposition: e.target.value,
@@ -248,7 +250,7 @@ class UserProps extends React.Component<Props, State> {
               id="form-input-last-name"
               fluid
               control={Input}
-              label="Last Name"
+              label={t('entities.user.props.lastName')}
               value={lastName}
               onChange={(e: ChangeEvent<HTMLInputElement>) => this.setState({
                 lastName: e.target.value,
@@ -266,12 +268,12 @@ class UserProps extends React.Component<Props, State> {
               <Dropdown
                 id="form-input-gender"
                 selection
-                placeholder="Gender"
+                placeholder={t('entities.user.props.gender.header')}
                 value={gender}
                 options={[
-                  { key: 0, text: 'Male', value: Gender.MALE },
-                  { key: 1, text: 'Female', value: Gender.FEMALE },
-                  { key: 2, text: 'Unknown', value: Gender.UNKNOWN },
+                  { key: 0, text: t('entities.user.props.gender.male'), value: Gender.MALE },
+                  { key: 1, text: t('entities.user.props.gender.female'), value: Gender.FEMALE },
+                  { key: 2, text: t('entities.user.props.gender.unknown'), value: Gender.UNKNOWN },
                 ]}
                 onChange={(e, data) => this.setState({
                   gender: data.value as Gender,
@@ -287,8 +289,8 @@ class UserProps extends React.Component<Props, State> {
               required
               width={12}
               control={Input}
-              label="Function"
-              placeholder="Appears under your name on contracts."
+              label={t('entities.user.props.function')}
+              placeholder={t('entities.user.props.functionDescription')}
               value={functionName}
               onChange={(e: ChangeEvent<HTMLInputElement>) => this.setState({
                 functionName: e.target.value,
@@ -305,7 +307,7 @@ class UserProps extends React.Component<Props, State> {
               fluid
               required
               control={Input}
-              label="Personal mail address"
+              label={t('entities.user.props.personalEmail')}
               value={email}
               onChange={(e: ChangeEvent<HTMLInputElement>) => this.setState({
                 email: e.target.value,
@@ -319,7 +321,7 @@ class UserProps extends React.Component<Props, State> {
               id="form-input-reply-to-email"
               fluid
               control={Input}
-              label="Reply-to mail address"
+              label={t('entities.user.props.replyToEmail')}
               value={replyToEmail}
               onChange={(e: ChangeEvent<HTMLInputElement>) => this.setState({
                 replyToEmail: e.target.value,
@@ -328,7 +330,7 @@ class UserProps extends React.Component<Props, State> {
           </Form.Group>
           <Form.Field>
             <Checkbox
-              label="I want to receive all emails on my reply-to email address"
+              label={t('entities.user.props.allMailToReplyTo')}
               disabled={!editing}
               id="form-send-emails-to-reply-to"
               checked={sendEmailsToReplyToEmail}
@@ -339,12 +341,12 @@ class UserProps extends React.Component<Props, State> {
           </Form.Field>
           {receiveEmailsCheckbox}
           <Segment>
-            <h3>Permissions</h3>
+            <h3>{t('pages.user.permissions')}</h3>
             <Form.Group widths="equal">
               <Form.Field>
                 {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
                 <label htmlFor="form-check-role-signee">
-                  Signee
+                  {t('entities.user.props.roles.signee')}
                 </label>
                 <Checkbox
                   disabled={!editing}
@@ -359,7 +361,7 @@ class UserProps extends React.Component<Props, State> {
               <Form.Field>
                 {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
                 <label htmlFor="form-check-role-financial">
-                  Financial
+                  {t('entities.user.props.roles.financial')}
                 </label>
                 <Checkbox
                   disabled={!editing}
@@ -374,7 +376,7 @@ class UserProps extends React.Component<Props, State> {
               <Form.Field>
                 {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
                 <label htmlFor="form-check-role-general">
-                  General
+                  {t('entities.user.props.roles.general')}
                 </label>
                 <Checkbox
                   disabled={!editing}
@@ -389,7 +391,7 @@ class UserProps extends React.Component<Props, State> {
               <Form.Field>
                 {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
                 <label htmlFor="form-check-role-audit">
-                  Audit
+                  {t('entities.user.props.roles.audit')}
                 </label>
                 <Checkbox
                   disabled={!editing}
@@ -404,7 +406,7 @@ class UserProps extends React.Component<Props, State> {
               <Form.Field>
                 {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
                 <label htmlFor="form-check-role-admin">
-                  Admin
+                  {t('entities.user.props.roles.admin')}
                 </label>
                 <Checkbox
                   disabled={!editing}
@@ -421,7 +423,7 @@ class UserProps extends React.Component<Props, State> {
           <Form.Field disabled={!editing}>
             {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
             <label htmlFor="form-input-comment">
-              Comments
+              {t('entities.user.props.comments')}
             </label>
             <TextArea
               id="form-delivery-spec-english"
@@ -429,7 +431,7 @@ class UserProps extends React.Component<Props, State> {
               onChange={
                 (e) => this.setState({ comment: e.target.value })
               }
-              placeholder="Comment"
+              placeholder={t('entities.user.props.comments')}
             />
           </Form.Field>
         </Form>
@@ -456,4 +458,5 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   ),
 });
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(UserProps));
+export default withTranslation()(withRouter(connect(mapStateToProps,
+  mapDispatchToProps)(UserProps)));

@@ -122,6 +122,34 @@
       "proposed": "Voorgesteld",
       "sent": "Verstuurd",
       "unknown": "Onbekend"
+    },
+    "user": {
+      "props": {
+        "allMailToReplyTo": "Ik wil alle emails ontvangen op mijn antwoord emailadres",
+        "comments": "Opmerkingen",
+        "firstName": "Voornaam",
+        "function": "Functie",
+        "functionDescription": "Verschijnt onder je naam op contracten.",
+        "gender": {
+          "female": "Vrouw",
+          "header": "Geslacht",
+          "male": "Man",
+          "unknown": "Onbekend"
+        },
+        "lastName": "Achternaam",
+        "mailOnInvoice": "Ik wil een email ontvangen iedere keer dat een factuur is verstuurd",
+        "name": "Naam",
+        "personalEmail": "Persoonlijk emailadres",
+        "preposition": "Tussenvoegsel",
+        "replyToEmail": "Antwoord emailadres",
+        "roles": {
+          "admin": "Admin",
+          "audit": "Kasco",
+          "financial": "Financieel",
+          "general": "Algemeen",
+          "signee": "Tekengerechtigd"
+        }
+      }
     }
   },
   "entity": {
@@ -175,6 +203,48 @@
       "descriptionHeader": "Invoice description",
       "header": "Handmatige factuur",
       "subheader": "Het leven van de penno vermakkelijken"
+    },
+    "forgotPassword": {
+      "back": "Terug naar inloggen",
+      "enterEmail": "Vul je emaildres in om een wachtwoord-reset link te ontvangen.",
+      "header": "Wachtwoord resetten",
+      "sendEmailButton": "Verstuur wachtwoord reset email",
+      "successMessage": "Controleer je mailbox voor de link om je wachtwoord te resetten. Als deze mail niet binnen een paar minuten verschijnt, controleer je spam map."
+    },
+    "loading": "Login informatie controleren...",
+    "login": {
+      "email": "Emailadres",
+      "forgotPassword": "Wachtwoord vergeten",
+      "loginButton": "Log in",
+      "password": "Wachtwoord",
+      "rememberMe": "Blijf ingelogd",
+      "troubleSigningIn": "Problemen met inloggen?"
+    },
+    "noRights": {
+      "hammerTime": "Stop, hammertime!",
+      "header": "Sorry, you don't have the rights to view this page!",
+      "subheader": "Neem contact op met de administrator als dit een fout is."
+    },
+    "notFound": {
+      "404": "404: Kan deze pagina niet vinden",
+      "header": "Er is geen geld hier,",
+      "subheader": "blijf zoeken!"
+    },
+    "resetPassword": {
+      "newPassword": "Nieuw wachtwoord",
+      "repeatPassword": "Herhaal wachtwoord",
+      "requirements": {
+        "header": "Wachtwoordeisen:",
+        "length": "Acht karakters lang",
+        "lowerCase": "Eén kleine letter",
+        "number": "Eén getal",
+        "symbol": "Eén leesteken/symbool",
+        "upperCase": "Eén hoofdletter"
+      },
+      "resetPassword": "Reset je wachtwoord",
+      "setPassword": "Kies een wachtwoord",
+      "submit": "Versture",
+      "successMessage": "Wachtwoord succesvol veranderd!"
     },
     "tables": {
       "companies": {
@@ -232,6 +302,13 @@
         },
         "header": "Alle producten",
         "subheader": "Producten"
+      }
+    },
+    "user": {
+      "permissions": "Rechten",
+      "responsibilities": {
+        "description": "Je kunt je verantwoordelijkheden overdragen aan een andere Parelracht gebruiker. Hierdoor verschijnt zijn/haar naam op al jouw contracten en facturen.",
+        "header": "Verantwoordelijkheden"
       }
     }
   },

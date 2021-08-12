@@ -122,6 +122,34 @@
       "proposed": "Proposed",
       "sent": "Sent",
       "unknown": "Unknown"
+    },
+    "user": {
+      "props": {
+        "allMailToReplyTo": "I want to receive all emails on my reply-to email address",
+        "comments": "Comments",
+        "firstName": "First Name",
+        "function": "Function",
+        "functionDescription": "Appears under your name on contracts.",
+        "gender": {
+          "female": "Female",
+          "header": "Gender",
+          "male": "Male",
+          "unknown": "Unknown"
+        },
+        "lastName": "Last Name",
+        "mailOnInvoice": "I want to receive an email each time an invoice is sent",
+        "name": "Name",
+        "personalEmail": "Personal email address",
+        "preposition": "Preposition",
+        "replyToEmail": "Reply-to email address",
+        "roles": {
+          "admin": "Admin",
+          "audit": "Audit",
+          "financial": "Financial",
+          "general": "General",
+          "signee": "Signee"
+        }
+      }
     }
   },
   "entity": {
@@ -175,6 +203,48 @@
       "descriptionHeader": "Factuur omschrijving",
       "header": "Custom invoice",
       "subheader": "Making the treasurer's life easier"
+    },
+    "forgotPassword": {
+      "back": "Back to login",
+      "enterEmail": "Enter your email address and receive a password reset link.",
+      "header": "Reset password",
+      "sendEmailButton": "Send password reset email",
+      "successMessage": "Check your email for a link to reset your password. If it doesn't appear within a few minutes, check your spam folder."
+    },
+    "loading": "Checking login information...",
+    "login": {
+      "email": "Email address",
+      "forgotPassword": "Forgot password",
+      "loginButton": "Login",
+      "password": "Password",
+      "rememberMe": "Remember me",
+      "troubleSigningIn": "Trouble signing in?"
+    },
+    "noRights": {
+      "hammerTime": "Stop, hammertime!",
+      "header": "Sorry, je hebt geen toegang om deze pagina te bekijken!",
+      "subheader": "Please contact your administrator if this is a mistake."
+    },
+    "notFound": {
+      "404": "404: Could not find this page",
+      "header": "There is no money here,",
+      "subheader": "keep looking!"
+    },
+    "resetPassword": {
+      "newPassword": "New password",
+      "repeatPassword": "Repeat password",
+      "requirements": {
+        "header": "Password requirements:",
+        "length": "Eight characters in length",
+        "lowerCase": "One lower case character",
+        "number": "One number",
+        "symbol": "One symbol",
+        "upperCase": "One upper case character"
+      },
+      "resetPassword": "Reset your password",
+      "setPassword": "Set your password",
+      "submit": "Submit",
+      "successMessage": "Password successfully changed!"
     },
     "tables": {
       "companies": {
@@ -232,6 +302,13 @@
         },
         "header": "All products",
         "subheader": "Products"
+      }
+    },
+    "user": {
+      "permissions": "Permissions",
+      "responsibilities": {
+        "description": "You can transfer your responsibilities to another ParelPracht user. By doing this, their name will appear on all your contracts and invoices.",
+        "header": "Responsibilities"
       }
     }
   },

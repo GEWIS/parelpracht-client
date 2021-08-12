@@ -6,6 +6,7 @@ import {
   Container, Dimmer, Header, Loader,
 } from 'semantic-ui-react';
 import { connect } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 import ProductsPage from './pages/ProductsPage';
 import SingleProductPage from './pages/SingleProductPage';
 import ProductCreatePage from './pages/ProductCreatePage';
@@ -55,6 +56,7 @@ interface Props extends RouteComponentProps {
 }
 
 function Routes(props: Props) {
+  const { t } = useTranslation();
   const loader = (
     <Container>
       <Dimmer active page inverted>
@@ -65,7 +67,7 @@ function Routes(props: Props) {
             content={(<ParelPrachtFullLogo />)}
             size="large"
           />
-          <Header.Subheader>Checking login information...</Header.Subheader>
+          <Header.Subheader>{t('pages.loading')}</Header.Subheader>
         </Header>
       </Dimmer>
     </Container>

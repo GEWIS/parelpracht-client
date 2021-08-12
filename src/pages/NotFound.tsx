@@ -2,8 +2,10 @@ import React from 'react';
 import {
   Container, Grid, Header, Icon, Segment, Image,
 } from 'semantic-ui-react';
+import { useTranslation } from 'react-i18next';
 
 function NotFound() {
+  const { t } = useTranslation();
   return (
     <>
       <Segment style={{ backgroundColor: 'rgba(237, 237, 237, 0.98)' }} vertical basic>
@@ -14,7 +16,7 @@ function NotFound() {
                 <Icon name="hand paper" />
                 <Header.Content>
                   <h1>
-                    404: Could not find this page
+                    {t('pages.notFound.404')}
                   </h1>
                 </Header.Content>
               </Header>
@@ -29,9 +31,9 @@ function NotFound() {
           </Grid.Column>
           <Grid.Column textAlign="left" verticalAlign="middle" width="12">
             <h1 style={{ fontSize: '70px' }}>
-              There is no money here,
+              {t('pages.notFound.header')}
               <br />
-              keep looking!
+              {t('pages.notFound.subheader')}
             </h1>
           </Grid.Column>
         </Grid>

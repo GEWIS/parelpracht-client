@@ -6,6 +6,7 @@ import { Dispatch } from 'redux';
 import {
   Button, Checkbox, Form, Input,
 } from 'semantic-ui-react';
+import { useTranslation } from 'react-i18next';
 import { authLogin } from '../../stores/auth/actionCreators';
 
 interface Props {
@@ -13,6 +14,7 @@ interface Props {
 }
 
 function LoginForm(props: Props) {
+  const { t } = useTranslation();
   const [email, changeEmail] = useState('');
   const [password, changePassword] = useState('');
   const [rememberMe, changeRememberMe] = useState(false);
@@ -26,7 +28,7 @@ function LoginForm(props: Props) {
     <Form size="large">
       <Form.Field>
         {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-        <label htmlFor="form-input-email">Email address</label>
+        <label htmlFor="form-input-email">{t('pages.login.email')}</label>
         <Input
           id="form-input-email"
           icon="user"
@@ -43,7 +45,7 @@ function LoginForm(props: Props) {
         type="password"
         icon="lock"
         iconPosition="left"
-        label="Password"
+        label={t('pages.login.password')}
         onChange={(e: ChangeEvent<HTMLInputElement>) => changePassword(e.target.value)}
       />
       <Form.Field>
@@ -52,7 +54,7 @@ function LoginForm(props: Props) {
           id="form-input-remember-me"
           checked={rememberMe}
           onChange={(e, data) => changeRememberMe(data.checked as boolean)}
-          label="Remember me"
+          label={t('pages.login.rememberMe')}
         />
       </Form.Field>
       <Button
@@ -62,7 +64,7 @@ function LoginForm(props: Props) {
         type="submit"
         onClick={() => props.login(email, password, rememberMe)}
       >
-        Login
+        {t('pages.login.loginButton')}
       </Button>
     </Form>
   );
