@@ -2,6 +2,7 @@ import React from 'react';
 import {
   Button, Icon, Segment, Table,
 } from 'semantic-ui-react';
+import { useTranslation } from 'react-i18next';
 import { CustomProduct } from '../../clients/server.generated';
 import { formatPriceFull } from '../../helpers/monetary';
 import CustomInvoiceProductRow from './CustomInvoiceProductRow';
@@ -14,10 +15,12 @@ interface Props {
 }
 
 function CustomInvoiceProducts(props: Props) {
+  const { t } = useTranslation();
+
   return (
     <Segment secondary style={{ backgroundColor: 'rgba(255, 255, 255, 0.95)', color: 'black' }}>
       <h2>
-        Products
+        {t('pages.customInvoice.products.header')}
         <Button
           icon
           labelPosition="left"
@@ -27,16 +30,16 @@ function CustomInvoiceProducts(props: Props) {
           onClick={() => props.addProduct()}
         >
           <Icon name="plus" />
-          Add product
+          {t('pages.customInvoice.products.addProduct')}
         </Button>
       </h2>
       <Table compact>
         <Table.Header>
           <Table.Row>
-            <Table.HeaderCell>Name</Table.HeaderCell>
-            <Table.HeaderCell>Price</Table.HeaderCell>
-            <Table.HeaderCell>Amount</Table.HeaderCell>
-            <Table.HeaderCell collapsing>Total</Table.HeaderCell>
+            <Table.HeaderCell>{t('pages.customInvoice.products.name')}</Table.HeaderCell>
+            <Table.HeaderCell>{t('pages.customInvoice.products.price')}</Table.HeaderCell>
+            <Table.HeaderCell>{t('pages.customInvoice.products.amount')}</Table.HeaderCell>
+            <Table.HeaderCell collapsing>{t('pages.customInvoice.products.total')}</Table.HeaderCell>
             <Table.HeaderCell />
           </Table.Row>
         </Table.Header>

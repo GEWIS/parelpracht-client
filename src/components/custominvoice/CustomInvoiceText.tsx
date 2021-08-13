@@ -1,6 +1,7 @@
 import React, { ChangeEvent } from 'react';
 import { Input, Segment } from 'semantic-ui-react';
 import validator from 'validator';
+import { useTranslation } from 'react-i18next';
 import { Language } from '../../clients/server.generated';
 
 interface Props {
@@ -12,6 +13,8 @@ interface Props {
 }
 
 function CustomInvoiceText(props: Props) {
+  const { t } = useTranslation();
+
   let prefix: string = '';
   let suffix: string = '';
   if (props.language === Language.DUTCH) {
@@ -24,7 +27,7 @@ function CustomInvoiceText(props: Props) {
 
   return (
     <Segment secondary style={{ backgroundColor: 'rgba(255, 255, 255, 0.95)', color: 'black', lineHeight: '30px' }}>
-      <h2>Invoice description</h2>
+      <h2>{t('pages.customInvoice.descriptionHeader')}</h2>
       {prefix}
       <Input
         value={props.invoiceReason}

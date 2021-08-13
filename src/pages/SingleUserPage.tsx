@@ -115,18 +115,16 @@ class SingleUserPage extends React.Component<Props> {
               {isProfilePage ? (
                 <Segment>
                   <Header as="h3">
-                    API Key
+                    {t('pages.user.apiKey.header')}
                   </Header>
                   <p>
-                    You can generate an API key to use ParelPracht in external tools.
-                    With this key, actions can be performed on your behalf.
-                    To use the API key, place the entire key in the
+                    {t('pages.user.apiKey.description1')}
                     {' '}
                     <code>Authentication</code>
                     {' '}
-                    header of any request.
+                    {t('pages.user.apiKey.description2')}
                     <br />
-                    <b>Only generate a key if you know what you&apos;re doing!</b>
+                    <b>{t('pages.user.apiKey.warning')}</b>
                   </p>
                   <UserApiKey />
                 </Segment>
@@ -134,7 +132,7 @@ class SingleUserPage extends React.Component<Props> {
               {isProfilePage ? (
                 <Segment>
                   <Header as="h3">
-                    Personal User Background
+                    {t('pages.user.background.header')}
                   </Header>
                   <UserBackgroundModal
                     entity={SingleEntities.User}
@@ -145,24 +143,23 @@ class SingleUserPage extends React.Component<Props> {
                     adminView={false}
                   />
                 </Segment>
-              )
-                : (
-                  <AuthorizationComponent roles={[Roles.ADMIN]} notFound={false}>
-                    <Segment>
-                      <Header as="h3">
-                        Personal User Background
-                      </Header>
-                      <UserBackgroundModal
-                        entity={SingleEntities.User}
-                        entityId={user.id}
-                        entityName={user.firstName}
-                        fileName={user.backgroundFilename}
-                        fetchEntity={this.props.fetchUser}
-                        adminView
-                      />
-                    </Segment>
-                  </AuthorizationComponent>
-                )}
+              ) : (
+                <AuthorizationComponent roles={[Roles.ADMIN]} notFound={false}>
+                  <Segment>
+                    <Header as="h3">
+                      {t('pages.user.background.header')}
+                    </Header>
+                    <UserBackgroundModal
+                      entity={SingleEntities.User}
+                      entityId={user.id}
+                      entityName={user.firstName}
+                      fileName={user.backgroundFilename}
+                      fetchEntity={this.props.fetchUser}
+                      adminView
+                    />
+                  </Segment>
+                </AuthorizationComponent>
+              )}
             </Grid.Column>
           </Grid>
         </Container>

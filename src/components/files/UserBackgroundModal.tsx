@@ -4,6 +4,7 @@ import {
 } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
+import { withTranslation, WithTranslation } from 'react-i18next';
 import { FilesClient } from '../../clients/filesClient';
 import { Client, User } from '../../clients/server.generated';
 import { SingleEntities } from '../../stores/single/single';
@@ -11,7 +12,7 @@ import { RootState } from '../../stores/store';
 import { authFetchProfile } from '../../stores/auth/actionCreators';
 import UserBackground from '../entities/user/UserBackground';
 
-interface Props {
+interface Props extends WithTranslation {
   entity: SingleEntities;
   entityId: number;
   entityName: string;
@@ -85,7 +86,7 @@ class UserBackgroundModal extends React.Component<Props, State> {
 
   public renderUserBackground(): JSX.Element {
     const {
-      entityName, entityId, fileName, adminView,
+      entityName, entityId, fileName, adminView, t,
     } = this.props;
 
     const { open } = this.state;
@@ -97,7 +98,7 @@ class UserBackgroundModal extends React.Component<Props, State> {
         <Icon
           name="picture"
         />
-        Add personal background
+        {t('pages.user.background.addPersonalBackground')}
       </Button>
     ) : (
       <div>
@@ -129,10 +130,7 @@ class UserBackgroundModal extends React.Component<Props, State> {
         onClick={() => this.removeImage()}
       >
         <Icon name="trash" />
-        Delete
-        {' '}
-        {entityName}
-        &#39;s background
+        {t('pages.user.background.deleteUsersBackground', { name: entityName })}
       </Button>
     );
 
@@ -141,10 +139,7 @@ class UserBackgroundModal extends React.Component<Props, State> {
       : (
         <Modal.Description>
           <h4>
-            Upload
-            {' '}
-            {entityName}
-            &#39;s Background
+            {t('pages.user.background.uploadUsersBackground', { name: entityName })}
           </h4>
           <Input
             type="file"
@@ -164,8 +159,7 @@ class UserBackgroundModal extends React.Component<Props, State> {
         trigger={image}
       >
         <Modal.Header>
-          {entityName}
-          &#39;s Background
+          {t('pages.user.background.modalHeader', { name: entityName })}
         </Modal.Header>
         <Modal.Content image>
           {imageModal}
@@ -173,7 +167,9 @@ class UserBackgroundModal extends React.Component<Props, State> {
         </Modal.Content>
         <Modal.Actions>
           {deleteButton}
-          <Button onClick={() => this.closeModal()}>Cancel</Button>
+          <Button onClick={() => this.closeModal()}>
+            {t('pages.user.background.cancel')}
+          </Button>
         </Modal.Actions>
       </Modal>
     );
@@ -200,4 +196,4 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   fetchAuthProfile: () => dispatch(authFetchProfile()),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(UserBackgroundModal);
+export default withTranslation()(connect(mapStateToProps, mapDispatchToProps)(UserBackgroundModal));

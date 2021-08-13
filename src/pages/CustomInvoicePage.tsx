@@ -3,6 +3,7 @@ import { RouteComponentProps, withRouter } from 'react-router-dom';
 import {
   Button, Container, Grid, Header, Icon, Segment,
 } from 'semantic-ui-react';
+import { withTranslation, WithTranslation } from 'react-i18next';
 import CustomInvoiceText from '../components/custominvoice/CustomInvoiceText';
 import {
   CustomInvoiceGenSettings,
@@ -19,6 +20,8 @@ import CustomInvoiceRecipient from '../components/custominvoice/CustomInvoiceRec
 import { FilesClient } from '../clients/filesClient';
 import AuthorizationComponent from '../components/AuthorizationComponent';
 
+interface Props extends RouteComponentProps, WithTranslation {}
+
 interface State {
   language: Language;
   fileType: ReturnFileType;
@@ -33,8 +36,8 @@ interface State {
   loading: boolean;
 }
 
-class CustomInvoicePage extends React.Component<RouteComponentProps, State> {
-  constructor(props: RouteComponentProps) {
+class CustomInvoicePage extends React.Component<Props, State> {
+  constructor(props: Props) {
     super(props);
     this.state = {
       language: Language.DUTCH,
@@ -140,6 +143,7 @@ class CustomInvoicePage extends React.Component<RouteComponentProps, State> {
   };
 
   render() {
+    const { t } = this.props;
     const {
       language, fileType, subject, ourReference, theirReference, invoiceReason, recipient, products,
       loading,
@@ -155,10 +159,9 @@ class CustomInvoicePage extends React.Component<RouteComponentProps, State> {
                   <Icon name="credit card" />
                   <Header.Content>
                     <Header.Subheader>
-                      {/* eslint-disable-next-line react/no-unescaped-entities */}
-                      Making the treasurer's life easier
+                      {t('pages.customInvoice.subheader')}
                     </Header.Subheader>
-                    Generate Custom Invoice
+                    {t('pages.customInvoice.header')}
                   </Header.Content>
                 </Header>
               </Grid.Column>
@@ -221,4 +224,4 @@ class CustomInvoicePage extends React.Component<RouteComponentProps, State> {
   }
 }
 
-export default withRouter(CustomInvoicePage);
+export default withTranslation()(withRouter(CustomInvoicePage));

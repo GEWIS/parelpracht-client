@@ -9,6 +9,7 @@
     "newComment": "Write a new comment..."
   },
   "buttons": {
+    "cancel": "Cancel",
     "files": {
       "cancel": "Cancel upload",
       "delete": "Delete file",
@@ -134,6 +135,7 @@
           "female": "Female",
           "header": "Gender",
           "male": "Male",
+          "other": "Other",
           "unknown": "Unknown"
         },
         "lastName": "Last Name",
@@ -171,6 +173,42 @@
     "products": "Products",
     "user": "User"
   },
+  "files": {
+    "generate": {
+      "contentType": "Content Type",
+      "contract": "Contract",
+      "custom": {
+        "ourReference": "Our Reference",
+        "subject": "Subject",
+        "theirReference": "Their Reference"
+      },
+      "error": "Could not generate a {{entity}} file. Please consulate the back-end logs.",
+      "fileType": "File Type",
+      "generateButton": "Generate",
+      "header": "Generate file",
+      "label": "Label",
+      "proposal": "Proposal",
+      "recipient": "Recipient",
+      "saveToDisk": "Save To Disk",
+      "showDiscount": "Show Discount",
+      "signee": "Signee"
+    }
+  },
+  "footer": {
+    "creators1": "Designed and built with",
+    "creators2": "by the 39th board",
+    "credits": {
+      "description1": "ParelPracht was built in the winter of 2020-2021 during the second lockdown of the corona crisis by the 39th board of GEWIS. Special thanks to everyone who contributed:",
+      "description2": "Also special thanks to Gijs de Man and everyone at Stijl for their help with the PDF template and Wout de Ruiter for sharing his knowledge regarding Docker containers.",
+      "header": "About ParelPracht"
+    },
+    "gewis": "Study Association GEWIS"
+  },
+  "language": {
+    "dutch": "Dutch",
+    "english": "English",
+    "header": "Language"
+  },
   "mainMenu": {
     "admin": "Admin",
     "categories": "Categories",
@@ -201,7 +239,19 @@
     },
     "customInvoice": {
       "descriptionHeader": "Factuur omschrijving",
-      "header": "Custom invoice",
+      "detailsHeader": "Invoice details",
+      "header": "Generate Custom Invoice",
+      "organizationName": "Organization name",
+      "products": {
+        "addProduct": "Add product",
+        "amount": "Amount",
+        "deleteButton": "Delete product",
+        "header": "Products",
+        "name": "Name",
+        "price": "Price",
+        "total": "Total"
+      },
+      "recipientDetails": "Recipient details",
       "subheader": "Making the treasurer's life easier"
     },
     "forgotPassword": {
@@ -305,10 +355,36 @@
       }
     },
     "user": {
+      "apiKey": {
+        "description1": "You can generate an API key to use ParelPracht in external tools. With this key, actions can be performed on your behalf. To use the API key, place the entire key in the",
+        "description2": "header of any request.",
+        "generate": "Generate",
+        "header": "API Key",
+        "revoke": "Revoke",
+        "viewKey": "View key",
+        "warning": "Only generate a key if you know what you're doing!"
+      },
+      "avatar": {
+        "addButton": "Add user avatar",
+        "deleteUsersAvatar": "Delete {{name}}'s avatar",
+        "modalHeader": "{{name}}'s Avatar",
+        "uploadUsersAvatar": "Upload {{name}}'s avatar"
+      },
+      "background": {
+        "addPersonalBackground": "Add personal background",
+        "cancel": "Cancel",
+        "deleteUsersBackground": "Delete {{name}}'s background",
+        "header": "Personal User Background",
+        "modalHeader": "{{name}}'s background",
+        "uploadUsersBackground": "Upload {{name}}'s background"
+      },
       "permissions": "Permissions",
       "responsibilities": {
+        "cancel": "Cancel",
         "description": "You can transfer your responsibilities to another ParelPracht user. By doing this, their name will appear on all your contracts and invoices.",
-        "header": "Responsibilities"
+        "header": "Responsibilities",
+        "transfer": "Transfer",
+        "transferButton": "Transfer responsibilities"
       }
     }
   },

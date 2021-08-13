@@ -9,6 +9,7 @@
     "newComment": "Schrijf een nieuwe opmerking..."
   },
   "buttons": {
+    "cancel": "Annuleren",
     "files": {
       "cancel": "Annuleren",
       "delete": "Verwijder bestand",
@@ -134,6 +135,7 @@
           "female": "Vrouw",
           "header": "Geslacht",
           "male": "Man",
+          "other": "Overig",
           "unknown": "Onbekend"
         },
         "lastName": "Achternaam",
@@ -171,6 +173,42 @@
     "products": "Producten",
     "user": "Gebruiker"
   },
+  "files": {
+    "generate": {
+      "contentType": "Bestandstype",
+      "contract": "Contract",
+      "custom": {
+        "ourReference": "Onze Referentie",
+        "subject": "Onderwerp",
+        "theirReference": "Hun Referentie"
+      },
+      "error": "Kon geen {{entity}} bestand genereren. Raadpleeg de back-end logs voor meer informatie.",
+      "fileType": "Bestandstype",
+      "generateButton": "Genereer",
+      "header": "Genereer bestand",
+      "label": "Label",
+      "proposal": "Voorstel",
+      "recipient": "Ontvanger",
+      "saveToDisk": "Opslaan",
+      "showDiscount": "Kortingen",
+      "signee": "Tekengerechtigde"
+    }
+  },
+  "footer": {
+    "creators1": "Ontwikkeld en gebouwd met",
+    "creators2": "door het 39e bestuur",
+    "credits": {
+      "description1": "ParelPracht is ontwikkeld in de winter van 2020-2021 tijdens de tweede lockdown van de coronacrisis door het 39 bestuur van GEWIS. Veel dank aan iedereen die heeft bijdragen:",
+      "description2": "Ook nog veel dank aan Gijs de Man en iedereen van Stijl voor hun hulp met de PDF templates en Wout de Ruiter voor het delen van zijn kennis van Docker containers.",
+      "header": "Over ParelPracht"
+    },
+    "gewis": "Studievereniging GEWIS"
+  },
+  "language": {
+    "dutch": "Nederlands",
+    "english": "Engels",
+    "header": "Taal"
+  },
   "mainMenu": {
     "admin": "Admin",
     "categories": "Categorieën",
@@ -201,8 +239,20 @@
     },
     "customInvoice": {
       "descriptionHeader": "Invoice description",
-      "header": "Handmatige factuur",
-      "subheader": "Het leven van de penno vermakkelijken"
+      "detailsHeader": "Factuurinformatie",
+      "header": "Genereer Handmatige Factuur",
+      "organizationName": "Naam van organisatie",
+      "products": {
+        "addProduct": "Product toevoegen",
+        "amount": "Aantal",
+        "deleteButton": "Verwijder product",
+        "header": "Producten",
+        "name": "Naam",
+        "price": "Prijs",
+        "total": "Totaal"
+      },
+      "recipientDetails": "Ontvangerinformatie",
+      "subheader": "Het leven van de penno makkelijker maken"
     },
     "forgotPassword": {
       "back": "Terug naar inloggen",
@@ -305,10 +355,36 @@
       }
     },
     "user": {
+      "apiKey": {
+        "description1": "Je kunt een API Key genereren om ParelPracht te gebruiken in externe applicaties. Met deze key kunnen operaties uitgevoerd worden namens jou. Om deze key te gebruiken zet je de gehele key in de",
+        "description2": "header van iedere API request.",
+        "generate": "Genereer",
+        "header": "API Key",
+        "revoke": "Intrekken",
+        "viewKey": "Bekijk key",
+        "warning": "Genereer alleen een key als je weet wat je doet!"
+      },
+      "avatar": {
+        "addButton": "Voeg profielfoto toe",
+        "deleteUsersAvatar": "Verwijder profielfoto van {{name}}",
+        "modalHeader": "Profielfoto van {{name}}",
+        "uploadUsersAvatar": "Upload profielfoto van {{name}}"
+      },
+      "background": {
+        "addPersonalBackground": "Voeg persoonlijke achtergond toe",
+        "cancel": "Annuleren",
+        "deleteUsersBackground": "Verwijder achtergrond van {{name}}",
+        "header": "Persoonlijke Achtergrond",
+        "modalHeader": "Achtergrond van {{name}}",
+        "uploadUsersBackground": "Upload een achtergrond voor {{name}}"
+      },
       "permissions": "Rechten",
       "responsibilities": {
+        "cancel": "Annuleren",
         "description": "Je kunt je verantwoordelijkheden overdragen aan een andere Parelracht gebruiker. Hierdoor verschijnt zijn/haar naam op al jouw contracten en facturen.",
-        "header": "Verantwoordelijkheden"
+        "header": "Verantwoordelijkheden",
+        "transfer": "Overdragen",
+        "transferButton": "Draag verantwoordelijkheden over"
       }
     }
   },

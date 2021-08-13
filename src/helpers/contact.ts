@@ -1,3 +1,4 @@
+import { TFunction } from 'i18next';
 import {
   Contact, ContactFunction, ContactSummary, Gender,
 } from '../clients/server.generated';
@@ -38,13 +39,13 @@ export function formatFunctionShort(func: ContactFunction) {
   }
 }
 
-export function formatGender(gender: Gender) {
+export function formatGender(gender: Gender, t: TFunction) {
   switch (gender) {
-    case Gender.MALE: return 'Male';
-    case Gender.FEMALE: return 'Female';
-    case Gender.OTHER: return 'Other gender';
-    case Gender.UNKNOWN: return 'Unknown gender';
-    default: return 'Unknown gender';
+    case Gender.MALE: return t('entities.user.props.gender.male');
+    case Gender.FEMALE: return t('entities.user.props.gender.female');
+    case Gender.OTHER: return t('entities.user.props.gender.other');
+    case Gender.UNKNOWN:
+    default: return t('entities.user.props.gender.unknown');
   }
 }
 
