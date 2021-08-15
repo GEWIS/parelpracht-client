@@ -51,7 +51,7 @@ function ContractRow(props: Props) {
         {formatPriceFull(value)}
       </Table.Cell>
       <Table.Cell>
-        {formatLastUpdate(contract.updatedAt, t)}
+        {formatLastUpdate(contract.updatedAt)}
       </Table.Cell>
     </Table.Row>
   );

@@ -1,5 +1,4 @@
-import { TFunction } from 'react-i18next';
-import { getLanguage } from '../localization';
+import i18n, { getLanguage } from '../localization';
 
 const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
   'July', 'August', 'September', 'October', 'November', 'December'];
@@ -33,10 +32,10 @@ function parseDateToSplitDateObj(date: Date): SplitDate {
   } as any as SplitDate;
 }
 
-export function formatLastUpdate(date: Date, t: TFunction): string {
+export function formatLastUpdate(date: Date): string {
   return `${date.toLocaleString(getLanguage(), {
     year: 'numeric', month: 'long', day: 'numeric',
-  })} ${t('other.dateTime.at')} ${date.toLocaleString(getLanguage(), {
+  })} ${i18n.t('other.dateTime.at')} ${date.toLocaleString(getLanguage(), {
     hour: '2-digit', minute: '2-digit',
   })}`;
 }

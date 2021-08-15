@@ -26,7 +26,7 @@ function InvoiceRow(props: Props) {
   const status = formatStatus(invoiceStatus, t);
   const amount = formatPriceFull(value);
   const financialYear = dateToFullFinancialYear(invoice.startDate);
-  const lastUpdate = formatLastUpdate(invoice.updatedAt, t);
+  const lastUpdate = formatLastUpdate(invoice.updatedAt);
 
   return (
     <Table.Row>

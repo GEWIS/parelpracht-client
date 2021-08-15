@@ -37,7 +37,7 @@ function ContractComponent(props: Props) {
           {formatStatus(status, t)}
         </Table.Cell>
         <Table.Cell>
-          {formatLastUpdate(contract.updatedAt, t)}
+          {formatLastUpdate(contract.updatedAt)}
         </Table.Cell>
       </Table.Row>
     </>

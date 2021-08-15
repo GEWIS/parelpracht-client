@@ -58,13 +58,13 @@ class ActivityComponent extends React.Component<Props> {
 
   public render() {
     const {
-      activity, avatarUrl, componentType, t,
+      activity, avatarUrl, componentType,
     } = this.props;
     const feedLabel = (
       <UserAvatar size="3em" fileName={avatarUrl} clickable={false} />
     );
 
-    const summaryType = formatActivitySummary(activity.type, activity.subType, componentType, t);
+    const summaryType = formatActivitySummary(activity.type, activity.subType, componentType);
     const summaryUser = (
       <UserLinkWithoutImage id={this.props.activity.createdById} />
     );
@@ -125,7 +125,7 @@ class ActivityComponent extends React.Component<Props> {
         </Feed.Label>
         <Feed.Content style={{ marginBottom: '1em', width: '85%' }}>
           <Feed.Date>
-            {formatLastUpdate(activity.createdAt, t)}
+            {formatLastUpdate(activity.createdAt)}
           </Feed.Date>
           <Feed.Summary>
             {summaryType}

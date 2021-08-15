@@ -22,7 +22,7 @@ export function CompanyRow(props: Props) {
         {formatStatus(company.status, t)}
       </Table.Cell>
       <Table.Cell>
-        {formatLastUpdate(company.updatedAt, t)}
+        {formatLastUpdate(company.updatedAt)}
       </Table.Cell>
     </Table.Row>
   );

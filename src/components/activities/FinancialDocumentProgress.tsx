@@ -96,8 +96,8 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
           notFound={false}
         >
           <Popup
-            header={t('activities.status.defer', { entity: formatDocumentType(documentType, t).toLowerCase() })}
-            content={t('activities.status.deferDescription', { entity: formatDocumentType(documentType, t).toLowerCase() })}
+            header={t('activities.status.defer', { entity: formatDocumentType(documentType).toLowerCase() })}
+            content={t('activities.status.deferDescription', { entity: formatDocumentType(documentType).toLowerCase() })}
             mouseEnterDelay={500}
             wide
             trigger={(
@@ -111,7 +111,7 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
                     deferModalOpen: true,
                   });
                 }}
-                content={t('activities.status.defer', { entity: formatDocumentType(documentType, t).toLowerCase() })}
+                content={t('activities.status.defer', { entity: formatDocumentType(documentType).toLowerCase() })}
                 disabled={allCompletedStatuses[allCompletedStatuses.length - 1]
                 !== DocumentStatus.NOTDELIVERED}
               />
@@ -165,12 +165,12 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
                     cancelModalOpen: true,
                   });
                 }}
-                content={t('activities.status.cancel', { entity: formatDocumentType(documentType, t).toLocaleLowerCase() })}
+                content={t('activities.status.cancel', { entity: formatDocumentType(documentType).toLocaleLowerCase() })}
                 disabled={getToDoStatus(allCompletedStatuses[allCompletedStatuses.length - 1],
                   documentType).length === 0}
               />
             )}
-            header={t('activities.status.cancel', { entity: formatDocumentType(documentType, t).toLocaleLowerCase() })}
+            header={t('activities.status.cancel', { entity: formatDocumentType(documentType).toLocaleLowerCase() })}
             content={() => {
               switch (documentType) {
                 case SingleEntities.Contract: return t('activities.status.cancelContractDescription');
@@ -196,7 +196,7 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
                   labelPosition="left"
                   icon="close"
                   basic
-                  content={t('activities.status.cancel', { entity: formatDocumentType(documentType, t).toLocaleLowerCase() })}
+                  content={t('activities.status.cancel', { entity: formatDocumentType(documentType).toLocaleLowerCase() })}
                   disabled
                   style={{ pointerEvents: 'auto !important' }}
                 />
@@ -220,7 +220,6 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
               {formatDocumentStatusTitle(
                 allStatusActivities[allStatusActivities.length - 1],
                 documentType,
-                t,
               )}
             </h3>
           </Grid.Column>
@@ -234,7 +233,6 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
         {formatDocumentStatusTitle(
           allStatusActivities[allStatusActivities.length - 1],
           documentType,
-          t,
         )}
       </h3>
     );

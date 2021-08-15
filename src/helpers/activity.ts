@@ -10,17 +10,18 @@ import {
 } from '../clients/server.generated';
 import { SingleEntities } from '../stores/single/single';
 import { DocumentStatus } from '../components/activities/DocumentStatus';
+import i18n from '../localization';
 
 /**
  * Format an SingleEntity to a document string, which can be used in the activities
  */
-export function formatDocumentType(entity: SingleEntities, t: TFunction) {
+export function formatDocumentType(entity: SingleEntities) {
   switch (entity) {
-    case SingleEntities.Contract: return t('entity.contract');
-    case SingleEntities.Invoice: return t('entity.invoice');
-    case SingleEntities.ProductInstance: return t('entity.productinstance');
-    case SingleEntities.Company: return t('entity.company');
-    case SingleEntities.Product: return t('entity.product');
+    case SingleEntities.Contract: return i18n.t('entity.contract');
+    case SingleEntities.Invoice: return i18n.t('entity.invoice');
+    case SingleEntities.ProductInstance: return i18n.t('entity.productinstance');
+    case SingleEntities.Company: return i18n.t('entity.company');
+    case SingleEntities.Product: return i18n.t('entity.product');
     default: throw new Error(`Unknown entity ${entity} to format`);
   }
 }
@@ -31,18 +32,17 @@ export function formatDocumentType(entity: SingleEntities, t: TFunction) {
 export function formatDocumentStatusTitle(
   lastActivity: GeneralActivity,
   documentType: SingleEntities,
-  t: TFunction,
 ): string {
-  const entity = formatDocumentType(documentType, t);
+  const entity = formatDocumentType(documentType);
   if (lastActivity == null) {
-    return t('activities.status.header.general', { entity });
+    return i18n.t('activities.status.header.general', { entity });
   }
   if (lastActivity.subType === 'CANCELLED') {
-    return t('activities.status.header.cancelled', { entity });
+    return i18n.t('activities.status.header.cancelled', { entity });
   } if (lastActivity.subType === 'IRRECOVERABLE') {
-    return t('activities.status.header.irrecoverable', { entity });
+    return i18n.t('activities.status.header.irrecoverable', { entity });
   }
-  return t('activities.status.header.general', { entity });
+  return i18n.t('activities.status.header.general', { entity });
 }
 
 /**
@@ -52,27 +52,26 @@ export function formatActivityType(
   activityType: ActivityType,
   subType: string | undefined,
   entity: SingleEntities,
-  t: TFunction,
 ): string {
   switch (activityType) {
     case ActivityType.COMMENT:
-      return t('activities.types.comment');
+      return i18n.t('activities.types.comment');
     case ActivityType.STATUS:
       if (subType?.toLowerCase() === 'created') {
-        return t('activities.types.status.created', { entity: formatDocumentType(entity, t) });
+        return i18n.t('activities.types.status.created', { entity: formatDocumentType(entity) });
       }
       if (subType?.toLowerCase() === 'notdelivered') {
-        return t('activities.types.status.added', { entity: formatDocumentType(entity, t) });
+        return i18n.t('activities.types.status.added', { entity: formatDocumentType(entity) });
       }
-      return t('activities.types.status.changed', { status: t(`entities.status.${subType?.toLowerCase()}`).toLowerCase() });
+      return i18n.t('activities.types.status.changed', { status: i18n.t(`entities.status.${subType?.toLowerCase()}`).toLowerCase() });
     case ActivityType.EDIT:
-      return t('activities.types.edit', { entity: formatDocumentType(entity, t).toLowerCase() });
+      return i18n.t('activities.types.edit', { entity: formatDocumentType(entity).toLowerCase() });
     case ActivityType.REASSIGN:
-      return t('activities.types.reassign');
+      return i18n.t('activities.types.reassign');
     case ActivityType.ADDPRODUCT:
-      return t('activities.types.addProduct', { entity: formatDocumentType(entity, t).toLowerCase() });
+      return i18n.t('activities.types.addProduct', { entity: formatDocumentType(entity).toLowerCase() });
     case ActivityType.DELPRODUCT:
-      return t('activities.types.delProduct', { entity: formatDocumentType(entity, t).toLowerCase() });
+      return i18n.t('activities.types.delProduct', { entity: formatDocumentType(entity).toLowerCase() });
     default:
       throw new Error(`Unknown activity type ${activityType}`);
   }
@@ -83,9 +82,9 @@ export function formatActivityType(
  * @param date date of the activity
  * @param userName of the user who performed the activity
  */
-export function formatActivityDate(date: Date, userName: string, t: TFunction): string {
-  const dateString = formatLastUpdate(date, t);
-  return `${dateString} ${t('other.dateTime.by')} ${userName}`;
+export function formatActivityDate(date: Date, userName: string): string {
+  const dateString = formatLastUpdate(date);
+  return `${dateString} ${i18n.t('other.dateTime.by')} ${userName}`;
 }
 
 /**
@@ -95,10 +94,9 @@ export function formatActivitySummary(
   activityType: ActivityType,
   subType: string | undefined,
   entity: SingleEntities,
-  t: TFunction,
 ): string {
-  const activity = formatActivityType(activityType, subType, entity, t);
-  return `${activity} ${t('other.dateTime.by')} `;
+  const activity = formatActivityType(activityType, subType, entity);
+  return `${activity} ${i18n.t('other.dateTime.by')} `;
 }
 
 /**
@@ -106,10 +104,10 @@ export function formatActivitySummary(
  */
 export function formatStatus(status: string | undefined, t: TFunction): string {
   if (status === undefined) {
-    return t('entities.status.unknown');
+    return i18n.t('entities.status.unknown');
   }
   if (status === ProductInstanceStatus.NOTDELIVERED) {
-    return t('entities.status.notDelivered');
+    return i18n.t('entities.status.notDelivered');
   }
 
   return t(`entities.status.${status.toLowerCase()}`);

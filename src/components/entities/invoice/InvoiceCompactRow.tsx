@@ -35,7 +35,7 @@ function InvoiceCompactRow(props: Props): JSX.Element {
         {dateToFullFinancialYear(invoice.startDate)}
       </Table.Cell>
       <Table.Cell>
-        {formatLastUpdate(invoice.updatedAt, t)}
+        {formatLastUpdate(invoice.updatedAt)}
       </Table.Cell>
     </Table.Row>
   );

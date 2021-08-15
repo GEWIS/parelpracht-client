@@ -21,7 +21,7 @@ interface Props extends RouteComponentProps, WithTranslation {
 class DashboardContractsRow extends React.Component<Props> {
   render() {
     const {
-      contract, logoFilename, company, user, t,
+      contract, logoFilename, company, user,
     } = this.props;
     const logo = logoFilename !== '' ? (
       <Image
@@ -61,7 +61,7 @@ class DashboardContractsRow extends React.Component<Props> {
                     {' - '}
                     {contract.title}
                     <Header.Subheader>
-                      {formatActivityDate(contract.updatedAt, user, t)}
+                      {formatActivityDate(contract.updatedAt, user)}
                     </Header.Subheader>
                   </Header.Content>
                 </Header>

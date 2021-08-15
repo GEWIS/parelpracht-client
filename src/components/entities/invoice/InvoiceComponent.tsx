@@ -40,7 +40,7 @@ function InvoiceComponent(props: Props) {
         {dateToFullFinancialYear(invoice.startDate)}
       </Table.Cell>
       <Table.Cell>
-        {formatLastUpdate(invoice.updatedAt, t)}
+        {formatLastUpdate(invoice.updatedAt)}
       </Table.Cell>
     </Table.Row>
   );
