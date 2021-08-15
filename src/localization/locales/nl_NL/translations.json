@@ -73,6 +73,13 @@
       "contracted": "Gecontracteerd",
       "contractedShort": "Gecontract.",
       "delivered": "Geleverd",
+      "description": {
+        "contracted": "De totale waarde van alle geleverde en niet-geleverde producten op alle bevestigde/getekende contracten. Producten die al zijn gefactureerd in een vorig boekjaar of producten die zijn uitgesteld naar volgend jaar worden hier niet meegerekend.",
+        "delivered": "De totale waarde van alle producten op bevestigde/getekende contracten die in het huidige boekjaar zijn geleverd.",
+        "invoiced": "De totale waarde van alle producten die in dit boekjaar zijn gefactureerd.",
+        "paid": "De totale waarde van alle betaalde facturen in het huidige boekjaar.",
+        "suggested": "De totale waarde van alle contracten die nog niet zijn bevestigd/getekend door een bedrijf."
+      },
       "header": "Financieel overzicht",
       "invoiced": "Gefactureerd",
       "notDelivered": "Niet geleverd",
@@ -231,6 +238,7 @@
       "warningFinancialYear": "* In bovenstaand overzicht staan boekjaren, dus 2021 betekent het verenigingsjaar 2020-2021."
     },
     "productInstance": {
+      "newProduct": "Nieuw Product",
       "props": {
         "basePrice": "Basisprijs",
         "details": "Details",
@@ -304,7 +312,8 @@
     "productinstance": "Product",
     "productinstances": "Producten",
     "products": "Producten",
-    "user": "Gebruiker"
+    "user": "Gebruiker",
+    "users": "Gebruikers"
   },
   "files": {
     "generate": {
@@ -432,6 +441,9 @@
       "header": "Er is geen geld hier,",
       "subheader": "blijf zoeken!"
     },
+    "product": {
+      "newProduct": "Nieuw Product"
+    },
     "products": {
       "addProduct": "Voeg product toe",
       "columns": {
@@ -467,9 +479,6 @@
           "previous": "Vorige pagina"
         }
       },
-      "generalColumns": {
-        "total": "Totaal"
-      },
       "header": {
         "clear": "Wis zoekopdracht",
         "items": "{{items}} van {{total}} item(s) geladen",
@@ -479,13 +488,6 @@
         "update": "{{time}} bijgewerkt"
       },
       "invoices": {
-        "columns": {
-          "amount": "Bedrag",
-          "company": "Bedrijf",
-          "financialYear": "Boekjaar",
-          "status": "Status",
-          "title": "Titel"
-        },
         "header": "Alle facturen",
         "lastSeenMessage": "{{timeAgo}} bijgewerkt door de penningmeester",
         "lastSeenMessageNever": "Nooit bijgewerkt door de penningmeester",
@@ -518,6 +520,7 @@
         "modalHeader": "Achtergrond van {{name}}",
         "uploadUsersBackground": "Upload een achtergrond voor {{name}}"
       },
+      "newUser": "Nieuwe Gebruiker",
       "permissions": "Rechten",
       "responsibilities": {
         "cancel": "Annuleren",
@@ -526,6 +529,10 @@
         "transfer": "Overdragen",
         "transferButton": "Draag verantwoordelijkheden over"
       }
+    },
+    "users": {
+      "addUser": "Nieuwe gebruiker",
+      "allUsers": "Alle gebruikers"
     }
   }
 }

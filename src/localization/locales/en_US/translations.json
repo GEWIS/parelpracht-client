@@ -73,6 +73,13 @@
       "contracted": "Contracted",
       "contractedShort": "Contracted",
       "delivered": "Delivered",
+      "description": {
+        "contracted": "The total value of all delivered and not-delivered products on confirmed contracts. Note that products that are already invoiced in a previous financial year or products that are deferred to next financial year, are not included here.",
+        "delivered": "The total value of delivered products on confirmed contracts in the current financial year.",
+        "invoiced": "The total value of all products invoiced in the current financial year.",
+        "paid": "The total value of all paid invoices in the current financial year.",
+        "suggested": "The total value of all contracts that have not been confirmed by a company."
+      },
       "header": "Financial Overview",
       "invoiced": "Invoiced",
       "notDelivered": "Not delivered",
@@ -231,6 +238,7 @@
       "warningFinancialYear": "* Note that these years are the financial years so 2021 means the association year 2020-2021."
     },
     "productInstance": {
+      "newProduct": "New Product",
       "props": {
         "basePrice": "Base price",
         "details": "Details",
@@ -304,7 +312,8 @@
     "productinstance": "Product",
     "productinstances": "Products",
     "products": "Products",
-    "user": "User"
+    "user": "User",
+    "users": "Users"
   },
   "files": {
     "generate": {
@@ -432,6 +441,9 @@
       "header": "There is no money here,",
       "subheader": "keep looking!"
     },
+    "product": {
+      "newProduct": "New Product"
+    },
     "products": {
       "addProduct": "Add product",
       "columns": {
@@ -467,9 +479,6 @@
           "previous": "Previous page"
         }
       },
-      "generalColumns": {
-        "total": "Total"
-      },
       "header": {
         "clear": "Clear search",
         "items": "{{items}} of {{total}} item(s) shown",
@@ -479,13 +488,6 @@
         "update": "updated {{time}}"
       },
       "invoices": {
-        "columns": {
-          "amount": "Amount",
-          "company": "Company",
-          "financialYear": "Financial Year",
-          "status": "Status",
-          "title": "Title"
-        },
         "header": "All invoices",
         "lastSeenMessage": "Last updated by the treasurer {{timeAgo}}",
         "lastSeenMessageNever": "Never updated by the treasurer",
@@ -518,6 +520,7 @@
         "modalHeader": "{{name}}'s background",
         "uploadUsersBackground": "Upload {{name}}'s background"
       },
+      "newUser": "New User",
       "permissions": "Permissions",
       "responsibilities": {
         "cancel": "Cancel",
@@ -526,6 +529,10 @@
         "transfer": "Transfer",
         "transferButton": "Transfer responsibilities"
       }
+    },
+    "users": {
+      "addUser": "Add user",
+      "allUsers": "All users"
     }
   }
 }

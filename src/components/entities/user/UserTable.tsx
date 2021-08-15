@@ -1,7 +1,10 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
-import { Table } from 'semantic-ui-react';
+import {
+  Dimmer, Loader, Segment, Table,
+} from 'semantic-ui-react';
+import { useTranslation } from 'react-i18next';
 import { User } from '../../../clients/server.generated';
 import TablePagination from '../../TablePagination';
 import { RootState } from '../../../stores/store';
@@ -11,6 +14,7 @@ import {
 import { countFetched, countTotal, getTable } from '../../../stores/tables/selectors';
 import { Tables } from '../../../stores/tables/tables';
 import UserRow from './UserRow';
+import ResourceStatus from '../../../stores/resourceStatus';
 
 interface Props {
   users: User[];
@@ -20,6 +24,7 @@ interface Props {
   fetched: number;
   skip: number;
   take: number;
+  status: ResourceStatus;
 
   fetchUsers: () => void;
   changeSort: (column: string) => void;
@@ -30,14 +35,15 @@ interface Props {
 
 function UsersTable({
   users, fetchUsers, column, direction, changeSort,
-  total, fetched, skip, take,
+  total, fetched, skip, take, status,
   prevPage, nextPage, setTake,
 }: Props) {
   useEffect(() => {
     fetchUsers();
   }, []);
+  const { t } = useTranslation();
 
-  return (
+  const table = (
     <>
       <Table singleLine selectable attached sortable>
         <Table.Header>
@@ -46,28 +52,28 @@ function UsersTable({
               sorted={column === 'firstName' ? direction : undefined}
               onClick={() => changeSort('firstName')}
             >
-              Name
+              {t('entities.user.props.name')}
             </Table.HeaderCell>
             <Table.HeaderCell
               sorted={column === 'email' ? direction : undefined}
               onClick={() => changeSort('email')}
             >
-              E-mail
+              {t('entities.user.props.personalEmail')}
             </Table.HeaderCell>
             <Table.HeaderCell width={2}>
-              Signee
+              {t('entities.user.props.roles.signee')}
             </Table.HeaderCell>
             <Table.HeaderCell width={2}>
-              Financial
+              {t('entities.user.props.roles.financial')}
             </Table.HeaderCell>
             <Table.HeaderCell width={2}>
-              General
+              {t('entities.user.props.roles.general')}
             </Table.HeaderCell>
             <Table.HeaderCell width={2}>
-              Audit
+              {t('entities.user.props.roles.audit')}
             </Table.HeaderCell>
             <Table.HeaderCell width={2}>
-              Admin
+              {t('entities.user.props.roles.admin')}
             </Table.HeaderCell>
           </Table.Row>
         </Table.Header>
@@ -86,6 +92,21 @@ function UsersTable({
       />
     </>
   );
+
+  if (status === ResourceStatus.FETCHING || status === ResourceStatus.SAVING) {
+    return (
+      <>
+        <Segment style={{ padding: '0px' }}>
+          <Dimmer active inverted>
+            <Loader inverted />
+          </Dimmer>
+          {table}
+        </Segment>
+      </>
+    );
+  }
+
+  return table;
 }
 
 const mapStateToProps = (state: RootState) => {
@@ -93,6 +114,7 @@ const mapStateToProps = (state: RootState) => {
   return {
     total: countTotal(state, Tables.Users),
     fetched: countFetched(state, Tables.Users),
+    status: userTable.status,
     skip: userTable.skip,
     take: userTable.take,
     users: userTable.data,

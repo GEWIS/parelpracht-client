@@ -5,19 +5,16 @@ import { getSummary } from '../summaries/selectors';
 import { SummaryCollections } from '../summaries/summaries';
 import { getTable } from '../tables/selectors';
 import { Tables } from '../tables/tables';
+import i18n from '../../localization';
 
 export function sortColumn(state: RootState): string {
   const column = getTable<Contact>(state, Tables.Contacts).sortColumn;
   switch (column) {
-    case 'id': return 'ID';
-    case 'CompanyId': return 'Company ID';
-    case 'firstName': return 'First Name';
-    case 'lastNamePreposition': return 'Middle Name';
-    case 'lastName': return 'Last Name';
-    case 'gender': return 'Gender';
-    case 'email': return 'E-mail';
-    case 'comment': return 'Comment';
-    default: return 'unknown';
+    case 'id': return i18n.t('entities.generalProps.ID');
+    case 'company': return i18n.t('entity.company').toLowerCase();
+    case 'firstName': return i18n.t('entities.contact.props.firstName').toLowerCase();
+    case 'email': return i18n.t('entities.contact.props.email').toLowerCase();
+    default: return i18n.t('entities.generalProps.unknown').toLowerCase();
   }
 }
 

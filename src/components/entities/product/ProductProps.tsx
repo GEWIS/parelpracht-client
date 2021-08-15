@@ -194,7 +194,7 @@ class ProductProps extends React.Component<Props, State> {
     return (
       <>
         <h2>
-          {this.props.create ? 'New Product' : 'Details'}
+          {this.props.create ? t('pages.product.newProduct') : t('entities.details')}
 
           <PropsButtons
             editing={editing}

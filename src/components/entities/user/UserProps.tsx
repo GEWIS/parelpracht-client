@@ -198,7 +198,7 @@ class UserProps extends React.Component<Props, State> {
     return (
       <>
         <h2>
-          {this.props.create ? 'New User' : 'Details'}
+          {this.props.create ? t('pages.user.newUser') : t('entities.details')}
 
           <PropsButtons
             editing={editing}

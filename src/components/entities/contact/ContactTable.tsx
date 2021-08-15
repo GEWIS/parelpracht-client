@@ -73,7 +73,7 @@ function ContactsTable({
               sorted={column === 'function' ? direction : undefined}
               onClick={() => changeSort('function')}
             >
-              {t('entities.contact.props.function')}
+              {t('entities.contact.props.function.header')}
               <ContactFunctionFilter table={Tables.Contacts} />
             </Table.HeaderCell>
           </Table.Row>

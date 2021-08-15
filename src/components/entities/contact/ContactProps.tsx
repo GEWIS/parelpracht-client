@@ -269,11 +269,11 @@ class ContactProps extends React.Component<Props, State> {
             </Form.Field>
             <Form.Field required disabled={!editing}>
               {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-              <label htmlFor="form-input-function">{t('entities.contact.props.function')}</label>
+              <label htmlFor="form-input-function">{t('entities.contact.props.function.header')}</label>
               <Dropdown
                 id="form-input-function"
                 selection
-                placeholder={t('entities.contact.props.function')}
+                placeholder={t('entities.contact.props.function.header')}
                 value={func}
                 options={Object.values(ContactFunction).map((x, i) => ({
                   key: i, value: x, text: formatFunction(x, t),
