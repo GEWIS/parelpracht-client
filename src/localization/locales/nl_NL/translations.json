@@ -243,6 +243,8 @@
         "basePrice": "Basisprijs",
         "details": "Details",
         "discount": "Korting",
+        "invoiced": "Gefactureerd",
+        "price": "Prijs",
         "realPrice": "Werkelijke prijs"
       }
     },
@@ -418,6 +420,12 @@
       "header": "Wachtwoord resetten",
       "sendEmailButton": "Verstuur wachtwoord reset email",
       "successMessage": "Controleer je mailbox voor de link om je wachtwoord te resetten. Als deze mail niet binnen een paar minuten verschijnt, controleer je spam map."
+    },
+    "insights": {
+      "header": "Inzicht",
+      "notInvoiced": "Niet gefactureerd",
+      "nrOfProducts": "Aantal producten",
+      "totals": "Totalen"
     },
     "invoice": {
       "newInvoice": "Nieuwe Factuur"

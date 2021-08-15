@@ -4,6 +4,7 @@ import {
 } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
+import { withTranslation, WithTranslation } from 'react-i18next';
 import MegaTableRow from './MegaTableRow';
 import { RootState } from '../../stores/store';
 import { countFetched, countTotal, getTable } from '../../stores/tables/selectors';
@@ -23,11 +24,11 @@ import ProductFilter from '../tablefilters/ProductFilter';
 import ProductInstanceStatusFilter from '../tablefilters/ProductInstanceStatusFilter';
 import ProductInstanceInvoicedFilter from '../tablefilters/ProductInstanceInvoicedFilter';
 import ResourceStatus from '../../stores/resourceStatus';
-import { ETCompany } from '../../clients/server.generated';
+import { ETCompany, ProductInstanceStatus } from '../../clients/server.generated';
 import { formatPriceFull } from '../../helpers/monetary';
 import ContractStatusFilter from '../tablefilters/ContractStatusFilter';
 
-interface Props {
+interface Props extends WithTranslation {
   companies: ETCompany[];
   nrOfProducts: number;
   sumProducts: number;
@@ -52,6 +53,7 @@ class MegaTable extends React.Component<Props> {
     const { setSort, setTableFilter } = this.props;
     setSort('companyName', 'ASC');
     setTableFilter({ column: 'invoiced', values: [-1] });
+    setTableFilter({ column: 'status', values: [ProductInstanceStatus.NOTDELIVERED, ProductInstanceStatus.DELIVERED] });
   }
 
   render() {
@@ -59,7 +61,7 @@ class MegaTable extends React.Component<Props> {
       companies, column, direction, changeSort,
       total, fetched, skip, take, status,
       prevPage, nextPage, setTake,
-      sumProducts, nrOfProducts,
+      sumProducts, nrOfProducts, t,
     } = this.props;
     return (
       <>
@@ -78,27 +80,31 @@ class MegaTable extends React.Component<Props> {
                   onClick={() => changeSort('companyName')}
                   width={3}
                 >
-                  Company
+                  {t('entity.company')}
                   <CompanyFilter table={Tables.ETCompanies} />
                 </Table.HeaderCell>
                 <Table.HeaderCell width={3}>
-                  Contract
+                  {t('entity.company')}
                   <ContractStatusFilter column="status2" columnName="Contract Status" table={Tables.ETCompanies} />
                 </Table.HeaderCell>
                 <Table.HeaderCell width={2}>
-                  Product
+                  {t('entity.product')}
                   <ProductFilter />
                 </Table.HeaderCell>
                 <Table.HeaderCell width={2}>
-                  Status
+                  {t('entities.generalProps.status')}
                   <ProductInstanceStatusFilter columnName="Product Status" />
                 </Table.HeaderCell>
                 <Table.HeaderCell width={2}>
-                  Invoiced
+                  {t('entities.productInstance.props.invoiced')}
                   <ProductInstanceInvoicedFilter />
                 </Table.HeaderCell>
-                <Table.HeaderCell>Price</Table.HeaderCell>
-                <Table.HeaderCell>Details</Table.HeaderCell>
+                <Table.HeaderCell>
+                  {t('entities.productInstance.props.price')}
+                </Table.HeaderCell>
+                <Table.HeaderCell>
+                  {t('entities.productInstance.props.details')}
+                </Table.HeaderCell>
               </Table.Row>
             </Table.Header>
             <Table.Body>
@@ -109,11 +115,11 @@ class MegaTable extends React.Component<Props> {
             <Table.Footer>
               <Table.Row>
                 <Table.HeaderCell colSpan="3">
-                  Totals
+                  {t('pages.insights.totals')}
                 </Table.HeaderCell>
                 <Table.HeaderCell colSpan="2" style={{ textAlign: 'center' }}>
-                  Number of products:
-                  {' '}
+                  {t('pages.insights.nrOfProducts')}
+                  {': '}
                   {nrOfProducts || 0}
                 </Table.HeaderCell>
                 <Table.HeaderCell collapsing>{formatPriceFull(sumProducts || 0)}</Table.HeaderCell>
@@ -181,4 +187,4 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   },
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(MegaTable);
+export default withTranslation()(connect(mapStateToProps, mapDispatchToProps)(MegaTable));

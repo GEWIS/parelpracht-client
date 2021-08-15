@@ -243,6 +243,8 @@
         "basePrice": "Base price",
         "details": "Details",
         "discount": "Discount",
+        "invoiced": "Invoiced",
+        "price": "Price",
         "realPrice": "Real price"
       }
     },
@@ -418,6 +420,12 @@
       "header": "Reset password",
       "sendEmailButton": "Send password reset email",
       "successMessage": "Check your email for a link to reset your password. If it doesn't appear within a few minutes, check your spam folder."
+    },
+    "insights": {
+      "header": "Insights",
+      "notInvoiced": "Not invoiced",
+      "nrOfProducts": "Number of products",
+      "totals": "Totals"
     },
     "invoice": {
       "newInvoice": "New Invoice"
