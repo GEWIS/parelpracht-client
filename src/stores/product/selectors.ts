@@ -4,6 +4,7 @@ import { getSummary } from '../summaries/selectors';
 import { SummaryCollections } from '../summaries/summaries';
 import { getTable } from '../tables/selectors';
 import { Tables } from '../tables/tables';
+import { getLanguage } from '../../localization';
 
 export function sortColumn(state: RootState): string {
   const column = getTable<Product>(state, Tables.Products).sortColumn;
@@ -19,6 +20,13 @@ export function sortColumn(state: RootState): string {
 }
 
 export function getProductName(state: RootState, id: number): string {
+  const currentLanguage = getLanguage();
+
+  if (currentLanguage === 'nl-NL') {
+    return getSummary<ProductSummary>(
+      state, SummaryCollections.Products, id,
+    )?.nameDutch ?? '...';
+  }
   return getSummary<ProductSummary>(
     state, SummaryCollections.Products, id,
   )?.nameEnglish ?? '...';

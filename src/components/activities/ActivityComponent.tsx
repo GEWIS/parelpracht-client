@@ -23,6 +23,7 @@ import UserAvatar from '../entities/user/UserAvatar';
 import { TransientAlert } from '../../stores/alerts/actions';
 import { showTransientAlert } from '../../stores/alerts/actionCreators';
 import AuthorizationComponent from '../AuthorizationComponent';
+import { getLanguage } from '../../localization';
 
 interface Props extends RouteComponentProps, WithTranslation {
   activity: GeneralActivity;
@@ -98,14 +99,17 @@ class ActivityComponent extends React.Component<Props> {
       );
     }
 
+    const language = getLanguage();
+    const description = language === 'nl-NL' ? activity.descriptionDutch : activity.descriptionEnglish;
+
     let feedDescription;
-    if (activity.descriptionEnglish === '') {
+    if (description === '') {
       feedDescription = undefined;
     } else if (activity.type === ActivityType.COMMENT || activity.type === ActivityType.STATUS) {
       feedDescription = (
-        <Feed.Extra><Segment raised>{activity.descriptionEnglish}</Segment></Feed.Extra>);
+        <Feed.Extra><Segment raised>{description}</Segment></Feed.Extra>);
     } else {
-      feedDescription = (<Feed.Extra style={{ fontStyle: 'italic' }}>{activity.descriptionEnglish}</Feed.Extra>);
+      feedDescription = (<Feed.Extra style={{ fontStyle: 'italic' }}>{description}</Feed.Extra>);
     }
 
     const feedButtons = deleteButton !== undefined ? (

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Button, Icon } from 'semantic-ui-react';
+import { useTranslation } from 'react-i18next';
 import ResourceStatus from '../stores/resourceStatus';
 import DeleteButton from './DeleteButton';
 import { SingleEntities } from '../stores/single/single';
@@ -21,9 +22,9 @@ interface Props {
 
 function PropsButtons(props: Props) {
   const {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     editing, canEdit, canDelete, canSave, entity, status, cancel, edit, save, remove, style,
   } = props;
+  const { t } = useTranslation();
 
   switch (status) {
     default:
@@ -41,10 +42,10 @@ function PropsButtons(props: Props) {
               style={style}
             >
               <Icon name="save" />
-              Save
+              {t('buttons.save')}
             </Button>
             <Button icon floated="right" onClick={cancel} style={style}>
-              Cancel
+              {t('buttons.cancel')}
             </Button>
             <DeleteButton
               entity={entity}
@@ -60,7 +61,7 @@ function PropsButtons(props: Props) {
         <>
           <Button icon labelPosition="left" floated="right" onClick={edit} style={style} disabled={!canEdit}>
             <Icon name="pencil" />
-            Edit
+            {t('buttons.edit')}
           </Button>
           <DeleteButton
             entity={entity}
@@ -83,10 +84,10 @@ function PropsButtons(props: Props) {
             style={style}
           >
             <Icon name="save" />
-            Save
+            {t('buttons.save')}
           </Button>
           <Button icon floated="right" onClick={cancel} disabled style={style}>
-            Cancel
+            {t('buttons.cancel')}
           </Button>
           <DeleteButton
             entity={entity}

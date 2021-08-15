@@ -175,7 +175,7 @@ class CustomInvoicePage extends React.Component<Props, State> {
                   loading={loading}
                 >
                   <Icon name="download" />
-                  Generate invoice
+                  {t('pages.customInvoice.generateButton')}
                 </Button>
               </Grid.Column>
             </Grid>

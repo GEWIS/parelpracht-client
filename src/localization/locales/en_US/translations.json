@@ -6,10 +6,51 @@
       "postComment": "Post comment",
       "writeComment": "Write comment"
     },
-    "newComment": "Write a new comment..."
+    "newComment": "Write a new comment...",
+    "status": {
+      "cancel": "Cancel {{entity}}",
+      "cancelContractDescription": "By cancelling this contract, you indicate that the contract will not be delivered. Note that other products from the contract might still be delivered and invoiced.  Only cancel a contract in consultation with the External Affairs Officer.",
+      "cancelInvoiceDescription": "By cancelling an invoice, you indicate that the invoice or any of the products on this invoice will not be sent to the company. Please only cancel an invoice after consultation with the External Affairs Officer and the Treasurer.",
+      "defer": "Defer {{entity}}",
+      "deferDescription": "By defering this {{entity}}, you indicate that it will not be delivered in the current academic year and that delivery will be postponed until the next academic year.",
+      "header": {
+        "cancelled": "{{entity}} has been cancelled",
+        "general": "{{entity}} status",
+        "irrecoverable": "{{entity}} is irrecoverable"
+      },
+      "irrecoverable": "Mark irrecoveable",
+      "irrecoverableDescription": "By marking this invoice irrecoverable, you indicate that the money owed from this invoice can not be collected. Either the invoice is no longer valid (i.e. it was created more than 5 years ago) or the responsible party indicated to not pay the invoice. Note that this is different from cancelling an invoice, in which the contracted products can still be invoiced on another invoice."
+    },
+    "types": {
+      "addProduct": "Products added to {{entity}}",
+      "comment": "Comment added",
+      "delProduct": "Product removed from {{entity}}",
+      "edit": "{{entity}} updated",
+      "reassign": "Assignment changed",
+      "status": {
+        "added": "{{entity}} was added",
+        "changed": "Status changed to {{status}}",
+        "created": "{{entity}} was created"
+      }
+    }
   },
   "buttons": {
     "cancel": "Cancel",
+    "delete": {
+      "confirm": "Are you sure you want to delete this?",
+      "errorCompany": "You cannot delete this company, because it still has contracts, invoices and/or contacts.",
+      "errorContact": "You cannot delete this contact, because it still has contracts.",
+      "errorContract": "You cannot delete this contract, because it has a different status than \"Created\" or still has products or files attached to it.",
+      "errorInvoice": "You cannot delete this invoice, because it has a different status than \"Created\" or still has products or files attached to it.",
+      "errorInvoiceProduct": "You cannot delete this product, because this invoice has already been sent or paid.",
+      "errorProduct": "You cannot delete this product, because it is still has files attached to it or is still used in contracts and/or invoices.",
+      "errorProductCategory": "You cannot delete this product category, because it is still used by one or more products.",
+      "errorProductInstance": "You cannot delete this product, because it is still on an invoice, is delivered/cancelled/deferred, or its contract is already sent or proposed.",
+      "errorUser": "You cannot delete this user, because this user still has active roles.",
+      "header": "Delete {{entity}}",
+      "short": "Delete"
+    },
+    "edit": "Edit",
     "files": {
       "cancel": "Cancel upload",
       "delete": "Delete file",
@@ -17,7 +58,8 @@
       "edit": "Edit file",
       "save": "Save file",
       "upload": "Upload files"
-    }
+    },
+    "save": "Save"
   },
   "categories": {
     "addCategory": "Add category",
@@ -48,7 +90,15 @@
       "comments": "Comments",
       "email": "Email address",
       "firstName": "First name",
-      "function": "Function",
+      "function": {
+        "extensive": "{{function}} contact",
+        "financial": "Financial",
+        "header": "Function",
+        "normal": "Normal",
+        "old": "Old",
+        "primary": "Primary",
+        "unknown": "Unknown"
+      },
       "gender": {
         "female": "Female",
         "gender": "Gender",
@@ -111,12 +161,14 @@
       }
     },
     "status": {
+      "active": "Active",
       "cancelled": "Cancelled",
       "confirmed": "Confirmed",
       "created": "Created",
       "deferred": "Deferred",
       "delivered": "Delivered",
       "finished": "Finished",
+      "inactive": "Inactive",
       "irrecoverable": "Irrecoverable",
       "notDelivered": "Not delivered",
       "paid": "Paid",
@@ -240,6 +292,7 @@
     "customInvoice": {
       "descriptionHeader": "Factuur omschrijving",
       "detailsHeader": "Invoice details",
+      "generateButton": "Generate invoice",
       "header": "Generate Custom Invoice",
       "organizationName": "Organization name",
       "products": {
@@ -401,7 +454,7 @@
     "noActivities": "There are no activities logged yet.",
     "noContract": "There are no contracts created yet.",
     "noFiles": "There are no files uploaded yet.",
-    "noInvoices": "There are no invoices yet.",
+    "noInvoice": "There are no invoices yet.",
     "props": {
       "category": "Product category",
       "comments": "Comments (internal)",

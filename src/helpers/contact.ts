@@ -17,26 +17,18 @@ export function formatContactName(
   return contactName;
 }
 
-export function formatFunction(func: ContactFunction) {
+export function formatFunctionShort(func: ContactFunction, t: TFunction) {
   switch (func) {
-    case ContactFunction.NORMAL: return 'Normal contact';
-    case ContactFunction.PRIMARY: return 'Primary contact';
-    case ContactFunction.FINANCIAL: return 'Financial contact';
-    case ContactFunction.OLD: return 'Old contact';
-    default: return 'Unknown function';
+    case ContactFunction.NORMAL: return t('contacts.props.function.normal');
+    case ContactFunction.PRIMARY: return t('contacts.props.function.primary');
+    case ContactFunction.FINANCIAL: return t('contacts.props.function.financial');
+    case ContactFunction.OLD: return t('contacts.props.function.old');
+    default: return t('contacts.props.function.unknown');
   }
 }
 
-export function formatFunctionShort(func: ContactFunction) {
-  switch (func) {
-    case ContactFunction.NORMAL: return 'Normal';
-    case ContactFunction.PRIMARY: return 'Primary';
-    case ContactFunction.FINANCIAL: return 'Financial';
-    case ContactFunction.OLD: return 'Old';
-    default: {
-      return 'Unknown';
-    }
-  }
+export function formatFunction(func: ContactFunction, t: TFunction) {
+  return t('contacts.props.function.extensive', { function: formatFunctionShort(func, t) });
 }
 
 export function formatGender(gender: Gender, t: TFunction) {

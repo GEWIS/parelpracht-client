@@ -1,6 +1,7 @@
 import { Button, Popup, SemanticCOLORS } from 'semantic-ui-react';
 import React from 'react';
 import { SemanticSIZES } from 'semantic-ui-react/dist/commonjs/generic';
+import { useTranslation } from 'react-i18next';
 import ResourceStatus from '../stores/resourceStatus';
 import { SingleEntities } from '../stores/single/single';
 
@@ -18,6 +19,8 @@ function DeleteButton(props: DeleteProps) {
   const {
     canDelete, entity, remove, status, size, color, style,
   } = props;
+  const { t } = useTranslation();
+
   if (canDelete === true) {
     return (
       <Popup
@@ -39,13 +42,12 @@ function DeleteButton(props: DeleteProps) {
             onClick={remove}
             loading={status === ResourceStatus.DELETING}
             style={{ marginTop: '0.5em' }}
+            title={t('buttons.delete.short')}
           >
-            Delete
-            {' '}
-            {entity.replace(/([a-z])([A-Z])/g, '$1 $2').trim().toLowerCase()}
+            {t('buttons.delete.header', { entity: t(`entity.${entity.replace(/([a-z])([A-Z])/g, '$1 $2').trim().toLowerCase()}`) })}
           </Button>
         )}
-        header="Are you sure you want to delete this?"
+        header={t('buttons.delete.confirm')}
       />
     );
   }
@@ -53,31 +55,31 @@ function DeleteButton(props: DeleteProps) {
     let deleteError: string;
     switch (entity) {
       case SingleEntities.Contract:
-        deleteError = 'it has a different status than "Created" or has products or files attached to it';
+        deleteError = t('buttons.delete.errorContract');
         break;
       case SingleEntities.Invoice:
-        deleteError = 'it has a different status than "Created" or has products or files attached to it';
+        deleteError = t('buttons.delete.errorInvoice');
         break;
       case SingleEntities.Company:
-        deleteError = 'this company has contracts, invoices and/or contacts';
+        deleteError = t('buttons.delete.errorCompany');
         break;
       case SingleEntities.Contact:
-        deleteError = 'this contact has contracts';
+        deleteError = t('buttons.delete.errorContact');
         break;
       case SingleEntities.Product:
-        deleteError = 'this product is used in contracts and/or invoices';
+        deleteError = t('buttons.delete.errorProduct');
         break;
       case SingleEntities.ProductCategory:
-        deleteError = 'this product category is used by one or more products';
+        deleteError = t('buttons.delete.errorProductCategory');
         break;
       case SingleEntities.ProductInstance:
-        deleteError = 'this product has an invoice or is delivered/cancelled/deferred or its contract is already sent or proposed';
+        deleteError = t('buttons.delete.errorProductInstance');
         break;
       case 'InvoiceProduct':
-        deleteError = 'this invoice has already been sent or finished';
+        deleteError = t('buttons.delete.errorInvoiceProduct');
         break;
       case SingleEntities.User:
-        deleteError = 'this user still has active roles';
+        deleteError = t('buttons.delete.errorUser');
         break;
       default:
         throw new Error(`${entity} is not a valid DeleteEntity`);
@@ -98,7 +100,7 @@ function DeleteButton(props: DeleteProps) {
         )}
         on="hover"
         mouseEnterDelay={500}
-        content={`You cannot delete this, because ${deleteError}.`}
+        content={deleteError}
       />
     );
   }

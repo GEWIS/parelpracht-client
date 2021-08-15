@@ -6,10 +6,51 @@
       "postComment": "Plaats opmerking",
       "writeComment": "Voeg opmerking toe"
     },
-    "newComment": "Schrijf een nieuwe opmerking..."
+    "newComment": "Schrijf een nieuwe opmerking...",
+    "status": {
+      "cancel": "Annuleer {{entity}}",
+      "cancelContractDescription": "Door een contract te annuleren, geef je aan dat het gehele contract niet geleverd wordt. Let op: sommige producten op het contract zouden nog wel geleverd en gefactureerd kunnen worden. Annuleer alleen een contract nadat je de Commissaris Externe Betrekkingen hebt geraadpleegd.",
+      "cancelInvoiceDescription": "Door een factuur te annuleren, geef je aan dat de factuur of één of meer producten op de factuur niet naar het bedrijf worden gestuurd. Annuleer alleen een factuur nadat je Commissaris Externe Betrekkingen en de Penningmeester hebt geraadpleegd.",
+      "defer": "Stel {{entity}} uit",
+      "deferDescription": "Door deze {{entity}} uit te stellen, geef je aan dat dit product niet geleverd wordt in het huidige academische jaar maar wel in het volgende academische jaar.",
+      "header": {
+        "cancelled": "{{entity}} is geannuleerd",
+        "general": "{{entity}} status",
+        "irrecoverable": "{{entity}} is oninbaar"
+      },
+      "irrecoverable": "Markeer als oninbaar",
+      "irrecoverableDescription": "Door deze factuur als oninbaar te markeren, geef je aan dat het geld van deze factuur niet geind kan worden. Dit kan als de factuur verlopen is (dus langer dan 5 jaar geleden verstuurd) of als de debiteur laat weten dat zij de factuur niet zullen betalen. Weet dat dit anders id dan een factuur annuleren: hierbij kunnen de producten nog steeds gefactureerd worden op een andere factuur."
+    },
+    "types": {
+      "addProduct": "Producten toegevoegd aan {{entity}}",
+      "comment": "Opmerking toegevoegd",
+      "delProduct": "Product verwijderd van {{entity}}",
+      "edit": "{{entity}} geupdatet",
+      "reassign": "Toewijzing aangepast",
+      "status": {
+        "added": "{{entity}} is toegevoegd",
+        "changed": "Status aangepast naar {{status}}",
+        "created": "{{entity}} is aangemaakt"
+      }
+    }
   },
   "buttons": {
     "cancel": "Annuleren",
+    "delete": {
+      "confirm": "Weet je zeker dat je dit wilt verwijderen?",
+      "errorCompany": "Je kunt dit bedrijf niet verwijderen, omdat het nog contracten, facturen en/of contactpersonen heeft.",
+      "errorContact": "Je kunt dit contract niet verwijderen, omdat het nog contracten heeft.",
+      "errorContract": "Je kunt dit contract niet verwijderen, omdat het een andere status heeft dan \"Aangemaakt\" of nog producten of bestanden heeft.",
+      "errorInvoice": "Je kunt deze factuur niet verwijderen, omdat het een andere status dan \"Aangemaakt\" heeft of nog producten of bestanden heeft.",
+      "errorInvoiceProduct": "Je kunt dit product niet verwijderen, omdat de factuur al verstuurd of betaald is.",
+      "errorProduct": "Je kunt dit product niet verwijderen, omdat het nog bestanden heeft of nog gebruikt wordt in contracten en/of facturen.",
+      "errorProductCategory": "Je kunt deze productcategorie niet verwijderne, omdat het nog gebruikt wordt door één of meer producten.",
+      "errorProductInstance": "Je kunt dit product niet verwijderen, omdat het al op een factuur staat, het al geleverd/geannulleerd/uitgesteld is, of omdat het contract al voorgesteld of verstuurd is.",
+      "errorUser": "Je kunt deze gebruiker niet verwijdern, omdat deze gebruiker nog actieve rollen heeft.",
+      "header": "Verwijder {{entity}}",
+      "short": "Verwijderen"
+    },
+    "edit": "Bewerken",
     "files": {
       "cancel": "Annuleren",
       "delete": "Verwijder bestand",
@@ -17,7 +58,8 @@
       "edit": "Bewerk bestand",
       "save": "Bestand opslaan",
       "upload": "Upload bestanden"
-    }
+    },
+    "save": "Opslaan"
   },
   "categories": {
     "addCategory": "Nieuwe categorie",
@@ -48,7 +90,15 @@
       "comments": "Opmerkingen",
       "email": "Emailadres",
       "firstName": "Voornaam",
-      "function": "Functie",
+      "function": {
+        "extensive": "{{function}} contactpersoon",
+        "financial": "Financieel",
+        "header": "Functie",
+        "normal": "Normaal",
+        "old": "Oud",
+        "primary": "Primair",
+        "unknown": "Onbekend"
+      },
       "gender": {
         "female": "Vrouw",
         "gender": "Gender",
@@ -111,12 +161,14 @@
       }
     },
     "status": {
+      "active": "Actief",
       "cancelled": "Geannuleerd",
       "confirmed": "Bevestigd",
       "created": "Aangemaakt",
       "deferred": "Uitgesteld",
       "delivered": "Geleverd",
       "finished": "Afgerond",
+      "inactive": "Inactief",
       "irrecoverable": "Oninbaar",
       "notDelivered": "Niet geleverd",
       "paid": "Betaald",
@@ -240,6 +292,7 @@
     "customInvoice": {
       "descriptionHeader": "Invoice description",
       "detailsHeader": "Factuurinformatie",
+      "generateButton": "Genereer factuur",
       "header": "Genereer Handmatige Factuur",
       "organizationName": "Naam van organisatie",
       "products": {
@@ -401,7 +454,7 @@
     "noActivities": "Er zijn nog geen activiteiten.",
     "noContract": "Er zijn nog geen contracten aangemaakt.",
     "noFiles": "Er zijn nog geen bestanden geupload.",
-    "noInvoices": "Er zijn nog geen facturen toegevoegd.",
+    "noInvoice": "Er zijn nog geen facturen toegevoegd.",
     "props": {
       "category": "Product categorie",
       "comments": "Opmerkingen (intern)",

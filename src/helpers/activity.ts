@@ -14,13 +14,13 @@ import { DocumentStatus } from '../components/activities/DocumentStatus';
 /**
  * Format an SingleEntity to a document string, which can be used in the activities
  */
-export function formatDocumentType(entity: SingleEntities) {
+export function formatDocumentType(entity: SingleEntities, t: TFunction) {
   switch (entity) {
-    case SingleEntities.Contract: return 'Contract';
-    case SingleEntities.Invoice: return 'Invoice';
-    case SingleEntities.ProductInstance: return 'Product';
-    case SingleEntities.Company: return 'Company';
-    case SingleEntities.Product: return 'Product';
+    case SingleEntities.Contract: return t('entity.contract');
+    case SingleEntities.Invoice: return t('entity.invoice');
+    case SingleEntities.ProductInstance: return t('entity.productinstance');
+    case SingleEntities.Company: return t('entity.company');
+    case SingleEntities.Product: return t('entity.product');
     default: throw new Error(`Unknown entity ${entity} to format`);
   }
 }
@@ -30,17 +30,19 @@ export function formatDocumentType(entity: SingleEntities) {
  */
 export function formatDocumentStatusTitle(
   lastActivity: GeneralActivity,
-  documentType: string,
+  documentType: SingleEntities,
+  t: TFunction,
 ): string {
+  const entity = formatDocumentType(documentType, t);
   if (lastActivity == null) {
-    return `${documentType} status`;
+    return t('activities.status.header.general', { entity });
   }
   if (lastActivity.subType === 'CANCELLED') {
-    return `${documentType} has been cancelled.`;
+    return t('activities.status.header.cancelled', { entity });
   } if (lastActivity.subType === 'IRRECOVERABLE') {
-    return `${documentType} is irrecoverable.`;
+    return t('activities.status.header.irrecoverable', { entity });
   }
-  return `${documentType} status`;
+  return t('activities.status.header.general', { entity });
 }
 
 /**
@@ -54,23 +56,23 @@ export function formatActivityType(
 ): string {
   switch (activityType) {
     case ActivityType.COMMENT:
-      return 'Comment added';
+      return t('activities.types.comment');
     case ActivityType.STATUS:
       if (subType?.toLowerCase() === 'created') {
-        return `${formatDocumentType(entity)} was created`;
+        return t('activities.types.status.created', { entity: formatDocumentType(entity, t) });
       }
       if (subType?.toLowerCase() === 'notdelivered') {
-        return `${formatDocumentType(entity)} was added`;
+        return t('activities.types.status.added', { entity: formatDocumentType(entity, t) });
       }
-      return `Status changed to ${subType?.toLowerCase()}`;
+      return t('activities.types.status.changed', { status: t(`entities.status.${subType?.toLowerCase()}`).toLowerCase() });
     case ActivityType.EDIT:
-      return `${formatDocumentType(entity)} updated`;
+      return t('activities.types.edit', { entity: formatDocumentType(entity, t).toLowerCase() });
     case ActivityType.REASSIGN:
-      return 'Assignment changed';
+      return t('activities.types.reassign');
     case ActivityType.ADDPRODUCT:
-      return `Products added to ${formatDocumentType(entity).toLowerCase()}`;
+      return t('activities.types.addProduct', { entity: formatDocumentType(entity, t).toLowerCase() });
     case ActivityType.DELPRODUCT:
-      return `Product removed from ${formatDocumentType(entity).toLowerCase()}`;
+      return t('activities.types.delProduct', { entity: formatDocumentType(entity, t).toLowerCase() });
     default:
       throw new Error(`Unknown activity type ${activityType}`);
   }

@@ -4,6 +4,7 @@ import {
   Button, Grid, Icon, Popup, Step,
 } from 'semantic-ui-react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
+import { withTranslation, WithTranslation } from 'react-i18next';
 import { GeneralActivity } from './GeneralActivity';
 import FinancialDocumentStep from './FinancialDocumentStep';
 import {
@@ -22,8 +23,9 @@ import { DocumentStatus } from './DocumentStatus';
 import ResourceStatus from '../../stores/resourceStatus';
 import { Roles } from '../../clients/server.generated';
 import AuthorizationComponent from '../AuthorizationComponent';
+import { getLanguage } from '../../localization';
 
-interface Props extends RouteComponentProps {
+interface Props extends RouteComponentProps, WithTranslation {
   documentId: number;
   // If the document is a ProductInstance, the parentId is the contract ID
   parentId?: number;
@@ -74,8 +76,10 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
   public render() {
     const {
       activities, documentType, documentId, resourceStatus, parentId, roles,
-      canCancel, cancelReason,
+      canCancel, cancelReason, t,
     } = this.props;
+    const language = getLanguage();
+
     const { cancelModalOpen, deferModalOpen, irrecoverableModalOpen } = this.state;
     const allPossibleDocumentStatuses = getAllDocumentStatuses(documentType);
     const allStatusActivities = getAllStatusActivities(activities);
@@ -92,9 +96,8 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
           notFound={false}
         >
           <Popup
-            header={`Defer ${formatDocumentType(documentType).toLowerCase()}`}
-            content={`By defering this ${formatDocumentType(documentType).toLowerCase()}, you indicate that it will
-          not be delivered in the current academic year and that delivery will be postponed until the next academic year.`}
+            header={t('activities.status.defer', { entity: formatDocumentType(documentType, t).toLowerCase() })}
+            content={t('activities.status.deferDescription', { entity: formatDocumentType(documentType, t).toLowerCase() })}
             mouseEnterDelay={500}
             wide
             trigger={(
@@ -108,7 +111,7 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
                     deferModalOpen: true,
                   });
                 }}
-                content={`Defer ${formatDocumentType(documentType).toLowerCase()}`}
+                content={t('activities.status.defer', { entity: formatDocumentType(documentType, t).toLowerCase() })}
                 disabled={allCompletedStatuses[allCompletedStatuses.length - 1]
                 !== DocumentStatus.NOTDELIVERED}
               />
@@ -123,13 +126,8 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
           notFound={false}
         >
           <Popup
-            header={`Mark
-          irrecoverable`}
-            content={`By marking this invoice irrecoverable, you indicate that the money owed from this invoice can not be collected.
-          Either the invoice is no longer valid
-          (i.e. it was created more than 5 years ago) or the responsible party indicated to not pay the invoice.
-          Note that this is different from cancelling an invoice, in which the contracted products can still be invoiced on
-          another invoice.`}
+            header={t('activities.status.irrecoverable')}
+            content={t('activities.status.irrecoverableDescription')}
             mouseEnterDelay={500}
             wide
             trigger={(
@@ -141,7 +139,7 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
                 onClick={() => {
                   this.setState({ irrecoverableModalOpen: true });
                 }}
-                content="Mark irrecoverable"
+                content={t('activities.status.irrecoverable')}
                 disabled={!(allCompletedStatuses.includes(DocumentStatus.CREATED)
                 || allCompletedStatuses.includes(DocumentStatus.SENT))}
               />
@@ -153,7 +151,7 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
 
     let rightButton;
     if (canCancel) {
-      rightButton = documentType === SingleEntities.Invoice ? (
+      rightButton = (
         <AuthorizationComponent roles={[Roles.GENERAL, Roles.ADMIN]} notFound={false}>
           <Popup
             trigger={(
@@ -167,40 +165,15 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
                     cancelModalOpen: true,
                   });
                 }}
-                content={`Cancel ${formatDocumentType(documentType).toLocaleLowerCase()}`}
+                content={t('activities.status.cancel', { entity: formatDocumentType(documentType, t).toLocaleLowerCase() })}
                 disabled={getToDoStatus(allCompletedStatuses[allCompletedStatuses.length - 1],
                   documentType).length === 0}
               />
             )}
-            header="Cancel invoice"
-            content="By cancelling an invoice, you indicate that the invoice or any of the products on this invoice will not be sent to the company.
-            Please only cancel an invoice after consultation with the external affairs officer and the treasurer."
-          />
-        </AuthorizationComponent>
-      ) : (
-        <AuthorizationComponent roles={[Roles.GENERAL, Roles.ADMIN]} notFound={false}>
-          <Popup
-            trigger={(
-              <Button
-                floated="right"
-                labelPosition="left"
-                icon="close"
-                basic
-                onClick={() => {
-                  this.setState({
-                    cancelModalOpen: true,
-                  });
-                }}
-                content={`Cancel ${formatDocumentType(documentType).toLocaleLowerCase()}`}
-                disabled={getToDoStatus(allCompletedStatuses[allCompletedStatuses.length - 1],
-                  documentType).length === 0}
-              />
-            )}
-            header={`Cancel ${formatDocumentType(documentType).toLocaleLowerCase()}`}
-            content={`By cancelling this ${formatDocumentType(documentType).toLocaleLowerCase()}, you indicate
-             that the ${formatDocumentType(documentType).toLocaleLowerCase()} will not be delivered. Note that other products from the contract
-             might still be delivered and invoiced. \n
-             Only cancel a ${formatDocumentType(documentType).toLocaleLowerCase()} in consultation with the external affairs officer.`}
+            header={t('activities.status.cancel', { entity: formatDocumentType(documentType, t).toLocaleLowerCase() })}
+            content={documentType === SingleEntities.Invoice
+              ? t('activities.status.cancelInvoiceDescription')
+              : t('activities.status.cancelContractDescription')}
           />
         </AuthorizationComponent>
       );
@@ -218,7 +191,7 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
                   labelPosition="left"
                   icon="close"
                   basic
-                  content={`Cancel ${formatDocumentType(documentType).toLocaleLowerCase()}`}
+                  content={t('activities.status.cancel', { entity: formatDocumentType(documentType, t).toLocaleLowerCase() })}
                   disabled
                   style={{ pointerEvents: 'auto !important' }}
                 />
@@ -241,7 +214,8 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
             >
               {formatDocumentStatusTitle(
                 allStatusActivities[allStatusActivities.length - 1],
-                formatDocumentType(documentType),
+                documentType,
+                t,
               )}
             </h3>
           </Grid.Column>
@@ -254,7 +228,8 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
       <h3 style={{ textAlign: 'center' }}>
         {formatDocumentStatusTitle(
           allStatusActivities[allStatusActivities.length - 1],
-          formatDocumentType(documentType),
+          documentType,
+          t,
         )}
       </h3>
     );
@@ -307,7 +282,7 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
 
       // push the description of the status if it has a status
       if (documentStatusActivity !== undefined) {
-        statusDescriptionList.push(documentStatusActivity.descriptionEnglish);
+        statusDescriptionList.push(language === 'nl-NL' ? documentStatusActivity.descriptionDutch : documentStatusActivity.descriptionEnglish);
       } else {
         statusDescriptionList.push('');
       }
@@ -373,4 +348,5 @@ const mapStateToProps = () => {
 const mapDispatchToProps = () => ({
 });
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(FinancialDocumentProgress));
+export default withTranslation()(withRouter(connect(mapStateToProps,
+  mapDispatchToProps)(FinancialDocumentProgress)));

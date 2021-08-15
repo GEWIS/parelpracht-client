@@ -25,6 +25,7 @@ import ProductsContractedGraph from '../components/entities/product/ProductsCont
 import PricingTable from '../components/productpricing/PricingTable';
 import AuthorizationComponent from '../components/AuthorizationComponent';
 import NotFound from './NotFound';
+import { getLanguage } from '../localization';
 
 interface Props extends WithTranslation, RouteComponentProps<{ productId: string }> {
   product: Product | undefined;
@@ -166,8 +167,9 @@ class SingleProductPage extends React.Component<Props, State> {
   };
 
   public render() {
-    const { product, status } = this.props;
+    const { product, status, t } = this.props;
     const { paneIndex } = this.state;
+    const useDutch = getLanguage() === 'nl-NL';
 
     if (status === ResourceStatus.NOTFOUND) {
       return <NotFound />;
@@ -192,8 +194,8 @@ class SingleProductPage extends React.Component<Props, State> {
             <Breadcrumb
               icon="right angle"
               sections={[
-                { key: 'Products', content: <NavLink to="/product">Products</NavLink> },
-                { key: 'Product', content: product.nameEnglish, active: true },
+                { key: 'Products', content: <NavLink to="/product">{t('entity.products')}</NavLink> },
+                { key: 'Product', content: useDutch ? product.nameDutch : product.nameEnglish, active: true },
               ]}
             />
           </Container>
