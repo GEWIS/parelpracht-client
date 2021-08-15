@@ -11,6 +11,7 @@
       "cancel": "Cancel {{entity}}",
       "cancelContractDescription": "By cancelling this contract, you indicate that the contract will not be delivered. Note that other products from the contract might still be delivered and invoiced.  Only cancel a contract in consultation with the External Affairs Officer.",
       "cancelInvoiceDescription": "By cancelling an invoice, you indicate that the invoice or any of the products on this invoice will not be sent to the company. Please only cancel an invoice after consultation with the External Affairs Officer and the Treasurer.",
+      "cancelProductInstanceDescription": "By cancelling a product, you indicate that it will never be delivered. Only cancel a product after consulting the External Affaris Officer.",
       "defer": "Defer {{entity}}",
       "deferDescription": "By defering this {{entity}}, you indicate that it will not be delivered in the current academic year and that delivery will be postponed until the next academic year.",
       "header": {
@@ -136,6 +137,22 @@
     "welcome": "Welcome back,"
   },
   "entities": {
+    "contract": {
+      "props": {
+        "title": "Title",
+        "totalValue": "Total value"
+      }
+    },
+    "details": "Details",
+    "generalProps": {
+      "ID": "ID",
+      "amount": "Amount",
+      "assignedTo": "Assigned to",
+      "comments": "Comments",
+      "commentsDescription": "Internal comments",
+      "lastUpdate": "Last update",
+      "status": "Status"
+    },
     "graph": {
       "label": {
         "amount": "Amount",
@@ -158,6 +175,14 @@
       "target": {
         "maximum": "Maximum target",
         "minimum": "Minimum target"
+      }
+    },
+    "productInstance": {
+      "props": {
+        "basePrice": "Base price",
+        "details": "Details",
+        "discount": "Discount",
+        "realPrice": "Real price"
       }
     },
     "status": {
@@ -212,6 +237,7 @@
     "companies": "Companies",
     "company": "Company",
     "contact": "Contact",
+    "contactShort": "Contact",
     "contacts": "Contacts",
     "contract": "Contract",
     "contracts": "Contracts",
@@ -221,7 +247,8 @@
     "invoices": "Invoices",
     "product": "Product",
     "productcategory": "Product Category",
-    "productinstance": "Product Instance",
+    "productinstance": "Product",
+    "productinstances": "Products",
     "products": "Products",
     "user": "User"
   },
@@ -286,8 +313,19 @@
       "addContact": "Add contact",
       "noContact": "There are no contacts yet."
     },
+    "contract": {
+      "cancelError": "You can not cancel this contract, because not all products are marked as cancelled.",
+      "newContract": "New contract",
+      "products": {
+        "addProduct": "Add product",
+        "addSingleToInvoice": "Add 1 product to invoice",
+        "addToInvoice": "Add {{amount}} products to invoice",
+        "createNewInvoice": "Create new invoice"
+      }
+    },
     "contracts": {
-      "addContract": "Add contract"
+      "addContract": "Add contract",
+      "allContracts": "All Contracts"
     },
     "customInvoice": {
       "descriptionHeader": "Factuur omschrijving",

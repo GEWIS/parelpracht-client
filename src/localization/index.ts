@@ -22,7 +22,7 @@ const resources = {
   },
 };
 
-export default i18n
+i18n
   .use(initReactI18next)
   .use(LanguageDetector)
   .init({
@@ -39,13 +39,14 @@ export const changeLanguage = (language: locales) => {
 };
 
 export const getLanguage = (): locales => {
-  return i18n.language as locales;
+  return i18n.languages[0] as locales;
 };
 
-const currentLanguage = i18n.language;
-// @ts-ignore
-if (currentLanguage !== 'nl-NL' || currentLanguage !== 'en-US') {
-  TimeAgo.setDefaultLocale('en-US');
+const currentLanguage = getLanguage();
+if (currentLanguage === 'nl-NL') {
+  TimeAgo.setDefaultLocale('nl-NL');
 } else {
-  TimeAgo.setDefaultLocale(i18n.language);
+  TimeAgo.setDefaultLocale('en-US');
 }
+
+export default i18n;

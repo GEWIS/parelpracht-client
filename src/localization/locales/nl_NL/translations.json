@@ -11,8 +11,9 @@
       "cancel": "Annuleer {{entity}}",
       "cancelContractDescription": "Door een contract te annuleren, geef je aan dat het gehele contract niet geleverd wordt. Let op: sommige producten op het contract zouden nog wel geleverd en gefactureerd kunnen worden. Annuleer alleen een contract nadat je de Commissaris Externe Betrekkingen hebt geraadpleegd.",
       "cancelInvoiceDescription": "Door een factuur te annuleren, geef je aan dat de factuur of één of meer producten op de factuur niet naar het bedrijf worden gestuurd. Annuleer alleen een factuur nadat je Commissaris Externe Betrekkingen en de Penningmeester hebt geraadpleegd.",
+      "cancelProductInstanceDescription": "Door een product te annuleren, geef je aan dat deze nooit geleverd zal worden. Annuleer alleen een product nadat je de Commissaris Externe Betrekkingen hebt geraadpleegd.",
       "defer": "Stel {{entity}} uit",
-      "deferDescription": "Door deze {{entity}} uit te stellen, geef je aan dat dit product niet geleverd wordt in het huidige academische jaar maar wel in het volgende academische jaar.",
+      "deferDescription": "Door deze {{entity}} uit te stellen, geef je aan dat dit product niet geleverd wordt in het huidige academische jaar, maar wel in het volgende academische jaar.",
       "header": {
         "cancelled": "{{entity}} is geannuleerd",
         "general": "{{entity}} status",
@@ -136,6 +137,22 @@
     "welcome": "Welkom terug,"
   },
   "entities": {
+    "contract": {
+      "props": {
+        "title": "Titel",
+        "totalValue": "Totale waarde"
+      }
+    },
+    "details": "Details",
+    "generalProps": {
+      "ID": "ID",
+      "amount": "Bedrag",
+      "assignedTo": "Toegewezen aan",
+      "comments": "Opmerkingen",
+      "commentsDescription": "Interne opmerkingen",
+      "lastUpdate": "Laatste update",
+      "status": "Status"
+    },
     "graph": {
       "label": {
         "amount": "Aantal",
@@ -158,6 +175,14 @@
       "target": {
         "maximum": "Maximum target",
         "minimum": "Minimum target"
+      }
+    },
+    "productInstance": {
+      "props": {
+        "basePrice": "Basisprijs",
+        "details": "Details",
+        "discount": "Korting",
+        "realPrice": "Werkelijke prijs"
       }
     },
     "status": {
@@ -211,7 +236,8 @@
     "categories": "Product categorieën",
     "companies": "Bedrijven",
     "company": "Bedrijf",
-    "contact": "Contact",
+    "contact": "Contactpersoon",
+    "contactShort": "Contactp.",
     "contacts": "Contactpersonen",
     "contract": "Contract",
     "contracts": "Contracten",
@@ -221,7 +247,8 @@
     "invoices": "Facturen",
     "product": "Product",
     "productcategory": "Product Categorie",
-    "productinstance": "Product Instantie",
+    "productinstance": "Product",
+    "productinstances": "Producten",
     "products": "Producten",
     "user": "Gebruiker"
   },
@@ -286,8 +313,19 @@
       "addContact": "Nieuw contactpersoon",
       "noContact": "Er zijn nog geen contactpersonen."
     },
+    "contract": {
+      "cancelError": "Je kunt dit contract niet annuleren, omdat niet alle producten zijn geannuleerd.",
+      "newContract": "Nieuw contract",
+      "products": {
+        "addProduct": "Voeg product toe",
+        "addSingleToInvoice": "Zet 1 product op factuur",
+        "addToInvoice": "Zet {{amount}} producten op factuur",
+        "createNewInvoice": "Maak nieuwe factuur"
+      }
+    },
     "contracts": {
-      "addContract": "Nieuw contract"
+      "addContract": "Nieuw contract",
+      "allContracts": "Alle Contracten"
     },
     "customInvoice": {
       "descriptionHeader": "Invoice description",

@@ -4,6 +4,7 @@ import {
   Button, Icon, Loader, Table,
 } from 'semantic-ui-react';
 import _ from 'lodash';
+import { withTranslation, WithTranslation } from 'react-i18next';
 import ContractProductRow from './ContractProductRow';
 import {
   ActivityType, Contract, ContractStatus, Roles,
@@ -13,7 +14,7 @@ import ContractInvoiceModal from '../../../pages/ContractInvoiceModal';
 import AuthorizationComponent from '../../AuthorizationComponent';
 import { getLastStatus } from '../../../helpers/activity';
 
-interface Props extends RouteComponentProps {
+interface Props extends RouteComponentProps, WithTranslation {
   contract: Contract;
 }
 
@@ -50,7 +51,7 @@ class ContractProductList extends React.Component<Props, State> {
   };
 
   public render() {
-    const { contract } = this.props;
+    const { contract, t } = this.props;
     const { selected } = this.state;
 
     if (contract === undefined) {
@@ -84,7 +85,7 @@ class ContractProductList extends React.Component<Props, State> {
     return (
       <>
         <h3>
-          Products
+          {t('entity.productinstances')}
           <AuthorizationComponent roles={[Roles.GENERAL, Roles.ADMIN]} notFound={false}>
             <Button
               icon
@@ -97,7 +98,7 @@ class ContractProductList extends React.Component<Props, State> {
               disabled={!canChangeProducts}
             >
               <Icon name="plus" />
-              Add Product
+              {t('pages.contract.products.addProduct')}
             </Button>
             <ContractInvoiceModal
               contract={contract}
@@ -111,11 +112,11 @@ class ContractProductList extends React.Component<Props, State> {
           <Table.Header>
             <Table.Row>
               <Table.HeaderCell />
-              <Table.HeaderCell>Title</Table.HeaderCell>
-              <Table.HeaderCell collapsing>Discount</Table.HeaderCell>
-              <Table.HeaderCell collapsing>Real Price</Table.HeaderCell>
-              <Table.HeaderCell collapsing>Status</Table.HeaderCell>
-              <Table.HeaderCell collapsing>Invoice</Table.HeaderCell>
+              <Table.HeaderCell>{t('entity.productinstance')}</Table.HeaderCell>
+              <Table.HeaderCell collapsing>{t('entities.productInstance.props.discount')}</Table.HeaderCell>
+              <Table.HeaderCell collapsing>{t('entities.productInstance.props.realPrice')}</Table.HeaderCell>
+              <Table.HeaderCell collapsing>{t('entities.generalProps.status')}</Table.HeaderCell>
+              <Table.HeaderCell collapsing>{t('entity.invoice')}</Table.HeaderCell>
             </Table.Row>
 
           </Table.Header>
@@ -132,7 +133,10 @@ class ContractProductList extends React.Component<Props, State> {
           <Table.Footer>
             <Table.Row>
               <Table.HeaderCell />
-              <Table.HeaderCell> Totals: </Table.HeaderCell>
+              <Table.HeaderCell>
+                {t('pages.tables.generalColumns.total')}
+                :
+              </Table.HeaderCell>
               <Table.HeaderCell singleLine collapsing>
                 {formatPriceFull(discountSum)}
                 {' '}
@@ -153,4 +157,4 @@ class ContractProductList extends React.Component<Props, State> {
   }
 }
 
-export default withRouter(ContractProductList);
+export default withTranslation()(withRouter(ContractProductList));

@@ -171,9 +171,14 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
               />
             )}
             header={t('activities.status.cancel', { entity: formatDocumentType(documentType, t).toLocaleLowerCase() })}
-            content={documentType === SingleEntities.Invoice
-              ? t('activities.status.cancelInvoiceDescription')
-              : t('activities.status.cancelContractDescription')}
+            content={() => {
+              switch (documentType) {
+                case SingleEntities.Contract: return t('activities.status.cancelContractDescription');
+                case SingleEntities.Invoice: return t('activities.status.cancelInvoiceDescription');
+                case SingleEntities.ProductInstance: return t('activities.status.cancelProductInstanceDescription');
+                default: return '';
+              }
+            }}
           />
         </AuthorizationComponent>
       );
