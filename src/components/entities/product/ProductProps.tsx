@@ -4,10 +4,11 @@ import { Dispatch } from 'redux';
 import {
   Checkbox, Form, Input, Label,
 } from 'semantic-ui-react';
-import { useTranslation, withTranslation, WithTranslation } from 'react-i18next';
+import { withTranslation, WithTranslation } from 'react-i18next';
 import validator from 'validator';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import {
+  Client, PaginationParams,
   Product, ProductParams, ProductStatus, Roles,
 } from '../../../clients/server.generated';
 import ProductCategorySelector from '../productcategories/ProductCategorySelector';
@@ -40,6 +41,7 @@ interface Props extends WithTranslation, RouteComponentProps {
 
 interface State {
   editing: boolean;
+  hasInstances: boolean;
 
   nameDutch: string;
   nameEnglish: string;
@@ -61,8 +63,11 @@ class ProductProps extends React.Component<Props, State> {
 
     this.state = {
       editing: props.create ?? false,
+      hasInstances: false,
       ...this.extractState(props),
     };
+
+    this.hasInstances();
   }
 
   componentDidUpdate(prevProps: Props) {
@@ -151,12 +156,21 @@ class ProductProps extends React.Component<Props, State> {
     );
   };
 
+  hasInstances = async () => {
+    const client = new Client();
+    const hasInstances = (await client.getProductContracts(this.props.product.id,
+      new PaginationParams({
+        skip: 0,
+        take: 1,
+      }))).list.length > 0;
+    this.setState({ hasInstances });
+  };
+
   deleteButtonActive = () => {
     if (this.props.create) {
       return undefined;
     }
-    return !(this.props.product.instances.length > 0
-      || this.props.product.files.length > 0);
+    return !(this.state.hasInstances || this.props.product.files.length > 0);
   };
 
   render() {
