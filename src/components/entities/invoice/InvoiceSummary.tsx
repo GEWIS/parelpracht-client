@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import {
   Image,
 } from 'semantic-ui-react';
+import { useTranslation } from 'react-i18next';
 import { Invoice } from '../../../clients/server.generated';
 import ResourceStatus from '../../../stores/resourceStatus';
 import { getSingle } from '../../../stores/single/selectors';
@@ -21,6 +22,7 @@ interface Props {
 }
 
 function InvoiceSummary(props: Props) {
+  const { t } = useTranslation();
   const { invoice, status, logoFilename } = props;
   if (invoice === undefined) {
     return (
@@ -56,19 +58,19 @@ function InvoiceSummary(props: Props) {
       rightHeader={logo}
     >
       <div>
-        <h5>Company</h5>
+        <h5>{t('entity.company')}</h5>
         <CompanyLink id={invoice.companyId} />
       </div>
       <div>
-        <h5>Created by</h5>
+        <h5>{t('entities.generalProps.createdBy')}</h5>
         <UserLink id={invoice.createdById} />
       </div>
       <div>
-        <h5>Assigned to</h5>
+        <h5>{t('entities.generalProps.assignedTo')}</h5>
         <UserLink id={invoice.assignedToId} />
       </div>
       <div>
-        <h5>Total value</h5>
+        <h5>{t('entities.invoice.props.totalValue')}</h5>
         <p>{formatPriceFull(totalValue)}</p>
       </div>
     </EntitySummary>

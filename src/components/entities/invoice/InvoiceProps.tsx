@@ -5,6 +5,7 @@ import { Form, Input, TextArea } from 'semantic-ui-react';
 import { DateInput } from 'semantic-ui-calendar-react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import validator from 'validator';
+import { withTranslation, WithTranslation } from 'react-i18next';
 import {
   ActivityType,
   Invoice,
@@ -26,7 +27,7 @@ import { TransientAlert } from '../../../stores/alerts/actions';
 import { showTransientAlert } from '../../../stores/alerts/actionCreators';
 import AuthorizationComponent from '../../AuthorizationComponent';
 
-interface Props extends RouteComponentProps {
+interface Props extends RouteComponentProps, WithTranslation {
   create?: boolean;
   onCancel?: () => void;
 
@@ -171,7 +172,7 @@ class InvoiceProps extends React.Component<Props, State> {
       dateValue,
       assignedToId,
     } = this.state;
-    const { companyName } = this.props;
+    const { companyName, t } = this.props;
 
     const dateFormatterHelper = (date: Date) => {
       let formattedDate: string = this.formatDate(date);
@@ -185,7 +186,7 @@ class InvoiceProps extends React.Component<Props, State> {
     return (
       <>
         <h2>
-          {this.props.create ? 'New Invoice' : 'Details'}
+          {this.props.create ? t('pages.invoice.newInvoice') : t('entities.details')}
 
           <AuthorizationComponent roles={[Roles.GENERAL, Roles.ADMIN]} notFound={false}>
             <PropsButtons
@@ -209,7 +210,7 @@ class InvoiceProps extends React.Component<Props, State> {
               id="form-input-title"
               fluid
               control={Input}
-              label="Title"
+              label={t('entities.invoice.props.title')}
               value={title}
               onChange={(e: ChangeEvent<HTMLInputElement>) => {
                 this.setState({ title: e.target.value });
@@ -220,7 +221,7 @@ class InvoiceProps extends React.Component<Props, State> {
               disabled={!editing}
             >
               {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-              <label htmlFor="form-assigned-to-selector">Assigned to</label>
+              <label htmlFor="form-assigned-to-selector">{t('entities.generalProps.assignedTo')}</label>
               <UserSelector
                 id="form-assigned-to-selector"
                 value={assignedToId}
@@ -237,7 +238,7 @@ class InvoiceProps extends React.Component<Props, State> {
               id="form-input-company"
               fluid
               control={Input}
-              label="Company"
+              label={t('entity.company')}
               value={companyName}
             />
           </Form.Group>
@@ -247,7 +248,7 @@ class InvoiceProps extends React.Component<Props, State> {
               id="form-input-ponumber"
               fluid
               control={Input}
-              label="PO Number"
+              label={t('entities.invoice.props.poNumber')}
               value={poNumber}
               onChange={(e: ChangeEvent<HTMLInputElement>) => {
                 this.setState({ poNumber: e.target.value });
@@ -258,7 +259,7 @@ class InvoiceProps extends React.Component<Props, State> {
               error={validator.isEmpty(formatTimestampToDate(startDate))}
             >
               {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-              <label htmlFor="form-input-startdate">Invoice date</label>
+              <label htmlFor="form-input-startdate">{t('entities.invoice.props.invoiceDate')}</label>
               <DateInput
                 // onChange={(e, { value }) => {
                 //   this.setState({ startDate: value });
@@ -282,13 +283,13 @@ class InvoiceProps extends React.Component<Props, State> {
             <Form.Field disabled={!editing}>
               {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
               <label htmlFor="form-input-comments">
-                Comments
+                {t('entities.generalProps.comments')}
               </label>
               <TextArea
                 id="form-input-comments"
                 value={comments}
                 onChange={(e) => this.setState({ comments: e.target.value })}
-                placeholder="Internal comments"
+                placeholder={t('entities.generalProps.commentsDescription')}
               />
             </Form.Field>
           </Form.Group>
@@ -315,4 +316,5 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   showTransientAlert: (alert: TransientAlert) => dispatch(showTransientAlert(alert)),
 });
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(InvoiceProps));
+export default withTranslation()(withRouter(connect(mapStateToProps,
+  mapDispatchToProps)(InvoiceProps)));

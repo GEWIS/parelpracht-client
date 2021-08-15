@@ -150,8 +150,10 @@
       "assignedTo": "Toegewezen aan",
       "comments": "Opmerkingen",
       "commentsDescription": "Interne opmerkingen",
+      "createdBy": "Aangemaakt door",
       "lastUpdate": "Laatste update",
-      "status": "Status"
+      "status": "Status",
+      "unknown": "Onbekend"
     },
     "graph": {
       "label": {
@@ -175,6 +177,15 @@
       "target": {
         "maximum": "Maximum target",
         "minimum": "Minimum target"
+      }
+    },
+    "invoice": {
+      "props": {
+        "financialYear": "Boekjaar",
+        "invoiceDate": "Factuurdatum",
+        "poNumber": "PO Nummer",
+        "title": "Titel",
+        "totalValue": "Totale waarde"
       }
     },
     "productInstance": {
@@ -351,6 +362,9 @@
       "header": "Wachtwoord resetten",
       "sendEmailButton": "Verstuur wachtwoord reset email",
       "successMessage": "Controleer je mailbox voor de link om je wachtwoord te resetten. Als deze mail niet binnen een paar minuten verschijnt, controleer je spam map."
+    },
+    "invoice": {
+      "newInvoice": "Nieuwe Factuur"
     },
     "loading": "Login informatie controleren...",
     "login": {

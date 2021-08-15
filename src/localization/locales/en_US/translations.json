@@ -150,8 +150,10 @@
       "assignedTo": "Assigned to",
       "comments": "Comments",
       "commentsDescription": "Internal comments",
+      "createdBy": "Created by",
       "lastUpdate": "Last update",
-      "status": "Status"
+      "status": "Status",
+      "unknown": "Unknown"
     },
     "graph": {
       "label": {
@@ -175,6 +177,15 @@
       "target": {
         "maximum": "Maximum target",
         "minimum": "Minimum target"
+      }
+    },
+    "invoice": {
+      "props": {
+        "financialYear": "Financial Year",
+        "invoiceDate": "Invoice date",
+        "poNumber": "PO Number",
+        "title": "Title",
+        "totalValue": "Total value"
       }
     },
     "productInstance": {
@@ -351,6 +362,9 @@
       "header": "Reset password",
       "sendEmailButton": "Send password reset email",
       "successMessage": "Check your email for a link to reset your password. If it doesn't appear within a few minutes, check your spam folder."
+    },
+    "invoice": {
+      "newInvoice": "New Invoice"
     },
     "loading": "Checking login information...",
     "login": {

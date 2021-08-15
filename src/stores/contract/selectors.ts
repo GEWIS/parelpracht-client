@@ -14,7 +14,7 @@ export function sortColumn(state: RootState): string {
     case 'company': return i18n.t('entity.company').toLowerCase();
     case 'contact': return i18n.t('entity.contact').toLowerCase();
     case 'updatedAt': return i18n.t('entities.generalProps.lastUpdate').toLowerCase();
-    default: return 'unknown';
+    default: return i18n.t('entities.generalProps.unknown').toLowerCase();
   }
 }
 export function getContractTitle(state: RootState, id: number): string {
