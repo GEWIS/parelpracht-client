@@ -44,7 +44,7 @@ class InvoiceList extends React.Component<Props, State> {
             {t('entity.invoices')}
           </h3>
           <h4>
-            {t('products.noInvoices')}
+            {t('entities.product.noInvoices')}
           </h4>
         </>
       );
@@ -59,19 +59,19 @@ class InvoiceList extends React.Component<Props, State> {
           <Table.Header>
             <Table.Row>
               <Table.HeaderCell>
-                {t('pages.tables.generalColumns.title')}
+                {t('entities.invoice.props.title')}
               </Table.HeaderCell>
               <Table.HeaderCell>
-                {t('pages.tables.generalColumns.amount')}
+                {t('entities.generalProps.amount')}
               </Table.HeaderCell>
               <Table.HeaderCell>
-                {t('pages.tables.generalColumns.status')}
+                {t('entities.generalProps.status')}
               </Table.HeaderCell>
               <Table.HeaderCell>
-                {t('pages.tables.generalColumns.year')}
+                {t('entities.invoice.props.financialYear')}
               </Table.HeaderCell>
               <Table.HeaderCell>
-                {t('pages.tables.generalColumns.lastUpdate')}
+                {t('entities.generalProps.lastUpdate')}
               </Table.HeaderCell>
             </Table.Row>
           </Table.Header>

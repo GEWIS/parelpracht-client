@@ -143,7 +143,7 @@ class ContactModal extends React.Component<Props> {
     if (this.props.create) {
       contractOverview = '';
     } else if (contact.contracts === undefined || contact.contracts.length === 0) {
-      contractOverview = <p>{t('products.noContract')}</p>;
+      contractOverview = <p>{t('entities.product.noContract')}</p>;
     } else {
       contractOverview = (
         <Segment>
@@ -151,13 +151,13 @@ class ContactModal extends React.Component<Props> {
           <Table>
             <Table.Header>
               <Table.HeaderCell>
-                {t('pages.tables.generalColumns.title')}
+                {t('entities.contract.props.title')}
               </Table.HeaderCell>
               <Table.HeaderCell>
-                {t('pages.tables.generalColumns.company')}
+                {t('entity.company')}
               </Table.HeaderCell>
               <Table.HeaderCell>
-                {t('pages.tables.generalColumns.status')}
+                {t('entities.generalProps.status')}
               </Table.HeaderCell>
             </Table.Header>
             {contact.contracts.map((contract) => {

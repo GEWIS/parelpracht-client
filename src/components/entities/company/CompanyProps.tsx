@@ -174,7 +174,7 @@ class CompanyProps extends React.Component<Props, State> {
     return (
       <>
         <h2>
-          {this.props.create ? t('companies.newCompany') : t('companies.props.details')}
+          {this.props.create ? t('entities.company.newCompany') : t('entities.company.props.details')}
           <AuthorizationComponent roles={[Roles.ADMIN, Roles.GENERAL]} notFound={false}>
             <PropsButtons
               editing={editing}
@@ -197,10 +197,10 @@ class CompanyProps extends React.Component<Props, State> {
               required
               disabled={!editing}
               id="form-input-name"
-              placeholder={t('companies.props.name')}
+              placeholder={t('entities.company.props.name')}
               fluid
               control={Input}
-              label={t('companies.props.name')}
+              label={t('entities.company.props.name')}
               value={name}
               onChange={(e: ChangeEvent<HTMLInputElement>) => this.setState({
                 name: e.target.value,
@@ -214,8 +214,8 @@ class CompanyProps extends React.Component<Props, State> {
               id="form-input-phone-number"
               fluid
               control={Input}
-              label={t('companies.props.number')}
-              placeholder={t('companies.props.number')}
+              label={t('entities.company.props.number')}
+              placeholder={t('entities.company.props.number')}
               value={phoneNumber}
               onChange={(e: ChangeEvent<HTMLInputElement>) => this.setState({
                 phoneNumber: e.target.value,
@@ -229,13 +229,13 @@ class CompanyProps extends React.Component<Props, State> {
             <Form.Field>
               {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
               <label htmlFor="form-check-status">
-                {t('products.props.status.header')}
+                {t('entities.product.props.status.header')}
               </label>
               <Checkbox
                 disabled={!editing}
                 toggle
                 id="form-check-status"
-                label={status === CompanyStatus.ACTIVE ? t('products.props.status.active') : t('products.props.status.inactive')}
+                label={status === CompanyStatus.ACTIVE ? t('entities.product.props.status.active') : t('entities.product.props.status.inactive')}
                 checked={status === CompanyStatus.ACTIVE}
                 onChange={(_, data) => this.setState({
                   status:
@@ -248,19 +248,19 @@ class CompanyProps extends React.Component<Props, State> {
             <Form.Field disabled={!editing}>
               {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
               <label htmlFor="form-input-description">
-                {t('companies.props.description')}
+                {t('entities.company.props.description')}
               </label>
               <TextArea
                 id="form-input-description"
                 value={comments}
                 onChange={(e) => this.setState({ comments: e.target.value })}
-                placeholder={t('companies.props.description')}
+                placeholder={t('entities.company.props.description')}
                 fluid
               />
             </Form.Field>
           </Form.Group>
           <h2>
-            {t('companies.props.addressInformation')}
+            {t('entities.company.props.addressInformation')}
           </h2>
           <Form.Group widths="equal">
             <Form.Field
@@ -272,27 +272,27 @@ class CompanyProps extends React.Component<Props, State> {
             >
               {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
               <label htmlFor="form-input-address-street">
-                {t('companies.props.street')}
+                {t('entities.company.props.street')}
               </label>
               <Input
                 id="form-input-address-street"
                 value={addressStreet}
                 fluid
                 onChange={(e) => this.setState({ addressStreet: e.target.value })}
-                placeholder={t('companies.props.street')}
+                placeholder={t('entities.company.props.street')}
               />
             </Form.Field>
             <Form.Field disabled={!editing} required error={validator.isEmpty(addressCity)}>
               {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
               <label htmlFor="form-input-address-city">
-                {t('companies.props.city')}
+                {t('entities.company.props.city')}
               </label>
               <Input
                 id="form-input-address-city"
                 value={addressCity}
                 fluid
                 onChange={(e) => this.setState({ addressCity: e.target.value })}
-                placeholder={t('companies.props.city')}
+                placeholder={t('entities.company.props.city')}
               />
             </Form.Field>
           </Form.Group>
@@ -306,14 +306,14 @@ class CompanyProps extends React.Component<Props, State> {
             >
               {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
               <label htmlFor="form-input-address-postal-code">
-                {t('companies.props.postalCode')}
+                {t('entities.company.props.postalCode')}
               </label>
               <Input
                 id="form-input-address-postal-code"
                 value={addressPostalCode}
                 fluid
                 onChange={(e) => this.setState({ addressPostalCode: e.target.value })}
-                placeholder={t('companies.props.postalCode')}
+                placeholder={t('entities.company.props.postalCode')}
               />
             </Form.Field>
             <CountrySelector
@@ -326,32 +326,32 @@ class CompanyProps extends React.Component<Props, State> {
             />
           </Form.Group>
           <h2>
-            {t('companies.props.invoiceAddress')}
+            {t('entities.company.props.invoiceAddress')}
           </h2>
           <Form.Group widths="equal">
             <Form.Field disabled={!editing}>
               {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
               <label htmlFor="form-input--invoice-address-street">
-                {t('companies.props.street')}
+                {t('entities.company.props.street')}
               </label>
               <Input
                 id="form-input-invoice-address-street"
                 value={invoiceAddressStreet}
                 onChange={(e) => this.setState({ invoiceAddressStreet: e.target.value })}
-                placeholder={t('companies.props.street')}
+                placeholder={t('entities.company.props.street')}
                 fluid
               />
             </Form.Field>
             <Form.Field disabled={!editing}>
               {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
               <label htmlFor="form-input-invoice-address-city">
-                {t('companies.props.city')}
+                {t('entities.company.props.city')}
               </label>
               <Input
                 id="form-input-invoice-address-city"
                 value={invoiceAddressCity}
                 onChange={(e) => this.setState({ invoiceAddressCity: e.target.value })}
-                placeholder={t('companies.props.city')}
+                placeholder={t('entities.company.props.city')}
                 fluid
               />
             </Form.Field>
@@ -362,13 +362,13 @@ class CompanyProps extends React.Component<Props, State> {
             >
               {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
               <label htmlFor="form-input-invoice-address-postal-code">
-                {t('companies.props.postalCode')}
+                {t('entities.company.props.postalCode')}
               </label>
               <Input
                 id="form-input-invoice-address-postal-code"
                 value={invoiceAddressPostalCode}
                 onChange={(e) => this.setState({ invoiceAddressPostalCode: e.target.value })}
-                placeholder={t('companies.props.PostalCode')}
+                placeholder={t('entities.company.props.PostalCode')}
                 fluid
               />
             </Form.Field>

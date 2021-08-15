@@ -1,5 +1,5 @@
 import React from 'react';
-import { useTranslation, withTranslation, WithTranslation } from 'react-i18next';
+import { withTranslation, WithTranslation } from 'react-i18next';
 import { Loader, Table } from 'semantic-ui-react';
 import {
   Client, PaginationParams, Product, ProductInstance,
@@ -86,7 +86,7 @@ class ContractCompactTable extends React.Component<Props, State> {
     if (productInstances.length === 0) {
       contractList = (
         <h4>
-          {t('products.noContract')}
+          {t('entities.product.noContract')}
         </h4>
       );
     } else {
@@ -96,16 +96,16 @@ class ContractCompactTable extends React.Component<Props, State> {
             <Table.Header>
               <Table.Row>
                 <Table.HeaderCell>
-                  {t('pages.tables.generalColumns.title')}
+                  {t('entities.contract.props.title')}
                 </Table.HeaderCell>
                 <Table.HeaderCell>
-                  {t('pages.tables.generalColumns.company')}
+                  {t('entity.company')}
                 </Table.HeaderCell>
                 <Table.HeaderCell>
-                  {t('pages.tables.generalColumns.status')}
+                  {t('entities.generalProps.status')}
                 </Table.HeaderCell>
                 <Table.HeaderCell>
-                  {t('pages.tables.generalColumns.lastUpdate')}
+                  {t('entities.generalProps.lastUpdate')}
                 </Table.HeaderCell>
               </Table.Row>
             </Table.Header>

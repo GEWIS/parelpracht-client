@@ -62,55 +62,6 @@
     },
     "save": "Save"
   },
-  "categories": {
-    "addCategory": "Add category",
-    "header": "All categories",
-    "newCategory": "New product category",
-    "noProduct": "This category has no products."
-  },
-  "companies": {
-    "header": "All companies",
-    "newCompany": "New company",
-    "props": {
-      "addressInformation": "Address information",
-      "city": "City",
-      "country": "Country",
-      "description": "Description",
-      "details": "Details",
-      "invoiceAddress": "Invoice address",
-      "name": "Name",
-      "number": "Telephone number",
-      "postalCode": "Postal code",
-      "street": "Street and number"
-    }
-  },
-  "contacts": {
-    "header": "All contacts",
-    "newContact": "New contact",
-    "props": {
-      "comments": "Comments",
-      "email": "Email address",
-      "firstName": "First name",
-      "function": {
-        "extensive": "{{function}} contact",
-        "financial": "Financial",
-        "header": "Function",
-        "normal": "Normal",
-        "old": "Old",
-        "primary": "Primary",
-        "unknown": "Unknown"
-      },
-      "gender": {
-        "female": "Female",
-        "gender": "Gender",
-        "male": "Male",
-        "unknown": "Unknown"
-      },
-      "lastName": "Last name",
-      "middleName": "Middle name",
-      "number": "Telephone number"
-    }
-  },
   "dashboard": {
     "categoryLinechart": {
       "header": "Contracted products"
@@ -137,6 +88,59 @@
     "welcome": "Welcome back,"
   },
   "entities": {
+    "category": {
+      "addCategory": "Add category",
+      "header": "All categories",
+      "newCategory": "New product category",
+      "noProduct": "This category has no products.",
+      "props": {
+        "name": "Name"
+      }
+    },
+    "company": {
+      "header": "All companies",
+      "newCompany": "New company",
+      "props": {
+        "addressInformation": "Address information",
+        "city": "City",
+        "country": "Country",
+        "description": "Description",
+        "details": "Details",
+        "invoiceAddress": "Invoice address",
+        "name": "Name",
+        "number": "Telephone number",
+        "postalCode": "Postal code",
+        "street": "Street and number"
+      }
+    },
+    "contact": {
+      "header": "All contacts",
+      "newContact": "New contact",
+      "props": {
+        "comments": "Comments",
+        "email": "Email address",
+        "firstName": "First name",
+        "function": {
+          "extensive": "{{function}} contact",
+          "financial": "Financial",
+          "header": "Function",
+          "normal": "Normal",
+          "old": "Old",
+          "primary": "Primary",
+          "unknown": "Unknown"
+        },
+        "gender": {
+          "female": "Female",
+          "gender": "Gender",
+          "male": "Male",
+          "unknown": "Unknown"
+        },
+        "lastName": "Last name",
+        "middleName": "Middle name",
+        "name": "Name",
+        "number": "Telephone number"
+      }
+    },
     "contract": {
       "props": {
         "title": "Title",
@@ -187,6 +191,44 @@
         "title": "Title",
         "totalValue": "Total value"
       }
+    },
+    "product": {
+      "contractedProducts": "Contracted products",
+      "insights": {
+        "addColumn": "Add column",
+        "addDescription": "Add a description",
+        "addRow": "Add row",
+        "header": "Pricing information",
+        "placeholderHeader": "Header",
+        "placeholderValue": "Value"
+      },
+      "noActivities": "There are no activities logged yet.",
+      "noContract": "There are no contracts created yet.",
+      "noFiles": "There are no files uploaded yet.",
+      "noInvoice": "There are no invoices yet.",
+      "props": {
+        "category": "Product category",
+        "comments": "Comments (internal)",
+        "contractTextEn": "Contract text (English)",
+        "contractTextNl": "Contract text (Dutch)",
+        "customPrice": "Custom pricing",
+        "customPriceButton": "Add pricing",
+        "header": "New product",
+        "maxTarget": "Maximum target",
+        "minTarget": "Minimum target",
+        "name": "Name",
+        "nameEn": "Title (English)",
+        "nameNl": "Title (Dutch)",
+        "price": "Target price",
+        "specsEn": "Delivery specifications (English)",
+        "specsNl": "Delivery specifications (Dutch)",
+        "status": {
+          "active": "Inactief",
+          "header": "Status",
+          "inactive": "Inactive"
+        }
+      },
+      "warningFinancialYear": "* Note that these years are the financial years so 2021 means the association year 2020-2021."
     },
     "productInstance": {
       "props": {
@@ -245,6 +287,7 @@
   "entity": {
     "activities": "Activities",
     "categories": "Product categories",
+    "category": "Category",
     "companies": "Companies",
     "company": "Company",
     "contact": "Contact",
@@ -320,6 +363,10 @@
     }
   },
   "pages": {
+    "companies": {
+      "addCompany": "Add company",
+      "subheader": "All companies"
+    },
     "contacts": {
       "addContact": "Add contact",
       "noContact": "There are no contacts yet."
@@ -385,6 +432,14 @@
       "header": "There is no money here,",
       "subheader": "keep looking!"
     },
+    "products": {
+      "addProduct": "Add product",
+      "columns": {
+        "category": "Category"
+      },
+      "header": "All products",
+      "subheader": "Products"
+    },
     "resetPassword": {
       "newPassword": "New password",
       "repeatPassword": "Repeat password",
@@ -402,10 +457,6 @@
       "successMessage": "Password successfully changed!"
     },
     "tables": {
-      "companies": {
-        "addCompany": "Add company",
-        "subheader": "All companies"
-      },
       "footer": {
         "items": "Showing {{begin}} to {{end}} of {{total}}",
         "pagination": {
@@ -417,16 +468,7 @@
         }
       },
       "generalColumns": {
-        "amount": "Amount",
-        "company": "Company",
-        "id": "ID",
-        "lastUpdate": "Last update",
-        "name": "Name",
-        "price": "Price",
-        "status": "Status",
-        "title": "Title",
-        "total": "Total",
-        "year": "Year"
+        "total": "Total"
       },
       "header": {
         "clear": "Clear search",
@@ -450,14 +492,7 @@
         "updateLastSeen": "Update Last Seen",
         "updateLastSeenDescription": "By updating the last seen, you indicate that all invoice statuses have been updated."
       },
-      "products": {
-        "addProduct": "Add product",
-        "columns": {
-          "category": "Category"
-        },
-        "header": "All products",
-        "subheader": "Products"
-      }
+      "total": "Total"
     },
     "user": {
       "apiKey": {
@@ -492,42 +527,5 @@
         "transferButton": "Transfer responsibilities"
       }
     }
-  },
-  "products": {
-    "contractedProducts": "Contracted products",
-    "insights": {
-      "addColumn": "Add column",
-      "addDescription": "Add a description",
-      "addRow": "Add row",
-      "header": "Pricing information",
-      "placeholderHeader": "Header",
-      "placeholderValue": "Value"
-    },
-    "noActivities": "There are no activities logged yet.",
-    "noContract": "There are no contracts created yet.",
-    "noFiles": "There are no files uploaded yet.",
-    "noInvoice": "There are no invoices yet.",
-    "props": {
-      "category": "Product category",
-      "comments": "Comments (internal)",
-      "contractTextEn": "Contract text (English)",
-      "contractTextNl": "Contract text (Dutch)",
-      "customPrice": "Custom pricing",
-      "customPriceButton": "Add pricing",
-      "header": "New product",
-      "maxTarget": "Maximum target",
-      "minTarget": "Minimum target",
-      "nameEn": "Title (English)",
-      "nameNl": "Title (Dutch)",
-      "price": "Target price",
-      "specsEn": "Delivery specifications (English)",
-      "specsNl": "Delivery specifications (Dutch)",
-      "status": {
-        "active": "Inactief",
-        "header": "Status",
-        "inactive": "Inactive"
-      }
-    },
-    "warningFinancialYear": "* Note that these years are the financial years so 2021 means the association year 2020-2021."
   }
 }

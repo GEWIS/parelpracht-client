@@ -183,7 +183,7 @@ class ContactProps extends React.Component<Props, State> {
     return (
       <>
         <h2>
-          {this.props.create ? t('contacts.newContact') : t('companies.props.details')}
+          {this.props.create ? t('entities.contact.newContact') : t('entities.company.props.details')}
 
           <AuthorizationComponent roles={[Roles.GENERAL, Roles.ADMIN]} notFound={false}>
             <PropsButtons
@@ -208,8 +208,8 @@ class ContactProps extends React.Component<Props, State> {
               id="form-input-first-name"
               fluid
               control={Input}
-              label={t('contacts.props.firstName')}
-              placeholder={t('contacts.props.firstName')}
+              label={t('entities.contact.props.firstName')}
+              placeholder={t('entities.contact.props.firstName')}
               value={firstName}
               onChange={(e: ChangeEvent<HTMLInputElement>) => this.setState({
                 firstName: e.target.value,
@@ -221,8 +221,8 @@ class ContactProps extends React.Component<Props, State> {
               id="form-input-middle-name"
               fluid
               control={Input}
-              label={t('contacts.props.middleName')}
-              placeholder={t('contacts.props.middleName')}
+              label={t('entities.contact.props.middleName')}
+              placeholder={t('entities.contact.props.middleName')}
               value={lastNamePreposition}
               onChange={(e: ChangeEvent<HTMLInputElement>) => this.setState({
                 lastNamePreposition: e.target.value,
@@ -235,8 +235,8 @@ class ContactProps extends React.Component<Props, State> {
               id="form-input-last-name"
               fluid
               control={Input}
-              label={t('contacts.props.lastName')}
-              placeholder={t('contacts.props.lastName')}
+              label={t('entities.contact.props.lastName')}
+              placeholder={t('entities.contact.props.lastName')}
               value={lastName}
               onChange={(e: ChangeEvent<HTMLInputElement>) => this.setState({
                 lastName: e.target.value,
@@ -250,16 +250,16 @@ class ContactProps extends React.Component<Props, State> {
           <Form.Group widths="equal">
             <Form.Field required disabled={!editing}>
               {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-              <label htmlFor="form-input-gender">{t('contacts.props.gender.gender')}</label>
+              <label htmlFor="form-input-gender">{t('entities.contact.props.gender.gender')}</label>
               <Dropdown
                 id="form-input-gender"
                 selection
                 placeholder="Gender"
                 value={gender}
                 options={[
-                  { key: 0, text: t('contacts.props.gender.male'), value: Gender.MALE },
-                  { key: 1, text: t('contacts.props.gender.female'), value: Gender.FEMALE },
-                  { key: 2, text: t('contacts.props.gender.unknown'), value: Gender.UNKNOWN },
+                  { key: 0, text: t('entities.contact.props.gender.male'), value: Gender.MALE },
+                  { key: 1, text: t('entities.contact.props.gender.female'), value: Gender.FEMALE },
+                  { key: 2, text: t('entities.contact.props.gender.unknown'), value: Gender.UNKNOWN },
                 ]}
                 onChange={(e, data) => this.setState({
                   gender: data.value as Gender,
@@ -269,11 +269,11 @@ class ContactProps extends React.Component<Props, State> {
             </Form.Field>
             <Form.Field required disabled={!editing}>
               {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-              <label htmlFor="form-input-function">{t('contacts.props.function')}</label>
+              <label htmlFor="form-input-function">{t('entities.contact.props.function')}</label>
               <Dropdown
                 id="form-input-function"
                 selection
-                placeholder={t('contacts.props.function')}
+                placeholder={t('entities.contact.props.function')}
                 value={func}
                 options={Object.values(ContactFunction).map((x, i) => ({
                   key: i, value: x, text: formatFunction(x, t),
@@ -291,8 +291,8 @@ class ContactProps extends React.Component<Props, State> {
               id="form-input-email"
               fluid
               control={Input}
-              label={t('contacts.props.email')}
-              placeholder={t('contacts.props.email')}
+              label={t('entities.contact.props.email')}
+              placeholder={t('entities.contact.props.email')}
               value={email}
               onChange={(e: ChangeEvent<HTMLInputElement>) => this.setState({
                 email: e.target.value,
@@ -305,9 +305,9 @@ class ContactProps extends React.Component<Props, State> {
               disabled={!editing}
               id="form-input-telephone"
               fluid
-              placeholder={t('companies.props.number')}
+              placeholder={t('entities.company.props.number')}
               control={Input}
-              label={t('companies.props.number')}
+              label={t('entities.company.props.number')}
               value={telephone}
               onChange={(e: ChangeEvent<HTMLInputElement>) => this.setState({
                 telephone: e.target.value,
@@ -320,7 +320,7 @@ class ContactProps extends React.Component<Props, State> {
           <Form.Field>
             {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
             <label htmlFor="form-input-comments">
-              {t('contacts.props.comments')}
+              {t('entities.contact.props.comments')}
             </label>
             <TextArea
               id="form-delivery-spec-english"
@@ -328,7 +328,7 @@ class ContactProps extends React.Component<Props, State> {
               onChange={
                 (e) => this.setState({ comments: e.target.value })
               }
-              placeholder={t('contacts.props.comments')}
+              placeholder={t('entities.contact.props.comments')}
             />
           </Form.Field>
         </Form>

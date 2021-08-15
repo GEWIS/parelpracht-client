@@ -1,7 +1,7 @@
 import React from 'react';
 import { Table } from 'semantic-ui-react';
 import { useTranslation } from 'react-i18next';
-import { Company, CompanyStatus } from '../../../clients/server.generated';
+import { Company } from '../../../clients/server.generated';
 import { formatLastUpdate } from '../../../helpers/timestamp';
 import CompanyLink from './CompanyLink';
 import { formatStatus } from '../../../helpers/activity';

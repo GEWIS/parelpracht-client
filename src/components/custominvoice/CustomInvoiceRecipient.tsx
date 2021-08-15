@@ -36,7 +36,7 @@ class CustomInvoiceRecipient extends React.Component<Props, State> {
               id="form-recipient-name"
               fluid
               control={Input}
-              label={t('companies.props.name')}
+              label={t('entities.company.props.name')}
               value={recipient.name}
               onChange={(e: ChangeEvent<HTMLInputElement>) => updateRecipientAttribute(
                 'name', e.target.value,
@@ -80,7 +80,7 @@ class CustomInvoiceRecipient extends React.Component<Props, State> {
               id="form-recipient-street"
               fluid
               control={Input}
-              label={t('companies.props.street')}
+              label={t('entities.company.props.street')}
               value={recipient.street}
               onChange={(e: ChangeEvent<HTMLInputElement>) => updateRecipientAttribute(
                 'street', e.target.value,
@@ -90,7 +90,7 @@ class CustomInvoiceRecipient extends React.Component<Props, State> {
               id="form-recipient-postal-code"
               fluid
               control={Input}
-              label={t('companies.props.postalCode')}
+              label={t('entities.company.props.postalCode')}
               value={recipient.postalCode}
               onChange={(e: ChangeEvent<HTMLInputElement>) => updateRecipientAttribute(
                 'postalCode', e.target.value,
@@ -102,7 +102,7 @@ class CustomInvoiceRecipient extends React.Component<Props, State> {
               id="form-recipient-city"
               fluid
               control={Input}
-              label={t('companies.props.city')}
+              label={t('entities.company.props.city')}
               value={recipient.city}
               onChange={(e: ChangeEvent<HTMLInputElement>) => updateRecipientAttribute(
                 'city', e.target.value,
@@ -112,7 +112,7 @@ class CustomInvoiceRecipient extends React.Component<Props, State> {
               id="form-recipient-country"
               fluid
               control={Input}
-              label={t('companies.props.country')}
+              label={t('entities.company.props.country')}
               value={recipient.country}
               onChange={(e: ChangeEvent<HTMLInputElement>) => updateRecipientAttribute(
                 'country', e.target.value,

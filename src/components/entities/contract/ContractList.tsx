@@ -55,7 +55,7 @@ class ContractList extends React.Component<Props, State> {
             </Button>
           </h3>
           <h4>
-            {t('products.noContract')}
+            {t('entities.product.noContract')}
           </h4>
         </>
       );
@@ -85,16 +85,16 @@ class ContractList extends React.Component<Props, State> {
           <Table.Header>
             <Table.Row>
               <Table.HeaderCell>
-                {t('pages.tables.generalColumns.title')}
+                {t('entities.contract.props.title')}
               </Table.HeaderCell>
               <Table.HeaderCell>
-                {t('pages.tables.generalColumns.contact')}
+                {t('entity.contact')}
               </Table.HeaderCell>
               <Table.HeaderCell>
-                {t('pages.tables.generalColumns.status')}
+                {t('entities.generalProps.status')}
               </Table.HeaderCell>
               <Table.HeaderCell>
-                {t('pages.tables.generalColumns.lastUpdate')}
+                {t('entities.generalProps.lastUpdate')}
               </Table.HeaderCell>
             </Table.Row>
           </Table.Header>

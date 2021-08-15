@@ -4,7 +4,7 @@ import { Dispatch } from 'redux';
 import {
   Dimmer, Loader, Segment, Table,
 } from 'semantic-ui-react';
-import { useTranslation, WithTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { Company } from '../../../clients/server.generated';
 import TablePagination from '../../TablePagination';
 import { RootState } from '../../../stores/store';
@@ -49,56 +49,7 @@ function CompaniesTable({
   }, []);
   const { t } = useTranslation();
 
-  if (status === ResourceStatus.FETCHING || status === ResourceStatus.SAVING) {
-    return (
-      <>
-        <Segment style={{ padding: '0px' }}>
-          <Dimmer active inverted>
-            <Loader inverted />
-          </Dimmer>
-          <Table singleLine selectable attached sortable fixed>
-            <Table.Header>
-              <Table.Row>
-                <Table.HeaderCell
-                  sorted={column === 'name' ? direction : undefined}
-                  onClick={() => changeSort('name')}
-                >
-                  {t('pages.tables.generalColumns.name')}
-                </Table.HeaderCell>
-                <Table.HeaderCell
-                  sorted={column === 'status' ? direction : undefined}
-                  onClick={() => changeSort('status')}
-                >
-                  {t('pages.tables.generalColumns.status')}
-                  <CompanyStatusFilter />
-                </Table.HeaderCell>
-                <Table.HeaderCell
-                  sorted={column === 'updatedAt' ? direction : undefined}
-                  onClick={() => changeSort('updatedAt')}
-                >
-                  {t('pages.tables.generalColumns.lastUpdate')}
-                </Table.HeaderCell>
-              </Table.Row>
-            </Table.Header>
-            <Table.Body>
-              {companies.map((x) => <CompanyRow company={x} key={x.id} />)}
-            </Table.Body>
-          </Table>
-          <TablePagination
-            countTotal={total}
-            countFetched={fetched}
-            skip={skip}
-            take={take}
-            nextPage={nextPage}
-            prevPage={prevPage}
-            setTake={setTake}
-          />
-        </Segment>
-      </>
-    );
-  }
-
-  return (
+  const table = (
     <>
       <Table singleLine selectable attached sortable fixed>
         <Table.Header>
@@ -107,20 +58,20 @@ function CompaniesTable({
               sorted={column === 'name' ? direction : undefined}
               onClick={() => changeSort('name')}
             >
-              {t('pages.tables.generalColumns.name')}
+              {t('entities.company.props.name')}
             </Table.HeaderCell>
             <Table.HeaderCell
               sorted={column === 'status' ? direction : undefined}
               onClick={() => changeSort('status')}
             >
-              {t('pages.tables.generalColumns.status')}
+              {t('entities.generalProps.status')}
               <CompanyStatusFilter />
             </Table.HeaderCell>
             <Table.HeaderCell
               sorted={column === 'updatedAt' ? direction : undefined}
               onClick={() => changeSort('updatedAt')}
             >
-              {t('pages.tables.generalColumns.lastUpdate')}
+              {t('entities.generalProps.lastUpdate')}
             </Table.HeaderCell>
           </Table.Row>
         </Table.Header>
@@ -139,6 +90,21 @@ function CompaniesTable({
       />
     </>
   );
+
+  if (status === ResourceStatus.FETCHING || status === ResourceStatus.SAVING) {
+    return (
+      <>
+        <Segment style={{ padding: '0px' }}>
+          <Dimmer active inverted>
+            <Loader inverted />
+          </Dimmer>
+          {table}
+        </Segment>
+      </>
+    );
+  }
+
+  return table;
 }
 
 const mapStateToProps = (state: RootState) => {

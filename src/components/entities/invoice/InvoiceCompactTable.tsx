@@ -89,7 +89,7 @@ class ContractCompactTable extends React.Component<Props, State> {
     if (productInstances.length === 0) {
       invoiceList = (
         <h4>
-          {t('products.noInvoice')}
+          {t('entities.product.noInvoice')}
         </h4>
       );
     } else {
@@ -99,19 +99,19 @@ class ContractCompactTable extends React.Component<Props, State> {
             <Table.Header>
               <Table.Row>
                 <Table.HeaderCell>
-                  {t('pages.tables.generalColumns.title')}
+                  {t('entities.invoice.props.title')}
                 </Table.HeaderCell>
                 <Table.HeaderCell>
-                  {t('pages.tables.generalColumns.company')}
+                  {t('entity.company')}
                 </Table.HeaderCell>
                 <Table.HeaderCell>
-                  {t('pages.tables.generalColumns.status')}
+                  {t('entities.generalProps.status')}
                 </Table.HeaderCell>
                 <Table.HeaderCell style={{ width: '15%' }}>
-                  {t('pages.tables.generalColumns.year')}
+                  {t('entities.invoice.props.financialYear')}
                 </Table.HeaderCell>
                 <Table.HeaderCell>
-                  {t('pages.tables.generalColumns.lastUpdate')}
+                  {t('entities.generalProps.lastUpdate')}
                 </Table.HeaderCell>
               </Table.Row>
             </Table.Header>

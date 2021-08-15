@@ -123,7 +123,7 @@ class ProductCategoryModal extends React.Component<Props> {
           />
           {
             category.products === undefined || category.products.length === 0 ? (
-              <p>{t('categories.noProduct')}</p>
+              <p>{t('entities.category.noProduct')}</p>
             ) : (
               <Segment>
                 <Header>

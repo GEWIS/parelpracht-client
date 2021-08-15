@@ -21,16 +21,16 @@ function ProductsPage(props: RouteComponentProps) {
                 <Icon name="shopping bag" />
                 <Header.Content>
                   <Header.Subheader>
-                    {t('pages.tables.products.header')}
+                    {t('pages.products.header')}
                   </Header.Subheader>
-                  {t('pages.tables.products.subheader')}
+                  {t('pages.products.subheader')}
                 </Header.Content>
               </Header>
             </Grid.Column>
             <Grid.Column>
               <Button icon labelPosition="left" primary floated="right" onClick={() => props.history.push('/product/new')}>
                 <Icon name="plus" />
-                {t('pages.tables.products.addProduct')}
+                {t('pages.products.addProduct')}
               </Button>
             </Grid.Column>
           </Grid>

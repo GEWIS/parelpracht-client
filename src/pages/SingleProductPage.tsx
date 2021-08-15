@@ -154,7 +154,7 @@ class SingleProductPage extends React.Component<Props, State> {
 
     if (product && product.pricing) {
       panes.push({
-        menuItem: t('products.props.customPrice'),
+        menuItem: t('entities.product.props.customPrice'),
         render: () => (
           <Tab.Pane>
             <PricingTable pricing={product.pricing!} productId={product.id} />

@@ -116,7 +116,7 @@ class ProductCategoryProps extends React.Component<Props, State> {
     return (
       <>
         <h2>
-          {this.props.create ? t('categories.newCategory') : t('companies.props.details')}
+          {this.props.create ? t('entities.category.newCategory') : t('entities.company.props.details')}
 
           <AuthorizationComponent roles={[Roles.ADMIN]} notFound={false}>
             <PropsButtons
@@ -140,10 +140,10 @@ class ProductCategoryProps extends React.Component<Props, State> {
               required
               disabled={!editing}
               id="form-input-name"
-              placeholder={t('pages.tables.generalColumns.name')}
+              placeholder={t('entities.category.props.name')}
               fluid
               control={Input}
-              label={t('pages.tables.generalColumns.name')}
+              label={t('entities.category.props.name')}
               value={name}
               onChange={(e: ChangeEvent<HTMLInputElement>) => this.setState({
                 name: e.target.value,

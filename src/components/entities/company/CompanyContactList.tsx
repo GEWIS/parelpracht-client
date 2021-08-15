@@ -43,18 +43,23 @@ class CompanyContactList extends React.Component<Props, State> {
         <>
           <h3>
             {t('entity.contacts')}
-            <Button
-              icon
-              labelPosition="left"
-              floated="right"
-              style={{ marginTop: '-0.5em' }}
-              basic
-              as={NavLink}
-              to={`${this.props.location.pathname}/contact/new`}
+            <AuthorizationComponent
+              roles={[Roles.GENERAL, Roles.ADMIN]}
+              notFound={false}
             >
-              <Icon name="plus" />
-              {t('pages.contacts.addContact')}
-            </Button>
+              <Button
+                icon
+                labelPosition="left"
+                floated="right"
+                style={{ marginTop: '-0.5em' }}
+                basic
+                as={NavLink}
+                to={`${this.props.location.pathname}/contact/new`}
+              >
+                <Icon name="plus" />
+                {t('pages.contacts.addContact')}
+              </Button>
+            </AuthorizationComponent>
           </h3>
           <h4>
             {t('pages.contacts.noContact')}

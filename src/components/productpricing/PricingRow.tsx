@@ -50,7 +50,7 @@ class PricingRow extends React.Component<Props, State> {
                   fluid
                   onChange={(e) => updateField(row, i, e.target.value)}
                   value={p}
-                  placeholder={t('products.insights.placeholderHeader')}
+                  placeholder={t('entities.product.insights.placeholderHeader')}
                 />
               </Table.HeaderCell>
             );
@@ -61,7 +61,7 @@ class PricingRow extends React.Component<Props, State> {
                 fluid
                 onChange={(e) => updateField(row, i, e.target.value)}
                 value={p}
-                placeholder={t('products.insights.placeholderValue')}
+                placeholder={t('entities.product.insights.placeholderValue')}
               />
             </Table.Cell>
           );

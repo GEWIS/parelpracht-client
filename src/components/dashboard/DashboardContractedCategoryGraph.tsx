@@ -44,7 +44,6 @@ class DashboardContractedCategoryGraph extends React.Component<Props, State> {
   }
 
   createDropdownOptions() {
-    const { t } = this.props;
     const { data } = this.state;
     const financialYears = data?.financialYears || [];
     const result: object[] = [];

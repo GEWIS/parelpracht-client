@@ -116,7 +116,7 @@ class PricingTable extends React.Component<Props, State> {
     return (
       <>
         <h3>
-          {t('products.insights.header')}
+          {t('entities.product.insights.header')}
           {editing ? (
             <>
               <Button
@@ -125,9 +125,9 @@ class PricingTable extends React.Component<Props, State> {
                 onClick={this.addRow}
                 style={{ marginTop: '-0.5em' }}
               >
-                {t('products.insights.addRow')}
+                {t('entities.product.insights.addRow')}
               </Button>
-              <Button primary floated="right" onClick={this.addColumn} style={{ marginTop: '-0.5em' }}>{t('products.insights.addColumn')}</Button>
+              <Button primary floated="right" onClick={this.addColumn} style={{ marginTop: '-0.5em' }}>{t('entities.product.insights.addColumn')}</Button>
             </>
           ) : null}
           <PropsButtons
@@ -148,7 +148,7 @@ class PricingTable extends React.Component<Props, State> {
           <Form>
             <TextArea
               value={description}
-              placeholder={t('products.insights.addDescription')}
+              placeholder={t('entities.product.insights.addDescription')}
               onChange={(e) => this.setState({ description: e.target.value })}
             />
           </Form>

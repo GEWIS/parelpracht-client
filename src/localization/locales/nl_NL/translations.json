@@ -62,55 +62,6 @@
     },
     "save": "Opslaan"
   },
-  "categories": {
-    "addCategory": "Nieuwe categorie",
-    "header": "Alle categorieën",
-    "newCategory": "Nieuwe productcategorie",
-    "noProduct": "Deze categorie heeft geen producten."
-  },
-  "companies": {
-    "header": "Alle bedrijven",
-    "newCompany": "Nieuw bedrijf",
-    "props": {
-      "addressInformation": "Adres",
-      "city": "Stad",
-      "country": "Land",
-      "description": "Omschrijving",
-      "details": "Details",
-      "invoiceAddress": "Factuuradres",
-      "name": "Naam",
-      "number": "Telefoonnummer",
-      "postalCode": "Postcode",
-      "street": "Straat en huisnummer"
-    }
-  },
-  "contacts": {
-    "header": "Alle contactpersonen",
-    "newContact": "Nieuw contactpersoon",
-    "props": {
-      "comments": "Opmerkingen",
-      "email": "Emailadres",
-      "firstName": "Voornaam",
-      "function": {
-        "extensive": "{{function}} contactpersoon",
-        "financial": "Financieel",
-        "header": "Functie",
-        "normal": "Normaal",
-        "old": "Oud",
-        "primary": "Primair",
-        "unknown": "Onbekend"
-      },
-      "gender": {
-        "female": "Vrouw",
-        "gender": "Gender",
-        "male": "Man",
-        "unknown": "Onbekend"
-      },
-      "lastName": "Achternaam",
-      "middleName": "Tussenvoegsel",
-      "number": "Telefoonnummer"
-    }
-  },
   "dashboard": {
     "categoryLinechart": {
       "header": "Gecontracteerde producten"
@@ -137,6 +88,59 @@
     "welcome": "Welkom terug,"
   },
   "entities": {
+    "category": {
+      "addCategory": "Nieuwe categorie",
+      "header": "Alle categorieën",
+      "newCategory": "Nieuwe productcategorie",
+      "noProduct": "Deze categorie heeft geen producten.",
+      "props": {
+        "name": "Naam"
+      }
+    },
+    "company": {
+      "header": "Alle bedrijven",
+      "newCompany": "Nieuw bedrijf",
+      "props": {
+        "addressInformation": "Adres",
+        "city": "Stad",
+        "country": "Land",
+        "description": "Omschrijving",
+        "details": "Details",
+        "invoiceAddress": "Factuuradres",
+        "name": "Naam",
+        "number": "Telefoonnummer",
+        "postalCode": "Postcode",
+        "street": "Straat en huisnummer"
+      }
+    },
+    "contact": {
+      "header": "Alle contactpersonen",
+      "newContact": "Nieuw contactpersoon",
+      "props": {
+        "comments": "Opmerkingen",
+        "email": "Emailadres",
+        "firstName": "Voornaam",
+        "function": {
+          "extensive": "{{function}} contactpersoon",
+          "financial": "Financieel",
+          "header": "Functie",
+          "normal": "Normaal",
+          "old": "Oud",
+          "primary": "Primair",
+          "unknown": "Onbekend"
+        },
+        "gender": {
+          "female": "Vrouw",
+          "gender": "Gender",
+          "male": "Man",
+          "unknown": "Onbekend"
+        },
+        "lastName": "Achternaam",
+        "middleName": "Tussenvoegsel",
+        "name": "Naam",
+        "number": "Telefoonnummer"
+      }
+    },
     "contract": {
       "props": {
         "title": "Titel",
@@ -187,6 +191,44 @@
         "title": "Titel",
         "totalValue": "Totale waarde"
       }
+    },
+    "product": {
+      "contractedProducts": "Gecontracteerde producten",
+      "insights": {
+        "addColumn": "Voeg kolom toe",
+        "addDescription": "Voeg een beschrijving toe",
+        "addRow": "Voeg rij toe",
+        "header": "Prijslijst",
+        "placeholderHeader": "Titel",
+        "placeholderValue": "Waarde"
+      },
+      "noActivities": "Er zijn nog geen activiteiten.",
+      "noContract": "Er zijn nog geen contracten aangemaakt.",
+      "noFiles": "Er zijn nog geen bestanden geupload.",
+      "noInvoice": "Er zijn nog geen facturen toegevoegd.",
+      "props": {
+        "category": "Product categorie",
+        "comments": "Opmerkingen (intern)",
+        "contractTextEn": "Contracttekst (Engels)",
+        "contractTextNl": "Contracttekst (Nederlands)",
+        "customPrice": "Prijslijst",
+        "customPriceButton": "Voeg prijslijst toe",
+        "header": "Nieuw product",
+        "maxTarget": "Maximum target",
+        "minTarget": "Minimum target",
+        "name": "Naam",
+        "nameEn": "Titel (Engels)",
+        "nameNl": "Titel (Nederlands)",
+        "price": "Prijs",
+        "specsEn": "Aanleverspecificaties (Engels)",
+        "specsNl": "Aanleverspecificaties (Nederlands)",
+        "status": {
+          "active": "Actief",
+          "header": "Status",
+          "inactive": "Inactief"
+        }
+      },
+      "warningFinancialYear": "* In bovenstaand overzicht staan boekjaren, dus 2021 betekent het verenigingsjaar 2020-2021."
     },
     "productInstance": {
       "props": {
@@ -245,6 +287,7 @@
   "entity": {
     "activities": "Activiteiten",
     "categories": "Product categorieën",
+    "category": "Categorie",
     "companies": "Bedrijven",
     "company": "Bedrijf",
     "contact": "Contactpersoon",
@@ -320,6 +363,10 @@
     }
   },
   "pages": {
+    "companies": {
+      "addCompany": "Voeg bedrijf toe",
+      "subheader": "Alle bedrijven"
+    },
     "contacts": {
       "addContact": "Nieuw contactpersoon",
       "noContact": "Er zijn nog geen contactpersonen."
@@ -385,6 +432,14 @@
       "header": "Er is geen geld hier,",
       "subheader": "blijf zoeken!"
     },
+    "products": {
+      "addProduct": "Voeg product toe",
+      "columns": {
+        "category": "Categorie"
+      },
+      "header": "Alle producten",
+      "subheader": "Producten"
+    },
     "resetPassword": {
       "newPassword": "Nieuw wachtwoord",
       "repeatPassword": "Herhaal wachtwoord",
@@ -402,10 +457,6 @@
       "successMessage": "Wachtwoord succesvol veranderd!"
     },
     "tables": {
-      "companies": {
-        "addCompany": "Voeg bedrijf toe",
-        "subheader": "Alle bedrijven"
-      },
       "footer": {
         "items": "Items {{begin}} tot {{end}} van {{total}} geladen",
         "pagination": {
@@ -417,16 +468,7 @@
         }
       },
       "generalColumns": {
-        "amount": "Aantal",
-        "company": "Bedrijf",
-        "id": "ID",
-        "lastUpdate": "Laatste update",
-        "name": "Naam",
-        "price": "Prijs",
-        "status": "Status",
-        "title": "Titel",
-        "total": "Totaal",
-        "year": "Jaar"
+        "total": "Totaal"
       },
       "header": {
         "clear": "Wis zoekopdracht",
@@ -450,14 +492,7 @@
         "updateLastSeen": "Update Laatst Gezien",
         "updateLastSeenDescription": "Door \"laatst gezien\" te updaten, laat je weten dat alle factuurstatussen zijn bijgewerkt."
       },
-      "products": {
-        "addProduct": "Voeg product toe",
-        "columns": {
-          "category": "Categorie"
-        },
-        "header": "Alle producten",
-        "subheader": "Producten"
-      }
+      "total": "Totaa"
     },
     "user": {
       "apiKey": {
@@ -492,42 +527,5 @@
         "transferButton": "Draag verantwoordelijkheden over"
       }
     }
-  },
-  "products": {
-    "contractedProducts": "Gecontracteerde producten",
-    "insights": {
-      "addColumn": "Voeg kolom toe",
-      "addDescription": "Voeg een beschrijving toe",
-      "addRow": "Voeg rij toe",
-      "header": "Prijslijst",
-      "placeholderHeader": "Titel",
-      "placeholderValue": "Waarde"
-    },
-    "noActivities": "Er zijn nog geen activiteiten.",
-    "noContract": "Er zijn nog geen contracten aangemaakt.",
-    "noFiles": "Er zijn nog geen bestanden geupload.",
-    "noInvoice": "Er zijn nog geen facturen toegevoegd.",
-    "props": {
-      "category": "Product categorie",
-      "comments": "Opmerkingen (intern)",
-      "contractTextEn": "Contracttekst (Engels)",
-      "contractTextNl": "Contracttekst (Nederlands)",
-      "customPrice": "Prijslijst",
-      "customPriceButton": "Voeg prijslijst toe",
-      "header": "Nieuw product",
-      "maxTarget": "Maximum target",
-      "minTarget": "Minimum target",
-      "nameEn": "Titel (Engels)",
-      "nameNl": "Titel (Nederlands)",
-      "price": "Prijs",
-      "specsEn": "Aanleverspecificaties (Engels)",
-      "specsNl": "Aanleverspecificaties (Nederlands)",
-      "status": {
-        "active": "Actief",
-        "header": "Status",
-        "inactive": "Inactief"
-      }
-    },
-    "warningFinancialYear": "* In bovenstaand overzicht staan boekjaren, dus 2021 betekent het verenigingsjaar 2020-2021."
   }
 }

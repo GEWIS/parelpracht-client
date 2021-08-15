@@ -73,7 +73,7 @@ class FilesList extends React.Component<Props, State> {
 
     const noFilesHeader = (
       <h4>
-        {t('products.noFiles')}
+        {t('entities.product.noFiles')}
       </h4>
     );
     const filesList = (

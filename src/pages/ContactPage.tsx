@@ -20,7 +20,7 @@ function ContactsPage() {
                 <Icon name="address card" />
                 <Header.Content>
                   <Header.Subheader>{t('entity.contacts')}</Header.Subheader>
-                  {t('contacts.header')}
+                  {t('entities.contact.header')}
                 </Header.Content>
               </Header>
             </Grid.Column>

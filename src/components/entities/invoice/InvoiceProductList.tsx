@@ -78,7 +78,7 @@ class InvoiceProductList extends React.Component<Props, State> {
           <Table.Footer>
             <Table.Row>
               <Table.HeaderCell>
-                {t('pages.tables.generalColumns.total')}
+                {t('pages.tables.total')}
                 :
               </Table.HeaderCell>
               <Table.HeaderCell collapsing>

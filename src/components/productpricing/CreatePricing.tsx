@@ -25,7 +25,7 @@ function CreatePricing(props: Props) {
       primary
       onClick={() => createPricing()}
     >
-      {t('products.props.customPriceButton')}
+      {t('entities.product.props.customPriceButton')}
     </Button>
   );
 }

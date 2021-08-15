@@ -134,7 +134,7 @@ class ContractProductList extends React.Component<Props, State> {
             <Table.Row>
               <Table.HeaderCell />
               <Table.HeaderCell>
-                {t('pages.tables.generalColumns.total')}
+                {t('pages.tables.total')}
                 :
               </Table.HeaderCell>
               <Table.HeaderCell singleLine collapsing>

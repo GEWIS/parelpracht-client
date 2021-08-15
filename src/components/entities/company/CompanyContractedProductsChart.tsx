@@ -47,7 +47,7 @@ class CompanyContractedProductsChart extends React.Component<Props, State> {
           labels={data.labels || []}
         />
         <p style={{ textAlign: 'center', fontStyle: 'italic', marginTop: '0.5em' }}>
-          {t('products.warningFinancialYear')}
+          {t('entities.product.warningFinancialYear')}
         </p>
       </Tab.Pane>
     );

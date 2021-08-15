@@ -21,7 +21,7 @@ function ProductCategoriesPage(props: RouteComponentProps) {
                 <Icon name="shopping bag" />
                 <Header.Content>
                   <Header.Subheader>{t('entity.categories')}</Header.Subheader>
-                  {t('categories.header')}
+                  {t('entities.category.header')}
                 </Header.Content>
               </Header>
             </Grid.Column>
@@ -29,7 +29,7 @@ function ProductCategoriesPage(props: RouteComponentProps) {
               <AuthorizationComponent roles={[Roles.ADMIN]} notFound={false}>
                 <Button icon labelPosition="left" primary floated="right" onClick={() => props.history.push('/category/new')}>
                   <Icon name="plus" />
-                  {t('categories.addCategory')}
+                  {t('entities.category.addCategory')}
                 </Button>
               </AuthorizationComponent>
             </Grid.Column>

@@ -46,21 +46,21 @@ function ProductSummary(props: Props) {
     >
       { useDutch ? (
         <div>
-          <h5>{t('products.props.nameEn')}</h5>
+          <h5>{t('entities.product.props.nameEn')}</h5>
           <p>{product.nameEnglish}</p>
         </div>
       ) : (
         <div>
-          <h5>{t('products.props.nameNl')}</h5>
+          <h5>{t('entities.product.props.nameNl')}</h5>
           <p>{product.nameDutch}</p>
         </div>
       )}
       <div>
-        <h5>{t('products.props.price')}</h5>
+        <h5>{t('entities.product.props.price')}</h5>
         <p>{formatPriceFull(product.targetPrice)}</p>
       </div>
       <div>
-        <h5>{t('products.props.category')}</h5>
+        <h5>{t('entities.product.props.category')}</h5>
         <p>{categoryName}</p>
       </div>
     </EntitySummary>

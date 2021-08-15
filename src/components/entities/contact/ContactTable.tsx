@@ -54,26 +54,26 @@ function ContactsTable({
               sorted={column === 'firstName' ? direction : undefined}
               onClick={() => changeSort('firstName')}
             >
-              {t('pages.tables.generalColumns.name')}
+              {t('entities.contact.props.name')}
             </Table.HeaderCell>
             <Table.HeaderCell
               sorted={column === 'company' ? direction : undefined}
               onClick={() => changeSort('company')}
             >
-              {t('pages.tables.generalColumns.company')}
+              {t('entity.company')}
               <ContactCompanyFilter table={Tables.Contacts} />
             </Table.HeaderCell>
             <Table.HeaderCell
               sorted={column === 'email' ? direction : undefined}
               onClick={() => changeSort('email')}
             >
-              {t('contacts.props.email')}
+              {t('entities.contact.props.email')}
             </Table.HeaderCell>
             <Table.HeaderCell
               sorted={column === 'function' ? direction : undefined}
               onClick={() => changeSort('function')}
             >
-              {t('contacts.props.function')}
+              {t('entities.contact.props.function')}
               <ContactFunctionFilter table={Tables.Contacts} />
             </Table.HeaderCell>
           </Table.Row>

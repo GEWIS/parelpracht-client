@@ -75,43 +75,43 @@ function InvoicesTable({
               onClick={() => changeSort('id')}
               width={1}
             >
-              {t('pages.tables.generalColumns.id')}
+              {t('entities.generalProps.ID')}
             </Table.HeaderCell>
             <Table.HeaderCell
               sorted={column === 'title' ? direction : undefined}
               onClick={() => changeSort('title')}
               width={4}
             >
-              {t('pages.tables.invoices.columns.title')}
+              {t('entities.invoice.props.title')}
             </Table.HeaderCell>
             <Table.HeaderCell
               sorted={column === 'company' ? direction : undefined}
               onClick={() => changeSort('company')}
               width={3}
             >
-              {t('pages.tables.invoices.columns.company')}
+              {t('entity.company')}
               <CompanyFilter table={Tables.Invoices} />
             </Table.HeaderCell>
             <Table.HeaderCell width={2}>
-              {t('pages.tables.invoices.columns.status')}
+              {t('entities.generalProps.status')}
               <InvoiceStatusFilter />
             </Table.HeaderCell>
             <Table.HeaderCell width={2}>
-              {t('pages.tables.invoices.columns.amount')}
+              {t('entities.generalProps.amount')}
             </Table.HeaderCell>
             <Table.HeaderCell
               width={2}
               sorted={column === 'startDate' ? direction : undefined}
               onClick={() => changeSort('startDate')}
             >
-              {t('pages.tables.invoices.columns.financialYear')}
+              {t('entities.invoice.props.financialYear')}
             </Table.HeaderCell>
             <Table.HeaderCell
               width={3}
               sorted={column === 'updatedAt' ? direction : undefined}
               onClick={() => changeSort('updatedAt')}
             >
-              {t('pages.tables.generalColumns.lastUpdate')}
+              {t('entities.generalProps.lastUpdate')}
             </Table.HeaderCell>
           </Table.Row>
         </Table.Header>

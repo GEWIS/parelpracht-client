@@ -33,11 +33,11 @@ class CountrySelector extends React.Component<Props> {
       >
         {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
         <label htmlFor={this.props.id}>
-          {t('companies.props.country')}
+          {t('entities.company.props.country')}
         </label>
         <Dropdown
           id={this.props.id}
-          placeholder={t('companies.props.country')}
+          placeholder={t('entities.company.props.country')}
           fluid
           search
           selection

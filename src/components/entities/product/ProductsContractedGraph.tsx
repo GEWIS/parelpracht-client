@@ -317,7 +317,7 @@ class ProductsContractedGraph extends React.Component<Props, State> {
         <Grid style={{ marginBottom: '1em' }}>
           <Grid.Row columns={2}>
             <Grid.Column textAlign="left">
-              <h3>{t('products.contractedProducts')}</h3>
+              <h3>{t('entities.product.contractedProducts')}</h3>
             </Grid.Column>
             <Grid.Column textAlign="right" verticalAlign="bottom" style={{ fontSize: '1.2em' }}>
               <Dropdown
@@ -342,7 +342,7 @@ class ProductsContractedGraph extends React.Component<Props, State> {
           />
         </div>
         <p style={{ textAlign: 'center', fontStyle: 'italic', marginTop: '0.5em' }}>
-          {t('products.warningFinancialYear')}
+          {t('entities.product.warningFinancialYear')}
         </p>
       </Tab.Pane>
     );

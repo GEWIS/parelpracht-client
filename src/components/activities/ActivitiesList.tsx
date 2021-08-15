@@ -54,7 +54,7 @@ class ActivitiesList extends React.Component<Props, State> {
     if (activities.length === 0) {
       activitiesComponent = (
         <h4>
-          {t('products.noActivities')}
+          {t('entities.product.noActivities')}
         </h4>
       );
     } else {

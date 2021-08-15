@@ -43,7 +43,7 @@ class CategoryLineChart extends React.Component<Props, State> {
 
   createLineChartDataObject(): object {
     const {
-      t, data, labels, getCatName,
+      data, labels, getCatName,
     } = this.props;
     const { dataSetSelection } = this.state;
 

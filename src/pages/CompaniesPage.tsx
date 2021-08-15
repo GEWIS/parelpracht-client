@@ -25,7 +25,7 @@ function CompaniesPage(props: RouteComponentProps) {
                 <Icon name="building" />
                 <Header.Content>
                   <Header.Subheader>{t('entity.companies')}</Header.Subheader>
-                  {t('pages.tables.companies.subheader')}
+                  {t('pages.companies.subheader')}
                 </Header.Content>
               </Header>
             </Grid.Column>
@@ -36,7 +36,7 @@ function CompaniesPage(props: RouteComponentProps) {
               >
                 <Button icon labelPosition="left" primary floated="right" onClick={() => props.history.push('/company/new')}>
                   <Icon name="plus" />
-                  {t('pages.tables.companies.addCompany')}
+                  {t('pages.companies.addCompany')}
                 </Button>
               </AuthorizationComponent>
             </Grid.Column>

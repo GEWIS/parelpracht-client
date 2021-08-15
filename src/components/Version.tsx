@@ -31,7 +31,7 @@ class VersionModal extends React.Component<Props, State> {
       <Modal
         trigger={(
           <span style={{ cursor: 'pointer' }}>
-            Parelpracht
+            ParelPracht
             {' '}
             {version}
           </span>
