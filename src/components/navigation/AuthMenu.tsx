@@ -13,7 +13,7 @@ import ResourceStatus from '../../stores/resourceStatus';
 import { RootState } from '../../stores/store';
 import UserAvatar from '../entities/user/UserAvatar';
 import { authedUserHasRole } from '../../stores/auth/selectors';
-import { changeLanguage } from '../../localization';
+import { changeLanguage, getLanguage } from '../../localization';
 
 interface Props extends RouteComponentProps {
   authStatus: AuthStatus | undefined;
@@ -93,12 +93,14 @@ function AuthMenu(props: Props) {
       >
         <Dropdown.Menu>
           <Dropdown.Item
+            className={getLanguage() === 'en-US' ? 'active' : ''}
             onClick={() => changeLanguage('en-US')}
           >
             <Flag name="us" />
             English
           </Dropdown.Item>
           <Dropdown.Item
+            className={getLanguage() === 'nl-NL' ? 'active' : ''}
             onClick={() => changeLanguage('nl-NL')}
           >
             <Flag name="nl" />
