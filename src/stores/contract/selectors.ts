@@ -4,17 +4,17 @@ import { getSummary } from '../summaries/selectors';
 import { SummaryCollections } from '../summaries/summaries';
 import { getTable } from '../tables/selectors';
 import { Tables } from '../tables/tables';
+import i18n from '../../localization';
 
 export function sortColumn(state: RootState): string {
   const column = getTable<Contract>(state, Tables.Contracts).sortColumn;
   switch (column) {
-    case 'id': return 'ID';
-    case 'title': return 'Title';
-    case 'company': return 'Company';
-    case 'contact': return 'Contact';
-    case 'assignedTo': return 'Assigned To';
-    case 'updatedAt': return 'Updated At';
-    default: return 'unknown';
+    case 'id': return i18n.t('entities.generalProps.ID');
+    case 'title': return i18n.t('entities.contract.props.title').toLowerCase();
+    case 'company': return i18n.t('entity.company').toLowerCase();
+    case 'contact': return i18n.t('entity.contact').toLowerCase();
+    case 'updatedAt': return i18n.t('entities.generalProps.lastUpdate').toLowerCase();
+    default: return i18n.t('entities.generalProps.unknown').toLowerCase();
   }
 }
 export function getContractTitle(state: RootState, id: number): string {

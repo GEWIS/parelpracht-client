@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useTranslation } from 'react-i18next';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import {
   Button, Container, Grid, Header, Icon, Segment,
@@ -9,6 +10,7 @@ import ProductCategoriesTable from '../components/entities/productcategories/Pro
 import ProductCategoriesTableControls from '../components/entities/productcategories/ProductCategoriesTableControls';
 
 function ProductCategoriesPage(props: RouteComponentProps) {
+  const { t } = useTranslation();
   return (
     <AuthorizationComponent roles={[Roles.GENERAL, Roles.ADMIN]} notFound>
       <Segment style={{ backgroundColor: 'rgba(237, 237, 237, 0.98)' }} vertical basic>
@@ -18,8 +20,8 @@ function ProductCategoriesPage(props: RouteComponentProps) {
               <Header as="h1">
                 <Icon name="shopping bag" />
                 <Header.Content>
-                  <Header.Subheader>Categories</Header.Subheader>
-                  Product Categories
+                  <Header.Subheader>{t('entity.categories')}</Header.Subheader>
+                  {t('entities.category.header')}
                 </Header.Content>
               </Header>
             </Grid.Column>
@@ -27,7 +29,7 @@ function ProductCategoriesPage(props: RouteComponentProps) {
               <AuthorizationComponent roles={[Roles.ADMIN]} notFound={false}>
                 <Button icon labelPosition="left" primary floated="right" onClick={() => props.history.push('/category/new')}>
                   <Icon name="plus" />
-                  Add Category
+                  {t('entities.category.addCategory')}
                 </Button>
               </AuthorizationComponent>
             </Grid.Column>

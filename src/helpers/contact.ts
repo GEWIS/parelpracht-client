@@ -1,6 +1,7 @@
 import {
   Contact, ContactFunction, ContactSummary, Gender,
 } from '../clients/server.generated';
+import i18n from '../localization';
 
 export function formatContactName(
   fName: string | undefined,
@@ -16,35 +17,27 @@ export function formatContactName(
   return contactName;
 }
 
-export function formatFunction(func: ContactFunction) {
+export function formatFunctionShort(func: ContactFunction) {
   switch (func) {
-    case ContactFunction.NORMAL: return 'Normal contact';
-    case ContactFunction.PRIMARY: return 'Primary contact';
-    case ContactFunction.FINANCIAL: return 'Financial contact';
-    case ContactFunction.OLD: return 'Old contact';
-    default: return 'Unknown function';
+    case ContactFunction.NORMAL: return i18n.t('entities.contact.props.function.normal');
+    case ContactFunction.PRIMARY: return i18n.t('entities.contact.props.function.primary');
+    case ContactFunction.FINANCIAL: return i18n.t('entities.contact.props.function.financial');
+    case ContactFunction.OLD: return i18n.t('entities.contact.props.function.old');
+    default: return i18n.t('entities.contact.props.function.unknown');
   }
 }
 
-export function formatFunctionShort(func: ContactFunction) {
-  switch (func) {
-    case ContactFunction.NORMAL: return 'Normal';
-    case ContactFunction.PRIMARY: return 'Primary';
-    case ContactFunction.FINANCIAL: return 'Financial';
-    case ContactFunction.OLD: return 'Old';
-    default: {
-      return 'Unknown';
-    }
-  }
+export function formatFunction(func: ContactFunction) {
+  return i18n.t('entities.contact.props.function.extensive', { function: formatFunctionShort(func) });
 }
 
 export function formatGender(gender: Gender) {
   switch (gender) {
-    case Gender.MALE: return 'Male';
-    case Gender.FEMALE: return 'Female';
-    case Gender.OTHER: return 'Other gender';
-    case Gender.UNKNOWN: return 'Unknown gender';
-    default: return 'Unknown gender';
+    case Gender.MALE: return i18n.t('entities.user.props.gender.male');
+    case Gender.FEMALE: return i18n.t('entities.user.props.gender.female');
+    case Gender.OTHER: return i18n.t('entities.user.props.gender.other');
+    case Gender.UNKNOWN:
+    default: return i18n.t('entities.user.props.gender.unknown');
   }
 }
 

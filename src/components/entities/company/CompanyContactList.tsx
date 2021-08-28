@@ -4,6 +4,7 @@ import { NavLink, RouteComponentProps, withRouter } from 'react-router-dom';
 import {
   Button, Icon, Loader,
 } from 'semantic-ui-react';
+import { WithTranslation, withTranslation } from 'react-i18next';
 import { Company, Roles } from '../../../clients/server.generated';
 import { getSingle } from '../../../stores/single/selectors';
 import { SingleEntities } from '../../../stores/single/single';
@@ -12,7 +13,7 @@ import AuthorizationComponent from '../../AuthorizationComponent';
 import CompanyContact from './CompanyContact';
 import { sortContactsByFunction } from '../../../helpers/contact';
 
-interface Props extends RouteComponentProps {
+interface Props extends WithTranslation, RouteComponentProps {
   company: Company | undefined;
 }
 
@@ -26,7 +27,7 @@ class CompanyContactList extends React.Component<Props, State> {
   }
 
   public render() {
-    const { company } = this.props;
+    const { company, t } = this.props;
 
     if (company === undefined) {
       return (
@@ -41,22 +42,27 @@ class CompanyContactList extends React.Component<Props, State> {
       return (
         <>
           <h3>
-            Contacts
-            <Button
-              icon
-              labelPosition="left"
-              floated="right"
-              style={{ marginTop: '-0.5em' }}
-              basic
-              as={NavLink}
-              to={`${this.props.location.pathname}/contact/new`}
+            {t('entity.contacts')}
+            <AuthorizationComponent
+              roles={[Roles.GENERAL, Roles.ADMIN]}
+              notFound={false}
             >
-              <Icon name="plus" />
-              Add Contact
-            </Button>
+              <Button
+                icon
+                labelPosition="left"
+                floated="right"
+                style={{ marginTop: '-0.5em' }}
+                basic
+                as={NavLink}
+                to={`${this.props.location.pathname}/contact/new`}
+              >
+                <Icon name="plus" />
+                {t('pages.contacts.addContact')}
+              </Button>
+            </AuthorizationComponent>
           </h3>
           <h4>
-            There are no contacts yet.
+            {t('pages.contacts.noContact')}
           </h4>
         </>
       );
@@ -65,24 +71,19 @@ class CompanyContactList extends React.Component<Props, State> {
     return (
       <>
         <h3>
-          Contacts
-          <AuthorizationComponent
-            roles={[Roles.GENERAL, Roles.ADMIN]}
-            notFound={false}
+          {t('entity.contacts')}
+          <Button
+            icon
+            labelPosition="left"
+            floated="right"
+            style={{ marginTop: '-0.5em' }}
+            basic
+            as={NavLink}
+            to={`${this.props.location.pathname}/contact/new`}
           >
-            <Button
-              icon
-              labelPosition="left"
-              floated="right"
-              style={{ marginTop: '-0.5em' }}
-              basic
-              as={NavLink}
-              to={`${this.props.location.pathname}/contact/new`}
-            >
-              <Icon name="plus" />
-              Add Contact
-            </Button>
-          </AuthorizationComponent>
+            <Icon name="plus" />
+            {t('pages.contacts.addContact')}
+          </Button>
         </h3>
         {contacts.map((contact) => (
           <CompanyContact key={contact.id} contact={contact} />
@@ -102,4 +103,6 @@ const mapStateToProps = (state: RootState) => {
 const mapDispatchToProps = () => ({
 });
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(CompanyContactList));
+export default withTranslation()(
+  withRouter(connect(mapStateToProps, mapDispatchToProps)(CompanyContactList)),
+);

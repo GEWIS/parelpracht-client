@@ -1,4 +1,5 @@
 import React from 'react';
+import { WithTranslation, withTranslation } from 'react-i18next';
 import { Loader, Table } from 'semantic-ui-react';
 import {
   Client, PaginationParams, Product, ProductInstance,
@@ -6,7 +7,7 @@ import {
 import TablePagination from '../../TablePagination';
 import InvoiceCompactRow from './InvoiceCompactRow';
 
-interface Props {
+interface Props extends WithTranslation {
   product: Product;
 }
 
@@ -82,12 +83,13 @@ class ContractCompactTable extends React.Component<Props, State> {
     const {
       productInstances, countTotal, skip, take, loading,
     } = this.state;
+    const { t } = this.props;
 
     let invoiceList;
     if (productInstances.length === 0) {
       invoiceList = (
         <h4>
-          There are no invoices created yet.
+          {t('entities.product.noInvoice')}
         </h4>
       );
     } else {
@@ -97,19 +99,19 @@ class ContractCompactTable extends React.Component<Props, State> {
             <Table.Header>
               <Table.Row>
                 <Table.HeaderCell>
-                  Title
+                  {t('entities.invoice.props.title')}
                 </Table.HeaderCell>
                 <Table.HeaderCell>
-                  Company
+                  {t('entity.company')}
                 </Table.HeaderCell>
                 <Table.HeaderCell>
-                  Status
+                  {t('entities.generalProps.status')}
                 </Table.HeaderCell>
                 <Table.HeaderCell style={{ width: '15%' }}>
-                  Year
+                  {t('entities.invoice.props.financialYear')}
                 </Table.HeaderCell>
                 <Table.HeaderCell>
-                  Last Update
+                  {t('entities.generalProps.lastUpdate')}
                 </Table.HeaderCell>
               </Table.Row>
             </Table.Header>
@@ -132,7 +134,7 @@ class ContractCompactTable extends React.Component<Props, State> {
 
     return (
       <>
-        <h3>Invoices</h3>
+        <h3>{t('entity.invoices')}</h3>
         <Loader active={loading} />
         {invoiceList}
       </>
@@ -140,4 +142,4 @@ class ContractCompactTable extends React.Component<Props, State> {
   }
 }
 
-export default ContractCompactTable;
+export default withTranslation()(ContractCompactTable);

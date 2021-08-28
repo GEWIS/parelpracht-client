@@ -1,9 +1,10 @@
-/* eslint-disable react/jsx-props-no-spreading */
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { Dropdown, DropdownProps } from 'semantic-ui-react';
+import { useTranslation } from 'react-i18next';
 import { ProductStatus, ProductSummary } from '../../../clients/server.generated';
 import { RootState } from '../../../stores/store';
+import { getLanguage } from '../../../localization';
 
 interface Props {
   value: number;
@@ -13,6 +14,8 @@ interface Props {
 
 function ProductSelector(props: Props & DropdownProps) {
   const [open, changeOpen] = useState(false);
+  const currentLanguage = getLanguage();
+  const { t } = useTranslation();
 
   const {
     value, onChange, options,
@@ -20,21 +23,21 @@ function ProductSelector(props: Props & DropdownProps) {
   const dropdownOptions = options
     .filter((p) => p.status === ProductStatus.ACTIVE)
     .sort((p1, p2) => {
-      const n1 = p1.nameEnglish.toUpperCase();
-      const n2 = p2.nameEnglish.toUpperCase();
+      const n1 = currentLanguage === 'nl-NL' ? p1.nameDutch.toUpperCase() : p1.nameEnglish.toUpperCase();
+      const n2 = currentLanguage === 'nl-NL' ? p2.nameDutch.toUpperCase() : p2.nameEnglish.toUpperCase();
       if (n1 < n2) return -1;
       if (n1 > n2) return 1;
       return 0;
     })
     .map((x) => ({
       key: x.id,
-      text: x.nameEnglish,
+      text: currentLanguage === 'nl-NL' ? x.nameDutch : x.nameEnglish,
       value: x.id,
     }));
 
   return (
     <Dropdown
-      placeholder="Product"
+      placeholder={t('entity.product')}
       search
       selection
       options={dropdownOptions}

@@ -4,9 +4,11 @@ import { Dispatch } from 'redux';
 import {
   Checkbox, Form, Input, Label,
 } from 'semantic-ui-react';
+import { withTranslation, WithTranslation } from 'react-i18next';
 import validator from 'validator';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import {
+  Client, PaginationParams,
   Product, ProductParams, ProductStatus, Roles,
 } from '../../../clients/server.generated';
 import ProductCategorySelector from '../productcategories/ProductCategorySelector';
@@ -23,7 +25,7 @@ import CreatePricing from '../../productpricing/CreatePricing';
 import AuthorizationComponent from '../../AuthorizationComponent';
 import TextArea from '../../TextArea';
 
-interface Props extends RouteComponentProps {
+interface Props extends WithTranslation, RouteComponentProps {
   create?: boolean;
   onCancel?: () => void;
 
@@ -39,6 +41,7 @@ interface Props extends RouteComponentProps {
 
 interface State {
   editing: boolean;
+  hasInstances: boolean;
 
   nameDutch: string;
   nameEnglish: string;
@@ -60,8 +63,11 @@ class ProductProps extends React.Component<Props, State> {
 
     this.state = {
       editing: props.create ?? false,
+      hasInstances: false,
       ...this.extractState(props),
     };
+
+    this.hasInstances();
   }
 
   componentDidUpdate(prevProps: Props) {
@@ -150,12 +156,21 @@ class ProductProps extends React.Component<Props, State> {
     );
   };
 
+  hasInstances = async () => {
+    const client = new Client();
+    const hasInstances = (await client.getProductContracts(this.props.product.id,
+      new PaginationParams({
+        skip: 0,
+        take: 1,
+      }))).list.length > 0;
+    this.setState({ hasInstances });
+  };
+
   deleteButtonActive = () => {
     if (this.props.create) {
       return undefined;
     }
-    return !(this.props.product.instances.length > 0
-      || this.props.product.files.length > 0);
+    return !(this.state.hasInstances || this.props.product.files.length > 0);
   };
 
   render() {
@@ -174,11 +189,12 @@ class ProductProps extends React.Component<Props, State> {
       minTarget,
       maxTarget,
     } = this.state;
+    const { t } = this.props;
 
     return (
       <>
         <h2>
-          {this.props.create ? 'New Product' : 'Details'}
+          {this.props.create ? t('pages.product.newProduct') : t('entities.details')}
 
           <PropsButtons
             editing={editing}
@@ -202,8 +218,8 @@ class ProductProps extends React.Component<Props, State> {
               id="form-input-dutch-name"
               fluid
               control={Input}
-              label="Name (Dutch)"
-              placeholder="Name (Dutch)"
+              label={t('entities.product.props.nameNl')}
+              placeholder={t('entities.product.props.nameNl')}
               value={nameDutch}
               onChange={(e: ChangeEvent<HTMLInputElement>) => this.setState({
                 nameDutch: e.target.value,
@@ -218,8 +234,8 @@ class ProductProps extends React.Component<Props, State> {
               fluid
               id="form-input-english-name"
               control={Input}
-              label="Name (English)"
-              placeholder="Name (English)"
+              label={t('entities.product.props.nameEn')}
+              placeholder={t('entities.product.props.nameEn')}
               value={nameEnglish}
               onChange={(e: ChangeEvent<HTMLInputElement>) => this.setState({
                 nameEnglish: e.target.value,
@@ -236,7 +252,7 @@ class ProductProps extends React.Component<Props, State> {
             >
               {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
               <label htmlFor="form-input-category">
-                Product category
+                {t('entities.product.props.category')}
               </label>
               <ProductCategorySelector
                 id="form-input-category"
@@ -253,12 +269,12 @@ class ProductProps extends React.Component<Props, State> {
             >
               {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
               <label htmlFor="form-check-status">
-                Status
+                {t('entities.product.props.status.header')}
               </label>
               <Checkbox
                 toggle
                 id="form-check-status"
-                label={status === ProductStatus.ACTIVE ? 'Active' : 'Inactive'}
+                label={status === ProductStatus.ACTIVE ? t('entities.product.props.status.active') : t('entities.product.props.status.inactive')}
                 checked={status === ProductStatus.ACTIVE}
                 onChange={(_, data) => this.setState({
                   status:
@@ -275,7 +291,7 @@ class ProductProps extends React.Component<Props, State> {
             >
               {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
               <label htmlFor="form-input-target-price">
-                Target Price
+                {t('entities.product.props.price')}
               </label>
               <Input
                 labelPosition="left"
@@ -295,7 +311,7 @@ class ProductProps extends React.Component<Props, State> {
                 >
                   {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
                   <label htmlFor="form-check-status">
-                    Pricing Tab
+                    {t('entities.product.props.customPrice')}
                   </label>
                   <CreatePricing productId={this.props.product.id} />
                 </Form.Field>
@@ -309,7 +325,7 @@ class ProductProps extends React.Component<Props, State> {
             >
               {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
               <label htmlFor="form-input-minimal-target">
-                Minimal Target
+                {t('entities.product.props.minTarget')}
               </label>
               <Input
                 id="form-input-minimal-target"
@@ -328,7 +344,7 @@ class ProductProps extends React.Component<Props, State> {
             >
               {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
               <label htmlFor="form-input-maximum-target">
-                Maximum Target
+                {t('entities.product.props.maxTarget')}
               </label>
               <Input
                 id="form-input-maximum-target"
@@ -345,7 +361,7 @@ class ProductProps extends React.Component<Props, State> {
           <Form.Field disabled={!editing}>
             {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
             <label htmlFor="form-input-description">
-              Comments (internal)
+              {t('entities.product.props.comments')}
             </label>
             <TextArea
               id="form-input-description"
@@ -357,7 +373,7 @@ class ProductProps extends React.Component<Props, State> {
           <Form.Field required error={validator.isEmpty(contractTextDutch)} disabled={!editing}>
             {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
             <label htmlFor="form-input-contract-text-dutch">
-              Contract Text (Dutch)
+              {t('entities.product.props.contractTextNl')}
             </label>
             <TextArea
               id="form-input-contract-text-dutch"
@@ -371,7 +387,7 @@ class ProductProps extends React.Component<Props, State> {
           <Form.Field required error={validator.isEmpty(contractTextEnglish)} disabled={!editing}>
             {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
             <label htmlFor="form-input-contract-text-english">
-              Contract Text (English)
+              {t('entities.product.props.contractTextEn')}
             </label>
             <TextArea
               id="form-input-contract-text-english"
@@ -385,7 +401,7 @@ class ProductProps extends React.Component<Props, State> {
           <Form.Field disabled={!editing}>
             {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
             <label htmlFor="form-input-delivery-spec-dutch">
-              Delivery Specification (Dutch)
+              {t('entities.product.props.specsNl')}
             </label>
             <TextArea
               id="form-input-delivery-spec-dutch"
@@ -399,7 +415,7 @@ class ProductProps extends React.Component<Props, State> {
           <Form.Field disabled={!editing}>
             {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
             <label htmlFor="form-input-delivery-spec-english">
-              Delivery Specification (English)
+              {t('entities.product.props.specsEn')}
             </label>
             <TextArea
               id="form-delivery-spec-english"
@@ -435,4 +451,6 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   showTransientAlert: (alert: TransientAlert) => dispatch(showTransientAlert(alert)),
 });
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ProductProps));
+export default withTranslation()(
+  withRouter(connect(mapStateToProps, mapDispatchToProps)(ProductProps)),
+);

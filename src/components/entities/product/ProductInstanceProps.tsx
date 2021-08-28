@@ -1,6 +1,7 @@
 import React, { ChangeEvent } from 'react';
 import { connect } from 'react-redux';
 import { Form, Input, Label } from 'semantic-ui-react';
+import { withTranslation, WithTranslation } from 'react-i18next';
 import {
   ActivityType,
   Contract,
@@ -22,7 +23,7 @@ import { getLastStatus } from '../../../helpers/activity';
 import { authedUserHasRole } from '../../../stores/auth/selectors';
 import ProductLink from './ProductLink';
 
-interface Props {
+interface Props extends WithTranslation {
   create?: boolean;
   onCancel?: () => void;
 
@@ -153,12 +154,12 @@ class ProductInstanceProps extends React.Component<Props, State> {
       details,
       productId,
     } = this.state;
-    const { productInstance } = this.props;
+    const { productInstance, t } = this.props;
 
     let productNameElement = (
       <Form.Field>
         {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-        <label htmlFor="form-product-dropdown">Product</label>
+        <label htmlFor="form-product-dropdown">{t('entity.product')}</label>
         <br />
         <ProductLink id={productId} />
       </Form.Field>
@@ -169,7 +170,7 @@ class ProductInstanceProps extends React.Component<Props, State> {
           disabled={!editing || productInstance.id >= 0}
         >
           {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-          <label htmlFor="form-product-dropdown">Product</label>
+          <label htmlFor="form-product-dropdown">{t('entity.product')}</label>
           <ProductSelector
             id="form-product-dropdown"
             value={productId}
@@ -195,7 +196,7 @@ class ProductInstanceProps extends React.Component<Props, State> {
     return (
       <>
         <h2>
-          {this.props.create ? 'New Product Instance' : 'Details'}
+          {this.props.create ? t('pages.productInstance.newProductInstance') : t('entities.details')}
 
           <AuthorizationComponent roles={[Roles.ADMIN, Roles.GENERAL]} notFound={false}>
             <PropsButtons
@@ -203,7 +204,7 @@ class ProductInstanceProps extends React.Component<Props, State> {
               canEdit={this.editButtonActive() || this.props.hasRole(Roles.ADMIN)}
               canDelete={this.deleteButtonActive()}
               canSave={!this.propsHaveErrors()}
-              entity={SingleEntities.Product}
+              entity={SingleEntities.ProductInstance}
               status={this.props.status}
               cancel={this.cancel}
               edit={this.edit}
@@ -219,7 +220,7 @@ class ProductInstanceProps extends React.Component<Props, State> {
             <Form.Field disabled={!editing}>
               {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
               <label htmlFor="form-input-details">
-                Details
+                {t('entities.productInstance.props.details')}
               </label>
               <Input
                 id="form-input-details"
@@ -227,7 +228,7 @@ class ProductInstanceProps extends React.Component<Props, State> {
                 onChange={
                   (e) => this.setState({ details: e.target.value })
                 }
-                placeholder="Details"
+                placeholder={t('entities.productInstance.props.details')}
                 fluid
               />
             </Form.Field>
@@ -240,7 +241,7 @@ class ProductInstanceProps extends React.Component<Props, State> {
             >
               {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
               <label htmlFor="form-input-base-price">
-                Base Price
+                {t('entities.productInstance.props.basePrice')}
               </label>
               <Input
                 labelPosition="left"
@@ -261,7 +262,7 @@ class ProductInstanceProps extends React.Component<Props, State> {
             >
               {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
               <label htmlFor="form-input-discount">
-                Discount
+                {t('entities.productInstance.props.discount')}
               </label>
               <Input
                 labelPosition="left"
@@ -281,7 +282,7 @@ class ProductInstanceProps extends React.Component<Props, State> {
             >
               {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
               <label htmlFor="form-input-real-price">
-                Real price
+                {t('entities.productInstance.props.realPrice')}
               </label>
               <Input
                 labelPosition="left"
@@ -307,4 +308,4 @@ const mapStateToProps = (state: RootState) => ({
     SummaryCollections.Products, id).targetPrice,
 });
 
-export default connect(mapStateToProps)(ProductInstanceProps);
+export default withTranslation()(connect(mapStateToProps)(ProductInstanceProps));

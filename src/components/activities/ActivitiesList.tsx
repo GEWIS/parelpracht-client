@@ -3,6 +3,7 @@ import {
   Button, Feed, Icon, Loader,
 } from 'semantic-ui-react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
+import { WithTranslation, withTranslation } from 'react-i18next';
 import ActivityComponent from './ActivityComponent';
 import { GeneralActivity } from './GeneralActivity';
 import { SingleEntities } from '../../stores/single/single';
@@ -11,7 +12,7 @@ import ResourceStatus from '../../stores/resourceStatus';
 import AuthorizationComponent from '../AuthorizationComponent';
 import { Roles } from '../../clients/server.generated';
 
-interface Props extends RouteComponentProps {
+interface Props extends WithTranslation, RouteComponentProps {
   activities: GeneralActivity[];
   componentId: number;
   componentType: SingleEntities;
@@ -39,7 +40,7 @@ class ActivitiesList extends React.Component<Props, State> {
 
   public render() {
     const {
-      activities, componentId, componentType, resourceStatus, parentId,
+      activities, componentId, componentType, resourceStatus, parentId, t,
     } = this.props;
     const { creating } = this.state;
 
@@ -53,7 +54,7 @@ class ActivitiesList extends React.Component<Props, State> {
     if (activities.length === 0) {
       activitiesComponent = (
         <h4>
-          There are no activities logged yet.
+          {t('entities.product.noActivities')}
         </h4>
       );
     } else {
@@ -95,7 +96,7 @@ class ActivitiesList extends React.Component<Props, State> {
     return (
       <>
         <h3>
-          Activities
+          {t('entity.activities')}
           <AuthorizationComponent
             roles={[Roles.GENERAL, Roles.ADMIN, Roles.FINANCIAL]}
             notFound={false}
@@ -109,7 +110,7 @@ class ActivitiesList extends React.Component<Props, State> {
               onClick={() => this.setState({ creating: true })}
             >
               <Icon name="pencil" />
-              Write comment
+              {t('activities.button.writeComment')}
             </Button>
           </AuthorizationComponent>
         </h3>
@@ -120,4 +121,4 @@ class ActivitiesList extends React.Component<Props, State> {
   }
 }
 
-export default withRouter(ActivitiesList);
+export default withTranslation()(withRouter(ActivitiesList));

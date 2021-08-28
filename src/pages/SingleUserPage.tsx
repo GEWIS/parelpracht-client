@@ -5,6 +5,7 @@ import {
 } from 'semantic-ui-react';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
+import { withTranslation, WithTranslation } from 'react-i18next';
 import { Roles, User } from '../clients/server.generated';
 import { fetchSingle, clearSingle } from '../stores/single/actionCreators';
 import { RootState } from '../stores/store';
@@ -23,7 +24,7 @@ import UserBackgroundModal from '../components/files/UserBackgroundModal';
 import AuthorizationComponent from '../components/AuthorizationComponent';
 import NotFound from './NotFound';
 
-interface Props extends RouteComponentProps<{ userId: string }> {
+interface Props extends RouteComponentProps<{ userId: string }>, WithTranslation {
   user: User | undefined;
   status: ResourceStatus;
   isProfilePage: boolean;
@@ -56,7 +57,9 @@ class SingleUserPage extends React.Component<Props> {
   }
 
   public render() {
-    const { user, isProfilePage, status } = this.props;
+    const {
+      user, isProfilePage, status, t,
+    } = this.props;
 
     if (status === ResourceStatus.NOTFOUND) {
       return <NotFound />;
@@ -102,30 +105,26 @@ class SingleUserPage extends React.Component<Props> {
             <Grid.Column>
               <Segment>
                 <h3>
-                  Responsibilities
+                  {t('pages.user.responsibilities.header')}
                 </h3>
                 <p>
-                  You can transfer your responsibilities to another ParelPracht user.
-                  By doing this, their name will appear
-                  on all your contracts and invoices.
+                  {t('pages.user.responsibilities.description')}
                 </p>
                 <UserMoveAssignmentsButton userId={user.id} />
               </Segment>
               {isProfilePage ? (
                 <Segment>
                   <Header as="h3">
-                    API Key
+                    {t('pages.user.apiKey.header')}
                   </Header>
                   <p>
-                    You can generate an API key to use ParelPracht in external tools.
-                    With this key, actions can be performed on your behalf.
-                    To use the API key, place the entire key in the
+                    {t('pages.user.apiKey.description1')}
                     {' '}
                     <code>Authentication</code>
                     {' '}
-                    header of any request.
+                    {t('pages.user.apiKey.description2')}
                     <br />
-                    <b>Only generate a key if you know what you&apos;re doing!</b>
+                    <b>{t('pages.user.apiKey.warning')}</b>
                   </p>
                   <UserApiKey />
                 </Segment>
@@ -133,7 +132,7 @@ class SingleUserPage extends React.Component<Props> {
               {isProfilePage ? (
                 <Segment>
                   <Header as="h3">
-                    Personal User Background
+                    {t('pages.user.background.header')}
                   </Header>
                   <UserBackgroundModal
                     entity={SingleEntities.User}
@@ -144,24 +143,23 @@ class SingleUserPage extends React.Component<Props> {
                     adminView={false}
                   />
                 </Segment>
-              )
-                : (
-                  <AuthorizationComponent roles={[Roles.ADMIN]} notFound={false}>
-                    <Segment>
-                      <Header as="h3">
-                        Personal User Background
-                      </Header>
-                      <UserBackgroundModal
-                        entity={SingleEntities.User}
-                        entityId={user.id}
-                        entityName={user.firstName}
-                        fileName={user.backgroundFilename}
-                        fetchEntity={this.props.fetchUser}
-                        adminView
-                      />
-                    </Segment>
-                  </AuthorizationComponent>
-                )}
+              ) : (
+                <AuthorizationComponent roles={[Roles.ADMIN]} notFound={false}>
+                  <Segment>
+                    <Header as="h3">
+                      {t('pages.user.background.header')}
+                    </Header>
+                    <UserBackgroundModal
+                      entity={SingleEntities.User}
+                      entityId={user.id}
+                      entityName={user.firstName}
+                      fileName={user.backgroundFilename}
+                      fetchEntity={this.props.fetchUser}
+                      adminView
+                    />
+                  </Segment>
+                </AuthorizationComponent>
+              )}
             </Grid.Column>
           </Grid>
         </Container>
@@ -184,4 +182,5 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   showTransientAlert: (alert: TransientAlert) => dispatch(showTransientAlert(alert)),
 });
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(SingleUserPage));
+export default withTranslation()(withRouter(connect(mapStateToProps,
+  mapDispatchToProps)(SingleUserPage)));

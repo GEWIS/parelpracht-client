@@ -1,6 +1,7 @@
 import React from 'react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { Button, Icon, Table } from 'semantic-ui-react';
+import { withTranslation, WithTranslation } from 'react-i18next';
 import { SingleEntities } from '../../stores/single/single';
 import { ContractFile, Roles } from '../../clients/server.generated';
 import ResourceStatus from '../../stores/resourceStatus';
@@ -9,7 +10,7 @@ import SingleFile from './SingleFile';
 import AuthorizationComponent from '../AuthorizationComponent';
 import './FilesList.scss';
 
-interface Props extends RouteComponentProps {
+interface Props extends WithTranslation, RouteComponentProps {
   files: GeneralFile[];
   entityId: number;
   entity: SingleEntities;
@@ -40,7 +41,7 @@ class FilesList extends React.Component<Props, State> {
 
   render() {
     const {
-      files, entityId, entity, fetchEntity, generateModal, status,
+      files, entityId, entity, fetchEntity, generateModal, status, t,
     } = this.props;
     const { creating } = this.state;
 
@@ -72,7 +73,7 @@ class FilesList extends React.Component<Props, State> {
 
     const noFilesHeader = (
       <h4>
-        There are no files uploaded yet.
+        {t('entities.product.noFiles')}
       </h4>
     );
     const filesList = (
@@ -99,7 +100,7 @@ class FilesList extends React.Component<Props, State> {
     return (
       <AuthorizationComponent roles={[Roles.GENERAL, Roles.ADMIN, Roles.AUDIT]} notFound={false}>
         <h3>
-          Files
+          {t('entity.files')}
           <AuthorizationComponent
             roles={[Roles.GENERAL, Roles.ADMIN]}
             notFound={false}
@@ -113,7 +114,7 @@ class FilesList extends React.Component<Props, State> {
               onClick={() => this.setState({ creating: true })}
             >
               <Icon name="plus" />
-              Upload File
+              {t('buttons.files.upload')}
             </Button>
           </AuthorizationComponent>
           {generateModal}
@@ -125,4 +126,4 @@ class FilesList extends React.Component<Props, State> {
   }
 }
 
-export default withRouter(FilesList);
+export default withTranslation()(withRouter(FilesList));

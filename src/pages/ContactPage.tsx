@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   Container, Grid, Header, Icon, Segment,
 } from 'semantic-ui-react';
@@ -8,6 +9,7 @@ import ContactsTable from '../components/entities/contact/ContactTable';
 import ContactTableControls from '../components/entities/contact/ContactTableControls';
 
 function ContactsPage() {
+  const { t } = useTranslation();
   return (
     <AuthorizationComponent roles={[Roles.GENERAL, Roles.ADMIN, Roles.AUDIT]} notFound>
       <Segment style={{ backgroundColor: 'rgba(237, 237, 237, 0.98)' }} vertical basic>
@@ -17,8 +19,8 @@ function ContactsPage() {
               <Header as="h1">
                 <Icon name="address card" />
                 <Header.Content>
-                  <Header.Subheader>Contacts</Header.Subheader>
-                  All Contacts
+                  <Header.Subheader>{t('entity.contacts')}</Header.Subheader>
+                  {t('entities.contact.header')}
                 </Header.Content>
               </Header>
             </Grid.Column>

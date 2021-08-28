@@ -1,4 +1,5 @@
 import React from 'react';
+import { withTranslation, WithTranslation } from 'react-i18next';
 import { connect } from 'react-redux';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import {
@@ -10,7 +11,7 @@ import { SingleEntities } from '../../../stores/single/single';
 import { RootState } from '../../../stores/store';
 import InvoiceComponent from './InvoiceComponent';
 
-interface Props extends RouteComponentProps {
+interface Props extends WithTranslation, RouteComponentProps {
   company: Company | undefined;
 }
 
@@ -24,7 +25,9 @@ class InvoiceList extends React.Component<Props, State> {
   }
 
   public render() {
-    const { company } = this.props;
+    const {
+      company, t,
+    } = this.props;
 
     if (company === undefined) {
       return (
@@ -38,10 +41,10 @@ class InvoiceList extends React.Component<Props, State> {
       return (
         <>
           <h3>
-            Invoice
+            {t('entity.invoices')}
           </h3>
           <h4>
-            There are no invoices yet.
+            {t('entities.product.noInvoices')}
           </h4>
         </>
       );
@@ -50,25 +53,25 @@ class InvoiceList extends React.Component<Props, State> {
     return (
       <>
         <h3>
-          Invoices
+          {t('entity.invoices')}
         </h3>
         <Table compact>
           <Table.Header>
             <Table.Row>
               <Table.HeaderCell>
-                Title
+                {t('entities.invoice.props.title')}
               </Table.HeaderCell>
               <Table.HeaderCell>
-                Amount
+                {t('entities.generalProps.amount')}
               </Table.HeaderCell>
               <Table.HeaderCell>
-                Status
+                {t('entities.generalProps.status')}
               </Table.HeaderCell>
               <Table.HeaderCell>
-                Year
+                {t('entities.invoice.props.financialYear')}
               </Table.HeaderCell>
               <Table.HeaderCell>
-                Last Update
+                {t('entities.generalProps.lastUpdate')}
               </Table.HeaderCell>
             </Table.Row>
           </Table.Header>
@@ -91,4 +94,6 @@ const mapStateToProps = (state: RootState) => {
 const mapDispatchToProps = () => ({
 });
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(InvoiceList));
+export default withTranslation()(
+  withRouter(connect(mapStateToProps, mapDispatchToProps)(InvoiceList)),
+);

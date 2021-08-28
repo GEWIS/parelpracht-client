@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import { connect } from 'react-redux';
 import { Redirect, RouteComponentProps, withRouter } from 'react-router-dom';
 import { Dispatch } from 'redux';
+import { useTranslation } from 'react-i18next';
 import { User } from '../../../clients/server.generated';
 import { formatContactName, formatGender } from '../../../helpers/contact';
 import ResourceStatus from '../../../stores/resourceStatus';
@@ -27,6 +28,7 @@ function usePrevious(value: any) {
 }
 
 function UserSummary(props: Props) {
+  const { t } = useTranslation();
   const prevStatus = usePrevious(props.status);
 
   // Check if user was deleted
@@ -70,15 +72,15 @@ function UserSummary(props: Props) {
       rightHeader={avatar}
     >
       <div>
-        <h5>Name</h5>
+        <h5>{t('entities.user.props.name')}</h5>
         <p>{formatContactName(user.firstName, user.lastNamePreposition, user.lastName)}</p>
       </div>
       <div>
-        <h5>Email</h5>
+        <h5>{t('entities.user.props.personalEmail')}</h5>
         <p>{user.email}</p>
       </div>
       <div>
-        <h5>Gender</h5>
+        <h5>{t('entities.user.props.gender.header')}</h5>
         <p>{formatGender(user.gender)}</p>
       </div>
     </EntitySummary>

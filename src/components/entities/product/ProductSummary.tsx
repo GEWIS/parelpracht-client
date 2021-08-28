@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 import { Product } from '../../../clients/server.generated';
 import { formatPriceFull } from '../../../helpers/monetary';
 import ResourceStatus from '../../../stores/resourceStatus';
@@ -8,6 +9,7 @@ import { SingleEntities } from '../../../stores/single/single';
 import { RootState } from '../../../stores/store';
 import { getCategoryName } from '../../../stores/productcategory/selectors';
 import { EntitySummary } from '../EntitySummary';
+import { getLanguage } from '../../../localization';
 
 interface Props {
   product: Product | undefined;
@@ -17,6 +19,8 @@ interface Props {
 
 function ProductSummary(props: Props) {
   const { product, status, categoryName } = props;
+  const { t } = useTranslation();
+
   if (product === undefined) {
     return (
       <EntitySummary
@@ -27,6 +31,8 @@ function ProductSummary(props: Props) {
     );
   }
 
+  const useDutch = getLanguage() === 'nl-NL';
+
   const loading = (status !== ResourceStatus.FETCHED
     && status !== ResourceStatus.SAVING
     && status !== ResourceStatus.ERROR);
@@ -36,18 +42,25 @@ function ProductSummary(props: Props) {
       loading={loading}
       entity={SingleEntities.Product}
       icon="shopping bag"
-      title={product.nameEnglish}
+      title={useDutch ? product.nameDutch : product.nameEnglish}
     >
+      { useDutch ? (
+        <div>
+          <h5>{t('entities.product.props.nameEn')}</h5>
+          <p>{product.nameEnglish}</p>
+        </div>
+      ) : (
+        <div>
+          <h5>{t('entities.product.props.nameNl')}</h5>
+          <p>{product.nameDutch}</p>
+        </div>
+      )}
       <div>
-        <h5>Name (Dutch)</h5>
-        <p>{product.nameDutch}</p>
-      </div>
-      <div>
-        <h5>Target price</h5>
+        <h5>{t('entities.product.props.price')}</h5>
         <p>{formatPriceFull(product.targetPrice)}</p>
       </div>
       <div>
-        <h5>Category</h5>
+        <h5>{t('entities.product.props.category')}</h5>
         <p>{categoryName}</p>
       </div>
     </EntitySummary>

@@ -5,6 +5,7 @@ import {
 } from 'semantic-ui-react';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
+import { WithTranslation, withTranslation } from 'react-i18next';
 import { Company, Roles } from '../clients/server.generated';
 import { fetchSingle, clearSingle } from '../stores/single/actionCreators';
 import { RootState } from '../stores/store';
@@ -26,7 +27,7 @@ import { authedUserHasRole } from '../stores/auth/selectors';
 import AuthorizationComponent from '../components/AuthorizationComponent';
 import NotFound from './NotFound';
 
-interface Props extends RouteComponentProps<{ companyId: string }> {
+interface Props extends WithTranslation, RouteComponentProps<{ companyId: string }> {
   company: Company | undefined;
   status: ResourceStatus;
 
@@ -96,12 +97,12 @@ class SingleCompanyPage extends React.Component<Props, State> {
 
   getPanes = () => {
     const {
-      company, fetchCompany, status, hasRole,
+      company, fetchCompany, status, hasRole, t,
     } = this.props;
 
     const panes = [
       {
-        menuItem: 'Contacts',
+        menuItem: t('entity.companies'),
         render: () => (
           <Tab.Pane>
             <CompanyContactList />
@@ -109,7 +110,7 @@ class SingleCompanyPage extends React.Component<Props, State> {
         ),
       },
       {
-        menuItem: 'Contracts',
+        menuItem: t('entity.contracts'),
         render: () => (
           <Tab.Pane>
             <ContractList />
@@ -117,7 +118,7 @@ class SingleCompanyPage extends React.Component<Props, State> {
         ),
       },
       {
-        menuItem: 'Invoices',
+        menuItem: t('entity.invoices'),
         render: () => (
           <Tab.Pane>
             <InvoiceList />
@@ -128,7 +129,7 @@ class SingleCompanyPage extends React.Component<Props, State> {
 
     if (hasRole(Roles.ADMIN) || hasRole(Roles.GENERAL) || hasRole(Roles.AUDIT)) {
       panes.push({
-        menuItem: 'Activities',
+        menuItem: t('entity.activities'),
         render: company ? () => (
           <Tab.Pane>
             <ActivitiesList
@@ -142,7 +143,7 @@ class SingleCompanyPage extends React.Component<Props, State> {
       });
 
       panes.push({
-        menuItem: 'Files',
+        menuItem: t('entity.files'),
         render: company ? () => (
           <Tab.Pane>
             <FilesList
@@ -159,7 +160,7 @@ class SingleCompanyPage extends React.Component<Props, State> {
 
     if (hasRole(Roles.ADMIN) || hasRole(Roles.GENERAL)) {
       panes.push({
-        menuItem: 'Insights',
+        menuItem: t('entity.insights'),
         render: company ? () => (
           // <Tab.Pane> is set in this tab, because it needs to fetch data and
           /// therefore needs to show a loading animation
@@ -193,6 +194,7 @@ class SingleCompanyPage extends React.Component<Props, State> {
     }
 
     const panes = this.getPanes();
+    const { t } = this.props;
 
     return (
       <AuthorizationComponent
@@ -204,7 +206,7 @@ class SingleCompanyPage extends React.Component<Props, State> {
             <Breadcrumb
               icon="right angle"
               sections={[
-                { key: 'Companies', content: <NavLink to="/company">Companies</NavLink> },
+                { key: 'Companies', content: <NavLink to="/company">{t('entity.companies')}</NavLink> },
                 { key: 'Company', content: company.name, active: true },
               ]}
             />
@@ -250,4 +252,6 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   showTransientAlert: (alert: TransientAlert) => dispatch(showTransientAlert(alert)),
 });
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(SingleCompanyPage));
+export default withTranslation()(
+  withRouter(connect(mapStateToProps, mapDispatchToProps)(SingleCompanyPage)),
+);

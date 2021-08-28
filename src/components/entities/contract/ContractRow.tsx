@@ -23,6 +23,7 @@ function ContractRow(props: Props) {
   const {
     contract, value, contactName, contractStatus,
   } = props;
+
   return (
     <Table.Row>
       <Table.Cell>

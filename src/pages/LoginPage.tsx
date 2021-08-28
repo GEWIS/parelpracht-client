@@ -4,11 +4,13 @@ import {
   Container, Grid, Message, Segment, Image,
 } from 'semantic-ui-react';
 import './BackgroundAnimation.css';
+import { useTranslation } from 'react-i18next';
 import AlertContainer from '../components/alerts/AlertContainer';
 import LoginForm from '../components/auth/LoginForm';
 import ParelPrachtFullLogo from '../components/ParelPrachtFullLogo';
 
 function LoginPage() {
+  const { t } = useTranslation();
   return (
     <>
       <div className="bg" />
@@ -24,9 +26,9 @@ function LoginPage() {
               <LoginForm />
             </Segment>
             <Message>
-              Trouble signing in?
+              {t('pages.login.troubleSigningIn')}
               {' '}
-              <NavLink to="/forgot-password">Forgot password</NavLink>
+              <NavLink to="/forgot-password">{t('pages.login.forgotPassword')}</NavLink>
               .
             </Message>
           </Grid.Column>

@@ -5,6 +5,7 @@ import {
 } from 'semantic-ui-react';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
+import { WithTranslation, withTranslation } from 'react-i18next';
 import { Product, Roles } from '../clients/server.generated';
 import { RootState } from '../stores/store';
 import ProductProps from '../components/entities/product/ProductProps';
@@ -24,8 +25,9 @@ import ProductsContractedGraph from '../components/entities/product/ProductsCont
 import PricingTable from '../components/productpricing/PricingTable';
 import AuthorizationComponent from '../components/AuthorizationComponent';
 import NotFound from './NotFound';
+import { getLanguage } from '../localization';
 
-interface Props extends RouteComponentProps<{ productId: string }> {
+interface Props extends WithTranslation, RouteComponentProps<{ productId: string }> {
   product: Product | undefined;
   status: ResourceStatus;
 
@@ -92,11 +94,12 @@ class SingleProductPage extends React.Component<Props, State> {
   }
 
   getPanes = () => {
-    const { product, fetchProduct, status } = this.props;
-
+    const {
+      t, product, fetchProduct, status,
+    } = this.props;
     const panes = [
       {
-        menuItem: 'Contracts',
+        menuItem: t('entity.contracts'),
         render: product ? () => (
           <Tab.Pane>
             <ContractCompactTable
@@ -106,7 +109,7 @@ class SingleProductPage extends React.Component<Props, State> {
         ) : () => <Tab.Pane />,
       },
       {
-        menuItem: 'Invoices',
+        menuItem: t('entity.invoices'),
         render: product ? () => (
           <Tab.Pane>
             <InvoiceCompactTable
@@ -116,7 +119,7 @@ class SingleProductPage extends React.Component<Props, State> {
         ) : () => <Tab.Pane />,
       },
       {
-        menuItem: 'Files',
+        menuItem: t('entity.files'),
         render: product ? () => (
           <Tab.Pane>
             <FilesList
@@ -130,7 +133,7 @@ class SingleProductPage extends React.Component<Props, State> {
         ) : () => <Tab.Pane />,
       },
       {
-        menuItem: 'Activities',
+        menuItem: t('entity.activities'),
         render: product ? () => (
           <Tab.Pane>
             <ActivitiesList
@@ -143,7 +146,7 @@ class SingleProductPage extends React.Component<Props, State> {
         ) : () => <Tab.Pane />,
       },
       {
-        menuItem: 'Insights',
+        menuItem: t('entity.insights'),
         render: product ? () => <ProductsContractedGraph product={product} />
           : () => <Tab.Pane />,
       },
@@ -151,7 +154,7 @@ class SingleProductPage extends React.Component<Props, State> {
 
     if (product && product.pricing) {
       panes.push({
-        menuItem: 'Pricing',
+        menuItem: t('entities.product.props.customPrice'),
         render: () => (
           <Tab.Pane>
             <PricingTable pricing={product.pricing!} productId={product.id} />
@@ -164,8 +167,9 @@ class SingleProductPage extends React.Component<Props, State> {
   };
 
   public render() {
-    const { product, status } = this.props;
+    const { product, status, t } = this.props;
     const { paneIndex } = this.state;
+    const useDutch = getLanguage() === 'nl-NL';
 
     if (status === ResourceStatus.NOTFOUND) {
       return <NotFound />;
@@ -190,8 +194,8 @@ class SingleProductPage extends React.Component<Props, State> {
             <Breadcrumb
               icon="right angle"
               sections={[
-                { key: 'Products', content: <NavLink to="/product">Products</NavLink> },
-                { key: 'Product', content: product.nameEnglish, active: true },
+                { key: 'Products', content: <NavLink to="/product">{t('entity.products')}</NavLink> },
+                { key: 'Product', content: useDutch ? product.nameDutch : product.nameEnglish, active: true },
               ]}
             />
           </Container>
@@ -238,4 +242,6 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   showTransientAlert: (alert: TransientAlert) => dispatch(showTransientAlert(alert)),
 });
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(SingleProductPage));
+export default withTranslation()(
+  withRouter(connect(mapStateToProps, mapDispatchToProps)(SingleProductPage)),
+);

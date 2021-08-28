@@ -4,6 +4,7 @@ import { Dispatch } from 'redux';
 import { Form, Input, TextArea } from 'semantic-ui-react';
 import validator from 'validator';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
+import { withTranslation, WithTranslation } from 'react-i18next';
 import {
   ActivityType, Contract, ContractParams, Roles,
 } from '../../../clients/server.generated';
@@ -21,7 +22,7 @@ import { showTransientAlert } from '../../../stores/alerts/actionCreators';
 import { formatDocumentIdTitle } from '../../../helpers/documents';
 import AuthorizationComponent from '../../AuthorizationComponent';
 
-interface Props extends RouteComponentProps {
+interface Props extends RouteComponentProps, WithTranslation {
   create?: boolean;
   companyPredefined?: boolean;
   onCancel?: () => void;
@@ -144,6 +145,7 @@ class ContractProps extends React.Component<Props, State> {
   };
 
   render() {
+    const { t } = this.props;
     const {
       editing,
       title,
@@ -153,48 +155,10 @@ class ContractProps extends React.Component<Props, State> {
       comments,
     } = this.state;
 
-    let companySelector: JSX.Element;
-    if (this.props.companyPredefined) {
-      companySelector = (
-        <Form.Field
-          disabled
-          required
-        >
-          {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-          <label htmlFor="form-company-selector">Company</label>
-          <CompanySelector
-            id="form-company-selector"
-            value={companySelection}
-            disabled
-            onChange={(val: number) => this.setState({
-              companySelection: val,
-            })}
-          />
-        </Form.Field>
-      );
-    } else {
-      companySelector = (
-        <Form.Field
-          disabled={!this.props.create}
-          required
-        >
-          {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-          <label htmlFor="form-company-selector">Company</label>
-          <CompanySelector
-            id="form-company-selector"
-            value={companySelection}
-            onChange={(val: number) => this.setState({
-              companySelection: val,
-            })}
-          />
-        </Form.Field>
-      );
-    }
-
     return (
       <>
         <h2>
-          {this.props.create ? 'New Contract' : 'Details'}
+          {this.props.create ? t('pages.contract.newContract') : t('entities.details')}
 
           <AuthorizationComponent roles={[Roles.GENERAL, Roles.ADMIN]} notFound={false}>
             <PropsButtons
@@ -220,7 +184,7 @@ class ContractProps extends React.Component<Props, State> {
               id="form-input-title"
               fluid
               control={Input}
-              label="Title"
+              label={t('entities.contract.props.title')}
               value={title}
               onChange={(e: ChangeEvent<HTMLInputElement>) => this.setState({
                 title: e.target.value,
@@ -233,7 +197,7 @@ class ContractProps extends React.Component<Props, State> {
               disabled={!editing}
             >
               {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-              <label htmlFor="form-assigned-to-selector">Assigned to</label>
+              <label htmlFor="form-assigned-to-selector">{t('entities.generalProps.assignedTo')}</label>
               <UserSelector
                 id="form-assigned-to-selector"
                 value={assignedToSelection}
@@ -245,13 +209,27 @@ class ContractProps extends React.Component<Props, State> {
               />
             </Form.Field>
           </Form.Group>
-          {companySelector}
+          <Form.Field
+            disabled={!this.props.create}
+            required
+          >
+            {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
+            <label htmlFor="form-company-selector">{t('entity.company')}</label>
+            <CompanySelector
+              id="form-company-selector"
+              disabled={this.props.companyPredefined}
+              value={companySelection}
+              onChange={(val: number) => this.setState({
+                companySelection: val,
+              })}
+            />
+          </Form.Field>
           <Form.Field
             disabled={!editing}
             required
           >
             {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-            <label htmlFor="form-contact-selector">Contact</label>
+            <label htmlFor="form-contact-selector">{t('entity.contact')}</label>
             <ContactSelector
               id="form-contact-selector"
               // disabled={editing && (companySelection === -1)}
@@ -261,19 +239,19 @@ class ContractProps extends React.Component<Props, State> {
                 contactSelection: val,
               })}
               clearable
-              placeholder="Contact"
+              placeholder={t('entity.contact')}
             />
           </Form.Field>
           <Form.Field disabled={!editing}>
             {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
             <label htmlFor="form-input-comments">
-              Comments
+              {t('entities.generalProps.comments')}
             </label>
             <TextArea
               id="form-input-comments"
               value={comments}
               onChange={(e) => this.setState({ comments: e.target.value })}
-              placeholder="Internal comments"
+              placeholder={t('entities.generalProps.commentsDescription')}
             />
           </Form.Field>
         </Form>
@@ -302,4 +280,5 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   showTransientAlert: (alert: TransientAlert) => dispatch(showTransientAlert(alert)),
 });
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ContractProps));
+export default withTranslation()(withRouter(connect(mapStateToProps,
+  mapDispatchToProps)(ContractProps)));

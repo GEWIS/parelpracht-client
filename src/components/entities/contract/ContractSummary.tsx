@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import {
   Image,
 } from 'semantic-ui-react';
+import { useTranslation } from 'react-i18next';
 import { Contract } from '../../../clients/server.generated';
 import { getCompanyLogo, getCompanyName } from '../../../stores/company/selectors';
 import { getContactName } from '../../../stores/contact/selectors';
@@ -24,6 +25,7 @@ interface Props {
 }
 
 function ContractSummary(props: Props) {
+  const { t } = useTranslation();
   const {
     contract, status, contactName, logoFilename,
   } = props;
@@ -62,21 +64,21 @@ function ContractSummary(props: Props) {
       rightHeader={logo}
     >
       <div>
-        <h5>Company</h5>
+        <h5>{t('entity.company')}</h5>
         <CompanyLink id={contract.companyId} />
       </div>
       <div>
-        <h5>Contact</h5>
+        <h5>{t('entity.contact')}</h5>
         <p>
           {contactName}
         </p>
       </div>
       <div>
-        <h5>Assigned to</h5>
+        <h5>{t('entities.generalProps.assignedTo')}</h5>
         <UserLink id={contract.assignedToId} />
       </div>
       <div>
-        <h5>Total value</h5>
+        <h5>{t('entities.contract.props.totalValue')}</h5>
         <p>{formatPriceFull(totalValue)}</p>
       </div>
     </EntitySummary>

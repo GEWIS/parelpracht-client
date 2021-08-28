@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { Button, Input } from 'semantic-ui-react';
 import { Dispatch } from 'redux';
 import validator from 'validator';
+import { withTranslation, WithTranslation } from 'react-i18next';
 import ResourceStatus from '../../stores/resourceStatus';
 import { SingleEntities } from '../../stores/single/single';
 import { createSingleComment } from '../../stores/single/actionCreators';
@@ -11,7 +12,7 @@ import { createInstanceCommentSingle } from '../../stores/productinstance/action
 import { TransientAlert } from '../../stores/alerts/actions';
 import { showTransientAlert } from '../../stores/alerts/actionCreators';
 
-interface Props {
+interface Props extends WithTranslation {
   create: boolean;
   resourceStatus: ResourceStatus;
   componentId: number;
@@ -93,10 +94,11 @@ class CreateCommentRow extends React.Component<Props, State> {
 
   render() {
     const { comment } = this.state;
+    const { t } = this.props;
     return (
       <>
         <h4>
-          {this.props.create ? 'Post Comment' : 'Comment Details'}
+          {this.props.create ? t('activities.button.postComment') : t('activities.button.details')}
         </h4>
 
         <Button
@@ -116,7 +118,7 @@ class CreateCommentRow extends React.Component<Props, State> {
         <Input
           fluid
           id="form-input-comment"
-          placeholder="Write a new comment..."
+          placeholder={t('activities.newComment')}
           onChange={(e) => this.setState({ comment: e.target.value })}
         />
       </>
@@ -134,4 +136,4 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   showTransientAlert: (alert: TransientAlert) => dispatch(showTransientAlert(alert)),
 });
 
-export default connect(null, mapDispatchToProps)(CreateCommentRow);
+export default withTranslation()(connect(null, mapDispatchToProps)(CreateCommentRow));

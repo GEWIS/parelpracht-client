@@ -55,7 +55,7 @@ class FinancialOverview extends React.Component<Props, State> {
         t('dashboard.financialOverview.paid')],
       datasets: [
         {
-          label: 'Amount',
+          label: t('entities.graph.label.amount'),
           backgroundColor: 'rgba(41, 48, 101, 0.8)',
           borderColor: 'rgba(41, 48, 101, 1)',
           borderWidth: 1,
@@ -159,7 +159,7 @@ class FinancialOverview extends React.Component<Props, State> {
                     </span>
                   )}
                   header={t('dashboard.financialOverview.suggested')}
-                  content="The total value of contracts that have not been confirmed by a company."
+                  content={t('dashboard.financialOverview.description.suggested')}
                 />
               </Table.HeaderCell>
               <Table.HeaderCell>
@@ -170,9 +170,7 @@ class FinancialOverview extends React.Component<Props, State> {
                     </span>
                   )}
                   header={t('dashboard.financialOverview.contracted')}
-                  content="The total value of all delivered and not-delivered products on confirmed contracts.
-                  Note that products that are already invoiced in a previous academic year
-                  or products that are deferred to next academic year, are not included here."
+                  content={t('dashboard.financialOverview.description.contracted')}
                 />
               </Table.HeaderCell>
               <Table.HeaderCell>
@@ -183,7 +181,7 @@ class FinancialOverview extends React.Component<Props, State> {
                     </span>
                   )}
                   header={t('dashboard.financialOverview.delivered')}
-                  content="The total value of delivered products on confirmed contracts in the current academic year."
+                  content={t('dashboard.financialOverview.description.delivered')}
                 />
               </Table.HeaderCell>
               <Table.HeaderCell>
@@ -194,7 +192,7 @@ class FinancialOverview extends React.Component<Props, State> {
                     </span>
                   )}
                   header={t('dashboard.financialOverview.invoiced')}
-                  content="The total value of all products invoiced in the current academic year."
+                  content={t('dashboard.financialOverview.description.invoiced')}
                 />
               </Table.HeaderCell>
               <Table.HeaderCell>
@@ -205,7 +203,7 @@ class FinancialOverview extends React.Component<Props, State> {
                     </span>
                   )}
                   header={t('dashboard.financialOverview.paid')}
-                  content="The total value of all paid invoices in the current academic year."
+                  content={t('dashboard.financialOverview.description.paid')}
                 />
               </Table.HeaderCell>
             </Table.Row>

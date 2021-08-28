@@ -1,11 +1,12 @@
 import React from 'react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { Table } from 'semantic-ui-react';
+import { withTranslation, WithTranslation } from 'react-i18next';
 import InvoiceProductRow from './InvoiceProductRow';
 import { ActivityType, Client, Invoice } from '../../../clients/server.generated';
 import { formatPriceFull } from '../../../helpers/monetary';
 
-interface Props extends RouteComponentProps {
+interface Props extends RouteComponentProps, WithTranslation {
   invoice: Invoice;
 
   fetchInvoice: (id: number) => void;
@@ -31,7 +32,7 @@ class InvoiceProductList extends React.Component<Props, State> {
   }
 
   public render() {
-    const { invoice } = this.props;
+    const { invoice, t } = this.props;
 
     const { products } = invoice;
     let priceSum = 0;
@@ -51,15 +52,15 @@ class InvoiceProductList extends React.Component<Props, State> {
     return (
       <>
         <h3>
-          Products
+          {t('entity.productinstances')}
         </h3>
         <Table compact>
           <Table.Header>
             <Table.Row>
-              <Table.HeaderCell>Title</Table.HeaderCell>
-              <Table.HeaderCell collapsing>Discount</Table.HeaderCell>
-              <Table.HeaderCell collapsing>Real Price</Table.HeaderCell>
-              <Table.HeaderCell collapsing>Contract</Table.HeaderCell>
+              <Table.HeaderCell>{t('entity.productinstance')}</Table.HeaderCell>
+              <Table.HeaderCell collapsing>{t('entities.productInstance.props.discount')}</Table.HeaderCell>
+              <Table.HeaderCell collapsing>{t('entities.productInstance.props.realPrice')}</Table.HeaderCell>
+              <Table.HeaderCell collapsing>{t('entity.contract')}</Table.HeaderCell>
               <Table.HeaderCell />
             </Table.Row>
 
@@ -76,7 +77,10 @@ class InvoiceProductList extends React.Component<Props, State> {
           </Table.Body>
           <Table.Footer>
             <Table.Row>
-              <Table.HeaderCell textAlign="right"> Totals: </Table.HeaderCell>
+              <Table.HeaderCell>
+                {t('pages.tables.total')}
+                :
+              </Table.HeaderCell>
               <Table.HeaderCell collapsing>
                 {formatPriceFull(discountSum)}
                 {' '}
@@ -97,4 +101,4 @@ class InvoiceProductList extends React.Component<Props, State> {
   }
 }
 
-export default withRouter(InvoiceProductList);
+export default withTranslation()(withRouter(InvoiceProductList));

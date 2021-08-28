@@ -4,6 +4,7 @@ import {
 } from 'semantic-ui-react';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 import {
   Contract,
   ContractType, GenerateContractParams, Language, ReturnFileType, Roles,
@@ -22,6 +23,8 @@ interface Props {
 }
 
 function GenerateContractModal(props: Props) {
+  const { t } = useTranslation();
+
   const [isOpen, setOpen] = useState(false);
 
   const [name, changeName] = useState('');
@@ -66,7 +69,7 @@ function GenerateContractModal(props: Props) {
     } else {
       props.showTransientAlert({
         title: 'Error',
-        message: 'Could not generate a contract file. Please consulate the back-end logs.',
+        message: t('files.generate.error', { entity: t('entity.contact').toLowerCase() }),
         type: 'error',
       });
     }
@@ -90,14 +93,14 @@ function GenerateContractModal(props: Props) {
           basic
         >
           <Icon name="plus" />
-          Generate File
+          {t('files.generate.header')}
         </Button>
       )}
     >
       <Segment attached="bottom">
         <AlertContainer />
         <h2>
-          Generate file
+          {t('files.generate.header')}
           <Button
             onClick={save}
             floated="right"
@@ -109,14 +112,14 @@ function GenerateContractModal(props: Props) {
               || (signee2Id === 0 && contentType === ContractType.CONTRACT)}
           >
             <Icon name="download" />
-            Generate
+            {t('files.generate.generateButton')}
           </Button>
           <Button
             icon
             floated="right"
             onClick={() => setOpen(false)}
           >
-            Cancel
+            {t('buttons.cancel')}
           </Button>
         </h2>
         <Form style={{ marginTop: '2em' }}>
@@ -125,15 +128,15 @@ function GenerateContractModal(props: Props) {
               required
             >
               {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-              <label htmlFor="form-input-Content-Type">Content Type</label>
+              <label htmlFor="form-input-Content-Type">{t('files.generate.contentType')}</label>
               <Dropdown
                 id="form-input-Content-Type"
                 selection
                 placeholder="Content Type"
                 value={contentType}
                 options={[
-                  { key: 0, text: 'Contract', value: ContractType.CONTRACT },
-                  { key: 1, text: 'Proposal', value: ContractType.PROPOSAL },
+                  { key: 0, text: t('files.generate.contract'), value: ContractType.CONTRACT },
+                  { key: 1, text: t('files.generate.proposal'), value: ContractType.PROPOSAL },
                 ]}
                 onChange={(e, data) => setContentType(data.value as ContractType)}
                 fluid
@@ -141,7 +144,7 @@ function GenerateContractModal(props: Props) {
             </Form.Field>
             <Form.Field required>
               {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-              <label htmlFor="form-contact-selector">Recipient</label>
+              <label htmlFor="form-contact-selector">{t('files.generate.recipient')}</label>
               <ContactSelector
                 id="form-contact-selector"
                 disabled={false}
@@ -154,7 +157,7 @@ function GenerateContractModal(props: Props) {
           </Form.Group>
           <Form.Group widths="equal">
             <Form.Field
-              label="Label"
+              label={t('files.generate.label')}
               control={Input}
               value={name}
               onChange={(e: ChangeEvent<HTMLInputElement>) => changeName(e.target.value)}
@@ -166,11 +169,11 @@ function GenerateContractModal(props: Props) {
               required
             >
               {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-              <label htmlFor="form-input-File-Type">File Type</label>
+              <label htmlFor="form-input-File-Type">{t('files.generate.fileType')}</label>
               <Dropdown
                 id="form-input-File-Type"
                 selection
-                placeholder="File Type"
+                placeholder={t('files.generate.fileType')}
                 value={fileType}
                 options={[
                   { key: 0, text: 'PDF', value: ReturnFileType.PDF },
@@ -184,15 +187,15 @@ function GenerateContractModal(props: Props) {
               required
             >
               {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-              <label htmlFor="form-input-language">Language</label>
+              <label htmlFor="form-input-language">{t('language.header')}</label>
               <Dropdown
                 id="form-input-language"
                 selection
                 placeholder="Language"
                 value={language}
                 options={[
-                  { key: 0, text: 'Dutch', value: Language.DUTCH },
-                  { key: 1, text: 'English', value: Language.ENGLISH },
+                  { key: 0, text: t('language.dutch'), value: Language.DUTCH },
+                  { key: 1, text: t('language.english'), value: Language.ENGLISH },
                 ]}
                 onChange={(e, data) => changeLanguage(data.value as Language)}
                 fluid
@@ -201,8 +204,8 @@ function GenerateContractModal(props: Props) {
           </Form.Group>
           <Form.Group widths="equal">
             <Form.Field
-              label="Signee 1"
-              placeholder="Signee 1"
+              label={`${t('files.generate.signee')} 1`}
+              placeholder={`${t('files.generate.signee')} 1`}
               control={UserSelector}
               value={signee1Id}
               required={contentType === ContractType.CONTRACT}
@@ -214,8 +217,8 @@ function GenerateContractModal(props: Props) {
               role={Roles.SIGNEE}
             />
             <Form.Field
-              label="Signee 2"
-              placeholder="Signee 2"
+              label={`${t('files.generate.signee')} 2`}
+              placeholder={`${t('files.generate.signee')} 2`}
               control={UserSelector}
               required={contentType === ContractType.CONTRACT}
               disabled={contentType !== ContractType.CONTRACT}
@@ -230,7 +233,7 @@ function GenerateContractModal(props: Props) {
           <Form.Group>
             <Form.Field>
               {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-              <label htmlFor="form-input-Discount">Show Discount</label>
+              <label htmlFor="form-input-Discount">{t('files.generate.showDiscount')}</label>
               <Checkbox
                 toggle
                 id="form-input-Discount"
@@ -240,7 +243,7 @@ function GenerateContractModal(props: Props) {
             </Form.Field>
             <Form.Field>
               {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-              <label htmlFor="form-input-SaveToDisk">Save To Disk</label>
+              <label htmlFor="form-input-SaveToDisk">{t('files.generate.saveToDisk')}</label>
               <Checkbox
                 id="form-input-SaveToDisk"
                 toggle

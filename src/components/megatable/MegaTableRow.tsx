@@ -1,6 +1,7 @@
 import React from 'react';
 import { Table } from 'semantic-ui-react';
 import { connect } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 import { formatPriceFull } from '../../helpers/monetary';
 import {
   ETCompany, ETContract, ETProductInstance, ProductSummary,
@@ -18,6 +19,7 @@ interface Props {
 }
 
 function MegaTableRow(props: Props) {
+  const { t } = useTranslation();
   const { company, products } = props;
 
   const productMap: Record<number, string> = {};
@@ -63,7 +65,7 @@ function MegaTableRow(props: Props) {
     innerResult.push(
       <Table.Cell key={`${product.id}-3`}>
         {product.invoiceDate == null
-          ? 'Not invoiced'
+          ? t('pages.insights.notInvoiced')
           : dateToFullFinancialYear(product.invoiceDate)}
       </Table.Cell>,
     );

@@ -1,9 +1,10 @@
 import React from 'react';
+import { withTranslation, WithTranslation } from 'react-i18next';
 import { Tab } from 'semantic-ui-react';
 import { Client, Company, ContractedProductsAnalysis } from '../../../clients/server.generated';
 import CategoryLineChart from '../../chart/CategoryLineChart';
 
-interface Props {
+interface Props extends WithTranslation {
   company: Company;
 }
 
@@ -33,6 +34,7 @@ class CompanyContractedProductsChart extends React.Component<Props, State> {
 
   render() {
     const { data, loading } = this.state;
+    const { t } = this.props;
 
     if (data === undefined) {
       return <Tab.Pane loading={loading} />;
@@ -45,12 +47,11 @@ class CompanyContractedProductsChart extends React.Component<Props, State> {
           labels={data.labels || []}
         />
         <p style={{ textAlign: 'center', fontStyle: 'italic', marginTop: '0.5em' }}>
-          * Note that these years are the financial years,
-          so 2021 means the association year 2020-2021.
+          {t('entities.product.warningFinancialYear')}
         </p>
       </Tab.Pane>
     );
   }
 }
 
-export default CompanyContractedProductsChart;
+export default withTranslation()(CompanyContractedProductsChart);

@@ -1,16 +1,16 @@
-/* eslint-disable react/jsx-props-no-spreading */
 import React from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import {
   Button, ButtonProps, Icon, Modal,
 } from 'semantic-ui-react';
+import { withTranslation, WithTranslation } from 'react-i18next';
 import { Client, Roles, TransferUserParams } from '../../../clients/server.generated';
 import { clearSingle, fetchSingle } from '../../../stores/single/actionCreators';
 import { SingleEntities } from '../../../stores/single/single';
 import UserSelector from './UserSelector';
 
-interface Props extends ButtonProps {
+interface Props extends ButtonProps, WithTranslation {
   userId: number;
   clearUser: () => void;
   fetchUser: (id: number) => void;
@@ -48,11 +48,12 @@ class UserMoveAssignmentsButton extends React.Component<Props, State> {
   }
 
   public render() {
+    const { t } = this.props;
     const trigger = (
       <Button>
         <Icon name="arrow up" />
         {' '}
-        Transfer assignments
+        {t('pages.user.responsibilities.transferButton')}
       </Button>
     );
 
@@ -67,7 +68,7 @@ class UserMoveAssignmentsButton extends React.Component<Props, State> {
         trigger={trigger}
       >
         <Modal.Header>
-          Transfer Assignments
+          {t('pages.user.responsibilities.transferButton')}
           <Button
             icon
             positive
@@ -77,14 +78,14 @@ class UserMoveAssignmentsButton extends React.Component<Props, State> {
             floated="right"
           >
             <Icon name="arrow right" />
-            Transfer
+            {t('pages.user.responsibilities.transfer')}
           </Button>
           <Button
             icon
             floated="right"
             onClick={() => { this.setState({ open: false }); }}
           >
-            Cancel
+            {t('pages.user.responsibilities.cancel')}
           </Button>
         </Modal.Header>
         <Modal.Content>
@@ -108,4 +109,4 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   clearUser: () => dispatch(clearSingle(SingleEntities.User)),
 });
 
-export default connect(null, mapDispatchToProps)(UserMoveAssignmentsButton);
+export default withTranslation()(connect(null, mapDispatchToProps)(UserMoveAssignmentsButton));

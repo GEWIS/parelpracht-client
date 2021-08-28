@@ -4,6 +4,7 @@ import { Dispatch } from 'redux';
 import {
   Dimmer, Loader, Segment, Table,
 } from 'semantic-ui-react';
+import { useTranslation } from 'react-i18next';
 import { Contract } from '../../../clients/server.generated';
 import TablePagination from '../../TablePagination';
 import { RootState } from '../../../stores/store';
@@ -45,83 +46,9 @@ function ContractsTable({
     setSort('id', 'DESC');
     fetchContracts();
   }, []);
+  const { t } = useTranslation();
 
-  if (status === ResourceStatus.FETCHING || status === ResourceStatus.SAVING) {
-    return (
-      <>
-        <Segment style={{ padding: '0px' }}>
-          <Dimmer active inverted>
-            <Loader inverted />
-          </Dimmer>
-          <Table singleLine selectable attached sortable fixed>
-            <Table.Header>
-              <Table.Row>
-                <Table.HeaderCell
-                  sorted={column === 'id' ? direction : undefined}
-                  onClick={() => changeSort('id')}
-                  width={1}
-                >
-                  ID
-                </Table.HeaderCell>
-                <Table.HeaderCell
-                  sorted={column === 'title' ? direction : undefined}
-                  onClick={() => changeSort('title')}
-                  width={3}
-                >
-                  Title
-                </Table.HeaderCell>
-                <Table.HeaderCell
-                  sorted={column === 'company' ? direction : undefined}
-                  onClick={() => changeSort('company')}
-                  width={3}
-                >
-                  Company
-                  <CompanyFilter table={Tables.Contracts} />
-                </Table.HeaderCell>
-                <Table.HeaderCell
-                  sorted={column === 'contact' ? direction : undefined}
-                  onClick={() => changeSort('contact')}
-                  width={2}
-                >
-                  Contact
-                  <ContractContactFilter />
-                </Table.HeaderCell>
-                <Table.HeaderCell width={2} collapsing>
-                  Status
-                  <ContractStatusFilter />
-                </Table.HeaderCell>
-                <Table.HeaderCell width={2}>
-                  Amount
-                </Table.HeaderCell>
-                <Table.HeaderCell
-                  collapsing
-                  sorted={column === 'updatedAt' ? direction : undefined}
-                  onClick={() => changeSort('updatedAt')}
-                  width={3}
-                >
-                  Last Update
-                </Table.HeaderCell>
-              </Table.Row>
-            </Table.Header>
-            <Table.Body>
-              {contracts.map((x) => <ContractRow contract={x} key={x.id} />)}
-            </Table.Body>
-          </Table>
-          <TablePagination
-            countTotal={total}
-            countFetched={fetched}
-            skip={skip}
-            take={take}
-            nextPage={nextPage}
-            prevPage={prevPage}
-            setTake={setTake}
-          />
-        </Segment>
-      </>
-    );
-  }
-
-  return (
+  const table = (
     <>
       <Table singleLine selectable attached sortable fixed>
         <Table.Header>
@@ -131,21 +58,21 @@ function ContractsTable({
               onClick={() => changeSort('id')}
               width={1}
             >
-              ID
+              {t('entities.generalProps.ID')}
             </Table.HeaderCell>
             <Table.HeaderCell
               sorted={column === 'title' ? direction : undefined}
               onClick={() => changeSort('title')}
               width={3}
             >
-              Title
+              {t('entities.contract.props.title')}
             </Table.HeaderCell>
             <Table.HeaderCell
               sorted={column === 'company' ? direction : undefined}
               onClick={() => changeSort('company')}
               width={3}
             >
-              Company
+              {t('entity.company')}
               <CompanyFilter table={Tables.Contracts} />
             </Table.HeaderCell>
             <Table.HeaderCell
@@ -153,15 +80,15 @@ function ContractsTable({
               onClick={() => changeSort('contact')}
               width={2}
             >
-              Contact
+              {t('entity.contactShort')}
               <ContractContactFilter />
             </Table.HeaderCell>
             <Table.HeaderCell width={2} collapsing>
-              Status
+              {t('entities.generalProps.status')}
               <ContractStatusFilter />
             </Table.HeaderCell>
             <Table.HeaderCell width={2}>
-              Amount
+              {t('entities.generalProps.amount')}
             </Table.HeaderCell>
             <Table.HeaderCell
               collapsing
@@ -169,7 +96,7 @@ function ContractsTable({
               onClick={() => changeSort('updatedAt')}
               width={3}
             >
-              Last Update
+              {t('entities.generalProps.lastUpdate')}
             </Table.HeaderCell>
           </Table.Row>
         </Table.Header>
@@ -188,6 +115,21 @@ function ContractsTable({
       />
     </>
   );
+
+  if (status === ResourceStatus.FETCHING || status === ResourceStatus.SAVING) {
+    return (
+      <>
+        <Segment style={{ padding: '0px' }}>
+          <Dimmer active inverted>
+            <Loader inverted />
+          </Dimmer>
+          {table}
+        </Segment>
+      </>
+    );
+  }
+
+  return table;
 }
 
 const mapStateToProps = (state: RootState) => {

@@ -12,6 +12,7 @@ import queryString from 'query-string';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import './BackgroundAnimation.css';
+import { useTranslation } from 'react-i18next';
 import AlertContainer from '../components/alerts/AlertContainer';
 import ResetPasswordForm from '../components/auth/ResetPasswordForm';
 import { RootState } from '../stores/store';
@@ -26,6 +27,8 @@ interface Props extends RouteComponentProps {
 
 function ResetPasswordPage(props: Props) {
   const { token } = queryString.parse(props.location.search);
+  const { t } = useTranslation();
+
   if (typeof token !== 'string') {
     return <Redirect to="/login" />;
   }
@@ -89,12 +92,12 @@ function ResetPasswordPage(props: Props) {
             <Grid.Column width={6}>
               <Segment color="green" size="large">
                 <Header as="h1">
-                  {newUser ? 'Set your password' : 'Reset your password'}
+                  {newUser ? t('pages.resetPassword.setPassword') : t('pages.resetPassword.resetPassword')}
                 </Header>
-                <p>Password successfully changed!</p>
+                <p>{t('pages.resetPassword.successMessage')}</p>
                 <Button as={NavLink} to="/login" style={{ marginTop: '1em' }} basic>
                   <Icon name="arrow left" basic />
-                  Back to login
+                  {t('pages.forgotPassword.back')}
                 </Button>
               </Segment>
             </Grid.Column>
@@ -114,11 +117,11 @@ function ResetPasswordPage(props: Props) {
         <Grid textAlign="center" verticalAlign="middle" style={{ height: '100vh' }}>
           <Grid.Column width={6}>
             <Header as="h1">
-              {newUser ? 'Set your password' : 'Reset your password'}
+              {newUser ? t('pages.resetPassword.setPassword') : t('pages.resetPassword.resetPassword')}
             </Header>
             <Segment>
               <h3>
-                Password requirements:
+                {t('pages.resetPassword.requirements.header')}
               </h3>
               <p>
                 <table
@@ -132,42 +135,41 @@ function ResetPasswordPage(props: Props) {
                     <td>
                       {eightCharacters ? <Icon name="check" color="green" /> : <Icon name="close" color="red" />}
                     </td>
-                    <td>Eight characters in length</td>
+                    <td>{t('pages.resetPassword.requirements.length')}</td>
                   </tr>
                   <tr>
                     <td>
                       {lowerCase ? <Icon name="check" color="green" /> : <Icon name="close" color="red" />}
                     </td>
-                    <td>One lower case character</td>
+                    <td>{t('pages.resetPassword.requirements.lowerCase')}</td>
                   </tr>
                   <tr>
                     <td>
                       {upperCase ? <Icon name="check" color="green" /> : <Icon name="close" color="red" />}
                     </td>
-                    <td>One upper case character</td>
+                    <td>{t('pages.resetPassword.requirements.upperCase')}</td>
                   </tr>
                   <tr>
                     <td>
                       {numbers ? <Icon name="check" color="green" /> : <Icon name="close" color="red" />}
                     </td>
-                    <td>One number</td>
+                    <td>{t('pages.resetPassword.requirements.number')}</td>
                   </tr>
                   <tr>
                     <td>
                       {symbols ? <Icon name="check" color="green" /> : <Icon name="close" color="red" />}
                     </td>
-                    <td>One symbol</td>
+                    <td>{t('pages.resetPassword.requirements.symbol')}</td>
                   </tr>
                 </table>
               </p>
               <ResetPasswordForm
                 token={token}
-                newUser={newUser}
                 validatePassword={validatePassword}
               />
               <Button as={NavLink} to="/login" style={{ marginTop: '1em' }} basic>
                 <Icon name="arrow left" basic />
-                Back to login
+                {t('pages.forgotPassword.back')}
               </Button>
             </Segment>
           </Grid.Column>

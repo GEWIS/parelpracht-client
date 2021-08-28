@@ -6,6 +6,7 @@ import {
 import { connect } from 'react-redux';
 import './Activity.scss';
 import { Dispatch } from 'redux';
+import { withTranslation, WithTranslation } from 'react-i18next';
 import { RootState } from '../../stores/store';
 import { getUserAvatar } from '../../stores/user/selectors';
 import { formatActivitySummary } from '../../helpers/activity';
@@ -22,8 +23,9 @@ import UserAvatar from '../entities/user/UserAvatar';
 import { TransientAlert } from '../../stores/alerts/actions';
 import { showTransientAlert } from '../../stores/alerts/actionCreators';
 import AuthorizationComponent from '../AuthorizationComponent';
+import { getLanguage } from '../../localization';
 
-interface Props extends RouteComponentProps {
+interface Props extends RouteComponentProps, WithTranslation {
   activity: GeneralActivity;
   componentId: number;
   componentType: SingleEntities;
@@ -55,7 +57,9 @@ class ActivityComponent extends React.Component<Props> {
   };
 
   public render() {
-    const { activity, avatarUrl, componentType } = this.props;
+    const {
+      activity, avatarUrl, componentType,
+    } = this.props;
     const feedLabel = (
       <UserAvatar size="3em" fileName={avatarUrl} clickable={false} />
     );
@@ -95,14 +99,17 @@ class ActivityComponent extends React.Component<Props> {
       );
     }
 
+    const language = getLanguage();
+    const description = language === 'nl-NL' ? activity.descriptionDutch : activity.descriptionEnglish;
+
     let feedDescription;
-    if (activity.descriptionEnglish === '') {
+    if (description === '') {
       feedDescription = undefined;
     } else if (activity.type === ActivityType.COMMENT || activity.type === ActivityType.STATUS) {
       feedDescription = (
-        <Feed.Extra><Segment raised>{activity.descriptionEnglish}</Segment></Feed.Extra>);
+        <Feed.Extra><Segment raised>{description}</Segment></Feed.Extra>);
     } else {
-      feedDescription = (<Feed.Extra style={{ fontStyle: 'italic' }}>{activity.descriptionEnglish}</Feed.Extra>);
+      feedDescription = (<Feed.Extra style={{ fontStyle: 'italic' }}>{description}</Feed.Extra>);
     }
 
     const feedButtons = deleteButton !== undefined ? (
@@ -149,4 +156,5 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   showTransientAlert: (alert: TransientAlert) => dispatch(showTransientAlert(alert)),
 });
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ActivityComponent));
+export default withTranslation()(withRouter(connect(mapStateToProps,
+  mapDispatchToProps)(ActivityComponent)));

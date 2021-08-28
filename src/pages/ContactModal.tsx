@@ -8,6 +8,7 @@ import {
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import { NavLink, RouteComponentProps, withRouter } from 'react-router-dom';
+import { withTranslation, WithTranslation } from 'react-i18next';
 import {
   Contact, ContactFunction, ContractStatus, Gender,
 } from '../clients/server.generated';
@@ -25,7 +26,8 @@ import { formatStatus } from '../helpers/activity';
 import { getContractStatus } from '../stores/contract/selectors';
 import CompanyLink from '../components/entities/company/CompanyLink';
 
-interface Props extends RouteComponentProps<{ companyId: string, contactId?: string }> {
+interface Props extends RouteComponentProps<{ companyId: string, contactId?: string }>,
+  WithTranslation {
   create?: boolean;
   onCompanyPage: boolean;
   contact: Contact | undefined;
@@ -136,25 +138,26 @@ class ContactModal extends React.Component<Props> {
     }
 
     let contractOverview;
+    const { t } = this.props;
 
     if (this.props.create) {
       contractOverview = '';
     } else if (contact.contracts === undefined || contact.contracts.length === 0) {
-      contractOverview = <p>This user has no contracts</p>;
+      contractOverview = <p>{t('entities.product.noContract')}</p>;
     } else {
       contractOverview = (
         <Segment>
-          <Header>Contracts</Header>
+          <Header>{t('entity.contracts')}</Header>
           <Table>
             <Table.Header>
               <Table.HeaderCell>
-                Title
+                {t('entities.contract.props.title')}
               </Table.HeaderCell>
               <Table.HeaderCell>
-                Company
+                {t('entity.company')}
               </Table.HeaderCell>
               <Table.HeaderCell>
-                Status
+                {t('entities.generalProps.status')}
               </Table.HeaderCell>
             </Table.Header>
             {contact.contracts.map((contract) => {
@@ -215,4 +218,5 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   showTransientAlert: (alert: TransientAlert) => dispatch(showTransientAlert(alert)),
 });
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ContactModal));
+export default withTranslation()(withRouter(connect(mapStateToProps,
+  mapDispatchToProps)(ContactModal)));

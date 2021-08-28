@@ -1,7 +1,7 @@
-/* eslint-disable react/jsx-props-no-spreading */
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { Dropdown, DropdownProps } from 'semantic-ui-react';
+import { useTranslation } from 'react-i18next';
 import { Roles, UserSummary } from '../../../clients/server.generated';
 import { formatContactName } from '../../../helpers/contact';
 import { RootState } from '../../../stores/store';
@@ -17,6 +17,7 @@ interface Props {
 function UserSelector(props: Props & DropdownProps) {
   const [open, changeOpen] = useState(false);
 
+  const { t } = useTranslation();
   const {
     value, onChange, options, correct, role,
   } = props;
@@ -38,7 +39,7 @@ function UserSelector(props: Props & DropdownProps) {
 
   return (
     <Dropdown
-      placeholder="User"
+      placeholder={t('entity.user')}
       search
       selection
       fluid

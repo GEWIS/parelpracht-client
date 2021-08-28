@@ -5,6 +5,7 @@ import {
   Form, Input,
 } from 'semantic-ui-react';
 import validator from 'validator';
+import { WithTranslation, withTranslation } from 'react-i18next';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { CategoryParams, ProductCategory, Roles } from '../../../clients/server.generated';
 import { createSingle, deleteSingle, saveSingle } from '../../../stores/single/actionCreators';
@@ -15,7 +16,7 @@ import { getSingle } from '../../../stores/single/selectors';
 import { SingleEntities } from '../../../stores/single/single';
 import AuthorizationComponent from '../../AuthorizationComponent';
 
-interface Props extends RouteComponentProps {
+interface Props extends WithTranslation, RouteComponentProps {
   create?: boolean;
   onCancel?: () => void;
 
@@ -110,11 +111,12 @@ class ProductCategoryProps extends React.Component<Props, State> {
       name,
       // products,
     } = this.state;
+    const { t } = this.props;
 
     return (
       <>
         <h2>
-          {this.props.create ? 'New Product Category' : 'Details'}
+          {this.props.create ? t('entities.category.newCategory') : t('entities.company.props.details')}
 
           <AuthorizationComponent roles={[Roles.ADMIN]} notFound={false}>
             <PropsButtons
@@ -138,10 +140,10 @@ class ProductCategoryProps extends React.Component<Props, State> {
               required
               disabled={!editing}
               id="form-input-name"
-              placeholder="Name"
+              placeholder={t('entities.category.props.name')}
               fluid
               control={Input}
-              label="Name"
+              label={t('entities.category.props.name')}
               value={name}
               onChange={(e: ChangeEvent<HTMLInputElement>) => this.setState({
                 name: e.target.value,
@@ -175,4 +177,6 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   ),
 });
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ProductCategoryProps));
+export default withTranslation()(
+  withRouter(connect(mapStateToProps, mapDispatchToProps)(ProductCategoryProps)),
+);

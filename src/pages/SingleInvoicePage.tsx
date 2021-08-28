@@ -6,6 +6,7 @@ import {
 } from 'semantic-ui-react';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
+import { withTranslation, WithTranslation } from 'react-i18next';
 import { Invoice, Roles } from '../clients/server.generated';
 import { RootState } from '../stores/store';
 import ResourceStatus from '../stores/resourceStatus';
@@ -24,7 +25,7 @@ import AuthorizationComponent from '../components/AuthorizationComponent';
 import { authedUserHasRole } from '../stores/auth/selectors';
 import NotFound from './NotFound';
 
-interface Props extends RouteComponentProps<{ invoiceId: string }> {
+interface Props extends RouteComponentProps<{ invoiceId: string }>, WithTranslation {
   invoice: Invoice | undefined;
   status: ResourceStatus;
 
@@ -70,12 +71,12 @@ class SingleInvoicePage extends React.Component<Props, State> {
 
   getPanes = () => {
     const {
-      invoice, fetchInvoice, status, hasRole,
+      invoice, fetchInvoice, status, hasRole, t,
     } = this.props;
 
     const panes = [
       {
-        menuItem: 'Products',
+        menuItem: t('entity.products'),
         render: invoice ? () => (
           <Tab.Pane>
             <InvoiceProductList
@@ -90,7 +91,7 @@ class SingleInvoicePage extends React.Component<Props, State> {
     if (hasRole(Roles.GENERAL)
       || hasRole(Roles.ADMIN) || hasRole(Roles.AUDIT) || hasRole(Roles.FINANCIAL)) {
       panes.push({
-        menuItem: 'Files',
+        menuItem: t('entity.files'),
         render: invoice ? () => (
           <Tab.Pane>
             <FilesList
@@ -110,7 +111,7 @@ class SingleInvoicePage extends React.Component<Props, State> {
         ) : () => <Tab.Pane />,
       });
       panes.push({
-        menuItem: 'Activities',
+        menuItem: t('entity.activities'),
         render: invoice ? () => (
           <Tab.Pane>
             <ActivitiesList
@@ -128,7 +129,7 @@ class SingleInvoicePage extends React.Component<Props, State> {
   };
 
   public render() {
-    const { invoice, status } = this.props;
+    const { invoice, status, t } = this.props;
     const { paneIndex } = this.state;
 
     if (status === ResourceStatus.NOTFOUND) {
@@ -155,7 +156,7 @@ class SingleInvoicePage extends React.Component<Props, State> {
             <Breadcrumb
               icon="right angle"
               sections={[
-                { key: 'Invoices', content: <NavLink to="/invoice">Invoices</NavLink> },
+                { key: 'Invoices', content: <NavLink to="/invoice">{t('entity.invoices')}</NavLink> },
                 { key: 'Invoice', content: `F${invoice.id} ${invoice.title}`, active: true },
               ]}
             />
@@ -214,4 +215,5 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   clearInvoice: () => dispatch(clearSingle(SingleEntities.Invoice)),
 });
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(SingleInvoicePage));
+export default withTranslation()(withRouter(connect(mapStateToProps,
+  mapDispatchToProps)(SingleInvoicePage)));

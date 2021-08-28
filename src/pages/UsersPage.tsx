@@ -3,10 +3,12 @@ import { RouteComponentProps, withRouter } from 'react-router-dom';
 import {
   Button, Container, Grid, Header, Icon, Segment,
 } from 'semantic-ui-react';
+import { useTranslation } from 'react-i18next';
 import UsersTable from '../components/entities/user/UserTable';
 import UserTableControls from '../components/entities/user/UserTableControls';
 
 function UsersPage(props: RouteComponentProps) {
+  const { t } = useTranslation();
   return (
     <>
       <Segment style={{ backgroundColor: 'rgba(237, 237, 237, 0.98)' }} vertical basic>
@@ -16,15 +18,15 @@ function UsersPage(props: RouteComponentProps) {
               <Header as="h1">
                 <Icon name="users" />
                 <Header.Content>
-                  <Header.Subheader>Users</Header.Subheader>
-                  All Users
+                  <Header.Subheader>{t('entity.users')}</Header.Subheader>
+                  {t('pages.users.allUsers')}
                 </Header.Content>
               </Header>
             </Grid.Column>
             <Grid.Column>
               <Button icon labelPosition="left" primary floated="right" onClick={() => props.history.push('/user/new')}>
                 <Icon name="plus" />
-                Add User
+                {t('pages.users.addUser')}
               </Button>
             </Grid.Column>
           </Grid>

@@ -1,3 +1,5 @@
+import i18n, { getLanguage } from '../localization';
+
 const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
   'July', 'August', 'September', 'October', 'November', 'December'];
 
@@ -31,8 +33,11 @@ function parseDateToSplitDateObj(date: Date): SplitDate {
 }
 
 export function formatLastUpdate(date: Date): string {
-  const d = parseDateToSplitDateObj(date);
-  return `${d.month} ${d.day}, ${d.year} at ${d.hour}:${d.minutes}`;
+  return `${date.toLocaleString(getLanguage(), {
+    year: 'numeric', month: 'long', day: 'numeric',
+  })} ${i18n.t('other.dateTime.at')} ${date.toLocaleString(getLanguage(), {
+    hour: '2-digit', minute: '2-digit',
+  })}`;
 }
 
 export function formatTimestampToDate(date: Date): string {

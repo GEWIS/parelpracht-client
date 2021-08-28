@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import { Button, Icon } from 'semantic-ui-react';
+import { useTranslation } from 'react-i18next';
 import { authGenerateApiKey, authGetApiKey, authRevokeApiKey } from '../../../stores/auth/actionCreators';
 import ResourceStatus from '../../../stores/resourceStatus';
 import { RootState } from '../../../stores/store';
@@ -21,6 +22,7 @@ function UserApiKey(props: Props) {
     hasApiKey, apiKey, apiKeyStatus, getApiKey,
     generateApiKey, revokeApiKey,
   } = props;
+  const { t } = useTranslation();
 
   if (hasApiKey) {
     return (
@@ -31,7 +33,7 @@ function UserApiKey(props: Props) {
             loading={apiKeyStatus === ResourceStatus.FETCHING}
           >
             <Icon name="eye" />
-            View Key
+            {t('pages.user.apiKey.viewKey')}
           </Button>
         ) : (
           <span>
@@ -47,28 +49,20 @@ function UserApiKey(props: Props) {
           loading={apiKeyStatus === ResourceStatus.DELETING}
         >
           <Icon name="times" />
-          Revoke
+          {t('pages.user.apiKey.revoke')}
         </Button>
       </>
     );
   }
+
   return (
     <Button
       onClick={generateApiKey}
       loading={apiKeyStatus === ResourceStatus.FETCHING}
     >
       <Icon name="refresh" />
-      Generate
+      {t('pages.user.apiKey.generate')}
     </Button>
-  );
-  return (
-    <div>
-      {hasApiKey}
-      {' '}
-      {apiKey}
-      {' '}
-      {apiKeyStatus}
-    </div>
   );
 }
 

@@ -4,6 +4,7 @@ import { Dispatch } from 'redux';
 import {
   Dimmer, Loader, Segment, Table,
 } from 'semantic-ui-react';
+import { useTranslation } from 'react-i18next';
 import { Product } from '../../../clients/server.generated';
 import TablePagination from '../../TablePagination';
 import { RootState } from '../../../stores/store';
@@ -47,64 +48,9 @@ function ProductsTable({
     setSort('nameEnglish', 'ASC');
     fetchProducts();
   }, []);
+  const { t } = useTranslation();
 
-  if (status === ResourceStatus.FETCHING || status === ResourceStatus.SAVING) {
-    return (
-      <>
-        <Segment style={{ padding: '0px' }}>
-          <Dimmer active inverted>
-            <Loader inverted />
-          </Dimmer>
-          <Table singleLine selectable attached sortable>
-            <Table.Header>
-              <Table.Row>
-                <Table.HeaderCell
-                  sorted={column === 'nameEnglish' ? direction : undefined}
-                  onClick={() => changeSort('nameEnglish')}
-                >
-                  Name
-                </Table.HeaderCell>
-                <Table.HeaderCell
-                  sorted={column === 'targetPrice' ? direction : undefined}
-                  onClick={() => changeSort('targetPrice')}
-                >
-                  Target price
-                </Table.HeaderCell>
-                <Table.HeaderCell
-                  sorted={column === 'status' ? direction : undefined}
-                  onClick={() => changeSort('status')}
-                >
-                  Status
-                  <ProductStatusFilter />
-                </Table.HeaderCell>
-                <Table.HeaderCell
-                  sorted={column === 'category' ? direction : undefined}
-                  onClick={() => changeSort('category')}
-                >
-                  Category
-                  <ProductCategoryFilter />
-                </Table.HeaderCell>
-              </Table.Row>
-            </Table.Header>
-            <Table.Body>
-              {products.map((x) => <ProductRow product={x} key={x.id} />)}
-            </Table.Body>
-          </Table>
-          <TablePagination
-            countTotal={total}
-            countFetched={fetched}
-            skip={skip}
-            take={take}
-            nextPage={nextPage}
-            prevPage={prevPage}
-            setTake={setTake}
-          />
-        </Segment>
-      </>
-    );
-  }
-
-  return (
+  const table = (
     <>
       <Table singleLine selectable attached sortable>
         <Table.Header>
@@ -113,26 +59,26 @@ function ProductsTable({
               sorted={column === 'nameEnglish' ? direction : undefined}
               onClick={() => changeSort('nameEnglish')}
             >
-              Name
+              {t('entities.product.props.name')}
             </Table.HeaderCell>
             <Table.HeaderCell
               sorted={column === 'targetPrice' ? direction : undefined}
               onClick={() => changeSort('targetPrice')}
             >
-              Target price
+              {t('entities.product.props.price')}
             </Table.HeaderCell>
             <Table.HeaderCell
               sorted={column === 'status' ? direction : undefined}
               onClick={() => changeSort('status')}
             >
-              Status
+              {t('entities.generalProps.status')}
               <ProductStatusFilter />
             </Table.HeaderCell>
             <Table.HeaderCell
               sorted={column === 'category' ? direction : undefined}
               onClick={() => changeSort('category')}
             >
-              Category
+              {t('entity.category')}
               <ProductCategoryFilter />
             </Table.HeaderCell>
           </Table.Row>
@@ -152,6 +98,21 @@ function ProductsTable({
       />
     </>
   );
+
+  if (status === ResourceStatus.FETCHING || status === ResourceStatus.SAVING) {
+    return (
+      <>
+        <Segment style={{ padding: '0px' }}>
+          <Dimmer active inverted>
+            <Loader inverted />
+          </Dimmer>
+          {table}
+        </Segment>
+      </>
+    );
+  }
+
+  return table;
 }
 
 const mapStateToProps = (state: RootState) => {

@@ -20,6 +20,12 @@ function InvoiceRow(props: Props) {
   const {
     invoice, value, invoiceStatus,
   } = props;
+
+  const status = formatStatus(invoiceStatus);
+  const amount = formatPriceFull(value);
+  const financialYear = dateToFullFinancialYear(invoice.startDate);
+  const lastUpdate = formatLastUpdate(invoice.updatedAt);
+
   return (
     <Table.Row>
       <Table.Cell>
@@ -35,17 +41,17 @@ function InvoiceRow(props: Props) {
       <Table.Cell>
         <CompanyLink id={invoice.companyId} />
       </Table.Cell>
-      <Table.Cell>
-        {formatStatus(invoiceStatus)}
+      <Table.Cell title={status}>
+        {status}
       </Table.Cell>
-      <Table.Cell>
-        {formatPriceFull(value)}
+      <Table.Cell title={amount}>
+        {amount}
       </Table.Cell>
-      <Table.Cell>
-        {dateToFullFinancialYear(invoice.startDate)}
+      <Table.Cell title={financialYear}>
+        {financialYear}
       </Table.Cell>
-      <Table.Cell>
-        {formatLastUpdate(invoice.updatedAt)}
+      <Table.Cell title={lastUpdate}>
+        {lastUpdate}
       </Table.Cell>
     </Table.Row>
   );
