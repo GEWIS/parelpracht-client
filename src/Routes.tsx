@@ -32,7 +32,6 @@ import UsersPage from './pages/UsersPage';
 import SingleUserPage from './pages/SingleUserPage';
 import UserCreatePage from './pages/UserCreatePage';
 import ContractProductInstanceModal from './pages/ContractProductInstanceModal';
-import InvoiceProductInstanceModal from './pages/InvoiceProductInstanceModal';
 import Footer from './components/navigation/Footer';
 import DashboardPage from './pages/DashboardPage';
 import NotFound from './pages/NotFound';
@@ -217,10 +216,6 @@ function Routes(props: Props) {
             <CustomInvoicePage />
           </Route>
           <Route path="/invoice/:invoiceId" exact component={SingleInvoicePage} />
-          <Route path="/invoice/:invoiceId/product/:productInstanceId" exact>
-            <SingleInvoicePage />
-            <InvoiceProductInstanceModal />
-          </Route>
 
           {/* Contracts */}
           <Route path="/contract" exact>
