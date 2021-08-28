@@ -2,7 +2,6 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { Icon } from 'semantic-ui-react';
 import { connect } from 'react-redux';
-import { useTranslation } from 'react-i18next';
 import { RootState } from '../../../stores/store';
 import { getContractTitle } from '../../../stores/contract/selectors';
 import { formatStatus } from '../../../helpers/activity';
@@ -23,7 +22,6 @@ function ContractLink(props: Props) {
   const {
     id, showId, showName, contractTitle, status,
   } = props;
-  const { t } = useTranslation();
 
   let statusCircle;
   switch (status) {
@@ -54,7 +52,7 @@ function ContractLink(props: Props) {
     <NavLink
       to={`/contract/${id}`}
       className="contact-link"
-      title={`C${id} ${contractTitle}${status ? ` (${formatStatus(status, t)})` : ''}`}
+      title={`C${id} ${contractTitle}${status ? ` (${formatStatus(status)})` : ''}`}
     >
       <Icon name="file alternate" />
       {showId ? `C${id} ` : ''}

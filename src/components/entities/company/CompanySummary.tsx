@@ -1,7 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
-import { useTranslation } from 'react-i18next';
 import { Company } from '../../../clients/server.generated';
 import { formatStatus } from '../../../helpers/activity';
 import ResourceStatus from '../../../stores/resourceStatus';
@@ -20,7 +19,6 @@ interface Props {
 
 function CompanySummary(props: Props) {
   const { company, status, fetchCompany } = props;
-  const { t } = useTranslation();
 
   if (company === undefined) {
     return (
@@ -60,7 +58,7 @@ function CompanySummary(props: Props) {
       </div>
       <div>
         <h5>Status</h5>
-        <p>{formatStatus(company.status, t)}</p>
+        <p>{formatStatus(company.status)}</p>
       </div>
     </EntitySummary>
   );

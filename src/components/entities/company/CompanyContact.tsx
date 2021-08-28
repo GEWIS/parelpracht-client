@@ -3,7 +3,6 @@ import { RouteComponentProps, withRouter } from 'react-router-dom';
 import {
   Button, Header, Icon, Segment,
 } from 'semantic-ui-react';
-import { useTranslation } from 'react-i18next';
 import { Contact, ContactFunction } from '../../../clients/server.generated';
 import { formatContactName, formatFunction } from '../../../helpers/contact';
 import './CompanyContact.scss';
@@ -13,7 +12,6 @@ interface Props extends RouteComponentProps {
 }
 
 function CompanyContact(props: Props) {
-  const { t } = useTranslation();
   const { contact } = props;
 
   return (
@@ -35,7 +33,7 @@ function CompanyContact(props: Props) {
         <Header sub>
           <Icon name="user circle" size="large" />
           <Header.Content>
-            {formatFunction(contact.function, t)}
+            {formatFunction(contact.function)}
             <Header.Subheader>
               {formatContactName(
                 contact.firstName,

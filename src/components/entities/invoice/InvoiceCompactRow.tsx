@@ -1,7 +1,6 @@
 import React from 'react';
 import { Table } from 'semantic-ui-react';
 import { connect } from 'react-redux';
-import { useTranslation } from 'react-i18next';
 import { Invoice, InvoiceStatus } from '../../../clients/server.generated';
 import { dateToFullFinancialYear, formatLastUpdate } from '../../../helpers/timestamp';
 import { RootState } from '../../../stores/store';
@@ -18,7 +17,6 @@ interface Props {
 
 function InvoiceCompactRow(props: Props): JSX.Element {
   const { invoice, status } = props;
-  const { t } = useTranslation();
   if (invoice === undefined) return <Table.Row />;
   return (
     <Table.Row>
@@ -29,7 +27,7 @@ function InvoiceCompactRow(props: Props): JSX.Element {
         <CompanyLink id={invoice.companyId} />
       </Table.Cell>
       <Table.Cell>
-        {formatStatus(status, t)}
+        {formatStatus(status)}
       </Table.Cell>
       <Table.Cell>
         {dateToFullFinancialYear(invoice.startDate)}

@@ -82,6 +82,7 @@ class DashboardContractedCategoryGraph extends React.Component<Props, State> {
             t('entities.graph.month.maa'),
             t('entities.graph.month.apr'),
             t('entities.graph.month.mei'),
+            t('entities.graph.month.jun'),
           ] : data.labels}
           extraDropdown={(
             <Dropdown

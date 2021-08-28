@@ -81,7 +81,7 @@ function UserSummary(props: Props) {
       </div>
       <div>
         <h5>{t('entities.user.props.gender.header')}</h5>
-        <p>{formatGender(user.gender, t)}</p>
+        <p>{formatGender(user.gender)}</p>
       </div>
     </EntitySummary>
   );

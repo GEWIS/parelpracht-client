@@ -2,7 +2,6 @@ import { connect } from 'react-redux';
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { Table } from 'semantic-ui-react';
-import { useTranslation } from 'react-i18next';
 import { Invoice, InvoiceStatus } from '../../../clients/server.generated';
 import { RootState } from '../../../stores/store';
 import { dateToFullFinancialYear, formatLastUpdate } from '../../../helpers/timestamp';
@@ -21,9 +20,8 @@ function InvoiceRow(props: Props) {
   const {
     invoice, value, invoiceStatus,
   } = props;
-  const { t } = useTranslation();
 
-  const status = formatStatus(invoiceStatus, t);
+  const status = formatStatus(invoiceStatus);
   const amount = formatPriceFull(value);
   const financialYear = dateToFullFinancialYear(invoice.startDate);
   const lastUpdate = formatLastUpdate(invoice.updatedAt);

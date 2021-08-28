@@ -1,4 +1,3 @@
-import { TFunction } from 'react-i18next';
 import { GeneralActivity } from '../components/activities/GeneralActivity';
 import { formatLastUpdate } from './timestamp';
 import {
@@ -102,7 +101,7 @@ export function formatActivitySummary(
 /**
  * Get the status in a string with the first character as uppercase and the rest lowercase.
  */
-export function formatStatus(status: string | undefined, t: TFunction): string {
+export function formatStatus(status: string | undefined): string {
   if (status === undefined) {
     return i18n.t('entities.status.unknown');
   }
@@ -110,7 +109,7 @@ export function formatStatus(status: string | undefined, t: TFunction): string {
     return i18n.t('entities.status.notDelivered');
   }
 
-  return t(`entities.status.${status.toLowerCase()}`);
+  return i18n.t(`entities.status.${status.toLowerCase()}`);
 }
 
 /**

@@ -1,7 +1,6 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { Table } from 'semantic-ui-react';
-import { useTranslation } from 'react-i18next';
 import { Contact } from '../../../clients/server.generated';
 import { formatContactName, formatFunction } from '../../../helpers/contact';
 import CompanyLink from '../company/CompanyLink';
@@ -11,7 +10,6 @@ interface Props {
 }
 
 function ContactRow(props: Props) {
-  const { t } = useTranslation();
   const { contact } = props;
   return (
     <Table.Row>
@@ -27,7 +25,7 @@ function ContactRow(props: Props) {
         {contact.email}
       </Table.Cell>
       <Table.Cell>
-        {formatFunction(contact.function, t)}
+        {formatFunction(contact.function)}
       </Table.Cell>
     </Table.Row>
   );

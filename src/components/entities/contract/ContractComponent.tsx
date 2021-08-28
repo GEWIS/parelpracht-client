@@ -3,7 +3,6 @@ import {
   Table,
 } from 'semantic-ui-react';
 import { connect } from 'react-redux';
-import { useTranslation } from 'react-i18next';
 import { Contract, ContractStatus } from '../../../clients/server.generated';
 import { getCompanyName } from '../../../stores/company/selectors';
 import './ContractComponent.scss';
@@ -22,7 +21,6 @@ interface Props {
 
 function ContractComponent(props: Props) {
   const { contract, contactName, status } = props;
-  const { t } = useTranslation();
 
   return (
     <>
@@ -34,7 +32,7 @@ function ContractComponent(props: Props) {
           {contactName}
         </Table.Cell>
         <Table.Cell>
-          {formatStatus(status, t)}
+          {formatStatus(status)}
         </Table.Cell>
         <Table.Cell>
           {formatLastUpdate(contract.updatedAt)}

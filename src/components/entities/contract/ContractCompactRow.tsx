@@ -1,7 +1,6 @@
 import React from 'react';
 import { Table } from 'semantic-ui-react';
 import { connect } from 'react-redux';
-import { useTranslation } from 'react-i18next';
 import { Contract, ContractStatus } from '../../../clients/server.generated';
 import CompanyLink from '../company/CompanyLink';
 import ContractLink from './ContractLink';
@@ -18,7 +17,6 @@ interface Props {
 
 function ContractCompactRow(props: Props) {
   const { contract, status } = props;
-  const { t } = useTranslation();
   return (
     <Table.Row>
       <Table.Cell>
@@ -28,7 +26,7 @@ function ContractCompactRow(props: Props) {
         <CompanyLink id={contract.companyId} />
       </Table.Cell>
       <Table.Cell>
-        {formatStatus(status, t)}
+        {formatStatus(status)}
       </Table.Cell>
       <Table.Cell>
         {formatLastUpdate(contract.updatedAt)}

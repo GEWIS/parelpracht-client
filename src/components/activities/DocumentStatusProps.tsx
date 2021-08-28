@@ -104,13 +104,13 @@ class DocumentStatusProps extends React.Component<Props, State> {
       editing,
       description,
     } = this.state;
-    const { documentStatus, documentType, t } = this.props;
+    const { documentStatus, documentType } = this.props;
 
     return (
       <>
         <h2>
-          {this.props.create ? `Post ${formatStatus(documentStatus, t)} Status`
-            : `${formatStatus(documentStatus, t)} Details} `}
+          {this.props.create ? `Post ${formatStatus(documentStatus)} Status`
+            : `${formatStatus(documentStatus)} Details} `}
 
           <PropsButtons
             editing={editing}

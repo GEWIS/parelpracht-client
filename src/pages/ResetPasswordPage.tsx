@@ -159,7 +159,7 @@ function ResetPasswordPage(props: Props) {
                     <td>
                       {symbols ? <Icon name="check" color="green" /> : <Icon name="close" color="red" />}
                     </td>
-                    <td>{t('pages.resetPassword.requirements.length')}</td>
+                    <td>{t('pages.resetPassword.requirements.symbol')}</td>
                   </tr>
                 </table>
               </p>

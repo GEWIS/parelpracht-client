@@ -62,7 +62,7 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
     const {
       documentId, documentType, status,
       statusChecked, statusClickable, statusDescription, statusDisabled, statusIcon,
-      resourceStatus, parentId, hasRole, roles, t,
+      resourceStatus, parentId, hasRole, roles,
     } = this.props;
     const { stepModalOpen } = this.state;
 
@@ -90,7 +90,7 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
           {statusIcon}
           <Step.Content>
             <Step.Title>
-              {formatStatus(status, t)}
+              {formatStatus(status)}
             </Step.Title>
             <Step.Description style={{ maxWidth: '20ch', wordWrap: 'break-word' }}>
               {statusDescription}

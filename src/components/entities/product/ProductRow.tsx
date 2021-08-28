@@ -1,7 +1,6 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { Table } from 'semantic-ui-react';
-import { useTranslation } from 'react-i18next';
 import { Product } from '../../../clients/server.generated';
 import { formatPriceFull } from '../../../helpers/monetary';
 import ProductCategoryLink from '../productcategories/ProductCategoryLink';
@@ -13,7 +12,6 @@ interface Props {
 }
 
 function ProductRow(props: Props) {
-  const { t } = useTranslation();
   const currentLanguage = getLanguage();
 
   const { product } = props;
@@ -28,7 +26,7 @@ function ProductRow(props: Props) {
         {formatPriceFull(product.targetPrice)}
       </Table.Cell>
       <Table.Cell>
-        {formatStatus(product.status, t)}
+        {formatStatus(product.status)}
       </Table.Cell>
       <Table.Cell>
         <ProductCategoryLink id={product.categoryId} />

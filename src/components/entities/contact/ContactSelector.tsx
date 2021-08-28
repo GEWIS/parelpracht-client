@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { Dropdown, DropdownProps } from 'semantic-ui-react';
-import { useTranslation } from 'react-i18next';
 import { ContactFunction, ContactSummary } from '../../../clients/server.generated';
 import { formatContactName, formatFunctionShort, sortContactsByFunction } from '../../../helpers/contact';
 import { RootState } from '../../../stores/store';
@@ -16,7 +15,6 @@ interface Props {
 }
 
 function ContactSelector(props: Props & DropdownProps) {
-  const { t } = useTranslation();
   const [open, changeOpen] = useState(false);
 
   const {
@@ -28,7 +26,7 @@ function ContactSelector(props: Props & DropdownProps) {
     .map((x) => ({
       key: x.id,
       text: formatContactName(x.firstName, x.lastNamePreposition, x.lastName),
-      description: formatFunctionShort(x.function, t),
+      description: formatFunctionShort(x.function),
       value: x.id,
     }));
 

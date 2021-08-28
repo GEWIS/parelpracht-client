@@ -170,7 +170,7 @@ class ContactModal extends React.Component<Props> {
                     <CompanyLink id={contract.companyId} />
                   </Table.Cell>
                   <Table.Cell>
-                    {formatStatus(this.props.getContractStatus(contract.id), this.props.t)}
+                    {formatStatus(this.props.getContractStatus(contract.id))}
                   </Table.Cell>
                 </Table.Row>
               );

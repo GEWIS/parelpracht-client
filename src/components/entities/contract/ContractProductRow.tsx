@@ -33,7 +33,7 @@ function showRecentStatus(productInstance: ProductInstance): string {
 class ContractProductRow extends React.Component<Props> {
   public render() {
     const {
-      productInstance, selectFunction, selected, t,
+      productInstance, selectFunction, selected,
     } = this.props;
 
     let invoice;
@@ -70,7 +70,7 @@ class ContractProductRow extends React.Component<Props> {
           {formatPriceFull(productInstance.basePrice - productInstance.discount)}
         </Table.Cell>
         <Table.Cell collapsing>
-          {formatStatus(showRecentStatus(productInstance), t)}
+          {formatStatus(showRecentStatus(productInstance))}
         </Table.Cell>
         <Table.Cell collapsing>
           {invoice}

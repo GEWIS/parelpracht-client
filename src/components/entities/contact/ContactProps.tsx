@@ -276,7 +276,7 @@ class ContactProps extends React.Component<Props, State> {
                 placeholder={t('entities.contact.props.function.header')}
                 value={func}
                 options={Object.values(ContactFunction).map((x, i) => ({
-                  key: i, value: x, text: formatFunction(x, t),
+                  key: i, value: x, text: formatFunction(x),
                 }))}
                 onChange={(e, data) => this.setState({
                   func: data.value as ContactFunction,
