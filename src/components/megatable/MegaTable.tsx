@@ -84,7 +84,7 @@ class MegaTable extends React.Component<Props> {
                   <CompanyFilter table={Tables.ETCompanies} />
                 </Table.HeaderCell>
                 <Table.HeaderCell width={3}>
-                  {t('entity.company')}
+                  {t('entity.contract')}
                   <ContractStatusFilter column="status2" columnName="Contract Status" table={Tables.ETCompanies} />
                 </Table.HeaderCell>
                 <Table.HeaderCell width={2}>

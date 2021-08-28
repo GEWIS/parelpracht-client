@@ -78,7 +78,7 @@
         "delivered": "De totale waarde van alle producten op bevestigde/getekende contracten die in het huidige boekjaar zijn geleverd.",
         "invoiced": "De totale waarde van alle producten die in dit boekjaar zijn gefactureerd.",
         "paid": "De totale waarde van alle betaalde facturen in het huidige boekjaar.",
-        "suggested": "De totale waarde van alle contracten die nog niet zijn bevestigd/getekend door een bedrijf."
+        "suggested": "De totale waarde van alle contracten die nog niet zijn bevestigd/getekend door een bedrijf, oftewel de waarde van alle contracten met status \"Aangemaakt\", \"Voorgesteld\" of \"Verstuurd\"."
       },
       "header": "Financieel overzicht",
       "invoiced": "Gefactureerd",
@@ -251,11 +251,11 @@
     "status": {
       "active": "Actief",
       "cancelled": "Geannuleerd",
-      "confirmed": "Bevestigd",
+      "confirmed": "Gesloten",
       "created": "Aangemaakt",
       "deferred": "Uitgesteld",
       "delivered": "Geleverd",
-      "finished": "Afgerond",
+      "finished": "Voldaan",
       "inactive": "Inactief",
       "irrecoverable": "Oninbaar",
       "notDelivered": "Niet geleverd",

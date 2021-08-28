@@ -78,7 +78,7 @@
         "delivered": "The total value of delivered products on confirmed contracts in the current financial year.",
         "invoiced": "The total value of all products invoiced in the current financial year.",
         "paid": "The total value of all paid invoices in the current financial year.",
-        "suggested": "The total value of all contracts that have not been confirmed by a company."
+        "suggested": "The total value of all contracts that have not been confirmed by a company, aka the value of all contracts with status \"Created\", \"Proposed\" or \"Sent\"."
       },
       "header": "Financial Overview",
       "invoiced": "Invoiced",

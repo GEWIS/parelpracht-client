@@ -7,6 +7,7 @@ You can find the release notes below.
 ### Added
 - Added a database validator command to the backend to validate the database and fix any issues.
 - Added column "Function" to the Contacts table with sorting and filtering by this column.
+- Added column "Updated at" to all tables.
 - Added a contract status filter to the Insights table.
   - Added a partial circle as symbol for a contract's status to the ContractLink.
 - Added favicons for all browser and operating system types.
@@ -27,7 +28,14 @@ You can find the release notes below.
 - When generating a PDF invoice, the date on the letter is now the "Invoice date" instead of the date of today.
 - All entity-dropdowns are now properly sorted alphabetically.
 - Error messages now show the actual error, instead of "An unexpected error occurred" message.
+- TextAreas are automatically streched to fit their content.
 - Updated node packages in the front-end and back-end.
+- Admins can now change the price of a product on a confirmed contract.
+- The contact of a contract can be changed.
+- Contracts on a single product page are sorted on date.
+- The Invoices table is filtered on status "Sent" for treasurers.
+- Activities are sorted on their creation date instead of their last update.
+- Changed pagination size to 25, 50, 100 (default), 250, 500 and All.
 
 ### Bugfixes
 - Fixed "Treasurer Last Seen" not being shown properly.
@@ -47,6 +55,9 @@ You can find the release notes below.
 - Fixed weird formatting of long text in all entity's summaries.
 - Fixed infinite loading screen instead of a 404 page when an entity does not exist.
 - Fixed timestamps not being in the correct timezone.
+- Fixed value and count being zero when filtering on an invoice year and "not invoiced" in the Insights table.
+- Fixed "Contracted" bar in financial overview on the dashboard being too high, as it included cancelled contracts.
+- Fixed weird formatting of currencies starting 1000 euros.
 
 ## v1.0.1 (23-04-2021)
 ### Added
