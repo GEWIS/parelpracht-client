@@ -2,7 +2,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Form } from 'semantic-ui-react';
 import { Dispatch } from 'redux';
-import { withTranslation, WithTranslation } from 'react-i18next';
 import {
   ContractStatusParams,
   InvoiceStatusParams,
@@ -16,7 +15,7 @@ import { DocumentStatus } from './DocumentStatus';
 import { createInstanceStatusSingle } from '../../stores/productinstance/actionCreator';
 import TextArea from '../TextArea';
 
-interface Props extends WithTranslation {
+interface Props {
   create?: boolean;
   createSingleStatus: (entity: SingleEntities, id: number, statusParams: object) => void;
   createSingleInstanceStatus: (id: number, instanceId: number, statusParam: object) => void;
@@ -157,4 +156,4 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   ),
 });
 
-export default withTranslation()(connect(null, mapDispatchToProps)(DocumentStatusProps));
+export default connect(null, mapDispatchToProps)(DocumentStatusProps);

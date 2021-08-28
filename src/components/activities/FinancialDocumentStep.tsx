@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { Step } from 'semantic-ui-react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { Dispatch } from 'redux';
-import { WithTranslation, withTranslation } from 'react-i18next';
 import {
   formatStatus,
 } from '../../helpers/activity';
@@ -20,7 +19,7 @@ import { authedUserHasRole } from '../../stores/auth/selectors';
 /**
  * Definition of used variables
  */
-interface Props extends RouteComponentProps, WithTranslation {
+interface Props extends RouteComponentProps {
   documentId: number;
   documentType: SingleEntities;
   // If the document is a ProductInstance, the parentId is the contract ID
@@ -121,5 +120,4 @@ const mapStateToProps = (state: RootState) => {
   };
 };
 
-export default withTranslation()(withRouter(connect(mapStateToProps,
-  mapDispatchToProps)(FinancialDocumentProgress)));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(FinancialDocumentProgress));

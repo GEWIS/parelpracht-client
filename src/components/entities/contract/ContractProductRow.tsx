@@ -1,7 +1,6 @@
 import React from 'react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { Checkbox, Table } from 'semantic-ui-react';
-import { withTranslation, WithTranslation } from 'react-i18next';
 import { ActivityType, ProductInstance, ProductInstanceStatus } from '../../../clients/server.generated';
 import './ContractComponent.scss';
 import { formatPriceDiscount, formatPriceFull } from '../../../helpers/monetary';
@@ -10,7 +9,7 @@ import { SingleEntities } from '../../../stores/single/single';
 import { formatStatus, getLastStatus } from '../../../helpers/activity';
 import InvoiceLink from '../invoice/InvoiceLink';
 
-interface Props extends RouteComponentProps, WithTranslation {
+interface Props extends RouteComponentProps {
   productInstance: ProductInstance;
 
   selectFunction: (id: number) => void;
@@ -80,4 +79,4 @@ class ContractProductRow extends React.Component<Props> {
   }
 }
 
-export default withTranslation()(withRouter(ContractProductRow));
+export default withRouter(ContractProductRow);
