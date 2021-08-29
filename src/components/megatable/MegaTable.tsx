@@ -5,6 +5,7 @@ import {
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import { withTranslation, WithTranslation } from 'react-i18next';
+import { RouteComponentProps, withRouter } from 'react-router-dom';
 import MegaTableRow from './MegaTableRow';
 import { RootState } from '../../stores/store';
 import { countFetched, countTotal, getTable } from '../../stores/tables/selectors';
@@ -24,11 +25,12 @@ import ProductFilter from '../tablefilters/ProductFilter';
 import ProductInstanceStatusFilter from '../tablefilters/ProductInstanceStatusFilter';
 import ProductInstanceInvoicedFilter from '../tablefilters/ProductInstanceInvoicedFilter';
 import ResourceStatus from '../../stores/resourceStatus';
-import { ETCompany, ProductInstanceStatus } from '../../clients/server.generated';
+import { ContractStatus, ETCompany, ProductInstanceStatus } from '../../clients/server.generated';
 import { formatPriceFull } from '../../helpers/monetary';
 import ContractStatusFilter from '../tablefilters/ContractStatusFilter';
+import { dateToFinancialYear } from '../../helpers/timestamp';
 
-interface Props extends WithTranslation {
+interface Props extends WithTranslation, RouteComponentProps {
   companies: ETCompany[];
   nrOfProducts: number;
   sumProducts: number;
@@ -40,6 +42,7 @@ interface Props extends WithTranslation {
   take: number;
   status: ResourceStatus;
 
+  fetchCompanies: () => void;
   setTableFilter: (filter: { column: string, values: any[] }) => void;
   changeSort: (column: string) => void;
   setSort: (column: string, direction: 'ASC' | 'DESC') => void;
@@ -48,12 +51,67 @@ interface Props extends WithTranslation {
   nextPage: () => void;
 }
 
-class MegaTable extends React.Component<Props> {
+interface State {
+  preFilters: string;
+  year?: number;
+}
+
+class MegaTable extends React.Component<Props, State> {
+  constructor(props: Props) {
+    super(props);
+
+    let { hash } = this.props.location;
+    // If there is no hash, do not take the first (#) character
+    if (hash.length > 0) {
+      hash = hash.substr(1);
+    }
+
+    const [preFilters, year] = hash.split('&');
+
+    this.state = {
+      preFilters,
+      year: year !== '' ? parseInt(year, 10) : undefined,
+    };
+  }
+
   componentDidMount() {
-    const { setSort, setTableFilter } = this.props;
+    const { setSort, setTableFilter, fetchCompanies } = this.props;
     setSort('companyName', 'ASC');
-    setTableFilter({ column: 'invoiced', values: [-1] });
-    setTableFilter({ column: 'status', values: [ProductInstanceStatus.NOTDELIVERED, ProductInstanceStatus.DELIVERED] });
+    setTableFilter({ column: 'status', values: [] });
+    setTableFilter({ column: 'status2', values: [] });
+    setTableFilter({ column: 'invoiced', values: [] });
+
+    if (!this.state.year) {
+      this.setState({ year: dateToFinancialYear(new Date()) });
+    } else if (Number.isNaN(this.state.year)) {
+      this.setState({ year: undefined });
+    }
+
+    switch (this.state.preFilters) {
+      case 'suggested':
+        setTableFilter({ column: 'status2', values: [ContractStatus.CREATED, ContractStatus.PROPOSED, ContractStatus.SENT] });
+        break;
+      case 'contracted':
+        setTableFilter({ column: 'status2', values: [ContractStatus.CONFIRMED, ContractStatus.FINISHED] });
+        setTableFilter({ column: 'status', values: [ProductInstanceStatus.NOTDELIVERED, ProductInstanceStatus.DELIVERED] });
+        setTableFilter({ column: 'invoiced', values: [-1, this.state.year] });
+        break;
+      case 'delivered':
+        setTableFilter({ column: 'status2', values: [ContractStatus.CONFIRMED, ContractStatus.FINISHED] });
+        setTableFilter({ column: 'status', values: [ProductInstanceStatus.DELIVERED] });
+        setTableFilter({ column: 'invoiced', values: [-1, this.state.year] });
+        break;
+      case 'invoiced':
+        setTableFilter({ column: 'status2', values: [ContractStatus.CONFIRMED, ContractStatus.FINISHED] });
+        setTableFilter({ column: 'invoiced', values: [this.state.year] });
+        break;
+      default:
+        setTableFilter({ column: 'invoiced', values: [-1] });
+        setTableFilter({ column: 'status', values: [ProductInstanceStatus.NOTDELIVERED, ProductInstanceStatus.DELIVERED] });
+        break;
+    }
+
+    fetchCompanies();
   }
 
   render() {
@@ -162,6 +220,7 @@ const mapStateToProps = (state: RootState) => {
 };
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
+  fetchCompanies: () => dispatch(fetchTable(Tables.ETCompanies)),
   setTableFilter: (filter: { column: string, values: any[] }) => {
     dispatch(setFilterTable(Tables.ETCompanies, filter));
   },
@@ -187,4 +246,5 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   },
 });
 
-export default withTranslation()(connect(mapStateToProps, mapDispatchToProps)(MegaTable));
+export default withTranslation()(withRouter(connect(mapStateToProps,
+  mapDispatchToProps)(MegaTable)));

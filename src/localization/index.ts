@@ -34,7 +34,6 @@ i18n
   });
 
 export const changeLanguage = (language: locales) => {
-  window.location.reload();
   i18n.changeLanguage(language);
 };
 

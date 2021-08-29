@@ -3,6 +3,7 @@ import {
   Dropdown, Grid, Popup, Segment, Table,
 } from 'semantic-ui-react';
 import { WithTranslation, withTranslation } from 'react-i18next';
+import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { Bar } from 'react-chartjs-2';
 import { Client, DashboardProductInstanceStats } from '../../clients/server.generated';
 import { dateToFinancialYear } from '../../helpers/timestamp';
@@ -10,21 +11,26 @@ import { formatPriceFull } from '../../helpers/monetary';
 import './FinancialOverview.scss';
 import { FinancialOverviewField } from './FinancialOverviewField';
 
-interface Props extends WithTranslation {}
+interface Props extends RouteComponentProps, WithTranslation {}
 
 interface State {
   data?: DashboardProductInstanceStats;
   financialYear: number;
   loading: boolean;
+  redirect: boolean;
 }
 
 class FinancialOverview extends React.Component<Props, State> {
+  private readonly chart: React.RefObject<Bar>;
+
   constructor(props: Props) {
     super(props);
+    this.chart = React.createRef();
     this.state = {
       data: undefined,
       financialYear: dateToFinancialYear(new Date()),
       loading: true,
+      redirect: false,
     };
   }
 
@@ -32,6 +38,33 @@ class FinancialOverview extends React.Component<Props, State> {
     const { financialYear } = this.state;
     await this.updateGraph(financialYear);
   }
+
+  shouldComponentUpdate(nextProps: Readonly<Props>, nextState: Readonly<State>): boolean {
+    return !nextState.redirect;
+  }
+
+  componentWillUnmount() {
+    this.chart.current?.chartInstance.destroy();
+  }
+
+  // goToInsightsTable = (e: MouseEvent | undefined, data: any[]) => {
+  //   if (data) {
+  //     const bars = ['suggested', 'contracted', 'delivered', 'invoiced', 'paid'];
+  //     // eslint-disable-next-line no-underscore-dangle
+  //     const i = data[0]._index;
+  //     // There is no way to list all paid invoices in the Insights table
+  //     if (i < 4) {
+  //       const { financialYear } = this.state;
+  //       this.setState({ redirect: true });
+  //       this.props.history.push(`/insights#${bars[i]}&${financialYear}`);
+  //     }
+  //   }
+  // };
+
+  goToInsightsTable = (status: 'suggested' | 'contracted' | 'delivered' | 'invoiced') => {
+    const { financialYear } = this.state;
+    this.props.history.push(`/insights#${status}&${financialYear}`);
+  };
 
   async updateGraph(year: number) {
     this.setState({ loading: true });
@@ -118,6 +151,7 @@ class FinancialOverview extends React.Component<Props, State> {
         </Grid>
         <div>
           <Bar
+            ref={this.chart}
             data={chartData}
             options={{
               legend: {
@@ -144,6 +178,12 @@ class FinancialOverview extends React.Component<Props, State> {
                   },
                 },
               },
+              // onClick: this.goToInsightsTable,
+              // onHover: (event, chartElement) => {
+              //   // @ts-ignore
+              //   // eslint-disable-next-line no-param-reassign
+              //   event.target!.style.cursor = chartElement[0] ? 'pointer' : 'default';
+              // },
             }}
           />
         </div>
@@ -211,28 +251,28 @@ class FinancialOverview extends React.Component<Props, State> {
           <Table.Body>
             <Table.Row>
               <Table.Cell>{t('dashboard.financialOverview.value')}</Table.Cell>
-              <Table.Cell>
+              <Table.Cell onClick={() => this.goToInsightsTable('suggested')}>
                 <FinancialOverviewField
                   fields={[t('dashboard.financialOverview.suggested')]}
                   values={[data?.suggested.amount || 0]}
                   type="value"
                 />
               </Table.Cell>
-              <Table.Cell>
+              <Table.Cell onClick={() => this.goToInsightsTable('contracted')}>
                 <FinancialOverviewField
                   fields={[t('dashboard.financialOverview.contracted')]}
                   values={[data?.contracted.amount || 0]}
                   type="value"
                 />
               </Table.Cell>
-              <Table.Cell>
+              <Table.Cell onClick={() => this.goToInsightsTable('delivered')}>
                 <FinancialOverviewField
                   fields={[t('dashboard.financialOverview.delivered')]}
                   values={[data?.delivered.amount || 0]}
                   type="value"
                 />
               </Table.Cell>
-              <Table.Cell>
+              <Table.Cell onClick={() => this.goToInsightsTable('invoiced')}>
                 <FinancialOverviewField
                   fields={[t('dashboard.financialOverview.delivered'), t('dashboard.financialOverview.notDelivered')]}
                   values={[
@@ -251,28 +291,28 @@ class FinancialOverview extends React.Component<Props, State> {
             </Table.Row>
             <Table.Row>
               <Table.Cell>{t('dashboard.financialOverview.nrOfProducts')}</Table.Cell>
-              <Table.Cell>
+              <Table.Cell onClick={() => this.goToInsightsTable('suggested')}>
                 <FinancialOverviewField
                   fields={[t('dashboard.financialOverview.suggested')]}
                   values={[data?.suggested.nrOfProducts || 0]}
                   type="amount"
                 />
               </Table.Cell>
-              <Table.Cell>
+              <Table.Cell onClick={() => this.goToInsightsTable('contracted')}>
                 <FinancialOverviewField
                   fields={[t('dashboard.financialOverview.contracted')]}
                   values={[data?.contracted.nrOfProducts || 0]}
                   type="amount"
                 />
               </Table.Cell>
-              <Table.Cell>
+              <Table.Cell onClick={() => this.goToInsightsTable('delivered')}>
                 <FinancialOverviewField
                   fields={[t('dashboard.financialOverview.delivered')]}
                   values={[data?.delivered.nrOfProducts || 0]}
                   type="amount"
                 />
               </Table.Cell>
-              <Table.Cell>
+              <Table.Cell onClick={() => this.goToInsightsTable('delivered')}>
                 <FinancialOverviewField
                   fields={[t('dashboard.financialOverview.delivered'), t('dashboard.financialOverview.notDelivered')]}
                   values={[
@@ -298,4 +338,4 @@ class FinancialOverview extends React.Component<Props, State> {
   }
 }
 
-export default withTranslation()(FinancialOverview);
+export default withTranslation()(withRouter(FinancialOverview));

@@ -13,6 +13,7 @@ You can find the release notes below.
 - Added favicons for all browser and operating system types.
 - Added localization.
   - Added the Dutch language.
+- Added links to the Insights table with predefined filters to the Financial Overview dashboard table.
 
 ### Changes
 - Selectors no longer have a unnecessary description.
