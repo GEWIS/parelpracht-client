@@ -1,9 +1,9 @@
 # Change log
-The current version of ParelPracht is **v1.0.1**, released on April 23rd, 2021.
+The current version of ParelPracht is **v1.1.0**, released on August 29th, 2021.
 You can find the release notes below.
 ----------------------
 
-## v1.1.0-dev
+## v1.1.0 (29-08-2021)
 ### Added
 - Added a database validator command to the backend to validate the database and fix any issues.
 - Added column "Function" to the Contacts table with sorting and filtering by this column.
@@ -52,7 +52,7 @@ You can find the release notes below.
 - Fixed ParelPracht logo missing on loading screen.
 - Fixed trash can icon working on contracts while a contract still has one or more files.
 - Fixed several small issues with generating PDF files, like missing dots/commas for 1000's, missing euro signs and weird spaces.
-- Fixed several tables going "out of bounds" when they had too much content, namely the "Financial overview", "Expired ivnoices", and "Files" tables.
+- Fixed several tables going "out of bounds" when they had too much content, namely the "Financial overview", "Expired invoices", and "Files" tables.
 - Fixed weird formatting of long text in all entity's summaries.
 - Fixed infinite loading screen instead of a 404 page when an entity does not exist.
 - Fixed timestamps not being in the correct timezone.
