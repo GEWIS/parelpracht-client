@@ -4,14 +4,15 @@ import {
 } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
+import { withTranslation, WithTranslation } from 'react-i18next';
 import { FilesClient } from '../../clients/filesClient';
 import { Client, User } from '../../clients/server.generated';
 import { SingleEntities } from '../../stores/single/single';
-import UserAvatar from '../user/UserAvatar';
+import UserAvatar from '../entities/user/UserAvatar';
 import { RootState } from '../../stores/store';
 import { authFetchProfile } from '../../stores/auth/actionCreators';
 
-interface Props {
+interface Props extends WithTranslation {
   entity: SingleEntities;
   entityId: number;
   entityName: string;
@@ -86,7 +87,9 @@ class LogoAvatarModal extends React.Component<Props, State> {
   };
 
   public renderUserAvatar(): JSX.Element {
-    const { entityName, entityId, fileName } = this.props;
+    const {
+      entityName, entityId, fileName, t,
+    } = this.props;
     const { open } = this.state;
     const image = fileName === '' ? (
       <Button
@@ -94,12 +97,13 @@ class LogoAvatarModal extends React.Component<Props, State> {
         primary
         style={{
           marginTop: '10px',
+          whiteSpace: 'nowrap',
         }}
       >
         <Icon
           name="user circle"
         />
-        Add user avatar
+        {t('pages.user.avatar.addButton')}
       </Button>
     ) : (
       <div>
@@ -131,10 +135,7 @@ class LogoAvatarModal extends React.Component<Props, State> {
         onClick={() => this.removeImage()}
       >
         <Icon name="trash" />
-        Delete
-        {' '}
-        {entityName}
-        &#39;s avatar
+        {t('pages.user.avatar.deleteUsersAvatar', { name: entityName })}
       </Button>
     );
 
@@ -147,17 +148,13 @@ class LogoAvatarModal extends React.Component<Props, State> {
         trigger={image}
       >
         <Modal.Header>
-          {entityName}
-          &#39;s Avatar
+          {t('pages.user.avatar.modalHeader', { name: entityName })}
         </Modal.Header>
         <Modal.Content image>
           {imageModal}
           <Modal.Description>
             <h4>
-              Upload
-              {' '}
-              {entityName}
-              &#39;s Avatar
+              {t('pages.user.avatar.uploadUsersAvatar', { name: entityName })}
             </h4>
             <Input
               type="file"
@@ -169,7 +166,7 @@ class LogoAvatarModal extends React.Component<Props, State> {
         </Modal.Content>
         <Modal.Actions>
           {deleteButton}
-          <Button onClick={() => this.closeModal()}>Cancel</Button>
+          <Button onClick={() => this.closeModal()}>{t('buttons.cancel')}</Button>
         </Modal.Actions>
       </Modal>
     );
@@ -184,6 +181,7 @@ class LogoAvatarModal extends React.Component<Props, State> {
         primary
         style={{
           marginTop: '10px',
+          whiteSpace: 'nowrap',
         }}
       >
         <Icon
@@ -296,4 +294,4 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   fetchAuthProfile: () => dispatch(authFetchProfile()),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(LogoAvatarModal);
+export default withTranslation()(connect(mapStateToProps, mapDispatchToProps)(LogoAvatarModal));

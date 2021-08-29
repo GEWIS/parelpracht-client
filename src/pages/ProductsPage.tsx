@@ -3,12 +3,14 @@ import { RouteComponentProps, withRouter } from 'react-router-dom';
 import {
   Button, Container, Grid, Header, Icon, Segment,
 } from 'semantic-ui-react';
+import { useTranslation, withTranslation } from 'react-i18next';
 import { Roles } from '../clients/server.generated';
 import AuthorizationComponent from '../components/AuthorizationComponent';
-import ProductsTable from '../components/product/ProductTable';
-import ProductTableControls from '../components/product/ProductTableControls';
+import ProductsTable from '../components/entities/product/ProductTable';
+import ProductTableControls from '../components/entities/product/ProductTableControls';
 
 function ProductsPage(props: RouteComponentProps) {
+  const { t } = useTranslation();
   return (
     <AuthorizationComponent roles={[Roles.GENERAL, Roles.ADMIN]} notFound>
       <Segment style={{ backgroundColor: 'rgba(237, 237, 237, 0.98)' }} vertical basic>
@@ -18,15 +20,17 @@ function ProductsPage(props: RouteComponentProps) {
               <Header as="h1">
                 <Icon name="shopping bag" />
                 <Header.Content>
-                  <Header.Subheader>Products</Header.Subheader>
-                  All Products
+                  <Header.Subheader>
+                    {t('pages.products.header')}
+                  </Header.Subheader>
+                  {t('pages.products.subheader')}
                 </Header.Content>
               </Header>
             </Grid.Column>
             <Grid.Column>
               <Button icon labelPosition="left" primary floated="right" onClick={() => props.history.push('/product/new')}>
                 <Icon name="plus" />
-                Add Product
+                {t('pages.products.addProduct')}
               </Button>
             </Grid.Column>
           </Grid>
@@ -42,4 +46,4 @@ function ProductsPage(props: RouteComponentProps) {
   );
 }
 
-export default withRouter(ProductsPage);
+export default withTranslation()(withRouter(ProductsPage));

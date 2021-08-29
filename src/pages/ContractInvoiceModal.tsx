@@ -5,6 +5,7 @@ import {
 import { connect } from 'react-redux';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { Dispatch } from 'redux';
+import { withTranslation, WithTranslation } from 'react-i18next';
 import {
   Body, Client, Contract, InvoiceCreateParams, InvoiceStatus, InvoiceSummary,
 } from '../clients/server.generated';
@@ -14,7 +15,7 @@ import { getSummaryCollection } from '../stores/summaries/selectors';
 import { createSingle, fetchSingle } from '../stores/single/actionCreators';
 import { SingleEntities } from '../stores/single/single';
 
-interface SelfProps extends RouteComponentProps<{ contractId: string }> {
+interface SelfProps extends RouteComponentProps<{ contractId: string }>, WithTranslation {
 }
 
 interface Props extends SelfProps {
@@ -68,14 +69,13 @@ class ContractInvoiceModal extends React.Component<Props, State> {
 
   public render() {
     const {
-      invoices, contract,
+      invoices, contract, t,
     } = this.props;
-    const { loading } = this.state;
-    const { selectedInvoice } = this.state;
+    const { loading, selectedInvoice } = this.state;
     const availableInvoices = invoices.filter((i) => {
       return i.companyId === contract.companyId && i.status === InvoiceStatus.CREATED;
     });
-    const dropdownOptions = [{ key: -1, text: 'Create new invoice', value: -1 }, ...availableInvoices.map((x) => ({
+    const dropdownOptions = [{ key: -1, text: t('pages.contract.products.createNewInvoice'), value: -1 }, ...availableInvoices.map((x) => ({
       key: x.id,
       description: `F${x.id.toString()}`,
       text: x.title,
@@ -84,9 +84,13 @@ class ContractInvoiceModal extends React.Component<Props, State> {
 
     dropdownOptions.push();
 
+    const header = this.props.productInstanceIds.length === 1
+      ? t('pages.contract.products.addSingleToInvoice')
+      : t('pages.contract.products.addToInvoice', { amount: this.props.productInstanceIds.length });
+
     const dropdown = (
       <Dropdown
-        placeholder="Invoice"
+        placeholder={t('entity.invoice')}
         search
         selection
         options={dropdownOptions}
@@ -105,11 +109,7 @@ class ContractInvoiceModal extends React.Component<Props, State> {
         disabled={this.props.productInstanceIds.length === 0}
       >
         <Icon name="money bill alternate outline" />
-        Add
-        {' '}
-        {(this.props.productInstanceIds.length)}
-        {' '}
-        products to Invoice
+        {header}
       </Button>
     );
 
@@ -124,7 +124,7 @@ class ContractInvoiceModal extends React.Component<Props, State> {
         trigger={trigger}
       >
         <Modal.Header>
-          Create Invoice
+          {header}
           <Button
             icon
             labelPosition="left"
@@ -134,14 +134,14 @@ class ContractInvoiceModal extends React.Component<Props, State> {
             loading={loading}
           >
             <Icon name="save" />
-            Save
+            {t('buttons.save')}
           </Button>
           <Button
             icon
             floated="right"
             onClick={() => { this.setState({ open: false }); }}
           >
-            Cancel
+            {t('buttons.cancel')}
           </Button>
         </Modal.Header>
         <Modal.Content attached="bottom">
@@ -167,4 +167,5 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   ),
 });
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ContractInvoiceModal));
+export default withTranslation()(withRouter(connect(mapStateToProps,
+  mapDispatchToProps)(ContractInvoiceModal)));

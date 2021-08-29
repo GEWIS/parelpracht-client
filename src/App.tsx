@@ -1,7 +1,6 @@
 import React from 'react';
 import { Provider } from 'react-redux';
 import { ConnectedRouter } from 'connected-react-router';
-/* import { BrowserRouter as Router } from 'react-router-dom'; */
 import './App.scss';
 import './Form.scss';
 

@@ -5,13 +5,14 @@ import {
 } from 'semantic-ui-react';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
+import { withTranslation, WithTranslation } from 'react-i18next';
 import { Contract, ProductInstanceStatus, Roles } from '../clients/server.generated';
 import { clearSingle, fetchSingle } from '../stores/single/actionCreators';
 import { RootState } from '../stores/store';
-import ContractProps from '../components/contract/ContractProps';
+import ContractProps from '../components/entities/contract/ContractProps';
 import ResourceStatus from '../stores/resourceStatus';
-import ContractSummary from '../components/contract/ContractSummary';
-import ContractProductList from '../components/contract/ContractProductList';
+import ContractSummary from '../components/entities/contract/ContractSummary';
+import ContractProductList from '../components/entities/contract/ContractProductList';
 import { getSingle } from '../stores/single/selectors';
 import { SingleEntities } from '../stores/single/single';
 import ActivitiesList from '../components/activities/ActivitiesList';
@@ -22,8 +23,9 @@ import { TransientAlert } from '../stores/alerts/actions';
 import FilesList from '../components/files/FilesList';
 import GenerateContractModal from '../components/files/GenerateContractModal';
 import { authedUserHasRole } from '../stores/auth/selectors';
+import NotFound from './NotFound';
 
-interface Props extends RouteComponentProps<{ contractId: string }> {
+interface Props extends RouteComponentProps<{ contractId: string }>, WithTranslation {
   contract: Contract | undefined;
   status: ResourceStatus;
 
@@ -84,12 +86,12 @@ class SingleContractPage extends React.Component<Props, State> {
 
   getPanes = () => {
     const {
-      contract, fetchContract, status, hasRole,
+      contract, fetchContract, status, hasRole, t,
     } = this.props;
 
     const panes = [
       {
-        menuItem: 'Products',
+        menuItem: t('entity.productinstances'),
         render: contract ? () => (
           <Tab.Pane>
             <ContractProductList
@@ -102,7 +104,7 @@ class SingleContractPage extends React.Component<Props, State> {
 
     if (hasRole(Roles.ADMIN) || hasRole(Roles.GENERAL) || hasRole(Roles.AUDIT)) {
       panes.push({
-        menuItem: 'Activities',
+        menuItem: t('entity.activities'),
         render: contract ? () => (
           <Tab.Pane>
             <ActivitiesList
@@ -116,7 +118,7 @@ class SingleContractPage extends React.Component<Props, State> {
       });
 
       panes.push({
-        menuItem: 'Files',
+        menuItem: t('entity.files'),
         render: contract ? () => (
           <Tab.Pane>
             <FilesList
@@ -126,7 +128,7 @@ class SingleContractPage extends React.Component<Props, State> {
               fetchEntity={fetchContract}
               generateModal={(
                 <GenerateContractModal
-                  contractId={contract.id}
+                  contract={contract}
                   fetchContract={fetchContract}
                 />
               )}
@@ -141,8 +143,12 @@ class SingleContractPage extends React.Component<Props, State> {
   };
 
   public render() {
-    const { contract, status } = this.props;
+    const { contract, status, t } = this.props;
     const { paneIndex } = this.state;
+
+    if (status === ResourceStatus.NOTFOUND) {
+      return <NotFound />;
+    }
 
     if (contract === undefined) {
       return (
@@ -161,7 +167,7 @@ class SingleContractPage extends React.Component<Props, State> {
             <Breadcrumb
               icon="right angle"
               sections={[
-                { key: 'Contracts', content: <NavLink to="/contract">Contracts</NavLink> },
+                { key: 'Contracts', content: <NavLink to="/contract">{t('entity.contracts')}</NavLink> },
                 { key: 'Contract', content: `C${contract.id} ${contract.title}`, active: true },
               ]}
             />
@@ -181,7 +187,7 @@ class SingleContractPage extends React.Component<Props, State> {
                   canCancel={contract.products
                     .every((p) => p.activities
                       .find((a) => a.subType === ProductInstanceStatus.CANCELLED) !== undefined)}
-                  cancelReason="Cannot cancel this contract, because not all products are marked as cancelled."
+                  cancelReason={t('pages.contract.cancelError')}
                 />
               </Segment>
             </Grid.Row>
@@ -224,4 +230,5 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   showTransientAlert: (alert: TransientAlert) => dispatch(showTransientAlert(alert)),
 });
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(SingleContractPage));
+export default withTranslation()(withRouter(connect(mapStateToProps,
+  mapDispatchToProps)(SingleContractPage)));

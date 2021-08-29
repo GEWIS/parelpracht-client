@@ -1,21 +1,26 @@
 import { GeneralActivity } from '../components/activities/GeneralActivity';
 import { formatLastUpdate } from './timestamp';
 import {
-  ActivityType, ContractStatus, InvoiceStatus, ProductInstanceStatus,
+  ActivityType,
+  BaseActivity,
+  ContractStatus,
+  InvoiceStatus,
+  ProductInstanceStatus,
 } from '../clients/server.generated';
 import { SingleEntities } from '../stores/single/single';
 import { DocumentStatus } from '../components/activities/DocumentStatus';
+import i18n from '../localization';
 
 /**
  * Format an SingleEntity to a document string, which can be used in the activities
  */
 export function formatDocumentType(entity: SingleEntities) {
   switch (entity) {
-    case SingleEntities.Contract: return 'Contract';
-    case SingleEntities.Invoice: return 'Invoice';
-    case SingleEntities.ProductInstance: return 'Product';
-    case SingleEntities.Company: return 'Company';
-    case SingleEntities.Product: return 'Product';
+    case SingleEntities.Contract: return i18n.t('entity.contract');
+    case SingleEntities.Invoice: return i18n.t('entity.invoice');
+    case SingleEntities.ProductInstance: return i18n.t('entity.productinstance');
+    case SingleEntities.Company: return i18n.t('entity.company');
+    case SingleEntities.Product: return i18n.t('entity.product');
     default: throw new Error(`Unknown entity ${entity} to format`);
   }
 }
@@ -25,17 +30,18 @@ export function formatDocumentType(entity: SingleEntities) {
  */
 export function formatDocumentStatusTitle(
   lastActivity: GeneralActivity,
-  documentType: string,
+  documentType: SingleEntities,
 ): string {
+  const entity = formatDocumentType(documentType);
   if (lastActivity == null) {
-    return `${documentType} status`;
+    return i18n.t('activities.status.header.general', { entity });
   }
   if (lastActivity.subType === 'CANCELLED') {
-    return `${documentType} has been cancelled.`;
+    return i18n.t('activities.status.header.cancelled', { entity });
   } if (lastActivity.subType === 'IRRECOVERABLE') {
-    return `${documentType} is irrecoverable.`;
+    return i18n.t('activities.status.header.irrecoverable', { entity });
   }
-  return `${documentType} status`;
+  return i18n.t('activities.status.header.general', { entity });
 }
 
 /**
@@ -48,23 +54,23 @@ export function formatActivityType(
 ): string {
   switch (activityType) {
     case ActivityType.COMMENT:
-      return 'Comment added';
+      return i18n.t('activities.types.comment');
     case ActivityType.STATUS:
       if (subType?.toLowerCase() === 'created') {
-        return `${formatDocumentType(entity)} was created`;
+        return i18n.t('activities.types.status.created', { entity: formatDocumentType(entity) });
       }
       if (subType?.toLowerCase() === 'notdelivered') {
-        return `${formatDocumentType(entity)} was added`;
+        return i18n.t('activities.types.status.added', { entity: formatDocumentType(entity) });
       }
-      return `Status changed to ${subType?.toLowerCase()}`;
+      return i18n.t('activities.types.status.changed', { status: i18n.t(`entities.status.${subType?.toLowerCase()}`).toLowerCase() });
     case ActivityType.EDIT:
-      return `${formatDocumentType(entity)} updated`;
+      return i18n.t('activities.types.edit', { entity: formatDocumentType(entity).toLowerCase() });
     case ActivityType.REASSIGN:
-      return 'Assignment changed';
+      return i18n.t('activities.types.reassign');
     case ActivityType.ADDPRODUCT:
-      return `Products added to ${formatDocumentType(entity).toLowerCase()}`;
+      return i18n.t('activities.types.addProduct', { entity: formatDocumentType(entity).toLowerCase() });
     case ActivityType.DELPRODUCT:
-      return `Product removed from ${formatDocumentType(entity).toLowerCase()}`;
+      return i18n.t('activities.types.delProduct', { entity: formatDocumentType(entity).toLowerCase() });
     default:
       throw new Error(`Unknown activity type ${activityType}`);
   }
@@ -77,7 +83,7 @@ export function formatActivityType(
  */
 export function formatActivityDate(date: Date, userName: string): string {
   const dateString = formatLastUpdate(date);
-  return `${dateString} by ${userName}`;
+  return `${dateString} ${i18n.t('other.dateTime.by')} ${userName}`;
 }
 
 /**
@@ -89,7 +95,7 @@ export function formatActivitySummary(
   entity: SingleEntities,
 ): string {
   const activity = formatActivityType(activityType, subType, entity);
-  return `${activity} by `;
+  return `${activity} ${i18n.t('other.dateTime.by')} `;
 }
 
 /**
@@ -97,12 +103,13 @@ export function formatActivitySummary(
  */
 export function formatStatus(status: string | undefined): string {
   if (status === undefined) {
-    return 'Unknown';
+    return i18n.t('entities.status.unknown');
   }
   if (status === ProductInstanceStatus.NOTDELIVERED) {
-    return 'Not delivered';
+    return i18n.t('entities.status.notDelivered');
   }
-  return status.substring(0, 1).toUpperCase() + status.slice(1).toLowerCase();
+
+  return i18n.t(`entities.status.${status.toLowerCase()}`);
 }
 
 /**
@@ -318,11 +325,12 @@ export function getLastStatusNotCancelled(
 
 /**
  * Get the last status activity
- * @param allStatusActivities All activities where type=STATUS
+ * @param activities All activities
  */
-export function getLastStatus(allStatusActivities: GeneralActivity[]): GeneralActivity | undefined {
-  if (allStatusActivities.length > 0) {
-    return allStatusActivities[allStatusActivities.length - 1];
+export function getLastStatus<T extends BaseActivity>(activities: T[]): T | undefined {
+  const filtered = activities.filter((a) => a.type === ActivityType.STATUS);
+  if (filtered.length > 0) {
+    return filtered[filtered.length - 1];
   }
   return undefined;
 }

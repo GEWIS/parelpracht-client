@@ -1,15 +1,16 @@
 import React from 'react';
 import { Table } from 'semantic-ui-react';
 import { connect } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 import { formatPriceFull } from '../../helpers/monetary';
 import {
   ETCompany, ETContract, ETProductInstance, ProductSummary,
 } from '../../clients/server.generated';
 import { RootState } from '../../stores/store';
 import { prodInsStatus } from '../../helpers/statusses';
-import CompanyLink from '../company/CompanyLink';
-import ContractLink from '../contract/ContractLink';
-import ProductLink from '../product/ProductLink';
+import CompanyLink from '../entities/company/CompanyLink';
+import ContractLink from '../entities/contract/ContractLink';
+import ProductLink from '../entities/product/ProductLink';
 import { dateToFullFinancialYear } from '../../helpers/timestamp';
 
 interface Props {
@@ -18,6 +19,7 @@ interface Props {
 }
 
 function MegaTableRow(props: Props) {
+  const { t } = useTranslation();
   const { company, products } = props;
 
   const productMap: Record<number, string> = {};
@@ -50,7 +52,7 @@ function MegaTableRow(props: Props) {
       contract = company.contracts[contractNr];
       innerResult.push((
         <Table.Cell rowSpan={contract.products.length} key={contract.id}>
-          <ContractLink id={contract.id} showId={false} showName />
+          <ContractLink id={contract.id} showId={false} showName status={contract.subType} />
         </Table.Cell>
       ));
     }
@@ -63,7 +65,7 @@ function MegaTableRow(props: Props) {
     innerResult.push(
       <Table.Cell key={`${product.id}-3`}>
         {product.invoiceDate == null
-          ? 'Not invoiced'
+          ? t('pages.insights.notInvoiced')
           : dateToFullFinancialYear(product.invoiceDate)}
       </Table.Cell>,
     );

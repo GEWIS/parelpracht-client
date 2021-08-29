@@ -3,9 +3,12 @@ import { NavLink } from 'react-router-dom';
 import {
   Dropdown, Icon, Menu,
 } from 'semantic-ui-react';
+import { useTranslation } from 'react-i18next';
 
 function CompaniesMenu() {
   const [isOpen, changeOpen] = useState(false);
+
+  const { t } = useTranslation();
 
   return (
     <Menu.Menu>
@@ -16,17 +19,19 @@ function CompaniesMenu() {
         item
         icon={null}
         trigger={(
-          <NavLink to="/company" style={{ whiteSpace: 'nowrap' }}>
+          <NavLink to="/company" title={t('mainMenu.companies')}>
             <Icon name="building" />
-            {' '}
-            Companies
+            <span>
+              {' '}
+              {t('mainMenu.companies')}
+            </span>
           </NavLink>
         ) as any}
       >
         <Dropdown.Menu>
           <Dropdown.Item as={NavLink} to="/contact">
             <Icon name="address card" />
-            Contacts
+            {t('mainMenu.contacts')}
           </Dropdown.Item>
         </Dropdown.Menu>
       </Dropdown>

@@ -7419,8 +7419,10 @@ export class InvoiceActivity implements IInvoiceActivity {
     version!: number;
     /** Type of the activity (status or comment) */
     type!: ActivityType;
-    /** Description of this activity */
-    description!: string;
+    /** Description of this activity (English) */
+    descriptionEnglish!: string;
+    /** Description of this activity (Dutch) */
+    descriptionDutch!: string;
     createdById!: number;
     /** User who created this activity */
     createdBy!: User;
@@ -7451,7 +7453,8 @@ export class InvoiceActivity implements IInvoiceActivity {
             this.deletedAt = _data["deletedAt"] ? new Date(_data["deletedAt"].toString()) : <any>undefined;
             this.version = _data["version"];
             this.type = _data["type"];
-            this.description = _data["description"];
+            this.descriptionEnglish = _data["descriptionEnglish"];
+            this.descriptionDutch = _data["descriptionDutch"];
             this.createdById = _data["createdById"];
             this.createdBy = _data["createdBy"] ? User.fromJS(_data["createdBy"]) : new User();
             this.invoiceId = _data["invoiceId"];
@@ -7475,7 +7478,8 @@ export class InvoiceActivity implements IInvoiceActivity {
         data["deletedAt"] = this.deletedAt ? this.deletedAt.toISOString() : <any>undefined;
         data["version"] = this.version;
         data["type"] = this.type;
-        data["description"] = this.description;
+        data["descriptionEnglish"] = this.descriptionEnglish;
+        data["descriptionDutch"] = this.descriptionDutch;
         data["createdById"] = this.createdById;
         data["createdBy"] = this.createdBy ? this.createdBy.toJSON() : <any>undefined;
         data["invoiceId"] = this.invoiceId;
@@ -7498,8 +7502,10 @@ export interface IInvoiceActivity {
     version: number;
     /** Type of the activity (status or comment) */
     type: ActivityType;
-    /** Description of this activity */
-    description: string;
+    /** Description of this activity (English) */
+    descriptionEnglish: string;
+    /** Description of this activity (Dutch) */
+    descriptionDutch: string;
     createdById: number;
     /** User who created this activity */
     createdBy: User;
@@ -7521,7 +7527,7 @@ export class InvoiceFile implements IInvoiceFile {
     deletedAt?: Date;
     /** Version number of this entity */
     version!: number;
-    /** Name of the file as shown in the front-end */
+    /** Label of the file as shown in the front-end */
     name!: string;
     /** Name of the file as shown when downloaded */
     downloadName!: string;
@@ -7600,7 +7606,7 @@ export interface IInvoiceFile {
     deletedAt?: Date;
     /** Version number of this entity */
     version: number;
-    /** Name of the file as shown in the front-end */
+    /** Label of the file as shown in the front-end */
     name: string;
     /** Name of the file as shown when downloaded */
     downloadName: string;
@@ -7772,8 +7778,10 @@ export class CompanyActivity implements ICompanyActivity {
     version!: number;
     /** Type of the activity (status or comment) */
     type!: ActivityType;
-    /** Description of this activity */
-    description!: string;
+    /** Description of this activity (English) */
+    descriptionEnglish!: string;
+    /** Description of this activity (Dutch) */
+    descriptionDutch!: string;
     createdById!: number;
     /** User who created this activity */
     createdBy!: User;
@@ -7802,7 +7810,8 @@ export class CompanyActivity implements ICompanyActivity {
             this.deletedAt = _data["deletedAt"] ? new Date(_data["deletedAt"].toString()) : <any>undefined;
             this.version = _data["version"];
             this.type = _data["type"];
-            this.description = _data["description"];
+            this.descriptionEnglish = _data["descriptionEnglish"];
+            this.descriptionDutch = _data["descriptionDutch"];
             this.createdById = _data["createdById"];
             this.createdBy = _data["createdBy"] ? User.fromJS(_data["createdBy"]) : new User();
             this.companyId = _data["companyId"];
@@ -7825,7 +7834,8 @@ export class CompanyActivity implements ICompanyActivity {
         data["deletedAt"] = this.deletedAt ? this.deletedAt.toISOString() : <any>undefined;
         data["version"] = this.version;
         data["type"] = this.type;
-        data["description"] = this.description;
+        data["descriptionEnglish"] = this.descriptionEnglish;
+        data["descriptionDutch"] = this.descriptionDutch;
         data["createdById"] = this.createdById;
         data["createdBy"] = this.createdBy ? this.createdBy.toJSON() : <any>undefined;
         data["companyId"] = this.companyId;
@@ -7847,8 +7857,10 @@ export interface ICompanyActivity {
     version: number;
     /** Type of the activity (status or comment) */
     type: ActivityType;
-    /** Description of this activity */
-    description: string;
+    /** Description of this activity (English) */
+    descriptionEnglish: string;
+    /** Description of this activity (Dutch) */
+    descriptionDutch: string;
     createdById: number;
     /** User who created this activity */
     createdBy: User;
@@ -7868,7 +7880,7 @@ export class CompanyFile implements ICompanyFile {
     deletedAt?: Date;
     /** Version number of this entity */
     version!: number;
-    /** Name of the file as shown in the front-end */
+    /** Label of the file as shown in the front-end */
     name!: string;
     /** Name of the file as shown when downloaded */
     downloadName!: string;
@@ -7947,7 +7959,7 @@ export interface ICompanyFile {
     deletedAt?: Date;
     /** Version number of this entity */
     version: number;
-    /** Name of the file as shown in the front-end */
+    /** Label of the file as shown in the front-end */
     name: string;
     /** Name of the file as shown when downloaded */
     downloadName: string;
@@ -7983,8 +7995,10 @@ export class ContractActivity implements IContractActivity {
     version!: number;
     /** Type of the activity (status or comment) */
     type!: ActivityType;
-    /** Description of this activity */
-    description!: string;
+    /** Description of this activity (English) */
+    descriptionEnglish!: string;
+    /** Description of this activity (Dutch) */
+    descriptionDutch!: string;
     createdById!: number;
     /** User who created this activity */
     createdBy!: User;
@@ -8015,7 +8029,8 @@ export class ContractActivity implements IContractActivity {
             this.deletedAt = _data["deletedAt"] ? new Date(_data["deletedAt"].toString()) : <any>undefined;
             this.version = _data["version"];
             this.type = _data["type"];
-            this.description = _data["description"];
+            this.descriptionEnglish = _data["descriptionEnglish"];
+            this.descriptionDutch = _data["descriptionDutch"];
             this.createdById = _data["createdById"];
             this.createdBy = _data["createdBy"] ? User.fromJS(_data["createdBy"]) : new User();
             this.contractId = _data["contractId"];
@@ -8039,7 +8054,8 @@ export class ContractActivity implements IContractActivity {
         data["deletedAt"] = this.deletedAt ? this.deletedAt.toISOString() : <any>undefined;
         data["version"] = this.version;
         data["type"] = this.type;
-        data["description"] = this.description;
+        data["descriptionEnglish"] = this.descriptionEnglish;
+        data["descriptionDutch"] = this.descriptionDutch;
         data["createdById"] = this.createdById;
         data["createdBy"] = this.createdBy ? this.createdBy.toJSON() : <any>undefined;
         data["contractId"] = this.contractId;
@@ -8062,8 +8078,10 @@ export interface IContractActivity {
     version: number;
     /** Type of the activity (status or comment) */
     type: ActivityType;
-    /** Description of this activity */
-    description: string;
+    /** Description of this activity (English) */
+    descriptionEnglish: string;
+    /** Description of this activity (Dutch) */
+    descriptionDutch: string;
     createdById: number;
     /** User who created this activity */
     createdBy: User;
@@ -8085,7 +8103,7 @@ export class ContractFile implements IContractFile {
     deletedAt?: Date;
     /** Version number of this entity */
     version!: number;
-    /** Name of the file as shown in the front-end */
+    /** Label of the file as shown in the front-end */
     name!: string;
     /** Name of the file as shown when downloaded */
     downloadName!: string;
@@ -8164,7 +8182,7 @@ export interface IContractFile {
     deletedAt?: Date;
     /** Version number of this entity */
     version: number;
-    /** Name of the file as shown in the front-end */
+    /** Label of the file as shown in the front-end */
     name: string;
     /** Name of the file as shown when downloaded */
     downloadName: string;
@@ -8198,8 +8216,10 @@ export class ProductInstanceActivity implements IProductInstanceActivity {
     version!: number;
     /** Type of the activity (status or comment) */
     type!: ActivityType;
-    /** Description of this activity */
-    description!: string;
+    /** Description of this activity (English) */
+    descriptionEnglish!: string;
+    /** Description of this activity (Dutch) */
+    descriptionDutch!: string;
     createdById!: number;
     /** User who created this activity */
     createdBy!: User;
@@ -8230,7 +8250,8 @@ export class ProductInstanceActivity implements IProductInstanceActivity {
             this.deletedAt = _data["deletedAt"] ? new Date(_data["deletedAt"].toString()) : <any>undefined;
             this.version = _data["version"];
             this.type = _data["type"];
-            this.description = _data["description"];
+            this.descriptionEnglish = _data["descriptionEnglish"];
+            this.descriptionDutch = _data["descriptionDutch"];
             this.createdById = _data["createdById"];
             this.createdBy = _data["createdBy"] ? User.fromJS(_data["createdBy"]) : new User();
             this.productInstanceId = _data["productInstanceId"];
@@ -8254,7 +8275,8 @@ export class ProductInstanceActivity implements IProductInstanceActivity {
         data["deletedAt"] = this.deletedAt ? this.deletedAt.toISOString() : <any>undefined;
         data["version"] = this.version;
         data["type"] = this.type;
-        data["description"] = this.description;
+        data["descriptionEnglish"] = this.descriptionEnglish;
+        data["descriptionDutch"] = this.descriptionDutch;
         data["createdById"] = this.createdById;
         data["createdBy"] = this.createdBy ? this.createdBy.toJSON() : <any>undefined;
         data["productInstanceId"] = this.productInstanceId;
@@ -8277,8 +8299,10 @@ export interface IProductInstanceActivity {
     version: number;
     /** Type of the activity (status or comment) */
     type: ActivityType;
-    /** Description of this activity */
-    description: string;
+    /** Description of this activity (English) */
+    descriptionEnglish: string;
+    /** Description of this activity (Dutch) */
+    descriptionDutch: string;
     createdById: number;
     /** User who created this activity */
     createdBy: User;
@@ -8302,8 +8326,10 @@ export class ProductActivity implements IProductActivity {
     version!: number;
     /** Type of the activity (status or comment) */
     type!: ActivityType;
-    /** Description of this activity */
-    description!: string;
+    /** Description of this activity (English) */
+    descriptionEnglish!: string;
+    /** Description of this activity (Dutch) */
+    descriptionDutch!: string;
     createdById!: number;
     /** User who created this activity */
     createdBy!: User;
@@ -8332,7 +8358,8 @@ export class ProductActivity implements IProductActivity {
             this.deletedAt = _data["deletedAt"] ? new Date(_data["deletedAt"].toString()) : <any>undefined;
             this.version = _data["version"];
             this.type = _data["type"];
-            this.description = _data["description"];
+            this.descriptionEnglish = _data["descriptionEnglish"];
+            this.descriptionDutch = _data["descriptionDutch"];
             this.createdById = _data["createdById"];
             this.createdBy = _data["createdBy"] ? User.fromJS(_data["createdBy"]) : new User();
             this.productId = _data["productId"];
@@ -8355,7 +8382,8 @@ export class ProductActivity implements IProductActivity {
         data["deletedAt"] = this.deletedAt ? this.deletedAt.toISOString() : <any>undefined;
         data["version"] = this.version;
         data["type"] = this.type;
-        data["description"] = this.description;
+        data["descriptionEnglish"] = this.descriptionEnglish;
+        data["descriptionDutch"] = this.descriptionDutch;
         data["createdById"] = this.createdById;
         data["createdBy"] = this.createdBy ? this.createdBy.toJSON() : <any>undefined;
         data["productId"] = this.productId;
@@ -8377,8 +8405,10 @@ export interface IProductActivity {
     version: number;
     /** Type of the activity (status or comment) */
     type: ActivityType;
-    /** Description of this activity */
-    description: string;
+    /** Description of this activity (English) */
+    descriptionEnglish: string;
+    /** Description of this activity (Dutch) */
+    descriptionDutch: string;
     createdById: number;
     /** User who created this activity */
     createdBy: User;
@@ -8398,7 +8428,7 @@ export class ProductFile implements IProductFile {
     deletedAt?: Date;
     /** Version number of this entity */
     version!: number;
-    /** Name of the file as shown in the front-end */
+    /** Label of the file as shown in the front-end */
     name!: string;
     /** Name of the file as shown when downloaded */
     downloadName!: string;
@@ -8477,7 +8507,7 @@ export interface IProductFile {
     deletedAt?: Date;
     /** Version number of this entity */
     version: number;
-    /** Name of the file as shown in the front-end */
+    /** Label of the file as shown in the front-end */
     name: string;
     /** Name of the file as shown when downloaded */
     downloadName: string;
@@ -8496,7 +8526,7 @@ export class ProductPricing implements IProductPricing {
     /** Piece of text to be placed above the table */
     description!: string;
     /** Table parsed as a JSON object */
-    data!: string;
+    data!: string[][];
     product!: Product;
     /** Date at which this entity has been created */
     createdAt!: Date;
@@ -8516,6 +8546,7 @@ at which the entity has been deleted */
             }
         }
         if (!data) {
+            this.data = [];
             this.product = new Product();
         }
     }
@@ -8524,7 +8555,11 @@ at which the entity has been deleted */
         if (_data) {
             this.id = _data["id"];
             this.description = _data["description"];
-            this.data = _data["data"];
+            if (Array.isArray(_data["data"])) {
+                this.data = [] as any;
+                for (let item of _data["data"])
+                    this.data!.push(item);
+            }
             this.product = _data["product"] ? Product.fromJS(_data["product"]) : new Product();
             this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
             this.updatedAt = _data["updatedAt"] ? new Date(_data["updatedAt"].toString()) : <any>undefined;
@@ -8544,7 +8579,11 @@ at which the entity has been deleted */
         data = typeof data === 'object' ? data : {};
         data["id"] = this.id;
         data["description"] = this.description;
-        data["data"] = this.data;
+        if (Array.isArray(this.data)) {
+            data["data"] = [];
+            for (let item of this.data)
+                data["data"].push(item);
+        }
         data["product"] = this.product ? this.product.toJSON() : <any>undefined;
         data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
         data["updatedAt"] = this.updatedAt ? this.updatedAt.toISOString() : <any>undefined;
@@ -8559,7 +8598,7 @@ export interface IProductPricing {
     /** Piece of text to be placed above the table */
     description: string;
     /** Table parsed as a JSON object */
-    data: string;
+    data: string[][];
     product: Product;
     /** Date at which this entity has been created */
     createdAt: Date;
@@ -8784,6 +8823,7 @@ export class ProductSummary implements IProductSummary {
     nameDutch!: string;
     nameEnglish!: string;
     targetPrice!: number;
+    status!: ProductStatus;
 
     constructor(data?: IProductSummary) {
         if (data) {
@@ -8800,6 +8840,7 @@ export class ProductSummary implements IProductSummary {
             this.nameDutch = _data["nameDutch"];
             this.nameEnglish = _data["nameEnglish"];
             this.targetPrice = _data["targetPrice"];
+            this.status = _data["status"];
         }
     }
 
@@ -8816,6 +8857,7 @@ export class ProductSummary implements IProductSummary {
         data["nameDutch"] = this.nameDutch;
         data["nameEnglish"] = this.nameEnglish;
         data["targetPrice"] = this.targetPrice;
+        data["status"] = this.status;
         return data; 
     }
 }
@@ -8825,6 +8867,7 @@ export interface IProductSummary {
     nameDutch: string;
     nameEnglish: string;
     targetPrice: number;
+    status: ProductStatus;
 }
 
 export class ProductParams implements IProductParams {
@@ -8992,7 +9035,7 @@ export interface IPartial_ProductParams {
 /** Make all properties in T optional */
 export class Partial_PricingParams implements IPartial_PricingParams {
     description?: string;
-    data?: string;
+    data?: string[][];
 
     constructor(data?: IPartial_PricingParams) {
         if (data) {
@@ -9006,7 +9049,11 @@ export class Partial_PricingParams implements IPartial_PricingParams {
     init(_data?: any) {
         if (_data) {
             this.description = _data["description"];
-            this.data = _data["data"];
+            if (Array.isArray(_data["data"])) {
+                this.data = [] as any;
+                for (let item of _data["data"])
+                    this.data!.push(item);
+            }
         }
     }
 
@@ -9020,7 +9067,11 @@ export class Partial_PricingParams implements IPartial_PricingParams {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["description"] = this.description;
-        data["data"] = this.data;
+        if (Array.isArray(this.data)) {
+            data["data"] = [];
+            for (let item of this.data)
+                data["data"].push(item);
+        }
         return data; 
     }
 }
@@ -9028,7 +9079,7 @@ export class Partial_PricingParams implements IPartial_PricingParams {
 /** Make all properties in T optional */
 export interface IPartial_PricingParams {
     description?: string;
-    data?: string;
+    data?: string[][];
 }
 
 export class ProductInstanceListResponse implements IProductInstanceListResponse {
@@ -9177,7 +9228,7 @@ export class BaseFile implements IBaseFile {
     deletedAt?: Date;
     /** Version number of this entity */
     version!: number;
-    /** Name of the file as shown in the front-end */
+    /** Label of the file as shown in the front-end */
     name!: string;
     /** Name of the file as shown when downloaded */
     downloadName!: string;
@@ -9248,7 +9299,7 @@ export interface IBaseFile {
     deletedAt?: Date;
     /** Version number of this entity */
     version: number;
-    /** Name of the file as shown in the front-end */
+    /** Label of the file as shown in the front-end */
     name: string;
     /** Name of the file as shown when downloaded */
     downloadName: string;
@@ -9310,8 +9361,10 @@ export class BaseActivity implements IBaseActivity {
     version!: number;
     /** Type of the activity (status or comment) */
     type!: ActivityType;
-    /** Description of this activity */
-    description!: string;
+    /** Description of this activity (English) */
+    descriptionEnglish!: string;
+    /** Description of this activity (Dutch) */
+    descriptionDutch!: string;
     createdById!: number;
     /** User who created this activity */
     createdBy!: User;
@@ -9336,7 +9389,8 @@ export class BaseActivity implements IBaseActivity {
             this.deletedAt = _data["deletedAt"] ? new Date(_data["deletedAt"].toString()) : <any>undefined;
             this.version = _data["version"];
             this.type = _data["type"];
-            this.description = _data["description"];
+            this.descriptionEnglish = _data["descriptionEnglish"];
+            this.descriptionDutch = _data["descriptionDutch"];
             this.createdById = _data["createdById"];
             this.createdBy = _data["createdBy"] ? User.fromJS(_data["createdBy"]) : new User();
         }
@@ -9357,7 +9411,8 @@ export class BaseActivity implements IBaseActivity {
         data["deletedAt"] = this.deletedAt ? this.deletedAt.toISOString() : <any>undefined;
         data["version"] = this.version;
         data["type"] = this.type;
-        data["description"] = this.description;
+        data["descriptionEnglish"] = this.descriptionEnglish;
+        data["descriptionDutch"] = this.descriptionDutch;
         data["createdById"] = this.createdById;
         data["createdBy"] = this.createdBy ? this.createdBy.toJSON() : <any>undefined;
         return data; 
@@ -9377,8 +9432,10 @@ export interface IBaseActivity {
     version: number;
     /** Type of the activity (status or comment) */
     type: ActivityType;
-    /** Description of this activity */
-    description: string;
+    /** Description of this activity (English) */
+    descriptionEnglish: string;
+    /** Description of this activity (Dutch) */
+    descriptionDutch: string;
     createdById: number;
     /** User who created this activity */
     createdBy: User;
@@ -9669,6 +9726,7 @@ export class CompanySummary implements ICompanySummary {
     id!: number;
     name!: string;
     logoFilename!: string;
+    status!: CompanyStatus;
 
     constructor(data?: ICompanySummary) {
         if (data) {
@@ -9684,6 +9742,7 @@ export class CompanySummary implements ICompanySummary {
             this.id = _data["id"];
             this.name = _data["name"];
             this.logoFilename = _data["logoFilename"];
+            this.status = _data["status"];
         }
     }
 
@@ -9699,6 +9758,7 @@ export class CompanySummary implements ICompanySummary {
         data["id"] = this.id;
         data["name"] = this.name;
         data["logoFilename"] = this.logoFilename;
+        data["status"] = this.status;
         return data; 
     }
 }
@@ -9707,6 +9767,7 @@ export interface ICompanySummary {
     id: number;
     name: string;
     logoFilename: string;
+    status: CompanyStatus;
 }
 
 export class ETProductInstance implements IETProductInstance {
@@ -9715,8 +9776,6 @@ export class ETProductInstance implements IETProductInstance {
     details?: string;
     basePrice!: number;
     discount!: number;
-    createdAt!: Date;
-    updatedAt!: Date;
     subType!: ProductInstanceStatus;
     invoiceDate?: Date;
 
@@ -9736,8 +9795,6 @@ export class ETProductInstance implements IETProductInstance {
             this.details = _data["details"];
             this.basePrice = _data["basePrice"];
             this.discount = _data["discount"];
-            this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
-            this.updatedAt = _data["updatedAt"] ? new Date(_data["updatedAt"].toString()) : <any>undefined;
             this.subType = _data["subType"];
             this.invoiceDate = _data["invoiceDate"] ? new Date(_data["invoiceDate"].toString()) : <any>undefined;
         }
@@ -9757,8 +9814,6 @@ export class ETProductInstance implements IETProductInstance {
         data["details"] = this.details;
         data["basePrice"] = this.basePrice;
         data["discount"] = this.discount;
-        data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
-        data["updatedAt"] = this.updatedAt ? this.updatedAt.toISOString() : <any>undefined;
         data["subType"] = this.subType;
         data["invoiceDate"] = this.invoiceDate ? this.invoiceDate.toISOString() : <any>undefined;
         return data; 
@@ -9771,8 +9826,6 @@ export interface IETProductInstance {
     details?: string;
     basePrice: number;
     discount: number;
-    createdAt: Date;
-    updatedAt: Date;
     subType: ProductInstanceStatus;
     invoiceDate?: Date;
 }
@@ -9780,6 +9833,7 @@ export interface IETProductInstance {
 export class ETContract implements IETContract {
     id!: number;
     title!: string;
+    subType!: ContractStatus;
     products!: ETProductInstance[];
 
     constructor(data?: IETContract) {
@@ -9798,6 +9852,7 @@ export class ETContract implements IETContract {
         if (_data) {
             this.id = _data["id"];
             this.title = _data["title"];
+            this.subType = _data["subType"];
             if (Array.isArray(_data["products"])) {
                 this.products = [] as any;
                 for (let item of _data["products"])
@@ -9817,6 +9872,7 @@ export class ETContract implements IETContract {
         data = typeof data === 'object' ? data : {};
         data["id"] = this.id;
         data["title"] = this.title;
+        data["subType"] = this.subType;
         if (Array.isArray(this.products)) {
             data["products"] = [];
             for (let item of this.products)
@@ -9829,6 +9885,7 @@ export class ETContract implements IETContract {
 export interface IETContract {
     id: number;
     title: string;
+    subType: ContractStatus;
     products: ETProductInstance[];
 }
 
@@ -10675,7 +10732,7 @@ export enum ReturnFileType {
 }
 
 export class GenerateContractParams implements IGenerateContractParams {
-    name!: string;
+    name?: string;
     language!: Language;
     contentType!: ContractType;
     fileType!: ReturnFileType;
@@ -10683,6 +10740,7 @@ export class GenerateContractParams implements IGenerateContractParams {
     saveToDisk!: boolean;
     signee1Id!: number;
     signee2Id!: number;
+    recipientId!: number;
 
     constructor(data?: IGenerateContractParams) {
         if (data) {
@@ -10703,6 +10761,7 @@ export class GenerateContractParams implements IGenerateContractParams {
             this.saveToDisk = _data["saveToDisk"];
             this.signee1Id = _data["signee1Id"];
             this.signee2Id = _data["signee2Id"];
+            this.recipientId = _data["recipientId"];
         }
     }
 
@@ -10723,12 +10782,13 @@ export class GenerateContractParams implements IGenerateContractParams {
         data["saveToDisk"] = this.saveToDisk;
         data["signee1Id"] = this.signee1Id;
         data["signee2Id"] = this.signee2Id;
+        data["recipientId"] = this.recipientId;
         return data; 
     }
 }
 
 export interface IGenerateContractParams {
-    name: string;
+    name?: string;
     language: Language;
     contentType: ContractType;
     fileType: ReturnFileType;
@@ -10736,6 +10796,7 @@ export interface IGenerateContractParams {
     saveToDisk: boolean;
     signee1Id: number;
     signee2Id: number;
+    recipientId: number;
 }
 
 export class ContractStatusParams implements IContractStatusParams {
@@ -11079,7 +11140,7 @@ export interface IPartial_InvoiceParams {
 }
 
 export class GenerateInvoiceParams implements IGenerateInvoiceParams {
-    name!: string;
+    name?: string;
     language!: Language;
     fileType!: ReturnFileType;
     showDiscountPercentages!: boolean;
@@ -11126,7 +11187,7 @@ export class GenerateInvoiceParams implements IGenerateInvoiceParams {
 }
 
 export interface IGenerateInvoiceParams {
-    name: string;
+    name?: string;
     language: Language;
     fileType: ReturnFileType;
     showDiscountPercentages: boolean;
@@ -11138,9 +11199,9 @@ export class CustomRecipient implements ICustomRecipient {
     name!: string;
     gender!: Gender;
     organizationName?: string;
-    street!: string;
-    postalCode!: string;
-    city!: string;
+    street?: string;
+    postalCode?: string;
+    city?: string;
     country?: string;
 
     constructor(data?: ICustomRecipient) {
@@ -11188,9 +11249,9 @@ export interface ICustomRecipient {
     name: string;
     gender: Gender;
     organizationName?: string;
-    street: string;
-    postalCode: string;
-    city: string;
+    street?: string;
+    postalCode?: string;
+    city?: string;
     country?: string;
 }
 
@@ -11411,6 +11472,7 @@ export class ContactSummary implements IContactSummary {
     lastNamePreposition!: string;
     lastName!: string;
     companyId!: number;
+    function!: ContactFunction;
 
     constructor(data?: IContactSummary) {
         if (data) {
@@ -11428,6 +11490,7 @@ export class ContactSummary implements IContactSummary {
             this.lastNamePreposition = _data["lastNamePreposition"];
             this.lastName = _data["lastName"];
             this.companyId = _data["companyId"];
+            this.function = _data["function"];
         }
     }
 
@@ -11445,6 +11508,7 @@ export class ContactSummary implements IContactSummary {
         data["lastNamePreposition"] = this.lastNamePreposition;
         data["lastName"] = this.lastName;
         data["companyId"] = this.companyId;
+        data["function"] = this.function;
         return data; 
     }
 }
@@ -11455,11 +11519,12 @@ export interface IContactSummary {
     lastNamePreposition: string;
     lastName: string;
     companyId: number;
+    function: ContactFunction;
 }
 
 export class ContactParams implements IContactParams {
     gender!: Gender;
-    firstName!: string;
+    firstName?: string;
     lastNamePreposition?: string;
     lastName!: string;
     email!: string;
@@ -11515,7 +11580,7 @@ export class ContactParams implements IContactParams {
 
 export interface IContactParams {
     gender: Gender;
-    firstName: string;
+    firstName?: string;
     lastNamePreposition?: string;
     lastName: string;
     email: string;

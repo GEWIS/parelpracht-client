@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { ExpiredInvoice } from '../../clients/server.generated';
 import { formatPriceFull } from '../../helpers/monetary';
 import { RootState } from '../../stores/store';
-import { formatTimestampToDate } from '../../helpers/timestamp';
+import { formatTimestampToDate, formatTimestampToDateShort } from '../../helpers/timestamp';
 import { getCompanyName } from '../../stores/company/selectors';
 import { getUserFirstName } from '../../stores/user/selectors';
 
@@ -26,24 +26,26 @@ function DashboardInvoicesRow(props: Props) {
       error={invoice.assignedToId === currentUserId}
     >
       <Table.Cell>
-        <NavLink to={`/invoice/${invoice.id}`}>
+        <NavLink to={`/invoice/${invoice.id}`} title={`F${invoice.id} (${company})`}>
           F
           {invoice.id}
         </NavLink>
       </Table.Cell>
       <Table.Cell>
-        <NavLink to={`/company/${invoice.companyId}`}>
+        <NavLink to={`/company/${invoice.companyId}`} title={company}>
           {company}
         </NavLink>
       </Table.Cell>
       <Table.Cell>
-        {formatTimestampToDate(invoice.startDate)}
+        <span title={formatTimestampToDate(invoice.startDate)}>
+          {formatTimestampToDateShort(invoice.startDate)}
+        </span>
       </Table.Cell>
       <Table.Cell>
         {formatPriceFull(invoice.value)}
       </Table.Cell>
       <Table.Cell>
-        {assignedTo}
+        <span title={assignedTo}>{assignedTo}</span>
       </Table.Cell>
     </Table.Row>
   );

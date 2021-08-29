@@ -2,6 +2,7 @@ import {
   call, put, select, throttle,
 } from 'redux-saga/effects';
 import {
+  ApiException,
   CategoryListResponse,
   CategoryParams,
   CategorySummary,
@@ -13,7 +14,9 @@ import {
   SortDirection,
 } from '../../clients/server.generated';
 import { takeEveryWithErrorHandling } from '../errorHandling';
-import { clearSingle, errorSingle, setSingle } from '../single/actionCreators';
+import {
+  clearSingle, errorSingle, notFoundSingle, setSingle,
+} from '../single/actionCreators';
 import {
   singleActionPattern,
   SingleActionType,
@@ -35,10 +38,10 @@ import { Tables } from '../tables/tables';
 import { TableState } from '../tables/tableState';
 
 function toSummary(category: ProductCategory): CategorySummary {
-  return {
+  return new CategorySummary({
     id: category.id,
     name: category.name,
-  } as CategorySummary;
+  });
 }
 
 function* fetchProductCategories() {
@@ -99,6 +102,16 @@ function* fetchSingleProductCategory(action: SingleFetchAction<SingleEntities.Pr
   const productCategory: ProductCategory = yield call([client, client.getCategory], action.id);
   yield put(setSingle(SingleEntities.ProductCategory, productCategory));
   yield put(updateSummary(SummaryCollections.ProductCategories, toSummary(productCategory)));
+}
+
+function* errorFetchSingleProductCategory(
+  error: ApiException,
+) {
+  if (error.status === 404) {
+    yield put(notFoundSingle(SingleEntities.ProductCategory));
+  } else {
+    yield put(errorSingle(SingleEntities.ProductCategory));
+  }
 }
 
 function* saveSingleProductCategory(
@@ -186,6 +199,7 @@ export default [
     yield takeEveryWithErrorHandling(
       singleActionPattern(SingleEntities.ProductCategory, SingleActionType.Fetch),
       fetchSingleProductCategory,
+      { onErrorSaga: errorFetchSingleProductCategory },
     );
   },
   watchSaveSingleProductCategory,

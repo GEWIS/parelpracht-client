@@ -4,15 +4,15 @@ import {
   Checkbox,
   Dropdown, Form, Icon, Input, Modal, Segment,
 } from 'semantic-ui-react';
-import validator from 'validator';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 import {
   Language, ReturnFileType, GenerateInvoiceParams, Invoice,
 } from '../../clients/server.generated';
 import AlertContainer from '../alerts/AlertContainer';
 import { FilesClient } from '../../clients/filesClient';
-import ContactSelector from '../contact/ContactSelector';
+import ContactSelector from '../entities/contact/ContactSelector';
 import { TransientAlert } from '../../stores/alerts/actions';
 import { showTransientAlert } from '../../stores/alerts/actionCreators';
 
@@ -23,6 +23,8 @@ interface Props {
 }
 
 function GenerateContract(props: Props) {
+  const { t } = useTranslation();
+
   const [isOpen, setOpen] = useState(false);
   const [name, changeName] = useState('');
   const [language, changeLanguage] = useState(Language.DUTCH);
@@ -51,7 +53,7 @@ function GenerateContract(props: Props) {
     } else {
       props.showTransientAlert({
         title: 'Error',
-        message: 'Could not generate an invoice file. Please consulate the back-end logs.',
+        message: t('files.generate.error', { entity: t('entity.invoice').toLowerCase() }),
         type: 'error',
       });
     }
@@ -75,14 +77,14 @@ function GenerateContract(props: Props) {
           basic
         >
           <Icon name="plus" />
-          Generate File
+          {t('files.generate.header')}
         </Button>
       )}
     >
       <Segment attached="bottom">
         <AlertContainer />
         <h2>
-          Generate file
+          {t('files.generate.header')}
           <Button
             onClick={save}
             floated="right"
@@ -90,41 +92,39 @@ function GenerateContract(props: Props) {
             color="green"
             icon
             labelPosition="left"
-            disabled={validator.isEmpty(name) || recipientId === 0}
+            disabled={recipientId === 0}
           >
             <Icon name="download" />
-            Generate
+            {t('files.generate.generateButton')}
           </Button>
           <Button
             icon
             floated="right"
             onClick={() => setOpen(false)}
           >
-            Cancel
+            {t('buttons.cancel')}
           </Button>
         </h2>
         <Form style={{ marginTop: '2em' }}>
           <Form.Group widths="equal">
             <Form.Field required>
               {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-              <label htmlFor="form-contact-selector">Recipient</label>
+              <label htmlFor="form-contact-selector">{t('files.generate.recipient')}</label>
               <ContactSelector
                 id="form-contact-selector"
                 disabled={false}
                 companyId={props.invoice.companyId}
                 value={recipientId}
                 onChange={(id: number) => changeRecipient(id)}
-                placeholder="Recipient"
+                placeholder={t('files.generate.recipient')}
               />
             </Form.Field>
             <Form.Field
-              label="Comment"
+              label={t('files.generate.label')}
               control={Input}
               value={name}
               onChange={(e: ChangeEvent<HTMLInputElement>) => changeName(e.target.value)}
               fluid
-              required
-              error={validator.isEmpty(name)}
             />
           </Form.Group>
           <Form.Group widths="equal">
@@ -132,11 +132,11 @@ function GenerateContract(props: Props) {
               required
             >
               {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-              <label htmlFor="form-input-File-Type">File Type</label>
+              <label htmlFor="form-input-File-Type">{t('files.generate.fileType')}</label>
               <Dropdown
                 id="form-input-File-Type"
                 selection
-                placeholder="File Type"
+                placeholder={t('files.generate.fileType')}
                 value={fileType}
                 options={[
                   { key: 0, text: 'PDF', value: ReturnFileType.PDF },
@@ -150,15 +150,15 @@ function GenerateContract(props: Props) {
               required
             >
               {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-              <label htmlFor="form-input-language">Language</label>
+              <label htmlFor="form-input-language">{t('language.header')}</label>
               <Dropdown
                 id="form-input-language"
                 selection
                 placeholder="Language"
                 value={language}
                 options={[
-                  { key: 0, text: 'Dutch', value: Language.DUTCH },
-                  { key: 1, text: 'English', value: Language.ENGLISH },
+                  { key: 0, text: t('language.dutch'), value: Language.DUTCH },
+                  { key: 1, text: t('language.english'), value: Language.ENGLISH },
                 ]}
                 onChange={(e, data) => changeLanguage(data.value as Language)}
                 fluid
@@ -168,7 +168,7 @@ function GenerateContract(props: Props) {
           <Form.Group>
             <Form.Field>
               {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-              <label htmlFor="form-input-Discount">Show Discount</label>
+              <label htmlFor="form-input-Discount">{t('files.generate.showDiscount')}</label>
               <Checkbox
                 toggle
                 id="form-input-Discount"
@@ -178,7 +178,7 @@ function GenerateContract(props: Props) {
             </Form.Field>
             <Form.Field>
               {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-              <label htmlFor="form-input-SaveToDisk">Save To Disk</label>
+              <label htmlFor="form-input-SaveToDisk">{t('files.generate.saveToDisk')}</label>
               <Checkbox
                 id="form-input-SaveToDisk"
                 toggle

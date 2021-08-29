@@ -3,12 +3,14 @@ import { RouteComponentProps, withRouter } from 'react-router-dom';
 import {
   Button, Container, Grid, Header, Icon, Segment,
 } from 'semantic-ui-react';
+import { useTranslation } from 'react-i18next';
 import { Roles } from '../clients/server.generated';
 import AuthorizationComponent from '../components/AuthorizationComponent';
-import ContractsTable from '../components/contract/ContractTable';
-import ContractTableControls from '../components/contract/ContractTableControls';
+import ContractsTable from '../components/entities/contract/ContractTable';
+import ContractTableControls from '../components/entities/contract/ContractTableControls';
 
 function ContractsPage(props: RouteComponentProps) {
+  const { t } = useTranslation();
   return (
     <AuthorizationComponent
       roles={[Roles.SIGNEE, Roles.GENERAL, Roles.FINANCIAL, Roles.AUDIT, Roles.AUDIT]}
@@ -21,8 +23,8 @@ function ContractsPage(props: RouteComponentProps) {
               <Header as="h1">
                 <Icon name="shopping bag" />
                 <Header.Content>
-                  <Header.Subheader>Contracts</Header.Subheader>
-                  All Contracts
+                  <Header.Subheader>{t('entity.contracts')}</Header.Subheader>
+                  {t('pages.contracts.allContracts')}
                 </Header.Content>
               </Header>
             </Grid.Column>
@@ -30,7 +32,7 @@ function ContractsPage(props: RouteComponentProps) {
               <AuthorizationComponent roles={[Roles.GENERAL, Roles.ADMIN]} notFound={false}>
                 <Button icon labelPosition="left" primary floated="right" onClick={() => props.history.push('/contract/new')}>
                   <Icon name="plus" />
-                  Add Contract
+                  {t('pages.contracts.addContract')}
                 </Button>
               </AuthorizationComponent>
             </Grid.Column>

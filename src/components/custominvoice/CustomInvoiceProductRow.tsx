@@ -1,6 +1,7 @@
 import React, { ChangeEvent, useState } from 'react';
 import { Button, Input, Table } from 'semantic-ui-react';
 import validator from 'validator';
+import { useTranslation } from 'react-i18next';
 import { CustomProduct } from '../../clients/server.generated';
 import { formatPriceFull } from '../../helpers/monetary';
 
@@ -14,6 +15,8 @@ interface Props {
 }
 
 function CustomInvoiceProductRow(props: Props) {
+  const { t } = useTranslation();
+
   const [pricePerOne, changePricePerOne] = useState('0.00');
 
   // @ts-ignore
@@ -21,7 +24,7 @@ function CustomInvoiceProductRow(props: Props) {
     <Table.Row>
       <Table.Cell>
         <Input
-          placeholder="Name"
+          placeholder={t('pages.customInvoice.products.name')}
           value={props.product.name}
           onChange={(e: ChangeEvent<HTMLInputElement>) => {
             props.updateProduct(props.id, 'name', e.target.value);
@@ -32,10 +35,10 @@ function CustomInvoiceProductRow(props: Props) {
       </Table.Cell>
       <Table.Cell width="4">
         <Input
-          placeholder="Price"
+          placeholder={t('pages.customInvoice.products.price')}
           value={pricePerOne}
           onChange={(e: ChangeEvent<HTMLInputElement>) => {
-            props.updateProduct(props.id, 'pricePerOne', parseFloat(e.target.value) * 100);
+            props.updateProduct(props.id, 'pricePerOne', parseFloat(e.target.value.replace(',', '.')) * 100);
             changePricePerOne(e.target.value);
           }}
           error={props.product.pricePerOne === 0}
@@ -46,7 +49,7 @@ function CustomInvoiceProductRow(props: Props) {
       </Table.Cell>
       <Table.Cell width="3">
         <Input
-          placeholder="Amount"
+          placeholder={t('pages.customInvoice.products.amount')}
           value={props.product.amount}
           onChange={(e: ChangeEvent<HTMLInputElement>) => {
             props.updateProduct(props.id, 'amount', e.target.value);
@@ -65,6 +68,7 @@ function CustomInvoiceProductRow(props: Props) {
           icon="trash"
           size="tiny"
           onClick={() => props.removeProduct(props.id)}
+          title={t('pages.customInvoice.products.deleteButton')}
         />
       </Table.Cell>
     </Table.Row>

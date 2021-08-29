@@ -7,18 +7,15 @@ import { getSummary } from '../summaries/selectors';
 import { SummaryCollections } from '../summaries/summaries';
 import { getTable } from '../tables/selectors';
 import { Tables } from '../tables/tables';
+import i18n from '../../localization';
 
 export function sortColumn(state: RootState): string {
   const column = getTable<User>(state, Tables.Users).sortColumn;
   switch (column) {
-    case 'id': return 'ID';
-    case 'firstName': return 'First Name';
-    case 'lastNamePreposition': return 'Middle Name';
-    case 'lastName': return 'Last Name';
-    case 'gender': return 'Gender';
-    case 'email': return 'E-mail';
-    case 'comment': return 'Comment';
-    default: return 'unknown';
+    case 'id': return i18n.t('entities.generalProps.ID');
+    case 'firstName': return i18n.t('entities.user.props.firstName').toLowerCase();
+    case 'email': return i18n.t('entities.user.props.personalEmail').toLowerCase();
+    default: return i18n.t('entities.generalProps.unknown').toLowerCase();
   }
 }
 

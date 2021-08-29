@@ -1,7 +1,8 @@
 import * as React from 'react';
+import { withTranslation, WithTranslation } from 'react-i18next';
 import { Button, Input, Table } from 'semantic-ui-react';
 
-interface Props {
+interface Props extends WithTranslation {
   pricing: string[];
   header: boolean;
   editing: boolean;
@@ -26,7 +27,7 @@ class PricingRow extends React.Component<Props, State> {
 
   render() {
     const {
-      pricing, header, editing, row, updateField, removeRow,
+      pricing, header, editing, row, updateField, removeRow, t,
     } = this.props;
 
     if (!editing) {
@@ -49,7 +50,7 @@ class PricingRow extends React.Component<Props, State> {
                   fluid
                   onChange={(e) => updateField(row, i, e.target.value)}
                   value={p}
-                  placeholder="Header"
+                  placeholder={t('entities.product.insights.placeholderHeader')}
                 />
               </Table.HeaderCell>
             );
@@ -60,7 +61,7 @@ class PricingRow extends React.Component<Props, State> {
                 fluid
                 onChange={(e) => updateField(row, i, e.target.value)}
                 value={p}
-                placeholder="Value"
+                placeholder={t('entities.product.insights.placeholderValue')}
               />
             </Table.Cell>
           );
@@ -80,4 +81,4 @@ class PricingRow extends React.Component<Props, State> {
   }
 }
 
-export default PricingRow;
+export default withTranslation()(PricingRow);

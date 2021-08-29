@@ -54,6 +54,11 @@ const createSingleReducer = <S extends SingleEntities, R, RSave, RCreate>(
           ...state,
           status: ResourceStatus.ERROR,
         };
+      case SingleActionType.NotFound:
+        return {
+          ...state,
+          status: ResourceStatus.NOTFOUND,
+        };
 
       case SingleActionType.Clear:
         return {

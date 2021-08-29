@@ -1,0 +1,546 @@
+{
+  "Welcome to React": "Welcome to React and react-i18next",
+  "activities": {
+    "button": {
+      "details": "Comment details",
+      "postComment": "Post comment",
+      "writeComment": "Write comment"
+    },
+    "newComment": "Write a new comment...",
+    "status": {
+      "cancel": "Cancel {{entity}}",
+      "cancelContractDescription": "By cancelling this contract, you indicate that the contract will not be delivered. Note that other products from the contract might still be delivered and invoiced.  Only cancel a contract in consultation with the External Affairs Officer.",
+      "cancelInvoiceDescription": "By cancelling an invoice, you indicate that the invoice or any of the products on this invoice will not be sent to the company. Please only cancel an invoice after consultation with the External Affairs Officer and the Treasurer.",
+      "cancelProductInstanceDescription": "By cancelling a product, you indicate that it will never be delivered. Only cancel a product after consulting the External Affaris Officer.",
+      "defer": "Defer {{entity}}",
+      "deferDescription": "By defering this {{entity}}, you indicate that it will not be delivered in the current academic year and that delivery will be postponed until the next academic year.",
+      "header": {
+        "cancelled": "{{entity}} has been cancelled",
+        "general": "{{entity}} status",
+        "irrecoverable": "{{entity}} is irrecoverable"
+      },
+      "irrecoverable": "Mark irrecoveable",
+      "irrecoverableDescription": "By marking this invoice irrecoverable, you indicate that the money owed from this invoice can not be collected. Either the invoice is no longer valid (i.e. it was created more than 5 years ago) or the responsible party indicated to not pay the invoice. Note that this is different from cancelling an invoice, in which the contracted products can still be invoiced on another invoice."
+    },
+    "types": {
+      "addProduct": "Products added to {{entity}}",
+      "comment": "Comment added",
+      "delProduct": "Product removed from {{entity}}",
+      "edit": "{{entity}} updated",
+      "reassign": "Assignment changed",
+      "status": {
+        "added": "{{entity}} was added",
+        "changed": "Status changed to {{status}}",
+        "created": "{{entity}} was created"
+      }
+    }
+  },
+  "buttons": {
+    "cancel": "Cancel",
+    "delete": {
+      "confirm": "Are you sure you want to delete this?",
+      "errorCompany": "You cannot delete this company, because it still has contracts, invoices and/or contacts.",
+      "errorContact": "You cannot delete this contact, because it still has contracts.",
+      "errorContract": "You cannot delete this contract, because it has a different status than \"Created\" or still has products or files attached to it.",
+      "errorInvoice": "You cannot delete this invoice, because it has a different status than \"Created\" or still has products or files attached to it.",
+      "errorInvoiceProduct": "You cannot delete this product, because this invoice has already been sent or paid.",
+      "errorProduct": "You cannot delete this product, because it is still has files attached to it or is still used in contracts and/or invoices.",
+      "errorProductCategory": "You cannot delete this product category, because it is still used by one or more products.",
+      "errorProductInstance": "You cannot delete this product, because it is still on an invoice, is delivered/cancelled/deferred, or its contract is already sent or proposed.",
+      "errorUser": "You cannot delete this user, because this user still has active roles.",
+      "header": "Delete {{entity}}",
+      "short": "Delete"
+    },
+    "edit": "Edit",
+    "files": {
+      "cancel": "Cancel upload",
+      "delete": "Delete file",
+      "download": "Download file",
+      "edit": "Edit file",
+      "save": "Save file",
+      "upload": "Upload files"
+    },
+    "save": "Save"
+  },
+  "dashboard": {
+    "categoryLinechart": {
+      "header": "Contracted products"
+    },
+    "expiredInvoices": {
+      "header": "Expired invoices"
+    },
+    "financialOverview": {
+      "contracted": "Contracted",
+      "contractedShort": "Contracted",
+      "delivered": "Delivered",
+      "description": {
+        "contracted": "The total value of all delivered and not-delivered products on confirmed contracts. Note that products that are already invoiced in a previous financial year or products that are deferred to next financial year, are not included here.",
+        "delivered": "The total value of delivered products on confirmed contracts in the current financial year.",
+        "invoiced": "The total value of all products invoiced in the current financial year.",
+        "paid": "The total value of all paid invoices in the current financial year.",
+        "suggested": "The total value of all contracts that have not been confirmed by a company, aka the value of all contracts with status \"Created\", \"Proposed\" or \"Sent\"."
+      },
+      "header": "Financial Overview",
+      "invoiced": "Invoiced",
+      "notDelivered": "Not delivered",
+      "nrOfProducts": "# Products",
+      "paid": "Paid",
+      "suggested": "Suggested",
+      "value": "Value"
+    },
+    "recentContracts": {
+      "allContracts": "All contracts...",
+      "header": "Recent contracts"
+    },
+    "welcome": "Welcome back,"
+  },
+  "entities": {
+    "category": {
+      "addCategory": "Add category",
+      "header": "All categories",
+      "newCategory": "New product category",
+      "noProduct": "This category has no products.",
+      "props": {
+        "name": "Name"
+      }
+    },
+    "company": {
+      "header": "All companies",
+      "newCompany": "New company",
+      "props": {
+        "addressInformation": "Address information",
+        "city": "City",
+        "country": "Country",
+        "description": "Description",
+        "details": "Details",
+        "invoiceAddress": "Invoice address",
+        "name": "Name",
+        "number": "Telephone number",
+        "postalCode": "Postal code",
+        "street": "Street and number"
+      }
+    },
+    "contact": {
+      "header": "All contacts",
+      "newContact": "New contact",
+      "props": {
+        "comments": "Comments",
+        "email": "Email address",
+        "firstName": "First name",
+        "function": {
+          "extensive": "{{function}} contact",
+          "financial": "Financial",
+          "header": "Function",
+          "normal": "Normal",
+          "old": "Old",
+          "primary": "Primary",
+          "unknown": "Unknown"
+        },
+        "gender": {
+          "female": "Female",
+          "gender": "Gender",
+          "male": "Male",
+          "unknown": "Unknown"
+        },
+        "lastName": "Last name",
+        "middleName": "Middle name",
+        "name": "Name",
+        "number": "Telephone number"
+      }
+    },
+    "contract": {
+      "props": {
+        "title": "Title",
+        "totalValue": "Total value"
+      }
+    },
+    "details": "Details",
+    "generalProps": {
+      "ID": "ID",
+      "amount": "Amount",
+      "assignedTo": "Assigned to",
+      "comments": "Comments",
+      "commentsDescription": "Internal comments",
+      "createdBy": "Created by",
+      "lastUpdate": "Last update",
+      "status": "Status",
+      "unknown": "Unknown"
+    },
+    "graph": {
+      "label": {
+        "amount": "Amount",
+        "value": "Value (€)"
+      },
+      "month": {
+        "apr": "April",
+        "aug": "August",
+        "dec": "December",
+        "feb": "February",
+        "jan": "January",
+        "jul": "July",
+        "jun": "June",
+        "maa": "March",
+        "mei": "May",
+        "nov": "November",
+        "okt": "October",
+        "sep": "September"
+      },
+      "target": {
+        "maximum": "Maximum target",
+        "minimum": "Minimum target"
+      }
+    },
+    "invoice": {
+      "props": {
+        "financialYear": "Financial Year",
+        "invoiceDate": "Invoice date",
+        "poNumber": "PO Number",
+        "title": "Title",
+        "totalValue": "Total value"
+      }
+    },
+    "product": {
+      "contractedProducts": "Contracted products",
+      "insights": {
+        "addColumn": "Add column",
+        "addDescription": "Add a description",
+        "addRow": "Add row",
+        "header": "Pricing information",
+        "placeholderHeader": "Header",
+        "placeholderValue": "Value"
+      },
+      "noActivities": "There are no activities logged yet.",
+      "noContract": "There are no contracts created yet.",
+      "noFiles": "There are no files uploaded yet.",
+      "noInvoice": "There are no invoices yet.",
+      "props": {
+        "category": "Product category",
+        "comments": "Comments (internal)",
+        "contractTextEn": "Contract text (English)",
+        "contractTextNl": "Contract text (Dutch)",
+        "customPrice": "Custom pricing",
+        "customPriceButton": "Add pricing",
+        "header": "New product",
+        "maxTarget": "Maximum target",
+        "minTarget": "Minimum target",
+        "name": "Name",
+        "nameEn": "Title (English)",
+        "nameNl": "Title (Dutch)",
+        "price": "Target price",
+        "specsEn": "Delivery specifications (English)",
+        "specsNl": "Delivery specifications (Dutch)",
+        "status": {
+          "active": "Inactief",
+          "header": "Status",
+          "inactive": "Inactive"
+        }
+      },
+      "warningFinancialYear": "* Note that these years are the financial years so 2021 means the association year 2020-2021."
+    },
+    "productInstance": {
+      "newProduct": "New Product",
+      "props": {
+        "basePrice": "Base price",
+        "details": "Details",
+        "discount": "Discount",
+        "invoiced": "Invoiced",
+        "price": "Price",
+        "realPrice": "Real price"
+      }
+    },
+    "status": {
+      "active": "Active",
+      "cancelled": "Cancelled",
+      "confirmed": "Confirmed",
+      "created": "Created",
+      "deferred": "Deferred",
+      "delivered": "Delivered",
+      "finished": "Finished",
+      "inactive": "Inactive",
+      "irrecoverable": "Irrecoverable",
+      "notDelivered": "Not delivered",
+      "paid": "Paid",
+      "proposed": "Proposed",
+      "sent": "Sent",
+      "unknown": "Unknown"
+    },
+    "user": {
+      "props": {
+        "allMailToReplyTo": "I want to receive all emails on my reply-to email address",
+        "comments": "Comments",
+        "firstName": "First Name",
+        "function": "Function",
+        "functionDescription": "Appears under your name on contracts.",
+        "gender": {
+          "female": "Female",
+          "header": "Gender",
+          "male": "Male",
+          "other": "Other",
+          "unknown": "Unknown"
+        },
+        "lastName": "Last Name",
+        "mailOnInvoice": "I want to receive an email each time an invoice is sent",
+        "name": "Name",
+        "personalEmail": "Personal email address",
+        "preposition": "Preposition",
+        "replyToEmail": "Reply-to email address",
+        "roles": {
+          "admin": "Admin",
+          "audit": "Audit",
+          "financial": "Financial",
+          "general": "General",
+          "signee": "Signee"
+        }
+      }
+    }
+  },
+  "entity": {
+    "activities": "Activities",
+    "categories": "Product categories",
+    "category": "Category",
+    "companies": "Companies",
+    "company": "Company",
+    "contact": "Contact",
+    "contactShort": "Contact",
+    "contacts": "Contacts",
+    "contract": "Contract",
+    "contracts": "Contracts",
+    "files": "Files",
+    "insights": "Insights",
+    "invoice": "Invoice",
+    "invoices": "Invoices",
+    "product": "Product",
+    "productcategory": "Product Category",
+    "productinstance": "Product",
+    "productinstances": "Products",
+    "products": "Products",
+    "user": "User",
+    "users": "Users"
+  },
+  "files": {
+    "generate": {
+      "contentType": "Content Type",
+      "contract": "Contract",
+      "custom": {
+        "ourReference": "Our Reference",
+        "subject": "Subject",
+        "theirReference": "Their Reference"
+      },
+      "error": "Could not generate a {{entity}} file. Please consulate the back-end logs.",
+      "fileType": "File Type",
+      "generateButton": "Generate",
+      "header": "Generate file",
+      "label": "Label",
+      "proposal": "Proposal",
+      "recipient": "Recipient",
+      "saveToDisk": "Save To Disk",
+      "showDiscount": "Show Discount",
+      "signee": "Signee"
+    }
+  },
+  "footer": {
+    "creators1": "Designed and built with",
+    "creators2": "by the 39th board",
+    "credits": {
+      "description1": "ParelPracht was built in the winter of 2020-2021 during the second lockdown of the corona crisis by the 39th board of GEWIS. Special thanks to everyone who contributed:",
+      "description2": "Also special thanks to Gijs de Man and everyone at Stijl for their help with the PDF template and Wout de Ruiter for sharing his knowledge regarding Docker containers.",
+      "header": "About ParelPracht"
+    },
+    "gewis": "Study Association GEWIS"
+  },
+  "language": {
+    "dutch": "Dutch",
+    "english": "English",
+    "header": "Language"
+  },
+  "mainMenu": {
+    "admin": "Admin",
+    "categories": "Categories",
+    "companies": "Companies",
+    "contacts": "Contacts",
+    "contracts": "Contracts",
+    "custom": "Custom",
+    "insights": "Insights",
+    "invoices": "Invoices",
+    "logout": "Logout",
+    "myProfile": "My Profile",
+    "products": "Products",
+    "users": "Users"
+  },
+  "other": {
+    "dateTime": {
+      "at": "at",
+      "by": "by"
+    }
+  },
+  "pages": {
+    "companies": {
+      "addCompany": "Add company",
+      "subheader": "All companies"
+    },
+    "contacts": {
+      "addContact": "Add contact",
+      "noContact": "There are no contacts yet."
+    },
+    "contract": {
+      "cancelError": "You can not cancel this contract, because not all products are marked as cancelled.",
+      "newContract": "New contract",
+      "products": {
+        "addProduct": "Add product",
+        "addSingleToInvoice": "Add 1 product to invoice",
+        "addToInvoice": "Add {{amount}} products to invoice",
+        "createNewInvoice": "Create new invoice"
+      }
+    },
+    "contracts": {
+      "addContract": "Add contract",
+      "allContracts": "All Contracts"
+    },
+    "customInvoice": {
+      "descriptionHeader": "Factuur omschrijving",
+      "detailsHeader": "Invoice details",
+      "generateButton": "Generate invoice",
+      "header": "Generate Custom Invoice",
+      "organizationName": "Organization name",
+      "products": {
+        "addProduct": "Add product",
+        "amount": "Amount",
+        "deleteButton": "Delete product",
+        "header": "Products",
+        "name": "Name",
+        "price": "Price",
+        "total": "Total"
+      },
+      "recipientDetails": "Recipient details",
+      "subheader": "Making the treasurer's life easier"
+    },
+    "forgotPassword": {
+      "back": "Back to login",
+      "enterEmail": "Enter your email address and receive a password reset link.",
+      "header": "Reset password",
+      "sendEmailButton": "Send password reset email",
+      "successMessage": "Check your email for a link to reset your password. If it doesn't appear within a few minutes, check your spam folder."
+    },
+    "insights": {
+      "header": "Insights",
+      "notInvoiced": "Not invoiced",
+      "nrOfProducts": "Number of products",
+      "totals": "Totals"
+    },
+    "invoice": {
+      "newInvoice": "New Invoice"
+    },
+    "loading": "Checking login information...",
+    "login": {
+      "email": "Email address",
+      "forgotPassword": "Forgot password",
+      "loginButton": "Login",
+      "password": "Password",
+      "rememberMe": "Remember me",
+      "troubleSigningIn": "Trouble signing in?"
+    },
+    "noRights": {
+      "hammerTime": "Stop, hammertime!",
+      "header": "Sorry, je hebt geen toegang om deze pagina te bekijken!",
+      "subheader": "Please contact your administrator if this is a mistake."
+    },
+    "notFound": {
+      "404": "404: Could not find this page",
+      "header": "There is no money here,",
+      "subheader": "keep looking!"
+    },
+    "product": {
+      "newProduct": "New Product"
+    },
+    "products": {
+      "addProduct": "Add product",
+      "columns": {
+        "category": "Category"
+      },
+      "header": "All products",
+      "subheader": "Products"
+    },
+    "resetPassword": {
+      "newPassword": "New password",
+      "repeatPassword": "Repeat password",
+      "requirements": {
+        "header": "Password requirements:",
+        "length": "Eight characters in length",
+        "lowerCase": "One lower case character",
+        "number": "One number",
+        "symbol": "One symbol",
+        "upperCase": "One upper case character"
+      },
+      "resetPassword": "Reset your password",
+      "setPassword": "Set your password",
+      "submit": "Submit",
+      "successMessage": "Password successfully changed!"
+    },
+    "tables": {
+      "footer": {
+        "items": "Showing {{begin}} to {{end}} of {{total}}",
+        "pagination": {
+          "all": "All",
+          "allItems": "All items",
+          "next": "Next page",
+          "nrItems": "{{take}} items",
+          "previous": "Previous page"
+        }
+      },
+      "header": {
+        "clear": "Clear search",
+        "items": "{{items}} of {{total}} item(s) shown",
+        "refresh": "Refresh table",
+        "search": "Search...",
+        "sorting": "sorted on {{column}}",
+        "update": "updated {{time}}"
+      },
+      "invoices": {
+        "header": "All invoices",
+        "lastSeenMessage": "Last updated by the treasurer {{timeAgo}}",
+        "lastSeenMessageNever": "Never updated by the treasurer",
+        "updateLastSeen": "Update Last Seen",
+        "updateLastSeenDescription": "By updating the last seen, you indicate that all invoice statuses have been updated."
+      },
+      "total": "Total"
+    },
+    "user": {
+      "apiKey": {
+        "description1": "You can generate an API key to use ParelPracht in external tools. With this key, actions can be performed on your behalf. To use the API key, place the entire key in the",
+        "description2": "header of any request.",
+        "generate": "Generate",
+        "header": "API Key",
+        "revoke": "Revoke",
+        "viewKey": "View key",
+        "warning": "Only generate a key if you know what you're doing!"
+      },
+      "avatar": {
+        "addButton": "Add user avatar",
+        "deleteUsersAvatar": "Delete {{name}}'s avatar",
+        "modalHeader": "{{name}}'s Avatar",
+        "uploadUsersAvatar": "Upload {{name}}'s avatar"
+      },
+      "background": {
+        "addPersonalBackground": "Add personal background",
+        "cancel": "Cancel",
+        "deleteUsersBackground": "Delete {{name}}'s background",
+        "header": "Personal User Background",
+        "modalHeader": "{{name}}'s background",
+        "uploadUsersBackground": "Upload {{name}}'s background"
+      },
+      "newUser": "New User",
+      "permissions": "Permissions",
+      "responsibilities": {
+        "cancel": "Cancel",
+        "description": "You can transfer your responsibilities to another ParelPracht user. By doing this, their name will appear on all your contracts and invoices.",
+        "header": "Responsibilities",
+        "transfer": "Transfer",
+        "transferButton": "Transfer responsibilities"
+      }
+    },
+    "users": {
+      "addUser": "Add user",
+      "allUsers": "All users"
+    }
+  }
+}

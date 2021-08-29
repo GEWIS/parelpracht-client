@@ -2,6 +2,7 @@ import {
   call, put, select, throttle,
 } from 'redux-saga/effects';
 import {
+  ApiException,
   Client,
   Contact, ContactListResponse,
   ContactParams,
@@ -12,7 +13,9 @@ import {
   SortDirection,
 } from '../../clients/server.generated';
 import { takeEveryWithErrorHandling } from '../errorHandling';
-import { clearSingle, errorSingle, setSingle } from '../single/actionCreators';
+import {
+  clearSingle, errorSingle, notFoundSingle, setSingle,
+} from '../single/actionCreators';
 import {
   singleActionPattern,
   SingleActionType,
@@ -34,13 +37,14 @@ import { Tables } from '../tables/tables';
 import { TableState } from '../tables/tableState';
 
 function toSummary(contact: Contact): ContactSummary {
-  return {
+  return new ContactSummary({
     id: contact.id,
     firstName: contact.firstName,
     lastNamePreposition: contact.lastNamePreposition,
     lastName: contact.lastName,
     companyId: contact.companyId,
-  } as ContactSummary;
+    function: contact.function,
+  });
 }
 
 function* fetchContacts() {
@@ -101,6 +105,16 @@ function* fetchSingleContact(action: SingleFetchAction<SingleEntities.Contact>) 
   const contact: Contact = yield call([client, client.getContact], action.id);
   yield put(setSingle(SingleEntities.Contact, contact));
   yield put(updateSummary(SummaryCollections.Contacts, toSummary(contact)));
+}
+
+function* errorFetchSingleContact(
+  error: ApiException,
+) {
+  if (error.status === 404) {
+    yield put(notFoundSingle(SingleEntities.Contact));
+  } else {
+    yield put(errorSingle(SingleEntities.Contact));
+  }
 }
 
 function* saveSingleContact(
@@ -188,6 +202,7 @@ export default [
     yield takeEveryWithErrorHandling(
       singleActionPattern(SingleEntities.Contact, SingleActionType.Fetch),
       fetchSingleContact,
+      { onErrorSaga: errorFetchSingleContact },
     );
   },
   watchSaveSingleContact,

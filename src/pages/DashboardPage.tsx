@@ -3,22 +3,23 @@ import { RouteComponentProps, withRouter } from 'react-router-dom';
 import {
   Container, Grid, Header, Icon, Segment,
 } from 'semantic-ui-react';
+import { WithTranslation, withTranslation } from 'react-i18next';
 import { connect } from 'react-redux';
 import { User } from '../clients/server.generated';
 import { RootState } from '../stores/store';
 import DashboardInvoices from '../components/dashboard/DashboardInvoices';
 import DashboardContracts from '../components/dashboard/DashboardContracts';
-import DashboardProductInstanceStatusGraph from '../components/dashboard/DashboardProductInstanceStatusGraph';
+import FinancialOverview from '../components/dashboard/FinancialOverview';
 import DashboardContractedCategoryGraph from '../components/dashboard/DashboardContractedCategoryGraph';
 
-interface Props extends RouteComponentProps {
+interface Props extends WithTranslation, RouteComponentProps {
   // eslint-disable-next-line react/no-unused-prop-types
   user: User | undefined;
 }
 
 function DashboardPage(props: Props) {
   const {
-    user,
+    user, t,
   } = props;
 
   return (
@@ -31,7 +32,7 @@ function DashboardPage(props: Props) {
                 <Icon name="hand paper" />
                 <Header.Content>
                   <Header.Subheader>Dashboard</Header.Subheader>
-                  Welcome back,
+                  {t('dashboard.welcome')}
                   {' '}
                   {user?.firstName}
                 </Header.Content>
@@ -45,7 +46,7 @@ function DashboardPage(props: Props) {
         <Grid>
           <Grid.Row columns={2}>
             <Grid.Column width={9}>
-              <DashboardProductInstanceStatusGraph />
+              <FinancialOverview />
               <DashboardContractedCategoryGraph />
             </Grid.Column>
             <Grid.Column width={7}>
@@ -65,4 +66,4 @@ const mapStateToProps = (state: RootState) => {
   };
 };
 
-export default withRouter(connect(mapStateToProps)(DashboardPage));
+export default withTranslation()(withRouter(connect(mapStateToProps)(DashboardPage)));

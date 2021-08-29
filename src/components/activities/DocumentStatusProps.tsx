@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Form, TextArea } from 'semantic-ui-react';
+import { Form } from 'semantic-ui-react';
 import { Dispatch } from 'redux';
 import {
   ContractStatusParams,
@@ -13,7 +13,7 @@ import { formatStatus } from '../../helpers/activity';
 import { createSingleStatus } from '../../stores/single/actionCreators';
 import { DocumentStatus } from './DocumentStatus';
 import { createInstanceStatusSingle } from '../../stores/productinstance/actionCreator';
-import TextAreaMimic from '../TextAreaMimic';
+import TextArea from '../TextArea';
 
 interface Props {
   create?: boolean;
@@ -132,18 +132,14 @@ class DocumentStatusProps extends React.Component<Props, State> {
             <label htmlFor="form-input-description">
               Comments
             </label>
-            {editing ? (
-              <TextArea
-                id="form-delivery-spec-english"
-                value={description}
-                onChange={
-                  (e) => this.setState({ description: e.target.value })
-                }
-                placeholder="Comments"
-              />
-            ) : (
-              <TextAreaMimic content={description} />
-            )}
+            <TextArea
+              id="form-delivery-spec-english"
+              value={description}
+              onChange={
+                (e) => this.setState({ description: e.target.value })
+              }
+              placeholder="Comments"
+            />
           </Form.Field>
         </Form>
       </>

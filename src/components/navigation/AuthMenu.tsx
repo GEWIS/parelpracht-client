@@ -3,15 +3,17 @@ import { connect } from 'react-redux';
 import { NavLink, RouteComponentProps, withRouter } from 'react-router-dom';
 import { Dispatch } from 'redux';
 import {
-  Dropdown, Icon, Loader, Menu,
+  Dropdown, Icon, Loader, Menu, Flag,
 } from 'semantic-ui-react';
+import { useTranslation } from 'react-i18next';
 import { AuthStatus, Roles, User } from '../../clients/server.generated';
 import { formatContactName } from '../../helpers/contact';
 import { authLogout } from '../../stores/auth/actionCreators';
 import ResourceStatus from '../../stores/resourceStatus';
 import { RootState } from '../../stores/store';
-import UserAvatar from '../user/UserAvatar';
+import UserAvatar from '../entities/user/UserAvatar';
 import { authedUserHasRole } from '../../stores/auth/selectors';
+import { changeLanguage, getLanguage } from '../../localization';
 
 interface Props extends RouteComponentProps {
   authStatus: AuthStatus | undefined;
@@ -33,6 +35,8 @@ function AuthMenu(props: Props) {
       </Menu.Item>
     );
   }
+
+  const { t } = useTranslation();
 
   const logout = () => {
     props.history.push('/login');
@@ -68,17 +72,39 @@ function AuthMenu(props: Props) {
         <Dropdown.Menu>
           <Dropdown.Item as={NavLink} to={`/user/${props.profile.id}`}>
             <Icon name="user circle" />
-            My profile
+            {t('mainMenu.myProfile')}
           </Dropdown.Item>
           {isAdmin ? (
             <Dropdown.Item as={NavLink} to="/user">
               <Icon name="users" />
-              Users
+              {t('mainMenu.users')}
             </Dropdown.Item>
           ) : undefined}
           <Dropdown.Item onClick={logout}>
             <Icon name="sign-out" />
-            Logout
+            {t('mainMenu.logout')}
+          </Dropdown.Item>
+        </Dropdown.Menu>
+      </Dropdown>
+      <Dropdown
+        trigger={(<Icon name="globe" />)}
+        item
+        className="icon"
+      >
+        <Dropdown.Menu>
+          <Dropdown.Item
+            className={getLanguage() === 'en-US' ? 'active' : ''}
+            onClick={() => changeLanguage('en-US')}
+          >
+            <Flag name="us" />
+            English
+          </Dropdown.Item>
+          <Dropdown.Item
+            className={getLanguage() === 'nl-NL' ? 'active' : ''}
+            onClick={() => changeLanguage('nl-NL')}
+          >
+            <Flag name="nl" />
+            Nederlands
           </Dropdown.Item>
         </Dropdown.Menu>
       </Dropdown>

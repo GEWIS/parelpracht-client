@@ -7,6 +7,7 @@ import {
   Container, Grid, Header, Icon, Segment,
 } from 'semantic-ui-react';
 import './BackgroundAnimation.css';
+import { useTranslation } from 'react-i18next';
 import AlertContainer from '../components/alerts/AlertContainer';
 import ForgotPasswordForm from '../components/auth/ForgotPasswordForm';
 import { authRequestClear } from '../stores/auth/actionCreators';
@@ -20,6 +21,7 @@ interface Props {
 }
 
 function ForgotPasswordPage(props: Props) {
+  const { t } = useTranslation();
   useEffect(() => {
     props.clearStatus();
   }, []);
@@ -36,12 +38,10 @@ function ForgotPasswordPage(props: Props) {
             <Grid.Column width={6}>
               <Segment color="green" size="large">
                 <Header as="h1">
-                  Reset your password
+                  {t('pages.forgotPassword.header')}
                 </Header>
                 <p>
-                  {`Check your email for a link to reset your password.
-                  If it doesn't appear within a few minutes,
-                  check your spam folder.`}
+                  {t('pages.forgotPassword.successMessage')}
                 </p>
                 <Button as={NavLink} to="/login" style={{ marginTop: '1em' }} basic>
                   <Icon name="arrow left" />
@@ -65,12 +65,12 @@ function ForgotPasswordPage(props: Props) {
           <Grid.Column width={6}>
             <Segment>
               <Header as="h1">
-                Reset your password
+                {t('pages.forgotPassword.header')}
               </Header>
               <ForgotPasswordForm />
               <Button as={NavLink} to="/login" style={{ marginTop: '1em' }} basic>
                 <Icon name="arrow left" />
-                Back to login
+                {t('pages.forgotPassword.back')}
               </Button>
             </Segment>
           </Grid.Column>

@@ -3,11 +3,13 @@ import {
 } from 'redux-saga/effects';
 import {
   ActivityParams,
+  ApiException,
   Client,
   Company,
   CompanyParams,
   CompanySummary,
-  ETCompany, ETCompanyListResponse,
+  ETCompany,
+  ETCompanyListResponse,
   ListOrFilter,
   ListParams,
   ListSorting,
@@ -25,7 +27,9 @@ import { tableActionPattern, TableActionType } from '../tables/actions';
 import { getTable } from '../tables/selectors';
 import { Tables } from '../tables/tables';
 import { TableState } from '../tables/tableState';
-import { clearSingle, errorSingle, setSingle } from '../single/actionCreators';
+import {
+  clearSingle, errorSingle, notFoundSingle, setSingle,
+} from '../single/actionCreators';
 import {
   singleActionPattern,
   SingleActionType,
@@ -42,11 +46,12 @@ import {
 import { SingleEntities } from '../single/single';
 
 function toSummary(company: Company): CompanySummary {
-  return {
+  return new CompanySummary({
     id: company.id,
     name: company.name,
     logoFilename: company.logoFilename,
-  } as CompanySummary;
+    status: company.status,
+  });
 }
 
 function* fetchCompanies() {
@@ -136,6 +141,16 @@ function* fetchSingleCompany(action: SingleFetchAction<SingleEntities.Company>) 
   const company: Company = yield call([client, client.getCompany], action.id);
   yield put(setSingle(SingleEntities.Company, company));
   yield put(updateSummary(SummaryCollections.Companies, toSummary(company)));
+}
+
+function* errorFetchSingleCompany(
+  error: ApiException,
+) {
+  if (error.status === 404) {
+    yield put(notFoundSingle(SingleEntities.Company));
+  } else {
+    yield put(errorSingle(SingleEntities.Company));
+  }
 }
 
 function* saveSingleCompany(
@@ -327,6 +342,7 @@ export default [
     yield takeEveryWithErrorHandling(
       singleActionPattern(SingleEntities.Company, SingleActionType.Fetch),
       fetchSingleCompany,
+      { onErrorSaga: errorFetchSingleCompany },
     );
   },
   watchSaveSingleCompany,

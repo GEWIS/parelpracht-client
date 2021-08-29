@@ -4,6 +4,7 @@ import {
 } from 'semantic-ui-react';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
+import { withTranslation, WithTranslation } from 'react-i18next';
 import { Client, Partial_PricingParams, ProductPricing } from '../../clients/server.generated';
 import PricingRow from './PricingRow';
 import PropsButtons from '../PropsButtons';
@@ -11,7 +12,7 @@ import { SingleEntities } from '../../stores/single/single';
 import ResourceStatus from '../../stores/resourceStatus';
 import { fetchSingle } from '../../stores/single/actionCreators';
 
-interface Props {
+interface Props extends WithTranslation {
   pricing: ProductPricing;
   productId: number;
 
@@ -30,7 +31,7 @@ class PricingTable extends React.Component<Props, State> {
   public constructor(props: Props) {
     super(props);
     this.state = {
-      pricingData: JSON.parse(props.pricing.data),
+      pricingData: props.pricing.data,
       description: props.pricing.description,
       editing: false,
       status: ResourceStatus.FETCHED,
@@ -89,7 +90,7 @@ class PricingTable extends React.Component<Props, State> {
     const client = new Client();
     await client.updatePricing(productId, {
       description,
-      data: JSON.stringify(pricingData),
+      data: pricingData,
     } as Partial_PricingParams);
     fetchProduct(productId);
     this.setState({ editing: false });
@@ -110,11 +111,12 @@ class PricingTable extends React.Component<Props, State> {
     const {
       pricingData, editing, status, description,
     } = this.state;
+    const { t } = this.props;
 
     return (
       <>
         <h3>
-          Pricing information
+          {t('entities.product.insights.header')}
           {editing ? (
             <>
               <Button
@@ -123,9 +125,9 @@ class PricingTable extends React.Component<Props, State> {
                 onClick={this.addRow}
                 style={{ marginTop: '-0.5em' }}
               >
-                Add row
+                {t('entities.product.insights.addRow')}
               </Button>
-              <Button primary floated="right" onClick={this.addColumn} style={{ marginTop: '-0.5em' }}>Add column</Button>
+              <Button primary floated="right" onClick={this.addColumn} style={{ marginTop: '-0.5em' }}>{t('entities.product.insights.addColumn')}</Button>
             </>
           ) : null}
           <PropsButtons
@@ -146,7 +148,7 @@ class PricingTable extends React.Component<Props, State> {
           <Form>
             <TextArea
               value={description}
-              placeholder="Add a description"
+              placeholder={t('entities.product.insights.addDescription')}
               onChange={(e) => this.setState({ description: e.target.value })}
             />
           </Form>
@@ -208,4 +210,4 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   fetchProduct: (id: number) => dispatch(fetchSingle(SingleEntities.Product, id)),
 });
 
-export default connect(null, mapDispatchToProps)(PricingTable);
+export default withTranslation()(connect(null, mapDispatchToProps)(PricingTable));

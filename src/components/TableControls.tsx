@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Grid, Input } from 'semantic-ui-react';
 import TimeAgo from 'javascript-time-ago';
+import { useTranslation } from 'react-i18next';
 import ResourceStatus from '../stores/resourceStatus';
 
 interface Props {
@@ -28,13 +29,14 @@ function TableControls(props: Props) {
   }, []);
 
   const timeAgo = new TimeAgo();
+  const { t } = useTranslation();
   return (
     <Grid columns={2}>
       <Grid.Column style={{ paddingTop: 0, paddingBottom: '0.5em' }} verticalAlign="middle">
         <p>
-          {`${props.countFetched} of ${props.countTotal} item(s) shown \u00b7
-            sorted on ${props.column} \u00b7
-            updated ${timeAgo.format(props.lastUpdated)}`}
+          {`${t('pages.tables.header.items', { items: props.countFetched, total: props.countTotal })} \u00b7
+            ${t('pages.tables.header.sorting', { column: props.column })} \u00b7
+            ${t('pages.tables.header.update', { time: timeAgo.format(props.lastUpdated) })}`}
           {props.bottomLine !== undefined ? <br /> : undefined}
           {props.bottomLine}
         </p>
@@ -45,16 +47,17 @@ function TableControls(props: Props) {
           floated="right"
           onClick={props.refresh}
           loading={props.status === ResourceStatus.FETCHING}
+          title={t('pages.tables.header.refresh')}
         />
 
         <Input
           style={{ float: 'right' }}
           icon="search"
           iconPosition="left"
-          placeholder="Search..."
+          placeholder={t('pages.tables.header.search')}
           value={props.search}
           action={
-            <Button icon="close" onClick={() => props.setSearch('')} />
+            <Button icon="close" onClick={() => props.setSearch('')} title={t('pages.tables.header.clear')} />
           }
           onChange={(e) => props.setSearch(e.target.value)}
         />

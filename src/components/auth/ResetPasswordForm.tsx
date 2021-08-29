@@ -5,12 +5,12 @@ import {
   Button, Form, Input,
 } from 'semantic-ui-react';
 import validator from 'validator';
+import { useTranslation } from 'react-i18next';
 import { authResetPassword } from '../../stores/auth/actionCreators';
 import ResourceStatus from '../../stores/resourceStatus';
 import { RootState } from '../../stores/store';
 
 interface Props {
-  newUser: boolean;
   token: string;
   status: ResourceStatus;
   resetPassword: (password: string, passwordRepeat: string, token: string) => void;
@@ -18,6 +18,7 @@ interface Props {
 }
 
 function ResetPasswordForm(props: Props) {
+  const { t } = useTranslation();
   const [password, changePassword] = useState('');
   const [passwordRepeat, changePasswordRepeat] = useState('');
 
@@ -30,7 +31,7 @@ function ResetPasswordForm(props: Props) {
         type="password"
         icon="lock"
         iconPosition="left"
-        label="New password"
+        label={t('pages.resetPassword.newPassword')}
         error={
           validator.isEmpty(password) || !validator.isStrongPassword(password)
         }
@@ -49,7 +50,7 @@ function ResetPasswordForm(props: Props) {
         error={
           validator.isEmpty(passwordRepeat) || !validator.equals(passwordRepeat, password)
         }
-        label="Repeat password"
+        label={t('pages.resetPassword.repeatPassword')}
         onChange={(e: ChangeEvent<HTMLInputElement>) => changePasswordRepeat(e.target.value)}
       />
       <Button
@@ -60,7 +61,7 @@ function ResetPasswordForm(props: Props) {
         onClick={() => props.resetPassword(password, passwordRepeat, props.token)}
         loading={props.status === ResourceStatus.FETCHING}
       >
-        {props.newUser ? 'Set password' : 'Reset password'}
+        {t('pages.restPassword.submit')}
       </Button>
     </Form>
   );

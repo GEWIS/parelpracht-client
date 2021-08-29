@@ -2,6 +2,7 @@ import {
   call, put, select, throttle,
 } from 'redux-saga/effects';
 import {
+  ApiException,
   Client,
   ListOrFilter,
   ListParams,
@@ -13,7 +14,9 @@ import {
   UserSummary,
 } from '../../clients/server.generated';
 import { takeEveryWithErrorHandling } from '../errorHandling';
-import { clearSingle, errorSingle, setSingle } from '../single/actionCreators';
+import {
+  clearSingle, errorSingle, notFoundSingle, setSingle,
+} from '../single/actionCreators';
 import {
   singleActionPattern,
   SingleActionType,
@@ -36,15 +39,16 @@ import { Tables } from '../tables/tables';
 import { TableState } from '../tables/tableState';
 
 function toSummary(user: User): UserSummary {
-  return {
+  return new UserSummary({
     id: user.id,
     firstName: user.firstName,
     lastNamePreposition: user.lastNamePreposition,
     lastName: user.lastName,
     email: user.email,
     avatarFilename: user.avatarFilename,
+    backgroundFilename: user.backgroundFilename,
     roles: user.roles.map((r) => r.name as Roles),
-  } as UserSummary;
+  });
 }
 
 function* fetchUsers() {
@@ -105,6 +109,16 @@ function* fetchSingleUser(action: SingleFetchAction<SingleEntities.User>) {
   const user: User = yield call([client, client.getUser], action.id);
   yield put(setSingle(SingleEntities.User, user));
   yield put(updateSummary(SummaryCollections.Users, toSummary(user)));
+}
+
+function* errorFetchSingleUser(
+  error: ApiException,
+) {
+  if (error.status === 404) {
+    yield put(notFoundSingle(SingleEntities.User));
+  } else {
+    yield put(errorSingle(SingleEntities.User));
+  }
 }
 
 function* deleteSingleUser(action: SingleDeleteAction<SingleEntities.User>) {
@@ -192,6 +206,7 @@ export default [
     yield takeEveryWithErrorHandling(
       singleActionPattern(SingleEntities.User, SingleActionType.Fetch),
       fetchSingleUser,
+      { onErrorSaga: errorFetchSingleUser },
     );
   },
   watchSaveSingleUser,

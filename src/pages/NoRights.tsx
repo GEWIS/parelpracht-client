@@ -2,8 +2,10 @@ import React from 'react';
 import {
   Container, Grid, Header, Icon, Segment, Image,
 } from 'semantic-ui-react';
+import { useTranslation } from 'react-i18next';
 
 function NoRights() {
+  const { t } = useTranslation();
   return (
     <>
       <Segment style={{ backgroundColor: 'rgba(237, 237, 237, 0.98)' }} vertical basic>
@@ -14,7 +16,7 @@ function NoRights() {
                 <Icon name="hand paper" />
                 <Header.Content>
                   <h1>
-                    Stop, hammertime!
+                    {t('pages.noRights.hammerTime')}
                   </h1>
                 </Header.Content>
               </Header>
@@ -29,10 +31,10 @@ function NoRights() {
           </Grid.Column>
           <Grid.Column textAlign="left" verticalAlign="middle" width="12">
             <h1 style={{ fontSize: '70px' }}>
-              Sorry, you don&apos;t have the rights to view this page!
+              {t('pages.noRights.header')}
             </h1>
             <h1 style={{ fontSize: '40px', color: '#737373' }}>
-              Please contact your administrator.
+              {t('pages.noRights.subheader')}
             </h1>
           </Grid.Column>
         </Grid>

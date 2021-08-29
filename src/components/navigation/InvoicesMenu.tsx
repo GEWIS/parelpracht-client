@@ -3,11 +3,14 @@ import { NavLink } from 'react-router-dom';
 import {
   Dropdown, Icon, Menu,
 } from 'semantic-ui-react';
+import { useTranslation } from 'react-i18next';
 import { Roles } from '../../clients/server.generated';
 import AuthorizationComponent from '../AuthorizationComponent';
 
 function InvoicesMenu() {
   const [isOpen, changeOpen] = useState(false);
+
+  const { t } = useTranslation();
 
   return (
     <Menu.Menu>
@@ -18,10 +21,12 @@ function InvoicesMenu() {
         item
         icon={null}
         trigger={(
-          <NavLink to="/invoice" style={{ whiteSpace: 'nowrap' }}>
+          <NavLink to="/invoice" title={t('mainMenu.invoices')}>
             <Icon name="money bill alternate outline" />
-            {' '}
-            Invoices
+            <span>
+              {' '}
+              {t('mainMenu.invoices')}
+            </span>
           </NavLink>
         ) as any}
       >
@@ -30,7 +35,7 @@ function InvoicesMenu() {
           <AuthorizationComponent roles={[Roles.FINANCIAL, Roles.ADMIN]} notFound={false}>
             <Dropdown.Item as={NavLink} to="/invoice/custom">
               <Icon name="credit card" />
-              Custom
+              {t('mainMenu.custom')}
             </Dropdown.Item>
           </AuthorizationComponent>
         </Dropdown.Menu>

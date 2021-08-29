@@ -3,7 +3,7 @@ import {
 } from 'redux-saga/effects';
 import {
   ActivityParams,
-  ActivityType,
+  ActivityType, ApiException,
   Client,
   Contract,
   Invoice,
@@ -21,7 +21,7 @@ import {
 } from '../../clients/server.generated';
 import { takeEveryWithErrorHandling } from '../errorHandling';
 import {
-  clearSingle, errorSingle, fetchSingle, setSingle,
+  clearSingle, errorSingle, fetchSingle, notFoundSingle, setSingle,
 } from '../single/actionCreators';
 import {
   singleActionPattern,
@@ -52,7 +52,7 @@ import { getSingle } from '../single/selectors';
 import { getLastStatus } from '../../helpers/activity';
 
 function toSummary(invoice: Invoice): InvoiceSummary {
-  return {
+  return new InvoiceSummary({
     id: invoice.id,
     title: invoice.title,
     companyId: invoice.companyId,
@@ -60,8 +60,8 @@ function toSummary(invoice: Invoice): InvoiceSummary {
       (r: number, p: ProductInstance) => r + p.basePrice - p.discount, 0,
     ),
     status: getLastStatus(invoice.activities
-      .filter((a: InvoiceActivity) => a.type === ActivityType.STATUS))?.subType,
-  } as InvoiceSummary;
+      .filter((a: InvoiceActivity) => a.type === ActivityType.STATUS))?.subType!,
+  });
 }
 
 function* fetchInvoices() {
@@ -109,7 +109,7 @@ function* fetchInvoices() {
     lastSeen = res.lastSeen;
   }
 
-  yield put(setTable(Tables.Invoices, list, count, lastSeen));
+  yield put(setTable(Tables.Invoices, list, count, {}, lastSeen));
 }
 
 export function* fetchInvoiceSummaries() {
@@ -124,6 +124,16 @@ function* fetchSingleInvoice(action: SingleFetchAction<SingleEntities.Invoice>) 
   const invoice: Invoice = yield call([client, client.getInvoice], action.id);
   yield put(setSingle(SingleEntities.Invoice, invoice));
   yield put(updateSummary(SummaryCollections.Invoices, toSummary(invoice)));
+}
+
+function* errorFetchSingleInvoice(
+  error: ApiException,
+) {
+  if (error.status === 404) {
+    yield put(notFoundSingle(SingleEntities.Invoice));
+  } else {
+    yield put(errorSingle(SingleEntities.Invoice));
+  }
 }
 
 function* saveSingleInvoice(
@@ -313,6 +323,7 @@ export default [
     yield takeEveryWithErrorHandling(
       singleActionPattern(SingleEntities.Invoice, SingleActionType.Fetch),
       fetchSingleInvoice,
+      { onErrorSaga: errorFetchSingleInvoice },
     );
   },
   watchSaveSingleInvoice,

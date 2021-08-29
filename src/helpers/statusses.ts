@@ -1,15 +1,16 @@
 import { ProductInstanceStatus } from '../clients/server.generated';
+import i18n from '../localization';
 
 export function prodInsStatus(status: ProductInstanceStatus) {
   switch (status) {
     case ProductInstanceStatus.NOTDELIVERED:
-      return 'Not delivered';
+      return i18n.t('entities.status.notDelivered');
     case ProductInstanceStatus.DELIVERED:
-      return 'Delivered';
+      return i18n.t('entities.status.delivered');
     case ProductInstanceStatus.DEFERRED:
-      return 'Deferred';
+      return i18n.t('entities.status.deferred');
     case ProductInstanceStatus.CANCELLED:
-      return 'Cancelled';
+      return i18n.t('entities.status.cancelled');
     default:
       throw new TypeError(`Unknown ProductInstanceStatus ${status}`);
   }

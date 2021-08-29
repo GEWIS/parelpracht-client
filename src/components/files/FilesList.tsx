@@ -1,14 +1,16 @@
 import React from 'react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { Button, Icon, Table } from 'semantic-ui-react';
+import { withTranslation, WithTranslation } from 'react-i18next';
 import { SingleEntities } from '../../stores/single/single';
 import { ContractFile, Roles } from '../../clients/server.generated';
 import ResourceStatus from '../../stores/resourceStatus';
 import { GeneralFile } from './GeneralFile';
 import SingleFile from './SingleFile';
 import AuthorizationComponent from '../AuthorizationComponent';
+import './FilesList.scss';
 
-interface Props extends RouteComponentProps {
+interface Props extends WithTranslation, RouteComponentProps {
   files: GeneralFile[];
   entityId: number;
   entity: SingleEntities;
@@ -39,7 +41,7 @@ class FilesList extends React.Component<Props, State> {
 
   render() {
     const {
-      files, entityId, entity, fetchEntity, generateModal, status,
+      files, entityId, entity, fetchEntity, generateModal, status, t,
     } = this.props;
     const { creating } = this.state;
 
@@ -69,60 +71,36 @@ class FilesList extends React.Component<Props, State> {
       );
     }
 
-    let filesList;
-    if (files.length === 0) {
-      filesList = (
-        <>
-          <h4>
-            There are no files uploaded yet.
-          </h4>
-          <Table compact>
-            <Table.Body>
-              {createRow}
-              {files
-                .sort((a, b) => { return b.updatedAt.getTime() - a.updatedAt.getTime(); })
-                .map((file) => (
-                  <SingleFile
-                    key={file.id}
-                    file={file}
-                    create={false}
-                    entity={entity}
-                    entityId={entityId}
-                    fetchEntity={fetchEntity}
-                    status={status}
-                  />
-                ))}
-            </Table.Body>
-          </Table>
-        </>
-      );
-    } else {
-      filesList = (
-        <Table compact>
-          <Table.Body>
-            {createRow}
-            {files
-              .sort((a, b) => { return b.updatedAt.getTime() - a.updatedAt.getTime(); })
-              .map((file) => (
-                <SingleFile
-                  key={file.id}
-                  file={file}
-                  create={false}
-                  entity={entity}
-                  entityId={entityId}
-                  fetchEntity={fetchEntity}
-                  status={status}
-                />
-              ))}
-          </Table.Body>
-        </Table>
-      );
-    }
+    const noFilesHeader = (
+      <h4>
+        {t('entities.product.noFiles')}
+      </h4>
+    );
+    const filesList = (
+      <Table compact fixed singleLine className="files">
+        <Table.Body>
+          {createRow}
+          {files
+            .sort((a, b) => { return b.updatedAt.getTime() - a.updatedAt.getTime(); })
+            .map((file) => (
+              <SingleFile
+                key={file.id}
+                file={file}
+                create={false}
+                entity={entity}
+                entityId={entityId}
+                fetchEntity={fetchEntity}
+                status={status}
+              />
+            ))}
+        </Table.Body>
+      </Table>
+    );
 
     return (
       <AuthorizationComponent roles={[Roles.GENERAL, Roles.ADMIN, Roles.AUDIT]} notFound={false}>
         <h3>
-          Files
+          {t('entity.files')}
           <AuthorizationComponent
             roles={[Roles.GENERAL, Roles.ADMIN]}
             notFound={false}
@@ -136,15 +114,16 @@ class FilesList extends React.Component<Props, State> {
               onClick={() => this.setState({ creating: true })}
             >
               <Icon name="plus" />
-              Upload File
+              {t('buttons.files.upload')}
             </Button>
           </AuthorizationComponent>
           {generateModal}
         </h3>
-        {filesList}
+        {files.length === 0 ? noFilesHeader : undefined}
+        {files.length > 0 || createRow ? filesList : undefined}
       </AuthorizationComponent>
     );
   }
 }
 
-export default withRouter(FilesList);
+export default withTranslation()(withRouter(FilesList));

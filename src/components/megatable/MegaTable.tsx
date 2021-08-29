@@ -1,9 +1,11 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import {
   Dimmer, Loader, Segment, Table,
 } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
+import { withTranslation, WithTranslation } from 'react-i18next';
+import { RouteComponentProps, withRouter } from 'react-router-dom';
 import MegaTableRow from './MegaTableRow';
 import { RootState } from '../../stores/store';
 import { countFetched, countTotal, getTable } from '../../stores/tables/selectors';
@@ -12,7 +14,9 @@ import {
   changeSortTable,
   fetchTable,
   nextPageTable,
-  prevPageTable, setFilterTable, setSortTable,
+  prevPageTable,
+  setFilterTable,
+  setSortTable,
   setTakeTable,
 } from '../../stores/tables/actionCreators';
 import TablePagination from '../TablePagination';
@@ -21,10 +25,12 @@ import ProductFilter from '../tablefilters/ProductFilter';
 import ProductInstanceStatusFilter from '../tablefilters/ProductInstanceStatusFilter';
 import ProductInstanceInvoicedFilter from '../tablefilters/ProductInstanceInvoicedFilter';
 import ResourceStatus from '../../stores/resourceStatus';
-import { ETCompany } from '../../clients/server.generated';
+import { ContractStatus, ETCompany, ProductInstanceStatus } from '../../clients/server.generated';
 import { formatPriceFull } from '../../helpers/monetary';
+import ContractStatusFilter from '../tablefilters/ContractStatusFilter';
+import { dateToFinancialYear } from '../../helpers/timestamp';
 
-interface Props {
+interface Props extends WithTranslation, RouteComponentProps {
   companies: ETCompany[];
   nrOfProducts: number;
   sumProducts: number;
@@ -36,7 +42,7 @@ interface Props {
   take: number;
   status: ResourceStatus;
 
-  fetchContracts: () => void;
+  fetchCompanies: () => void;
   setTableFilter: (filter: { column: string, values: any[] }) => void;
   changeSort: (column: string) => void;
   setSort: (column: string, direction: 'ASC' | 'DESC') => void;
@@ -45,89 +51,153 @@ interface Props {
   nextPage: () => void;
 }
 
-function MegaTable({
-  companies, fetchContracts, setTableFilter, column, direction, changeSort, setSort,
-  total, fetched, skip, take, status,
-  prevPage, nextPage, setTake,
-  sumProducts, nrOfProducts,
-}: Props) {
-  useEffect(() => {
-    setSort('companyName', 'ASC');
-    setTableFilter({ column: 'invoiced', values: [-1] });
-    fetchContracts();
-  }, []);
+interface State {
+  preFilters: string;
+  year?: number;
+}
 
-  return (
-    <>
-      <Segment style={{ padding: '0px' }}>
-        {status === ResourceStatus.FETCHING || status === ResourceStatus.SAVING
-          ? (
-            <Dimmer active inverted>
-              <Loader inverted />
-            </Dimmer>
-          ) : null}
-        <Table attached compact sortable striped fixed>
-          <Table.Header>
-            <Table.Row>
-              <Table.HeaderCell
-                sorted={column === 'companyName' ? direction : undefined}
-                onClick={() => changeSort('companyName')}
-                width={3}
-              >
-                Company
-                <CompanyFilter table={Tables.ETCompanies} />
-              </Table.HeaderCell>
-              <Table.HeaderCell width={3}>
-                Contract
-              </Table.HeaderCell>
-              <Table.HeaderCell width={2}>
-                Product
-                <ProductFilter />
-              </Table.HeaderCell>
-              <Table.HeaderCell width={2}>
-                Status
-                <ProductInstanceStatusFilter />
-              </Table.HeaderCell>
-              <Table.HeaderCell width={2}>
-                Invoiced
-                <ProductInstanceInvoicedFilter />
-              </Table.HeaderCell>
-              <Table.HeaderCell>Price</Table.HeaderCell>
-              <Table.HeaderCell>Details</Table.HeaderCell>
-            </Table.Row>
-          </Table.Header>
-          <Table.Body>
-            {companies.map((c) => (
-              <MegaTableRow company={c} key={c.id} />
-            ))}
-          </Table.Body>
-          <Table.Footer>
-            <Table.Row>
-              <Table.HeaderCell colSpan="3">
-                Totals
-              </Table.HeaderCell>
-              <Table.HeaderCell colSpan="2" style={{ textAlign: 'center' }}>
-                Number of products:
-                {' '}
-                {nrOfProducts || 0}
-              </Table.HeaderCell>
-              <Table.HeaderCell collapsing>{formatPriceFull(sumProducts || 0)}</Table.HeaderCell>
-              <Table.HeaderCell />
-            </Table.Row>
-          </Table.Footer>
-        </Table>
-        <TablePagination
-          countTotal={total}
-          countFetched={fetched}
-          skip={skip}
-          take={take}
-          nextPage={nextPage}
-          prevPage={prevPage}
-          setTake={setTake}
-        />
-      </Segment>
-    </>
-  );
+class MegaTable extends React.Component<Props, State> {
+  constructor(props: Props) {
+    super(props);
+
+    let { hash } = this.props.location;
+    // If there is no hash, do not take the first (#) character
+    if (hash.length > 0) {
+      hash = hash.substr(1);
+    }
+
+    const [preFilters, year] = hash.split('&');
+
+    this.state = {
+      preFilters,
+      year: year !== '' ? parseInt(year, 10) : undefined,
+    };
+  }
+
+  componentDidMount() {
+    const { setSort, setTableFilter, fetchCompanies } = this.props;
+    setSort('companyName', 'ASC');
+    setTableFilter({ column: 'status', values: [] });
+    setTableFilter({ column: 'status2', values: [] });
+    setTableFilter({ column: 'invoiced', values: [] });
+
+    if (!this.state.year) {
+      this.setState({ year: dateToFinancialYear(new Date()) });
+    } else if (Number.isNaN(this.state.year)) {
+      this.setState({ year: undefined });
+    }
+
+    switch (this.state.preFilters) {
+      case 'suggested':
+        setTableFilter({ column: 'status2', values: [ContractStatus.CREATED, ContractStatus.PROPOSED, ContractStatus.SENT] });
+        break;
+      case 'contracted':
+        setTableFilter({ column: 'status2', values: [ContractStatus.CONFIRMED, ContractStatus.FINISHED] });
+        setTableFilter({ column: 'status', values: [ProductInstanceStatus.NOTDELIVERED, ProductInstanceStatus.DELIVERED] });
+        setTableFilter({ column: 'invoiced', values: [-1, this.state.year] });
+        break;
+      case 'delivered':
+        setTableFilter({ column: 'status2', values: [ContractStatus.CONFIRMED, ContractStatus.FINISHED] });
+        setTableFilter({ column: 'status', values: [ProductInstanceStatus.DELIVERED] });
+        setTableFilter({ column: 'invoiced', values: [-1, this.state.year] });
+        break;
+      case 'invoiced':
+        setTableFilter({ column: 'status2', values: [ContractStatus.CONFIRMED, ContractStatus.FINISHED] });
+        setTableFilter({ column: 'invoiced', values: [this.state.year] });
+        break;
+      default:
+        setTableFilter({ column: 'invoiced', values: [-1] });
+        setTableFilter({ column: 'status', values: [ProductInstanceStatus.NOTDELIVERED, ProductInstanceStatus.DELIVERED] });
+        break;
+    }
+
+    fetchCompanies();
+  }
+
+  render() {
+    const {
+      companies, column, direction, changeSort,
+      total, fetched, skip, take, status,
+      prevPage, nextPage, setTake,
+      sumProducts, nrOfProducts, t,
+    } = this.props;
+    return (
+      <>
+        <Segment style={{ padding: '0px' }}>
+          {status === ResourceStatus.FETCHING || status === ResourceStatus.SAVING
+            ? (
+              <Dimmer active inverted>
+                <Loader inverted />
+              </Dimmer>
+            ) : null}
+          <Table attached compact sortable striped fixed>
+            <Table.Header>
+              <Table.Row>
+                <Table.HeaderCell
+                  sorted={column === 'companyName' ? direction : undefined}
+                  onClick={() => changeSort('companyName')}
+                  width={3}
+                >
+                  {t('entity.company')}
+                  <CompanyFilter table={Tables.ETCompanies} />
+                </Table.HeaderCell>
+                <Table.HeaderCell width={3}>
+                  {t('entity.contract')}
+                  <ContractStatusFilter column="status2" columnName="Contract Status" table={Tables.ETCompanies} />
+                </Table.HeaderCell>
+                <Table.HeaderCell width={2}>
+                  {t('entity.product')}
+                  <ProductFilter />
+                </Table.HeaderCell>
+                <Table.HeaderCell width={2}>
+                  {t('entities.generalProps.status')}
+                  <ProductInstanceStatusFilter columnName="Product Status" />
+                </Table.HeaderCell>
+                <Table.HeaderCell width={2}>
+                  {t('entities.productInstance.props.invoiced')}
+                  <ProductInstanceInvoicedFilter />
+                </Table.HeaderCell>
+                <Table.HeaderCell>
+                  {t('entities.productInstance.props.price')}
+                </Table.HeaderCell>
+                <Table.HeaderCell>
+                  {t('entities.productInstance.props.details')}
+                </Table.HeaderCell>
+              </Table.Row>
+            </Table.Header>
+            <Table.Body>
+              {companies.map((c) => (
+                <MegaTableRow company={c} key={c.id} />
+              ))}
+            </Table.Body>
+            <Table.Footer>
+              <Table.Row>
+                <Table.HeaderCell colSpan="3">
+                  {t('pages.insights.totals')}
+                </Table.HeaderCell>
+                <Table.HeaderCell colSpan="2" style={{ textAlign: 'center' }}>
+                  {t('pages.insights.nrOfProducts')}
+                  {': '}
+                  {nrOfProducts || 0}
+                </Table.HeaderCell>
+                <Table.HeaderCell collapsing>{formatPriceFull(sumProducts || 0)}</Table.HeaderCell>
+                <Table.HeaderCell />
+              </Table.Row>
+            </Table.Footer>
+          </Table>
+          <TablePagination
+            countTotal={total}
+            countFetched={fetched}
+            skip={skip}
+            take={take}
+            nextPage={nextPage}
+            prevPage={prevPage}
+            setTake={setTake}
+          />
+        </Segment>
+      </>
+    );
+  }
 }
 
 const mapStateToProps = (state: RootState) => {
@@ -150,7 +220,7 @@ const mapStateToProps = (state: RootState) => {
 };
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
-  fetchContracts: () => dispatch(fetchTable(Tables.ETCompanies)),
+  fetchCompanies: () => dispatch(fetchTable(Tables.ETCompanies)),
   setTableFilter: (filter: { column: string, values: any[] }) => {
     dispatch(setFilterTable(Tables.ETCompanies, filter));
   },
@@ -176,4 +246,5 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   },
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(MegaTable);
+export default withTranslation()(withRouter(connect(mapStateToProps,
+  mapDispatchToProps)(MegaTable)));

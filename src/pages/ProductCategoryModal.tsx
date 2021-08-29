@@ -7,6 +7,7 @@ import {
 } from 'semantic-ui-react';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
+import { withTranslation, WithTranslation } from 'react-i18next';
 import { NavLink, RouteComponentProps, withRouter } from 'react-router-dom';
 import { ProductCategory } from '../clients/server.generated';
 import { clearSingle, fetchSingle } from '../stores/single/actionCreators';
@@ -17,9 +18,9 @@ import { getSingle } from '../stores/single/selectors';
 import { SingleEntities } from '../stores/single/single';
 import { TransientAlert } from '../stores/alerts/actions';
 import { showTransientAlert } from '../stores/alerts/actionCreators';
-import ProductCategoryProps from '../components/productcategories/ProductCategoryProps';
+import ProductCategoryProps from '../components/entities/productcategories/ProductCategoryProps';
 
-interface Props extends RouteComponentProps<{ categoryId: string }> {
+interface Props extends WithTranslation, RouteComponentProps<{ categoryId: string }> {
   create?: boolean;
   category: ProductCategory | undefined;
   status: ResourceStatus;
@@ -83,6 +84,7 @@ class ProductCategoryModal extends React.Component<Props> {
     } else {
       category = this.props.category;
     }
+    const { t } = this.props;
 
     if (category === undefined) {
       return (
@@ -121,10 +123,13 @@ class ProductCategoryModal extends React.Component<Props> {
           />
           {
             category.products === undefined || category.products.length === 0 ? (
-              <p>This category has no products</p>
+              <p>{t('entities.category.noProduct')}</p>
             ) : (
               <Segment>
-                <Header>Products:</Header>
+                <Header>
+                  {t('entity.products')}
+                  :
+                </Header>
                 <ul>
                   {category.products.map((product) => {
                     return (
@@ -156,4 +161,6 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   showTransientAlert: (alert: TransientAlert) => dispatch(showTransientAlert(alert)),
 });
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ProductCategoryModal));
+export default withTranslation()(
+  withRouter(connect(mapStateToProps, mapDispatchToProps)(ProductCategoryModal)),
+);

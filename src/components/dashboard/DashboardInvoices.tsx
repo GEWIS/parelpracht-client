@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import { Segment, Table } from 'semantic-ui-react';
+import { WithTranslation, withTranslation } from 'react-i18next';
 import { Client, ExpiredInvoice } from '../../clients/server.generated';
 import DashboardInvoicesRow from './DashboardInvoicesRow';
+import './DashboardInvoices.scss';
 
-interface Props {
+interface Props extends WithTranslation {
 }
 
 interface State {
@@ -31,12 +33,13 @@ class DashboardInvoices extends Component<Props, State> {
   }
 
   render() {
+    const { t } = this.props;
     const { invoices } = this.state;
 
     return (
       <Segment loading={this.state.loading}>
-        <h3>Expired invoices</h3>
-        <Table striped compact>
+        <h3>{t('dashboard.expiredInvoices.header')}</h3>
+        <Table striped compact fixed singleLine className="expired-invoices">
           <Table.Body>
             {invoices.map((i) => <DashboardInvoicesRow invoice={i} key={i.id} />)}
           </Table.Body>
@@ -46,4 +49,4 @@ class DashboardInvoices extends Component<Props, State> {
   }
 }
 
-export default DashboardInvoices;
+export default withTranslation()(DashboardInvoices);

@@ -1,0 +1,546 @@
+{
+  "Welcome to React": "Welkom bij React en react-i18next",
+  "activities": {
+    "button": {
+      "details": "Opmerking details",
+      "postComment": "Plaats opmerking",
+      "writeComment": "Voeg opmerking toe"
+    },
+    "newComment": "Schrijf een nieuwe opmerking...",
+    "status": {
+      "cancel": "Annuleer {{entity}}",
+      "cancelContractDescription": "Door een contract te annuleren, geef je aan dat het gehele contract niet geleverd wordt. Let op: sommige producten op het contract zouden nog wel geleverd en gefactureerd kunnen worden. Annuleer alleen een contract nadat je de Commissaris Externe Betrekkingen hebt geraadpleegd.",
+      "cancelInvoiceDescription": "Door een factuur te annuleren, geef je aan dat de factuur of één of meer producten op de factuur niet naar het bedrijf worden gestuurd. Annuleer alleen een factuur nadat je Commissaris Externe Betrekkingen en de Penningmeester hebt geraadpleegd.",
+      "cancelProductInstanceDescription": "Door een product te annuleren, geef je aan dat deze nooit geleverd zal worden. Annuleer alleen een product nadat je de Commissaris Externe Betrekkingen hebt geraadpleegd.",
+      "defer": "Stel {{entity}} uit",
+      "deferDescription": "Door deze {{entity}} uit te stellen, geef je aan dat dit product niet geleverd wordt in het huidige academische jaar, maar wel in het volgende academische jaar.",
+      "header": {
+        "cancelled": "{{entity}} is geannuleerd",
+        "general": "{{entity}} status",
+        "irrecoverable": "{{entity}} is oninbaar"
+      },
+      "irrecoverable": "Markeer als oninbaar",
+      "irrecoverableDescription": "Door deze factuur als oninbaar te markeren, geef je aan dat het geld van deze factuur niet geind kan worden. Dit kan als de factuur verlopen is (dus langer dan 5 jaar geleden verstuurd) of als de debiteur laat weten dat zij de factuur niet zullen betalen. Weet dat dit anders id dan een factuur annuleren: hierbij kunnen de producten nog steeds gefactureerd worden op een andere factuur."
+    },
+    "types": {
+      "addProduct": "Producten toegevoegd aan {{entity}}",
+      "comment": "Opmerking toegevoegd",
+      "delProduct": "Product verwijderd van {{entity}}",
+      "edit": "{{entity}} geupdatet",
+      "reassign": "Toewijzing aangepast",
+      "status": {
+        "added": "{{entity}} is toegevoegd",
+        "changed": "Status aangepast naar {{status}}",
+        "created": "{{entity}} is aangemaakt"
+      }
+    }
+  },
+  "buttons": {
+    "cancel": "Annuleren",
+    "delete": {
+      "confirm": "Weet je zeker dat je dit wilt verwijderen?",
+      "errorCompany": "Je kunt dit bedrijf niet verwijderen, omdat het nog contracten, facturen en/of contactpersonen heeft.",
+      "errorContact": "Je kunt dit contract niet verwijderen, omdat het nog contracten heeft.",
+      "errorContract": "Je kunt dit contract niet verwijderen, omdat het een andere status heeft dan \"Aangemaakt\" of nog producten of bestanden heeft.",
+      "errorInvoice": "Je kunt deze factuur niet verwijderen, omdat het een andere status dan \"Aangemaakt\" heeft of nog producten of bestanden heeft.",
+      "errorInvoiceProduct": "Je kunt dit product niet verwijderen, omdat de factuur al verstuurd of betaald is.",
+      "errorProduct": "Je kunt dit product niet verwijderen, omdat het nog bestanden heeft of nog gebruikt wordt in contracten en/of facturen.",
+      "errorProductCategory": "Je kunt deze productcategorie niet verwijderne, omdat het nog gebruikt wordt door één of meer producten.",
+      "errorProductInstance": "Je kunt dit product niet verwijderen, omdat het al op een factuur staat, het al geleverd/geannulleerd/uitgesteld is, of omdat het contract al voorgesteld of verstuurd is.",
+      "errorUser": "Je kunt deze gebruiker niet verwijdern, omdat deze gebruiker nog actieve rollen heeft.",
+      "header": "Verwijder {{entity}}",
+      "short": "Verwijderen"
+    },
+    "edit": "Bewerken",
+    "files": {
+      "cancel": "Annuleren",
+      "delete": "Verwijder bestand",
+      "download": "Download bestand",
+      "edit": "Bewerk bestand",
+      "save": "Bestand opslaan",
+      "upload": "Upload bestanden"
+    },
+    "save": "Opslaan"
+  },
+  "dashboard": {
+    "categoryLinechart": {
+      "header": "Gecontracteerde producten"
+    },
+    "expiredInvoices": {
+      "header": "Verlopen facturen"
+    },
+    "financialOverview": {
+      "contracted": "Gecontracteerd",
+      "contractedShort": "Gecontract.",
+      "delivered": "Geleverd",
+      "description": {
+        "contracted": "De totale waarde van alle geleverde en niet-geleverde producten op alle bevestigde/getekende contracten. Producten die al zijn gefactureerd in een vorig boekjaar of producten die zijn uitgesteld naar volgend jaar worden hier niet meegerekend.",
+        "delivered": "De totale waarde van alle producten op bevestigde/getekende contracten die in het huidige boekjaar zijn geleverd.",
+        "invoiced": "De totale waarde van alle producten die in dit boekjaar zijn gefactureerd.",
+        "paid": "De totale waarde van alle betaalde facturen in het huidige boekjaar.",
+        "suggested": "De totale waarde van alle contracten die nog niet zijn bevestigd/getekend door een bedrijf, oftewel de waarde van alle contracten met status \"Aangemaakt\", \"Voorgesteld\" of \"Verstuurd\"."
+      },
+      "header": "Financieel overzicht",
+      "invoiced": "Gefactureerd",
+      "notDelivered": "Niet geleverd",
+      "nrOfProducts": "# Producten",
+      "paid": "Voldaan",
+      "suggested": "Voorgesteld",
+      "value": "Waarde"
+    },
+    "recentContracts": {
+      "allContracts": "Alle contracten...",
+      "header": "Recente contracten"
+    },
+    "welcome": "Welkom terug,"
+  },
+  "entities": {
+    "category": {
+      "addCategory": "Nieuwe categorie",
+      "header": "Alle categorieën",
+      "newCategory": "Nieuwe productcategorie",
+      "noProduct": "Deze categorie heeft geen producten.",
+      "props": {
+        "name": "Naam"
+      }
+    },
+    "company": {
+      "header": "Alle bedrijven",
+      "newCompany": "Nieuw bedrijf",
+      "props": {
+        "addressInformation": "Adres",
+        "city": "Stad",
+        "country": "Land",
+        "description": "Omschrijving",
+        "details": "Details",
+        "invoiceAddress": "Factuuradres",
+        "name": "Naam",
+        "number": "Telefoonnummer",
+        "postalCode": "Postcode",
+        "street": "Straat en huisnummer"
+      }
+    },
+    "contact": {
+      "header": "Alle contactpersonen",
+      "newContact": "Nieuw contactpersoon",
+      "props": {
+        "comments": "Opmerkingen",
+        "email": "Emailadres",
+        "firstName": "Voornaam",
+        "function": {
+          "extensive": "{{function}} contactpersoon",
+          "financial": "Financieel",
+          "header": "Functie",
+          "normal": "Normaal",
+          "old": "Oud",
+          "primary": "Primair",
+          "unknown": "Onbekend"
+        },
+        "gender": {
+          "female": "Vrouw",
+          "gender": "Gender",
+          "male": "Man",
+          "unknown": "Onbekend"
+        },
+        "lastName": "Achternaam",
+        "middleName": "Tussenvoegsel",
+        "name": "Naam",
+        "number": "Telefoonnummer"
+      }
+    },
+    "contract": {
+      "props": {
+        "title": "Titel",
+        "totalValue": "Totale waarde"
+      }
+    },
+    "details": "Details",
+    "generalProps": {
+      "ID": "ID",
+      "amount": "Bedrag",
+      "assignedTo": "Toegewezen aan",
+      "comments": "Opmerkingen",
+      "commentsDescription": "Interne opmerkingen",
+      "createdBy": "Aangemaakt door",
+      "lastUpdate": "Laatste update",
+      "status": "Status",
+      "unknown": "Onbekend"
+    },
+    "graph": {
+      "label": {
+        "amount": "Aantal",
+        "value": "Waarde (€)"
+      },
+      "month": {
+        "apr": "April",
+        "aug": "Augustus",
+        "dec": "December",
+        "feb": "Februari",
+        "jan": "Januari",
+        "jul": "Juli",
+        "jun": "Juni",
+        "maa": "Maart",
+        "mei": "Mei",
+        "nov": "November",
+        "okt": "Oktober",
+        "sep": "September"
+      },
+      "target": {
+        "maximum": "Maximum target",
+        "minimum": "Minimum target"
+      }
+    },
+    "invoice": {
+      "props": {
+        "financialYear": "Boekjaar",
+        "invoiceDate": "Factuurdatum",
+        "poNumber": "PO Nummer",
+        "title": "Titel",
+        "totalValue": "Totale waarde"
+      }
+    },
+    "product": {
+      "contractedProducts": "Gecontracteerde producten",
+      "insights": {
+        "addColumn": "Voeg kolom toe",
+        "addDescription": "Voeg een beschrijving toe",
+        "addRow": "Voeg rij toe",
+        "header": "Prijslijst",
+        "placeholderHeader": "Titel",
+        "placeholderValue": "Waarde"
+      },
+      "noActivities": "Er zijn nog geen activiteiten.",
+      "noContract": "Er zijn nog geen contracten aangemaakt.",
+      "noFiles": "Er zijn nog geen bestanden geupload.",
+      "noInvoice": "Er zijn nog geen facturen toegevoegd.",
+      "props": {
+        "category": "Product categorie",
+        "comments": "Opmerkingen (intern)",
+        "contractTextEn": "Contracttekst (Engels)",
+        "contractTextNl": "Contracttekst (Nederlands)",
+        "customPrice": "Prijslijst",
+        "customPriceButton": "Voeg prijslijst toe",
+        "header": "Nieuw product",
+        "maxTarget": "Maximum target",
+        "minTarget": "Minimum target",
+        "name": "Naam",
+        "nameEn": "Titel (Engels)",
+        "nameNl": "Titel (Nederlands)",
+        "price": "Prijs",
+        "specsEn": "Aanleverspecificaties (Engels)",
+        "specsNl": "Aanleverspecificaties (Nederlands)",
+        "status": {
+          "active": "Actief",
+          "header": "Status",
+          "inactive": "Inactief"
+        }
+      },
+      "warningFinancialYear": "* In bovenstaand overzicht staan boekjaren, dus 2021 betekent het verenigingsjaar 2020-2021."
+    },
+    "productInstance": {
+      "newProduct": "Nieuw Product",
+      "props": {
+        "basePrice": "Basisprijs",
+        "details": "Details",
+        "discount": "Korting",
+        "invoiced": "Gefactureerd",
+        "price": "Prijs",
+        "realPrice": "Werkelijke prijs"
+      }
+    },
+    "status": {
+      "active": "Actief",
+      "cancelled": "Geannuleerd",
+      "confirmed": "Gesloten",
+      "created": "Aangemaakt",
+      "deferred": "Uitgesteld",
+      "delivered": "Geleverd",
+      "finished": "Voldaan",
+      "inactive": "Inactief",
+      "irrecoverable": "Oninbaar",
+      "notDelivered": "Niet geleverd",
+      "paid": "Betaald",
+      "proposed": "Voorgesteld",
+      "sent": "Verstuurd",
+      "unknown": "Onbekend"
+    },
+    "user": {
+      "props": {
+        "allMailToReplyTo": "Ik wil alle emails ontvangen op mijn antwoord emailadres",
+        "comments": "Opmerkingen",
+        "firstName": "Voornaam",
+        "function": "Functie",
+        "functionDescription": "Verschijnt onder je naam op contracten.",
+        "gender": {
+          "female": "Vrouw",
+          "header": "Geslacht",
+          "male": "Man",
+          "other": "Overig",
+          "unknown": "Onbekend"
+        },
+        "lastName": "Achternaam",
+        "mailOnInvoice": "Ik wil een email ontvangen iedere keer dat een factuur is verstuurd",
+        "name": "Naam",
+        "personalEmail": "Persoonlijk emailadres",
+        "preposition": "Tussenvoegsel",
+        "replyToEmail": "Antwoord emailadres",
+        "roles": {
+          "admin": "Admin",
+          "audit": "Kasco",
+          "financial": "Financieel",
+          "general": "Algemeen",
+          "signee": "Tekengerechtigd"
+        }
+      }
+    }
+  },
+  "entity": {
+    "activities": "Activiteiten",
+    "categories": "Product categorieën",
+    "category": "Categorie",
+    "companies": "Bedrijven",
+    "company": "Bedrijf",
+    "contact": "Contactpersoon",
+    "contactShort": "Contactp.",
+    "contacts": "Contactpersonen",
+    "contract": "Contract",
+    "contracts": "Contracten",
+    "files": "Bestanden",
+    "insights": "Inzichten",
+    "invoice": "Factuur",
+    "invoices": "Facturen",
+    "product": "Product",
+    "productcategory": "Product Categorie",
+    "productinstance": "Product",
+    "productinstances": "Producten",
+    "products": "Producten",
+    "user": "Gebruiker",
+    "users": "Gebruikers"
+  },
+  "files": {
+    "generate": {
+      "contentType": "Bestandstype",
+      "contract": "Contract",
+      "custom": {
+        "ourReference": "Onze Referentie",
+        "subject": "Onderwerp",
+        "theirReference": "Hun Referentie"
+      },
+      "error": "Kon geen {{entity}} bestand genereren. Raadpleeg de back-end logs voor meer informatie.",
+      "fileType": "Bestandstype",
+      "generateButton": "Genereer",
+      "header": "Genereer bestand",
+      "label": "Label",
+      "proposal": "Voorstel",
+      "recipient": "Ontvanger",
+      "saveToDisk": "Opslaan",
+      "showDiscount": "Kortingen",
+      "signee": "Tekengerechtigde"
+    }
+  },
+  "footer": {
+    "creators1": "Ontwikkeld en gebouwd met",
+    "creators2": "door het 39e bestuur",
+    "credits": {
+      "description1": "ParelPracht is ontwikkeld in de winter van 2020-2021 tijdens de tweede lockdown van de coronacrisis door het 39 bestuur van GEWIS. Veel dank aan iedereen die heeft bijdragen:",
+      "description2": "Ook nog veel dank aan Gijs de Man en iedereen van Stijl voor hun hulp met de PDF templates en Wout de Ruiter voor het delen van zijn kennis van Docker containers.",
+      "header": "Over ParelPracht"
+    },
+    "gewis": "Studievereniging GEWIS"
+  },
+  "language": {
+    "dutch": "Nederlands",
+    "english": "Engels",
+    "header": "Taal"
+  },
+  "mainMenu": {
+    "admin": "Admin",
+    "categories": "Categorieën",
+    "companies": "Bedrijven",
+    "contacts": "Contactpersonen",
+    "contracts": "Contracten",
+    "custom": "Handmatig",
+    "insights": "Inzicht",
+    "invoices": "Facturen",
+    "logout": "Uitloggen",
+    "myProfile": "Mijn profiel",
+    "products": "Producten",
+    "users": "Gebruikers"
+  },
+  "other": {
+    "dateTime": {
+      "at": "om",
+      "by": "door"
+    }
+  },
+  "pages": {
+    "companies": {
+      "addCompany": "Voeg bedrijf toe",
+      "subheader": "Alle bedrijven"
+    },
+    "contacts": {
+      "addContact": "Nieuw contactpersoon",
+      "noContact": "Er zijn nog geen contactpersonen."
+    },
+    "contract": {
+      "cancelError": "Je kunt dit contract niet annuleren, omdat niet alle producten zijn geannuleerd.",
+      "newContract": "Nieuw contract",
+      "products": {
+        "addProduct": "Voeg product toe",
+        "addSingleToInvoice": "Zet 1 product op factuur",
+        "addToInvoice": "Zet {{amount}} producten op factuur",
+        "createNewInvoice": "Maak nieuwe factuur"
+      }
+    },
+    "contracts": {
+      "addContract": "Nieuw contract",
+      "allContracts": "Alle Contracten"
+    },
+    "customInvoice": {
+      "descriptionHeader": "Invoice description",
+      "detailsHeader": "Factuurinformatie",
+      "generateButton": "Genereer factuur",
+      "header": "Genereer Handmatige Factuur",
+      "organizationName": "Naam van organisatie",
+      "products": {
+        "addProduct": "Product toevoegen",
+        "amount": "Aantal",
+        "deleteButton": "Verwijder product",
+        "header": "Producten",
+        "name": "Naam",
+        "price": "Prijs",
+        "total": "Totaal"
+      },
+      "recipientDetails": "Ontvangerinformatie",
+      "subheader": "Het leven van de penno makkelijker maken"
+    },
+    "forgotPassword": {
+      "back": "Terug naar inloggen",
+      "enterEmail": "Vul je emaildres in om een wachtwoord-reset link te ontvangen.",
+      "header": "Wachtwoord resetten",
+      "sendEmailButton": "Verstuur wachtwoord reset email",
+      "successMessage": "Controleer je mailbox voor de link om je wachtwoord te resetten. Als deze mail niet binnen een paar minuten verschijnt, controleer je spam map."
+    },
+    "insights": {
+      "header": "Inzicht",
+      "notInvoiced": "Niet gefactureerd",
+      "nrOfProducts": "Aantal producten",
+      "totals": "Totalen"
+    },
+    "invoice": {
+      "newInvoice": "Nieuwe Factuur"
+    },
+    "loading": "Login informatie controleren...",
+    "login": {
+      "email": "Emailadres",
+      "forgotPassword": "Wachtwoord vergeten",
+      "loginButton": "Log in",
+      "password": "Wachtwoord",
+      "rememberMe": "Blijf ingelogd",
+      "troubleSigningIn": "Problemen met inloggen?"
+    },
+    "noRights": {
+      "hammerTime": "Stop, hammertime!",
+      "header": "Sorry, you don't have the rights to view this page!",
+      "subheader": "Neem contact op met de administrator als dit een fout is."
+    },
+    "notFound": {
+      "404": "404: Kan deze pagina niet vinden",
+      "header": "Er is geen geld hier,",
+      "subheader": "blijf zoeken!"
+    },
+    "product": {
+      "newProduct": "Nieuw Product"
+    },
+    "products": {
+      "addProduct": "Voeg product toe",
+      "columns": {
+        "category": "Categorie"
+      },
+      "header": "Alle producten",
+      "subheader": "Producten"
+    },
+    "resetPassword": {
+      "newPassword": "Nieuw wachtwoord",
+      "repeatPassword": "Herhaal wachtwoord",
+      "requirements": {
+        "header": "Wachtwoordeisen:",
+        "length": "Acht karakters lang",
+        "lowerCase": "Eén kleine letter",
+        "number": "Eén getal",
+        "symbol": "Eén leesteken/symbool",
+        "upperCase": "Eén hoofdletter"
+      },
+      "resetPassword": "Reset je wachtwoord",
+      "setPassword": "Kies een wachtwoord",
+      "submit": "Versture",
+      "successMessage": "Wachtwoord succesvol veranderd!"
+    },
+    "tables": {
+      "footer": {
+        "items": "Items {{begin}} tot {{end}} van {{total}} geladen",
+        "pagination": {
+          "all": "Alles",
+          "allItems": "Alle items",
+          "next": "Volgende pagina",
+          "nrItems": "{{take}} items",
+          "previous": "Vorige pagina"
+        }
+      },
+      "header": {
+        "clear": "Wis zoekopdracht",
+        "items": "{{items}} van {{total}} item(s) geladen",
+        "refresh": "Herlaad tabel",
+        "search": "Zoeken...",
+        "sorting": "gesorteerd op {{column}}",
+        "update": "{{time}} bijgewerkt"
+      },
+      "invoices": {
+        "header": "Alle facturen",
+        "lastSeenMessage": "{{timeAgo}} bijgewerkt door de penningmeester",
+        "lastSeenMessageNever": "Nooit bijgewerkt door de penningmeester",
+        "updateLastSeen": "Update Laatst Gezien",
+        "updateLastSeenDescription": "Door \"laatst gezien\" te updaten, laat je weten dat alle factuurstatussen zijn bijgewerkt."
+      },
+      "total": "Totaa"
+    },
+    "user": {
+      "apiKey": {
+        "description1": "Je kunt een API Key genereren om ParelPracht te gebruiken in externe applicaties. Met deze key kunnen operaties uitgevoerd worden namens jou. Om deze key te gebruiken zet je de gehele key in de",
+        "description2": "header van iedere API request.",
+        "generate": "Genereer",
+        "header": "API Key",
+        "revoke": "Intrekken",
+        "viewKey": "Bekijk key",
+        "warning": "Genereer alleen een key als je weet wat je doet!"
+      },
+      "avatar": {
+        "addButton": "Voeg profielfoto toe",
+        "deleteUsersAvatar": "Verwijder profielfoto van {{name}}",
+        "modalHeader": "Profielfoto van {{name}}",
+        "uploadUsersAvatar": "Upload profielfoto van {{name}}"
+      },
+      "background": {
+        "addPersonalBackground": "Voeg persoonlijke achtergond toe",
+        "cancel": "Annuleren",
+        "deleteUsersBackground": "Verwijder achtergrond van {{name}}",
+        "header": "Persoonlijke Achtergrond",
+        "modalHeader": "Achtergrond van {{name}}",
+        "uploadUsersBackground": "Upload een achtergrond voor {{name}}"
+      },
+      "newUser": "Nieuwe Gebruiker",
+      "permissions": "Rechten",
+      "responsibilities": {
+        "cancel": "Annuleren",
+        "description": "Je kunt je verantwoordelijkheden overdragen aan een andere Parelracht gebruiker. Hierdoor verschijnt zijn/haar naam op al jouw contracten en facturen.",
+        "header": "Verantwoordelijkheden",
+        "transfer": "Overdragen",
+        "transferButton": "Draag verantwoordelijkheden over"
+      }
+    },
+    "users": {
+      "addUser": "Nieuwe gebruiker",
+      "allUsers": "Alle gebruikers"
+    }
+  }
+}

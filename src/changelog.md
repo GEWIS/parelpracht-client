@@ -1,14 +1,71 @@
 # Change log
-The current version of ParelPracht is **v1.0.1**, released on April 23rd, 2021.
+The current version of ParelPracht is **v1.1.0**, released on August 29th, 2021.
 You can find the release notes below.
 ----------------------
+
+## v1.1.0 (29-08-2021)
+### Added
+- Added a database validator command to the backend to validate the database and fix any issues.
+- Added column "Function" to the Contacts table with sorting and filtering by this column.
+- Added column "Updated at" to all tables.
+- Added a contract status filter to the Insights table.
+  - Added a partial circle as symbol for a contract's status to the ContractLink.
+- Added favicons for all browser and operating system types.
+- Added localization.
+  - Added the Dutch language.
+- Added links to the Insights table with predefined filters to the Financial Overview dashboard table.
+
+### Changes
+- Selectors no longer have a unnecessary description.
+  - The only exception is the Contact selector: company is replaced by the contact's function as a contact.
+- The name of a generated file now also includes the company.
+- When creating a PDF or .tex file from a contract or invoice, a recipient other than the contact can be chosen.
+- Contacts no require need a first name.
+- Files no longer require a label/comment.
+- "Save to disk" is no longer selected by default when generating files.
+- An address is no longer required when creating a custom invoice.
+- The list of products when adding one to a contract, is now sorted alphabetically.
+- Contacts are now nicely sorted in Primary, Normal, Financial and Old-order.
+- When generating a PDF invoice, the date on the letter is now the "Invoice date" instead of the date of today.
+- All entity-dropdowns are now properly sorted alphabetically.
+- Error messages now show the actual error, instead of "An unexpected error occurred" message.
+- TextAreas are automatically streched to fit their content.
+- Updated node packages in the front-end and back-end.
+- Admins can now change the price of a product on a confirmed contract.
+- The contact of a contract can be changed.
+- Contracts on a single product page are sorted on date.
+- The Invoices table is filtered on status "Sent" for treasurers.
+- Activities are sorted on their creation date instead of their last update.
+- Changed pagination size to 25, 50, 100 (default), 250, 500 and All.
+
+### Bugfixes
+- Fixed "Treasurer Last Seen" not being shown properly.
+- Fixed compiling errors when generating a PDF of an empty contract or invoice.
+- Fixed all sent invoices showing as expired invoices, not only the actually expired ones.
+- Fixed not being able to update a property of an invoice without changing the invoice date as well.
+- Fixed inactive products showing up in the list of products when adding a product to a contract.
+- Fixed not being able to use commas in prices when creating a custom invoice.
+- Fixed being able to select an Old contact for a contract in the front-end, but not in the back-end.
+- Fixed being able to select an inactive company for a contract.
+- Fixed being redirected to a non-existing company when closing a contact modal from the All Contacts-list.
+- Fixed not being able to scroll the "Comments" field of contracts and invoices.
+- Fixed ParelPracht logo missing on loading screen.
+- Fixed trash can icon working on contracts while a contract still has one or more files.
+- Fixed several small issues with generating PDF files, like missing dots/commas for 1000's, missing euro signs and weird spaces.
+- Fixed several tables going "out of bounds" when they had too much content, namely the "Financial overview", "Expired invoices", and "Files" tables.
+- Fixed weird formatting of long text in all entity's summaries.
+- Fixed infinite loading screen instead of a 404 page when an entity does not exist.
+- Fixed timestamps not being in the correct timezone.
+- Fixed value and count being zero when filtering on an invoice year and "not invoiced" in the Insights table.
+- Fixed "Contracted" bar in financial overview on the dashboard being too high, as it included cancelled contracts.
+- Fixed weird formatting of currencies starting 1000 euros.
 
 ## v1.0.1 (23-04-2021)
 ### Added
 - Added support for 'mysql_clear_password' authentication method.
 
 ### Changes
-- Updated the node packages
+- Updated the node packages.
 
 ### Bugfixes
 - Fixed the backend docker container failing to build.

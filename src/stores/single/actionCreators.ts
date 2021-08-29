@@ -6,7 +6,7 @@ import {
   SingleDeleteAction, SingleDeleteActivityAction,
   SingleDeleteFileAction,
   SingleErrorAction,
-  SingleFetchAction,
+  SingleFetchAction, SingleNotFoundAction,
   SingleSaveAction, SingleSaveActivityAction,
   SingleSaveFileAction,
   SingleSetAction,
@@ -91,4 +91,8 @@ export function clearSingle<S extends SingleEntities>(single: S): SingleClearAct
 
 export function errorSingle<S extends SingleEntities>(single: S): SingleErrorAction<S> {
   return { type: singleActionPattern(single, SingleActionType.Error) };
+}
+
+export function notFoundSingle<S extends SingleEntities>(single: S): SingleNotFoundAction<S> {
+  return { type: singleActionPattern(single, SingleActionType.NotFound) };
 }

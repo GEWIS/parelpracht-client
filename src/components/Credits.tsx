@@ -1,24 +1,26 @@
 import React from 'react';
 import { Modal } from 'semantic-ui-react';
+import { useTranslation } from 'react-i18next';
 
 function Credits() {
+  const { t } = useTranslation();
+
   return (
     <Modal
       trigger={(
         <span style={{ cursor: 'pointer' }}>
-          Designed and built with
+          {t('footer.creators1')}
           {' '}
           <span role="img" aria-label="love">🍑</span>
           {' '}
-          by the 39th board
+          {t('footer.creators2')}
         </span>
     )}
       closeIcon
     >
-      <Modal.Header>About ParelPracht</Modal.Header>
+      <Modal.Header>{t('footer.credits.header')}</Modal.Header>
       <Modal.Content>
-        ParelPracht was built in the winter of 2020-2021 during the second lockdown of the corona
-        crisis by the 39th board of GEWIS. Special thanks to everyone who contributed:
+        {t('footer.credits.description1')}
         <ul>
           <li>Roy Kakkenberg</li>
           <li>Koen de Nooij</li>
@@ -28,8 +30,7 @@ function Credits() {
           <li>Irne Verwijst</li>
         </ul>
         <br />
-        Also special thanks to Gijs de Man and everyone at Stijl for their help with the PDF
-        template and Wout de Ruiter for sharing his knowledge regarding Docker containers.
+        {t('footer.credits.description2')}
       </Modal.Content>
     </Modal>
   );

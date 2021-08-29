@@ -27,6 +27,7 @@ services:
       - PORT=3001
       - USE_HTTPS=false
       - SERVER_HOST=localhost:9639
+      - TZ=Europe/Amsterdam
       - TYPEORM_CONNECTION=postgres
       - TYPEORM_HOST=database
       - TYPEORM_PORT=5432
