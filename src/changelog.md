@@ -3,6 +3,13 @@ The current version of ParelPracht is **v1.1.0**, released on August 29th, 2021.
 You can find the release notes below.
 ----------------------
 
+## v1.1.1
+### Changes
+- Files are now sorted on their creation date instead of their last update.
+
+### Bugfixes
+- Fixed a bug that caused an API key not to work in certain situations.
+
 ## v1.1.0 (29-08-2021)
 ### Added
 - Added a database validator command to the backend to validate the database and fix any issues.
