@@ -81,7 +81,7 @@ class FilesList extends React.Component<Props, State> {
         <Table.Body>
           {createRow}
           {files
-            .sort((a, b) => { return b.updatedAt.getTime() - a.updatedAt.getTime(); })
+            .sort((a, b) => { return b.createdAt.getTime() - a.createdAt.getTime(); })
             .map((file) => (
               <SingleFile
                 key={file.id}
