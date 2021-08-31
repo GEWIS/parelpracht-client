@@ -14,7 +14,7 @@ function Footer() {
           <Grid.Column textAlign="left" style={{ padding: '1rem' }}>
             <Version />
             <span style={{ marginRight: '0.5em', marginLeft: '0.5em' }}>-</span>
-            {`© ${t('footer.gewis')} - 2020`}
+            {`© ${t('footer.gewis')} - 2021`}
           </Grid.Column>
           <Grid.Column textAlign="right" style={{ padding: '1rem' }}>
             <Credits />

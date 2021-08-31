@@ -288,7 +288,7 @@ class SingleFile extends React.Component<Props, State> {
             </>
           ) : undefined}
         </Table.Cell>
-        <Table.Cell>{formatLastUpdate(file!.updatedAt)}</Table.Cell>
+        <Table.Cell>{formatLastUpdate(file!.createdAt)}</Table.Cell>
         <Table.Cell>
           <AuthorizationComponent roles={[Roles.GENERAL, Roles.ADMIN]} notFound={false}>
             <Popup
