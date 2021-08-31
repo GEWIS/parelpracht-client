@@ -1,9 +1,9 @@
 # Change log
-The current version of ParelPracht is **v1.1.0**, released on August 29th, 2021.
+The current version of ParelPracht is **v1.1.1**, released on August 31st, 2021.
 You can find the release notes below.
 ----------------------
 
-## v1.1.1
+## v1.1.1 (31-08-2021)
 ### Changes
 - Files are now sorted on their creation date instead of their last update.
 
