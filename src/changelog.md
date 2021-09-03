@@ -1,7 +1,11 @@
 # Change log
-The current version of ParelPracht is **v1.1.1**, released on August 31st, 2021.
+The current version of ParelPracht is **v1.1.2**, released on August 31st, 2021.
 You can find the release notes below.
 ----------------------
+
+## v1.1.2 (31-08-2021)
+### Bugfixes
+- Fixed not being able to upload files larger than 1MB. The new limit is 50MB.
 
 ## v1.1.1 (31-08-2021)
 ### Changes
