@@ -4,7 +4,7 @@ services:
     build:
       context: ../parelpracht-client
       dockerfile: Dockerfile
-    image: board.docker-registry.gewis.nl/parelpracht-client:latest
+    image: parelpracht.docker-registry.gewis.nl/parelpracht-client:latest
     restart: 'unless-stopped'
     ports:
       - '9639:80'
@@ -13,14 +13,15 @@ services:
     volumes:
       - logos:/usr/src/app/data/logos
       - backgrounds:/usr/src/app/data/backgrounds
+      - uploads:/usr/src/app/data/uploads
+      - generated:/usr/src/app/data/generated
   backend:
     build: ../parelpracht-server
-    image: board.docker-registry.gewis.nl/parelpracht-server:latest
+    image: parelpracht.docker-registry.gewis.nl/parelpracht-server:latest
     restart: 'unless-stopped'
     networks:
       - parelpracht
     volumes:
-      - backend-files:/usr/src/app/data
       - logos:/usr/src/app/data/logos
       - backgrounds:/usr/src/app/data/backgrounds
     environment:
@@ -68,11 +69,13 @@ services:
 volumes:
 #  database-data:
 #    driver: local
-  backend-files:
-    driver: local
   logos:
     driver: local
   backgrounds:
+    driver: local
+  uploads:
+    driver: local
+  generated:
     driver: local
 networks:
   parelpracht:

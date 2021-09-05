@@ -10,6 +10,7 @@ You can find the release notes below.
 ### Bugfixes
 - Fixed month in list of expired invoices being wrong (namely the day number of tomorrow instead of the actual month).
 - Fixed being able to mark paid/cancelled invoices as irrecoverable.
+- Fixed templates not being updated when the Docker image is updated.
 
 ## v1.1.2 (31-08-2021)
 ### Bugfixes
