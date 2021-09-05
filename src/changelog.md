@@ -3,6 +3,14 @@ The current version of ParelPracht is **v1.1.2**, released on August 31st, 2021.
 You can find the release notes below.
 ----------------------
 
+## v1.1.3
+### Changes
+- The files tab is now consistently before the activity tab on all entity pages.
+
+### Bugfixes
+- Fixed month in list of expired invoices being wrong (namely the day number of tomorrow instead of the actual month).
+- Fixed being able to mark paid/cancelled invoices as irrecoverable.
+
 ## v1.1.2 (31-08-2021)
 ### Bugfixes
 - Fixed not being able to upload files larger than 1MB. The new limit is 50MB.

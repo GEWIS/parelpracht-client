@@ -46,7 +46,7 @@ export function formatTimestampToDate(date: Date): string {
 }
 
 export function formatTimestampToDateShort(date: Date): string {
-  return `${date.getDate().toString().padStart(2, '0')}-${(date.getDate() + 1).toString().padStart(2, '0')}-${date.getFullYear()}`;
+  return `${date.getDate().toString().padStart(2, '0')}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getFullYear()}`;
 }
 
 export function parseFinancialYear(year: number): string {
