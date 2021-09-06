@@ -326,7 +326,7 @@
         "subject": "Subject",
         "theirReference": "Their Reference"
       },
-      "error": "Could not generate a {{entity}} file. Please consulate the back-end logs.",
+      "error": "Could not generate a {{entity}} file. Please consulate the back-end logs, or download the .tex file and compile it locally.",
       "fileType": "File Type",
       "generateButton": "Generate",
       "header": "Generate file",
