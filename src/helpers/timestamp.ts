@@ -65,3 +65,27 @@ export function dateToFullFinancialYear(date: Date): string {
   const finYear = dateToFinancialYear(date);
   return parseFinancialYear(finYear);
 }
+
+export function formatDateToString(date: Date) {
+  let day = date.getDate().toString();
+  let month = (date.getMonth() + 1).toString();
+  const year = date.getFullYear().toString();
+
+  if (Number(day) < 10) { day = `0${day}`; }
+  if (Number(month) < 10) { month = `0${month}`; }
+
+  return `${year}-${month}-${day}`;
+}
+
+export function isInvalidDate(date: Date) {
+  return !(date instanceof Date && !Number.isNaN(date.getDate()));
+}
+
+export function formatDateForDateInput(date: Date, dateValue: string) {
+  let formattedDate: string = formatDateToString(date);
+
+  if (dateValue.length !== 10 || isInvalidDate(date)) {
+    formattedDate = dateValue;
+  }
+  return formattedDate;
+}

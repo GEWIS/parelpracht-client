@@ -4,6 +4,7 @@ import {
   Button, Container, Grid, Header, Icon, Segment,
 } from 'semantic-ui-react';
 import { withTranslation, WithTranslation } from 'react-i18next';
+import validator from 'validator';
 import CustomInvoiceText from '../components/custominvoice/CustomInvoiceText';
 import {
   CustomInvoiceGenSettings,
@@ -19,6 +20,7 @@ import CustomInvoiceProps from '../components/custominvoice/CustomInvoiceProps';
 import CustomInvoiceRecipient from '../components/custominvoice/CustomInvoiceRecipient';
 import { FilesClient } from '../clients/filesClient';
 import AuthorizationComponent from '../components/AuthorizationComponent';
+import { isInvalidDate } from '../helpers/timestamp';
 
 interface Props extends RouteComponentProps, WithTranslation {}
 
@@ -28,6 +30,7 @@ interface State {
   subject: string;
   ourReference: string;
   theirReference: string;
+  date: Date;
 
   invoiceReason: string;
   recipient: CustomRecipient;
@@ -46,6 +49,7 @@ class CustomInvoicePage extends React.Component<Props, State> {
       ourReference: '',
       theirReference: '',
       invoiceReason: '',
+      date: new Date(),
       recipient: new CustomRecipient({
         name: '',
         organizationName: '',
@@ -79,6 +83,10 @@ class CustomInvoicePage extends React.Component<Props, State> {
 
   setFileType = (fileType: ReturnFileType) => {
     this.setState({ fileType });
+  };
+
+  setDate = (date: Date) => {
+    this.setState({ date });
   };
 
   addProduct = () => {
@@ -124,7 +132,8 @@ class CustomInvoicePage extends React.Component<Props, State> {
 
   generate = async () => {
     const {
-      language, fileType, ourReference, theirReference, subject, invoiceReason, recipient, products,
+      language, fileType, ourReference, theirReference, subject,
+      invoiceReason, recipient, products, date,
     } = this.state;
     this.setState({ loading: true });
     const client = new FilesClient();
@@ -137,6 +146,7 @@ class CustomInvoicePage extends React.Component<Props, State> {
       invoiceReason,
       recipient,
       products,
+      date,
     }));
 
     this.setState({ loading: false });
@@ -145,8 +155,8 @@ class CustomInvoicePage extends React.Component<Props, State> {
   render() {
     const { t } = this.props;
     const {
-      language, fileType, subject, ourReference, theirReference, invoiceReason, recipient, products,
-      loading,
+      language, fileType, subject, ourReference, theirReference,
+      invoiceReason, recipient, products, date, loading,
     } = this.state;
 
     return (
@@ -173,6 +183,9 @@ class CustomInvoicePage extends React.Component<Props, State> {
                   floated="right"
                   onClick={() => this.generate()}
                   loading={loading}
+                  disabled={(isInvalidDate(date) || validator.isEmpty(subject)
+                    || validator.isEmpty(ourReference) || validator.isEmpty(invoiceReason)
+                    || validator.isEmpty(recipient.name))}
                 >
                   <Icon name="download" />
                   {t('pages.customInvoice.generateButton')}
@@ -206,9 +219,11 @@ class CustomInvoicePage extends React.Component<Props, State> {
                   subject={subject}
                   ourReference={ourReference}
                   theirReference={theirReference}
+                  date={date}
                   setAttribute={this.setAttribute}
                   setLanguage={this.setLanguage}
                   setFileType={this.setFileType}
+                  setDate={this.setDate}
                 />
                 <CustomInvoiceRecipient
                   recipient={recipient}
