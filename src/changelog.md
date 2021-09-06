@@ -1,9 +1,9 @@
 # Change log
-The current version of ParelPracht is **v1.1.2**, released on August 31st, 2021.
+The current version of ParelPracht is **v1.1.3**, released on September 6th, 2021.
 You can find the release notes below.
 ----------------------
 
-## v1.1.3
+## v1.1.3 (06-09-2021)
 ### Added
 - Added "Invoice date" field to custom invoices.
 
