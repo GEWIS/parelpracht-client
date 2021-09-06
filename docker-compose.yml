@@ -11,10 +11,9 @@ services:
     networks:
       - parelpracht
     volumes:
+      - backend-files:/usr/src/app/data
       - logos:/usr/src/app/data/logos
       - backgrounds:/usr/src/app/data/backgrounds
-      - uploads:/usr/src/app/data/uploads
-      - generated:/usr/src/app/data/generated
   backend:
     build: ../parelpracht-server
     image: parelpracht.docker-registry.gewis.nl/parelpracht-server:latest
@@ -69,13 +68,11 @@ services:
 volumes:
 #  database-data:
 #    driver: local
+  backend-files:
+    driver: local
   logos:
     driver: local
   backgrounds:
-    driver: local
-  uploads:
-    driver: local
-  generated:
     driver: local
 networks:
   parelpracht:

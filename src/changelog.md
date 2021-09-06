@@ -15,6 +15,7 @@ You can find the release notes below.
 - Fixed being able to mark paid/cancelled invoices as irrecoverable.
 - Fixed templates not being updated when the Docker image is updated.
 - Fixed input validation and NaN-dates of date input fields.
+- Fixed browser caching issues, causing ParelPracht not to be updated in the browser.
 
 ## v1.1.2 (31-08-2021)
 ### Bugfixes
