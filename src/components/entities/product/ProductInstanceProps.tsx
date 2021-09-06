@@ -196,7 +196,7 @@ class ProductInstanceProps extends React.Component<Props, State> {
     return (
       <>
         <h2>
-          {this.props.create ? t('pages.productInstance.newProductInstance') : t('entities.details')}
+          {this.props.create ? t('entities.productInstance.newProduct') : t('entities.details')}
 
           <AuthorizationComponent roles={[Roles.ADMIN, Roles.GENERAL]} notFound={false}>
             <PropsButtons

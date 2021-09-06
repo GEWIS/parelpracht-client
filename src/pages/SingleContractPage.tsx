@@ -104,20 +104,6 @@ class SingleContractPage extends React.Component<Props, State> {
 
     if (hasRole(Roles.ADMIN) || hasRole(Roles.GENERAL) || hasRole(Roles.AUDIT)) {
       panes.push({
-        menuItem: t('entity.activities'),
-        render: contract ? () => (
-          <Tab.Pane>
-            <ActivitiesList
-              activities={contract.activities as GeneralActivity[]}
-              componentId={contract.id}
-              componentType={SingleEntities.Contract}
-              resourceStatus={status}
-            />
-          </Tab.Pane>
-        ) : () => <Tab.Pane />,
-      });
-
-      panes.push({
         menuItem: t('entity.files'),
         render: contract ? () => (
           <Tab.Pane>
@@ -133,6 +119,20 @@ class SingleContractPage extends React.Component<Props, State> {
                 />
               )}
               status={status}
+            />
+          </Tab.Pane>
+        ) : () => <Tab.Pane />,
+      });
+
+      panes.push({
+        menuItem: t('entity.activities'),
+        render: contract ? () => (
+          <Tab.Pane>
+            <ActivitiesList
+              activities={contract.activities as GeneralActivity[]}
+              componentId={contract.id}
+              componentType={SingleEntities.Contract}
+              resourceStatus={status}
             />
           </Tab.Pane>
         ) : () => <Tab.Pane />,

@@ -9313,6 +9313,7 @@ export interface IBaseFile {
 /** Make all properties in T optional */
 export class Partial_FileParams implements IPartial_FileParams {
     name?: string;
+    createdAt?: Date;
 
     constructor(data?: IPartial_FileParams) {
         if (data) {
@@ -9326,6 +9327,7 @@ export class Partial_FileParams implements IPartial_FileParams {
     init(_data?: any) {
         if (_data) {
             this.name = _data["name"];
+            this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
         }
     }
 
@@ -9339,6 +9341,7 @@ export class Partial_FileParams implements IPartial_FileParams {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["name"] = this.name;
+        data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
         return data; 
     }
 }
@@ -9346,6 +9349,7 @@ export class Partial_FileParams implements IPartial_FileParams {
 /** Make all properties in T optional */
 export interface IPartial_FileParams {
     name?: string;
+    createdAt?: Date;
 }
 
 export class BaseActivity implements IBaseActivity {
@@ -10733,6 +10737,7 @@ export enum ReturnFileType {
 
 export class GenerateContractParams implements IGenerateContractParams {
     name?: string;
+    createdAt?: Date;
     language!: Language;
     contentType!: ContractType;
     fileType!: ReturnFileType;
@@ -10754,6 +10759,7 @@ export class GenerateContractParams implements IGenerateContractParams {
     init(_data?: any) {
         if (_data) {
             this.name = _data["name"];
+            this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
             this.language = _data["language"];
             this.contentType = _data["contentType"];
             this.fileType = _data["fileType"];
@@ -10775,6 +10781,7 @@ export class GenerateContractParams implements IGenerateContractParams {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["name"] = this.name;
+        data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
         data["language"] = this.language;
         data["contentType"] = this.contentType;
         data["fileType"] = this.fileType;
@@ -10789,6 +10796,7 @@ export class GenerateContractParams implements IGenerateContractParams {
 
 export interface IGenerateContractParams {
     name?: string;
+    createdAt?: Date;
     language: Language;
     contentType: ContractType;
     fileType: ReturnFileType;
@@ -11141,6 +11149,7 @@ export interface IPartial_InvoiceParams {
 
 export class GenerateInvoiceParams implements IGenerateInvoiceParams {
     name?: string;
+    createdAt?: Date;
     language!: Language;
     fileType!: ReturnFileType;
     showDiscountPercentages!: boolean;
@@ -11159,6 +11168,7 @@ export class GenerateInvoiceParams implements IGenerateInvoiceParams {
     init(_data?: any) {
         if (_data) {
             this.name = _data["name"];
+            this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
             this.language = _data["language"];
             this.fileType = _data["fileType"];
             this.showDiscountPercentages = _data["showDiscountPercentages"];
@@ -11177,6 +11187,7 @@ export class GenerateInvoiceParams implements IGenerateInvoiceParams {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["name"] = this.name;
+        data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
         data["language"] = this.language;
         data["fileType"] = this.fileType;
         data["showDiscountPercentages"] = this.showDiscountPercentages;
@@ -11188,6 +11199,7 @@ export class GenerateInvoiceParams implements IGenerateInvoiceParams {
 
 export interface IGenerateInvoiceParams {
     name?: string;
+    createdAt?: Date;
     language: Language;
     fileType: ReturnFileType;
     showDiscountPercentages: boolean;
@@ -11308,6 +11320,7 @@ export class CustomInvoiceGenSettings implements ICustomInvoiceGenSettings {
     ourReference!: string;
     theirReference?: string;
     products!: CustomProduct[];
+    date!: Date;
 
     constructor(data?: ICustomInvoiceGenSettings) {
         if (data) {
@@ -11336,6 +11349,7 @@ export class CustomInvoiceGenSettings implements ICustomInvoiceGenSettings {
                 for (let item of _data["products"])
                     this.products!.push(CustomProduct.fromJS(item));
             }
+            this.date = _data["date"] ? new Date(_data["date"].toString()) : <any>undefined;
         }
     }
 
@@ -11360,6 +11374,7 @@ export class CustomInvoiceGenSettings implements ICustomInvoiceGenSettings {
             for (let item of this.products)
                 data["products"].push(item.toJSON());
         }
+        data["date"] = this.date ? this.date.toISOString() : <any>undefined;
         return data; 
     }
 }
@@ -11373,6 +11388,7 @@ export interface ICustomInvoiceGenSettings {
     ourReference: string;
     theirReference?: string;
     products: CustomProduct[];
+    date: Date;
 }
 
 export class InvoiceStatusParams implements IInvoiceStatusParams {

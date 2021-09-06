@@ -7,7 +7,11 @@ import { connect } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import {
   Contract,
-  ContractType, GenerateContractParams, Language, ReturnFileType, Roles,
+  ContractType,
+  GenerateContractParams,
+  Language,
+  ReturnFileType,
+  Roles,
 } from '../../clients/server.generated';
 import AlertContainer from '../alerts/AlertContainer';
 import UserSelector from '../entities/user/UserSelector';
@@ -69,7 +73,11 @@ function GenerateContractModal(props: Props) {
     } else {
       props.showTransientAlert({
         title: 'Error',
-        message: t('files.generate.error', { entity: t('entity.contact').toLowerCase() }),
+        message: t('files.generate.error', {
+          entity: contentType === ContractType.CONTRACT
+            ? t('files.generate.contract').toLowerCase()
+            : t('files.generate.proposal').toLowerCase(),
+        }),
         type: 'error',
       });
     }

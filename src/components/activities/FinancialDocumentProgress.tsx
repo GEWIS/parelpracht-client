@@ -140,8 +140,8 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
                   this.setState({ irrecoverableModalOpen: true });
                 }}
                 content={t('activities.status.irrecoverable')}
-                disabled={!(allCompletedStatuses.includes(DocumentStatus.CREATED)
-                || allCompletedStatuses.includes(DocumentStatus.SENT))}
+                disabled={!(realLastStatus.includes(DocumentStatus.CREATED)
+                || realLastStatus.includes(DocumentStatus.SENT))}
               />
           )}
           />

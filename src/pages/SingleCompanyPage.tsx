@@ -129,20 +129,6 @@ class SingleCompanyPage extends React.Component<Props, State> {
 
     if (hasRole(Roles.ADMIN) || hasRole(Roles.GENERAL) || hasRole(Roles.AUDIT)) {
       panes.push({
-        menuItem: t('entity.activities'),
-        render: company ? () => (
-          <Tab.Pane>
-            <ActivitiesList
-              activities={company.activities as GeneralActivity[]}
-              componentId={company.id}
-              componentType={SingleEntities.Company}
-              resourceStatus={status}
-            />
-          </Tab.Pane>
-        ) : () => <Tab.Pane />,
-      });
-
-      panes.push({
         menuItem: t('entity.files'),
         render: company ? () => (
           <Tab.Pane>
@@ -152,6 +138,20 @@ class SingleCompanyPage extends React.Component<Props, State> {
               entity={SingleEntities.Company}
               fetchEntity={fetchCompany}
               status={status}
+            />
+          </Tab.Pane>
+        ) : () => <Tab.Pane />,
+      });
+
+      panes.push({
+        menuItem: t('entity.activities'),
+        render: company ? () => (
+          <Tab.Pane>
+            <ActivitiesList
+              activities={company.activities as GeneralActivity[]}
+              componentId={company.id}
+              componentType={SingleEntities.Company}
+              resourceStatus={status}
             />
           </Tab.Pane>
         ) : () => <Tab.Pane />,

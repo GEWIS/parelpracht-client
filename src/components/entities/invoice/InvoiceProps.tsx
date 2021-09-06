@@ -20,7 +20,11 @@ import { getSingle } from '../../../stores/single/selectors';
 import { SingleEntities } from '../../../stores/single/single';
 import { RootState } from '../../../stores/store';
 import PropsButtons from '../../PropsButtons';
-import { formatTimestampToDate } from '../../../helpers/timestamp';
+import {
+  formatDateToString,
+  formatTimestampToDate,
+  isInvalidDate,
+} from '../../../helpers/timestamp';
 import UserSelector from '../user/UserSelector';
 import { formatDocumentIdTitle } from '../../../helpers/documents';
 import { TransientAlert } from '../../../stores/alerts/actions';
@@ -91,7 +95,7 @@ class InvoiceProps extends React.Component<Props, State> {
       assignedToId: invoice.assignedToId,
       poNumber: invoice.poNumber ?? '',
       startDate: invoice.startDate,
-      dateValue: this.formatDate(invoice.startDate),
+      dateValue: formatDateToString(invoice.startDate),
     };
   };
 
@@ -151,17 +155,6 @@ class InvoiceProps extends React.Component<Props, State> {
       || invoice.activities.filter((a) => a.type === ActivityType.STATUS).length > 1);
   };
 
-  formatDate(date: Date) {
-    let day = date.getDate().toString();
-    let month = (date.getMonth() + 1).toString();
-    const year = date.getFullYear().toString();
-
-    if (Number(day) < 10) { day = `0${day}`; }
-    if (Number(month) < 10) { month = `0${month}`; }
-
-    return `${year}-${month}-${day}`;
-  }
-
   render() {
     const {
       editing,
@@ -173,15 +166,6 @@ class InvoiceProps extends React.Component<Props, State> {
       assignedToId,
     } = this.state;
     const { companyName, t } = this.props;
-
-    const dateFormatterHelper = (date: Date) => {
-      let formattedDate: string = this.formatDate(date);
-
-      if (dateValue.length !== 10) {
-        formattedDate = dateValue;
-      }
-      return formattedDate;
-    };
 
     return (
       <>
@@ -261,18 +245,13 @@ class InvoiceProps extends React.Component<Props, State> {
               {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
               <label htmlFor="form-input-startdate">{t('entities.invoice.props.invoiceDate')}</label>
               <DateInput
-                // onChange={(e, { value }) => {
-                //   this.setState({ startDate: value });
-                // }}
                 onChange={(e, { value }) => {
-                  // eslint-disable-next-line no-new
-                  if (value.length === 10) { this.setState({ startDate: new Date(value) }); }
-                  this.setState({ dateValue: value });
+                  this.setState({ dateValue: value, startDate: new Date(value) });
                 }}
-                error={startDate.setHours(0, 0, 0, 0) < new Date().setHours(0, 0, 0, 0)
+                error={(startDate.setHours(0, 0, 0, 0) < new Date().setHours(0, 0, 0, 0)
                 && startDate.setHours(0, 0, 0, 0)
-                < this.props.invoice.startDate.setHours(0, 0, 0, 0)}
-                value={dateFormatterHelper(startDate)}
+                < this.props.invoice.startDate.setHours(0, 0, 0, 0)) || isInvalidDate(startDate)}
+                value={dateValue}
                 id="form-input-startdate"
                 dateFormat="YYYY-MM-DD"
                 fluid

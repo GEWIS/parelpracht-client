@@ -326,7 +326,7 @@
         "subject": "Onderwerp",
         "theirReference": "Hun Referentie"
       },
-      "error": "Kon geen {{entity}} bestand genereren. Raadpleeg de back-end logs voor meer informatie.",
+      "error": "Kon geen {{entity}} bestand genereren. Raadpleeg de back-end logs voor meer informatie, of download het .tex bestand en compile hem lokaal.",
       "fileType": "Bestandstype",
       "generateButton": "Genereer",
       "header": "Genereer bestand",
