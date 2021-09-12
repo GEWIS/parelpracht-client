@@ -1,7 +1,11 @@
 # Change log
-The current version of ParelPracht is **v1.1.3**, released on September 6th, 2021.
+The current version of ParelPracht is **v1.1.4**, released on September 12th, 2021.
 You can find the release notes below.
 ----------------------
+
+## v1.1.4 (12-09-2021)
+### Bugfixes
+- Fixed validated entities not showing their correct status.
 
 ## v1.1.3 (06-09-2021)
 ### Added
