@@ -122,7 +122,7 @@ export function getAllStatusActivities(activities: GeneralActivity[]): GeneralAc
       statusActivities.push(activities[i]);
     }
   }
-  statusActivities.sort((a, b) => { return a.updatedAt.getTime() - b.updatedAt.getTime(); });
+  statusActivities.sort((a, b) => { return a.createdAt.getTime() - b.createdAt.getTime(); });
   return statusActivities;
 }
 
@@ -130,7 +130,7 @@ export function getAllStatusActivities(activities: GeneralActivity[]): GeneralAc
  * Get all the statuses from a list of status activities
  */
 export function getStatusesFromActivities(activities: GeneralActivity[]): DocumentStatus[] {
-  activities.sort((a, b) => { return a.updatedAt.getTime() - b.updatedAt.getTime(); });
+  activities.sort((a, b) => { return a.createdAt.getTime() - b.createdAt.getTime(); });
   const statuses: DocumentStatus[] = [];
   for (let i = 0; i < activities.length; i++) {
     statuses.push(activities[i].subType as DocumentStatus);
