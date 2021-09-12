@@ -24,7 +24,9 @@ function showRecentStatus(productInstance: ProductInstance): string {
 
   // eslint-disable-next-line no-nested-ternary
   // eslint-disable-next-line
-  const sortedArray = statusArray.sort((a, b) => (a.updatedAt > b.updatedAt ? -1 : a.updatedAt < b.updatedAt ? 1 : 0))
+  console.log(statusArray);
+  const sortedArray = statusArray.sort((a, b) => (b.createdAt.getTime() - a.createdAt.getTime()));
+  console.log(sortedArray);
   if (sortedArray.length === 0) return '';
   return sortedArray[0].subType!;
 }
