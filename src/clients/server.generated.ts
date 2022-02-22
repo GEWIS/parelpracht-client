@@ -380,8 +380,8 @@ export class Client {
     /**
      * @return Ok
      */
-    getGeneralInfo(): Promise<number[]> {
-        let url_ = this.baseUrl + "/generalInfo";
+    getPrivateGeneralInfo(): Promise<GeneralPrivateInfo> {
+        let url_ = this.baseUrl + "/getPrivateGeneralInfo";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ = <RequestInit>{
@@ -392,22 +392,18 @@ export class Client {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processGetGeneralInfo(_response);
+            return this.processGetPrivateGeneralInfo(_response);
         });
     }
 
-    protected processGetGeneralInfo(response: Response): Promise<number[]> {
+    protected processGetPrivateGeneralInfo(response: Response): Promise<GeneralPrivateInfo> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            if (Array.isArray(resultData200)) {
-                result200 = [] as any;
-                for (let item of resultData200)
-                    result200!.push(item);
-            }
+            result200 = GeneralPrivateInfo.fromJS(resultData200);
             return result200;
             });
         } else if (status === 400) {
@@ -422,7 +418,51 @@ export class Client {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<number[]>(<any>null);
+        return Promise.resolve<GeneralPrivateInfo>(<any>null);
+    }
+
+    /**
+     * @return Ok
+     */
+    getPublicGeneralInfo(): Promise<GeneralPublicInfo> {
+        let url_ = this.baseUrl + "/getPublicGeneralInfo";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <RequestInit>{
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processGetPublicGeneralInfo(_response);
+        });
+    }
+
+    protected processGetPublicGeneralInfo(response: Response): Promise<GeneralPublicInfo> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = GeneralPublicInfo.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status === 400) {
+            return response.text().then((_responseText) => {
+            let result400: any = null;
+            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result400 = WrappedApiError.fromJS(resultData400);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result400);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<GeneralPublicInfo>(<any>null);
     }
 
     /**
@@ -5724,7 +5764,7 @@ export class Client {
      * @return Ok
      */
     login(body: LoginParams): Promise<Product> {
-        let url_ = this.baseUrl + "/login";
+        let url_ = this.baseUrl + "/login/local";
         url_ = url_.replace(/[?&]$/, "");
 
         const content_ = JSON.stringify(body);
@@ -5770,6 +5810,58 @@ export class Client {
             });
         }
         return Promise.resolve<Product>(<any>null);
+    }
+
+    /**
+     * @return Ok
+     */
+    loginLDAP(body: LDAPLoginParams): Promise<User> {
+        let url_ = this.baseUrl + "/login/ldap";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ = <RequestInit>{
+            body: content_,
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processLoginLDAP(_response);
+        });
+    }
+
+    protected processLoginLDAP(response: Response): Promise<User> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = User.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status === 204) {
+            return response.text().then((_responseText) => {
+            return throwException("No content", status, _responseText, _headers);
+            });
+        } else if (status === 400) {
+            return response.text().then((_responseText) => {
+            let result400: any = null;
+            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result400 = WrappedApiError.fromJS(resultData400);
+            return throwException("Bad Request", status, _responseText, _headers, result400);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<User>(<any>null);
     }
 }
 
@@ -6103,6 +6195,8 @@ be sent to "email", or "replyToEmail" */
 export class Role implements IRole {
     /** Name of the role */
     name!: string;
+    /** LDAP group used for this role */
+    ldapGroup!: string;
     /** All users having this role */
     users!: User[];
 
@@ -6121,6 +6215,7 @@ export class Role implements IRole {
     init(_data?: any) {
         if (_data) {
             this.name = _data["name"];
+            this.ldapGroup = _data["ldapGroup"];
             if (Array.isArray(_data["users"])) {
                 this.users = [] as any;
                 for (let item of _data["users"])
@@ -6139,6 +6234,7 @@ export class Role implements IRole {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["name"] = this.name;
+        data["ldapGroup"] = this.ldapGroup;
         if (Array.isArray(this.users)) {
             data["users"] = [];
             for (let item of this.users)
@@ -6151,6 +6247,8 @@ export class Role implements IRole {
 export interface IRole {
     /** Name of the role */
     name: string;
+    /** LDAP group used for this role */
+    ldapGroup: string;
     /** All users having this role */
     users: User[];
 }
@@ -6313,9 +6411,9 @@ be sent to "email", or "replyToEmail" */
 }
 
 export class ApiError implements IApiError {
+    code!: number;
     name!: string;
     message!: string;
-    stack?: string;
     /** The activity code of the error, as defined by HTTP activity codes. */
     statusCode!: number;
 
@@ -6330,9 +6428,9 @@ export class ApiError implements IApiError {
 
     init(_data?: any) {
         if (_data) {
+            this.code = _data["code"];
             this.name = _data["name"];
             this.message = _data["message"];
-            this.stack = _data["stack"];
             this.statusCode = _data["statusCode"];
         }
     }
@@ -6346,18 +6444,18 @@ export class ApiError implements IApiError {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
+        data["code"] = this.code;
         data["name"] = this.name;
         data["message"] = this.message;
-        data["stack"] = this.stack;
         data["statusCode"] = this.statusCode;
         return data; 
     }
 }
 
 export interface IApiError {
+    code: number;
     name: string;
     message: string;
-    stack?: string;
     /** The activity code of the error, as defined by HTTP activity codes. */
     statusCode: number;
 }
@@ -6445,6 +6543,94 @@ export interface IResetPasswordRequest {
     password: string;
     repeatPassword: string;
     token: string;
+}
+
+export class GeneralPrivateInfo implements IGeneralPrivateInfo {
+    financialYears!: number[];
+
+    constructor(data?: IGeneralPrivateInfo) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+        if (!data) {
+            this.financialYears = [];
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["financialYears"])) {
+                this.financialYears = [] as any;
+                for (let item of _data["financialYears"])
+                    this.financialYears!.push(item);
+            }
+        }
+    }
+
+    static fromJS(data: any): GeneralPrivateInfo {
+        data = typeof data === 'object' ? data : {};
+        let result = new GeneralPrivateInfo();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.financialYears)) {
+            data["financialYears"] = [];
+            for (let item of this.financialYears)
+                data["financialYears"].push(item);
+        }
+        return data; 
+    }
+}
+
+export interface IGeneralPrivateInfo {
+    financialYears: number[];
+}
+
+export enum LoginMethods {
+    Local = "local",
+    Ldap = "ldap",
+}
+
+export class GeneralPublicInfo implements IGeneralPublicInfo {
+    loginMethod!: LoginMethods;
+
+    constructor(data?: IGeneralPublicInfo) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.loginMethod = _data["loginMethod"];
+        }
+    }
+
+    static fromJS(data: any): GeneralPublicInfo {
+        data = typeof data === 'object' ? data : {};
+        let result = new GeneralPublicInfo();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["loginMethod"] = this.loginMethod;
+        return data; 
+    }
+}
+
+export interface IGeneralPublicInfo {
+    loginMethod: LoginMethods;
 }
 
 export enum ProductStatus {
@@ -12129,6 +12315,50 @@ export class LoginParams implements ILoginParams {
 
 export interface ILoginParams {
     email?: string;
+    password?: string;
+    rememberMe?: boolean;
+}
+
+export class LDAPLoginParams implements ILDAPLoginParams {
+    username?: string;
+    password?: string;
+    rememberMe?: boolean;
+
+    constructor(data?: ILDAPLoginParams) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.username = _data["username"];
+            this.password = _data["password"];
+            this.rememberMe = _data["rememberMe"];
+        }
+    }
+
+    static fromJS(data: any): LDAPLoginParams {
+        data = typeof data === 'object' ? data : {};
+        let result = new LDAPLoginParams();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["username"] = this.username;
+        data["password"] = this.password;
+        data["rememberMe"] = this.rememberMe;
+        return data; 
+    }
+}
+
+export interface ILDAPLoginParams {
+    username?: string;
     password?: string;
     rememberMe?: boolean;
 }

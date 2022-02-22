@@ -12,7 +12,7 @@ import {
 import {
   AuthActionType, AuthForgotPassword, AuthLogin, AuthResetPassword,
 } from './actions';
-import { generalFetchInfo } from '../general/actionCreators';
+import { generalPrivateFetchInfo } from '../general/actionCreators';
 
 export function* fetchAuthStatus() {
   const client = new Client();
@@ -31,7 +31,7 @@ export function* fetchAuthStatus() {
     }
 
     // Fetch the general data
-    yield put(generalFetchInfo());
+    yield put(generalPrivateFetchInfo());
   }
 }
 

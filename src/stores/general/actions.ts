@@ -1,11 +1,18 @@
 import { Action } from 'redux';
+import { LoginMethods } from '../../clients/server.generated';
 
 export enum GeneralActionType {
-  FetchInfo = 'General/FetchInfo',
-  SetInfo = 'General/SetInfo',
+  FetchPrivateInfo = 'General/FetchPrivateInfo',
+  FetchPublicInfo = 'General/FetchPublicInfo',
+  SetPrivateInfo = 'General/SetPrivateInfo',
+  SetPublicInfo = 'General/SetPublicInfo',
 }
 
-export type GeneralFetchInfo = Action<GeneralActionType.FetchInfo>;
-export type GeneralSetInfo = Action<GeneralActionType.SetInfo> & {
+export type FetchGeneralPrivateInfo = Action<GeneralActionType.FetchPrivateInfo>;
+export type FetchGeneralPublicInfo = Action<GeneralActionType.FetchPublicInfo>;
+export type PrivateGeneralSetInfo = Action<GeneralActionType.SetPrivateInfo> & {
   financialYears: number[];
+};
+export type PublicGeneralSetInfo = Action<GeneralActionType.SetPublicInfo> & {
+  loginMethod: LoginMethods;
 };

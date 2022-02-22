@@ -2,7 +2,7 @@ import { applyMiddleware, combineReducers, createStore } from 'redux';
 import { createBrowserHistory } from 'history';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import createSagaMiddleware from 'redux-saga';
-import { all, fork } from 'redux-saga/effects';
+import { all, fork, put } from 'redux-saga/effects';
 import { connectRouter, routerMiddleware, RouterState } from 'connected-react-router';
 
 import authReducer from './auth/reducer';
@@ -11,7 +11,7 @@ import generalReducer from './general/reducer';
 
 import authSagas, { fetchAuthStatus } from './auth/sagas';
 import alertsSagas from './alerts/sagas';
-import generalSagas from './general/sagas';
+import generalSagas, { fetchGeneralPublicInfo } from './general/sagas';
 import productSagas from './product/sagas';
 import productCategorySagas from './productcategory/sagas';
 import productInstanceSagas from './productinstance/sagas';
@@ -24,6 +24,8 @@ import userSagas from './user/sagas';
 import { tablesReducer } from './tables/reducer';
 import { singleEntitiesReducer } from './single/reducer';
 import { summariesReducer } from './summaries/reducer';
+import { generalPublicFetchInfo } from './general/actionCreators';
+import { GeneralPublicInfo } from '../clients/server.generated';
 
 // Import all watching sagas
 const watchSagas = [
@@ -64,6 +66,9 @@ export type RootState = {
 };
 
 function* rootSaga() {
+  // Fetch general information
+  yield fetchGeneralPublicInfo();
+
   // Check authentication status at start
   yield fork(fetchAuthStatus);
 

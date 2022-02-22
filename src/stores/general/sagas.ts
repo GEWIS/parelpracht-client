@@ -1,19 +1,34 @@
 import { call, put } from 'redux-saga/effects';
-import { Client } from '../../clients/server.generated';
-import { generalSetInfo } from './actionCreators';
+import { Client, IGeneralPrivateInfo, IGeneralPublicInfo } from '../../clients/server.generated';
+import { generalPrivateSetInfo, generalPublicSetInfo } from './actionCreators';
 import { takeEveryWithErrorHandling } from '../errorHandling';
 import { GeneralActionType } from './actions';
 
-export function* fetchGeneralInfo() {
+export function* fetchGeneralPrivateInfo() {
   const client = new Client();
 
-  const financialYears: number[] = yield call([client, client.getGeneralInfo]);
+  const generalPrivateInfo: IGeneralPrivateInfo = yield call([
+    client, client.getPrivateGeneralInfo]);
+  const { financialYears } = generalPrivateInfo;
 
-  yield put(generalSetInfo(financialYears));
+  yield put(generalPrivateSetInfo(financialYears));
+}
+
+export function* fetchGeneralPublicInfo() {
+  const client = new Client();
+
+  const generalPublicInfo: IGeneralPublicInfo = yield call([
+    client, client.getPublicGeneralInfo]);
+  const { loginMethod } = generalPublicInfo;
+
+  yield put(generalPublicSetInfo(loginMethod));
 }
 
 export default [
-  function* watchFetchGeneralInfo() {
-    yield takeEveryWithErrorHandling(GeneralActionType.FetchInfo, fetchGeneralInfo);
+  function* watchFetchGeneralPublicInfo() {
+    yield takeEveryWithErrorHandling(GeneralActionType.FetchPublicInfo, fetchGeneralPublicInfo);
+  },
+  function* watchFetchGeneralPrivateInfo() {
+    yield takeEveryWithErrorHandling(GeneralActionType.FetchPrivateInfo, fetchGeneralPrivateInfo);
   },
 ];
