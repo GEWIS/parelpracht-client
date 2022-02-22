@@ -432,9 +432,11 @@
     },
     "loading": "Checking login information...",
     "login": {
+      "username": "Username",
       "email": "Email address",
       "forgotPassword": "Forgot password",
       "loginButton": "Login",
+      "loginLDAPButton": "Login with LDAP",
       "password": "Password",
       "rememberMe": "Remember me",
       "troubleSigningIn": "Trouble signing in?"

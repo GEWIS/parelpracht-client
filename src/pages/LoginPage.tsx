@@ -5,12 +5,31 @@ import {
 } from 'semantic-ui-react';
 import './BackgroundAnimation.css';
 import { useTranslation } from 'react-i18next';
+import { connect } from 'react-redux';
 import AlertContainer from '../components/alerts/AlertContainer';
-import LoginForm from '../components/auth/LoginForm';
+import LoginLocalForm from '../components/auth/LoginLocalForm';
+import LoginLDAPForm from '../components/auth/LoginLDAPForm';
 import ParelPrachtFullLogo from '../components/ParelPrachtFullLogo';
+import { RootState } from '../stores/store';
+import { LoginMethods } from '../clients/server.generated';
 
-function LoginPage() {
+interface Props {
+  loginMethod: LoginMethods;
+}
+
+function LoginPage({ loginMethod }: Props) {
   const { t } = useTranslation();
+
+  let loginForm;
+  switch (loginMethod) {
+    case LoginMethods.Local:
+      loginForm = <LoginLocalForm />; break;
+    case LoginMethods.Ldap:
+      loginForm = <LoginLDAPForm />; break;
+    default:
+      throw new Error(`Unknown login method: ${loginMethod}`);
+  }
+
   return (
     <>
       <div className="bg" />
@@ -23,14 +42,16 @@ function LoginPage() {
             <Segment>
               <Image src="./gewis-logo.png" size="small" centered />
               <ParelPrachtFullLogo />
-              <LoginForm />
+              {loginForm}
             </Segment>
-            <Message>
-              {t('pages.login.troubleSigningIn')}
-              {' '}
-              <NavLink to="/forgot-password">{t('pages.login.forgotPassword')}</NavLink>
-              .
-            </Message>
+            {loginMethod === LoginMethods.Local ? (
+              <Message>
+                {t('pages.login.troubleSigningIn')}
+                {' '}
+                <NavLink to="/forgot-password">{t('pages.login.forgotPassword')}</NavLink>
+                .
+              </Message>
+            ) : null}
           </Grid.Column>
         </Grid>
       </Container>
@@ -38,4 +59,8 @@ function LoginPage() {
   );
 }
 
-export default LoginPage;
+const mapStateToProps = (state: RootState) => ({
+  loginMethod: state.general.loginMethod,
+});
+
+export default connect(mapStateToProps)(LoginPage);

@@ -1,6 +1,6 @@
 import { call, put } from 'redux-saga/effects';
 import {
-  AuthStatus, Client, LoginParams, ResetPasswordRequest,
+  AuthStatus, Client, LDAPLoginParams, LoginParams, ResetPasswordRequest,
 } from '../../clients/server.generated';
 import { takeEveryWithErrorHandling } from '../errorHandling';
 import { fetchSummaries } from '../summaries/actionCreators';
@@ -10,7 +10,7 @@ import {
   authRequestSuccess, authSetApiKey, authSetProfile, authSetStatus,
 } from './actionCreators';
 import {
-  AuthActionType, AuthForgotPassword, AuthLogin, AuthResetPassword,
+  AuthActionType, AuthForgotPassword, AuthLoginLDAP, AuthLoginLocal, AuthResetPassword,
 } from './actions';
 import { generalPrivateFetchInfo } from '../general/actionCreators';
 
@@ -43,12 +43,25 @@ function* fetchProfile() {
   yield put(authSetProfile(profile));
 }
 
-function* login(action: AuthLogin) {
+function* loginLocal(action: AuthLoginLocal) {
   const client = new Client();
 
   yield call([client, client.login],
     new LoginParams({
       email: action.email,
+      password: action.password,
+      rememberMe: action.rememberMe,
+    }));
+
+  yield put(authFetchStatus());
+}
+
+function* loginLDAP(action: AuthLoginLDAP) {
+  const client = new Client();
+
+  yield call([client, client.loginLDAP],
+    new LDAPLoginParams({
+      username: action.username,
       password: action.password,
       rememberMe: action.rememberMe,
     }));
@@ -120,8 +133,11 @@ export default [
   function* watchFetchProfile() {
     yield takeEveryWithErrorHandling(AuthActionType.FetchProfile, fetchProfile);
   },
-  function* watchLogin() {
-    yield takeEveryWithErrorHandling(AuthActionType.Login, login);
+  function* watchLoginLocal() {
+    yield takeEveryWithErrorHandling(AuthActionType.LoginLocal, loginLocal);
+  },
+  function* watchLoginLDAP() {
+    yield takeEveryWithErrorHandling(AuthActionType.LoginLDAP, loginLDAP);
   },
   function* watchLogout() {
     yield takeEveryWithErrorHandling(AuthActionType.Logout, logout);

@@ -432,9 +432,11 @@
     },
     "loading": "Login informatie controleren...",
     "login": {
+      "username": "Gebruikersnaam",
       "email": "Emailadres",
       "forgotPassword": "Wachtwoord vergeten",
       "loginButton": "Log in",
+      "loginLDAPButton": "Log in met LDAP",
       "password": "Wachtwoord",
       "rememberMe": "Blijf ingelogd",
       "troubleSigningIn": "Problemen met inloggen?"
