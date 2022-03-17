@@ -279,8 +279,14 @@
           "unknown": "Unknown"
         },
         "lastName": "Last Name",
+        "ldap": {
+          "username": "LDAP username",
+          "warningHeader": "Warning - Very dangerous operation",
+          "warningContent": "Changing the LDAP username is very dangerous, as it could lock this user out of ParelPracht permanently. Only change this field if you know what you are doing."
+        },
         "mailOnInvoice": "I want to receive an email each time an invoice is sent",
         "name": "Name",
+        "overrideLdapEmail": "Override my LDAP email address with my personal email address above",
         "personalEmail": "Personal email address",
         "preposition": "Preposition",
         "replyToEmail": "Reply-to email address",

@@ -2,14 +2,14 @@ import React, { ChangeEvent } from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import {
-  Checkbox, Dropdown, Form, Input, Segment,
+  Checkbox, Dropdown, Form, Icon, Input, Message, Segment,
 } from 'semantic-ui-react';
 import validator from 'validator';
 import _ from 'lodash';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { withTranslation, WithTranslation } from 'react-i18next';
 import {
-  User, UserParams, Gender, Roles,
+  Gender, LoginMethods, Roles, User, UserParams,
 } from '../../../clients/server.generated';
 import { createSingle, deleteSingle, saveSingle } from '../../../stores/single/actionCreators';
 import ResourceStatus from '../../../stores/resourceStatus';
@@ -18,6 +18,7 @@ import PropsButtons from '../../PropsButtons';
 import { SingleEntities } from '../../../stores/single/single';
 import { getSingle } from '../../../stores/single/selectors';
 import TextArea from '../../TextArea';
+import { authedUserHasRole } from '../../../stores/auth/selectors';
 
 interface Props extends RouteComponentProps, WithTranslation {
   create?: boolean;
@@ -25,6 +26,8 @@ interface Props extends RouteComponentProps, WithTranslation {
 
   user: User;
   status: ResourceStatus;
+  loginMethod: LoginMethods;
+  actorIsAdmin: boolean;
 
   saveUser: (id: number, user: UserParams) => void;
   createUser: (user: UserParams) => void;
@@ -49,6 +52,9 @@ interface State {
   roleFinancial: boolean;
   roleAudit: boolean;
   roleAdmin: boolean;
+
+  ldapUsername?: string;
+  ldapOverrideEmail?: boolean;
 }
 
 class UserProps extends React.Component<Props, State> {
@@ -69,9 +75,13 @@ class UserProps extends React.Component<Props, State> {
     }
   }
 
+  ldapEnabled = (): boolean => {
+    return this.props.loginMethod === LoginMethods.Ldap;
+  };
+
   extractState = (props: Props) => {
     const { user } = props;
-    return {
+    const result: any = {
       firstName: user.firstName,
       lastNamePreposition: user.lastNamePreposition,
       lastName: user.lastName,
@@ -89,10 +99,22 @@ class UserProps extends React.Component<Props, State> {
       roleAudit: user.roles.find((r) => r.name === Roles.AUDIT) !== undefined,
       roleAdmin: user.roles.find((r) => r.name === Roles.ADMIN) !== undefined,
     };
+
+    if (this.ldapEnabled()) {
+      if (user.identityLdap) {
+        result.ldapUsername = user.identityLdap.username ? user.identityLdap.username : '';
+        result.ldapOverrideEmail = user.identityLdap.overrideEmail;
+      } else {
+        result.ldapUsername = '';
+        result.ldapOverrideEmail = false;
+      }
+    }
+
+    return result;
   };
 
   toParams = (): UserParams => {
-    return new UserParams({
+    const result = new UserParams({
       firstName: this.state.firstName,
       lastNamePreposition: this.state.lastNamePreposition,
       lastName: this.state.lastName,
@@ -112,6 +134,13 @@ class UserProps extends React.Component<Props, State> {
         this.state.roleAdmin ? Roles.ADMIN : undefined,
       ]),
     });
+
+    if (this.ldapEnabled()) {
+      result.ldapUsername = this.state.ldapUsername !== '' ? this.state.ldapUsername : undefined;
+      result.ldapOverrideEmail = this.state.ldapOverrideEmail;
+    }
+
+    return result;
   };
 
   edit = () => {
@@ -160,7 +189,7 @@ class UserProps extends React.Component<Props, State> {
   };
 
   render() {
-    const { t } = this.props;
+    const { t, actorIsAdmin } = this.props;
     const {
       editing,
       firstName,
@@ -175,7 +204,55 @@ class UserProps extends React.Component<Props, State> {
       sendEmailsToReplyToEmail,
 
       roleGeneral, roleSignee, roleAdmin, roleAudit, roleFinancial,
+
+      ldapUsername, ldapOverrideEmail,
     } = this.state;
+
+    const ldapUsernameField = this.ldapEnabled() && ldapUsername !== undefined ? (
+      <>
+        <Form.Group widths="equal">
+          <Form.Field
+            disabled={!editing || !actorIsAdmin}
+            required
+            id="form-input-ldap-username"
+            fluid
+            control={Input}
+            label={t('entities.user.props.ldap.username')}
+            value={ldapUsername}
+            onChange={(e: ChangeEvent<HTMLInputElement>) => this.setState({
+              ldapUsername: e.target.value,
+            })}
+            error={
+            validator.isEmpty(ldapUsername)
+          }
+          />
+        </Form.Group>
+        {editing && actorIsAdmin ? (
+          <Form.Group widths="equal">
+            <Message
+              visible
+              error
+              header={t('entities.user.props.ldap.warningHeader')}
+              content={t('entities.user.props.ldap.warningContent')}
+            />
+          </Form.Group>
+        ) : null}
+      </>
+    ) : (' ');
+
+    const ldapOverrideEmailCheckbox = this.ldapEnabled() ? (
+      <Form.Field>
+        <Checkbox
+          label={t('entities.user.props.overrideLdapEmail')}
+          disabled={!editing}
+          id="form-override-ldap-email"
+          checked={ldapOverrideEmail}
+          onChange={(e, data) => this.setState({
+            ldapOverrideEmail: data.checked!,
+          })}
+        />
+      </Form.Field>
+    ) : (' ');
 
     const receiveEmailsCheckbox = roleAudit || roleFinancial ? (
       <>
@@ -302,7 +379,7 @@ class UserProps extends React.Component<Props, State> {
           </Form.Group>
           <Form.Group widths="equal">
             <Form.Field
-              disabled={!editing}
+              disabled={!editing || !ldapOverrideEmail}
               id="form-input-email"
               fluid
               required
@@ -328,6 +405,8 @@ class UserProps extends React.Component<Props, State> {
               })}
             />
           </Form.Group>
+          {ldapUsernameField}
+          {ldapOverrideEmailCheckbox}
           <Form.Field>
             <Checkbox
               label={t('entities.user.props.allMailToReplyTo')}
@@ -349,7 +428,7 @@ class UserProps extends React.Component<Props, State> {
                   {t('entities.user.props.roles.signee')}
                 </label>
                 <Checkbox
-                  disabled={!editing}
+                  disabled={!editing || this.ldapEnabled()}
                   toggle
                   id="form-check-role-signee"
                   checked={roleSignee}
@@ -364,7 +443,7 @@ class UserProps extends React.Component<Props, State> {
                   {t('entities.user.props.roles.financial')}
                 </label>
                 <Checkbox
-                  disabled={!editing}
+                  disabled={!editing || this.ldapEnabled()}
                   toggle
                   id="form-check-role-financial"
                   checked={roleFinancial}
@@ -379,7 +458,7 @@ class UserProps extends React.Component<Props, State> {
                   {t('entities.user.props.roles.general')}
                 </label>
                 <Checkbox
-                  disabled={!editing}
+                  disabled={!editing || this.ldapEnabled()}
                   toggle
                   id="form-check-role-general"
                   checked={roleGeneral}
@@ -394,7 +473,7 @@ class UserProps extends React.Component<Props, State> {
                   {t('entities.user.props.roles.audit')}
                 </label>
                 <Checkbox
-                  disabled={!editing}
+                  disabled={!editing || this.ldapEnabled()}
                   toggle
                   id="form-check-role-audit"
                   checked={roleAudit}
@@ -409,7 +488,7 @@ class UserProps extends React.Component<Props, State> {
                   {t('entities.user.props.roles.admin')}
                 </label>
                 <Checkbox
-                  disabled={!editing}
+                  disabled={!editing || this.ldapEnabled()}
                   toggle
                   id="form-check-role-admin"
                   checked={roleAdmin}
@@ -440,11 +519,11 @@ class UserProps extends React.Component<Props, State> {
   }
 }
 
-const mapStateToProps = (state: RootState) => {
-  return {
-    status: getSingle<User>(state, SingleEntities.User).status,
-  };
-};
+const mapStateToProps = (state: RootState) => ({
+  status: getSingle<User>(state, SingleEntities.User).status,
+  loginMethod: state.general.loginMethod,
+  actorIsAdmin: authedUserHasRole(state, Roles.ADMIN),
+});
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
   saveUser: (id: number, user: UserParams) => dispatch(

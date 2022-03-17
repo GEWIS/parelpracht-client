@@ -5763,7 +5763,7 @@ export class Client {
     /**
      * @return Ok
      */
-    login(body: LoginParams): Promise<Product> {
+    login(body: LoginParams): Promise<void> {
         let url_ = this.baseUrl + "/login/local";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -5774,7 +5774,6 @@ export class Client {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                "Accept": "application/json"
             }
         };
 
@@ -5783,19 +5782,16 @@ export class Client {
         });
     }
 
-    protected processLogin(response: Response): Promise<Product> {
+    protected processLogin(response: Response): Promise<void> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = Product.fromJS(resultData200);
-            return result200;
+            return;
             });
         } else if (status === 204) {
             return response.text().then((_responseText) => {
-            return throwException("No content", status, _responseText, _headers);
+            return;
             });
         } else if (status === 400) {
             return response.text().then((_responseText) => {
@@ -5809,13 +5805,13 @@ export class Client {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<Product>(<any>null);
+        return Promise.resolve<void>(<any>null);
     }
 
     /**
      * @return Ok
      */
-    loginLDAP(body: LDAPLoginParams): Promise<User> {
+    loginLDAP(body: LDAPLoginParams): Promise<void> {
         let url_ = this.baseUrl + "/login/ldap";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -5826,7 +5822,6 @@ export class Client {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                "Accept": "application/json"
             }
         };
 
@@ -5835,19 +5830,16 @@ export class Client {
         });
     }
 
-    protected processLoginLDAP(response: Response): Promise<User> {
+    protected processLoginLDAP(response: Response): Promise<void> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = User.fromJS(resultData200);
-            return result200;
+            return;
             });
         } else if (status === 204) {
             return response.text().then((_responseText) => {
-            return throwException("No content", status, _responseText, _headers);
+            return;
             });
         } else if (status === 400) {
             return response.text().then((_responseText) => {
@@ -5861,7 +5853,7 @@ export class Client {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<User>(<any>null);
+        return Promise.resolve<void>(<any>null);
     }
 }
 
@@ -5891,6 +5883,8 @@ export class UserParams implements IUserParams {
     receiveEmails?: boolean;
     sendEmailsToReplyToEmail?: boolean;
     comment?: string;
+    ldapUsername?: string;
+    ldapOverrideEmail?: boolean;
     roles?: Roles[];
 
     constructor(data?: IUserParams) {
@@ -5914,6 +5908,8 @@ export class UserParams implements IUserParams {
             this.receiveEmails = _data["receiveEmails"];
             this.sendEmailsToReplyToEmail = _data["sendEmailsToReplyToEmail"];
             this.comment = _data["comment"];
+            this.ldapUsername = _data["ldapUsername"];
+            this.ldapOverrideEmail = _data["ldapOverrideEmail"];
             if (Array.isArray(_data["roles"])) {
                 this.roles = [] as any;
                 for (let item of _data["roles"])
@@ -5941,6 +5937,8 @@ export class UserParams implements IUserParams {
         data["receiveEmails"] = this.receiveEmails;
         data["sendEmailsToReplyToEmail"] = this.sendEmailsToReplyToEmail;
         data["comment"] = this.comment;
+        data["ldapUsername"] = this.ldapUsername;
+        data["ldapOverrideEmail"] = this.ldapOverrideEmail;
         if (Array.isArray(this.roles)) {
             data["roles"] = [];
             for (let item of this.roles)
@@ -5961,6 +5959,8 @@ export interface IUserParams {
     receiveEmails?: boolean;
     sendEmailsToReplyToEmail?: boolean;
     comment?: string;
+    ldapUsername?: string;
+    ldapOverrideEmail?: boolean;
     roles?: Roles[];
 }
 
@@ -6077,6 +6077,8 @@ be sent to "email", or "replyToEmail" */
     sendEmailsToReplyToEmail!: boolean;
     /** The roles this user has */
     roles!: Role[];
+    /** Identity for LDAP */
+    identityLdap?: IdentityLDAP;
 
     constructor(data?: IUser) {
         if (data) {
@@ -6114,6 +6116,7 @@ be sent to "email", or "replyToEmail" */
                 for (let item of _data["roles"])
                     this.roles!.push(Role.fromJS(item));
             }
+            this.identityLdap = _data["identityLdap"] ? IdentityLDAP.fromJS(_data["identityLdap"]) : <any>undefined;
         }
     }
 
@@ -6148,6 +6151,7 @@ be sent to "email", or "replyToEmail" */
             for (let item of this.roles)
                 data["roles"].push(item.toJSON());
         }
+        data["identityLdap"] = this.identityLdap ? this.identityLdap.toJSON() : <any>undefined;
         return data; 
     }
 }
@@ -6190,6 +6194,8 @@ be sent to "email", or "replyToEmail" */
     sendEmailsToReplyToEmail: boolean;
     /** The roles this user has */
     roles: Role[];
+    /** Identity for LDAP */
+    identityLdap?: IdentityLDAP;
 }
 
 export class Role implements IRole {
@@ -6253,6 +6259,89 @@ export interface IRole {
     users: User[];
 }
 
+export class IdentityLDAP implements IIdentityLDAP {
+    /** ID of the associated user */
+    id!: number;
+    username!: string;
+    overrideEmail!: boolean;
+    lastLogin?: Date;
+    user!: User;
+    /** Date at which this entity has been created */
+    createdAt!: Date;
+    /** Date at which this entity has last been updated */
+    updatedAt!: Date;
+    /** If this entity has been soft-deleted, this is the date
+at which the entity has been deleted */
+    deletedAt?: Date;
+    /** Version number of this entity */
+    version!: number;
+
+    constructor(data?: IIdentityLDAP) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+        if (!data) {
+            this.user = new User();
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.username = _data["username"];
+            this.overrideEmail = _data["overrideEmail"];
+            this.lastLogin = _data["lastLogin"] ? new Date(_data["lastLogin"].toString()) : <any>undefined;
+            this.user = _data["user"] ? User.fromJS(_data["user"]) : new User();
+            this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
+            this.updatedAt = _data["updatedAt"] ? new Date(_data["updatedAt"].toString()) : <any>undefined;
+            this.deletedAt = _data["deletedAt"] ? new Date(_data["deletedAt"].toString()) : <any>undefined;
+            this.version = _data["version"];
+        }
+    }
+
+    static fromJS(data: any): IdentityLDAP {
+        data = typeof data === 'object' ? data : {};
+        let result = new IdentityLDAP();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["username"] = this.username;
+        data["overrideEmail"] = this.overrideEmail;
+        data["lastLogin"] = this.lastLogin ? this.lastLogin.toISOString() : <any>undefined;
+        data["user"] = this.user ? this.user.toJSON() : <any>undefined;
+        data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
+        data["updatedAt"] = this.updatedAt ? this.updatedAt.toISOString() : <any>undefined;
+        data["deletedAt"] = this.deletedAt ? this.deletedAt.toISOString() : <any>undefined;
+        data["version"] = this.version;
+        return data; 
+    }
+}
+
+export interface IIdentityLDAP {
+    /** ID of the associated user */
+    id: number;
+    username: string;
+    overrideEmail: boolean;
+    lastLogin?: Date;
+    user: User;
+    /** Date at which this entity has been created */
+    createdAt: Date;
+    /** Date at which this entity has last been updated */
+    updatedAt: Date;
+    /** If this entity has been soft-deleted, this is the date
+at which the entity has been deleted */
+    deletedAt?: Date;
+    /** Version number of this entity */
+    version: number;
+}
+
 export class Profile implements IProfile {
     /** Incremental ID of the entity */
     id!: number;
@@ -6291,6 +6380,8 @@ be sent to "email", or "replyToEmail" */
     sendEmailsToReplyToEmail!: boolean;
     /** The roles this user has */
     roles!: Role[];
+    /** Identity for LDAP */
+    identityLdap?: IdentityLDAP;
     hasApiKey?: boolean;
 
     constructor(data?: IProfile) {
@@ -6329,6 +6420,7 @@ be sent to "email", or "replyToEmail" */
                 for (let item of _data["roles"])
                     this.roles!.push(Role.fromJS(item));
             }
+            this.identityLdap = _data["identityLdap"] ? IdentityLDAP.fromJS(_data["identityLdap"]) : <any>undefined;
             this.hasApiKey = _data["hasApiKey"];
         }
     }
@@ -6364,6 +6456,7 @@ be sent to "email", or "replyToEmail" */
             for (let item of this.roles)
                 data["roles"].push(item.toJSON());
         }
+        data["identityLdap"] = this.identityLdap ? this.identityLdap.toJSON() : <any>undefined;
         data["hasApiKey"] = this.hasApiKey;
         return data; 
     }
@@ -6407,6 +6500,8 @@ be sent to "email", or "replyToEmail" */
     sendEmailsToReplyToEmail: boolean;
     /** The roles this user has */
     roles: Role[];
+    /** Identity for LDAP */
+    identityLdap?: IdentityLDAP;
     hasApiKey?: boolean;
 }
 
@@ -12000,6 +12095,8 @@ export class Partial_UserParams implements IPartial_UserParams {
     receiveEmails?: boolean;
     sendEmailsToReplyToEmail?: boolean;
     comment?: string;
+    ldapUsername?: string;
+    ldapOverrideEmail?: boolean;
     roles?: Roles[];
 
     constructor(data?: IPartial_UserParams) {
@@ -12023,6 +12120,8 @@ export class Partial_UserParams implements IPartial_UserParams {
             this.receiveEmails = _data["receiveEmails"];
             this.sendEmailsToReplyToEmail = _data["sendEmailsToReplyToEmail"];
             this.comment = _data["comment"];
+            this.ldapUsername = _data["ldapUsername"];
+            this.ldapOverrideEmail = _data["ldapOverrideEmail"];
             if (Array.isArray(_data["roles"])) {
                 this.roles = [] as any;
                 for (let item of _data["roles"])
@@ -12050,6 +12149,8 @@ export class Partial_UserParams implements IPartial_UserParams {
         data["receiveEmails"] = this.receiveEmails;
         data["sendEmailsToReplyToEmail"] = this.sendEmailsToReplyToEmail;
         data["comment"] = this.comment;
+        data["ldapUsername"] = this.ldapUsername;
+        data["ldapOverrideEmail"] = this.ldapOverrideEmail;
         if (Array.isArray(this.roles)) {
             data["roles"] = [];
             for (let item of this.roles)
@@ -12071,6 +12172,8 @@ export interface IPartial_UserParams {
     receiveEmails?: boolean;
     sendEmailsToReplyToEmail?: boolean;
     comment?: string;
+    ldapUsername?: string;
+    ldapOverrideEmail?: boolean;
     roles?: Roles[];
 }
 

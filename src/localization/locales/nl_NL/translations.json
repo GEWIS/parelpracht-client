@@ -279,8 +279,14 @@
           "unknown": "Onbekend"
         },
         "lastName": "Achternaam",
+        "ldap": {
+          "username": "LDAP gebruikersnaam",
+          "warningHeader": "Waarschuwing - Zeer gevaarlijke actie",
+          "warningContent": "Het veranderen van de LDAP gebruikersnaam is heel gevaarlijk, omdat het deze gebruiker permanent uit ParelPracht buitengesloten kan worden. Verander het dus alleen als je weet wat je aan het doen bent."
+        },
         "mailOnInvoice": "Ik wil een email ontvangen iedere keer dat een factuur is verstuurd",
         "name": "Naam",
+        "overrideLdapEmail": "Overschrijf mijn persoonlijke emailadres hierboven niet met mijn LDAP email adres",
         "personalEmail": "Persoonlijk emailadres",
         "preposition": "Tussenvoegsel",
         "replyToEmail": "Antwoord emailadres",
