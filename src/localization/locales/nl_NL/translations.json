@@ -395,6 +395,7 @@
     "logout": "Uitloggen",
     "myProfile": "Mijn profiel",
     "products": "Producten",
+    "settings": "Instellingen",
     "users": "Gebruikers"
   },
   "other": {
@@ -507,6 +508,19 @@
       "setPassword": "Kies een wachtwoord",
       "submit": "Versture",
       "successMessage": "Wachtwoord succesvol veranderd!"
+    },
+    "settings": {
+      "header": {
+        "header": "ParelPracht server instellingen",
+        "subheader": "Omdat we allemaal graag op het randje leven."
+      },
+      "roles": {
+        "header": {
+          "ldapGroup": "LDAP groep",
+          "roleName": "Naam"
+        }
+      },
+      "warning": "WAARSCHUWING: Het aanpassen van instellingen op deze pagina heeft gevolgen voor de werking van ParelPracht. Je kunt mogelijk het systeem volledig slopen. Pas hier dus alleen dingen aan als je weet wat je aan het doen bent."
     },
     "tables": {
       "footer": {

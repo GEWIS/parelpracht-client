@@ -395,6 +395,7 @@
     "logout": "Logout",
     "myProfile": "My Profile",
     "products": "Products",
+    "settings": "Settings",
     "users": "Users"
   },
   "other": {
@@ -507,6 +508,19 @@
       "setPassword": "Set your password",
       "submit": "Submit",
       "successMessage": "Password successfully changed!"
+    },
+    "settings": {
+      "header": {
+        "header": "ParelPracht server settings",
+        "subheader": "Because we all like to live dangerously."
+      },
+      "roles": {
+        "header": {
+          "ldapGroup": "LDAP group",
+          "roleName": "Rolename"
+        }
+      },
+      "warning": "WARNING: Changing anything on this page will have consequences for the workings of ParelPracht, and you could possibly deadlock the system. Only change these settings when you know what you are doing."
     },
     "tables": {
       "footer": {

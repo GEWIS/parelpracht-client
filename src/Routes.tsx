@@ -44,6 +44,7 @@ import CustomInvoicePage from './pages/CustomInvoicePage';
 import { authedUserHasRole } from './stores/auth/selectors';
 import AuthorizationComponent from './components/AuthorizationComponent';
 import ParelPrachtFullLogo from './components/ParelPrachtFullLogo';
+import SettingsPage from './pages/SettingsPage';
 
 interface Props extends RouteComponentProps {
   // eslint-disable-next-line react/no-unused-prop-types
@@ -260,6 +261,11 @@ function Routes(props: Props) {
             </Route>,
           ] : null}
           <Route path="/user/:userId" exact component={SingleUserPage} />
+
+          <AuthorizationComponent roles={[Roles.ADMIN]} notFound>
+            <Route path="/settings" exact component={SettingsPage} />
+          </AuthorizationComponent>
+
           <Route path="/norights" component={NoRights} />
           <Route path="" component={NotFound} />
         </Switch>
