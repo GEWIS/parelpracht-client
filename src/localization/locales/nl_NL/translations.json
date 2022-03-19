@@ -60,6 +60,7 @@
       "save": "Bestand opslaan",
       "upload": "Upload bestanden"
     },
+    "ok": "Ok",
     "save": "Opslaan"
   },
   "dashboard": {
@@ -265,6 +266,33 @@
       "unknown": "Onbekend"
     },
     "user": {
+      "auth": {
+        "addLdap": {
+          "button": "Add LDAP login",
+          "description": "Are you sure you want to enable ldap authentication for this user? This user can then login with LDAP with the given username!"
+        },
+        "addPassword": {
+          "button": "Add password login",
+          "description": "Are you sure you want to enable local authentication for this user? This user can then login with their email address and password!"
+        },
+        "loginLdap": "LDAP Authenticatie",
+        "loginLocal": "Locale Authenticatie",
+        "modalHeader": "Are you sure?",
+        "removeLdap": {
+          "button": "Remove LDAP login",
+          "description": "Are you sure you want to remove local authentication for this user? This user can then no longer login with LDAP!"
+        },
+        "removePassword": {
+          "button": "Remove password login",
+          "description": "Are you sure you want to remove local authentication for this user? This user can then no longer login with email/password!"
+        },
+        "segmentDescription": "Only change these settings if you know what you are doing!",
+        "segmentHeader": "Loginmethodes bewerken",
+        "updateLdap": {
+          "button": "Add LDAP login",
+          "description": "Are you sure you want to update this user's ldap authentication credentials? This user might then no longer be able to login with LDAP!"
+        }
+      },
       "props": {
         "allMailToReplyTo": "Ik wil alle emails ontvangen op mijn antwoord emailadres",
         "comments": "Opmerkingen",
@@ -279,11 +307,6 @@
           "unknown": "Onbekend"
         },
         "lastName": "Achternaam",
-        "ldap": {
-          "username": "LDAP gebruikersnaam",
-          "warningHeader": "Waarschuwing - Zeer gevaarlijke actie",
-          "warningContent": "Het veranderen van de LDAP gebruikersnaam is heel gevaarlijk, omdat het deze gebruiker permanent uit ParelPracht buitengesloten kan worden. Verander het dus alleen als je weet wat je aan het doen bent."
-        },
         "mailOnInvoice": "Ik wil een email ontvangen iedere keer dat een factuur is verstuurd",
         "name": "Naam",
         "overrideLdapEmail": "Overschrijf mijn persoonlijke emailadres hierboven niet met mijn LDAP email adres",
@@ -438,14 +461,14 @@
     },
     "loading": "Login informatie controleren...",
     "login": {
-      "username": "Gebruikersnaam",
       "email": "Emailadres",
       "forgotPassword": "Wachtwoord vergeten",
       "loginButton": "Log in",
       "loginLDAPButton": "Log in met LDAP",
       "password": "Wachtwoord",
       "rememberMe": "Blijf ingelogd",
-      "troubleSigningIn": "Problemen met inloggen?"
+      "troubleSigningIn": "Problemen met inloggen?",
+      "username": "Gebruikersnaam"
     },
     "noRights": {
       "hammerTime": "Stop, hammertime!",

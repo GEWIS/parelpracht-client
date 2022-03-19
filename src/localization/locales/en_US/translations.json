@@ -60,6 +60,7 @@
       "save": "Save file",
       "upload": "Upload files"
     },
+    "ok": "Ok",
     "save": "Save"
   },
   "dashboard": {
@@ -265,6 +266,33 @@
       "unknown": "Unknown"
     },
     "user": {
+      "auth": {
+        "addLdap": {
+          "button": "Add LDAP login",
+          "description": "Are you sure you want to enable ldap authentication for this user? This user can then log in with LDAP with the given username!"
+        },
+        "addPassword": {
+          "button": "Add password login",
+          "description": "Are you sure you want to enable local authentication for this user? This user can then log in with their email address and password!"
+        },
+        "loginLdap": "LDAP Authentication",
+        "loginLocal": "Local Authentication",
+        "modalHeader": "Are you sure?",
+        "removeLdap": {
+          "button": "Remove LDAP login",
+          "description": "Are you sure you want to remove local authentication for this user? This user can then no longer log in with LDAP!"
+        },
+        "removePassword": {
+          "button": "Remove password login",
+          "description": "Are you sure you want to remove local authentication for this user? This user can then no longer log in with email/password!"
+        },
+        "segmentDescription": "Only change these settings if you know what you are doing!",
+        "segmentHeader": "Edit login methods",
+        "updateLdap": {
+          "button": "Update LDAP login",
+          "description": "Are you sure you want to update this user's ldap authentication credentials? This user might then no longer be able to log in with LDAP!"
+        }
+      },
       "props": {
         "allMailToReplyTo": "I want to receive all emails on my reply-to email address",
         "comments": "Comments",
@@ -279,11 +307,6 @@
           "unknown": "Unknown"
         },
         "lastName": "Last Name",
-        "ldap": {
-          "username": "LDAP username",
-          "warningHeader": "Warning - Very dangerous operation",
-          "warningContent": "Changing the LDAP username is very dangerous, as it could lock this user out of ParelPracht permanently. Only change this field if you know what you are doing."
-        },
         "mailOnInvoice": "I want to receive an email each time an invoice is sent",
         "name": "Name",
         "overrideLdapEmail": "Override my LDAP email address with my personal email address above",
@@ -438,14 +461,14 @@
     },
     "loading": "Checking login information...",
     "login": {
-      "username": "Username",
       "email": "Email address",
       "forgotPassword": "Forgot password",
       "loginButton": "Login",
       "loginLDAPButton": "Login with LDAP",
       "password": "Password",
       "rememberMe": "Remember me",
-      "troubleSigningIn": "Trouble signing in?"
+      "troubleSigningIn": "Trouble signing in?",
+      "username": "Username"
     },
     "noRights": {
       "hammerTime": "Stop, hammertime!",

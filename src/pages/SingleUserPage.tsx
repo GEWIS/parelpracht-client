@@ -23,6 +23,7 @@ import UserApiKey from '../components/entities/user/UserApiKey';
 import UserBackgroundModal from '../components/files/UserBackgroundModal';
 import AuthorizationComponent from '../components/AuthorizationComponent';
 import NotFound from './NotFound';
+import UserAuthSettings from '../components/entities/user/UserAuthSettings';
 
 interface Props extends RouteComponentProps<{ userId: string }>, WithTranslation {
   user: User | undefined;
@@ -160,6 +161,9 @@ class SingleUserPage extends React.Component<Props> {
                   </Segment>
                 </AuthorizationComponent>
               )}
+              <AuthorizationComponent roles={[Roles.ADMIN]} notFound={false}>
+                <UserAuthSettings user={user} />
+              </AuthorizationComponent>
             </Grid.Column>
           </Grid>
         </Container>

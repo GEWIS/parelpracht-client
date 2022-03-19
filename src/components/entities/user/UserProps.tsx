@@ -2,7 +2,7 @@ import React, { ChangeEvent } from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import {
-  Checkbox, Dropdown, Form, Icon, Input, Message, Segment,
+  Checkbox, Dropdown, Form, Input, Segment,
 } from 'semantic-ui-react';
 import validator from 'validator';
 import _ from 'lodash';
@@ -53,7 +53,6 @@ interface State {
   roleAudit: boolean;
   roleAdmin: boolean;
 
-  ldapUsername?: string;
   ldapOverrideEmail?: boolean;
 }
 
@@ -136,7 +135,6 @@ class UserProps extends React.Component<Props, State> {
     });
 
     if (this.ldapEnabled()) {
-      result.ldapUsername = this.state.ldapUsername !== '' ? this.state.ldapUsername : undefined;
       result.ldapOverrideEmail = this.state.ldapOverrideEmail;
     }
 
@@ -189,7 +187,7 @@ class UserProps extends React.Component<Props, State> {
   };
 
   render() {
-    const { t, actorIsAdmin } = this.props;
+    const { t } = this.props;
     const {
       editing,
       firstName,
@@ -205,40 +203,8 @@ class UserProps extends React.Component<Props, State> {
 
       roleGeneral, roleSignee, roleAdmin, roleAudit, roleFinancial,
 
-      ldapUsername, ldapOverrideEmail,
+      ldapOverrideEmail,
     } = this.state;
-
-    const ldapUsernameField = this.ldapEnabled() && ldapUsername !== undefined ? (
-      <>
-        <Form.Group widths="equal">
-          <Form.Field
-            disabled={!editing || !actorIsAdmin}
-            required
-            id="form-input-ldap-username"
-            fluid
-            control={Input}
-            label={t('entities.user.props.ldap.username')}
-            value={ldapUsername}
-            onChange={(e: ChangeEvent<HTMLInputElement>) => this.setState({
-              ldapUsername: e.target.value,
-            })}
-            error={
-            validator.isEmpty(ldapUsername)
-          }
-          />
-        </Form.Group>
-        {editing && actorIsAdmin ? (
-          <Form.Group widths="equal">
-            <Message
-              visible
-              error
-              header={t('entities.user.props.ldap.warningHeader')}
-              content={t('entities.user.props.ldap.warningContent')}
-            />
-          </Form.Group>
-        ) : null}
-      </>
-    ) : (' ');
 
     const ldapOverrideEmailCheckbox = this.ldapEnabled() ? (
       <Form.Field>
@@ -405,7 +371,6 @@ class UserProps extends React.Component<Props, State> {
               })}
             />
           </Form.Group>
-          {ldapUsernameField}
           {ldapOverrideEmailCheckbox}
           <Form.Field>
             <Checkbox
