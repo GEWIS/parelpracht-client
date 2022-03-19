@@ -3,6 +3,13 @@ The current version of ParelPracht is **v1.1.4**, released on September 12th, 20
 You can find the release notes below.
 ----------------------
 
+## v1.2.0
+### Added
+- Improved page layouts on smaller screens, like tablets.
+
+### Bugfixes
+- Fixed some small translation errors.
+
 ## v1.1.4 (12-09-2021)
 ### Bugfixes
 - Fixed validated entities not showing their correct status.

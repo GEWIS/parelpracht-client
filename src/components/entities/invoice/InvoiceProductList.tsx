@@ -54,7 +54,7 @@ class InvoiceProductList extends React.Component<Props, State> {
         <h3>
           {t('entity.productinstances')}
         </h3>
-        <Table compact>
+        <Table compact unstackable>
           <Table.Header>
             <Table.Row>
               <Table.HeaderCell>{t('entity.productinstance')}</Table.HeaderCell>

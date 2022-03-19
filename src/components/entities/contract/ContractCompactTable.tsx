@@ -92,7 +92,7 @@ class ContractCompactTable extends React.Component<Props, State> {
     } else {
       contractList = (
         <>
-          <Table striped compact>
+          <Table striped compact unstackable>
             <Table.Header>
               <Table.Row>
                 <Table.HeaderCell>

@@ -187,7 +187,7 @@ class FinancialOverview extends React.Component<Props, State> {
             }}
           />
         </div>
-        <Table celled definition style={{ marginTop: '2em' }}>
+        <Table celled definition style={{ marginTop: '2em' }} unstackable>
           <Table.Header>
             <Table.Row>
               <Table.HeaderCell />

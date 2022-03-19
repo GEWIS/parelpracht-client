@@ -175,7 +175,7 @@ class SingleContractPage extends React.Component<Props, State> {
         </Segment>
         <Container style={{ marginTop: '1.25em' }}>
           <ContractSummary />
-          <Grid rows={2}>
+          <Grid rows={2} stackable>
             <Grid.Row centered columns={1} style={{ paddingLeft: '1em', paddingRight: '1em' }}>
               <Segment secondary style={{ backgroundColor: 'rgba(243, 244, 245, 0.98)' }}>
                 <FinancialDocumentProgress

@@ -214,7 +214,7 @@ class SingleCompanyPage extends React.Component<Props, State> {
         </Segment>
         <Container style={{ marginTop: '1.25em' }}>
           <CompanySummary />
-          <Grid columns={2}>
+          <Grid columns={2} stackable>
             <Grid.Column width={10}>
               <Tab
                 panes={panes}

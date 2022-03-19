@@ -49,7 +49,7 @@ class DashboardContractsRow extends React.Component<Props> {
           textAlign="left"
           style={{ paddingLeft: '10px', paddingTop: '5px', paddingBottom: '5px' }}
         >
-          <Table basic="very" style={{ padding: '0px', margin: '0px' }}>
+          <Table basic="very" style={{ padding: '0px', margin: '0px' }} unstackable>
             <Table.Row>
               <Table.Cell width={2} style={{ padding: '0px', margin: '0px' }}>
                 {logo}

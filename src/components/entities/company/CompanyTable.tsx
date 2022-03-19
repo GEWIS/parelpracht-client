@@ -51,7 +51,7 @@ function CompaniesTable({
 
   const table = (
     <>
-      <Table singleLine selectable attached sortable fixed>
+      <Table singleLine selectable attached sortable fixed unstackable>
         <Table.Header>
           <Table.Row>
             <Table.HeaderCell

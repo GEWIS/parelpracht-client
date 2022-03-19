@@ -43,7 +43,7 @@ function DashboardPage(props: Props) {
         </Container>
       </Segment>
       <Container style={{ marginTop: '2em' }}>
-        <Grid>
+        <Grid stackable>
           <Grid.Row columns={2}>
             <Grid.Column width={9}>
               <FinancialOverview />

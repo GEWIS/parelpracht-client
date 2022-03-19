@@ -95,7 +95,7 @@ class ContractCompactTable extends React.Component<Props, State> {
     } else {
       invoiceList = (
         <>
-          <Table striped>
+          <Table striped unstackable>
             <Table.Header>
               <Table.Row>
                 <Table.HeaderCell>

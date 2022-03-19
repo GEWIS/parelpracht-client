@@ -202,7 +202,7 @@ class SingleProductPage extends React.Component<Props, State> {
         </Segment>
         <Container style={{ marginTop: '1.25em' }}>
           <ProductSummary product={product} />
-          <Grid columns={2}>
+          <Grid columns={2} stackable>
             <Grid.Column width={10}>
               <Tab
                 panes={panes}

@@ -1,7 +1,7 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import {
-  Container, Grid, Message, Segment, Image,
+  Container, Message, Segment, Image,
 } from 'semantic-ui-react';
 import './BackgroundAnimation.css';
 import { useTranslation } from 'react-i18next';
@@ -12,6 +12,7 @@ import LoginLDAPForm from '../components/auth/LoginLDAPForm';
 import ParelPrachtFullLogo from '../components/ParelPrachtFullLogo';
 import { RootState } from '../stores/store';
 import { LoginMethods } from '../clients/server.generated';
+import CenterInPage from '../components/CenterInPage';
 
 interface Props {
   loginMethod: LoginMethods;
@@ -37,23 +38,21 @@ function LoginPage({ loginMethod }: Props) {
       <div className="bg bg3" />
       <AlertContainer internal />
       <Container>
-        <Grid textAlign="center" verticalAlign="middle" style={{ height: '100vh' }}>
-          <Grid.Column width={6}>
-            <Segment>
-              <Image src="./gewis-logo.png" size="small" centered />
-              <ParelPrachtFullLogo />
-              {loginForm}
-            </Segment>
-            {loginMethod === LoginMethods.Local ? (
-              <Message>
-                {t('pages.login.troubleSigningIn')}
-                {' '}
-                <NavLink to="/forgot-password">{t('pages.login.forgotPassword')}</NavLink>
-                .
-              </Message>
-            ) : null}
-          </Grid.Column>
-        </Grid>
+        <CenterInPage>
+          <Segment>
+            <Image src="./gewis-logo.png" size="small" centered />
+            <ParelPrachtFullLogo />
+            {loginForm}
+          </Segment>
+          {loginMethod === LoginMethods.Local ? (
+            <Message>
+              {t('pages.login.troubleSigningIn')}
+              {' '}
+              <NavLink to="/forgot-password">{t('pages.login.forgotPassword')}</NavLink>
+              .
+            </Message>
+          ) : null}
+        </CenterInPage>
       </Container>
     </>
   );

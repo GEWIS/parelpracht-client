@@ -77,7 +77,7 @@ class FilesList extends React.Component<Props, State> {
       </h4>
     );
     const filesList = (
-      <Table compact fixed singleLine className="files">
+      <Table compact fixed singleLine unstackable className="files">
         <Table.Body>
           {createRow}
           {files

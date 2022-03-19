@@ -95,7 +95,7 @@ class SingleUserPage extends React.Component<Props> {
         </Segment>
         <Container style={{ marginTop: '1.25em' }}>
           <UserSummary />
-          <Grid columns={2}>
+          <Grid columns={2} stackable>
             <Grid.Column>
               {user ? (
                 <Segment>
