@@ -8,6 +8,7 @@ You can find the release notes below.
 - Improved page layouts on smaller screens, like tablets.
 
 ### Bugfixes
+- Fixed the "Users" menu button being highlighted when viewing your own profile.
 - Fixed some small translation errors.
 
 ## v1.1.4 (12-09-2021)

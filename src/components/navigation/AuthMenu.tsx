@@ -76,7 +76,7 @@ function AuthMenu(props: Props) {
           </Dropdown.Item>
           {isAdmin ? (
             <>
-              <Dropdown.Item as={NavLink} to="/user">
+              <Dropdown.Item as={NavLink} to="/users">
                 <Icon name="users" />
                 {t('mainMenu.users')}
               </Dropdown.Item>

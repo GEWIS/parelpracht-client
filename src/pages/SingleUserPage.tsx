@@ -81,7 +81,7 @@ class SingleUserPage extends React.Component<Props> {
             <Breadcrumb
               icon="right angle"
               sections={[
-                { key: 'Users', content: <NavLink to="/user">Users</NavLink> },
+                { key: 'Users', content: <NavLink to="/users">Users</NavLink> },
                 {
                   key: 'User',
                   content: user
