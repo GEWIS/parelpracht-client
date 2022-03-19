@@ -56,7 +56,7 @@ class ConfirmationDialogWithParameter extends React.Component<Props, State> {
     return (
       <Modal
         trigger={(
-          <Button disabled={disabled}>
+          <Button disabled={disabled} style={{ marginBottom: '0.25rem' }}>
             {button}
           </Button>
         )}

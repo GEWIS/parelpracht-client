@@ -61,7 +61,7 @@ function ResetPasswordForm(props: Props) {
         onClick={() => props.resetPassword(password, passwordRepeat, props.token)}
         loading={props.status === ResourceStatus.FETCHING}
       >
-        {t('pages.restPassword.submit')}
+        {t('pages.resetPassword.submit')}
       </Button>
     </Form>
   );

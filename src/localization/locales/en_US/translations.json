@@ -269,23 +269,24 @@
       "auth": {
         "addLdap": {
           "button": "Add LDAP login",
-          "description": "Are you sure you want to enable ldap authentication for this user? This user can then log in with LDAP with the given username!"
+          "description": "Are you sure you want to enable LDAP authentication for this user? This user can then login with LDAP with the given username!"
         },
         "addPassword": {
           "button": "Add password login",
-          "description": "Are you sure you want to enable local authentication for this user? This user can then log in with their email address and password!"
+          "description": "Are you sure you want to enable local authentication for this user? This user can then login with their email address and password!"
         },
         "loginLdap": "LDAP Authentication",
         "loginLocal": "Local Authentication",
         "modalHeader": "Are you sure?",
         "removeLdap": {
           "button": "Remove LDAP login",
-          "description": "Are you sure you want to remove local authentication for this user? This user can then no longer log in with LDAP!"
+          "description": "Are you sure you want to remove LDAP authentication for this user? This user can then no longer log in with LDAP!"
         },
         "removePassword": {
           "button": "Remove password login",
           "description": "Are you sure you want to remove local authentication for this user? This user can then no longer log in with email/password!"
         },
+        "rolesBlocked": "Roles cannot be changed, because roles assigned based on LDAP groups",
         "segmentDescription": "Only change these settings if you know what you are doing!",
         "segmentHeader": "Edit login methods",
         "updateLdap": {

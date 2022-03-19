@@ -268,29 +268,30 @@
     "user": {
       "auth": {
         "addLdap": {
-          "button": "Add LDAP login",
-          "description": "Are you sure you want to enable ldap authentication for this user? This user can then login with LDAP with the given username!"
+          "button": "LDAP login toevoegen",
+          "description": "Weet je zeker dat je LDAP authenticatie wilt inschakelen voor deze gebruiker? Deze gebruiker kan dan inloggen via LDAP met de opgegeven gebruikersnaam!"
         },
         "addPassword": {
-          "button": "Add password login",
-          "description": "Are you sure you want to enable local authentication for this user? This user can then login with their email address and password!"
+          "button": "Wachtwoord login toevoegen",
+          "description": "Weet je zeker dat je lokale authenticatie wilt inschakelen voor deze gebruiker? Deze gebruiker kan dan inloggen met hun emailadres en wachtwoord!"
         },
         "loginLdap": "LDAP Authenticatie",
-        "loginLocal": "Locale Authenticatie",
-        "modalHeader": "Are you sure?",
+        "loginLocal": "Lokale Authenticatie",
+        "modalHeader": "Weet je het zeker?",
         "removeLdap": {
-          "button": "Remove LDAP login",
-          "description": "Are you sure you want to remove local authentication for this user? This user can then no longer login with LDAP!"
+          "button": "LDAP login verwijderen",
+          "description": "Weet je zeker dat je LDAP authenticatie wilt verwijderen voor deze gebruiker? Deze gebruiker kan dan niet meer inloggen met LDAP!"
         },
         "removePassword": {
-          "button": "Remove password login",
-          "description": "Are you sure you want to remove local authentication for this user? This user can then no longer login with email/password!"
+          "button": "Wachtwoord login verwijderen",
+          "description": "Weet je zeker dat je lokale authenticatie wilt verwijderen voor deze gebruiker? Deze gebruiker kan dan niet meer inloggen met emailadres en wachtwoord!"
         },
-        "segmentDescription": "Only change these settings if you know what you are doing!",
+        "rolesBlocked": "Rechten kunnen niet aangepast worden, omdat rechten zijn gebaseerd op LDAP groepen.",
+        "segmentDescription": "Verander deze instellingen alleen als je weet wat je aan het doen bent!",
         "segmentHeader": "Loginmethodes bewerken",
         "updateLdap": {
-          "button": "Add LDAP login",
-          "description": "Are you sure you want to update this user's ldap authentication credentials? This user might then no longer be able to login with LDAP!"
+          "button": "LDAP login toevoegen",
+          "description": "Weet je zeker dat je LDAP authenticatie wilt aanpassen voor deze gebruiker? Deze gebruiker kan dan misschien niet meer inloggen met LDAP!"
         }
       },
       "props": {

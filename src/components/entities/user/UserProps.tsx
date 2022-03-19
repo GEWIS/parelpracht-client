@@ -2,7 +2,7 @@ import React, { ChangeEvent } from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import {
-  Checkbox, Dropdown, Form, Input, Segment,
+  Checkbox, Dropdown, Form, Icon, Input, Popup, Segment,
 } from 'semantic-ui-react';
 import validator from 'validator';
 import _ from 'lodash';
@@ -75,7 +75,8 @@ class UserProps extends React.Component<Props, State> {
   }
 
   ldapEnabled = (): boolean => {
-    return this.props.loginMethod === LoginMethods.Ldap;
+    return this.props.loginMethod === LoginMethods.Ldap
+      && this.props.user.identityLdap !== undefined;
   };
 
   extractState = (props: Props) => {
@@ -345,7 +346,7 @@ class UserProps extends React.Component<Props, State> {
           </Form.Group>
           <Form.Group widths="equal">
             <Form.Field
-              disabled={!editing || !ldapOverrideEmail}
+              disabled={!editing || (this.ldapEnabled() && !ldapOverrideEmail)}
               id="form-input-email"
               fluid
               required
@@ -385,7 +386,16 @@ class UserProps extends React.Component<Props, State> {
           </Form.Field>
           {receiveEmailsCheckbox}
           <Segment>
-            <h3>{t('pages.user.permissions')}</h3>
+            <h3>
+              {t('pages.user.permissions')}
+              {this.ldapEnabled() ? (
+                <Popup
+                  content={t('entities.user.auth.rolesBlocked')}
+                  trigger={<Icon circular size="small" name="lock" style={{ float: 'right' }} />}
+                  position="top center"
+                />
+              ) : null}
+            </h3>
             <Form.Group widths="equal">
               <Form.Field>
                 {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
