@@ -102,7 +102,7 @@ class SingleCompanyPage extends React.Component<Props, State> {
 
     const panes = [
       {
-        menuItem: t('entity.companies'),
+        menuItem: t('entity.contact'),
         render: () => (
           <Tab.Pane>
             <CompanyContactList />
