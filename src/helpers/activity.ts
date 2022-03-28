@@ -187,10 +187,12 @@ export function getCompletedDocumentStatuses(
           DocumentStatus.SENT] as any as DocumentStatus[];
       case DocumentStatus.PAID:
         return [DocumentStatus.CREATED,
+          InvoiceStatus.PROPOSED,
           DocumentStatus.SENT,
           DocumentStatus.PAID] as any as DocumentStatus[];
       case DocumentStatus.IRRECOVERABLE:
         return [DocumentStatus.CREATED,
+          InvoiceStatus.PROPOSED,
           DocumentStatus.SENT,
           DocumentStatus.IRRECOVERABLE] as any as DocumentStatus[];
       case DocumentStatus.CANCELLED:
