@@ -3,7 +3,7 @@ import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { Table } from 'semantic-ui-react';
 import { withTranslation, WithTranslation } from 'react-i18next';
 import InvoiceProductRow from './InvoiceProductRow';
-import { ActivityType, Client, Invoice } from '../../../clients/server.generated';
+import { Client, Invoice, InvoiceStatus } from '../../../clients/server.generated';
 import { formatPriceFull } from '../../../helpers/monetary';
 
 interface Props extends RouteComponentProps, WithTranslation {
@@ -27,8 +27,11 @@ class InvoiceProductList extends React.Component<Props, State> {
   };
 
   deleteButtonActive() {
-    return !(this.props.invoice.activities
-      .filter((a) => a.type === ActivityType.STATUS).length > 1);
+    const { activities } = this.props.invoice;
+    return !(activities.find((a) => a.subType === InvoiceStatus.SENT) !== undefined
+      || activities.find((a) => a.subType === InvoiceStatus.PAID) !== undefined
+      || activities.find((a) => a.subType === InvoiceStatus.IRRECOVERABLE) !== undefined
+      || activities.find((a) => a.subType === InvoiceStatus.CANCELLED) !== undefined);
   }
 
   public render() {
