@@ -231,7 +231,7 @@
         "specsEn": "Delivery specifications (English)",
         "specsNl": "Delivery specifications (Dutch)",
         "status": {
-          "active": "Inactief",
+          "active": "Active",
           "header": "Status",
           "inactive": "Inactive"
         }
