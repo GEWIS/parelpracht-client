@@ -7,9 +7,16 @@ import { Roles } from '../clients/server.generated';
 import AuthorizationComponent from '../components/AuthorizationComponent';
 import ContactsTable from '../components/entities/contact/ContactTable';
 import ContactTableControls from '../components/entities/contact/ContactTableControls';
+import { useTitle } from '../components/TitleContext';
 
 function ContactsPage() {
   const { t } = useTranslation();
+  const { setTitle } = useTitle();
+
+  React.useEffect(() => {
+    setTitle(t('entity.contacts'));
+  }, []);
+
   return (
     <AuthorizationComponent roles={[Roles.GENERAL, Roles.ADMIN, Roles.AUDIT]} notFound>
       <Segment style={{ backgroundColor: 'rgba(237, 237, 237, 0.98)' }} vertical basic>

@@ -3,6 +3,7 @@ import { Modal } from 'semantic-ui-react';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
+import { withTranslation, WithTranslation } from 'react-i18next';
 import { Contract } from '../clients/server.generated';
 import { fetchSingle, clearSingle } from '../stores/single/actionCreators';
 import { RootState } from '../stores/store';
@@ -11,11 +12,12 @@ import ResourceStatus from '../stores/resourceStatus';
 import AlertContainer from '../components/alerts/AlertContainer';
 import { SingleEntities } from '../stores/single/single';
 import { getSingle } from '../stores/single/selectors';
+import { TitleContext } from '../components/TitleContext';
 
 interface SelfProps extends RouteComponentProps<{ companyId?: string }> {
 }
 
-interface Props extends SelfProps {
+interface Props extends SelfProps, WithTranslation {
   status: ResourceStatus;
 
   clearContract: () => void;
@@ -28,6 +30,9 @@ class ContractModal extends React.Component<Props> {
   }
 
   componentDidUpdate(prevProps: Props) {
+    const { t } = this.props;
+    this.context.setTitle(t('pages.contract.newContract'));
+
     if (prevProps.status === ResourceStatus.SAVING
       && this.props.status === ResourceStatus.FETCHED) {
       this.close();
@@ -92,4 +97,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   clearContract: () => dispatch(clearSingle(SingleEntities.Contract)),
 });
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ContractModal));
+ContractModal.contextType = TitleContext;
+
+export default withTranslation()(withRouter(connect(mapStateToProps,
+  mapDispatchToProps)(ContractModal)));

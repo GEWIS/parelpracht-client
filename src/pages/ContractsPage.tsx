@@ -8,9 +8,16 @@ import { Roles } from '../clients/server.generated';
 import AuthorizationComponent from '../components/AuthorizationComponent';
 import ContractsTable from '../components/entities/contract/ContractTable';
 import ContractTableControls from '../components/entities/contract/ContractTableControls';
+import { useTitle } from '../components/TitleContext';
 
 function ContractsPage(props: RouteComponentProps) {
   const { t } = useTranslation();
+  const { setTitle } = useTitle();
+
+  React.useEffect(() => {
+    setTitle(t('entity.contracts'));
+  }, []);
+
   return (
     <AuthorizationComponent
       roles={[Roles.SIGNEE, Roles.GENERAL, Roles.FINANCIAL, Roles.AUDIT, Roles.AUDIT]}

@@ -12,6 +12,7 @@ You can find the release notes below.
 - Added "Proposed" status to invoices.
   - Proposed invoices are not yet immutable, so can still be changed.
 - Improved page layouts on smaller screens, like tablets.
+- Added current page's title to browser title.
 
 ### Changes
 - On generated documents, countries are now fully written out instead of only their abbreviation.

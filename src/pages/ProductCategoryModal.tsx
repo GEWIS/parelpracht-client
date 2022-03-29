@@ -19,6 +19,7 @@ import { SingleEntities } from '../stores/single/single';
 import { TransientAlert } from '../stores/alerts/actions';
 import { showTransientAlert } from '../stores/alerts/actionCreators';
 import ProductCategoryProps from '../components/entities/productcategories/ProductCategoryProps';
+import { TitleContext } from '../components/TitleContext';
 
 interface Props extends WithTranslation, RouteComponentProps<{ categoryId: string }> {
   create?: boolean;
@@ -41,23 +42,35 @@ class ProductCategoryModal extends React.Component<Props> {
   }
 
   componentDidUpdate(prevProps: Props) {
-    if (this.props.status === ResourceStatus.FETCHED
+    const {
+      category, status, t, create,
+    } = this.props;
+
+    if (create) {
+      this.context.setTitle(t('entities.category.newCategory'));
+    } else if (category === undefined) {
+      this.context.setTitle(t('entity.category'));
+    } else {
+      this.context.setTitle(category.name);
+    }
+
+    if (status === ResourceStatus.FETCHED
       && prevProps.status === ResourceStatus.SAVING
     ) {
       this.closeWithPopupMessage();
       this.props.showTransientAlert({
         title: 'Success',
-        message: `Category ${this.props.category?.name} successfully saved`,
+        message: `Category ${category?.name} successfully saved`,
         type: 'success',
         displayTimeInMs: 3000,
       });
     }
 
-    if (this.props.status === ResourceStatus.EMPTY
+    if (status === ResourceStatus.EMPTY
       && prevProps.status === ResourceStatus.DELETING
     ) {
       this.closeWithPopupMessage();
-      this.props.showTransientAlert({
+      showTransientAlert({
         title: 'Success',
         message: `Category ${prevProps.category?.name} successfully deleted`,
         type: 'success',
@@ -160,6 +173,8 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   fetchCategory: (id: number) => dispatch(fetchSingle(SingleEntities.ProductCategory, id)),
   showTransientAlert: (alert: TransientAlert) => dispatch(showTransientAlert(alert)),
 });
+
+ProductCategoryModal.contextType = TitleContext;
 
 export default withTranslation()(
   withRouter(connect(mapStateToProps, mapDispatchToProps)(ProductCategoryModal)),

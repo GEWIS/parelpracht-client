@@ -26,6 +26,8 @@ import FilesList from '../components/files/FilesList';
 import { authedUserHasRole } from '../stores/auth/selectors';
 import AuthorizationComponent from '../components/AuthorizationComponent';
 import NotFound from './NotFound';
+import { TitleContext } from '../components/TitleContext';
+import { getLanguage } from '../localization';
 
 interface Props extends WithTranslation, RouteComponentProps<{ companyId: string }> {
   company: Company | undefined;
@@ -73,7 +75,15 @@ class SingleCompanyPage extends React.Component<Props, State> {
   }
 
   componentDidUpdate(prevProps: Readonly<Props>) {
-    if (this.props.status === ResourceStatus.EMPTY
+    const { company, status, t } = this.props;
+
+    if (company === undefined) {
+      this.context.setTitle(t('entity.company'));
+    } else {
+      this.context.setTitle(company.name);
+    }
+
+    if (status === ResourceStatus.EMPTY
       && prevProps.status === ResourceStatus.DELETING
     ) {
       this.props.history.push('/company');
@@ -84,7 +94,7 @@ class SingleCompanyPage extends React.Component<Props, State> {
         displayTimeInMs: 3000,
       });
     }
-    if (this.props.status === ResourceStatus.FETCHED
+    if (status === ResourceStatus.FETCHED
     && prevProps.status === ResourceStatus.SAVING) {
       this.props.showTransientAlert({
         title: 'Success',
@@ -102,7 +112,7 @@ class SingleCompanyPage extends React.Component<Props, State> {
 
     const panes = [
       {
-        menuItem: t('entity.companies'),
+        menuItem: t('entity.contacts'),
         render: () => (
           <Tab.Pane>
             <CompanyContactList />
@@ -173,7 +183,7 @@ class SingleCompanyPage extends React.Component<Props, State> {
   };
 
   public render() {
-    const { company, status } = this.props;
+    const { company, status, t } = this.props;
     const { paneIndex } = this.state;
 
     if (status === ResourceStatus.NOTFOUND) {
@@ -181,6 +191,7 @@ class SingleCompanyPage extends React.Component<Props, State> {
     }
 
     if (company === undefined) {
+      this.context.setTitle(t('entity.company'));
       return (
         <AuthorizationComponent
           roles={[Roles.GENERAL, Roles.ADMIN, Roles.AUDIT]}
@@ -194,7 +205,7 @@ class SingleCompanyPage extends React.Component<Props, State> {
     }
 
     const panes = this.getPanes();
-    const { t } = this.props;
+    this.context.setTitle(company.name);
 
     return (
       <AuthorizationComponent
@@ -251,6 +262,8 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   clearCompany: () => dispatch(clearSingle(SingleEntities.Company)),
   showTransientAlert: (alert: TransientAlert) => dispatch(showTransientAlert(alert)),
 });
+
+SingleCompanyPage.contextType = TitleContext;
 
 export default withTranslation()(
   withRouter(connect(mapStateToProps, mapDispatchToProps)(SingleCompanyPage)),

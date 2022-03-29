@@ -24,6 +24,7 @@ import UserBackgroundModal from '../components/files/UserBackgroundModal';
 import AuthorizationComponent from '../components/AuthorizationComponent';
 import NotFound from './NotFound';
 import UserAuthSettings from '../components/entities/user/UserAuthSettings';
+import { TitleContext } from '../components/TitleContext';
 
 interface Props extends RouteComponentProps<{ userId: string }>, WithTranslation {
   user: User | undefined;
@@ -44,10 +45,21 @@ class SingleUserPage extends React.Component<Props> {
   }
 
   componentDidUpdate(prevProps: Readonly<Props>) {
-    if (this.props.status === ResourceStatus.EMPTY
+    const { status, user, t } = this.props;
+    if (user === undefined) {
+      this.context.setTitle(t('entity.user'));
+    } else {
+      this.context.setTitle(formatContactName(
+        user.firstName,
+        user.lastNamePreposition,
+        user.lastName,
+      ));
+    }
+
+    if (status === ResourceStatus.EMPTY
       && prevProps.status === ResourceStatus.DELETING
     ) {
-      this.props.history.push('/user');
+      this.props.history.push('/users');
       this.props.showTransientAlert({
         title: 'Success',
         message: `User ${prevProps.user?.firstName} successfully deleted`,
@@ -185,6 +197,8 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   clearUser: () => dispatch(clearSingle(SingleEntities.User)),
   showTransientAlert: (alert: TransientAlert) => dispatch(showTransientAlert(alert)),
 });
+
+SingleUserPage.contextType = TitleContext;
 
 export default withTranslation()(withRouter(connect(mapStateToProps,
   mapDispatchToProps)(SingleUserPage)));

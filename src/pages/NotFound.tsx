@@ -3,9 +3,16 @@ import {
   Container, Grid, Header, Icon, Segment, Image,
 } from 'semantic-ui-react';
 import { useTranslation } from 'react-i18next';
+import { useTitle } from '../components/TitleContext';
 
 function NotFound() {
   const { t } = useTranslation();
+  const { setTitle } = useTitle();
+
+  React.useEffect(() => {
+    setTitle(t('pages.notFound.title'));
+  }, []);
+
   return (
     <>
       <Segment style={{ backgroundColor: 'rgba(237, 237, 237, 0.98)' }} vertical basic>

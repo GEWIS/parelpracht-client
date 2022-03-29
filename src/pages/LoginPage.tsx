@@ -5,14 +5,13 @@ import {
 } from 'semantic-ui-react';
 import './BackgroundAnimation.css';
 import { useTranslation } from 'react-i18next';
-import { connect } from 'react-redux';
 import AlertContainer from '../components/alerts/AlertContainer';
 import LoginLocalForm from '../components/auth/LoginLocalForm';
 import LoginLDAPForm from '../components/auth/LoginLDAPForm';
 import ParelPrachtFullLogo from '../components/ParelPrachtFullLogo';
-import { RootState } from '../stores/store';
 import { LoginMethods } from '../clients/server.generated';
 import CenterInPage from '../components/CenterInPage';
+import { useTitle } from '../components/TitleContext';
 
 interface Props {
   loginMethod: LoginMethods;
@@ -20,6 +19,11 @@ interface Props {
 
 function LoginPage({ loginMethod }: Props) {
   const { t } = useTranslation();
+  const { setTitle } = useTitle();
+
+  React.useEffect(() => {
+    setTitle(t('pages.login.title'));
+  }, []);
 
   let loginForm;
   switch (loginMethod) {

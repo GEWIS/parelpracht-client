@@ -4,7 +4,7 @@ import { NavLink } from 'react-router-dom';
 import { Dispatch } from 'redux';
 import {
   Button,
-  Container, Grid, Header, Icon, Segment,
+  Container, Header, Icon, Segment,
 } from 'semantic-ui-react';
 import './BackgroundAnimation.css';
 import { useTranslation } from 'react-i18next';
@@ -14,6 +14,7 @@ import { authRequestClear } from '../stores/auth/actionCreators';
 import ResourceStatus from '../stores/resourceStatus';
 import { RootState } from '../stores/store';
 import CenterInPage from '../components/CenterInPage';
+import { useTitle } from '../components/TitleContext';
 
 interface Props {
   status: ResourceStatus;
@@ -23,8 +24,11 @@ interface Props {
 
 function ForgotPasswordPage(props: Props) {
   const { t } = useTranslation();
+  const { setTitle } = useTitle();
+
   useEffect(() => {
     props.clearStatus();
+    setTitle(t('pages.forgotPassword.title'));
   }, []);
 
   if (props.status === ResourceStatus.FETCHED) {
