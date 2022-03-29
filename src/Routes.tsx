@@ -23,7 +23,9 @@ import ContractModal from './pages/ContractModal';
 import Navigation from './components/navigation/Navigation';
 import { RootState } from './stores/store';
 import ResourceStatus from './stores/resourceStatus';
-import { AuthStatus, Roles, User } from './clients/server.generated';
+import {
+  AuthStatus, LoginMethods, Roles, User,
+} from './clients/server.generated';
 import LoginPage from './pages/LoginPage';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
 import ResetPasswordPage from './pages/ResetPasswordPage';
@@ -51,6 +53,7 @@ interface Props extends RouteComponentProps {
   authStatus: AuthStatus | undefined;
   status: ResourceStatus;
   profile: User | undefined;
+  loginMethod: LoginMethods;
 
   hasRole: (role: Roles) => boolean;
 }
@@ -79,6 +82,8 @@ function Routes(props: Props) {
 
   if (!props.authStatus.authenticated) {
     const authPaths = ['/login', '/forgot-password', '/reset-password'];
+    if (props.loginMethod !== LoginMethods.Local) authPaths.push('/login/local');
+
     const onAuthPath = authPaths.find(
       (p) => props.location.pathname === p,
     ) !== undefined;
@@ -91,9 +96,15 @@ function Routes(props: Props) {
     return (
       <Switch>
         <Route path="/login" exact>
-          <LoginPage />
+          <LoginPage loginMethod={props.loginMethod} />
           <Footer />
         </Route>
+        {authPaths.includes('/login/local') ? (
+          <Route path="/login/local" exact>
+            <LoginPage loginMethod={LoginMethods.Local} />
+            <Footer />
+          </Route>
+        ) : null}
         <Route path="/forgot-password" exact>
           <ForgotPasswordPage />
           <Footer />
@@ -132,6 +143,9 @@ function Routes(props: Props) {
         <AlertContainer internal />
         <Switch>
           <Route path="/login" exact>
+            <Redirect to="/" />
+          </Route>
+          <Route path="/login/local" exact>
             <Redirect to="/" />
           </Route>
           <Route path="/" exact>
@@ -282,6 +296,7 @@ const mapStateToProps = (state: RootState) => {
     profile: state.auth.profile,
     profileStatus: state.auth.profileStatus,
     hasRole: (role: Roles): boolean => authedUserHasRole(state, role),
+    loginMethod: state.general.loginMethod,
   };
 };
 

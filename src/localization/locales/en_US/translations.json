@@ -465,6 +465,7 @@
     "login": {
       "email": "Email address",
       "forgotPassword": "Forgot password",
+      "localLoginInstead": "...or login locally instead.",
       "loginButton": "Login",
       "loginLDAPButton": "Login with LDAP",
       "password": "Password",

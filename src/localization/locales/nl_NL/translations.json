@@ -465,6 +465,7 @@
     "login": {
       "email": "Emailadres",
       "forgotPassword": "Wachtwoord vergeten",
+      "localLoginInstead": "...of log in plaats daarvan lokaal in.",
       "loginButton": "Log in",
       "loginLDAPButton": "Log in met LDAP",
       "password": "Wachtwoord",
