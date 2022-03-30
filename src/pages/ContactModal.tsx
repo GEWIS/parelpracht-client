@@ -25,6 +25,7 @@ import { formatContactName } from '../helpers/contact';
 import { formatStatus } from '../helpers/activity';
 import { getContractStatus } from '../stores/contract/selectors';
 import CompanyLink from '../components/entities/company/CompanyLink';
+import { TitleContext } from '../components/TitleContext';
 
 interface Props extends RouteComponentProps<{ companyId: string, contactId?: string }>,
   WithTranslation {
@@ -99,8 +100,11 @@ class ContactModal extends React.Component<Props> {
   };
 
   public render() {
+    const { t } = this.props;
     let contact: Contact | undefined;
+
     if (this.props.create) {
+      this.context.setTitle(t('entities.contact.newContact'));
       const { companyId } = this.props.match.params;
       contact = {
         id: 0,
@@ -119,6 +123,7 @@ class ContactModal extends React.Component<Props> {
     }
 
     if (contact === undefined) {
+      this.context.setTitle(t('entity.contact'));
       return (
         <Modal
           onClose={this.close}
@@ -137,8 +142,9 @@ class ContactModal extends React.Component<Props> {
       );
     }
 
+    this.context.setTitle(formatContactName(contact.firstName, contact.lastName, contact.lastName));
+
     let contractOverview;
-    const { t } = this.props;
 
     if (this.props.create) {
       contractOverview = '';
@@ -217,6 +223,8 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   fetchCompany: (id: number) => dispatch(fetchSingle(SingleEntities.Company, id)),
   showTransientAlert: (alert: TransientAlert) => dispatch(showTransientAlert(alert)),
 });
+
+ContactModal.contextType = TitleContext;
 
 export default withTranslation()(withRouter(connect(mapStateToProps,
   mapDispatchToProps)(ContactModal)));

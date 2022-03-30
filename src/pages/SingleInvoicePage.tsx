@@ -24,6 +24,7 @@ import GenerateInvoiceModal from '../components/files/GenerateInvoiceModal';
 import AuthorizationComponent from '../components/AuthorizationComponent';
 import { authedUserHasRole } from '../stores/auth/selectors';
 import NotFound from './NotFound';
+import { TitleContext } from '../components/TitleContext';
 
 interface Props extends RouteComponentProps<{ invoiceId: string }>, WithTranslation {
   invoice: Invoice | undefined;
@@ -67,6 +68,15 @@ class SingleInvoicePage extends React.Component<Props, State> {
 
     this.props.clearInvoice();
     this.props.fetchInvoice(Number.parseInt(invoiceId, 10));
+  }
+
+  componentDidUpdate() {
+    const { invoice, t } = this.props;
+    if (invoice === undefined) {
+      this.context.setTitle(t('entity.contract'));
+    } else {
+      this.context.setTitle(`F${invoice.id} ${invoice.title}`);
+    }
   }
 
   getPanes = () => {
@@ -214,6 +224,8 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   fetchInvoice: (id: number) => dispatch(fetchSingle(SingleEntities.Invoice, id)),
   clearInvoice: () => dispatch(clearSingle(SingleEntities.Invoice)),
 });
+
+SingleInvoicePage.contextType = TitleContext;
 
 export default withTranslation()(withRouter(connect(mapStateToProps,
   mapDispatchToProps)(SingleInvoicePage)));

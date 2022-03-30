@@ -5,6 +5,7 @@ import {
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
+import { withTranslation, WithTranslation } from 'react-i18next';
 import { Gender, User } from '../clients/server.generated';
 import { RootState } from '../stores/store';
 import UserProps from '../components/entities/user/UserProps';
@@ -13,8 +14,9 @@ import AlertContainer from '../components/alerts/AlertContainer';
 import { SingleEntities } from '../stores/single/single';
 import { getSingle } from '../stores/single/selectors';
 import { clearSingle, fetchSingle } from '../stores/single/actionCreators';
+import { TitleContext } from '../components/TitleContext';
 
-interface Props extends RouteComponentProps {
+interface Props extends RouteComponentProps, WithTranslation {
   status: ResourceStatus;
 
   clearUser: () => void;
@@ -22,7 +24,9 @@ interface Props extends RouteComponentProps {
 
 class UserCreatePage extends React.Component<Props> {
   componentDidMount() {
-    this.props.clearUser();
+    const { clearUser, t } = this.props;
+    clearUser();
+    this.context.setTitle(t('pages.user.newUser'));
   }
 
   componentDidUpdate(prevProps: Props) {
@@ -32,7 +36,7 @@ class UserCreatePage extends React.Component<Props> {
     }
   }
 
-  close = () => { this.props.history.push('/user'); };
+  close = () => { this.props.history.push('/users'); };
 
   public render() {
     const user: User = {
@@ -76,4 +80,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   clearUser: () => dispatch(clearSingle(SingleEntities.User)),
 });
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(UserCreatePage));
+UserCreatePage.contextType = TitleContext;
+
+export default withTranslation()(withRouter(connect(mapStateToProps,
+  mapDispatchToProps)(UserCreatePage)));

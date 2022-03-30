@@ -93,6 +93,7 @@
       "allContracts": "Alle contracten...",
       "header": "Recente contracten"
     },
+    "title": "Dashboard",
     "welcome": "Welkom terug,"
   },
   "entities": {
@@ -443,14 +444,16 @@
         "total": "Totaal"
       },
       "recipientDetails": "Ontvangerinformatie",
-      "subheader": "Het leven van de penno makkelijker maken"
+      "subheader": "Het leven van de penno makkelijker maken",
+      "title": "Handmatige factuur"
     },
     "forgotPassword": {
       "back": "Terug naar inloggen",
       "enterEmail": "Vul je emaildres in om een wachtwoord-reset link te ontvangen.",
       "header": "Wachtwoord resetten",
       "sendEmailButton": "Verstuur wachtwoord reset email",
-      "successMessage": "Controleer je mailbox voor de link om je wachtwoord te resetten. Als deze mail niet binnen een paar minuten verschijnt, controleer je spam map."
+      "successMessage": "Controleer je mailbox voor de link om je wachtwoord te resetten. Als deze mail niet binnen een paar minuten verschijnt, controleer je spam map.",
+      "title": "Wachtwoord vergeten"
     },
     "insights": {
       "header": "Inzicht",
@@ -465,22 +468,26 @@
     "login": {
       "email": "Emailadres",
       "forgotPassword": "Wachtwoord vergeten",
+      "localLoginInstead": "...of log in plaats daarvan lokaal in.",
       "loginButton": "Log in",
       "loginLDAPButton": "Log in met LDAP",
       "password": "Wachtwoord",
       "rememberMe": "Blijf ingelogd",
+      "title": "Login",
       "troubleSigningIn": "Problemen met inloggen?",
       "username": "Gebruikersnaam"
     },
     "noRights": {
       "hammerTime": "Stop, hammertime!",
       "header": "Sorry, you don't have the rights to view this page!",
-      "subheader": "Neem contact op met de administrator als dit een fout is."
+      "subheader": "Neem contact op met de administrator als dit een fout is.",
+      "title": "Geen toegang"
     },
     "notFound": {
       "404": "404: Kan deze pagina niet vinden",
       "header": "Er is geen geld hier,",
-      "subheader": "blijf zoeken!"
+      "subheader": "blijf zoeken!",
+      "title": "404 Niet gevonden"
     },
     "product": {
       "newProduct": "Nieuw Product"
@@ -507,7 +514,8 @@
       "resetPassword": "Reset je wachtwoord",
       "setPassword": "Kies een wachtwoord",
       "submit": "Versturen",
-      "successMessage": "Wachtwoord succesvol veranderd!"
+      "successMessage": "Wachtwoord succesvol veranderd!",
+      "title": "Wachtwoord resetten"
     },
     "settings": {
       "header": {
@@ -520,6 +528,7 @@
           "roleName": "Naam"
         }
       },
+      "title": "Instellingen",
       "warning": "WAARSCHUWING: Het aanpassen van instellingen op deze pagina heeft gevolgen voor de werking van ParelPracht. Je kunt mogelijk het systeem volledig slopen. Pas hier dus alleen dingen aan als je weet wat je aan het doen bent."
     },
     "tables": {

@@ -13,12 +13,18 @@ import { Client, Roles } from '../clients/server.generated';
 import { fetchTable } from '../stores/tables/actionCreators';
 import { Tables } from '../stores/tables/tables';
 import AuthorizationComponent from '../components/AuthorizationComponent';
+import { TitleContext } from '../components/TitleContext';
 
 interface Props extends RouteComponentProps, WithTranslation {
   refresh: () => void;
 }
 
 class InvoicesPage extends React.Component<Props> {
+  componentDidMount() {
+    const { t } = this.props;
+    this.context.setTitle(t('entity.invoices'));
+  }
+
   updateTreasurerLastSeen = async () => {
     const { refresh } = this.props;
     const client = new Client();
@@ -78,5 +84,7 @@ class InvoicesPage extends React.Component<Props> {
 const mapDispatchToProps = (dispatch: Dispatch) => ({
   refresh: () => dispatch(fetchTable(Tables.Invoices)),
 });
+
+InvoicesPage.contextType = TitleContext;
 
 export default withTranslation()(withRouter(connect(null, mapDispatchToProps)(InvoicesPage)));

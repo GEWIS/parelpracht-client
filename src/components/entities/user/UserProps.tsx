@@ -164,7 +164,7 @@ class UserProps extends React.Component<Props, State> {
 
   remove = () => {
     if (!this.props.create) {
-      this.props.history.push('/user');
+      this.props.history.push('/users');
       this.props.deleteUser(this.props.user.id);
     }
   };

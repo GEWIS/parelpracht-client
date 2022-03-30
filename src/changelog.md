@@ -5,10 +5,22 @@ You can find the release notes below.
 
 ## v1.2.0
 ### Added
+- Added logging in with LDAP.
+  - User roles are based on LDAP groups.
+  - Roles and other user information is updated every login and every night.
+  - Login methods can be enabled/disabled on a user basis.
+- Added "Proposed" status to invoices.
+  - Proposed invoices are not yet immutable, so can still be changed.
 - Improved page layouts on smaller screens, like tablets.
+- Added current page's title to browser title.
+
+### Changes
+- On generated documents, countries are now fully written out instead of only their abbreviation.
 
 ### Bugfixes
+- Fixed the contract summary on the dashboard not being in line with the Insights table.
 - Fixed the "Users" menu button being highlighted when viewing your own profile.
+- Fixed download button for files being one pixel too small in Chrome.
 - Fixed some small translation errors.
 
 ## v1.1.4 (12-09-2021)

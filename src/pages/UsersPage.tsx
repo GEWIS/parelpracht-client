@@ -6,9 +6,16 @@ import {
 import { useTranslation } from 'react-i18next';
 import UsersTable from '../components/entities/user/UserTable';
 import UserTableControls from '../components/entities/user/UserTableControls';
+import { useTitle } from '../components/TitleContext';
 
 function UsersPage(props: RouteComponentProps) {
   const { t } = useTranslation();
+  const { setTitle } = useTitle();
+
+  React.useEffect(() => {
+    setTitle(t('entity.users'));
+  }, []);
+
   return (
     <>
       <Segment style={{ backgroundColor: 'rgba(237, 237, 237, 0.98)' }} vertical basic>

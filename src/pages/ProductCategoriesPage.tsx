@@ -8,9 +8,16 @@ import { Roles } from '../clients/server.generated';
 import AuthorizationComponent from '../components/AuthorizationComponent';
 import ProductCategoriesTable from '../components/entities/productcategories/ProductCategoriesTable';
 import ProductCategoriesTableControls from '../components/entities/productcategories/ProductCategoriesTableControls';
+import { useTitle } from '../components/TitleContext';
 
 function ProductCategoriesPage(props: RouteComponentProps) {
   const { t } = useTranslation();
+  const { setTitle } = useTitle();
+
+  React.useEffect(() => {
+    setTitle(t('entity.categories'));
+  }, []);
+
   return (
     <AuthorizationComponent roles={[Roles.GENERAL, Roles.ADMIN]} notFound>
       <Segment style={{ backgroundColor: 'rgba(237, 237, 237, 0.98)' }} vertical basic>

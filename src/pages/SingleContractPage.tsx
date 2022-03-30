@@ -24,6 +24,7 @@ import FilesList from '../components/files/FilesList';
 import GenerateContractModal from '../components/files/GenerateContractModal';
 import { authedUserHasRole } from '../stores/auth/selectors';
 import NotFound from './NotFound';
+import { TitleContext } from '../components/TitleContext';
 
 interface Props extends RouteComponentProps<{ contractId: string }>, WithTranslation {
   contract: Contract | undefined;
@@ -71,7 +72,15 @@ class SingleContractPage extends React.Component<Props, State> {
   }
 
   public componentDidUpdate(prevProps: Readonly<Props>) {
-    if (this.props.status === ResourceStatus.EMPTY
+    const { contract, status, t } = this.props;
+
+    if (contract === undefined) {
+      this.context.setTitle(t('entity.contract'));
+    } else {
+      this.context.setTitle(`C${contract.id} ${contract.title}`);
+    }
+
+    if (status === ResourceStatus.EMPTY
       && prevProps.status === ResourceStatus.DELETING
     ) {
       this.props.history.push('/contract');
@@ -229,6 +238,8 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   clearContract: () => dispatch(clearSingle(SingleEntities.Contract)),
   showTransientAlert: (alert: TransientAlert) => dispatch(showTransientAlert(alert)),
 });
+
+SingleContractPage.contextType = TitleContext;
 
 export default withTranslation()(withRouter(connect(mapStateToProps,
   mapDispatchToProps)(SingleContractPage)));

@@ -8,11 +8,17 @@ import DashboardContractedCategoryGraph from '../components/dashboard/DashboardC
 import DashboardContracts from '../components/dashboard/DashboardContracts';
 import DashboardInvoices from '../components/dashboard/DashboardInvoices';
 import RoleTable from '../components/settings/RoleTable';
+import { useTitle } from '../components/TitleContext';
 
 interface Props extends WithTranslation {}
 
 function SettingsPage(props: Props) {
   const { t } = props;
+  const { setTitle } = useTitle();
+
+  React.useEffect(() => {
+    setTitle(t('pages.settings.title'));
+  }, []);
 
   return (
     <>

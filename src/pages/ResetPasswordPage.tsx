@@ -19,6 +19,7 @@ import { RootState } from '../stores/store';
 import { authRequestClear } from '../stores/auth/actionCreators';
 import ResourceStatus from '../stores/resourceStatus';
 import CenterInPage from '../components/CenterInPage';
+import { useTitle } from '../components/TitleContext';
 
 interface Props extends RouteComponentProps {
   status: ResourceStatus;
@@ -29,6 +30,7 @@ interface Props extends RouteComponentProps {
 function ResetPasswordPage(props: Props) {
   const { token } = queryString.parse(props.location.search);
   const { t } = useTranslation();
+  const { setTitle } = useTitle();
 
   if (typeof token !== 'string') {
     return <Redirect to="/login" />;
@@ -79,6 +81,7 @@ function ResetPasswordPage(props: Props) {
 
   useEffect(() => {
     props.clearStatus();
+    setTitle(t('pages.resetPassword.title'));
   }, []);
 
   if (props.status === ResourceStatus.FETCHED) {

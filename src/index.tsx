@@ -5,6 +5,7 @@ import i18n from './localization';
 import './index.scss';
 import App from './App';
 import 'semantic-ui-less/semantic.less';
+import TitleRenderer from './components/TitleContext';
 
 // We have to disable the following "errors", because they are actually warnings.
 // The components that throw them work fine, so to keep the console clean from errors,
@@ -23,7 +24,9 @@ import 'semantic-ui-less/semantic.less';
 ReactDOM.render(
   <React.StrictMode>
     <I18nextProvider i18n={i18n}>
-      <App />
+      <TitleRenderer>
+        <App />
+      </TitleRenderer>
     </I18nextProvider>
   </React.StrictMode>,
   document.getElementById('root'),

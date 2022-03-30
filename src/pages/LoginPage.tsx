@@ -1,18 +1,17 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import {
-  Container, Message, Segment, Image,
+  Container, Image, Message, Segment,
 } from 'semantic-ui-react';
 import './BackgroundAnimation.css';
 import { useTranslation } from 'react-i18next';
-import { connect } from 'react-redux';
 import AlertContainer from '../components/alerts/AlertContainer';
 import LoginLocalForm from '../components/auth/LoginLocalForm';
 import LoginLDAPForm from '../components/auth/LoginLDAPForm';
 import ParelPrachtFullLogo from '../components/ParelPrachtFullLogo';
-import { RootState } from '../stores/store';
 import { LoginMethods } from '../clients/server.generated';
 import CenterInPage from '../components/CenterInPage';
+import { useTitle } from '../components/TitleContext';
 
 interface Props {
   loginMethod: LoginMethods;
@@ -20,6 +19,11 @@ interface Props {
 
 function LoginPage({ loginMethod }: Props) {
   const { t } = useTranslation();
+  const { setTitle } = useTitle();
+
+  React.useEffect(() => {
+    setTitle(t('pages.login.title'));
+  }, []);
 
   let loginForm;
   switch (loginMethod) {
@@ -52,14 +56,15 @@ function LoginPage({ loginMethod }: Props) {
               .
             </Message>
           ) : null}
+          {loginMethod !== LoginMethods.Local ? (
+            <Message>
+              <NavLink to="/login/local">{t('pages.login.localLoginInstead')}</NavLink>
+            </Message>
+          ) : null}
         </CenterInPage>
       </Container>
     </>
   );
 }
 
-const mapStateToProps = (state: RootState) => ({
-  loginMethod: state.general.loginMethod,
-});
-
-export default connect(mapStateToProps)(LoginPage);
+export default LoginPage;
