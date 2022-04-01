@@ -73,7 +73,8 @@ class ContractInvoiceModal extends React.Component<Props, State> {
     } = this.props;
     const { loading, selectedInvoice } = this.state;
     const availableInvoices = invoices.filter((i) => {
-      return i.companyId === contract.companyId && i.status === InvoiceStatus.CREATED;
+      return i.companyId === contract.companyId
+        && (i.status === InvoiceStatus.CREATED || i.status === InvoiceStatus.PROPOSED);
     });
     const dropdownOptions = [{ key: -1, text: t('pages.contract.products.createNewInvoice'), value: -1 }, ...availableInvoices.map((x) => ({
       key: x.id,
