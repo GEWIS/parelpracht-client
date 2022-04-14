@@ -147,6 +147,7 @@ export function getAllDocumentStatuses(
   switch (type) {
     case SingleEntities.Invoice:
       return [InvoiceStatus.CREATED,
+        InvoiceStatus.PROPOSED,
         InvoiceStatus.SENT,
         InvoiceStatus.PAID] as any as DocumentStatus[];
     case SingleEntities.Contract:
@@ -177,15 +178,21 @@ export function getCompletedDocumentStatuses(
     switch (status) {
       case DocumentStatus.CREATED:
         return [DocumentStatus.CREATED] as any as DocumentStatus[];
+      case DocumentStatus.PROPOSED:
+        return [DocumentStatus.CREATED,
+          DocumentStatus.PROPOSED] as any as DocumentStatus[];
       case DocumentStatus.SENT:
         return [DocumentStatus.CREATED,
+          DocumentStatus.PROPOSED,
           DocumentStatus.SENT] as any as DocumentStatus[];
       case DocumentStatus.PAID:
         return [DocumentStatus.CREATED,
+          DocumentStatus.PROPOSED,
           DocumentStatus.SENT,
           DocumentStatus.PAID] as any as DocumentStatus[];
       case DocumentStatus.IRRECOVERABLE:
         return [DocumentStatus.CREATED,
+          DocumentStatus.PROPOSED,
           DocumentStatus.SENT,
           DocumentStatus.IRRECOVERABLE] as any as DocumentStatus[];
       case DocumentStatus.CANCELLED:
