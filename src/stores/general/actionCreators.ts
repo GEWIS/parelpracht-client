@@ -9,7 +9,6 @@ export function generalPrivateFetchInfo(): FetchGeneralPrivateInfo {
 }
 
 export function generalPublicFetchInfo(): FetchGeneralPublicInfo {
-  console.log('create fetch action');
   return { type: GeneralActionType.FetchPublicInfo };
 }
 
@@ -18,6 +17,5 @@ export function generalPrivateSetInfo(financialYears: number[]): PrivateGeneralS
 }
 
 export function generalPublicSetInfo(loginMethod: LoginMethods): PublicGeneralSetInfo {
-  console.log('create set action');
   return { type: GeneralActionType.SetPublicInfo, loginMethod };
 }

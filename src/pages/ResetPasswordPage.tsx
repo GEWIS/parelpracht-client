@@ -3,8 +3,7 @@ import {
   NavLink, Redirect, RouteComponentProps, withRouter,
 } from 'react-router-dom';
 import {
-  Button,
-  Container, Grid, Header, Icon, Segment,
+  Button, Container, Header, Icon, Segment,
 } from 'semantic-ui-react';
 import jwt from 'jsonwebtoken';
 import validator from 'validator';

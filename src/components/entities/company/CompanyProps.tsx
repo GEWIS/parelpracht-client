@@ -255,7 +255,6 @@ class CompanyProps extends React.Component<Props, State> {
                 value={comments}
                 onChange={(e) => this.setState({ comments: e.target.value })}
                 placeholder={t('entities.company.props.description')}
-                fluid
               />
             </Form.Field>
           </Form.Group>

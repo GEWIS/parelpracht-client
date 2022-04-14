@@ -5,10 +5,10 @@ import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import ConfirmationDialog from '../../ConfirmationDialog';
 import {
-  Client, LdapIdentityParams, User, UserParams,
+  Client, LdapIdentityParams, User,
 } from '../../../clients/server.generated';
 import ConfirmationDialogWithParameter from '../../tablefilters/ConfirmDialogWithParameter';
-import { fetchSingle, saveSingle } from '../../../stores/single/actionCreators';
+import { fetchSingle } from '../../../stores/single/actionCreators';
 import { SingleEntities } from '../../../stores/single/single';
 
 interface Props extends WithTranslation {

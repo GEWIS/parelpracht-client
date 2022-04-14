@@ -27,7 +27,6 @@ import { authedUserHasRole } from '../stores/auth/selectors';
 import AuthorizationComponent from '../components/AuthorizationComponent';
 import NotFound from './NotFound';
 import { TitleContext } from '../components/TitleContext';
-import { getLanguage } from '../localization';
 
 interface Props extends WithTranslation, RouteComponentProps<{ companyId: string }> {
   company: Company | undefined;

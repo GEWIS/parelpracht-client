@@ -3,10 +3,6 @@ import {
   Container, Grid, Header, Icon, Message, Segment,
 } from 'semantic-ui-react';
 import React from 'react';
-import FinancialOverview from '../components/dashboard/FinancialOverview';
-import DashboardContractedCategoryGraph from '../components/dashboard/DashboardContractedCategoryGraph';
-import DashboardContracts from '../components/dashboard/DashboardContracts';
-import DashboardInvoices from '../components/dashboard/DashboardInvoices';
 import RoleTable from '../components/settings/RoleTable';
 import { useTitle } from '../components/TitleContext';
 

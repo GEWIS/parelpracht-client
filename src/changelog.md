@@ -13,6 +13,7 @@ You can find the release notes below.
   - Proposed invoices are not yet immutable, so can still be changed.
 - Improved page layouts on smaller screens, like tablets.
 - Added current page's title to browser title.
+- Updated Node packages in the backend.
 
 ### Changes
 - On generated documents, countries are now fully written out instead of only their abbreviation.

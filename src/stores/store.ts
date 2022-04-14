@@ -2,7 +2,7 @@ import { applyMiddleware, combineReducers, createStore } from 'redux';
 import { createBrowserHistory } from 'history';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import createSagaMiddleware from 'redux-saga';
-import { all, fork, put } from 'redux-saga/effects';
+import { all, fork } from 'redux-saga/effects';
 import { connectRouter, routerMiddleware, RouterState } from 'connected-react-router';
 
 import authReducer from './auth/reducer';
@@ -24,8 +24,6 @@ import userSagas from './user/sagas';
 import { tablesReducer } from './tables/reducer';
 import { singleEntitiesReducer } from './single/reducer';
 import { summariesReducer } from './summaries/reducer';
-import { generalPublicFetchInfo } from './general/actionCreators';
-import { GeneralPublicInfo } from '../clients/server.generated';
 
 // Import all watching sagas
 const watchSagas = [

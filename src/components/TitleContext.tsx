@@ -1,7 +1,7 @@
 import React, { Dispatch } from 'react';
 
 const TITLE_UNDEFINED = 'ParelPracht';
-const TITLE_TEMPLATE = 'ParelPracht - {}';
+const TITLE_TEMPLATE = '{} - ParelPracht';
 
 type Title = string | undefined;
 
