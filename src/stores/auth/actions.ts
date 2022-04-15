@@ -9,7 +9,8 @@ export enum AuthActionType {
   FetchProfile = 'Auth/FetchProfile',
   SetProfile = 'Auth/SetProfile',
 
-  Login = 'Auth/Login',
+  LoginLocal = 'Auth/LoginLocal',
+  LoginLDAP = 'Auth/LoginLDAP',
   Logout = 'Auth/Logout',
   ForgotPassword = 'Auth/ForgotPassword',
   ResetPassword = 'Auth/ResetPassword',
@@ -33,8 +34,13 @@ export type AuthSetProfile = Action<AuthActionType.SetProfile> & {
   profile: User;
 };
 
-export type AuthLogin = Action<AuthActionType.Login> & {
+export type AuthLoginLocal = Action<AuthActionType.LoginLocal> & {
   email: string;
+  password: string;
+  rememberMe: boolean;
+};
+export type AuthLoginLDAP = Action<AuthActionType.LoginLDAP> & {
+  username: string;
   password: string;
   rememberMe: boolean;
 };

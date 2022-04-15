@@ -380,8 +380,8 @@ export class Client {
     /**
      * @return Ok
      */
-    getGeneralInfo(): Promise<number[]> {
-        let url_ = this.baseUrl + "/generalInfo";
+    getPrivateGeneralInfo(): Promise<GeneralPrivateInfo> {
+        let url_ = this.baseUrl + "/getPrivateGeneralInfo";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ = <RequestInit>{
@@ -392,22 +392,18 @@ export class Client {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processGetGeneralInfo(_response);
+            return this.processGetPrivateGeneralInfo(_response);
         });
     }
 
-    protected processGetGeneralInfo(response: Response): Promise<number[]> {
+    protected processGetPrivateGeneralInfo(response: Response): Promise<GeneralPrivateInfo> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            if (Array.isArray(resultData200)) {
-                result200 = [] as any;
-                for (let item of resultData200)
-                    result200!.push(item);
-            }
+            result200 = GeneralPrivateInfo.fromJS(resultData200);
             return result200;
             });
         } else if (status === 400) {
@@ -422,7 +418,51 @@ export class Client {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<number[]>(<any>null);
+        return Promise.resolve<GeneralPrivateInfo>(<any>null);
+    }
+
+    /**
+     * @return Ok
+     */
+    getPublicGeneralInfo(): Promise<GeneralPublicInfo> {
+        let url_ = this.baseUrl + "/getPublicGeneralInfo";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <RequestInit>{
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processGetPublicGeneralInfo(_response);
+        });
+    }
+
+    protected processGetPublicGeneralInfo(response: Response): Promise<GeneralPublicInfo> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = GeneralPublicInfo.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status === 400) {
+            return response.text().then((_responseText) => {
+            let result400: any = null;
+            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result400 = WrappedApiError.fromJS(resultData400);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result400);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<GeneralPublicInfo>(<any>null);
     }
 
     /**
@@ -5382,6 +5422,241 @@ export class Client {
     }
 
     /**
+     * @return Ok
+     */
+    createLocalIdentity(id: number): Promise<IdentityLocal> {
+        let url_ = this.baseUrl + "/user/{id}/auth/local";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <RequestInit>{
+            method: "POST",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processCreateLocalIdentity(_response);
+        });
+    }
+
+    protected processCreateLocalIdentity(response: Response): Promise<IdentityLocal> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = IdentityLocal.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<IdentityLocal>(<any>null);
+    }
+
+    /**
+     * @return No content
+     */
+    deleteLocalIdentity(id: number): Promise<void> {
+        let url_ = this.baseUrl + "/user/{id}/auth/local";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <RequestInit>{
+            method: "DELETE",
+            headers: {
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processDeleteLocalIdentity(_response);
+        });
+    }
+
+    protected processDeleteLocalIdentity(response: Response): Promise<void> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 204) {
+            return response.text().then((_responseText) => {
+            return;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<void>(<any>null);
+    }
+
+    /**
+     * @return Ok
+     */
+    createLdapIdentity(id: number, body: LdapIdentityParams): Promise<IdentityLDAP> {
+        let url_ = this.baseUrl + "/user/{id}/auth/ldap";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ = <RequestInit>{
+            body: content_,
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processCreateLdapIdentity(_response);
+        });
+    }
+
+    protected processCreateLdapIdentity(response: Response): Promise<IdentityLDAP> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = IdentityLDAP.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<IdentityLDAP>(<any>null);
+    }
+
+    /**
+     * @return Ok
+     */
+    updateLdapIdentity(id: number, body: Partial_LdapIdentityParams): Promise<IdentityLDAP> {
+        let url_ = this.baseUrl + "/user/{id}/auth/ldap";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ = <RequestInit>{
+            body: content_,
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processUpdateLdapIdentity(_response);
+        });
+    }
+
+    protected processUpdateLdapIdentity(response: Response): Promise<IdentityLDAP> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = IdentityLDAP.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<IdentityLDAP>(<any>null);
+    }
+
+    /**
+     * @return No content
+     */
+    deleteLdapIdentity(id: number): Promise<void> {
+        let url_ = this.baseUrl + "/user/{id}/auth/ldap";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <RequestInit>{
+            method: "DELETE",
+            headers: {
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processDeleteLdapIdentity(_response);
+        });
+    }
+
+    protected processDeleteLdapIdentity(response: Response): Promise<void> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 204) {
+            return response.text().then((_responseText) => {
+            return;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<void>(<any>null);
+    }
+
+    /**
      * @param body List parameters to sort and filter the list
      * @return Ok
      */
@@ -5723,8 +5998,154 @@ export class Client {
     /**
      * @return Ok
      */
-    login(body: LoginParams): Promise<Product> {
-        let url_ = this.baseUrl + "/login";
+    getAllRoles(): Promise<Role[]> {
+        let url_ = this.baseUrl + "/role";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <RequestInit>{
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processGetAllRoles(_response);
+        });
+    }
+
+    protected processGetAllRoles(response: Response): Promise<Role[]> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(Role.fromJS(item));
+            }
+            return result200;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<Role[]>(<any>null);
+    }
+
+    /**
+     * @return Ok
+     */
+    getRole(id: string): Promise<Role> {
+        let url_ = this.baseUrl + "/role/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <RequestInit>{
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processGetRole(_response);
+        });
+    }
+
+    protected processGetRole(response: Response): Promise<Role> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = Role.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<Role>(<any>null);
+    }
+
+    /**
+     * @return Ok
+     */
+    updateRole(id: string, body: Partial_RoleParams): Promise<Role> {
+        let url_ = this.baseUrl + "/role/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ = <RequestInit>{
+            body: content_,
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processUpdateRole(_response);
+        });
+    }
+
+    protected processUpdateRole(response: Response): Promise<Role> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = Role.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<Role>(<any>null);
+    }
+
+    /**
+     * @return Ok
+     */
+    login(body: LoginParams): Promise<void> {
+        let url_ = this.baseUrl + "/login/local";
         url_ = url_.replace(/[?&]$/, "");
 
         const content_ = JSON.stringify(body);
@@ -5734,7 +6155,6 @@ export class Client {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                "Accept": "application/json"
             }
         };
 
@@ -5743,19 +6163,16 @@ export class Client {
         });
     }
 
-    protected processLogin(response: Response): Promise<Product> {
+    protected processLogin(response: Response): Promise<void> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = Product.fromJS(resultData200);
-            return result200;
+            return;
             });
         } else if (status === 204) {
             return response.text().then((_responseText) => {
-            return throwException("No content", status, _responseText, _headers);
+            return;
             });
         } else if (status === 400) {
             return response.text().then((_responseText) => {
@@ -5769,7 +6186,55 @@ export class Client {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<Product>(<any>null);
+        return Promise.resolve<void>(<any>null);
+    }
+
+    /**
+     * @return Ok
+     */
+    loginLDAP(body: LDAPLoginParams): Promise<void> {
+        let url_ = this.baseUrl + "/login/ldap";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ = <RequestInit>{
+            body: content_,
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processLoginLDAP(_response);
+        });
+    }
+
+    protected processLoginLDAP(response: Response): Promise<void> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            return;
+            });
+        } else if (status === 204) {
+            return response.text().then((_responseText) => {
+            return;
+            });
+        } else if (status === 400) {
+            return response.text().then((_responseText) => {
+            let result400: any = null;
+            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result400 = WrappedApiError.fromJS(resultData400);
+            return throwException("Bad Request", status, _responseText, _headers, result400);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<void>(<any>null);
     }
 }
 
@@ -5799,6 +6264,7 @@ export class UserParams implements IUserParams {
     receiveEmails?: boolean;
     sendEmailsToReplyToEmail?: boolean;
     comment?: string;
+    ldapOverrideEmail?: boolean;
     roles?: Roles[];
 
     constructor(data?: IUserParams) {
@@ -5822,6 +6288,7 @@ export class UserParams implements IUserParams {
             this.receiveEmails = _data["receiveEmails"];
             this.sendEmailsToReplyToEmail = _data["sendEmailsToReplyToEmail"];
             this.comment = _data["comment"];
+            this.ldapOverrideEmail = _data["ldapOverrideEmail"];
             if (Array.isArray(_data["roles"])) {
                 this.roles = [] as any;
                 for (let item of _data["roles"])
@@ -5849,6 +6316,7 @@ export class UserParams implements IUserParams {
         data["receiveEmails"] = this.receiveEmails;
         data["sendEmailsToReplyToEmail"] = this.sendEmailsToReplyToEmail;
         data["comment"] = this.comment;
+        data["ldapOverrideEmail"] = this.ldapOverrideEmail;
         if (Array.isArray(this.roles)) {
             data["roles"] = [];
             for (let item of this.roles)
@@ -5869,6 +6337,7 @@ export interface IUserParams {
     receiveEmails?: boolean;
     sendEmailsToReplyToEmail?: boolean;
     comment?: string;
+    ldapOverrideEmail?: boolean;
     roles?: Roles[];
 }
 
@@ -5985,6 +6454,10 @@ be sent to "email", or "replyToEmail" */
     sendEmailsToReplyToEmail!: boolean;
     /** The roles this user has */
     roles!: Role[];
+    /** Identity for local login */
+    identityLocal?: IdentityLocal;
+    /** Identity for LDAP */
+    identityLdap?: IdentityLDAP;
 
     constructor(data?: IUser) {
         if (data) {
@@ -6022,6 +6495,8 @@ be sent to "email", or "replyToEmail" */
                 for (let item of _data["roles"])
                     this.roles!.push(Role.fromJS(item));
             }
+            this.identityLocal = _data["identityLocal"] ? IdentityLocal.fromJS(_data["identityLocal"]) : <any>undefined;
+            this.identityLdap = _data["identityLdap"] ? IdentityLDAP.fromJS(_data["identityLdap"]) : <any>undefined;
         }
     }
 
@@ -6056,6 +6531,8 @@ be sent to "email", or "replyToEmail" */
             for (let item of this.roles)
                 data["roles"].push(item.toJSON());
         }
+        data["identityLocal"] = this.identityLocal ? this.identityLocal.toJSON() : <any>undefined;
+        data["identityLdap"] = this.identityLdap ? this.identityLdap.toJSON() : <any>undefined;
         return data; 
     }
 }
@@ -6098,11 +6575,17 @@ be sent to "email", or "replyToEmail" */
     sendEmailsToReplyToEmail: boolean;
     /** The roles this user has */
     roles: Role[];
+    /** Identity for local login */
+    identityLocal?: IdentityLocal;
+    /** Identity for LDAP */
+    identityLdap?: IdentityLDAP;
 }
 
 export class Role implements IRole {
     /** Name of the role */
     name!: string;
+    /** LDAP group used for this role */
+    ldapGroup!: string;
     /** All users having this role */
     users!: User[];
 
@@ -6121,6 +6604,7 @@ export class Role implements IRole {
     init(_data?: any) {
         if (_data) {
             this.name = _data["name"];
+            this.ldapGroup = _data["ldapGroup"];
             if (Array.isArray(_data["users"])) {
                 this.users = [] as any;
                 for (let item of _data["users"])
@@ -6139,6 +6623,7 @@ export class Role implements IRole {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["name"] = this.name;
+        data["ldapGroup"] = this.ldapGroup;
         if (Array.isArray(this.users)) {
             data["users"] = [];
             for (let item of this.users)
@@ -6151,8 +6636,180 @@ export class Role implements IRole {
 export interface IRole {
     /** Name of the role */
     name: string;
+    /** LDAP group used for this role */
+    ldapGroup: string;
     /** All users having this role */
     users: User[];
+}
+
+export class IdentityLocal implements IIdentityLocal {
+    /** ID of the associated user */
+    id!: number;
+    verifiedEmail!: boolean;
+    salt?: string;
+    hash?: string;
+    lastLogin?: Date;
+    user!: User;
+    /** Date at which this entity has been created */
+    createdAt!: Date;
+    /** Date at which this entity has last been updated */
+    updatedAt!: Date;
+    /** If this entity has been soft-deleted, this is the date
+at which the entity has been deleted */
+    deletedAt?: Date;
+    /** Version number of this entity */
+    version!: number;
+
+    constructor(data?: IIdentityLocal) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+        if (!data) {
+            this.user = new User();
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.verifiedEmail = _data["verifiedEmail"];
+            this.salt = _data["salt"];
+            this.hash = _data["hash"];
+            this.lastLogin = _data["lastLogin"] ? new Date(_data["lastLogin"].toString()) : <any>undefined;
+            this.user = _data["user"] ? User.fromJS(_data["user"]) : new User();
+            this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
+            this.updatedAt = _data["updatedAt"] ? new Date(_data["updatedAt"].toString()) : <any>undefined;
+            this.deletedAt = _data["deletedAt"] ? new Date(_data["deletedAt"].toString()) : <any>undefined;
+            this.version = _data["version"];
+        }
+    }
+
+    static fromJS(data: any): IdentityLocal {
+        data = typeof data === 'object' ? data : {};
+        let result = new IdentityLocal();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["verifiedEmail"] = this.verifiedEmail;
+        data["salt"] = this.salt;
+        data["hash"] = this.hash;
+        data["lastLogin"] = this.lastLogin ? this.lastLogin.toISOString() : <any>undefined;
+        data["user"] = this.user ? this.user.toJSON() : <any>undefined;
+        data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
+        data["updatedAt"] = this.updatedAt ? this.updatedAt.toISOString() : <any>undefined;
+        data["deletedAt"] = this.deletedAt ? this.deletedAt.toISOString() : <any>undefined;
+        data["version"] = this.version;
+        return data; 
+    }
+}
+
+export interface IIdentityLocal {
+    /** ID of the associated user */
+    id: number;
+    verifiedEmail: boolean;
+    salt?: string;
+    hash?: string;
+    lastLogin?: Date;
+    user: User;
+    /** Date at which this entity has been created */
+    createdAt: Date;
+    /** Date at which this entity has last been updated */
+    updatedAt: Date;
+    /** If this entity has been soft-deleted, this is the date
+at which the entity has been deleted */
+    deletedAt?: Date;
+    /** Version number of this entity */
+    version: number;
+}
+
+export class IdentityLDAP implements IIdentityLDAP {
+    /** ID of the associated user */
+    id!: number;
+    username!: string;
+    overrideEmail!: boolean;
+    lastLogin?: Date;
+    user!: User;
+    /** Date at which this entity has been created */
+    createdAt!: Date;
+    /** Date at which this entity has last been updated */
+    updatedAt!: Date;
+    /** If this entity has been soft-deleted, this is the date
+at which the entity has been deleted */
+    deletedAt?: Date;
+    /** Version number of this entity */
+    version!: number;
+
+    constructor(data?: IIdentityLDAP) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+        if (!data) {
+            this.user = new User();
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.username = _data["username"];
+            this.overrideEmail = _data["overrideEmail"];
+            this.lastLogin = _data["lastLogin"] ? new Date(_data["lastLogin"].toString()) : <any>undefined;
+            this.user = _data["user"] ? User.fromJS(_data["user"]) : new User();
+            this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
+            this.updatedAt = _data["updatedAt"] ? new Date(_data["updatedAt"].toString()) : <any>undefined;
+            this.deletedAt = _data["deletedAt"] ? new Date(_data["deletedAt"].toString()) : <any>undefined;
+            this.version = _data["version"];
+        }
+    }
+
+    static fromJS(data: any): IdentityLDAP {
+        data = typeof data === 'object' ? data : {};
+        let result = new IdentityLDAP();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["username"] = this.username;
+        data["overrideEmail"] = this.overrideEmail;
+        data["lastLogin"] = this.lastLogin ? this.lastLogin.toISOString() : <any>undefined;
+        data["user"] = this.user ? this.user.toJSON() : <any>undefined;
+        data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
+        data["updatedAt"] = this.updatedAt ? this.updatedAt.toISOString() : <any>undefined;
+        data["deletedAt"] = this.deletedAt ? this.deletedAt.toISOString() : <any>undefined;
+        data["version"] = this.version;
+        return data; 
+    }
+}
+
+export interface IIdentityLDAP {
+    /** ID of the associated user */
+    id: number;
+    username: string;
+    overrideEmail: boolean;
+    lastLogin?: Date;
+    user: User;
+    /** Date at which this entity has been created */
+    createdAt: Date;
+    /** Date at which this entity has last been updated */
+    updatedAt: Date;
+    /** If this entity has been soft-deleted, this is the date
+at which the entity has been deleted */
+    deletedAt?: Date;
+    /** Version number of this entity */
+    version: number;
 }
 
 export class Profile implements IProfile {
@@ -6193,6 +6850,10 @@ be sent to "email", or "replyToEmail" */
     sendEmailsToReplyToEmail!: boolean;
     /** The roles this user has */
     roles!: Role[];
+    /** Identity for local login */
+    identityLocal?: IdentityLocal;
+    /** Identity for LDAP */
+    identityLdap?: IdentityLDAP;
     hasApiKey?: boolean;
 
     constructor(data?: IProfile) {
@@ -6231,6 +6892,8 @@ be sent to "email", or "replyToEmail" */
                 for (let item of _data["roles"])
                     this.roles!.push(Role.fromJS(item));
             }
+            this.identityLocal = _data["identityLocal"] ? IdentityLocal.fromJS(_data["identityLocal"]) : <any>undefined;
+            this.identityLdap = _data["identityLdap"] ? IdentityLDAP.fromJS(_data["identityLdap"]) : <any>undefined;
             this.hasApiKey = _data["hasApiKey"];
         }
     }
@@ -6266,6 +6929,8 @@ be sent to "email", or "replyToEmail" */
             for (let item of this.roles)
                 data["roles"].push(item.toJSON());
         }
+        data["identityLocal"] = this.identityLocal ? this.identityLocal.toJSON() : <any>undefined;
+        data["identityLdap"] = this.identityLdap ? this.identityLdap.toJSON() : <any>undefined;
         data["hasApiKey"] = this.hasApiKey;
         return data; 
     }
@@ -6309,13 +6974,17 @@ be sent to "email", or "replyToEmail" */
     sendEmailsToReplyToEmail: boolean;
     /** The roles this user has */
     roles: Role[];
+    /** Identity for local login */
+    identityLocal?: IdentityLocal;
+    /** Identity for LDAP */
+    identityLdap?: IdentityLDAP;
     hasApiKey?: boolean;
 }
 
 export class ApiError implements IApiError {
+    code!: number;
     name!: string;
     message!: string;
-    stack?: string;
     /** The activity code of the error, as defined by HTTP activity codes. */
     statusCode!: number;
 
@@ -6330,9 +6999,9 @@ export class ApiError implements IApiError {
 
     init(_data?: any) {
         if (_data) {
+            this.code = _data["code"];
             this.name = _data["name"];
             this.message = _data["message"];
-            this.stack = _data["stack"];
             this.statusCode = _data["statusCode"];
         }
     }
@@ -6346,18 +7015,18 @@ export class ApiError implements IApiError {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
+        data["code"] = this.code;
         data["name"] = this.name;
         data["message"] = this.message;
-        data["stack"] = this.stack;
         data["statusCode"] = this.statusCode;
         return data; 
     }
 }
 
 export interface IApiError {
+    code: number;
     name: string;
     message: string;
-    stack?: string;
     /** The activity code of the error, as defined by HTTP activity codes. */
     statusCode: number;
 }
@@ -6445,6 +7114,94 @@ export interface IResetPasswordRequest {
     password: string;
     repeatPassword: string;
     token: string;
+}
+
+export class GeneralPrivateInfo implements IGeneralPrivateInfo {
+    financialYears!: number[];
+
+    constructor(data?: IGeneralPrivateInfo) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+        if (!data) {
+            this.financialYears = [];
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["financialYears"])) {
+                this.financialYears = [] as any;
+                for (let item of _data["financialYears"])
+                    this.financialYears!.push(item);
+            }
+        }
+    }
+
+    static fromJS(data: any): GeneralPrivateInfo {
+        data = typeof data === 'object' ? data : {};
+        let result = new GeneralPrivateInfo();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.financialYears)) {
+            data["financialYears"] = [];
+            for (let item of this.financialYears)
+                data["financialYears"].push(item);
+        }
+        return data; 
+    }
+}
+
+export interface IGeneralPrivateInfo {
+    financialYears: number[];
+}
+
+export enum LoginMethods {
+    Local = "local",
+    Ldap = "ldap",
+}
+
+export class GeneralPublicInfo implements IGeneralPublicInfo {
+    loginMethod!: LoginMethods;
+
+    constructor(data?: IGeneralPublicInfo) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.loginMethod = _data["loginMethod"];
+        }
+    }
+
+    static fromJS(data: any): GeneralPublicInfo {
+        data = typeof data === 'object' ? data : {};
+        let result = new GeneralPublicInfo();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["loginMethod"] = this.loginMethod;
+        return data; 
+    }
+}
+
+export interface IGeneralPublicInfo {
+    loginMethod: LoginMethods;
 }
 
 export enum ProductStatus {
@@ -7391,6 +8148,7 @@ export interface IInvoice {
 
 export enum InvoiceStatus {
     CREATED = "CREATED",
+    PROPOSED = "PROPOSED",
     SENT = "SENT",
     PAID = "PAID",
     IRRECOVERABLE = "IRRECOVERABLE",
@@ -11814,6 +12572,7 @@ export class Partial_UserParams implements IPartial_UserParams {
     receiveEmails?: boolean;
     sendEmailsToReplyToEmail?: boolean;
     comment?: string;
+    ldapOverrideEmail?: boolean;
     roles?: Roles[];
 
     constructor(data?: IPartial_UserParams) {
@@ -11837,6 +12596,7 @@ export class Partial_UserParams implements IPartial_UserParams {
             this.receiveEmails = _data["receiveEmails"];
             this.sendEmailsToReplyToEmail = _data["sendEmailsToReplyToEmail"];
             this.comment = _data["comment"];
+            this.ldapOverrideEmail = _data["ldapOverrideEmail"];
             if (Array.isArray(_data["roles"])) {
                 this.roles = [] as any;
                 for (let item of _data["roles"])
@@ -11864,6 +12624,7 @@ export class Partial_UserParams implements IPartial_UserParams {
         data["receiveEmails"] = this.receiveEmails;
         data["sendEmailsToReplyToEmail"] = this.sendEmailsToReplyToEmail;
         data["comment"] = this.comment;
+        data["ldapOverrideEmail"] = this.ldapOverrideEmail;
         if (Array.isArray(this.roles)) {
             data["roles"] = [];
             for (let item of this.roles)
@@ -11885,6 +12646,7 @@ export interface IPartial_UserParams {
     receiveEmails?: boolean;
     sendEmailsToReplyToEmail?: boolean;
     comment?: string;
+    ldapOverrideEmail?: boolean;
     roles?: Roles[];
 }
 
@@ -11922,6 +12684,80 @@ export class TransferUserParams implements ITransferUserParams {
 
 export interface ITransferUserParams {
     toUserId: number;
+}
+
+export class LdapIdentityParams implements ILdapIdentityParams {
+    username!: string;
+
+    constructor(data?: ILdapIdentityParams) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.username = _data["username"];
+        }
+    }
+
+    static fromJS(data: any): LdapIdentityParams {
+        data = typeof data === 'object' ? data : {};
+        let result = new LdapIdentityParams();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["username"] = this.username;
+        return data; 
+    }
+}
+
+export interface ILdapIdentityParams {
+    username: string;
+}
+
+/** Make all properties in T optional */
+export class Partial_LdapIdentityParams implements IPartial_LdapIdentityParams {
+    username?: string;
+
+    constructor(data?: IPartial_LdapIdentityParams) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.username = _data["username"];
+        }
+    }
+
+    static fromJS(data: any): Partial_LdapIdentityParams {
+        data = typeof data === 'object' ? data : {};
+        let result = new Partial_LdapIdentityParams();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["username"] = this.username;
+        return data; 
+    }
+}
+
+/** Make all properties in T optional */
+export interface IPartial_LdapIdentityParams {
+    username?: string;
 }
 
 export class CategoryListResponse implements ICategoryListResponse {
@@ -12089,6 +12925,44 @@ export interface IPartial_CategoryParams {
     name?: string;
 }
 
+/** Make all properties in T optional */
+export class Partial_RoleParams implements IPartial_RoleParams {
+    ldapGroup?: string;
+
+    constructor(data?: IPartial_RoleParams) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.ldapGroup = _data["ldapGroup"];
+        }
+    }
+
+    static fromJS(data: any): Partial_RoleParams {
+        data = typeof data === 'object' ? data : {};
+        let result = new Partial_RoleParams();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["ldapGroup"] = this.ldapGroup;
+        return data; 
+    }
+}
+
+/** Make all properties in T optional */
+export interface IPartial_RoleParams {
+    ldapGroup?: string;
+}
+
 export class LoginParams implements ILoginParams {
     email?: string;
     password?: string;
@@ -12129,6 +13003,50 @@ export class LoginParams implements ILoginParams {
 
 export interface ILoginParams {
     email?: string;
+    password?: string;
+    rememberMe?: boolean;
+}
+
+export class LDAPLoginParams implements ILDAPLoginParams {
+    username?: string;
+    password?: string;
+    rememberMe?: boolean;
+
+    constructor(data?: ILDAPLoginParams) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.username = _data["username"];
+            this.password = _data["password"];
+            this.rememberMe = _data["rememberMe"];
+        }
+    }
+
+    static fromJS(data: any): LDAPLoginParams {
+        data = typeof data === 'object' ? data : {};
+        let result = new LDAPLoginParams();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["username"] = this.username;
+        data["password"] = this.password;
+        data["rememberMe"] = this.rememberMe;
+        return data; 
+    }
+}
+
+export interface ILDAPLoginParams {
+    username?: string;
     password?: string;
     rememberMe?: boolean;
 }

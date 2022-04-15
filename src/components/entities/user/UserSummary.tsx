@@ -34,7 +34,7 @@ function UserSummary(props: Props) {
   // Check if user was deleted
   if (prevStatus === ResourceStatus.DELETING
     && props.status === ResourceStatus.EMPTY) {
-    return (<Redirect to="/user" />);
+    return (<Redirect to="/users" />);
   }
 
   const { user, status, fetchUser } = props;

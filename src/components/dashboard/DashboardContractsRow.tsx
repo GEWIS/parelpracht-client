@@ -49,24 +49,26 @@ class DashboardContractsRow extends React.Component<Props> {
           textAlign="left"
           style={{ paddingLeft: '10px', paddingTop: '5px', paddingBottom: '5px' }}
         >
-          <Table basic="very" style={{ padding: '0px', margin: '0px' }}>
-            <Table.Row>
-              <Table.Cell width={2} style={{ padding: '0px', margin: '0px' }}>
-                {logo}
-              </Table.Cell>
-              <Table.Cell>
-                <Header>
-                  <Header.Content>
-                    {company}
-                    {' - '}
-                    {contract.title}
-                    <Header.Subheader>
-                      {formatActivityDate(contract.updatedAt, user)}
-                    </Header.Subheader>
-                  </Header.Content>
-                </Header>
-              </Table.Cell>
-            </Table.Row>
+          <Table basic="very" style={{ padding: '0px', margin: '0px' }} unstackable>
+            <Table.Body>
+              <Table.Row>
+                <Table.Cell width={2} style={{ padding: '0px', margin: '0px' }}>
+                  {logo}
+                </Table.Cell>
+                <Table.Cell>
+                  <Header>
+                    <Header.Content>
+                      {company}
+                      {' - '}
+                      {contract.title}
+                      <Header.Subheader>
+                        {formatActivityDate(contract.updatedAt, user)}
+                      </Header.Subheader>
+                    </Header.Content>
+                  </Header>
+                </Table.Cell>
+              </Table.Row>
+            </Table.Body>
           </Table>
         </Segment>
       </Segment.Group>

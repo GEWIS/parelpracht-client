@@ -52,7 +52,7 @@ function ProductsTable({
 
   const table = (
     <>
-      <Table singleLine selectable attached sortable>
+      <Table singleLine selectable attached sortable unstackable>
         <Table.Header>
           <Table.Row>
             <Table.HeaderCell

@@ -44,7 +44,7 @@ function DeleteButton(props: DeleteProps) {
             style={{ marginTop: '0.5em' }}
             title={t('buttons.delete.short')}
           >
-            {t('buttons.delete.header', { entity: t(`entity.${entity.replace(/([a-z])([A-Z])/g, '$1 $2').trim().toLowerCase()}`) })}
+            {t('buttons.delete.header', { entity: t(`entity.${entity.replace(/([a-z])([A-Z])/g, '$1$2').trim().toLowerCase()}`) })}
           </Button>
         )}
         header={t('buttons.delete.confirm')}

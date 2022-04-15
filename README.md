@@ -19,11 +19,14 @@ This is the front-end of ParelPracht. [The back-end can be found here](https://g
 You can also build the application with `npm run build`. This puts a production build in the `./build` directory.
 
 ## Deployment
-*To be added later*
+1. Clone the repository in a folder called `parelpracht-client` and clone the backend repository in a folder called `parelpracht-server`. Make sure that both folders are in the same parent folder.
+2. Change the image locations to the correct locations in `docker-compose.yml` (for both the frontend and backend).
+3. Fill in the correct (environment) variables in `docker-compose.yml`.
+4. Run `docker-compose` in `./parelpracht-client`.
 
 ## Copyright
 
-Copyright © 2020 The 39th board of GEWIS - Some rights reserved. Created by Roy Kakkenberg, Koen de Nooij, Jealy van den
+Copyright © 2022 The 39th board of GEWIS - Some rights reserved. Created by Roy Kakkenberg, Koen de Nooij, Jealy van den
 Aker, Max Opperman, Wouter van der Heijden en Irne Verwijst. You can use our software freely within the limits of
 our license. However, we worked very hard on this project and invested a lot of time in it, so we ask you to leave our
 copyright mark in place when modifying our software. Of course, you are free to add your own.

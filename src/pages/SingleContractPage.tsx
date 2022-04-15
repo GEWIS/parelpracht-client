@@ -24,6 +24,7 @@ import FilesList from '../components/files/FilesList';
 import GenerateContractModal from '../components/files/GenerateContractModal';
 import { authedUserHasRole } from '../stores/auth/selectors';
 import NotFound from './NotFound';
+import { TitleContext } from '../components/TitleContext';
 
 interface Props extends RouteComponentProps<{ contractId: string }>, WithTranslation {
   contract: Contract | undefined;
@@ -71,7 +72,15 @@ class SingleContractPage extends React.Component<Props, State> {
   }
 
   public componentDidUpdate(prevProps: Readonly<Props>) {
-    if (this.props.status === ResourceStatus.EMPTY
+    const { contract, status, t } = this.props;
+
+    if (contract === undefined) {
+      this.context.setTitle(t('entity.contract'));
+    } else {
+      this.context.setTitle(`C${contract.id} ${contract.title}`);
+    }
+
+    if (status === ResourceStatus.EMPTY
       && prevProps.status === ResourceStatus.DELETING
     ) {
       this.props.history.push('/contract');
@@ -175,7 +184,7 @@ class SingleContractPage extends React.Component<Props, State> {
         </Segment>
         <Container style={{ marginTop: '1.25em' }}>
           <ContractSummary />
-          <Grid rows={2}>
+          <Grid rows={2} stackable>
             <Grid.Row centered columns={1} style={{ paddingLeft: '1em', paddingRight: '1em' }}>
               <Segment secondary style={{ backgroundColor: 'rgba(243, 244, 245, 0.98)' }}>
                 <FinancialDocumentProgress
@@ -229,6 +238,8 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   clearContract: () => dispatch(clearSingle(SingleEntities.Contract)),
   showTransientAlert: (alert: TransientAlert) => dispatch(showTransientAlert(alert)),
 });
+
+SingleContractPage.contextType = TitleContext;
 
 export default withTranslation()(withRouter(connect(mapStateToProps,
   mapDispatchToProps)(SingleContractPage)));

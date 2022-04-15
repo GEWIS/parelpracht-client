@@ -3,8 +3,7 @@ import {
   NavLink, Redirect, RouteComponentProps, withRouter,
 } from 'react-router-dom';
 import {
-  Button,
-  Container, Grid, Header, Icon, Segment,
+  Button, Container, Header, Icon, Segment,
 } from 'semantic-ui-react';
 import jwt from 'jsonwebtoken';
 import validator from 'validator';
@@ -18,6 +17,8 @@ import ResetPasswordForm from '../components/auth/ResetPasswordForm';
 import { RootState } from '../stores/store';
 import { authRequestClear } from '../stores/auth/actionCreators';
 import ResourceStatus from '../stores/resourceStatus';
+import CenterInPage from '../components/CenterInPage';
+import { useTitle } from '../components/TitleContext';
 
 interface Props extends RouteComponentProps {
   status: ResourceStatus;
@@ -28,6 +29,7 @@ interface Props extends RouteComponentProps {
 function ResetPasswordPage(props: Props) {
   const { token } = queryString.parse(props.location.search);
   const { t } = useTranslation();
+  const { setTitle } = useTitle();
 
   if (typeof token !== 'string') {
     return <Redirect to="/login" />;
@@ -78,6 +80,7 @@ function ResetPasswordPage(props: Props) {
 
   useEffect(() => {
     props.clearStatus();
+    setTitle(t('pages.resetPassword.title'));
   }, []);
 
   if (props.status === ResourceStatus.FETCHED) {
@@ -88,20 +91,18 @@ function ResetPasswordPage(props: Props) {
         <div className="bg bg3" />
         <AlertContainer internal />
         <Container>
-          <Grid textAlign="center" verticalAlign="middle" style={{ height: '100vh' }}>
-            <Grid.Column width={6}>
-              <Segment color="green" size="large">
-                <Header as="h1">
-                  {newUser ? t('pages.resetPassword.setPassword') : t('pages.resetPassword.resetPassword')}
-                </Header>
-                <p>{t('pages.resetPassword.successMessage')}</p>
-                <Button as={NavLink} to="/login" style={{ marginTop: '1em' }} basic>
-                  <Icon name="arrow left" basic />
-                  {t('pages.forgotPassword.back')}
-                </Button>
-              </Segment>
-            </Grid.Column>
-          </Grid>
+          <CenterInPage>
+            <Segment color="green" size="large">
+              <Header as="h1">
+                {newUser ? t('pages.resetPassword.setPassword') : t('pages.resetPassword.resetPassword')}
+              </Header>
+              <p>{t('pages.resetPassword.successMessage')}</p>
+              <Button as={NavLink} to="/login" style={{ marginTop: '1em' }} basic>
+                <Icon name="arrow left" basic />
+                {t('pages.forgotPassword.back')}
+              </Button>
+            </Segment>
+          </CenterInPage>
         </Container>
       </>
     );
@@ -114,66 +115,64 @@ function ResetPasswordPage(props: Props) {
       <div className="bg bg3" />
       <AlertContainer internal />
       <Container>
-        <Grid textAlign="center" verticalAlign="middle" style={{ height: '100vh' }}>
-          <Grid.Column width={6}>
-            <Header as="h1">
-              {newUser ? t('pages.resetPassword.setPassword') : t('pages.resetPassword.resetPassword')}
-            </Header>
-            <Segment>
-              <h3>
-                {t('pages.resetPassword.requirements.header')}
-              </h3>
-              <p>
-                <table
-                  style={{
-                    textAlign: 'left',
-                    marginLeft: 'auto',
-                    marginRight: 'auto',
-                  }}
-                >
-                  <tr>
-                    <td>
-                      {eightCharacters ? <Icon name="check" color="green" /> : <Icon name="close" color="red" />}
-                    </td>
-                    <td>{t('pages.resetPassword.requirements.length')}</td>
-                  </tr>
-                  <tr>
-                    <td>
-                      {lowerCase ? <Icon name="check" color="green" /> : <Icon name="close" color="red" />}
-                    </td>
-                    <td>{t('pages.resetPassword.requirements.lowerCase')}</td>
-                  </tr>
-                  <tr>
-                    <td>
-                      {upperCase ? <Icon name="check" color="green" /> : <Icon name="close" color="red" />}
-                    </td>
-                    <td>{t('pages.resetPassword.requirements.upperCase')}</td>
-                  </tr>
-                  <tr>
-                    <td>
-                      {numbers ? <Icon name="check" color="green" /> : <Icon name="close" color="red" />}
-                    </td>
-                    <td>{t('pages.resetPassword.requirements.number')}</td>
-                  </tr>
-                  <tr>
-                    <td>
-                      {symbols ? <Icon name="check" color="green" /> : <Icon name="close" color="red" />}
-                    </td>
-                    <td>{t('pages.resetPassword.requirements.symbol')}</td>
-                  </tr>
-                </table>
-              </p>
-              <ResetPasswordForm
-                token={token}
-                validatePassword={validatePassword}
-              />
-              <Button as={NavLink} to="/login" style={{ marginTop: '1em' }} basic>
-                <Icon name="arrow left" basic />
-                {t('pages.forgotPassword.back')}
-              </Button>
-            </Segment>
-          </Grid.Column>
-        </Grid>
+        <CenterInPage>
+          <Header as="h1">
+            {newUser ? t('pages.resetPassword.setPassword') : t('pages.resetPassword.resetPassword')}
+          </Header>
+          <Segment>
+            <h3>
+              {t('pages.resetPassword.requirements.header')}
+            </h3>
+            <p>
+              <table
+                style={{
+                  textAlign: 'left',
+                  marginLeft: 'auto',
+                  marginRight: 'auto',
+                }}
+              >
+                <tr>
+                  <td>
+                    {eightCharacters ? <Icon name="check" color="green" /> : <Icon name="close" color="red" />}
+                  </td>
+                  <td>{t('pages.resetPassword.requirements.length')}</td>
+                </tr>
+                <tr>
+                  <td>
+                    {lowerCase ? <Icon name="check" color="green" /> : <Icon name="close" color="red" />}
+                  </td>
+                  <td>{t('pages.resetPassword.requirements.lowerCase')}</td>
+                </tr>
+                <tr>
+                  <td>
+                    {upperCase ? <Icon name="check" color="green" /> : <Icon name="close" color="red" />}
+                  </td>
+                  <td>{t('pages.resetPassword.requirements.upperCase')}</td>
+                </tr>
+                <tr>
+                  <td>
+                    {numbers ? <Icon name="check" color="green" /> : <Icon name="close" color="red" />}
+                  </td>
+                  <td>{t('pages.resetPassword.requirements.number')}</td>
+                </tr>
+                <tr>
+                  <td>
+                    {symbols ? <Icon name="check" color="green" /> : <Icon name="close" color="red" />}
+                  </td>
+                  <td>{t('pages.resetPassword.requirements.symbol')}</td>
+                </tr>
+              </table>
+            </p>
+            <ResetPasswordForm
+              token={token}
+              validatePassword={validatePassword}
+            />
+            <Button as={NavLink} to="/login" style={{ marginTop: '1em' }} basic>
+              <Icon name="arrow left" basic />
+              {t('pages.forgotPassword.back')}
+            </Button>
+          </Segment>
+        </CenterInPage>
       </Container>
     </>
   );

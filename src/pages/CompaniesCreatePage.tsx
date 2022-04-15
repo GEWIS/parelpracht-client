@@ -5,6 +5,7 @@ import {
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
+import { withTranslation, WithTranslation } from 'react-i18next';
 import { Company, CompanyStatus } from '../clients/server.generated';
 import { clearSingle } from '../stores/single/actionCreators';
 import { RootState } from '../stores/store';
@@ -15,8 +16,9 @@ import { getSingle } from '../stores/single/selectors';
 import { SingleEntities } from '../stores/single/single';
 import { TransientAlert } from '../stores/alerts/actions';
 import { showTransientAlert } from '../stores/alerts/actionCreators';
+import { TitleContext } from '../components/TitleContext';
 
-interface Props extends RouteComponentProps {
+interface Props extends RouteComponentProps, WithTranslation {
   status: ResourceStatus;
 
   clearCompany: () => void;
@@ -25,7 +27,9 @@ interface Props extends RouteComponentProps {
 
 class CompaniesCreatePage extends React.Component<Props> {
   componentDidMount() {
-    this.props.clearCompany();
+    const { clearCompany, t } = this.props;
+    clearCompany();
+    this.context.setTitle(t('entities.company.newCompany'));
   }
 
   componentDidUpdate(prevProps: Props) {
@@ -87,4 +91,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   showTransientAlert: (alert: TransientAlert) => dispatch(showTransientAlert(alert)),
 });
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(CompaniesCreatePage));
+CompaniesCreatePage.contextType = TitleContext;
+
+export default withTranslation()(withRouter(connect(mapStateToProps,
+  mapDispatchToProps)(CompaniesCreatePage)));

@@ -11,6 +11,7 @@ import DashboardInvoices from '../components/dashboard/DashboardInvoices';
 import DashboardContracts from '../components/dashboard/DashboardContracts';
 import FinancialOverview from '../components/dashboard/FinancialOverview';
 import DashboardContractedCategoryGraph from '../components/dashboard/DashboardContractedCategoryGraph';
+import { useTitle } from '../components/TitleContext';
 
 interface Props extends WithTranslation, RouteComponentProps {
   // eslint-disable-next-line react/no-unused-prop-types
@@ -18,9 +19,12 @@ interface Props extends WithTranslation, RouteComponentProps {
 }
 
 function DashboardPage(props: Props) {
-  const {
-    user, t,
-  } = props;
+  const { user, t } = props;
+  const { setTitle } = useTitle();
+
+  React.useEffect(() => {
+    setTitle(t('dashboard.title'));
+  }, []);
 
   return (
     <>
@@ -43,7 +47,7 @@ function DashboardPage(props: Props) {
         </Container>
       </Segment>
       <Container style={{ marginTop: '2em' }}>
-        <Grid>
+        <Grid stackable>
           <Grid.Row columns={2}>
             <Grid.Column width={9}>
               <FinancialOverview />

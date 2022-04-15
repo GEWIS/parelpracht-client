@@ -3,8 +3,8 @@ import {
   AuthActionType, AuthFetchProfile, AuthFetchStatus,
   AuthForgotPassword,
   AuthGenerateApiKey,
-  AuthGetApiKey,
-  AuthLogin, AuthLogout, AuthRequestClear, AuthRequestError, AuthRequestSuccess,
+  AuthGetApiKey, AuthLoginLDAP,
+  AuthLoginLocal, AuthLogout, AuthRequestClear, AuthRequestError, AuthRequestSuccess,
   AuthResetPassword, AuthRevokeApiKey, AuthSetApiKey, AuthSetProfile, AuthSetStatus,
 } from './actions';
 
@@ -24,9 +24,19 @@ export function authSetProfile(profile: User): AuthSetProfile {
   return { type: AuthActionType.SetProfile, profile };
 }
 
-export function authLogin(email: string, password: string, rememberMe: boolean): AuthLogin {
+export function authLoginLocal(
+  email: string, password: string, rememberMe: boolean,
+): AuthLoginLocal {
   return {
-    type: AuthActionType.Login, email, password, rememberMe,
+    type: AuthActionType.LoginLocal, email, password, rememberMe,
+  };
+}
+
+export function authLoginLDAP(
+  username: string, password: string, rememberMe: boolean,
+): AuthLoginLDAP {
+  return {
+    type: AuthActionType.LoginLDAP, username, password, rememberMe,
   };
 }
 

@@ -1,9 +1,21 @@
-import { GeneralActionType, GeneralFetchInfo, GeneralSetInfo } from './actions';
+import {
+  FetchGeneralPrivateInfo, FetchGeneralPublicInfo, GeneralActionType,
+  PrivateGeneralSetInfo, PublicGeneralSetInfo,
+} from './actions';
+import { LoginMethods } from '../../clients/server.generated';
 
-export function generalFetchInfo(): GeneralFetchInfo {
-  return { type: GeneralActionType.FetchInfo };
+export function generalPrivateFetchInfo(): FetchGeneralPrivateInfo {
+  return { type: GeneralActionType.FetchPrivateInfo };
 }
 
-export function generalSetInfo(financialYears: number[]): GeneralSetInfo {
-  return { type: GeneralActionType.SetInfo, financialYears };
+export function generalPublicFetchInfo(): FetchGeneralPublicInfo {
+  return { type: GeneralActionType.FetchPublicInfo };
+}
+
+export function generalPrivateSetInfo(financialYears: number[]): PrivateGeneralSetInfo {
+  return { type: GeneralActionType.SetPrivateInfo, financialYears };
+}
+
+export function generalPublicSetInfo(loginMethod: LoginMethods): PublicGeneralSetInfo {
+  return { type: GeneralActionType.SetPublicInfo, loginMethod };
 }

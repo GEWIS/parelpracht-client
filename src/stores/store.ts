@@ -11,7 +11,7 @@ import generalReducer from './general/reducer';
 
 import authSagas, { fetchAuthStatus } from './auth/sagas';
 import alertsSagas from './alerts/sagas';
-import generalSagas from './general/sagas';
+import generalSagas, { fetchGeneralPublicInfo } from './general/sagas';
 import productSagas from './product/sagas';
 import productCategorySagas from './productcategory/sagas';
 import productInstanceSagas from './productinstance/sagas';
@@ -64,6 +64,9 @@ export type RootState = {
 };
 
 function* rootSaga() {
+  // Fetch general information
+  yield fetchGeneralPublicInfo();
+
   // Check authentication status at start
   yield fork(fetchAuthStatus);
 

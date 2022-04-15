@@ -3,6 +3,7 @@ import { Modal } from 'semantic-ui-react';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
+import { withTranslation, WithTranslation } from 'react-i18next';
 import { Product, ProductStatus } from '../clients/server.generated';
 import { RootState } from '../stores/store';
 import ProductProps from '../components/entities/product/ProductProps';
@@ -13,8 +14,9 @@ import { getSingle } from '../stores/single/selectors';
 import { clearSingle } from '../stores/single/actionCreators';
 import { TransientAlert } from '../stores/alerts/actions';
 import { showTransientAlert } from '../stores/alerts/actionCreators';
+import { TitleContext } from '../components/TitleContext';
 
-interface Props extends RouteComponentProps {
+interface Props extends RouteComponentProps, WithTranslation {
   status: ResourceStatus;
 
   clearProduct: () => void;
@@ -23,7 +25,9 @@ interface Props extends RouteComponentProps {
 
 class ProductCreatePage extends React.Component<Props> {
   componentDidMount() {
-    this.props.clearProduct();
+    const { clearProduct, t } = this.props;
+    clearProduct();
+    this.context.setTitle(t('pages.product.newProduct'));
   }
 
   componentDidUpdate(prevProps: Props) {
@@ -86,4 +90,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   showTransientAlert: (alert: TransientAlert) => dispatch(showTransientAlert(alert)),
 });
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ProductCreatePage));
+ProductCreatePage.contextType = TitleContext;
+
+export default withTranslation()(withRouter(connect(mapStateToProps,
+  mapDispatchToProps)(ProductCreatePage)));

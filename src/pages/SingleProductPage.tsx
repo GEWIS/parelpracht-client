@@ -26,6 +26,7 @@ import PricingTable from '../components/productpricing/PricingTable';
 import AuthorizationComponent from '../components/AuthorizationComponent';
 import NotFound from './NotFound';
 import { getLanguage } from '../localization';
+import { TitleContext } from '../components/TitleContext';
 
 interface Props extends WithTranslation, RouteComponentProps<{ productId: string }> {
   product: Product | undefined;
@@ -72,7 +73,17 @@ class SingleProductPage extends React.Component<Props, State> {
   }
 
   componentDidUpdate(prevProps: Readonly<Props>) {
-    if (this.props.status === ResourceStatus.EMPTY
+    const { product, status, t } = this.props;
+
+    if (product === undefined) {
+      this.context.setTitle(t('entity.product'));
+    } else if (getLanguage() === 'nl-NL') {
+      this.context.setTitle(product.nameDutch);
+    } else {
+      this.context.setTitle(product.nameEnglish);
+    }
+
+    if (status === ResourceStatus.EMPTY
       && prevProps.status === ResourceStatus.DELETING
     ) {
       this.props.history.push('/product');
@@ -202,7 +213,7 @@ class SingleProductPage extends React.Component<Props, State> {
         </Segment>
         <Container style={{ marginTop: '1.25em' }}>
           <ProductSummary product={product} />
-          <Grid columns={2}>
+          <Grid columns={2} stackable>
             <Grid.Column width={10}>
               <Tab
                 panes={panes}
@@ -241,6 +252,8 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   clearProduct: () => dispatch(clearSingle(SingleEntities.Product)),
   showTransientAlert: (alert: TransientAlert) => dispatch(showTransientAlert(alert)),
 });
+
+SingleProductPage.contextType = TitleContext;
 
 export default withTranslation()(
   withRouter(connect(mapStateToProps, mapDispatchToProps)(SingleProductPage)),

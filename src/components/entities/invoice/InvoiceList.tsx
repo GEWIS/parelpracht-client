@@ -44,7 +44,7 @@ class InvoiceList extends React.Component<Props, State> {
             {t('entity.invoices')}
           </h3>
           <h4>
-            {t('entities.product.noInvoices')}
+            {t('entities.product.noInvoice')}
           </h4>
         </>
       );

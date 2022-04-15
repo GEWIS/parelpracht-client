@@ -60,6 +60,7 @@
       "save": "Bestand opslaan",
       "upload": "Upload bestanden"
     },
+    "ok": "Ok",
     "save": "Opslaan"
   },
   "dashboard": {
@@ -92,6 +93,7 @@
       "allContracts": "Alle contracten...",
       "header": "Recente contracten"
     },
+    "title": "Dashboard",
     "welcome": "Welkom terug,"
   },
   "entities": {
@@ -265,6 +267,34 @@
       "unknown": "Onbekend"
     },
     "user": {
+      "auth": {
+        "addLdap": {
+          "button": "LDAP login toevoegen",
+          "description": "Weet je zeker dat je LDAP authenticatie wilt inschakelen voor deze gebruiker? Deze gebruiker kan dan inloggen via LDAP met de opgegeven gebruikersnaam!"
+        },
+        "addPassword": {
+          "button": "Wachtwoord login toevoegen",
+          "description": "Weet je zeker dat je lokale authenticatie wilt inschakelen voor deze gebruiker? Deze gebruiker kan dan inloggen met hun emailadres en wachtwoord!"
+        },
+        "loginLdap": "LDAP Authenticatie",
+        "loginLocal": "Lokale Authenticatie",
+        "modalHeader": "Weet je het zeker?",
+        "removeLdap": {
+          "button": "LDAP login verwijderen",
+          "description": "Weet je zeker dat je LDAP authenticatie wilt verwijderen voor deze gebruiker? Deze gebruiker kan dan niet meer inloggen met LDAP!"
+        },
+        "removePassword": {
+          "button": "Wachtwoord login verwijderen",
+          "description": "Weet je zeker dat je lokale authenticatie wilt verwijderen voor deze gebruiker? Deze gebruiker kan dan niet meer inloggen met emailadres en wachtwoord!"
+        },
+        "rolesBlocked": "Rechten kunnen niet aangepast worden, omdat rechten zijn gebaseerd op LDAP groepen.",
+        "segmentDescription": "Verander deze instellingen alleen als je weet wat je aan het doen bent!",
+        "segmentHeader": "Loginmethodes bewerken",
+        "updateLdap": {
+          "button": "LDAP login toevoegen",
+          "description": "Weet je zeker dat je LDAP authenticatie wilt aanpassen voor deze gebruiker? Deze gebruiker kan dan misschien niet meer inloggen met LDAP!"
+        }
+      },
       "props": {
         "allMailToReplyTo": "Ik wil alle emails ontvangen op mijn antwoord emailadres",
         "comments": "Opmerkingen",
@@ -281,6 +311,7 @@
         "lastName": "Achternaam",
         "mailOnInvoice": "Ik wil een email ontvangen iedere keer dat een factuur is verstuurd",
         "name": "Naam",
+        "overrideLdapEmail": "Overschrijf mijn persoonlijke emailadres hierboven niet met mijn LDAP email adres",
         "personalEmail": "Persoonlijk emailadres",
         "preposition": "Tussenvoegsel",
         "replyToEmail": "Antwoord emailadres",
@@ -365,6 +396,7 @@
     "logout": "Uitloggen",
     "myProfile": "Mijn profiel",
     "products": "Producten",
+    "settings": "Instellingen",
     "users": "Gebruikers"
   },
   "other": {
@@ -412,14 +444,16 @@
         "total": "Totaal"
       },
       "recipientDetails": "Ontvangerinformatie",
-      "subheader": "Het leven van de penno makkelijker maken"
+      "subheader": "Het leven van de penno makkelijker maken",
+      "title": "Handmatige factuur"
     },
     "forgotPassword": {
       "back": "Terug naar inloggen",
       "enterEmail": "Vul je emaildres in om een wachtwoord-reset link te ontvangen.",
       "header": "Wachtwoord resetten",
       "sendEmailButton": "Verstuur wachtwoord reset email",
-      "successMessage": "Controleer je mailbox voor de link om je wachtwoord te resetten. Als deze mail niet binnen een paar minuten verschijnt, controleer je spam map."
+      "successMessage": "Controleer je mailbox voor de link om je wachtwoord te resetten. Als deze mail niet binnen een paar minuten verschijnt, controleer je spam map.",
+      "title": "Wachtwoord vergeten"
     },
     "insights": {
       "header": "Inzicht",
@@ -434,20 +468,26 @@
     "login": {
       "email": "Emailadres",
       "forgotPassword": "Wachtwoord vergeten",
+      "localLoginInstead": "...of log in plaats daarvan lokaal in.",
       "loginButton": "Log in",
+      "loginLDAPButton": "Log in met LDAP",
       "password": "Wachtwoord",
       "rememberMe": "Blijf ingelogd",
-      "troubleSigningIn": "Problemen met inloggen?"
+      "title": "Login",
+      "troubleSigningIn": "Problemen met inloggen?",
+      "username": "Gebruikersnaam"
     },
     "noRights": {
       "hammerTime": "Stop, hammertime!",
       "header": "Sorry, you don't have the rights to view this page!",
-      "subheader": "Neem contact op met de administrator als dit een fout is."
+      "subheader": "Neem contact op met de administrator als dit een fout is.",
+      "title": "Geen toegang"
     },
     "notFound": {
       "404": "404: Kan deze pagina niet vinden",
       "header": "Er is geen geld hier,",
-      "subheader": "blijf zoeken!"
+      "subheader": "blijf zoeken!",
+      "title": "404 Niet gevonden"
     },
     "product": {
       "newProduct": "Nieuw Product"
@@ -473,8 +513,23 @@
       },
       "resetPassword": "Reset je wachtwoord",
       "setPassword": "Kies een wachtwoord",
-      "submit": "Versture",
-      "successMessage": "Wachtwoord succesvol veranderd!"
+      "submit": "Versturen",
+      "successMessage": "Wachtwoord succesvol veranderd!",
+      "title": "Wachtwoord resetten"
+    },
+    "settings": {
+      "header": {
+        "header": "ParelPracht server instellingen",
+        "subheader": "Omdat we allemaal graag op het randje leven."
+      },
+      "roles": {
+        "header": {
+          "ldapGroup": "LDAP groep",
+          "roleName": "Naam"
+        }
+      },
+      "title": "Instellingen",
+      "warning": "WAARSCHUWING: Het aanpassen van instellingen op deze pagina heeft gevolgen voor de werking van ParelPracht. Je kunt mogelijk het systeem volledig slopen. Pas hier dus alleen dingen aan als je weet wat je aan het doen bent."
     },
     "tables": {
       "footer": {

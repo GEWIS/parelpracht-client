@@ -23,6 +23,8 @@ import UserApiKey from '../components/entities/user/UserApiKey';
 import UserBackgroundModal from '../components/files/UserBackgroundModal';
 import AuthorizationComponent from '../components/AuthorizationComponent';
 import NotFound from './NotFound';
+import UserAuthSettings from '../components/entities/user/UserAuthSettings';
+import { TitleContext } from '../components/TitleContext';
 
 interface Props extends RouteComponentProps<{ userId: string }>, WithTranslation {
   user: User | undefined;
@@ -43,10 +45,21 @@ class SingleUserPage extends React.Component<Props> {
   }
 
   componentDidUpdate(prevProps: Readonly<Props>) {
-    if (this.props.status === ResourceStatus.EMPTY
+    const { status, user, t } = this.props;
+    if (user === undefined) {
+      this.context.setTitle(t('entity.user'));
+    } else {
+      this.context.setTitle(formatContactName(
+        user.firstName,
+        user.lastNamePreposition,
+        user.lastName,
+      ));
+    }
+
+    if (status === ResourceStatus.EMPTY
       && prevProps.status === ResourceStatus.DELETING
     ) {
-      this.props.history.push('/user');
+      this.props.history.push('/users');
       this.props.showTransientAlert({
         title: 'Success',
         message: `User ${prevProps.user?.firstName} successfully deleted`,
@@ -80,7 +93,7 @@ class SingleUserPage extends React.Component<Props> {
             <Breadcrumb
               icon="right angle"
               sections={[
-                { key: 'Users', content: <NavLink to="/user">Users</NavLink> },
+                { key: 'Users', content: <NavLink to="/users">Users</NavLink> },
                 {
                   key: 'User',
                   content: user
@@ -94,7 +107,7 @@ class SingleUserPage extends React.Component<Props> {
         </Segment>
         <Container style={{ marginTop: '1.25em' }}>
           <UserSummary />
-          <Grid columns={2}>
+          <Grid columns={2} stackable>
             <Grid.Column>
               {user ? (
                 <Segment>
@@ -160,6 +173,9 @@ class SingleUserPage extends React.Component<Props> {
                   </Segment>
                 </AuthorizationComponent>
               )}
+              <AuthorizationComponent roles={[Roles.ADMIN]} notFound={false}>
+                <UserAuthSettings user={user} />
+              </AuthorizationComponent>
             </Grid.Column>
           </Grid>
         </Container>
@@ -181,6 +197,8 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   clearUser: () => dispatch(clearSingle(SingleEntities.User)),
   showTransientAlert: (alert: TransientAlert) => dispatch(showTransientAlert(alert)),
 });
+
+SingleUserPage.contextType = TitleContext;
 
 export default withTranslation()(withRouter(connect(mapStateToProps,
   mapDispatchToProps)(SingleUserPage)));

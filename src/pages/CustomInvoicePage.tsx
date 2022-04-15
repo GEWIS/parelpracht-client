@@ -21,6 +21,7 @@ import CustomInvoiceRecipient from '../components/custominvoice/CustomInvoiceRec
 import { FilesClient } from '../clients/filesClient';
 import AuthorizationComponent from '../components/AuthorizationComponent';
 import { isInvalidDate } from '../helpers/timestamp';
+import { TitleContext } from '../components/TitleContext';
 
 interface Props extends RouteComponentProps, WithTranslation {}
 
@@ -66,6 +67,11 @@ class CustomInvoicePage extends React.Component<Props, State> {
       })],
       loading: false,
     };
+  }
+
+  componentDidMount() {
+    const { t } = this.props;
+    this.context.setTitle(t('pages.customInvoice.title'));
   }
 
   setAttribute = (attribute: string, value: string) => {
@@ -238,5 +244,7 @@ class CustomInvoicePage extends React.Component<Props, State> {
     );
   }
 }
+
+CustomInvoicePage.contextType = TitleContext;
 
 export default withTranslation()(withRouter(CustomInvoicePage));

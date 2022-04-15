@@ -39,7 +39,7 @@ class DashboardInvoices extends Component<Props, State> {
     return (
       <Segment loading={this.state.loading}>
         <h3>{t('dashboard.expiredInvoices.header')}</h3>
-        <Table striped compact fixed singleLine className="expired-invoices">
+        <Table striped compact fixed singleLine className="expired-invoices" unstackable>
           <Table.Body>
             {invoices.map((i) => <DashboardInvoicesRow invoice={i} key={i.id} />)}
           </Table.Body>

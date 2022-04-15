@@ -5,6 +5,7 @@ import {
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
+import { withTranslation, WithTranslation } from 'react-i18next';
 import {
   Contract, ProductInstance, ProductInstanceParams, ProductInstanceStatus, Roles,
 } from '../clients/server.generated';
@@ -26,6 +27,7 @@ import {
 import { TransientAlert } from '../stores/alerts/actions';
 import { showTransientAlert } from '../stores/alerts/actionCreators';
 import { getProductName } from '../stores/product/selectors';
+import { TitleContext } from '../components/TitleContext';
 
 interface SelfProps extends RouteComponentProps<{
   contractId: string, productInstanceId?: string
@@ -33,7 +35,7 @@ interface SelfProps extends RouteComponentProps<{
   create?: boolean;
 }
 
-interface Props extends SelfProps {
+interface Props extends SelfProps, WithTranslation {
   productInstance: ProductInstance | undefined;
   status: ResourceStatus;
   contract?: Contract;
@@ -47,6 +49,15 @@ interface Props extends SelfProps {
 }
 
 class ContractProductInstanceModal extends React.Component<Props> {
+  componentDidUpdate() {
+    const { productInstance, productName, t } = this.props;
+    if (!productInstance) {
+      this.context.setTitle(t('pages.contract.products.addProduct'));
+    } else {
+      this.context.setTitle(productName);
+    }
+  }
+
   close = () => {
     const { contractId } = this.props.match.params;
     this.props.fetchContract(parseInt(contractId, 10));
@@ -200,5 +211,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   showTransientAlert: (alert: TransientAlert) => dispatch(showTransientAlert(alert)),
 });
 
-export default withRouter(connect(mapStateToProps,
-  mapDispatchToProps)(ContractProductInstanceModal));
+ContractProductInstanceModal.contextType = TitleContext;
+
+export default withTranslation()(withRouter(connect(mapStateToProps,
+  mapDispatchToProps)(ContractProductInstanceModal)));

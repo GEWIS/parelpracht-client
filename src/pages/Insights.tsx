@@ -6,9 +6,16 @@ import {
 import { useTranslation } from 'react-i18next';
 import ContractTableExtensive from '../components/megatable/MegaTable';
 import ContractTableExtensiveControls from '../components/megatable/MegaTableControls';
+import { useTitle } from '../components/TitleContext';
 
 function Insights() {
   const { t } = useTranslation();
+  const { setTitle } = useTitle();
+
+  React.useEffect(() => {
+    setTitle(t('entity.insights'));
+  }, []);
+
   return (
     <>
       <Segment style={{ backgroundColor: 'rgba(237, 237, 237, 0.98)' }} vertical basic>

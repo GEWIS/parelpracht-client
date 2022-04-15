@@ -60,6 +60,7 @@
       "save": "Save file",
       "upload": "Upload files"
     },
+    "ok": "Ok",
     "save": "Save"
   },
   "dashboard": {
@@ -92,6 +93,7 @@
       "allContracts": "All contracts...",
       "header": "Recent contracts"
     },
+    "title": "Dashboard",
     "welcome": "Welcome back,"
   },
   "entities": {
@@ -230,7 +232,7 @@
         "specsEn": "Delivery specifications (English)",
         "specsNl": "Delivery specifications (Dutch)",
         "status": {
-          "active": "Inactief",
+          "active": "Active",
           "header": "Status",
           "inactive": "Inactive"
         }
@@ -265,6 +267,34 @@
       "unknown": "Unknown"
     },
     "user": {
+      "auth": {
+        "addLdap": {
+          "button": "Add LDAP login",
+          "description": "Are you sure you want to enable LDAP authentication for this user? This user can then login with LDAP with the given username!"
+        },
+        "addPassword": {
+          "button": "Add password login",
+          "description": "Are you sure you want to enable local authentication for this user? This user can then login with their email address and password!"
+        },
+        "loginLdap": "LDAP Authentication",
+        "loginLocal": "Local Authentication",
+        "modalHeader": "Are you sure?",
+        "removeLdap": {
+          "button": "Remove LDAP login",
+          "description": "Are you sure you want to remove LDAP authentication for this user? This user can then no longer log in with LDAP!"
+        },
+        "removePassword": {
+          "button": "Remove password login",
+          "description": "Are you sure you want to remove local authentication for this user? This user can then no longer log in with email/password!"
+        },
+        "rolesBlocked": "Roles cannot be changed, because roles assigned based on LDAP groups",
+        "segmentDescription": "Only change these settings if you know what you are doing!",
+        "segmentHeader": "Edit login methods",
+        "updateLdap": {
+          "button": "Update LDAP login",
+          "description": "Are you sure you want to update this user's ldap authentication credentials? This user might then no longer be able to log in with LDAP!"
+        }
+      },
       "props": {
         "allMailToReplyTo": "I want to receive all emails on my reply-to email address",
         "comments": "Comments",
@@ -281,6 +311,7 @@
         "lastName": "Last Name",
         "mailOnInvoice": "I want to receive an email each time an invoice is sent",
         "name": "Name",
+        "overrideLdapEmail": "Override my LDAP email address with my personal email address above",
         "personalEmail": "Personal email address",
         "preposition": "Preposition",
         "replyToEmail": "Reply-to email address",
@@ -365,6 +396,7 @@
     "logout": "Logout",
     "myProfile": "My Profile",
     "products": "Products",
+    "settings": "Settings",
     "users": "Users"
   },
   "other": {
@@ -412,14 +444,16 @@
         "total": "Total"
       },
       "recipientDetails": "Recipient details",
-      "subheader": "Making the treasurer's life easier"
+      "subheader": "Making the treasurer's life easier",
+      "title": "Custom Invoice"
     },
     "forgotPassword": {
       "back": "Back to login",
       "enterEmail": "Enter your email address and receive a password reset link.",
       "header": "Reset password",
       "sendEmailButton": "Send password reset email",
-      "successMessage": "Check your email for a link to reset your password. If it doesn't appear within a few minutes, check your spam folder."
+      "successMessage": "Check your email for a link to reset your password. If it doesn't appear within a few minutes, check your spam folder.",
+      "title": "Forgot Password"
     },
     "insights": {
       "header": "Insights",
@@ -434,20 +468,26 @@
     "login": {
       "email": "Email address",
       "forgotPassword": "Forgot password",
+      "localLoginInstead": "...or login locally instead.",
       "loginButton": "Login",
+      "loginLDAPButton": "Login with LDAP",
       "password": "Password",
       "rememberMe": "Remember me",
-      "troubleSigningIn": "Trouble signing in?"
+      "title": "Login",
+      "troubleSigningIn": "Trouble signing in?",
+      "username": "Username"
     },
     "noRights": {
       "hammerTime": "Stop, hammertime!",
       "header": "Sorry, je hebt geen toegang om deze pagina te bekijken!",
-      "subheader": "Please contact your administrator if this is a mistake."
+      "subheader": "Please contact your administrator if this is a mistake.",
+      "title": "Unauthorized"
     },
     "notFound": {
       "404": "404: Could not find this page",
       "header": "There is no money here,",
-      "subheader": "keep looking!"
+      "subheader": "keep looking!",
+      "title": "404 Not Found"
     },
     "product": {
       "newProduct": "New Product"
@@ -474,7 +514,22 @@
       "resetPassword": "Reset your password",
       "setPassword": "Set your password",
       "submit": "Submit",
-      "successMessage": "Password successfully changed!"
+      "successMessage": "Password successfully changed!",
+      "title": "Reset Password"
+    },
+    "settings": {
+      "header": {
+        "header": "ParelPracht server settings",
+        "subheader": "Because we all like to live dangerously."
+      },
+      "roles": {
+        "header": {
+          "ldapGroup": "LDAP group",
+          "roleName": "Rolename"
+        }
+      },
+      "title": "Settings",
+      "warning": "WARNING: Changing anything on this page will have consequences for the workings of ParelPracht, and you could possibly deadlock the system. Only change these settings when you know what you are doing."
     },
     "tables": {
       "footer": {

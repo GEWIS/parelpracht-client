@@ -8,9 +8,15 @@ import { Roles } from '../clients/server.generated';
 import AuthorizationComponent from '../components/AuthorizationComponent';
 import CompanyTable from '../components/entities/company/CompanyTable';
 import CompanyTableControls from '../components/entities/company/CompanyTableControls';
+import { useTitle } from '../components/TitleContext';
 
 function CompaniesPage(props: RouteComponentProps) {
   const { t } = useTranslation();
+  const { setTitle } = useTitle();
+
+  React.useEffect(() => {
+    setTitle(t('entity.companies'));
+  }, []);
 
   return (
     <AuthorizationComponent

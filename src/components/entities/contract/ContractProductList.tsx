@@ -108,7 +108,7 @@ class ContractProductList extends React.Component<Props, State> {
           </AuthorizationComponent>
 
         </h3>
-        <Table compact>
+        <Table compact unstackable>
           <Table.Header>
             <Table.Row>
               <Table.HeaderCell />
