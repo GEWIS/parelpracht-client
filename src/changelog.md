@@ -1,9 +1,9 @@
 # Change log
-The current version of ParelPracht is **v1.1.4**, released on September 12th, 2021.
+The current version of ParelPracht is **v1.2.0**, released on April 15th, 2022.
 You can find the release notes below.
 ----------------------
 
-## v1.2.0
+## v1.2.0 (15-04-2022)
 ### Added
 - Added logging in with LDAP.
   - User roles are based on LDAP groups.
@@ -20,7 +20,7 @@ You can find the release notes below.
 - Searching on names in tables now also works for relational fields (like company names in the contracts table).
 
 ### Bugfixes
-- Fixed the contract summary on the dashboard not being in line with the Insights table.
+- Fixed the contract summary on the dashboard not being consistent with the Insights table.
 - Fixed the "Users" menu button being highlighted when viewing your own profile.
 - Fixed download button for files being one pixel too small in Chrome.
 - Fixed some small translation errors.
