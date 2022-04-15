@@ -17,6 +17,7 @@ You can find the release notes below.
 
 ### Changes
 - On generated documents, countries are now fully written out instead of only their abbreviation.
+- Searching on names in tables now also works for relational fields (like company names in the contracts table).
 
 ### Bugfixes
 - Fixed the contract summary on the dashboard not being in line with the Insights table.
