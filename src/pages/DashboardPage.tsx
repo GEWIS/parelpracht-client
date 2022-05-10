@@ -27,7 +27,15 @@ function DashboardPage(props: Props) {
   }, []);
 
   var current = new Date();
-  console.error(current);
+  let hour = current.getHours();
+  const BIERTIJD = 16;
+  var joke = false;
+  var isBiertijd = ((~~hour) >== BIERTIJD);
+  if (isBiertijd) {
+	  if (Math.random() < 0.039 ){
+		  joke = true;
+	  }
+  }
 
   return (
     <>
@@ -39,7 +47,7 @@ function DashboardPage(props: Props) {
                 <Icon name="hand paper" />
                 <Header.Content>
                   <Header.Subheader>Dashboard</Header.Subheader>
-                  {t('dashboard.welcome')}
+                  {joke ? 'Trek een bak' : t('dashboard.welcome')}
                   {' '}
                   {user?.firstName}
                 </Header.Content>
