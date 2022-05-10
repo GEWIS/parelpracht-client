@@ -26,6 +26,9 @@ function DashboardPage(props: Props) {
     setTitle(t('dashboard.title'));
   }, []);
 
+  var current = new Date();
+  console.error(current);
+
   return (
     <>
       <Segment style={{ backgroundColor: 'rgba(237, 237, 237, 0.98)' }} vertical basic>
