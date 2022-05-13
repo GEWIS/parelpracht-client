@@ -30,12 +30,12 @@ function DashboardPage(props: Props) {
     const current = new Date();
     let hour = current.getHours();
     const BIERTIJD = 16;
-    var joke = false;
-    var isBiertijd = Math.floor(hour) >= BIERTIJD;
+    let joke = false;
+    const isBiertijd = Math.floor(hour) >= BIERTIJD;
     if (isBiertijd && Math.random() < 0.039 ){
-	  joke = true;
+      joke = true;
     }
-	return joke;
+    return joke;
   }
   
   
@@ -50,7 +50,7 @@ function DashboardPage(props: Props) {
                 <Icon name="hand paper" />
                 <Header.Content>
                   <Header.Subheader>Dashboard</Header.Subheader>
-                  { beerTime() ? 'Trek een bak' : t('dashboard.welcome')}
+                  {beerTime() ? 'Trek een bak' : t('dashboard.welcome')}
                   {' '}
                   {user?.firstName}
                 </Header.Content>
