@@ -26,6 +26,18 @@ function DashboardPage(props: Props) {
     setTitle(t('dashboard.title'));
   }, []);
 
+  const beerTime = () => {
+    const current = new Date();
+    const hour = current.getHours();
+    const BIERTIJD = 16;
+    let joke = false;
+    const isBiertijd = Math.floor(hour) >= BIERTIJD;
+    if (isBiertijd && Math.random() < 0.039) {
+      joke = true;
+    }
+    return joke;
+  };
+
   return (
     <>
       <Segment style={{ backgroundColor: 'rgba(237, 237, 237, 0.98)' }} vertical basic>
@@ -36,14 +48,13 @@ function DashboardPage(props: Props) {
                 <Icon name="hand paper" />
                 <Header.Content>
                   <Header.Subheader>Dashboard</Header.Subheader>
-                  {t('dashboard.welcome')}
+                  {beerTime() ? 'Trek een bak' : t('dashboard.welcome')}
                   {' '}
                   {user?.firstName}
                 </Header.Content>
               </Header>
             </Grid.Column>
           </Grid>
-
         </Container>
       </Segment>
       <Container style={{ marginTop: '2em' }}>
