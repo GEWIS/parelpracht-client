@@ -49,7 +49,6 @@ import ParelPrachtFullLogo from './components/ParelPrachtFullLogo';
 import SettingsPage from './pages/SettingsPage';
 
 interface Props extends RouteComponentProps {
-  // eslint-disable-next-line react/no-unused-prop-types
   authStatus: AuthStatus | undefined;
   status: ResourceStatus;
   profile: User | undefined;

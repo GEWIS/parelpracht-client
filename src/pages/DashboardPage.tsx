@@ -28,17 +28,15 @@ function DashboardPage(props: Props) {
 
   const beerTime = () => {
     const current = new Date();
-    let hour = current.getHours();
+    const hour = current.getHours();
     const BIERTIJD = 16;
     let joke = false;
     const isBiertijd = Math.floor(hour) >= BIERTIJD;
-    if (isBiertijd && Math.random() < 0.039 ){
+    if (isBiertijd && Math.random() < 0.039) {
       joke = true;
     }
     return joke;
-  }
-  
-  
+  };
 
   return (
     <>
@@ -57,7 +55,6 @@ function DashboardPage(props: Props) {
               </Header>
             </Grid.Column>
           </Grid>
-
         </Container>
       </Segment>
       <Container style={{ marginTop: '2em' }}>
