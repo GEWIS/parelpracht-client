@@ -238,7 +238,11 @@ class SingleCompanyPage extends React.Component<Props, State> {
             </Grid.Column>
             <Grid.Column width={6}>
               <Segment secondary style={{ backgroundColor: 'rgba(243, 244, 245, 0.98)' }}>
-                <CompanyProps company={company} />
+                <CompanyProps
+                  company={company}
+                  canEdit={[Roles.ADMIN, Roles.GENERAL]}
+                  canDelete={[Roles.ADMIN]}
+                />
               </Segment>
             </Grid.Column>
           </Grid>

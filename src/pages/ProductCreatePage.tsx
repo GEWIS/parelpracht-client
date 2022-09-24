@@ -4,7 +4,7 @@ import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { withTranslation, WithTranslation } from 'react-i18next';
-import { Product, ProductStatus } from '../clients/server.generated';
+import { Product, ProductStatus, Roles } from '../clients/server.generated';
 import { RootState } from '../stores/store';
 import ProductProps from '../components/entities/product/ProductProps';
 import ResourceStatus from '../stores/resourceStatus';
@@ -72,7 +72,13 @@ class ProductCreatePage extends React.Component<Props> {
       >
         <Modal.Content>
           <AlertContainer />
-          <ProductProps product={product} create onCancel={this.close} />
+          <ProductProps
+            product={product}
+            create
+            onCancel={this.close}
+            canEdit={[Roles.ADMIN]}
+            canDelete={[Roles.ADMIN]}
+          />
         </Modal.Content>
       </Modal>
     );

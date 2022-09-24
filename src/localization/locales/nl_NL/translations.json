@@ -229,6 +229,12 @@
         "nameEn": "Titel (Engels)",
         "nameNl": "Titel (Nederlands)",
         "price": "Prijs",
+        "valueAddedTax": "BTW",
+        "valueAddedTaxValue": {
+          "zero": "0%",
+          "low": "9%",
+          "high": "21%"
+        },
         "specsEn": "Aanleverspecificaties (Engels)",
         "specsNl": "Aanleverspecificaties (Nederlands)",
         "status": {
@@ -247,7 +253,17 @@
         "discount": "Korting",
         "invoiced": "Gefactureerd",
         "price": "Prijs",
-        "realPrice": "Werkelijke prijs"
+        "realPrice": "Werkelijke prijs",
+        "realPriceNoVat": "Prijs excl. BTW",
+        "realPriceWithVat": "Prijs incl. BTW",
+        "priceLowVat": "BTW laag (9%)",
+        "priceHighVat": "BTW hoog (21%)",
+        "valueAddedTax": "BTW",
+        "valueAddedTaxValue": {
+          "zero": "0%",
+          "low": "9%",
+          "high": "21%"
+        }
       }
     },
     "status": {

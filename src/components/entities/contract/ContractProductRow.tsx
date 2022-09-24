@@ -60,7 +60,7 @@ class ContractProductRow extends React.Component<Props> {
             details={productInstance.details}
           />
         </Table.Cell>
-        <Table.Cell collapsing textAlign="right">
+        <Table.Cell collapsing>
           {formatPriceDiscount(productInstance.discount)}
         </Table.Cell>
         <Table.Cell collapsing>

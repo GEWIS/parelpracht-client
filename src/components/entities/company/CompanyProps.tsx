@@ -21,6 +21,7 @@ import { TransientAlert } from '../../../stores/alerts/actions';
 import { showTransientAlert } from '../../../stores/alerts/actionCreators';
 import AuthorizationComponent from '../../AuthorizationComponent';
 import TextArea from '../../TextArea';
+import { authedUserHasRole } from '../../../stores/auth/selectors';
 
 interface Props extends WithTranslation, RouteComponentProps {
   create?: boolean;
@@ -28,6 +29,10 @@ interface Props extends WithTranslation, RouteComponentProps {
 
   company: Company;
   status: ResourceStatus;
+
+  hasRole: (role: Roles) => boolean;
+  canEdit: Roles[];
+  canDelete: Roles[];
 
   saveCompany: (id: number, company: CompanyParams) => void;
   createCompany: (company: CompanyParams) => void;
@@ -178,8 +183,8 @@ class CompanyProps extends React.Component<Props, State> {
           <AuthorizationComponent roles={[Roles.ADMIN, Roles.GENERAL]} notFound={false}>
             <PropsButtons
               editing={editing}
-              canEdit
-              canDelete={this.deleteButtonActive()}
+              canEdit={this.props.canEdit.some(this.props.hasRole)}
+              canDelete={this.deleteButtonActive() && this.props.canDelete.some(this.props.hasRole)}
               canSave={!this.propsHaveErrors()}
               entity={SingleEntities.Company}
               status={this.props.status}
@@ -389,6 +394,7 @@ class CompanyProps extends React.Component<Props, State> {
 const mapStateToProps = (state: RootState) => {
   return {
     status: getSingle<Company>(state, SingleEntities.Company).status,
+    hasRole: (role: Roles): boolean => authedUserHasRole(state, role),
   };
 };
 

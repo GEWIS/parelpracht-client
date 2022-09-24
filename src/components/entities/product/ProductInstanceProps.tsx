@@ -10,11 +10,11 @@ import {
   ProductInstanceParams,
   ProductSummary,
   Roles,
+  ValueAddedTax,
 } from '../../../clients/server.generated';
 import ResourceStatus from '../../../stores/resourceStatus';
 import { RootState } from '../../../stores/store';
 import { getSummary } from '../../../stores/summaries/selectors';
-import { SummaryCollections } from '../../../stores/summaries/summaries';
 import PropsButtons from '../../PropsButtons';
 import ProductSelector from './ProductSelector';
 import { SingleEntities } from '../../../stores/single/single';
@@ -22,6 +22,7 @@ import AuthorizationComponent from '../../AuthorizationComponent';
 import { getLastStatus } from '../../../helpers/activity';
 import { authedUserHasRole } from '../../../stores/auth/selectors';
 import ProductLink from './ProductLink';
+import { SummaryCollections } from '../../../stores/summaries/summaries';
 
 interface Props extends WithTranslation {
   create?: boolean;
@@ -34,12 +35,15 @@ interface Props extends WithTranslation {
   saveProductInstance: (productInstance: ProductInstanceParams) => void;
   createProductInstance: (productInstance: ProductInstanceParams) => void;
   removeProductInstance: () => void;
+
   getBasePrice: (id: number) => number;
+  getValueAddedTax: (id: number) => ValueAddedTax;
   hasRole: (role: Roles) => boolean;
 }
 
 interface State {
   editing: boolean;
+  valueAddedTax: ValueAddedTax;
 
   productId: number;
   basePrice: string;
@@ -53,6 +57,8 @@ class ProductInstanceProps extends React.Component<Props, State> {
 
     this.state = {
       editing: props.create ?? false,
+      valueAddedTax: props.productInstance.product
+        ? props.productInstance.product.valueAddedTax : ValueAddedTax.ZERO,
       ...this.extractState(props),
     };
   }
@@ -81,6 +87,7 @@ class ProductInstanceProps extends React.Component<Props, State> {
       basePrice: Math.round(parseFloat(this.state.basePrice.replace(',', '.')) * 100),
       discount: Math.round(parseFloat(this.state.discount.replace(',', '.')) * 100),
       details: this.state.details,
+      // valueAddedTax: this.state.valueAddedTax,
     });
   };
 
@@ -146,6 +153,28 @@ class ProductInstanceProps extends React.Component<Props, State> {
       || this.props.productInstance.invoiceId !== undefined);
   };
 
+  enumToVatPercentage = (valueAddedTax: ValueAddedTax) => {
+    switch (valueAddedTax) {
+      case ValueAddedTax.LOW:
+        return 9;
+      case ValueAddedTax.HIGH:
+        return 21;
+      default:
+        return 0;
+    }
+  };
+
+  enumToVatAmount = (valueAddedTax: ValueAddedTax) => {
+    switch (valueAddedTax) {
+      case ValueAddedTax.LOW:
+        return 1.09;
+      case ValueAddedTax.HIGH:
+        return 1.21;
+      default:
+        return 1;
+    }
+  };
+
   render() {
     const {
       editing,
@@ -153,9 +182,9 @@ class ProductInstanceProps extends React.Component<Props, State> {
       discount,
       details,
       productId,
+      valueAddedTax,
     } = this.state;
     const { productInstance, t } = this.props;
-
     let productNameElement = (
       <Form.Field>
         {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
@@ -175,15 +204,18 @@ class ProductInstanceProps extends React.Component<Props, State> {
             id="form-product-dropdown"
             value={productId}
             onChange={(id: string) => {
+              console.log(this.props.getValueAddedTax(parseInt(id, 10)));
               if (id === '') {
                 this.setState({
                   productId: -1,
                   basePrice: '0',
+                  valueAddedTax: ValueAddedTax.ZERO,
                 });
               } else {
                 this.setState({
                   productId: parseInt(id, 10),
                   basePrice: (this.props.getBasePrice(parseInt(id, 10)) / 100).toString(),
+                  valueAddedTax: (this.props.getValueAddedTax(parseInt(id, 10))),
                 });
               }
             }}
@@ -281,13 +313,47 @@ class ProductInstanceProps extends React.Component<Props, State> {
               disabled={!editing}
             >
               {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-              <label htmlFor="form-input-real-price">
-                {t('entities.productInstance.props.realPrice')}
+              <label htmlFor="form-input-value-added-tax">
+                {t('entities.productInstance.props.valueAddedTax')}
               </label>
               <Input
                 labelPosition="left"
-                id="form-input-real-price"
+                id="form-input-value-added-tax"
+                value={this.enumToVatPercentage(valueAddedTax)}
+                fluid
+              >
+                <Label basic>%</Label>
+                <input />
+              </Input>
+            </Form.Field>
+            <Form.Field
+              disabled={!editing}
+            >
+              {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
+              <label htmlFor="form-input-real-price-no-vat">
+                {t('entities.productInstance.props.realPriceNoVat')}
+              </label>
+              <Input
+                labelPosition="left"
+                id="form-input-real-price-no-vat"
                 value={(parseFloat(basePrice.replace(',', '.')) - parseFloat(discount.replace(',', '.'))).toFixed(2)}
+                fluid
+              >
+                <Label basic>€</Label>
+                <input />
+              </Input>
+            </Form.Field>
+            <Form.Field
+              disabled={!editing}
+            >
+              {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
+              <label htmlFor="form-input-real-price-with-vat">
+                {t('entities.productInstance.props.realPriceWithVat')}
+              </label>
+              <Input
+                labelPosition="left"
+                id="form-input-real-price-with-vat"
+                value={((parseFloat(basePrice.replace(',', '.')) - parseFloat(discount.replace(',', '.'))) * this.enumToVatAmount(valueAddedTax)).toFixed(2)}
                 fluid
               >
                 <Label basic>€</Label>
@@ -306,6 +372,9 @@ const mapStateToProps = (state: RootState) => ({
   hasRole: (role: Roles): boolean => authedUserHasRole(state, role),
   getBasePrice: (id: number) => getSummary<ProductSummary>(state,
     SummaryCollections.Products, id).targetPrice,
+  getValueAddedTax: (id: number) => getSummary<ProductSummary>(state,
+    SummaryCollections.Products, id).valueAddedTax,
+
 });
 
 export default withTranslation()(connect(mapStateToProps)(ProductInstanceProps));

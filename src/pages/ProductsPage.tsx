@@ -35,10 +35,12 @@ function ProductsPage(props: RouteComponentProps) {
               </Header>
             </Grid.Column>
             <Grid.Column>
-              <Button icon labelPosition="left" primary floated="right" onClick={() => props.history.push('/product/new')}>
-                <Icon name="plus" />
-                {t('pages.products.addProduct')}
-              </Button>
+              <AuthorizationComponent roles={[Roles.ADMIN]} notFound={false}>
+                <Button icon labelPosition="left" primary floated="right" onClick={() => props.history.push('/product/new')}>
+                  <Icon name="plus" />
+                  {t('pages.products.addProduct')}
+                </Button>
+              </AuthorizationComponent>
             </Grid.Column>
           </Grid>
 

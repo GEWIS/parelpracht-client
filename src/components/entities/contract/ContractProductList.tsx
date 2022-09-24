@@ -7,7 +7,7 @@ import _ from 'lodash';
 import { withTranslation, WithTranslation } from 'react-i18next';
 import ContractProductRow from './ContractProductRow';
 import {
-  ActivityType, Contract, ContractStatus, Roles,
+  ActivityType, Contract, ContractStatus, Roles, ValueAddedTax,
 } from '../../../clients/server.generated';
 import { formatPriceFull } from '../../../helpers/monetary';
 import ContractInvoiceModal from '../../../pages/ContractInvoiceModal';
@@ -50,6 +50,17 @@ class ContractProductList extends React.Component<Props, State> {
     this.setState({ selected: _.xor(selected, [id]) });
   };
 
+  enumToVatAmount = (valueAddedTax: ValueAddedTax) => {
+    switch (valueAddedTax) {
+      case ValueAddedTax.LOW:
+        return 1.09;
+      case ValueAddedTax.HIGH:
+        return 1.21;
+      default:
+        return 1;
+    }
+  };
+
   public render() {
     const { contract, t } = this.props;
     const { selected } = this.state;
@@ -67,16 +78,25 @@ class ContractProductList extends React.Component<Props, State> {
     let priceSum = 0;
     let discountAmount = 0;
     let discountSum = 0;
+    let priceSumVAT = 0;
+    let lowVATsum = 0;
+    let highVATsum = 0;
 
     products.forEach((p) => {
       priceSum += p.basePrice;
       discountSum += p.discount;
-      if (p.discount !== 0) {
-        discountAmount++;
+      if (p.discount !== 0) discountAmount++;
+
+      const currentPrice = p.basePrice - p.discount;
+      const currentPriceVAT = currentPrice * this.enumToVatAmount(p.product.valueAddedTax);
+      priceSumVAT += currentPriceVAT;
+      if (p.product.valueAddedTax === ValueAddedTax.LOW) {
+        lowVATsum += currentPriceVAT - currentPrice;
+      }
+      if (p.product.valueAddedTax === ValueAddedTax.HIGH) {
+        highVATsum += currentPriceVAT - currentPrice;
       }
     });
-
-    const discountedPriceSum = priceSum - discountSum;
 
     const canChangeProducts = contractStatus === ContractStatus.CREATED
       || contractStatus === ContractStatus.PROPOSED
@@ -134,8 +154,11 @@ class ContractProductList extends React.Component<Props, State> {
             <Table.Row>
               <Table.HeaderCell />
               <Table.HeaderCell>
-                {t('pages.tables.total')}
-                :
+                <b>{t('entities.productInstance.props.realPriceNoVat')}</b>
+                <br />
+                <b>{t('entities.productInstance.props.priceLowVat')}</b>
+                <br />
+                <b>{t('entities.productInstance.props.priceHighVat')}</b>
               </Table.HeaderCell>
               <Table.HeaderCell singleLine collapsing>
                 {formatPriceFull(discountSum)}
@@ -143,9 +166,28 @@ class ContractProductList extends React.Component<Props, State> {
                 (
                 {discountAmount}
                 )
+                <br />
+                <br />
+                <br />
               </Table.HeaderCell>
               <Table.HeaderCell collapsing>
-                {formatPriceFull(discountedPriceSum)}
+                {formatPriceFull(priceSum - discountSum)}
+                <br />
+                {formatPriceFull(lowVATsum)}
+                <br />
+                {formatPriceFull(highVATsum)}
+              </Table.HeaderCell>
+              <Table.HeaderCell />
+              <Table.HeaderCell />
+            </Table.Row>
+            <Table.Row>
+              <Table.HeaderCell />
+              <Table.HeaderCell>
+                <b>{t('entities.productInstance.props.realPriceWithVat')}</b>
+              </Table.HeaderCell>
+              <Table.HeaderCell />
+              <Table.HeaderCell collapsing>
+                {formatPriceFull(priceSumVAT)}
               </Table.HeaderCell>
               <Table.HeaderCell />
               <Table.HeaderCell />

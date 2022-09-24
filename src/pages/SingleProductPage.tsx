@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { NavLink, RouteComponentProps, withRouter } from 'react-router-dom';
 import {
-  Breadcrumb, Container, Grid, Loader, Segment, Tab,
+  Breadcrumb, Button, Container, Form, Grid, Loader, Segment, Tab,
 } from 'semantic-ui-react';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
@@ -27,6 +27,7 @@ import AuthorizationComponent from '../components/AuthorizationComponent';
 import NotFound from './NotFound';
 import { getLanguage } from '../localization';
 import { TitleContext } from '../components/TitleContext';
+import CreatePricing from '../components/productpricing/CreatePricing';
 
 interface Props extends WithTranslation, RouteComponentProps<{ productId: string }> {
   product: Product | undefined;
@@ -161,18 +162,25 @@ class SingleProductPage extends React.Component<Props, State> {
         render: product ? () => <ProductsContractedGraph product={product} />
           : () => <Tab.Pane />,
       },
-    ];
-
-    if (product && product.pricing) {
-      panes.push({
+      {
         menuItem: t('entities.product.props.customPrice'),
-        render: () => (
+        render: product ? () => (
           <Tab.Pane>
-            <PricingTable pricing={product.pricing!} productId={product.id} />
+            {!product.pricing ? (
+              <>
+                <h3>
+                  {t('entities.product.insights.header')}
+                </h3>
+                <AuthorizationComponent roles={[Roles.ADMIN]} notFound={false}>
+                  {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
+                  <CreatePricing productId={product.id} />
+                </AuthorizationComponent>
+              </>
+            ) : <PricingTable pricing={product.pricing!} productId={product.id} /> }
           </Tab.Pane>
-        ),
-      });
-    }
+        ) : () => <Tab.Pane />,
+      },
+    ];
 
     return panes;
   };
@@ -230,6 +238,8 @@ class SingleProductPage extends React.Component<Props, State> {
                 <ProductProps
                   product={product}
                   productPricingActive={product.pricing === undefined}
+                  canEdit={[Roles.ADMIN]}
+                  canDelete={[Roles.ADMIN]}
                 />
               </Segment>
             </Grid.Column>

@@ -229,6 +229,12 @@
         "nameEn": "Title (English)",
         "nameNl": "Title (Dutch)",
         "price": "Target price",
+        "valueAddedTax": "VAT",
+        "valueAddedTaxValue": {
+          "zero": "0%",
+          "low": "9%",
+          "high": "21%"
+        },
         "specsEn": "Delivery specifications (English)",
         "specsNl": "Delivery specifications (Dutch)",
         "status": {
@@ -247,7 +253,17 @@
         "discount": "Discount",
         "invoiced": "Invoiced",
         "price": "Price",
-        "realPrice": "Real price"
+        "realPrice": "Real price",
+        "realPriceNoVat": "Price excl. VAT",
+        "realPriceWithVat": "Price incl. VAT",
+        "priceLowVat": "VAT low (9%)",
+        "priceHighVat": "VAT high (21%)",
+        "valueAddedTax": "VAT",
+        "valueAddedTaxValue": {
+          "zero": "0%",
+          "low": "9%",
+          "high": "21%"
+        }
       }
     },
     "status": {

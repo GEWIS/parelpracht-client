@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { withTranslation, WithTranslation } from 'react-i18next';
 import {
-  Contract, ProductInstance, ProductInstanceParams, ProductInstanceStatus, Roles,
+  Contract, ProductInstance, ProductInstanceParams, ProductInstanceStatus, Roles, ValueAddedTax,
 } from '../clients/server.generated';
 import { fetchSingle } from '../stores/single/actionCreators';
 import { RootState } from '../stores/store';

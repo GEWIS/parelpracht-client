@@ -48,6 +48,7 @@ function toSummary(product: Product): ProductSummary {
     nameDutch: product.nameDutch,
     nameEnglish: product.nameEnglish,
     targetPrice: product.targetPrice,
+    valueAddedTax: product.valueAddedTax,
     status: product.status,
   });
 }

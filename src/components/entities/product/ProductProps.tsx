@@ -2,14 +2,14 @@ import React, { ChangeEvent } from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import {
-  Checkbox, Form, Input, Label,
+  Checkbox, Dropdown, Form, Input, Label,
 } from 'semantic-ui-react';
 import { withTranslation, WithTranslation } from 'react-i18next';
 import validator from 'validator';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import {
   Client, PaginationParams,
-  Product, ProductParams, ProductStatus, Roles,
+  Product, ProductParams, ProductStatus, Roles, ValueAddedTax,
 } from '../../../clients/server.generated';
 import ProductCategorySelector from '../productcategories/ProductCategorySelector';
 import { formatPrice } from '../../../helpers/monetary';
@@ -21,9 +21,8 @@ import { RootState } from '../../../stores/store';
 import PropsButtons from '../../PropsButtons';
 import { TransientAlert } from '../../../stores/alerts/actions';
 import { showTransientAlert } from '../../../stores/alerts/actionCreators';
-import CreatePricing from '../../productpricing/CreatePricing';
-import AuthorizationComponent from '../../AuthorizationComponent';
 import TextArea from '../../TextArea';
+import { authedUserHasRole } from '../../../stores/auth/selectors';
 
 interface Props extends WithTranslation, RouteComponentProps {
   create?: boolean;
@@ -32,6 +31,10 @@ interface Props extends WithTranslation, RouteComponentProps {
   product: Product;
   productPricingActive?: boolean;
   status: ResourceStatus;
+
+  hasRole: (role: Roles) => boolean;
+  canEdit: Roles[];
+  canDelete: Roles[];
 
   saveProduct: (id: number, product: ProductParams) => void;
   createProduct: (product: ProductParams) => void;
@@ -46,6 +49,7 @@ interface State {
   nameDutch: string;
   nameEnglish: string;
   targetPrice: string;
+  valueAddedTax: ValueAddedTax;
   status: ProductStatus;
   description: string;
   categoryId: number;
@@ -84,6 +88,7 @@ class ProductProps extends React.Component<Props, State> {
       nameDutch: product.nameDutch,
       nameEnglish: product.nameEnglish,
       targetPrice: formatPrice(product.targetPrice),
+      valueAddedTax: product.valueAddedTax,
       status: product.status,
       description: product.description,
       categoryId: product.categoryId,
@@ -110,6 +115,7 @@ class ProductProps extends React.Component<Props, State> {
       minTarget: this.state.minTarget,
       maxTarget: this.state.maxTarget,
       targetPrice: Math.round(Number.parseFloat(this.state.targetPrice.replace(',', '')) * 100),
+      valueAddedTax: this.state.valueAddedTax,
     });
   };
 
@@ -179,6 +185,7 @@ class ProductProps extends React.Component<Props, State> {
       nameDutch,
       nameEnglish,
       targetPrice,
+      valueAddedTax,
       status,
       description,
       categoryId,
@@ -198,8 +205,8 @@ class ProductProps extends React.Component<Props, State> {
 
           <PropsButtons
             editing={editing}
-            canEdit
-            canDelete={this.deleteButtonActive()}
+            canEdit={this.props.canEdit.some(this.props.hasRole)}
+            canDelete={this.deleteButtonActive() && this.props.canDelete.some(this.props.hasRole)}
             canSave={!this.propsHaveErrors()}
             entity={SingleEntities.Product}
             status={this.props.status}
@@ -304,19 +311,30 @@ class ProductProps extends React.Component<Props, State> {
                 <input />
               </Input>
             </Form.Field>
-            {this.props.productPricingActive ? (
-              <AuthorizationComponent roles={[Roles.ADMIN]} notFound={false}>
-                <Form.Field
-                  disabled={!editing}
-                >
-                  {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-                  <label htmlFor="form-check-status">
-                    {t('entities.product.props.customPrice')}
-                  </label>
-                  <CreatePricing productId={this.props.product.id} />
-                </Form.Field>
-              </AuthorizationComponent>
-            ) : null }
+            <Form.Field
+              disabled={!editing}
+              required
+            >
+              {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
+              <label htmlFor="form-input-value-added-tax">
+                {t('entities.product.props.valueAddedTax')}
+              </label>
+              <Dropdown
+                id="form-input-value-added-tax"
+                selection
+                placeholder={t('entities.product.props.valueAddedTaxValue.high')}
+                value={valueAddedTax}
+                options={[
+                  { key: 0, text: t('entities.product.props.valueAddedTaxValue.zero'), value: ValueAddedTax.ZERO },
+                  { key: 1, text: t('entities.product.props.valueAddedTaxValue.low'), value: ValueAddedTax.LOW },
+                  { key: 2, text: t('entities.product.props.valueAddedTaxValue.high'), value: ValueAddedTax.HIGH },
+                ]}
+                onChange={(e, data) => this.setState(
+                  { valueAddedTax: data.value as ValueAddedTax },
+                )}
+                fluid
+              />
+            </Form.Field>
           </Form.Group>
           <Form.Group widths="equal">
             <Form.Field
@@ -435,6 +453,7 @@ class ProductProps extends React.Component<Props, State> {
 const mapStateToProps = (state: RootState) => {
   return {
     status: getSingle<Product>(state, SingleEntities.Product).status,
+    hasRole: (role: Roles): boolean => authedUserHasRole(state, role),
   };
 };
 
