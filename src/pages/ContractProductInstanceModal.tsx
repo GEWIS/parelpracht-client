@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { withTranslation, WithTranslation } from 'react-i18next';
 import {
-  Contract, ProductInstance, ProductInstanceParams, ProductInstanceStatus, Roles, ValueAddedTax,
+  Contract, ProductInstance, ProductInstanceParams, ProductInstanceStatus, Roles,
 } from '../clients/server.generated';
 import { fetchSingle } from '../stores/single/actionCreators';
 import { RootState } from '../stores/store';
@@ -158,7 +158,7 @@ class ContractProductInstanceModal extends React.Component<Props> {
         open
         closeIcon
         dimmer="blurring"
-        size={create ? 'tiny' : 'small'}
+        size="small"
       >
         <div style={{ margin: '1em' }}>
           <AlertContainer />

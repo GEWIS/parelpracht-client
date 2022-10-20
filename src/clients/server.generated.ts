@@ -19,1490 +19,6 @@ export class Client {
     }
 
     /**
-     * @return No content
-     */
-    postSetup(body: SetupParams): Promise<void> {
-        let url_ = this.baseUrl + "/setup";
-        url_ = url_.replace(/[?&]$/, "");
-
-        const content_ = JSON.stringify(body);
-
-        let options_: RequestInit = {
-            body: content_,
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            }
-        };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processPostSetup(_response);
-        });
-    }
-
-    protected processPostSetup(response: Response): Promise<void> {
-        const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
-        if (status === 204) {
-            return response.text().then((_responseText) => {
-            return;
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            });
-        }
-        return Promise.resolve<void>(null as any);
-    }
-
-    /**
-     * @return Ok
-     */
-    getAuthStatus(): Promise<AuthStatus> {
-        let url_ = this.baseUrl + "/authStatus";
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_: RequestInit = {
-            method: "GET",
-            headers: {
-                "Accept": "application/json"
-            }
-        };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processGetAuthStatus(_response);
-        });
-    }
-
-    protected processGetAuthStatus(response: Response): Promise<AuthStatus> {
-        const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
-        if (status === 200) {
-            return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = AuthStatus.fromJS(resultData200);
-            return result200;
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            });
-        }
-        return Promise.resolve<AuthStatus>(null as any);
-    }
-
-    /**
-     * @return Ok
-     */
-    getProfile(): Promise<Profile> {
-        let url_ = this.baseUrl + "/profile";
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_: RequestInit = {
-            method: "GET",
-            headers: {
-                "Accept": "application/json"
-            }
-        };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processGetProfile(_response);
-        });
-    }
-
-    protected processGetProfile(response: Response): Promise<Profile> {
-        const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
-        if (status === 200) {
-            return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = Profile.fromJS(resultData200);
-            return result200;
-            });
-        } else if (status === 401) {
-            return response.text().then((_responseText) => {
-            let result401: any = null;
-            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result401 = WrappedApiError.fromJS(resultData401);
-            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            });
-        }
-        return Promise.resolve<Profile>(null as any);
-    }
-
-    /**
-     * @return No content
-     */
-    logout(): Promise<void> {
-        let url_ = this.baseUrl + "/logout";
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_: RequestInit = {
-            method: "POST",
-            headers: {
-            }
-        };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processLogout(_response);
-        });
-    }
-
-    protected processLogout(response: Response): Promise<void> {
-        const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
-        if (status === 204) {
-            return response.text().then((_responseText) => {
-            return;
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            });
-        }
-        return Promise.resolve<void>(null as any);
-    }
-
-    /**
-     * @return No content
-     */
-    forgotPassword(email: string): Promise<void> {
-        let url_ = this.baseUrl + "/forgotPassword?";
-        if (email === undefined || email === null)
-            throw new Error("The parameter 'email' must be defined and cannot be null.");
-        else
-            url_ += "email=" + encodeURIComponent("" + email) + "&";
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_: RequestInit = {
-            method: "POST",
-            headers: {
-            }
-        };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processForgotPassword(_response);
-        });
-    }
-
-    protected processForgotPassword(response: Response): Promise<void> {
-        const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
-        if (status === 204) {
-            return response.text().then((_responseText) => {
-            return;
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            });
-        }
-        return Promise.resolve<void>(null as any);
-    }
-
-    /**
-     * @return No content
-     */
-    resetPassword(body: ResetPasswordRequest): Promise<void> {
-        let url_ = this.baseUrl + "/resetPassword";
-        url_ = url_.replace(/[?&]$/, "");
-
-        const content_ = JSON.stringify(body);
-
-        let options_: RequestInit = {
-            body: content_,
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            }
-        };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processResetPassword(_response);
-        });
-    }
-
-    protected processResetPassword(response: Response): Promise<void> {
-        const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
-        if (status === 204) {
-            return response.text().then((_responseText) => {
-            return;
-            });
-        } else if (status === 400) {
-            return response.text().then((_responseText) => {
-            let result400: any = null;
-            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result400 = WrappedApiError.fromJS(resultData400);
-            return throwException("A server side error occurred.", status, _responseText, _headers, result400);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            });
-        }
-        return Promise.resolve<void>(null as any);
-    }
-
-    /**
-     * @return Ok
-     */
-    generateApiKey(): Promise<string> {
-        let url_ = this.baseUrl + "/generateApiKey";
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_: RequestInit = {
-            method: "POST",
-            headers: {
-                "Accept": "application/json"
-            }
-        };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processGenerateApiKey(_response);
-        });
-    }
-
-    protected processGenerateApiKey(response: Response): Promise<string> {
-        const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
-        if (status === 200) {
-            return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-                result200 = resultData200 !== undefined ? resultData200 : <any>null;
-
-            return result200;
-            });
-        } else if (status === 400) {
-            return response.text().then((_responseText) => {
-            let result400: any = null;
-            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result400 = WrappedApiError.fromJS(resultData400);
-            return throwException("A server side error occurred.", status, _responseText, _headers, result400);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            });
-        }
-        return Promise.resolve<string>(null as any);
-    }
-
-    /**
-     * @return Ok
-     */
-    getApiKey(): Promise<string> {
-        let url_ = this.baseUrl + "/getApiKey";
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_: RequestInit = {
-            method: "GET",
-            headers: {
-                "Accept": "application/json"
-            }
-        };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processGetApiKey(_response);
-        });
-    }
-
-    protected processGetApiKey(response: Response): Promise<string> {
-        const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
-        if (status === 200) {
-            return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-                result200 = resultData200 !== undefined ? resultData200 : <any>null;
-
-            return result200;
-            });
-        } else if (status === 400) {
-            return response.text().then((_responseText) => {
-            let result400: any = null;
-            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result400 = WrappedApiError.fromJS(resultData400);
-            return throwException("A server side error occurred.", status, _responseText, _headers, result400);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            });
-        }
-        return Promise.resolve<string>(null as any);
-    }
-
-    /**
-     * @return No content
-     */
-    revokeApiKey(): Promise<void> {
-        let url_ = this.baseUrl + "/revokeApiKey";
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_: RequestInit = {
-            method: "POST",
-            headers: {
-            }
-        };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processRevokeApiKey(_response);
-        });
-    }
-
-    protected processRevokeApiKey(response: Response): Promise<void> {
-        const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
-        if (status === 204) {
-            return response.text().then((_responseText) => {
-            return;
-            });
-        } else if (status === 400) {
-            return response.text().then((_responseText) => {
-            let result400: any = null;
-            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result400 = WrappedApiError.fromJS(resultData400);
-            return throwException("A server side error occurred.", status, _responseText, _headers, result400);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            });
-        }
-        return Promise.resolve<void>(null as any);
-    }
-
-    /**
-     * @return Ok
-     */
-    getPrivateGeneralInfo(): Promise<GeneralPrivateInfo> {
-        let url_ = this.baseUrl + "/getPrivateGeneralInfo";
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_: RequestInit = {
-            method: "GET",
-            headers: {
-                "Accept": "application/json"
-            }
-        };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processGetPrivateGeneralInfo(_response);
-        });
-    }
-
-    protected processGetPrivateGeneralInfo(response: Response): Promise<GeneralPrivateInfo> {
-        const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
-        if (status === 200) {
-            return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = GeneralPrivateInfo.fromJS(resultData200);
-            return result200;
-            });
-        } else if (status === 400) {
-            return response.text().then((_responseText) => {
-            let result400: any = null;
-            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result400 = WrappedApiError.fromJS(resultData400);
-            return throwException("A server side error occurred.", status, _responseText, _headers, result400);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            });
-        }
-        return Promise.resolve<GeneralPrivateInfo>(null as any);
-    }
-
-    /**
-     * @return Ok
-     */
-    getPublicGeneralInfo(): Promise<GeneralPublicInfo> {
-        let url_ = this.baseUrl + "/getPublicGeneralInfo";
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_: RequestInit = {
-            method: "GET",
-            headers: {
-                "Accept": "application/json"
-            }
-        };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processGetPublicGeneralInfo(_response);
-        });
-    }
-
-    protected processGetPublicGeneralInfo(response: Response): Promise<GeneralPublicInfo> {
-        const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
-        if (status === 200) {
-            return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = GeneralPublicInfo.fromJS(resultData200);
-            return result200;
-            });
-        } else if (status === 400) {
-            return response.text().then((_responseText) => {
-            let result400: any = null;
-            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result400 = WrappedApiError.fromJS(resultData400);
-            return throwException("A server side error occurred.", status, _responseText, _headers, result400);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            });
-        }
-        return Promise.resolve<GeneralPublicInfo>(null as any);
-    }
-
-    /**
-     * @param body List parameters to sort and filter the list
-     * @return Ok
-     */
-    getAllProducts(body: ListParams): Promise<ProductListResponse> {
-        let url_ = this.baseUrl + "/product/table";
-        url_ = url_.replace(/[?&]$/, "");
-
-        const content_ = JSON.stringify(body);
-
-        let options_: RequestInit = {
-            body: content_,
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "Accept": "application/json"
-            }
-        };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processGetAllProducts(_response);
-        });
-    }
-
-    protected processGetAllProducts(response: Response): Promise<ProductListResponse> {
-        const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
-        if (status === 200) {
-            return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = ProductListResponse.fromJS(resultData200);
-            return result200;
-            });
-        } else if (status === 401) {
-            return response.text().then((_responseText) => {
-            let result401: any = null;
-            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result401 = WrappedApiError.fromJS(resultData401);
-            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            });
-        }
-        return Promise.resolve<ProductListResponse>(null as any);
-    }
-
-    /**
-     * @return Ok
-     */
-    getProductSummaries(): Promise<ProductSummary[]> {
-        let url_ = this.baseUrl + "/product/compact";
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_: RequestInit = {
-            method: "GET",
-            headers: {
-                "Accept": "application/json"
-            }
-        };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processGetProductSummaries(_response);
-        });
-    }
-
-    protected processGetProductSummaries(response: Response): Promise<ProductSummary[]> {
-        const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
-        if (status === 200) {
-            return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            if (Array.isArray(resultData200)) {
-                result200 = [] as any;
-                for (let item of resultData200)
-                    result200!.push(ProductSummary.fromJS(item));
-            }
-            else {
-                result200 = <any>null;
-            }
-            return result200;
-            });
-        } else if (status === 401) {
-            return response.text().then((_responseText) => {
-            let result401: any = null;
-            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result401 = WrappedApiError.fromJS(resultData401);
-            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            });
-        }
-        return Promise.resolve<ProductSummary[]>(null as any);
-    }
-
-    /**
-     * @param id ID of product to retrieve
-     * @return Ok
-     */
-    getProduct(id: number): Promise<Product> {
-        let url_ = this.baseUrl + "/product/{id}";
-        if (id === undefined || id === null)
-            throw new Error("The parameter 'id' must be defined.");
-        url_ = url_.replace("{id}", encodeURIComponent("" + id));
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_: RequestInit = {
-            method: "GET",
-            headers: {
-                "Accept": "application/json"
-            }
-        };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processGetProduct(_response);
-        });
-    }
-
-    protected processGetProduct(response: Response): Promise<Product> {
-        const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
-        if (status === 200) {
-            return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = Product.fromJS(resultData200);
-            return result200;
-            });
-        } else if (status === 401) {
-            return response.text().then((_responseText) => {
-            let result401: any = null;
-            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result401 = WrappedApiError.fromJS(resultData401);
-            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            });
-        }
-        return Promise.resolve<Product>(null as any);
-    }
-
-    /**
-     * @param id ID of product to update
-     * @param body Update subset of parameter of product
-     * @return Ok
-     */
-    updateProduct(id: number, body: Partial_ProductParams): Promise<Product> {
-        let url_ = this.baseUrl + "/product/{id}";
-        if (id === undefined || id === null)
-            throw new Error("The parameter 'id' must be defined.");
-        url_ = url_.replace("{id}", encodeURIComponent("" + id));
-        url_ = url_.replace(/[?&]$/, "");
-
-        const content_ = JSON.stringify(body);
-
-        let options_: RequestInit = {
-            body: content_,
-            method: "PUT",
-            headers: {
-                "Content-Type": "application/json",
-                "Accept": "application/json"
-            }
-        };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processUpdateProduct(_response);
-        });
-    }
-
-    protected processUpdateProduct(response: Response): Promise<Product> {
-        const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
-        if (status === 200) {
-            return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = Product.fromJS(resultData200);
-            return result200;
-            });
-        } else if (status === 400) {
-            return response.text().then((_responseText) => {
-            let result400: any = null;
-            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result400 = WrappedApiError.fromJS(resultData400);
-            return throwException("A server side error occurred.", status, _responseText, _headers, result400);
-            });
-        } else if (status === 401) {
-            return response.text().then((_responseText) => {
-            let result401: any = null;
-            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result401 = WrappedApiError.fromJS(resultData401);
-            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            });
-        }
-        return Promise.resolve<Product>(null as any);
-    }
-
-    /**
-     * @param id ID of the product
-     * @return No content
-     */
-    deleteProduct(id: number): Promise<void> {
-        let url_ = this.baseUrl + "/product/{id}";
-        if (id === undefined || id === null)
-            throw new Error("The parameter 'id' must be defined.");
-        url_ = url_.replace("{id}", encodeURIComponent("" + id));
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_: RequestInit = {
-            method: "DELETE",
-            headers: {
-            }
-        };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processDeleteProduct(_response);
-        });
-    }
-
-    protected processDeleteProduct(response: Response): Promise<void> {
-        const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
-        if (status === 204) {
-            return response.text().then((_responseText) => {
-            return;
-            });
-        } else if (status === 401) {
-            return response.text().then((_responseText) => {
-            let result401: any = null;
-            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result401 = WrappedApiError.fromJS(resultData401);
-            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            });
-        }
-        return Promise.resolve<void>(null as any);
-    }
-
-    /**
-     * @param body Parameters to create product with
-     * @return Ok
-     */
-    createProduct(body: ProductParams): Promise<Product> {
-        let url_ = this.baseUrl + "/product";
-        url_ = url_.replace(/[?&]$/, "");
-
-        const content_ = JSON.stringify(body);
-
-        let options_: RequestInit = {
-            body: content_,
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "Accept": "application/json"
-            }
-        };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processCreateProduct(_response);
-        });
-    }
-
-    protected processCreateProduct(response: Response): Promise<Product> {
-        const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
-        if (status === 200) {
-            return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = Product.fromJS(resultData200);
-            return result200;
-            });
-        } else if (status === 400) {
-            return response.text().then((_responseText) => {
-            let result400: any = null;
-            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result400 = WrappedApiError.fromJS(resultData400);
-            return throwException("A server side error occurred.", status, _responseText, _headers, result400);
-            });
-        } else if (status === 401) {
-            return response.text().then((_responseText) => {
-            let result401: any = null;
-            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result401 = WrappedApiError.fromJS(resultData401);
-            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            });
-        }
-        return Promise.resolve<Product>(null as any);
-    }
-
-    /**
-     * @param id ID of the product
-     * @return Ok
-     */
-    addPricing(id: number): Promise<ProductPricing> {
-        let url_ = this.baseUrl + "/product/{id}/pricing";
-        if (id === undefined || id === null)
-            throw new Error("The parameter 'id' must be defined.");
-        url_ = url_.replace("{id}", encodeURIComponent("" + id));
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_: RequestInit = {
-            method: "POST",
-            headers: {
-                "Accept": "application/json"
-            }
-        };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processAddPricing(_response);
-        });
-    }
-
-    protected processAddPricing(response: Response): Promise<ProductPricing> {
-        const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
-        if (status === 200) {
-            return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = ProductPricing.fromJS(resultData200);
-            return result200;
-            });
-        } else if (status === 401) {
-            return response.text().then((_responseText) => {
-            let result401: any = null;
-            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result401 = WrappedApiError.fromJS(resultData401);
-            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            });
-        }
-        return Promise.resolve<ProductPricing>(null as any);
-    }
-
-    /**
-     * @param id ID of the product
-     * @param body Description string and JSON table (nested array)
-     * @return Ok
-     */
-    updatePricing(id: number, body: Partial_PricingParams): Promise<ProductPricing> {
-        let url_ = this.baseUrl + "/product/{id}/pricing";
-        if (id === undefined || id === null)
-            throw new Error("The parameter 'id' must be defined.");
-        url_ = url_.replace("{id}", encodeURIComponent("" + id));
-        url_ = url_.replace(/[?&]$/, "");
-
-        const content_ = JSON.stringify(body);
-
-        let options_: RequestInit = {
-            body: content_,
-            method: "PUT",
-            headers: {
-                "Content-Type": "application/json",
-                "Accept": "application/json"
-            }
-        };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processUpdatePricing(_response);
-        });
-    }
-
-    protected processUpdatePricing(response: Response): Promise<ProductPricing> {
-        const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
-        if (status === 200) {
-            return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = ProductPricing.fromJS(resultData200);
-            return result200;
-            });
-        } else if (status === 401) {
-            return response.text().then((_responseText) => {
-            let result401: any = null;
-            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result401 = WrappedApiError.fromJS(resultData401);
-            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            });
-        }
-        return Promise.resolve<ProductPricing>(null as any);
-    }
-
-    /**
-     * @param id ID of the product
-     * @return No content
-     */
-    deletePricing(id: number): Promise<void> {
-        let url_ = this.baseUrl + "/product/{id}/pricing";
-        if (id === undefined || id === null)
-            throw new Error("The parameter 'id' must be defined.");
-        url_ = url_.replace("{id}", encodeURIComponent("" + id));
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_: RequestInit = {
-            method: "DELETE",
-            headers: {
-            }
-        };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processDeletePricing(_response);
-        });
-    }
-
-    protected processDeletePricing(response: Response): Promise<void> {
-        const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
-        if (status === 204) {
-            return response.text().then((_responseText) => {
-            return;
-            });
-        } else if (status === 401) {
-            return response.text().then((_responseText) => {
-            let result401: any = null;
-            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result401 = WrappedApiError.fromJS(resultData401);
-            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            });
-        }
-        return Promise.resolve<void>(null as any);
-    }
-
-    /**
-     * @param id Product id
-     * @param body Skip and take to allow for pagination
-     * @return Ok
-     */
-    getProductContracts(id: number, body: PaginationParams): Promise<ProductInstanceListResponse> {
-        let url_ = this.baseUrl + "/product/{id}/contracts";
-        if (id === undefined || id === null)
-            throw new Error("The parameter 'id' must be defined.");
-        url_ = url_.replace("{id}", encodeURIComponent("" + id));
-        url_ = url_.replace(/[?&]$/, "");
-
-        const content_ = JSON.stringify(body);
-
-        let options_: RequestInit = {
-            body: content_,
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "Accept": "application/json"
-            }
-        };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processGetProductContracts(_response);
-        });
-    }
-
-    protected processGetProductContracts(response: Response): Promise<ProductInstanceListResponse> {
-        const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
-        if (status === 200) {
-            return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = ProductInstanceListResponse.fromJS(resultData200);
-            return result200;
-            });
-        } else if (status === 401) {
-            return response.text().then((_responseText) => {
-            let result401: any = null;
-            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result401 = WrappedApiError.fromJS(resultData401);
-            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            });
-        }
-        return Promise.resolve<ProductInstanceListResponse>(null as any);
-    }
-
-    /**
-     * @param id Product id
-     * @param body Skip and take to allow for pagination
-     * @return Ok
-     */
-    getProductInvoices(id: number, body: PaginationParams): Promise<ProductInstanceListResponse> {
-        let url_ = this.baseUrl + "/product/{id}/invoices";
-        if (id === undefined || id === null)
-            throw new Error("The parameter 'id' must be defined.");
-        url_ = url_.replace("{id}", encodeURIComponent("" + id));
-        url_ = url_.replace(/[?&]$/, "");
-
-        const content_ = JSON.stringify(body);
-
-        let options_: RequestInit = {
-            body: content_,
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "Accept": "application/json"
-            }
-        };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processGetProductInvoices(_response);
-        });
-    }
-
-    protected processGetProductInvoices(response: Response): Promise<ProductInstanceListResponse> {
-        const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
-        if (status === 200) {
-            return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = ProductInstanceListResponse.fromJS(resultData200);
-            return result200;
-            });
-        } else if (status === 401) {
-            return response.text().then((_responseText) => {
-            let result401: any = null;
-            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result401 = WrappedApiError.fromJS(resultData401);
-            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            });
-        }
-        return Promise.resolve<ProductInstanceListResponse>(null as any);
-    }
-
-    /**
-     * @return Ok
-     */
-    getProductStatistics(id: number): Promise<AnalysisResultByYear[]> {
-        let url_ = this.baseUrl + "/product/{id}/statistics";
-        if (id === undefined || id === null)
-            throw new Error("The parameter 'id' must be defined.");
-        url_ = url_.replace("{id}", encodeURIComponent("" + id));
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_: RequestInit = {
-            method: "GET",
-            headers: {
-                "Accept": "application/json"
-            }
-        };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processGetProductStatistics(_response);
-        });
-    }
-
-    protected processGetProductStatistics(response: Response): Promise<AnalysisResultByYear[]> {
-        const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
-        if (status === 200) {
-            return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            if (Array.isArray(resultData200)) {
-                result200 = [] as any;
-                for (let item of resultData200)
-                    result200!.push(AnalysisResultByYear.fromJS(item));
-            }
-            else {
-                result200 = <any>null;
-            }
-            return result200;
-            });
-        } else if (status === 401) {
-            return response.text().then((_responseText) => {
-            let result401: any = null;
-            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result401 = WrappedApiError.fromJS(resultData401);
-            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            });
-        }
-        return Promise.resolve<AnalysisResultByYear[]>(null as any);
-    }
-
-    /**
-     * @param file The file to upload
-     * @param name The name of the new file, as seen in the UI
-     * @return Ok
-     */
-    uploadProductFile(file: FileParameter, name: string): Promise<ProductFile> {
-        let url_ = this.baseUrl + "/product/{id}/file/upload";
-        url_ = url_.replace(/[?&]$/, "");
-
-        const content_ = new FormData();
-        if (file === null || file === undefined)
-            throw new Error("The parameter 'file' cannot be null.");
-        else
-            content_.append("file", file.data, file.fileName ? file.fileName : "file");
-        if (name === null || name === undefined)
-            throw new Error("The parameter 'name' cannot be null.");
-        else
-            content_.append("name", name.toString());
-
-        let options_: RequestInit = {
-            body: content_,
-            method: "POST",
-            headers: {
-                "Accept": "application/json"
-            }
-        };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processUploadProductFile(_response);
-        });
-    }
-
-    protected processUploadProductFile(response: Response): Promise<ProductFile> {
-        const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
-        if (status === 200) {
-            return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = ProductFile.fromJS(resultData200);
-            return result200;
-            });
-        } else if (status === 401) {
-            return response.text().then((_responseText) => {
-            let result401: any = null;
-            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result401 = WrappedApiError.fromJS(resultData401);
-            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            });
-        }
-        return Promise.resolve<ProductFile>(null as any);
-    }
-
-    /**
-     * @param id ID of the product
-     * @param fileId ID of the file
-     * @return Ok
-     */
-    getProductFile(id: number, fileId: number): Promise<any> {
-        let url_ = this.baseUrl + "/product/{id}/file/{fileId}";
-        if (id === undefined || id === null)
-            throw new Error("The parameter 'id' must be defined.");
-        url_ = url_.replace("{id}", encodeURIComponent("" + id));
-        if (fileId === undefined || fileId === null)
-            throw new Error("The parameter 'fileId' must be defined.");
-        url_ = url_.replace("{fileId}", encodeURIComponent("" + fileId));
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_: RequestInit = {
-            method: "GET",
-            headers: {
-                "Accept": "application/json"
-            }
-        };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processGetProductFile(_response);
-        });
-    }
-
-    protected processGetProductFile(response: Response): Promise<any> {
-        const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
-        if (status === 200) {
-            return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-                result200 = resultData200 !== undefined ? resultData200 : <any>null;
-
-            return result200;
-            });
-        } else if (status === 401) {
-            return response.text().then((_responseText) => {
-            let result401: any = null;
-            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result401 = WrappedApiError.fromJS(resultData401);
-            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            });
-        }
-        return Promise.resolve<any>(null as any);
-    }
-
-    /**
-     * @param id ID of the product
-     * @param fileId ID of the file
-     * @param body Update subset of the parameters of the file
-     * @return Ok
-     */
-    updateProductFile(id: number, fileId: number, body: Partial_FileParams): Promise<BaseFile> {
-        let url_ = this.baseUrl + "/product/{id}/file/{fileId}";
-        if (id === undefined || id === null)
-            throw new Error("The parameter 'id' must be defined.");
-        url_ = url_.replace("{id}", encodeURIComponent("" + id));
-        if (fileId === undefined || fileId === null)
-            throw new Error("The parameter 'fileId' must be defined.");
-        url_ = url_.replace("{fileId}", encodeURIComponent("" + fileId));
-        url_ = url_.replace(/[?&]$/, "");
-
-        const content_ = JSON.stringify(body);
-
-        let options_: RequestInit = {
-            body: content_,
-            method: "PUT",
-            headers: {
-                "Content-Type": "application/json",
-                "Accept": "application/json"
-            }
-        };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processUpdateProductFile(_response);
-        });
-    }
-
-    protected processUpdateProductFile(response: Response): Promise<BaseFile> {
-        const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
-        if (status === 200) {
-            return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = BaseFile.fromJS(resultData200);
-            return result200;
-            });
-        } else if (status === 401) {
-            return response.text().then((_responseText) => {
-            let result401: any = null;
-            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result401 = WrappedApiError.fromJS(resultData401);
-            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            });
-        }
-        return Promise.resolve<BaseFile>(null as any);
-    }
-
-    /**
-     * @param id ID of the product
-     * @param fileId ID of the file
-     * @return No content
-     */
-    deleteProductFile(id: number, fileId: number): Promise<void> {
-        let url_ = this.baseUrl + "/product/{id}/file/{fileId}";
-        if (id === undefined || id === null)
-            throw new Error("The parameter 'id' must be defined.");
-        url_ = url_.replace("{id}", encodeURIComponent("" + id));
-        if (fileId === undefined || fileId === null)
-            throw new Error("The parameter 'fileId' must be defined.");
-        url_ = url_.replace("{fileId}", encodeURIComponent("" + fileId));
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_: RequestInit = {
-            method: "DELETE",
-            headers: {
-            }
-        };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processDeleteProductFile(_response);
-        });
-    }
-
-    protected processDeleteProductFile(response: Response): Promise<void> {
-        const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
-        if (status === 204) {
-            return response.text().then((_responseText) => {
-            return;
-            });
-        } else if (status === 401) {
-            return response.text().then((_responseText) => {
-            let result401: any = null;
-            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result401 = WrappedApiError.fromJS(resultData401);
-            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            });
-        }
-        return Promise.resolve<void>(null as any);
-    }
-
-    /**
-     * @param id ID of the product
-     * @param body Parameters to create this comment with
-     * @return Ok
-     */
-    addProductComment(id: number, body: ActivityParams): Promise<BaseActivity> {
-        let url_ = this.baseUrl + "/product/{id}/comment";
-        if (id === undefined || id === null)
-            throw new Error("The parameter 'id' must be defined.");
-        url_ = url_.replace("{id}", encodeURIComponent("" + id));
-        url_ = url_.replace(/[?&]$/, "");
-
-        const content_ = JSON.stringify(body);
-
-        let options_: RequestInit = {
-            body: content_,
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "Accept": "application/json"
-            }
-        };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processAddProductComment(_response);
-        });
-    }
-
-    protected processAddProductComment(response: Response): Promise<BaseActivity> {
-        const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
-        if (status === 200) {
-            return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = BaseActivity.fromJS(resultData200);
-            return result200;
-            });
-        } else if (status === 401) {
-            return response.text().then((_responseText) => {
-            let result401: any = null;
-            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result401 = WrappedApiError.fromJS(resultData401);
-            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            });
-        }
-        return Promise.resolve<BaseActivity>(null as any);
-    }
-
-    /**
-     * @param id ID of the product
-     * @param activityId ID of the activity
-     * @param body Update subset of parameter of comment activity
-     * @return Ok
-     */
-    updateProductActivity(id: number, activityId: number, body: Partial_ActivityParams): Promise<BaseActivity> {
-        let url_ = this.baseUrl + "/product/{id}/activity/{activityId}";
-        if (id === undefined || id === null)
-            throw new Error("The parameter 'id' must be defined.");
-        url_ = url_.replace("{id}", encodeURIComponent("" + id));
-        if (activityId === undefined || activityId === null)
-            throw new Error("The parameter 'activityId' must be defined.");
-        url_ = url_.replace("{activityId}", encodeURIComponent("" + activityId));
-        url_ = url_.replace(/[?&]$/, "");
-
-        const content_ = JSON.stringify(body);
-
-        let options_: RequestInit = {
-            body: content_,
-            method: "PUT",
-            headers: {
-                "Content-Type": "application/json",
-                "Accept": "application/json"
-            }
-        };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processUpdateProductActivity(_response);
-        });
-    }
-
-    protected processUpdateProductActivity(response: Response): Promise<BaseActivity> {
-        const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
-        if (status === 200) {
-            return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = BaseActivity.fromJS(resultData200);
-            return result200;
-            });
-        } else if (status === 401) {
-            return response.text().then((_responseText) => {
-            let result401: any = null;
-            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result401 = WrappedApiError.fromJS(resultData401);
-            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            });
-        }
-        return Promise.resolve<BaseActivity>(null as any);
-    }
-
-    /**
-     * @param id ID of the product
-     * @param activityId ID of the activity
-     * @return No content
-     */
-    deleteProductActivity(id: number, activityId: number): Promise<void> {
-        let url_ = this.baseUrl + "/product/{id}/activity/{activityId}";
-        if (id === undefined || id === null)
-            throw new Error("The parameter 'id' must be defined.");
-        url_ = url_.replace("{id}", encodeURIComponent("" + id));
-        if (activityId === undefined || activityId === null)
-            throw new Error("The parameter 'activityId' must be defined.");
-        url_ = url_.replace("{activityId}", encodeURIComponent("" + activityId));
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_: RequestInit = {
-            method: "DELETE",
-            headers: {
-            }
-        };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processDeleteProductActivity(_response);
-        });
-    }
-
-    protected processDeleteProductActivity(response: Response): Promise<void> {
-        const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
-        if (status === 204) {
-            return response.text().then((_responseText) => {
-            return;
-            });
-        } else if (status === 401) {
-            return response.text().then((_responseText) => {
-            let result401: any = null;
-            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result401 = WrappedApiError.fromJS(resultData401);
-            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            });
-        }
-        return Promise.resolve<void>(null as any);
-    }
-
-    /**
-     * @param year Financial year of the overview
-     * @return Ok
-     */
-    getDashboardProductInstanceStatistics(year: number): Promise<DashboardProductInstanceStats> {
-        let url_ = this.baseUrl + "/product/stats/statuses/{year}";
-        if (year === undefined || year === null)
-            throw new Error("The parameter 'year' must be defined.");
-        url_ = url_.replace("{year}", encodeURIComponent("" + year));
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_: RequestInit = {
-            method: "GET",
-            headers: {
-                "Accept": "application/json"
-            }
-        };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processGetDashboardProductInstanceStatistics(_response);
-        });
-    }
-
-    protected processGetDashboardProductInstanceStatistics(response: Response): Promise<DashboardProductInstanceStats> {
-        const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
-        if (status === 200) {
-            return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = DashboardProductInstanceStats.fromJS(resultData200);
-            return result200;
-            });
-        } else if (status === 401) {
-            return response.text().then((_responseText) => {
-            let result401: any = null;
-            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result401 = WrappedApiError.fromJS(resultData401);
-            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            });
-        }
-        return Promise.resolve<DashboardProductInstanceStats>(null as any);
-    }
-
-    /**
      * @param body List parameters to sort and filter the list
      * @return Ok
      */
@@ -2456,6 +972,300 @@ export class Client {
             });
         }
         return Promise.resolve<void>(null as any);
+    }
+
+    /**
+     * @param body List parameters to sort and filter the list
+     * @return Ok
+     */
+    getAllContacts(body: ListParams): Promise<ContactListResponse> {
+        let url_ = this.baseUrl + "/contact/table";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_: RequestInit = {
+            body: content_,
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processGetAllContacts(_response);
+        });
+    }
+
+    protected processGetAllContacts(response: Response): Promise<ContactListResponse> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = ContactListResponse.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<ContactListResponse>(null as any);
+    }
+
+    /**
+     * @return Ok
+     */
+    getContactSummaries(): Promise<ContactSummary[]> {
+        let url_ = this.baseUrl + "/contact/compact";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processGetContactSummaries(_response);
+        });
+    }
+
+    protected processGetContactSummaries(response: Response): Promise<ContactSummary[]> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(ContactSummary.fromJS(item));
+            }
+            else {
+                result200 = <any>null;
+            }
+            return result200;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<ContactSummary[]>(null as any);
+    }
+
+    /**
+     * @param id ID of contact to retrieve
+     * @return Ok
+     */
+    getContact(id: number): Promise<Contact> {
+        let url_ = this.baseUrl + "/contact/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processGetContact(_response);
+        });
+    }
+
+    protected processGetContact(response: Response): Promise<Contact> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = Contact.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<Contact>(null as any);
+    }
+
+    /**
+     * @param id ID of contact to update
+     * @param body Update subset of parameter of contact
+     * @return Ok
+     */
+    updateContact(id: number, body: Partial_ContactParams): Promise<Contact> {
+        let url_ = this.baseUrl + "/contact/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_: RequestInit = {
+            body: content_,
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processUpdateContact(_response);
+        });
+    }
+
+    protected processUpdateContact(response: Response): Promise<Contact> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = Contact.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<Contact>(null as any);
+    }
+
+    /**
+     * @param id ID of the contact
+     * @return No content
+     */
+    deleteContact(id: number): Promise<void> {
+        let url_ = this.baseUrl + "/contact/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "DELETE",
+            headers: {
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processDeleteContact(_response);
+        });
+    }
+
+    protected processDeleteContact(response: Response): Promise<void> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 204) {
+            return response.text().then((_responseText) => {
+            return;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<void>(null as any);
+    }
+
+    /**
+     * @param body Parameters to create contact with
+     * @return Ok
+     */
+    createContact(body: ContactParams): Promise<Contact> {
+        let url_ = this.baseUrl + "/contact";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_: RequestInit = {
+            body: content_,
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processCreateContact(_response);
+        });
+    }
+
+    protected processCreateContact(response: Response): Promise<Contact> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = Contact.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<Contact>(null as any);
     }
 
     /**
@@ -4111,7 +2921,7 @@ export class Client {
      * @param prodId ID of the product instance
      * @return No content
      */
-    deleteProduct2(id: number, prodId: number): Promise<void> {
+    deleteProduct(id: number, prodId: number): Promise<void> {
         let url_ = this.baseUrl + "/invoice/{id}/product/{prodId}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -4128,11 +2938,11 @@ export class Client {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processDeleteProduct2(_response);
+            return this.processDeleteProduct(_response);
         });
     }
 
-    protected processDeleteProduct2(response: Response): Promise<void> {
+    protected processDeleteProduct(response: Response): Promise<void> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 204) {
@@ -4640,8 +3450,8 @@ export class Client {
      * @param body List parameters to sort and filter the list
      * @return Ok
      */
-    getAllContacts(body: ListParams): Promise<ContactListResponse> {
-        let url_ = this.baseUrl + "/contact/table";
+    getAllCategories(body: ListParams): Promise<CategoryListResponse> {
+        let url_ = this.baseUrl + "/category/table";
         url_ = url_.replace(/[?&]$/, "");
 
         const content_ = JSON.stringify(body);
@@ -4656,18 +3466,18 @@ export class Client {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processGetAllContacts(_response);
+            return this.processGetAllCategories(_response);
         });
     }
 
-    protected processGetAllContacts(response: Response): Promise<ContactListResponse> {
+    protected processGetAllCategories(response: Response): Promise<CategoryListResponse> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = ContactListResponse.fromJS(resultData200);
+            result200 = CategoryListResponse.fromJS(resultData200);
             return result200;
             });
         } else if (status === 401) {
@@ -4682,14 +3492,14 @@ export class Client {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<ContactListResponse>(null as any);
+        return Promise.resolve<CategoryListResponse>(null as any);
     }
 
     /**
      * @return Ok
      */
-    getContactSummaries(): Promise<ContactSummary[]> {
-        let url_ = this.baseUrl + "/contact/compact";
+    getCategorySummaries(): Promise<CategorySummary[]> {
+        let url_ = this.baseUrl + "/category/compact";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_: RequestInit = {
@@ -4700,11 +3510,11 @@ export class Client {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processGetContactSummaries(_response);
+            return this.processGetCategorySummaries(_response);
         });
     }
 
-    protected processGetContactSummaries(response: Response): Promise<ContactSummary[]> {
+    protected processGetCategorySummaries(response: Response): Promise<CategorySummary[]> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -4714,7 +3524,7 @@ export class Client {
             if (Array.isArray(resultData200)) {
                 result200 = [] as any;
                 for (let item of resultData200)
-                    result200!.push(ContactSummary.fromJS(item));
+                    result200!.push(CategorySummary.fromJS(item));
             }
             else {
                 result200 = <any>null;
@@ -4733,40 +3543,41 @@ export class Client {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<ContactSummary[]>(null as any);
+        return Promise.resolve<CategorySummary[]>(null as any);
     }
 
     /**
-     * @param id ID of contact to retrieve
+     * @param body Parameters to create category with
      * @return Ok
      */
-    getContact(id: number): Promise<Contact> {
-        let url_ = this.baseUrl + "/contact/{id}";
-        if (id === undefined || id === null)
-            throw new Error("The parameter 'id' must be defined.");
-        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+    createCategory(body: CategoryParams): Promise<ProductCategory> {
+        let url_ = this.baseUrl + "/category";
         url_ = url_.replace(/[?&]$/, "");
 
+        const content_ = JSON.stringify(body);
+
         let options_: RequestInit = {
-            method: "GET",
+            body: content_,
+            method: "POST",
             headers: {
+                "Content-Type": "application/json",
                 "Accept": "application/json"
             }
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processGetContact(_response);
+            return this.processCreateCategory(_response);
         });
     }
 
-    protected processGetContact(response: Response): Promise<Contact> {
+    protected processCreateCategory(response: Response): Promise<ProductCategory> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = Contact.fromJS(resultData200);
+            result200 = ProductCategory.fromJS(resultData200);
             return result200;
             });
         } else if (status === 401) {
@@ -4781,16 +3592,64 @@ export class Client {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<Contact>(null as any);
+        return Promise.resolve<ProductCategory>(null as any);
     }
 
     /**
-     * @param id ID of contact to update
-     * @param body Update subset of parameter of contact
+     * @param id ID of the category
      * @return Ok
      */
-    updateContact(id: number, body: Partial_ContactParams): Promise<Contact> {
-        let url_ = this.baseUrl + "/contact/{id}";
+    getCategory(id: number): Promise<ProductCategory> {
+        let url_ = this.baseUrl + "/category/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processGetCategory(_response);
+        });
+    }
+
+    protected processGetCategory(response: Response): Promise<ProductCategory> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = ProductCategory.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<ProductCategory>(null as any);
+    }
+
+    /**
+     * @param id ID of the category
+     * @param body Update subset of parameter of category
+     * @return Ok
+     */
+    updateCategory(id: number, body: Partial_CategoryParams): Promise<ProductCategory> {
+        let url_ = this.baseUrl + "/category/{id}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
         url_ = url_.replace("{id}", encodeURIComponent("" + id));
@@ -4808,18 +3667,18 @@ export class Client {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processUpdateContact(_response);
+            return this.processUpdateCategory(_response);
         });
     }
 
-    protected processUpdateContact(response: Response): Promise<Contact> {
+    protected processUpdateCategory(response: Response): Promise<ProductCategory> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = Contact.fromJS(resultData200);
+            result200 = ProductCategory.fromJS(resultData200);
             return result200;
             });
         } else if (status === 401) {
@@ -4834,15 +3693,15 @@ export class Client {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<Contact>(null as any);
+        return Promise.resolve<ProductCategory>(null as any);
     }
 
     /**
-     * @param id ID of the contact
+     * @param id ID of the category
      * @return No content
      */
-    deleteContact(id: number): Promise<void> {
-        let url_ = this.baseUrl + "/contact/{id}";
+    deleteCategory(id: number): Promise<void> {
+        let url_ = this.baseUrl + "/category/{id}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
         url_ = url_.replace("{id}", encodeURIComponent("" + id));
@@ -4855,11 +3714,11 @@ export class Client {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processDeleteContact(_response);
+            return this.processDeleteCategory(_response);
         });
     }
 
-    protected processDeleteContact(response: Response): Promise<void> {
+    protected processDeleteCategory(response: Response): Promise<void> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 204) {
@@ -4882,37 +3741,36 @@ export class Client {
     }
 
     /**
-     * @param body Parameters to create contact with
+     * @param year Financial year of the overview
      * @return Ok
      */
-    createContact(body: ContactParams): Promise<Contact> {
-        let url_ = this.baseUrl + "/contact";
+    getContractedProductsStatistics(year: number): Promise<ContractedProductsAnalysis> {
+        let url_ = this.baseUrl + "/category/stats/contracted/{year}";
+        if (year === undefined || year === null)
+            throw new Error("The parameter 'year' must be defined.");
+        url_ = url_.replace("{year}", encodeURIComponent("" + year));
         url_ = url_.replace(/[?&]$/, "");
 
-        const content_ = JSON.stringify(body);
-
         let options_: RequestInit = {
-            body: content_,
-            method: "POST",
+            method: "GET",
             headers: {
-                "Content-Type": "application/json",
                 "Accept": "application/json"
             }
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processCreateContact(_response);
+            return this.processGetContractedProductsStatistics(_response);
         });
     }
 
-    protected processCreateContact(response: Response): Promise<Contact> {
+    protected processGetContractedProductsStatistics(response: Response): Promise<ContractedProductsAnalysis> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = Contact.fromJS(resultData200);
+            result200 = ContractedProductsAnalysis.fromJS(resultData200);
             return result200;
             });
         } else if (status === 401) {
@@ -4927,7 +3785,1640 @@ export class Client {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<Contact>(null as any);
+        return Promise.resolve<ContractedProductsAnalysis>(null as any);
+    }
+
+    /**
+     * @param body List parameters to sort and filter the list
+     * @return Ok
+     */
+    getAllProducts(body: ListParams): Promise<ProductListResponse> {
+        let url_ = this.baseUrl + "/product/table";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_: RequestInit = {
+            body: content_,
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processGetAllProducts(_response);
+        });
+    }
+
+    protected processGetAllProducts(response: Response): Promise<ProductListResponse> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = ProductListResponse.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<ProductListResponse>(null as any);
+    }
+
+    /**
+     * @return Ok
+     */
+    getProductSummaries(): Promise<ProductSummary[]> {
+        let url_ = this.baseUrl + "/product/compact";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processGetProductSummaries(_response);
+        });
+    }
+
+    protected processGetProductSummaries(response: Response): Promise<ProductSummary[]> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(ProductSummary.fromJS(item));
+            }
+            else {
+                result200 = <any>null;
+            }
+            return result200;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<ProductSummary[]>(null as any);
+    }
+
+    /**
+     * @param id ID of product to retrieve
+     * @return Ok
+     */
+    getProduct(id: number): Promise<Product> {
+        let url_ = this.baseUrl + "/product/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processGetProduct(_response);
+        });
+    }
+
+    protected processGetProduct(response: Response): Promise<Product> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = Product.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<Product>(null as any);
+    }
+
+    /**
+     * @param id ID of product to update
+     * @param body Update subset of parameter of product
+     * @return Ok
+     */
+    updateProduct(id: number, body: Partial_ProductParams): Promise<Product> {
+        let url_ = this.baseUrl + "/product/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_: RequestInit = {
+            body: content_,
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processUpdateProduct(_response);
+        });
+    }
+
+    protected processUpdateProduct(response: Response): Promise<Product> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = Product.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status === 400) {
+            return response.text().then((_responseText) => {
+            let result400: any = null;
+            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result400 = WrappedApiError.fromJS(resultData400);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result400);
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<Product>(null as any);
+    }
+
+    /**
+     * @param id ID of the product
+     * @return No content
+     */
+    deleteProduct2(id: number): Promise<void> {
+        let url_ = this.baseUrl + "/product/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "DELETE",
+            headers: {
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processDeleteProduct2(_response);
+        });
+    }
+
+    protected processDeleteProduct2(response: Response): Promise<void> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 204) {
+            return response.text().then((_responseText) => {
+            return;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<void>(null as any);
+    }
+
+    /**
+     * @param body Parameters to create product with
+     * @return Ok
+     */
+    createProduct(body: ProductParams): Promise<Product> {
+        let url_ = this.baseUrl + "/product";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_: RequestInit = {
+            body: content_,
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processCreateProduct(_response);
+        });
+    }
+
+    protected processCreateProduct(response: Response): Promise<Product> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = Product.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status === 400) {
+            return response.text().then((_responseText) => {
+            let result400: any = null;
+            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result400 = WrappedApiError.fromJS(resultData400);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result400);
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<Product>(null as any);
+    }
+
+    /**
+     * @param id ID of the product
+     * @return Ok
+     */
+    addPricing(id: number): Promise<ProductPricing> {
+        let url_ = this.baseUrl + "/product/{id}/pricing";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "POST",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processAddPricing(_response);
+        });
+    }
+
+    protected processAddPricing(response: Response): Promise<ProductPricing> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = ProductPricing.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<ProductPricing>(null as any);
+    }
+
+    /**
+     * @param id ID of the product
+     * @param body Description string and JSON table (nested array)
+     * @return Ok
+     */
+    updatePricing(id: number, body: Partial_PricingParams): Promise<ProductPricing> {
+        let url_ = this.baseUrl + "/product/{id}/pricing";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_: RequestInit = {
+            body: content_,
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processUpdatePricing(_response);
+        });
+    }
+
+    protected processUpdatePricing(response: Response): Promise<ProductPricing> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = ProductPricing.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<ProductPricing>(null as any);
+    }
+
+    /**
+     * @param id ID of the product
+     * @return No content
+     */
+    deletePricing(id: number): Promise<void> {
+        let url_ = this.baseUrl + "/product/{id}/pricing";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "DELETE",
+            headers: {
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processDeletePricing(_response);
+        });
+    }
+
+    protected processDeletePricing(response: Response): Promise<void> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 204) {
+            return response.text().then((_responseText) => {
+            return;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<void>(null as any);
+    }
+
+    /**
+     * @param id Product id
+     * @param body Skip and take to allow for pagination
+     * @return Ok
+     */
+    getProductContracts(id: number, body: PaginationParams): Promise<ProductInstanceListResponse> {
+        let url_ = this.baseUrl + "/product/{id}/contracts";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_: RequestInit = {
+            body: content_,
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processGetProductContracts(_response);
+        });
+    }
+
+    protected processGetProductContracts(response: Response): Promise<ProductInstanceListResponse> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = ProductInstanceListResponse.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<ProductInstanceListResponse>(null as any);
+    }
+
+    /**
+     * @param id Product id
+     * @param body Skip and take to allow for pagination
+     * @return Ok
+     */
+    getProductInvoices(id: number, body: PaginationParams): Promise<ProductInstanceListResponse> {
+        let url_ = this.baseUrl + "/product/{id}/invoices";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_: RequestInit = {
+            body: content_,
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processGetProductInvoices(_response);
+        });
+    }
+
+    protected processGetProductInvoices(response: Response): Promise<ProductInstanceListResponse> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = ProductInstanceListResponse.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<ProductInstanceListResponse>(null as any);
+    }
+
+    /**
+     * @return Ok
+     */
+    getProductStatistics(id: number): Promise<AnalysisResultByYear[]> {
+        let url_ = this.baseUrl + "/product/{id}/statistics";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processGetProductStatistics(_response);
+        });
+    }
+
+    protected processGetProductStatistics(response: Response): Promise<AnalysisResultByYear[]> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(AnalysisResultByYear.fromJS(item));
+            }
+            else {
+                result200 = <any>null;
+            }
+            return result200;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<AnalysisResultByYear[]>(null as any);
+    }
+
+    /**
+     * @param file The file to upload
+     * @param name The name of the new file, as seen in the UI
+     * @return Ok
+     */
+    uploadProductFile(file: FileParameter, name: string): Promise<ProductFile> {
+        let url_ = this.baseUrl + "/product/{id}/file/upload";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = new FormData();
+        if (file === null || file === undefined)
+            throw new Error("The parameter 'file' cannot be null.");
+        else
+            content_.append("file", file.data, file.fileName ? file.fileName : "file");
+        if (name === null || name === undefined)
+            throw new Error("The parameter 'name' cannot be null.");
+        else
+            content_.append("name", name.toString());
+
+        let options_: RequestInit = {
+            body: content_,
+            method: "POST",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processUploadProductFile(_response);
+        });
+    }
+
+    protected processUploadProductFile(response: Response): Promise<ProductFile> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = ProductFile.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<ProductFile>(null as any);
+    }
+
+    /**
+     * @param id ID of the product
+     * @param fileId ID of the file
+     * @return Ok
+     */
+    getProductFile(id: number, fileId: number): Promise<any> {
+        let url_ = this.baseUrl + "/product/{id}/file/{fileId}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        if (fileId === undefined || fileId === null)
+            throw new Error("The parameter 'fileId' must be defined.");
+        url_ = url_.replace("{fileId}", encodeURIComponent("" + fileId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processGetProductFile(_response);
+        });
+    }
+
+    protected processGetProductFile(response: Response): Promise<any> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = resultData200 !== undefined ? resultData200 : <any>null;
+
+            return result200;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<any>(null as any);
+    }
+
+    /**
+     * @param id ID of the product
+     * @param fileId ID of the file
+     * @param body Update subset of the parameters of the file
+     * @return Ok
+     */
+    updateProductFile(id: number, fileId: number, body: Partial_FileParams): Promise<BaseFile> {
+        let url_ = this.baseUrl + "/product/{id}/file/{fileId}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        if (fileId === undefined || fileId === null)
+            throw new Error("The parameter 'fileId' must be defined.");
+        url_ = url_.replace("{fileId}", encodeURIComponent("" + fileId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_: RequestInit = {
+            body: content_,
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processUpdateProductFile(_response);
+        });
+    }
+
+    protected processUpdateProductFile(response: Response): Promise<BaseFile> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = BaseFile.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<BaseFile>(null as any);
+    }
+
+    /**
+     * @param id ID of the product
+     * @param fileId ID of the file
+     * @return No content
+     */
+    deleteProductFile(id: number, fileId: number): Promise<void> {
+        let url_ = this.baseUrl + "/product/{id}/file/{fileId}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        if (fileId === undefined || fileId === null)
+            throw new Error("The parameter 'fileId' must be defined.");
+        url_ = url_.replace("{fileId}", encodeURIComponent("" + fileId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "DELETE",
+            headers: {
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processDeleteProductFile(_response);
+        });
+    }
+
+    protected processDeleteProductFile(response: Response): Promise<void> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 204) {
+            return response.text().then((_responseText) => {
+            return;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<void>(null as any);
+    }
+
+    /**
+     * @param id ID of the product
+     * @param body Parameters to create this comment with
+     * @return Ok
+     */
+    addProductComment(id: number, body: ActivityParams): Promise<BaseActivity> {
+        let url_ = this.baseUrl + "/product/{id}/comment";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_: RequestInit = {
+            body: content_,
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processAddProductComment(_response);
+        });
+    }
+
+    protected processAddProductComment(response: Response): Promise<BaseActivity> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = BaseActivity.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<BaseActivity>(null as any);
+    }
+
+    /**
+     * @param id ID of the product
+     * @param activityId ID of the activity
+     * @param body Update subset of parameter of comment activity
+     * @return Ok
+     */
+    updateProductActivity(id: number, activityId: number, body: Partial_ActivityParams): Promise<BaseActivity> {
+        let url_ = this.baseUrl + "/product/{id}/activity/{activityId}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        if (activityId === undefined || activityId === null)
+            throw new Error("The parameter 'activityId' must be defined.");
+        url_ = url_.replace("{activityId}", encodeURIComponent("" + activityId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_: RequestInit = {
+            body: content_,
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processUpdateProductActivity(_response);
+        });
+    }
+
+    protected processUpdateProductActivity(response: Response): Promise<BaseActivity> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = BaseActivity.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<BaseActivity>(null as any);
+    }
+
+    /**
+     * @param id ID of the product
+     * @param activityId ID of the activity
+     * @return No content
+     */
+    deleteProductActivity(id: number, activityId: number): Promise<void> {
+        let url_ = this.baseUrl + "/product/{id}/activity/{activityId}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        if (activityId === undefined || activityId === null)
+            throw new Error("The parameter 'activityId' must be defined.");
+        url_ = url_.replace("{activityId}", encodeURIComponent("" + activityId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "DELETE",
+            headers: {
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processDeleteProductActivity(_response);
+        });
+    }
+
+    protected processDeleteProductActivity(response: Response): Promise<void> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 204) {
+            return response.text().then((_responseText) => {
+            return;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<void>(null as any);
+    }
+
+    /**
+     * @param year Financial year of the overview
+     * @return Ok
+     */
+    getDashboardProductInstanceStatistics(year: number): Promise<DashboardProductInstanceStats> {
+        let url_ = this.baseUrl + "/product/stats/statuses/{year}";
+        if (year === undefined || year === null)
+            throw new Error("The parameter 'year' must be defined.");
+        url_ = url_.replace("{year}", encodeURIComponent("" + year));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processGetDashboardProductInstanceStatistics(_response);
+        });
+    }
+
+    protected processGetDashboardProductInstanceStatistics(response: Response): Promise<DashboardProductInstanceStats> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = DashboardProductInstanceStats.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<DashboardProductInstanceStats>(null as any);
+    }
+
+    /**
+     * @return Ok
+     */
+    getAllRoles(): Promise<Role[]> {
+        let url_ = this.baseUrl + "/role";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processGetAllRoles(_response);
+        });
+    }
+
+    protected processGetAllRoles(response: Response): Promise<Role[]> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(Role.fromJS(item));
+            }
+            else {
+                result200 = <any>null;
+            }
+            return result200;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<Role[]>(null as any);
+    }
+
+    /**
+     * @return Ok
+     */
+    getRole(id: string): Promise<Role> {
+        let url_ = this.baseUrl + "/role/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processGetRole(_response);
+        });
+    }
+
+    protected processGetRole(response: Response): Promise<Role> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = Role.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<Role>(null as any);
+    }
+
+    /**
+     * @return Ok
+     */
+    updateRole(id: string, body: Partial_RoleParams): Promise<Role> {
+        let url_ = this.baseUrl + "/role/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_: RequestInit = {
+            body: content_,
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processUpdateRole(_response);
+        });
+    }
+
+    protected processUpdateRole(response: Response): Promise<Role> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = Role.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<Role>(null as any);
+    }
+
+    /**
+     * @return No content
+     */
+    postSetup(body: SetupParams): Promise<void> {
+        let url_ = this.baseUrl + "/setup";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_: RequestInit = {
+            body: content_,
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processPostSetup(_response);
+        });
+    }
+
+    protected processPostSetup(response: Response): Promise<void> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 204) {
+            return response.text().then((_responseText) => {
+            return;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<void>(null as any);
+    }
+
+    /**
+     * @return Ok
+     */
+    getAuthStatus(): Promise<AuthStatus> {
+        let url_ = this.baseUrl + "/authStatus";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processGetAuthStatus(_response);
+        });
+    }
+
+    protected processGetAuthStatus(response: Response): Promise<AuthStatus> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = AuthStatus.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<AuthStatus>(null as any);
+    }
+
+    /**
+     * @return Ok
+     */
+    getProfile(): Promise<Profile> {
+        let url_ = this.baseUrl + "/profile";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processGetProfile(_response);
+        });
+    }
+
+    protected processGetProfile(response: Response): Promise<Profile> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = Profile.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            let result401: any = null;
+            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result401 = WrappedApiError.fromJS(resultData401);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<Profile>(null as any);
+    }
+
+    /**
+     * @return No content
+     */
+    logout(): Promise<void> {
+        let url_ = this.baseUrl + "/logout";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "POST",
+            headers: {
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processLogout(_response);
+        });
+    }
+
+    protected processLogout(response: Response): Promise<void> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 204) {
+            return response.text().then((_responseText) => {
+            return;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<void>(null as any);
+    }
+
+    /**
+     * @return No content
+     */
+    forgotPassword(email: string): Promise<void> {
+        let url_ = this.baseUrl + "/forgotPassword?";
+        if (email === undefined || email === null)
+            throw new Error("The parameter 'email' must be defined and cannot be null.");
+        else
+            url_ += "email=" + encodeURIComponent("" + email) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "POST",
+            headers: {
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processForgotPassword(_response);
+        });
+    }
+
+    protected processForgotPassword(response: Response): Promise<void> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 204) {
+            return response.text().then((_responseText) => {
+            return;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<void>(null as any);
+    }
+
+    /**
+     * @return No content
+     */
+    resetPassword(body: ResetPasswordRequest): Promise<void> {
+        let url_ = this.baseUrl + "/resetPassword";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_: RequestInit = {
+            body: content_,
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processResetPassword(_response);
+        });
+    }
+
+    protected processResetPassword(response: Response): Promise<void> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 204) {
+            return response.text().then((_responseText) => {
+            return;
+            });
+        } else if (status === 400) {
+            return response.text().then((_responseText) => {
+            let result400: any = null;
+            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result400 = WrappedApiError.fromJS(resultData400);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result400);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<void>(null as any);
+    }
+
+    /**
+     * @return Ok
+     */
+    generateApiKey(): Promise<string> {
+        let url_ = this.baseUrl + "/generateApiKey";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "POST",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processGenerateApiKey(_response);
+        });
+    }
+
+    protected processGenerateApiKey(response: Response): Promise<string> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = resultData200 !== undefined ? resultData200 : <any>null;
+
+            return result200;
+            });
+        } else if (status === 400) {
+            return response.text().then((_responseText) => {
+            let result400: any = null;
+            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result400 = WrappedApiError.fromJS(resultData400);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result400);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<string>(null as any);
+    }
+
+    /**
+     * @return Ok
+     */
+    getApiKey(): Promise<string> {
+        let url_ = this.baseUrl + "/getApiKey";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processGetApiKey(_response);
+        });
+    }
+
+    protected processGetApiKey(response: Response): Promise<string> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = resultData200 !== undefined ? resultData200 : <any>null;
+
+            return result200;
+            });
+        } else if (status === 400) {
+            return response.text().then((_responseText) => {
+            let result400: any = null;
+            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result400 = WrappedApiError.fromJS(resultData400);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result400);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<string>(null as any);
+    }
+
+    /**
+     * @return No content
+     */
+    revokeApiKey(): Promise<void> {
+        let url_ = this.baseUrl + "/revokeApiKey";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "POST",
+            headers: {
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processRevokeApiKey(_response);
+        });
+    }
+
+    protected processRevokeApiKey(response: Response): Promise<void> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 204) {
+            return response.text().then((_responseText) => {
+            return;
+            });
+        } else if (status === 400) {
+            return response.text().then((_responseText) => {
+            let result400: any = null;
+            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result400 = WrappedApiError.fromJS(resultData400);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result400);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<void>(null as any);
+    }
+
+    /**
+     * @return Ok
+     */
+    getPrivateGeneralInfo(): Promise<GeneralPrivateInfo> {
+        let url_ = this.baseUrl + "/getPrivateGeneralInfo";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processGetPrivateGeneralInfo(_response);
+        });
+    }
+
+    protected processGetPrivateGeneralInfo(response: Response): Promise<GeneralPrivateInfo> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = GeneralPrivateInfo.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status === 400) {
+            return response.text().then((_responseText) => {
+            let result400: any = null;
+            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result400 = WrappedApiError.fromJS(resultData400);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result400);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<GeneralPrivateInfo>(null as any);
+    }
+
+    /**
+     * @return Ok
+     */
+    getPublicGeneralInfo(): Promise<GeneralPublicInfo> {
+        let url_ = this.baseUrl + "/getPublicGeneralInfo";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processGetPublicGeneralInfo(_response);
+        });
+    }
+
+    protected processGetPublicGeneralInfo(response: Response): Promise<GeneralPublicInfo> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = GeneralPublicInfo.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status === 400) {
+            return response.text().then((_responseText) => {
+            let result400: any = null;
+            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result400 = WrappedApiError.fromJS(resultData400);
+            return throwException("A server side error occurred.", status, _responseText, _headers, result400);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<GeneralPublicInfo>(null as any);
     }
 
     /**
@@ -5703,8 +6194,8 @@ export class Client {
      * @param body List parameters to sort and filter the list
      * @return Ok
      */
-    getAllCategories(body: ListParams): Promise<CategoryListResponse> {
-        let url_ = this.baseUrl + "/category/table";
+    getAllVAT(body: ListParams): Promise<VATListResponse> {
+        let url_ = this.baseUrl + "/VAT/table";
         url_ = url_.replace(/[?&]$/, "");
 
         const content_ = JSON.stringify(body);
@@ -5719,18 +6210,18 @@ export class Client {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processGetAllCategories(_response);
+            return this.processGetAllVAT(_response);
         });
     }
 
-    protected processGetAllCategories(response: Response): Promise<CategoryListResponse> {
+    protected processGetAllVAT(response: Response): Promise<VATListResponse> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = CategoryListResponse.fromJS(resultData200);
+            result200 = VATListResponse.fromJS(resultData200);
             return result200;
             });
         } else if (status === 401) {
@@ -5745,14 +6236,14 @@ export class Client {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<CategoryListResponse>(null as any);
+        return Promise.resolve<VATListResponse>(null as any);
     }
 
     /**
      * @return Ok
      */
-    getCategorySummaries(): Promise<CategorySummary[]> {
-        let url_ = this.baseUrl + "/category/compact";
+    getVATSummaries(): Promise<VATSummary[]> {
+        let url_ = this.baseUrl + "/VAT/compact";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_: RequestInit = {
@@ -5763,11 +6254,11 @@ export class Client {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processGetCategorySummaries(_response);
+            return this.processGetVATSummaries(_response);
         });
     }
 
-    protected processGetCategorySummaries(response: Response): Promise<CategorySummary[]> {
+    protected processGetVATSummaries(response: Response): Promise<VATSummary[]> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -5777,7 +6268,7 @@ export class Client {
             if (Array.isArray(resultData200)) {
                 result200 = [] as any;
                 for (let item of resultData200)
-                    result200!.push(CategorySummary.fromJS(item));
+                    result200!.push(VATSummary.fromJS(item));
             }
             else {
                 result200 = <any>null;
@@ -5796,64 +6287,15 @@ export class Client {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<CategorySummary[]>(null as any);
+        return Promise.resolve<VATSummary[]>(null as any);
     }
 
     /**
-     * @param body Parameters to create category with
+     * @param id ID of the VAT
      * @return Ok
      */
-    createCategory(body: CategoryParams): Promise<ProductCategory> {
-        let url_ = this.baseUrl + "/category";
-        url_ = url_.replace(/[?&]$/, "");
-
-        const content_ = JSON.stringify(body);
-
-        let options_: RequestInit = {
-            body: content_,
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "Accept": "application/json"
-            }
-        };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processCreateCategory(_response);
-        });
-    }
-
-    protected processCreateCategory(response: Response): Promise<ProductCategory> {
-        const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
-        if (status === 200) {
-            return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = ProductCategory.fromJS(resultData200);
-            return result200;
-            });
-        } else if (status === 401) {
-            return response.text().then((_responseText) => {
-            let result401: any = null;
-            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result401 = WrappedApiError.fromJS(resultData401);
-            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            });
-        }
-        return Promise.resolve<ProductCategory>(null as any);
-    }
-
-    /**
-     * @param id ID of the category
-     * @return Ok
-     */
-    getCategory(id: number): Promise<ProductCategory> {
-        let url_ = this.baseUrl + "/category/{id}";
+    getVAT(id: number): Promise<ValueAddedTax> {
+        let url_ = this.baseUrl + "/VAT/{id}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
         url_ = url_.replace("{id}", encodeURIComponent("" + id));
@@ -5867,18 +6309,18 @@ export class Client {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processGetCategory(_response);
+            return this.processGetVAT(_response);
         });
     }
 
-    protected processGetCategory(response: Response): Promise<ProductCategory> {
+    protected processGetVAT(response: Response): Promise<ValueAddedTax> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = ProductCategory.fromJS(resultData200);
+            result200 = ValueAddedTax.fromJS(resultData200);
             return result200;
             });
         } else if (status === 401) {
@@ -5893,16 +6335,16 @@ export class Client {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<ProductCategory>(null as any);
+        return Promise.resolve<ValueAddedTax>(null as any);
     }
 
     /**
-     * @param id ID of the category
-     * @param body Update subset of parameter of category
+     * @param id ID of the VAT
+     * @param body Update subset of parameter of VAT
      * @return Ok
      */
-    updateCategory(id: number, body: Partial_CategoryParams): Promise<ProductCategory> {
-        let url_ = this.baseUrl + "/category/{id}";
+    updateVAT(id: number, body: Partial_VATParams): Promise<ValueAddedTax> {
+        let url_ = this.baseUrl + "/VAT/{id}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
         url_ = url_.replace("{id}", encodeURIComponent("" + id));
@@ -5920,18 +6362,18 @@ export class Client {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processUpdateCategory(_response);
+            return this.processUpdateVAT(_response);
         });
     }
 
-    protected processUpdateCategory(response: Response): Promise<ProductCategory> {
+    protected processUpdateVAT(response: Response): Promise<ValueAddedTax> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = ProductCategory.fromJS(resultData200);
+            result200 = ValueAddedTax.fromJS(resultData200);
             return result200;
             });
         } else if (status === 401) {
@@ -5946,248 +6388,7 @@ export class Client {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<ProductCategory>(null as any);
-    }
-
-    /**
-     * @param id ID of the category
-     * @return No content
-     */
-    deleteCategory(id: number): Promise<void> {
-        let url_ = this.baseUrl + "/category/{id}";
-        if (id === undefined || id === null)
-            throw new Error("The parameter 'id' must be defined.");
-        url_ = url_.replace("{id}", encodeURIComponent("" + id));
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_: RequestInit = {
-            method: "DELETE",
-            headers: {
-            }
-        };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processDeleteCategory(_response);
-        });
-    }
-
-    protected processDeleteCategory(response: Response): Promise<void> {
-        const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
-        if (status === 204) {
-            return response.text().then((_responseText) => {
-            return;
-            });
-        } else if (status === 401) {
-            return response.text().then((_responseText) => {
-            let result401: any = null;
-            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result401 = WrappedApiError.fromJS(resultData401);
-            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            });
-        }
-        return Promise.resolve<void>(null as any);
-    }
-
-    /**
-     * @param year Financial year of the overview
-     * @return Ok
-     */
-    getContractedProductsStatistics(year: number): Promise<ContractedProductsAnalysis> {
-        let url_ = this.baseUrl + "/category/stats/contracted/{year}";
-        if (year === undefined || year === null)
-            throw new Error("The parameter 'year' must be defined.");
-        url_ = url_.replace("{year}", encodeURIComponent("" + year));
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_: RequestInit = {
-            method: "GET",
-            headers: {
-                "Accept": "application/json"
-            }
-        };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processGetContractedProductsStatistics(_response);
-        });
-    }
-
-    protected processGetContractedProductsStatistics(response: Response): Promise<ContractedProductsAnalysis> {
-        const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
-        if (status === 200) {
-            return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = ContractedProductsAnalysis.fromJS(resultData200);
-            return result200;
-            });
-        } else if (status === 401) {
-            return response.text().then((_responseText) => {
-            let result401: any = null;
-            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result401 = WrappedApiError.fromJS(resultData401);
-            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            });
-        }
-        return Promise.resolve<ContractedProductsAnalysis>(null as any);
-    }
-
-    /**
-     * @return Ok
-     */
-    getAllRoles(): Promise<Role[]> {
-        let url_ = this.baseUrl + "/role";
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_: RequestInit = {
-            method: "GET",
-            headers: {
-                "Accept": "application/json"
-            }
-        };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processGetAllRoles(_response);
-        });
-    }
-
-    protected processGetAllRoles(response: Response): Promise<Role[]> {
-        const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
-        if (status === 200) {
-            return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            if (Array.isArray(resultData200)) {
-                result200 = [] as any;
-                for (let item of resultData200)
-                    result200!.push(Role.fromJS(item));
-            }
-            else {
-                result200 = <any>null;
-            }
-            return result200;
-            });
-        } else if (status === 401) {
-            return response.text().then((_responseText) => {
-            let result401: any = null;
-            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result401 = WrappedApiError.fromJS(resultData401);
-            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            });
-        }
-        return Promise.resolve<Role[]>(null as any);
-    }
-
-    /**
-     * @return Ok
-     */
-    getRole(id: string): Promise<Role> {
-        let url_ = this.baseUrl + "/role/{id}";
-        if (id === undefined || id === null)
-            throw new Error("The parameter 'id' must be defined.");
-        url_ = url_.replace("{id}", encodeURIComponent("" + id));
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_: RequestInit = {
-            method: "GET",
-            headers: {
-                "Accept": "application/json"
-            }
-        };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processGetRole(_response);
-        });
-    }
-
-    protected processGetRole(response: Response): Promise<Role> {
-        const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
-        if (status === 200) {
-            return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = Role.fromJS(resultData200);
-            return result200;
-            });
-        } else if (status === 401) {
-            return response.text().then((_responseText) => {
-            let result401: any = null;
-            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result401 = WrappedApiError.fromJS(resultData401);
-            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            });
-        }
-        return Promise.resolve<Role>(null as any);
-    }
-
-    /**
-     * @return Ok
-     */
-    updateRole(id: string, body: Partial_RoleParams): Promise<Role> {
-        let url_ = this.baseUrl + "/role/{id}";
-        if (id === undefined || id === null)
-            throw new Error("The parameter 'id' must be defined.");
-        url_ = url_.replace("{id}", encodeURIComponent("" + id));
-        url_ = url_.replace(/[?&]$/, "");
-
-        const content_ = JSON.stringify(body);
-
-        let options_: RequestInit = {
-            body: content_,
-            method: "PUT",
-            headers: {
-                "Content-Type": "application/json",
-                "Accept": "application/json"
-            }
-        };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processUpdateRole(_response);
-        });
-    }
-
-    protected processUpdateRole(response: Response): Promise<Role> {
-        const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
-        if (status === 200) {
-            return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = Role.fromJS(resultData200);
-            return result200;
-            });
-        } else if (status === 401) {
-            return response.text().then((_responseText) => {
-            let result401: any = null;
-            let resultData401 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result401 = WrappedApiError.fromJS(resultData401);
-            return throwException("A server side error occurred.", status, _responseText, _headers, result401);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            });
-        }
-        return Promise.resolve<Role>(null as any);
+        return Promise.resolve<ValueAddedTax>(null as any);
     }
 
     /**
@@ -6287,113 +6488,52 @@ export class Client {
     }
 }
 
-export enum Gender {
-    MALE = "MALE",
-    FEMALE = "FEMALE",
-    OTHER = "OTHER",
-    UNKNOWN = "UNKNOWN",
+export enum CompanyStatus {
+    ACTIVE = "ACTIVE",
+    INACTIVE = "INACTIVE",
 }
 
-export enum Roles {
-    SIGNEE = "SIGNEE",
-    FINANCIAL = "FINANCIAL",
-    ADMIN = "ADMIN",
-    GENERAL = "GENERAL",
-    AUDIT = "AUDIT",
-}
+export class Company implements ICompany {
+    /** Incremental ID of the entity */
+    id!: number;
+    /** Date at which this entity has been created */
+    createdAt!: Date;
+    /** Date at which this entity has last been updated */
+    updatedAt!: Date;
+    /** If this entity has been soft-deleted, this is the date at which the entity has been deleted */
+    deletedAt?: Date;
+    /** Version number of this entity */
+    version!: number;
+    /** Name of the company */
+    name!: string;
+    addressStreet!: string;
+    addressPostalCode!: string;
+    addressCity!: string;
+    addressCountry!: string;
+    invoiceAddressStreet!: string;
+    invoiceAddressPostalCode!: string;
+    invoiceAddressCity!: string;
+    invoiceAddressCountry!: string;
+    /** Status of the collaboration with this company */
+    status!: CompanyStatus;
+    /** General phone number of the company */
+    phoneNumber?: string;
+    /** Optional filename of a logo image */
+    logoFilename!: string;
+    /** Comments regarding the company */
+    comments?: string;
+    /** All contracts related to this company */
+    contracts!: Contract[];
+    /** All invoices related to this company */
+    invoices!: Invoice[];
+    /** All contact persons related to this company */
+    contacts!: Contact[];
+    /** All updates / activities regarding this company */
+    activities!: CompanyActivity[];
+    /** All files regarding this company */
+    files!: CompanyFile[];
 
-export class UserParams implements IUserParams {
-    email!: string;
-    firstName!: string;
-    lastNamePreposition?: string;
-    lastName!: string;
-    function!: string;
-    gender!: Gender;
-    replyToEmail?: string;
-    receiveEmails?: boolean;
-    sendEmailsToReplyToEmail?: boolean;
-    comment?: string;
-    ldapOverrideEmail?: boolean;
-    roles?: Roles[];
-
-    constructor(data?: IUserParams) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.email = _data["email"];
-            this.firstName = _data["firstName"];
-            this.lastNamePreposition = _data["lastNamePreposition"];
-            this.lastName = _data["lastName"];
-            this.function = _data["function"];
-            this.gender = _data["gender"];
-            this.replyToEmail = _data["replyToEmail"];
-            this.receiveEmails = _data["receiveEmails"];
-            this.sendEmailsToReplyToEmail = _data["sendEmailsToReplyToEmail"];
-            this.comment = _data["comment"];
-            this.ldapOverrideEmail = _data["ldapOverrideEmail"];
-            if (Array.isArray(_data["roles"])) {
-                this.roles = [] as any;
-                for (let item of _data["roles"])
-                    this.roles!.push(item);
-            }
-        }
-    }
-
-    static fromJS(data: any): UserParams {
-        data = typeof data === 'object' ? data : {};
-        let result = new UserParams();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["email"] = this.email;
-        data["firstName"] = this.firstName;
-        data["lastNamePreposition"] = this.lastNamePreposition;
-        data["lastName"] = this.lastName;
-        data["function"] = this.function;
-        data["gender"] = this.gender;
-        data["replyToEmail"] = this.replyToEmail;
-        data["receiveEmails"] = this.receiveEmails;
-        data["sendEmailsToReplyToEmail"] = this.sendEmailsToReplyToEmail;
-        data["comment"] = this.comment;
-        data["ldapOverrideEmail"] = this.ldapOverrideEmail;
-        if (Array.isArray(this.roles)) {
-            data["roles"] = [];
-            for (let item of this.roles)
-                data["roles"].push(item);
-        }
-        return data;
-    }
-}
-
-export interface IUserParams {
-    email: string;
-    firstName: string;
-    lastNamePreposition?: string;
-    lastName: string;
-    function: string;
-    gender: Gender;
-    replyToEmail?: string;
-    receiveEmails?: boolean;
-    sendEmailsToReplyToEmail?: boolean;
-    comment?: string;
-    ldapOverrideEmail?: boolean;
-    roles?: Roles[];
-}
-
-export class SetupParams implements ISetupParams {
-    admin!: UserParams;
-
-    constructor(data?: ISetupParams) {
+    constructor(data?: ICompany) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -6401,68 +6541,696 @@ export class SetupParams implements ISetupParams {
             }
         }
         if (!data) {
-            this.admin = new UserParams();
+            this.contracts = [];
+            this.invoices = [];
+            this.contacts = [];
+            this.activities = [];
+            this.files = [];
         }
     }
 
     init(_data?: any) {
         if (_data) {
-            this.admin = _data["admin"] ? UserParams.fromJS(_data["admin"]) : new UserParams();
+            this.id = _data["id"];
+            this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
+            this.updatedAt = _data["updatedAt"] ? new Date(_data["updatedAt"].toString()) : <any>undefined;
+            this.deletedAt = _data["deletedAt"] ? new Date(_data["deletedAt"].toString()) : <any>undefined;
+            this.version = _data["version"];
+            this.name = _data["name"];
+            this.addressStreet = _data["addressStreet"];
+            this.addressPostalCode = _data["addressPostalCode"];
+            this.addressCity = _data["addressCity"];
+            this.addressCountry = _data["addressCountry"];
+            this.invoiceAddressStreet = _data["invoiceAddressStreet"];
+            this.invoiceAddressPostalCode = _data["invoiceAddressPostalCode"];
+            this.invoiceAddressCity = _data["invoiceAddressCity"];
+            this.invoiceAddressCountry = _data["invoiceAddressCountry"];
+            this.status = _data["status"];
+            this.phoneNumber = _data["phoneNumber"];
+            this.logoFilename = _data["logoFilename"];
+            this.comments = _data["comments"];
+            if (Array.isArray(_data["contracts"])) {
+                this.contracts = [] as any;
+                for (let item of _data["contracts"])
+                    this.contracts!.push(Contract.fromJS(item));
+            }
+            if (Array.isArray(_data["invoices"])) {
+                this.invoices = [] as any;
+                for (let item of _data["invoices"])
+                    this.invoices!.push(Invoice.fromJS(item));
+            }
+            if (Array.isArray(_data["contacts"])) {
+                this.contacts = [] as any;
+                for (let item of _data["contacts"])
+                    this.contacts!.push(Contact.fromJS(item));
+            }
+            if (Array.isArray(_data["activities"])) {
+                this.activities = [] as any;
+                for (let item of _data["activities"])
+                    this.activities!.push(CompanyActivity.fromJS(item));
+            }
+            if (Array.isArray(_data["files"])) {
+                this.files = [] as any;
+                for (let item of _data["files"])
+                    this.files!.push(CompanyFile.fromJS(item));
+            }
         }
     }
 
-    static fromJS(data: any): SetupParams {
+    static fromJS(data: any): Company {
         data = typeof data === 'object' ? data : {};
-        let result = new SetupParams();
+        let result = new Company();
         result.init(data);
         return result;
     }
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["admin"] = this.admin ? this.admin.toJSON() : <any>undefined;
+        data["id"] = this.id;
+        data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
+        data["updatedAt"] = this.updatedAt ? this.updatedAt.toISOString() : <any>undefined;
+        data["deletedAt"] = this.deletedAt ? this.deletedAt.toISOString() : <any>undefined;
+        data["version"] = this.version;
+        data["name"] = this.name;
+        data["addressStreet"] = this.addressStreet;
+        data["addressPostalCode"] = this.addressPostalCode;
+        data["addressCity"] = this.addressCity;
+        data["addressCountry"] = this.addressCountry;
+        data["invoiceAddressStreet"] = this.invoiceAddressStreet;
+        data["invoiceAddressPostalCode"] = this.invoiceAddressPostalCode;
+        data["invoiceAddressCity"] = this.invoiceAddressCity;
+        data["invoiceAddressCountry"] = this.invoiceAddressCountry;
+        data["status"] = this.status;
+        data["phoneNumber"] = this.phoneNumber;
+        data["logoFilename"] = this.logoFilename;
+        data["comments"] = this.comments;
+        if (Array.isArray(this.contracts)) {
+            data["contracts"] = [];
+            for (let item of this.contracts)
+                data["contracts"].push(item.toJSON());
+        }
+        if (Array.isArray(this.invoices)) {
+            data["invoices"] = [];
+            for (let item of this.invoices)
+                data["invoices"].push(item.toJSON());
+        }
+        if (Array.isArray(this.contacts)) {
+            data["contacts"] = [];
+            for (let item of this.contacts)
+                data["contacts"].push(item.toJSON());
+        }
+        if (Array.isArray(this.activities)) {
+            data["activities"] = [];
+            for (let item of this.activities)
+                data["activities"].push(item.toJSON());
+        }
+        if (Array.isArray(this.files)) {
+            data["files"] = [];
+            for (let item of this.files)
+                data["files"].push(item.toJSON());
+        }
         return data;
     }
 }
 
-export interface ISetupParams {
-    admin: UserParams;
+export interface ICompany {
+    /** Incremental ID of the entity */
+    id: number;
+    /** Date at which this entity has been created */
+    createdAt: Date;
+    /** Date at which this entity has last been updated */
+    updatedAt: Date;
+    /** If this entity has been soft-deleted, this is the date at which the entity has been deleted */
+    deletedAt?: Date;
+    /** Version number of this entity */
+    version: number;
+    /** Name of the company */
+    name: string;
+    addressStreet: string;
+    addressPostalCode: string;
+    addressCity: string;
+    addressCountry: string;
+    invoiceAddressStreet: string;
+    invoiceAddressPostalCode: string;
+    invoiceAddressCity: string;
+    invoiceAddressCountry: string;
+    /** Status of the collaboration with this company */
+    status: CompanyStatus;
+    /** General phone number of the company */
+    phoneNumber?: string;
+    /** Optional filename of a logo image */
+    logoFilename: string;
+    /** Comments regarding the company */
+    comments?: string;
+    /** All contracts related to this company */
+    contracts: Contract[];
+    /** All invoices related to this company */
+    invoices: Invoice[];
+    /** All contact persons related to this company */
+    contacts: Contact[];
+    /** All updates / activities regarding this company */
+    activities: CompanyActivity[];
+    /** All files regarding this company */
+    files: CompanyFile[];
 }
 
-export class AuthStatus implements IAuthStatus {
-    authenticated!: boolean;
+export enum ProductStatus {
+    ACTIVE = "ACTIVE",
+    INACTIVE = "INACTIVE",
+}
 
-    constructor(data?: IAuthStatus) {
+export enum VAT {
+    ZERO = "ZERO",
+    LOW = "LOW",
+    HIGH = "HIGH",
+}
+
+export class Product implements IProduct {
+    /** Incremental ID of the entity */
+    id!: number;
+    /** Date at which this entity has been created */
+    createdAt!: Date;
+    /** Date at which this entity has last been updated */
+    updatedAt!: Date;
+    /** If this entity has been soft-deleted, this is the date at which the entity has been deleted */
+    deletedAt?: Date;
+    /** Version number of this entity */
+    version!: number;
+    /** Dutch name of the product */
+    nameDutch!: string;
+    /** English name of the product */
+    nameEnglish!: string;
+    /** Price is stored * 100 and as integer */
+    targetPrice!: number;
+    /** Status of the collaboration with this company */
+    status!: ProductStatus;
+    /** Description of the product, only used within the application */
+    description!: string;
+    /** Text that should be used on generated PDF files, in Dutch */
+    contractTextDutch!: string;
+    /** Text that should be used on generated PDF files, in English */
+    contractTextEnglish!: string;
+    /** Delivery attachment text used on the PDF file, in Dutch */
+    deliverySpecificationDutch?: string;
+    /** Delivery attachment text used on the PDF file, in English */
+    deliverySpecificationEnglish?: string;
+    vatId!: number;
+    categoryId!: number;
+    /** Target minimum amount contracted for this product */
+    minTarget!: number;
+    /** Target maximum amount contracted for this product */
+    maxTarget!: number;
+    /** VAT category this product is in */
+    valueAddedTax!: ValueAddedTax;
+    /** Category this product is in */
+    category!: ProductCategory;
+    /** All the product instances of this product, used in contracts and invoiced */
+    instances!: ProductInstance[];
+    /** All activities regarding this product */
+    activities!: ProductActivity[];
+    /** All files regarding this product */
+    files!: ProductFile[];
+    /** Optional ProductPricing object */
+    pricing?: ProductPricing;
+
+    constructor(data?: IProduct) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
                     (<any>this)[property] = (<any>data)[property];
             }
         }
+        if (!data) {
+            this.valueAddedTax = new ValueAddedTax();
+            this.category = new ProductCategory();
+            this.instances = [];
+            this.activities = [];
+            this.files = [];
+        }
     }
 
     init(_data?: any) {
         if (_data) {
-            this.authenticated = _data["authenticated"];
+            this.id = _data["id"];
+            this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
+            this.updatedAt = _data["updatedAt"] ? new Date(_data["updatedAt"].toString()) : <any>undefined;
+            this.deletedAt = _data["deletedAt"] ? new Date(_data["deletedAt"].toString()) : <any>undefined;
+            this.version = _data["version"];
+            this.nameDutch = _data["nameDutch"];
+            this.nameEnglish = _data["nameEnglish"];
+            this.targetPrice = _data["targetPrice"];
+            this.status = _data["status"];
+            this.description = _data["description"];
+            this.contractTextDutch = _data["contractTextDutch"];
+            this.contractTextEnglish = _data["contractTextEnglish"];
+            this.deliverySpecificationDutch = _data["deliverySpecificationDutch"];
+            this.deliverySpecificationEnglish = _data["deliverySpecificationEnglish"];
+            this.vatId = _data["vatId"];
+            this.categoryId = _data["categoryId"];
+            this.minTarget = _data["minTarget"];
+            this.maxTarget = _data["maxTarget"];
+            this.valueAddedTax = _data["valueAddedTax"] ? ValueAddedTax.fromJS(_data["valueAddedTax"]) : new ValueAddedTax();
+            this.category = _data["category"] ? ProductCategory.fromJS(_data["category"]) : new ProductCategory();
+            if (Array.isArray(_data["instances"])) {
+                this.instances = [] as any;
+                for (let item of _data["instances"])
+                    this.instances!.push(ProductInstance.fromJS(item));
+            }
+            if (Array.isArray(_data["activities"])) {
+                this.activities = [] as any;
+                for (let item of _data["activities"])
+                    this.activities!.push(ProductActivity.fromJS(item));
+            }
+            if (Array.isArray(_data["files"])) {
+                this.files = [] as any;
+                for (let item of _data["files"])
+                    this.files!.push(ProductFile.fromJS(item));
+            }
+            this.pricing = _data["pricing"] ? ProductPricing.fromJS(_data["pricing"]) : <any>undefined;
         }
     }
 
-    static fromJS(data: any): AuthStatus {
+    static fromJS(data: any): Product {
         data = typeof data === 'object' ? data : {};
-        let result = new AuthStatus();
+        let result = new Product();
         result.init(data);
         return result;
     }
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["authenticated"] = this.authenticated;
+        data["id"] = this.id;
+        data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
+        data["updatedAt"] = this.updatedAt ? this.updatedAt.toISOString() : <any>undefined;
+        data["deletedAt"] = this.deletedAt ? this.deletedAt.toISOString() : <any>undefined;
+        data["version"] = this.version;
+        data["nameDutch"] = this.nameDutch;
+        data["nameEnglish"] = this.nameEnglish;
+        data["targetPrice"] = this.targetPrice;
+        data["status"] = this.status;
+        data["description"] = this.description;
+        data["contractTextDutch"] = this.contractTextDutch;
+        data["contractTextEnglish"] = this.contractTextEnglish;
+        data["deliverySpecificationDutch"] = this.deliverySpecificationDutch;
+        data["deliverySpecificationEnglish"] = this.deliverySpecificationEnglish;
+        data["vatId"] = this.vatId;
+        data["categoryId"] = this.categoryId;
+        data["minTarget"] = this.minTarget;
+        data["maxTarget"] = this.maxTarget;
+        data["valueAddedTax"] = this.valueAddedTax ? this.valueAddedTax.toJSON() : <any>undefined;
+        data["category"] = this.category ? this.category.toJSON() : <any>undefined;
+        if (Array.isArray(this.instances)) {
+            data["instances"] = [];
+            for (let item of this.instances)
+                data["instances"].push(item.toJSON());
+        }
+        if (Array.isArray(this.activities)) {
+            data["activities"] = [];
+            for (let item of this.activities)
+                data["activities"].push(item.toJSON());
+        }
+        if (Array.isArray(this.files)) {
+            data["files"] = [];
+            for (let item of this.files)
+                data["files"].push(item.toJSON());
+        }
+        data["pricing"] = this.pricing ? this.pricing.toJSON() : <any>undefined;
         return data;
     }
 }
 
-export interface IAuthStatus {
-    authenticated: boolean;
+export interface IProduct {
+    /** Incremental ID of the entity */
+    id: number;
+    /** Date at which this entity has been created */
+    createdAt: Date;
+    /** Date at which this entity has last been updated */
+    updatedAt: Date;
+    /** If this entity has been soft-deleted, this is the date at which the entity has been deleted */
+    deletedAt?: Date;
+    /** Version number of this entity */
+    version: number;
+    /** Dutch name of the product */
+    nameDutch: string;
+    /** English name of the product */
+    nameEnglish: string;
+    /** Price is stored * 100 and as integer */
+    targetPrice: number;
+    /** Status of the collaboration with this company */
+    status: ProductStatus;
+    /** Description of the product, only used within the application */
+    description: string;
+    /** Text that should be used on generated PDF files, in Dutch */
+    contractTextDutch: string;
+    /** Text that should be used on generated PDF files, in English */
+    contractTextEnglish: string;
+    /** Delivery attachment text used on the PDF file, in Dutch */
+    deliverySpecificationDutch?: string;
+    /** Delivery attachment text used on the PDF file, in English */
+    deliverySpecificationEnglish?: string;
+    vatId: number;
+    categoryId: number;
+    /** Target minimum amount contracted for this product */
+    minTarget: number;
+    /** Target maximum amount contracted for this product */
+    maxTarget: number;
+    /** VAT category this product is in */
+    valueAddedTax: ValueAddedTax;
+    /** Category this product is in */
+    category: ProductCategory;
+    /** All the product instances of this product, used in contracts and invoiced */
+    instances: ProductInstance[];
+    /** All activities regarding this product */
+    activities: ProductActivity[];
+    /** All files regarding this product */
+    files: ProductFile[];
+    /** Optional ProductPricing object */
+    pricing?: ProductPricing;
+}
+
+export class ValueAddedTax implements IValueAddedTax {
+    /** Incremental ID of the entity */
+    id!: number;
+    /** Date at which this entity has been created */
+    createdAt!: Date;
+    /** Date at which this entity has last been updated */
+    updatedAt!: Date;
+    /** If this entity has been soft-deleted, this is the date at which the entity has been deleted */
+    deletedAt?: Date;
+    /** Version number of this entity */
+    version!: number;
+    /** VAT category */
+    category!: VAT;
+    /** Price is stored * 100 and as integer */
+    amount!: number;
+    /** All products in this category */
+    products!: Product[];
+
+    constructor(data?: IValueAddedTax) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+        if (!data) {
+            this.products = [];
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
+            this.updatedAt = _data["updatedAt"] ? new Date(_data["updatedAt"].toString()) : <any>undefined;
+            this.deletedAt = _data["deletedAt"] ? new Date(_data["deletedAt"].toString()) : <any>undefined;
+            this.version = _data["version"];
+            this.category = _data["category"];
+            this.amount = _data["amount"];
+            if (Array.isArray(_data["products"])) {
+                this.products = [] as any;
+                for (let item of _data["products"])
+                    this.products!.push(Product.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): ValueAddedTax {
+        data = typeof data === 'object' ? data : {};
+        let result = new ValueAddedTax();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
+        data["updatedAt"] = this.updatedAt ? this.updatedAt.toISOString() : <any>undefined;
+        data["deletedAt"] = this.deletedAt ? this.deletedAt.toISOString() : <any>undefined;
+        data["version"] = this.version;
+        data["category"] = this.category;
+        data["amount"] = this.amount;
+        if (Array.isArray(this.products)) {
+            data["products"] = [];
+            for (let item of this.products)
+                data["products"].push(item.toJSON());
+        }
+        return data;
+    }
+}
+
+export interface IValueAddedTax {
+    /** Incremental ID of the entity */
+    id: number;
+    /** Date at which this entity has been created */
+    createdAt: Date;
+    /** Date at which this entity has last been updated */
+    updatedAt: Date;
+    /** If this entity has been soft-deleted, this is the date at which the entity has been deleted */
+    deletedAt?: Date;
+    /** Version number of this entity */
+    version: number;
+    /** VAT category */
+    category: VAT;
+    /** Price is stored * 100 and as integer */
+    amount: number;
+    /** All products in this category */
+    products: Product[];
+}
+
+export class ProductCategory implements IProductCategory {
+    /** Incremental ID of the entity */
+    id!: number;
+    /** Date at which this entity has been created */
+    createdAt!: Date;
+    /** Date at which this entity has last been updated */
+    updatedAt!: Date;
+    /** If this entity has been soft-deleted, this is the date at which the entity has been deleted */
+    deletedAt?: Date;
+    /** Version number of this entity */
+    version!: number;
+    /** Name of the product category */
+    name!: string;
+    /** All products in this category */
+    products!: Product[];
+
+    constructor(data?: IProductCategory) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+        if (!data) {
+            this.products = [];
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
+            this.updatedAt = _data["updatedAt"] ? new Date(_data["updatedAt"].toString()) : <any>undefined;
+            this.deletedAt = _data["deletedAt"] ? new Date(_data["deletedAt"].toString()) : <any>undefined;
+            this.version = _data["version"];
+            this.name = _data["name"];
+            if (Array.isArray(_data["products"])) {
+                this.products = [] as any;
+                for (let item of _data["products"])
+                    this.products!.push(Product.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): ProductCategory {
+        data = typeof data === 'object' ? data : {};
+        let result = new ProductCategory();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
+        data["updatedAt"] = this.updatedAt ? this.updatedAt.toISOString() : <any>undefined;
+        data["deletedAt"] = this.deletedAt ? this.deletedAt.toISOString() : <any>undefined;
+        data["version"] = this.version;
+        data["name"] = this.name;
+        if (Array.isArray(this.products)) {
+            data["products"] = [];
+            for (let item of this.products)
+                data["products"].push(item.toJSON());
+        }
+        return data;
+    }
+}
+
+export interface IProductCategory {
+    /** Incremental ID of the entity */
+    id: number;
+    /** Date at which this entity has been created */
+    createdAt: Date;
+    /** Date at which this entity has last been updated */
+    updatedAt: Date;
+    /** If this entity has been soft-deleted, this is the date at which the entity has been deleted */
+    deletedAt?: Date;
+    /** Version number of this entity */
+    version: number;
+    /** Name of the product category */
+    name: string;
+    /** All products in this category */
+    products: Product[];
+}
+
+export class ProductInstance implements IProductInstance {
+    /** Incremental ID of the entity */
+    id!: number;
+    /** Date at which this entity has been created */
+    createdAt!: Date;
+    /** Date at which this entity has last been updated */
+    updatedAt!: Date;
+    /** If this entity has been soft-deleted, this is the date at which the entity has been deleted */
+    deletedAt?: Date;
+    /** Version number of this entity */
+    version!: number;
+    productId!: number;
+    /** The ID of the product, this entity is instanced from */
+    product!: Product;
+    contractId!: number;
+    /** Contract this product is used in */
+    contract!: Contract;
+    invoiceId?: number;
+    /** Invoice this product is used in, if it has already been invoiced */
+    invoice?: Invoice;
+    /** All activities regarding this product instance */
+    activities!: ProductInstanceActivity[];
+    /** Actual price of the product, should be a copy from the product price upon creation,
+or a different price that is not a discount
+price is excluding VAT */
+    basePrice!: number;
+    /** Optional discount amount, discount is taken over excl. VAT price */
+    discount!: number;
+    /** Any comments regarding this product instance */
+    details?: string;
+
+    constructor(data?: IProductInstance) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+        if (!data) {
+            this.product = new Product();
+            this.contract = new Contract();
+            this.activities = [];
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
+            this.updatedAt = _data["updatedAt"] ? new Date(_data["updatedAt"].toString()) : <any>undefined;
+            this.deletedAt = _data["deletedAt"] ? new Date(_data["deletedAt"].toString()) : <any>undefined;
+            this.version = _data["version"];
+            this.productId = _data["productId"];
+            this.product = _data["product"] ? Product.fromJS(_data["product"]) : new Product();
+            this.contractId = _data["contractId"];
+            this.contract = _data["contract"] ? Contract.fromJS(_data["contract"]) : new Contract();
+            this.invoiceId = _data["invoiceId"];
+            this.invoice = _data["invoice"] ? Invoice.fromJS(_data["invoice"]) : <any>undefined;
+            if (Array.isArray(_data["activities"])) {
+                this.activities = [] as any;
+                for (let item of _data["activities"])
+                    this.activities!.push(ProductInstanceActivity.fromJS(item));
+            }
+            this.basePrice = _data["basePrice"];
+            this.discount = _data["discount"];
+            this.details = _data["details"];
+        }
+    }
+
+    static fromJS(data: any): ProductInstance {
+        data = typeof data === 'object' ? data : {};
+        let result = new ProductInstance();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
+        data["updatedAt"] = this.updatedAt ? this.updatedAt.toISOString() : <any>undefined;
+        data["deletedAt"] = this.deletedAt ? this.deletedAt.toISOString() : <any>undefined;
+        data["version"] = this.version;
+        data["productId"] = this.productId;
+        data["product"] = this.product ? this.product.toJSON() : <any>undefined;
+        data["contractId"] = this.contractId;
+        data["contract"] = this.contract ? this.contract.toJSON() : <any>undefined;
+        data["invoiceId"] = this.invoiceId;
+        data["invoice"] = this.invoice ? this.invoice.toJSON() : <any>undefined;
+        if (Array.isArray(this.activities)) {
+            data["activities"] = [];
+            for (let item of this.activities)
+                data["activities"].push(item.toJSON());
+        }
+        data["basePrice"] = this.basePrice;
+        data["discount"] = this.discount;
+        data["details"] = this.details;
+        return data;
+    }
+}
+
+export interface IProductInstance {
+    /** Incremental ID of the entity */
+    id: number;
+    /** Date at which this entity has been created */
+    createdAt: Date;
+    /** Date at which this entity has last been updated */
+    updatedAt: Date;
+    /** If this entity has been soft-deleted, this is the date at which the entity has been deleted */
+    deletedAt?: Date;
+    /** Version number of this entity */
+    version: number;
+    productId: number;
+    /** The ID of the product, this entity is instanced from */
+    product: Product;
+    contractId: number;
+    /** Contract this product is used in */
+    contract: Contract;
+    invoiceId?: number;
+    /** Invoice this product is used in, if it has already been invoiced */
+    invoice?: Invoice;
+    /** All activities regarding this product instance */
+    activities: ProductInstanceActivity[];
+    /** Actual price of the product, should be a copy from the product price upon creation,
+or a different price that is not a discount
+price is excluding VAT */
+    basePrice: number;
+    /** Optional discount amount, discount is taken over excl. VAT price */
+    discount: number;
+    /** Any comments regarding this product instance */
+    details?: string;
+}
+
+export enum ActivityType {
+    STATUS = "STATUS",
+    COMMENT = "COMMENT",
+    EDIT = "EDIT",
+    REASSIGN = "REASSIGN",
+    ADDPRODUCT = "ADDPRODUCT",
+    DELPRODUCT = "DELPRODUCT",
+}
+
+export enum Gender {
+    MALE = "MALE",
+    FEMALE = "FEMALE",
+    OTHER = "OTHER",
+    UNKNOWN = "UNKNOWN",
 }
 
 export class User implements IUser {
@@ -6861,2289 +7629,6 @@ at which the entity has been deleted */
     version: number;
 }
 
-export class Profile implements IProfile {
-    /** Incremental ID of the entity */
-    id!: number;
-    /** Date at which this entity has been created */
-    createdAt!: Date;
-    /** Date at which this entity has last been updated */
-    updatedAt!: Date;
-    /** If this entity has been soft-deleted, this is the date at which the entity has been deleted */
-    deletedAt?: Date;
-    /** Version number of this entity */
-    version!: number;
-    /** Gender of this user */
-    gender!: Gender;
-    /** First name of this user */
-    firstName!: string;
-    /** Middle name of this user, if he/she has any */
-    lastNamePreposition!: string;
-    /** Last name of this user */
-    lastName!: string;
-    /** Email address of the user */
-    email!: string;
-    /** Email address used in PDF files */
-    replyToEmail!: string;
-    /** Any comments regarding this user */
-    comment!: string;
-    /** Function of this user, used when generating documents and printed below this user's name */
-    function!: string;
-    /** Optional filename of the user's avatar */
-    avatarFilename!: string;
-    /** Optional filename of the user's background */
-    backgroundFilename!: string;
-    /** Whether this user wishes to receive (regular) email updates, e.g. sent invoices */
-    receiveEmails!: boolean;
-    /** Whether the update emails (from the boolean above) should
-be sent to "email", or "replyToEmail" */
-    sendEmailsToReplyToEmail!: boolean;
-    /** The roles this user has */
-    roles!: Role[];
-    /** Identity for local login */
-    identityLocal?: IdentityLocal;
-    /** Identity for LDAP */
-    identityLdap?: IdentityLDAP;
-    hasApiKey?: boolean;
-
-    constructor(data?: IProfile) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-        if (!data) {
-            this.roles = [];
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"];
-            this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
-            this.updatedAt = _data["updatedAt"] ? new Date(_data["updatedAt"].toString()) : <any>undefined;
-            this.deletedAt = _data["deletedAt"] ? new Date(_data["deletedAt"].toString()) : <any>undefined;
-            this.version = _data["version"];
-            this.gender = _data["gender"];
-            this.firstName = _data["firstName"];
-            this.lastNamePreposition = _data["lastNamePreposition"];
-            this.lastName = _data["lastName"];
-            this.email = _data["email"];
-            this.replyToEmail = _data["replyToEmail"];
-            this.comment = _data["comment"];
-            this.function = _data["function"];
-            this.avatarFilename = _data["avatarFilename"];
-            this.backgroundFilename = _data["backgroundFilename"];
-            this.receiveEmails = _data["receiveEmails"];
-            this.sendEmailsToReplyToEmail = _data["sendEmailsToReplyToEmail"];
-            if (Array.isArray(_data["roles"])) {
-                this.roles = [] as any;
-                for (let item of _data["roles"])
-                    this.roles!.push(Role.fromJS(item));
-            }
-            this.identityLocal = _data["identityLocal"] ? IdentityLocal.fromJS(_data["identityLocal"]) : <any>undefined;
-            this.identityLdap = _data["identityLdap"] ? IdentityLDAP.fromJS(_data["identityLdap"]) : <any>undefined;
-            this.hasApiKey = _data["hasApiKey"];
-        }
-    }
-
-    static fromJS(data: any): Profile {
-        data = typeof data === 'object' ? data : {};
-        let result = new Profile();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
-        data["updatedAt"] = this.updatedAt ? this.updatedAt.toISOString() : <any>undefined;
-        data["deletedAt"] = this.deletedAt ? this.deletedAt.toISOString() : <any>undefined;
-        data["version"] = this.version;
-        data["gender"] = this.gender;
-        data["firstName"] = this.firstName;
-        data["lastNamePreposition"] = this.lastNamePreposition;
-        data["lastName"] = this.lastName;
-        data["email"] = this.email;
-        data["replyToEmail"] = this.replyToEmail;
-        data["comment"] = this.comment;
-        data["function"] = this.function;
-        data["avatarFilename"] = this.avatarFilename;
-        data["backgroundFilename"] = this.backgroundFilename;
-        data["receiveEmails"] = this.receiveEmails;
-        data["sendEmailsToReplyToEmail"] = this.sendEmailsToReplyToEmail;
-        if (Array.isArray(this.roles)) {
-            data["roles"] = [];
-            for (let item of this.roles)
-                data["roles"].push(item.toJSON());
-        }
-        data["identityLocal"] = this.identityLocal ? this.identityLocal.toJSON() : <any>undefined;
-        data["identityLdap"] = this.identityLdap ? this.identityLdap.toJSON() : <any>undefined;
-        data["hasApiKey"] = this.hasApiKey;
-        return data;
-    }
-}
-
-export interface IProfile {
-    /** Incremental ID of the entity */
-    id: number;
-    /** Date at which this entity has been created */
-    createdAt: Date;
-    /** Date at which this entity has last been updated */
-    updatedAt: Date;
-    /** If this entity has been soft-deleted, this is the date at which the entity has been deleted */
-    deletedAt?: Date;
-    /** Version number of this entity */
-    version: number;
-    /** Gender of this user */
-    gender: Gender;
-    /** First name of this user */
-    firstName: string;
-    /** Middle name of this user, if he/she has any */
-    lastNamePreposition: string;
-    /** Last name of this user */
-    lastName: string;
-    /** Email address of the user */
-    email: string;
-    /** Email address used in PDF files */
-    replyToEmail: string;
-    /** Any comments regarding this user */
-    comment: string;
-    /** Function of this user, used when generating documents and printed below this user's name */
-    function: string;
-    /** Optional filename of the user's avatar */
-    avatarFilename: string;
-    /** Optional filename of the user's background */
-    backgroundFilename: string;
-    /** Whether this user wishes to receive (regular) email updates, e.g. sent invoices */
-    receiveEmails: boolean;
-    /** Whether the update emails (from the boolean above) should
-be sent to "email", or "replyToEmail" */
-    sendEmailsToReplyToEmail: boolean;
-    /** The roles this user has */
-    roles: Role[];
-    /** Identity for local login */
-    identityLocal?: IdentityLocal;
-    /** Identity for LDAP */
-    identityLdap?: IdentityLDAP;
-    hasApiKey?: boolean;
-}
-
-export class ApiError implements IApiError {
-    name!: string;
-    message!: string;
-    stack?: string;
-    /** The activity code of the error, as defined by HTTP activity codes. */
-    statusCode!: number;
-
-    constructor(data?: IApiError) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.name = _data["name"];
-            this.message = _data["message"];
-            this.stack = _data["stack"];
-            this.statusCode = _data["statusCode"];
-        }
-    }
-
-    static fromJS(data: any): ApiError {
-        data = typeof data === 'object' ? data : {};
-        let result = new ApiError();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["name"] = this.name;
-        data["message"] = this.message;
-        data["stack"] = this.stack;
-        data["statusCode"] = this.statusCode;
-        return data;
-    }
-}
-
-export interface IApiError {
-    name: string;
-    message: string;
-    stack?: string;
-    /** The activity code of the error, as defined by HTTP activity codes. */
-    statusCode: number;
-}
-
-/** WrappedApiError represents the type returned by the server. */
-export class WrappedApiError implements IWrappedApiError {
-    error!: ApiError;
-
-    [key: string]: any;
-
-    constructor(data?: IWrappedApiError) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-        if (!data) {
-            this.error = new ApiError();
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            for (var property in _data) {
-                if (_data.hasOwnProperty(property))
-                    this[property] = _data[property];
-            }
-            this.error = _data["error"] ? ApiError.fromJS(_data["error"]) : new ApiError();
-        }
-    }
-
-    static fromJS(data: any): WrappedApiError {
-        data = typeof data === 'object' ? data : {};
-        let result = new WrappedApiError();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        for (var property in this) {
-            if (this.hasOwnProperty(property))
-                data[property] = this[property];
-        }
-        data["error"] = this.error ? this.error.toJSON() : <any>undefined;
-        return data;
-    }
-}
-
-/** WrappedApiError represents the type returned by the server. */
-export interface IWrappedApiError {
-    error: ApiError;
-
-    [key: string]: any;
-}
-
-export class ResetPasswordRequest implements IResetPasswordRequest {
-    password!: string;
-    repeatPassword!: string;
-    token!: string;
-
-    constructor(data?: IResetPasswordRequest) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.password = _data["password"];
-            this.repeatPassword = _data["repeatPassword"];
-            this.token = _data["token"];
-        }
-    }
-
-    static fromJS(data: any): ResetPasswordRequest {
-        data = typeof data === 'object' ? data : {};
-        let result = new ResetPasswordRequest();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["password"] = this.password;
-        data["repeatPassword"] = this.repeatPassword;
-        data["token"] = this.token;
-        return data;
-    }
-}
-
-export interface IResetPasswordRequest {
-    password: string;
-    repeatPassword: string;
-    token: string;
-}
-
-export class GeneralPrivateInfo implements IGeneralPrivateInfo {
-    financialYears!: number[];
-
-    constructor(data?: IGeneralPrivateInfo) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-        if (!data) {
-            this.financialYears = [];
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            if (Array.isArray(_data["financialYears"])) {
-                this.financialYears = [] as any;
-                for (let item of _data["financialYears"])
-                    this.financialYears!.push(item);
-            }
-        }
-    }
-
-    static fromJS(data: any): GeneralPrivateInfo {
-        data = typeof data === 'object' ? data : {};
-        let result = new GeneralPrivateInfo();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        if (Array.isArray(this.financialYears)) {
-            data["financialYears"] = [];
-            for (let item of this.financialYears)
-                data["financialYears"].push(item);
-        }
-        return data;
-    }
-}
-
-export interface IGeneralPrivateInfo {
-    financialYears: number[];
-}
-
-export enum LoginMethods {
-    Local = "local",
-    Ldap = "ldap",
-}
-
-export class GeneralPublicInfo implements IGeneralPublicInfo {
-    loginMethod!: LoginMethods;
-
-    constructor(data?: IGeneralPublicInfo) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.loginMethod = _data["loginMethod"];
-        }
-    }
-
-    static fromJS(data: any): GeneralPublicInfo {
-        data = typeof data === 'object' ? data : {};
-        let result = new GeneralPublicInfo();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["loginMethod"] = this.loginMethod;
-        return data;
-    }
-}
-
-export interface IGeneralPublicInfo {
-    loginMethod: LoginMethods;
-}
-
-export enum ValueAddedTax {
-    ZERO = "ZERO",
-    LOW = "LOW",
-    HIGH = "HIGH",
-}
-
-export enum ProductStatus {
-    ACTIVE = "ACTIVE",
-    INACTIVE = "INACTIVE",
-}
-
-export class Product implements IProduct {
-    /** Incremental ID of the entity */
-    id!: number;
-    /** Date at which this entity has been created */
-    createdAt!: Date;
-    /** Date at which this entity has last been updated */
-    updatedAt!: Date;
-    /** If this entity has been soft-deleted, this is the date at which the entity has been deleted */
-    deletedAt?: Date;
-    /** Version number of this entity */
-    version!: number;
-    /** Dutch name of the product */
-    nameDutch!: string;
-    /** English name of the product */
-    nameEnglish!: string;
-    /** Price is stored * 100 and as integer */
-    targetPrice!: number;
-    /** VAT category is stored */
-    valueAddedTax!: ValueAddedTax;
-    /** Status of the collaboration with this company */
-    status!: ProductStatus;
-    /** Description of the product, only used within the application */
-    description!: string;
-    /** Text that should be used on generated PDF files, in Dutch */
-    contractTextDutch!: string;
-    /** Text that should be used on generated PDF files, in English */
-    contractTextEnglish!: string;
-    /** Delivery attachment text used on the PDF file, in Dutch */
-    deliverySpecificationDutch?: string;
-    /** Delivery attachment text used on the PDF file, in English */
-    deliverySpecificationEnglish?: string;
-    categoryId!: number;
-    /** Target minimum amount contracted for this product */
-    minTarget!: number;
-    /** Target maximum amount contracted for this product */
-    maxTarget!: number;
-    /** Category this product is in */
-    category!: ProductCategory;
-    /** All the product instances of this product, used in contracts and invoiced */
-    instances!: ProductInstance[];
-    /** All activities regarding this product */
-    activities!: ProductActivity[];
-    /** All files regarding this product */
-    files!: ProductFile[];
-    /** Optional ProductPricing object */
-    pricing?: ProductPricing;
-
-    constructor(data?: IProduct) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-        if (!data) {
-            this.category = new ProductCategory();
-            this.instances = [];
-            this.activities = [];
-            this.files = [];
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"];
-            this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
-            this.updatedAt = _data["updatedAt"] ? new Date(_data["updatedAt"].toString()) : <any>undefined;
-            this.deletedAt = _data["deletedAt"] ? new Date(_data["deletedAt"].toString()) : <any>undefined;
-            this.version = _data["version"];
-            this.nameDutch = _data["nameDutch"];
-            this.nameEnglish = _data["nameEnglish"];
-            this.targetPrice = _data["targetPrice"];
-            this.valueAddedTax = _data["valueAddedTax"];
-            this.status = _data["status"];
-            this.description = _data["description"];
-            this.contractTextDutch = _data["contractTextDutch"];
-            this.contractTextEnglish = _data["contractTextEnglish"];
-            this.deliverySpecificationDutch = _data["deliverySpecificationDutch"];
-            this.deliverySpecificationEnglish = _data["deliverySpecificationEnglish"];
-            this.categoryId = _data["categoryId"];
-            this.minTarget = _data["minTarget"];
-            this.maxTarget = _data["maxTarget"];
-            this.category = _data["category"] ? ProductCategory.fromJS(_data["category"]) : new ProductCategory();
-            if (Array.isArray(_data["instances"])) {
-                this.instances = [] as any;
-                for (let item of _data["instances"])
-                    this.instances!.push(ProductInstance.fromJS(item));
-            }
-            if (Array.isArray(_data["activities"])) {
-                this.activities = [] as any;
-                for (let item of _data["activities"])
-                    this.activities!.push(ProductActivity.fromJS(item));
-            }
-            if (Array.isArray(_data["files"])) {
-                this.files = [] as any;
-                for (let item of _data["files"])
-                    this.files!.push(ProductFile.fromJS(item));
-            }
-            this.pricing = _data["pricing"] ? ProductPricing.fromJS(_data["pricing"]) : <any>undefined;
-        }
-    }
-
-    static fromJS(data: any): Product {
-        data = typeof data === 'object' ? data : {};
-        let result = new Product();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
-        data["updatedAt"] = this.updatedAt ? this.updatedAt.toISOString() : <any>undefined;
-        data["deletedAt"] = this.deletedAt ? this.deletedAt.toISOString() : <any>undefined;
-        data["version"] = this.version;
-        data["nameDutch"] = this.nameDutch;
-        data["nameEnglish"] = this.nameEnglish;
-        data["targetPrice"] = this.targetPrice;
-        data["valueAddedTax"] = this.valueAddedTax;
-        data["status"] = this.status;
-        data["description"] = this.description;
-        data["contractTextDutch"] = this.contractTextDutch;
-        data["contractTextEnglish"] = this.contractTextEnglish;
-        data["deliverySpecificationDutch"] = this.deliverySpecificationDutch;
-        data["deliverySpecificationEnglish"] = this.deliverySpecificationEnglish;
-        data["categoryId"] = this.categoryId;
-        data["minTarget"] = this.minTarget;
-        data["maxTarget"] = this.maxTarget;
-        data["category"] = this.category ? this.category.toJSON() : <any>undefined;
-        if (Array.isArray(this.instances)) {
-            data["instances"] = [];
-            for (let item of this.instances)
-                data["instances"].push(item.toJSON());
-        }
-        if (Array.isArray(this.activities)) {
-            data["activities"] = [];
-            for (let item of this.activities)
-                data["activities"].push(item.toJSON());
-        }
-        if (Array.isArray(this.files)) {
-            data["files"] = [];
-            for (let item of this.files)
-                data["files"].push(item.toJSON());
-        }
-        data["pricing"] = this.pricing ? this.pricing.toJSON() : <any>undefined;
-        return data;
-    }
-}
-
-export interface IProduct {
-    /** Incremental ID of the entity */
-    id: number;
-    /** Date at which this entity has been created */
-    createdAt: Date;
-    /** Date at which this entity has last been updated */
-    updatedAt: Date;
-    /** If this entity has been soft-deleted, this is the date at which the entity has been deleted */
-    deletedAt?: Date;
-    /** Version number of this entity */
-    version: number;
-    /** Dutch name of the product */
-    nameDutch: string;
-    /** English name of the product */
-    nameEnglish: string;
-    /** Price is stored * 100 and as integer */
-    targetPrice: number;
-    /** VAT category is stored */
-    valueAddedTax: ValueAddedTax;
-    /** Status of the collaboration with this company */
-    status: ProductStatus;
-    /** Description of the product, only used within the application */
-    description: string;
-    /** Text that should be used on generated PDF files, in Dutch */
-    contractTextDutch: string;
-    /** Text that should be used on generated PDF files, in English */
-    contractTextEnglish: string;
-    /** Delivery attachment text used on the PDF file, in Dutch */
-    deliverySpecificationDutch?: string;
-    /** Delivery attachment text used on the PDF file, in English */
-    deliverySpecificationEnglish?: string;
-    categoryId: number;
-    /** Target minimum amount contracted for this product */
-    minTarget: number;
-    /** Target maximum amount contracted for this product */
-    maxTarget: number;
-    /** Category this product is in */
-    category: ProductCategory;
-    /** All the product instances of this product, used in contracts and invoiced */
-    instances: ProductInstance[];
-    /** All activities regarding this product */
-    activities: ProductActivity[];
-    /** All files regarding this product */
-    files: ProductFile[];
-    /** Optional ProductPricing object */
-    pricing?: ProductPricing;
-}
-
-export class ProductCategory implements IProductCategory {
-    /** Incremental ID of the entity */
-    id!: number;
-    /** Date at which this entity has been created */
-    createdAt!: Date;
-    /** Date at which this entity has last been updated */
-    updatedAt!: Date;
-    /** If this entity has been soft-deleted, this is the date at which the entity has been deleted */
-    deletedAt?: Date;
-    /** Version number of this entity */
-    version!: number;
-    /** Name of the product category */
-    name!: string;
-    /** All products in this category */
-    products!: Product[];
-
-    constructor(data?: IProductCategory) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-        if (!data) {
-            this.products = [];
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"];
-            this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
-            this.updatedAt = _data["updatedAt"] ? new Date(_data["updatedAt"].toString()) : <any>undefined;
-            this.deletedAt = _data["deletedAt"] ? new Date(_data["deletedAt"].toString()) : <any>undefined;
-            this.version = _data["version"];
-            this.name = _data["name"];
-            if (Array.isArray(_data["products"])) {
-                this.products = [] as any;
-                for (let item of _data["products"])
-                    this.products!.push(Product.fromJS(item));
-            }
-        }
-    }
-
-    static fromJS(data: any): ProductCategory {
-        data = typeof data === 'object' ? data : {};
-        let result = new ProductCategory();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
-        data["updatedAt"] = this.updatedAt ? this.updatedAt.toISOString() : <any>undefined;
-        data["deletedAt"] = this.deletedAt ? this.deletedAt.toISOString() : <any>undefined;
-        data["version"] = this.version;
-        data["name"] = this.name;
-        if (Array.isArray(this.products)) {
-            data["products"] = [];
-            for (let item of this.products)
-                data["products"].push(item.toJSON());
-        }
-        return data;
-    }
-}
-
-export interface IProductCategory {
-    /** Incremental ID of the entity */
-    id: number;
-    /** Date at which this entity has been created */
-    createdAt: Date;
-    /** Date at which this entity has last been updated */
-    updatedAt: Date;
-    /** If this entity has been soft-deleted, this is the date at which the entity has been deleted */
-    deletedAt?: Date;
-    /** Version number of this entity */
-    version: number;
-    /** Name of the product category */
-    name: string;
-    /** All products in this category */
-    products: Product[];
-}
-
-export enum CompanyStatus {
-    ACTIVE = "ACTIVE",
-    INACTIVE = "INACTIVE",
-}
-
-export class Contract implements IContract {
-    /** Incremental ID of the entity */
-    id!: number;
-    /** Date at which this entity has been created */
-    createdAt!: Date;
-    /** Date at which this entity has last been updated */
-    updatedAt!: Date;
-    /** If this entity has been soft-deleted, this is the date at which the entity has been deleted */
-    deletedAt?: Date;
-    /** Version number of this entity */
-    version!: number;
-    /** Title or name of this contract/collaboration */
-    title!: string;
-    companyId!: number;
-    /** Company this contract has been closed with */
-    company!: Company;
-    /** All products in the contract */
-    products!: ProductInstance[];
-    createdById!: number;
-    createdBy!: User;
-    assignedToId!: number;
-    assignedTo!: User;
-    contactId!: number;
-    /** Comments regarding this contract, if there are any */
-    comments?: string;
-    /** The contact this contract has been closed with */
-    contact!: Contact;
-    /** All activities regarding this contract */
-    activities!: ContractActivity[];
-    /** All files regarding this contract */
-    files!: ContractFile[];
-
-    constructor(data?: IContract) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-        if (!data) {
-            this.company = new Company();
-            this.products = [];
-            this.createdBy = new User();
-            this.assignedTo = new User();
-            this.contact = new Contact();
-            this.activities = [];
-            this.files = [];
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"];
-            this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
-            this.updatedAt = _data["updatedAt"] ? new Date(_data["updatedAt"].toString()) : <any>undefined;
-            this.deletedAt = _data["deletedAt"] ? new Date(_data["deletedAt"].toString()) : <any>undefined;
-            this.version = _data["version"];
-            this.title = _data["title"];
-            this.companyId = _data["companyId"];
-            this.company = _data["company"] ? Company.fromJS(_data["company"]) : new Company();
-            if (Array.isArray(_data["products"])) {
-                this.products = [] as any;
-                for (let item of _data["products"])
-                    this.products!.push(ProductInstance.fromJS(item));
-            }
-            this.createdById = _data["createdById"];
-            this.createdBy = _data["createdBy"] ? User.fromJS(_data["createdBy"]) : new User();
-            this.assignedToId = _data["assignedToId"];
-            this.assignedTo = _data["assignedTo"] ? User.fromJS(_data["assignedTo"]) : new User();
-            this.contactId = _data["contactId"];
-            this.comments = _data["comments"];
-            this.contact = _data["contact"] ? Contact.fromJS(_data["contact"]) : new Contact();
-            if (Array.isArray(_data["activities"])) {
-                this.activities = [] as any;
-                for (let item of _data["activities"])
-                    this.activities!.push(ContractActivity.fromJS(item));
-            }
-            if (Array.isArray(_data["files"])) {
-                this.files = [] as any;
-                for (let item of _data["files"])
-                    this.files!.push(ContractFile.fromJS(item));
-            }
-        }
-    }
-
-    static fromJS(data: any): Contract {
-        data = typeof data === 'object' ? data : {};
-        let result = new Contract();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
-        data["updatedAt"] = this.updatedAt ? this.updatedAt.toISOString() : <any>undefined;
-        data["deletedAt"] = this.deletedAt ? this.deletedAt.toISOString() : <any>undefined;
-        data["version"] = this.version;
-        data["title"] = this.title;
-        data["companyId"] = this.companyId;
-        data["company"] = this.company ? this.company.toJSON() : <any>undefined;
-        if (Array.isArray(this.products)) {
-            data["products"] = [];
-            for (let item of this.products)
-                data["products"].push(item.toJSON());
-        }
-        data["createdById"] = this.createdById;
-        data["createdBy"] = this.createdBy ? this.createdBy.toJSON() : <any>undefined;
-        data["assignedToId"] = this.assignedToId;
-        data["assignedTo"] = this.assignedTo ? this.assignedTo.toJSON() : <any>undefined;
-        data["contactId"] = this.contactId;
-        data["comments"] = this.comments;
-        data["contact"] = this.contact ? this.contact.toJSON() : <any>undefined;
-        if (Array.isArray(this.activities)) {
-            data["activities"] = [];
-            for (let item of this.activities)
-                data["activities"].push(item.toJSON());
-        }
-        if (Array.isArray(this.files)) {
-            data["files"] = [];
-            for (let item of this.files)
-                data["files"].push(item.toJSON());
-        }
-        return data;
-    }
-}
-
-export interface IContract {
-    /** Incremental ID of the entity */
-    id: number;
-    /** Date at which this entity has been created */
-    createdAt: Date;
-    /** Date at which this entity has last been updated */
-    updatedAt: Date;
-    /** If this entity has been soft-deleted, this is the date at which the entity has been deleted */
-    deletedAt?: Date;
-    /** Version number of this entity */
-    version: number;
-    /** Title or name of this contract/collaboration */
-    title: string;
-    companyId: number;
-    /** Company this contract has been closed with */
-    company: Company;
-    /** All products in the contract */
-    products: ProductInstance[];
-    createdById: number;
-    createdBy: User;
-    assignedToId: number;
-    assignedTo: User;
-    contactId: number;
-    /** Comments regarding this contract, if there are any */
-    comments?: string;
-    /** The contact this contract has been closed with */
-    contact: Contact;
-    /** All activities regarding this contract */
-    activities: ContractActivity[];
-    /** All files regarding this contract */
-    files: ContractFile[];
-}
-
-export class ProductInstance implements IProductInstance {
-    /** Incremental ID of the entity */
-    id!: number;
-    /** Date at which this entity has been created */
-    createdAt!: Date;
-    /** Date at which this entity has last been updated */
-    updatedAt!: Date;
-    /** If this entity has been soft-deleted, this is the date at which the entity has been deleted */
-    deletedAt?: Date;
-    /** Version number of this entity */
-    version!: number;
-    productId!: number;
-    /** The ID of the product, this entity is instanced from */
-    product!: Product;
-    contractId!: number;
-    /** Contract this product is used in */
-    contract!: Contract;
-    invoiceId?: number;
-    /** Invoice this product is used in, if it has already been invoiced */
-    invoice?: Invoice;
-    /** All activities regarding this product instance */
-    activities!: ProductInstanceActivity[];
-    /** Actual price of the product, should be a copy from the product price upon creation,
-or a different price that is not a discount */
-    basePrice!: number;
-    /** Optional discount amount */
-    discount!: number;
-    /** Any comments regarding this product instance */
-    details?: string;
-
-    constructor(data?: IProductInstance) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-        if (!data) {
-            this.product = new Product();
-            this.contract = new Contract();
-            this.activities = [];
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"];
-            this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
-            this.updatedAt = _data["updatedAt"] ? new Date(_data["updatedAt"].toString()) : <any>undefined;
-            this.deletedAt = _data["deletedAt"] ? new Date(_data["deletedAt"].toString()) : <any>undefined;
-            this.version = _data["version"];
-            this.productId = _data["productId"];
-            this.product = _data["product"] ? Product.fromJS(_data["product"]) : new Product();
-            this.contractId = _data["contractId"];
-            this.contract = _data["contract"] ? Contract.fromJS(_data["contract"]) : new Contract();
-            this.invoiceId = _data["invoiceId"];
-            this.invoice = _data["invoice"] ? Invoice.fromJS(_data["invoice"]) : <any>undefined;
-            if (Array.isArray(_data["activities"])) {
-                this.activities = [] as any;
-                for (let item of _data["activities"])
-                    this.activities!.push(ProductInstanceActivity.fromJS(item));
-            }
-            this.basePrice = _data["basePrice"];
-            this.discount = _data["discount"];
-            this.details = _data["details"];
-        }
-    }
-
-    static fromJS(data: any): ProductInstance {
-        data = typeof data === 'object' ? data : {};
-        let result = new ProductInstance();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
-        data["updatedAt"] = this.updatedAt ? this.updatedAt.toISOString() : <any>undefined;
-        data["deletedAt"] = this.deletedAt ? this.deletedAt.toISOString() : <any>undefined;
-        data["version"] = this.version;
-        data["productId"] = this.productId;
-        data["product"] = this.product ? this.product.toJSON() : <any>undefined;
-        data["contractId"] = this.contractId;
-        data["contract"] = this.contract ? this.contract.toJSON() : <any>undefined;
-        data["invoiceId"] = this.invoiceId;
-        data["invoice"] = this.invoice ? this.invoice.toJSON() : <any>undefined;
-        if (Array.isArray(this.activities)) {
-            data["activities"] = [];
-            for (let item of this.activities)
-                data["activities"].push(item.toJSON());
-        }
-        data["basePrice"] = this.basePrice;
-        data["discount"] = this.discount;
-        data["details"] = this.details;
-        return data;
-    }
-}
-
-export interface IProductInstance {
-    /** Incremental ID of the entity */
-    id: number;
-    /** Date at which this entity has been created */
-    createdAt: Date;
-    /** Date at which this entity has last been updated */
-    updatedAt: Date;
-    /** If this entity has been soft-deleted, this is the date at which the entity has been deleted */
-    deletedAt?: Date;
-    /** Version number of this entity */
-    version: number;
-    productId: number;
-    /** The ID of the product, this entity is instanced from */
-    product: Product;
-    contractId: number;
-    /** Contract this product is used in */
-    contract: Contract;
-    invoiceId?: number;
-    /** Invoice this product is used in, if it has already been invoiced */
-    invoice?: Invoice;
-    /** All activities regarding this product instance */
-    activities: ProductInstanceActivity[];
-    /** Actual price of the product, should be a copy from the product price upon creation,
-or a different price that is not a discount */
-    basePrice: number;
-    /** Optional discount amount */
-    discount: number;
-    /** Any comments regarding this product instance */
-    details?: string;
-}
-
-export class Company implements ICompany {
-    /** Incremental ID of the entity */
-    id!: number;
-    /** Date at which this entity has been created */
-    createdAt!: Date;
-    /** Date at which this entity has last been updated */
-    updatedAt!: Date;
-    /** If this entity has been soft-deleted, this is the date at which the entity has been deleted */
-    deletedAt?: Date;
-    /** Version number of this entity */
-    version!: number;
-    /** Name of the company */
-    name!: string;
-    addressStreet!: string;
-    addressPostalCode!: string;
-    addressCity!: string;
-    addressCountry!: string;
-    invoiceAddressStreet!: string;
-    invoiceAddressPostalCode!: string;
-    invoiceAddressCity!: string;
-    invoiceAddressCountry!: string;
-    /** Status of the collaboration with this company */
-    status!: CompanyStatus;
-    /** General phone number of the company */
-    phoneNumber?: string;
-    /** Optional filename of a logo image */
-    logoFilename!: string;
-    /** Comments regarding the company */
-    comments?: string;
-    /** All contracts related to this company */
-    contracts!: Contract[];
-    /** All invoices related to this company */
-    invoices!: Invoice[];
-    /** All contact persons related to this company */
-    contacts!: Contact[];
-    /** All updates / activities regarding this company */
-    activities!: CompanyActivity[];
-    /** All files regarding this company */
-    files!: CompanyFile[];
-
-    constructor(data?: ICompany) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-        if (!data) {
-            this.contracts = [];
-            this.invoices = [];
-            this.contacts = [];
-            this.activities = [];
-            this.files = [];
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"];
-            this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
-            this.updatedAt = _data["updatedAt"] ? new Date(_data["updatedAt"].toString()) : <any>undefined;
-            this.deletedAt = _data["deletedAt"] ? new Date(_data["deletedAt"].toString()) : <any>undefined;
-            this.version = _data["version"];
-            this.name = _data["name"];
-            this.addressStreet = _data["addressStreet"];
-            this.addressPostalCode = _data["addressPostalCode"];
-            this.addressCity = _data["addressCity"];
-            this.addressCountry = _data["addressCountry"];
-            this.invoiceAddressStreet = _data["invoiceAddressStreet"];
-            this.invoiceAddressPostalCode = _data["invoiceAddressPostalCode"];
-            this.invoiceAddressCity = _data["invoiceAddressCity"];
-            this.invoiceAddressCountry = _data["invoiceAddressCountry"];
-            this.status = _data["status"];
-            this.phoneNumber = _data["phoneNumber"];
-            this.logoFilename = _data["logoFilename"];
-            this.comments = _data["comments"];
-            if (Array.isArray(_data["contracts"])) {
-                this.contracts = [] as any;
-                for (let item of _data["contracts"])
-                    this.contracts!.push(Contract.fromJS(item));
-            }
-            if (Array.isArray(_data["invoices"])) {
-                this.invoices = [] as any;
-                for (let item of _data["invoices"])
-                    this.invoices!.push(Invoice.fromJS(item));
-            }
-            if (Array.isArray(_data["contacts"])) {
-                this.contacts = [] as any;
-                for (let item of _data["contacts"])
-                    this.contacts!.push(Contact.fromJS(item));
-            }
-            if (Array.isArray(_data["activities"])) {
-                this.activities = [] as any;
-                for (let item of _data["activities"])
-                    this.activities!.push(CompanyActivity.fromJS(item));
-            }
-            if (Array.isArray(_data["files"])) {
-                this.files = [] as any;
-                for (let item of _data["files"])
-                    this.files!.push(CompanyFile.fromJS(item));
-            }
-        }
-    }
-
-    static fromJS(data: any): Company {
-        data = typeof data === 'object' ? data : {};
-        let result = new Company();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
-        data["updatedAt"] = this.updatedAt ? this.updatedAt.toISOString() : <any>undefined;
-        data["deletedAt"] = this.deletedAt ? this.deletedAt.toISOString() : <any>undefined;
-        data["version"] = this.version;
-        data["name"] = this.name;
-        data["addressStreet"] = this.addressStreet;
-        data["addressPostalCode"] = this.addressPostalCode;
-        data["addressCity"] = this.addressCity;
-        data["addressCountry"] = this.addressCountry;
-        data["invoiceAddressStreet"] = this.invoiceAddressStreet;
-        data["invoiceAddressPostalCode"] = this.invoiceAddressPostalCode;
-        data["invoiceAddressCity"] = this.invoiceAddressCity;
-        data["invoiceAddressCountry"] = this.invoiceAddressCountry;
-        data["status"] = this.status;
-        data["phoneNumber"] = this.phoneNumber;
-        data["logoFilename"] = this.logoFilename;
-        data["comments"] = this.comments;
-        if (Array.isArray(this.contracts)) {
-            data["contracts"] = [];
-            for (let item of this.contracts)
-                data["contracts"].push(item.toJSON());
-        }
-        if (Array.isArray(this.invoices)) {
-            data["invoices"] = [];
-            for (let item of this.invoices)
-                data["invoices"].push(item.toJSON());
-        }
-        if (Array.isArray(this.contacts)) {
-            data["contacts"] = [];
-            for (let item of this.contacts)
-                data["contacts"].push(item.toJSON());
-        }
-        if (Array.isArray(this.activities)) {
-            data["activities"] = [];
-            for (let item of this.activities)
-                data["activities"].push(item.toJSON());
-        }
-        if (Array.isArray(this.files)) {
-            data["files"] = [];
-            for (let item of this.files)
-                data["files"].push(item.toJSON());
-        }
-        return data;
-    }
-}
-
-export interface ICompany {
-    /** Incremental ID of the entity */
-    id: number;
-    /** Date at which this entity has been created */
-    createdAt: Date;
-    /** Date at which this entity has last been updated */
-    updatedAt: Date;
-    /** If this entity has been soft-deleted, this is the date at which the entity has been deleted */
-    deletedAt?: Date;
-    /** Version number of this entity */
-    version: number;
-    /** Name of the company */
-    name: string;
-    addressStreet: string;
-    addressPostalCode: string;
-    addressCity: string;
-    addressCountry: string;
-    invoiceAddressStreet: string;
-    invoiceAddressPostalCode: string;
-    invoiceAddressCity: string;
-    invoiceAddressCountry: string;
-    /** Status of the collaboration with this company */
-    status: CompanyStatus;
-    /** General phone number of the company */
-    phoneNumber?: string;
-    /** Optional filename of a logo image */
-    logoFilename: string;
-    /** Comments regarding the company */
-    comments?: string;
-    /** All contracts related to this company */
-    contracts: Contract[];
-    /** All invoices related to this company */
-    invoices: Invoice[];
-    /** All contact persons related to this company */
-    contacts: Contact[];
-    /** All updates / activities regarding this company */
-    activities: CompanyActivity[];
-    /** All files regarding this company */
-    files: CompanyFile[];
-}
-
-export class Invoice implements IInvoice {
-    /** Incremental ID of the entity */
-    id!: number;
-    /** Date at which this entity has been created */
-    createdAt!: Date;
-    /** Date at which this entity has last been updated */
-    updatedAt!: Date;
-    /** If this entity has been soft-deleted, this is the date at which the entity has been deleted */
-    deletedAt?: Date;
-    /** Version number of this entity */
-    version!: number;
-    /** All products that have been invoiced */
-    products!: ProductInstance[];
-    /** Name of the invoice (by default the same as the first contract) */
-    title!: string;
-    /** PO number on the invoice, if needed */
-    poNumber?: string;
-    /** Date at which this invoice will be sent */
-    startDate!: Date;
-    companyId!: number;
-    createdById!: number;
-    createdBy!: User;
-    assignedToId!: number;
-    assignedTo!: User;
-    /** Any comments regarding this invoice */
-    comments?: string;
-    /** Company this invoice is directed to */
-    company!: Company;
-    /** All activities regarding this invoice */
-    activities!: InvoiceActivity[];
-    /** All files regarding this contract */
-    files!: InvoiceFile[];
-
-    constructor(data?: IInvoice) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-        if (!data) {
-            this.products = [];
-            this.createdBy = new User();
-            this.assignedTo = new User();
-            this.company = new Company();
-            this.activities = [];
-            this.files = [];
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"];
-            this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
-            this.updatedAt = _data["updatedAt"] ? new Date(_data["updatedAt"].toString()) : <any>undefined;
-            this.deletedAt = _data["deletedAt"] ? new Date(_data["deletedAt"].toString()) : <any>undefined;
-            this.version = _data["version"];
-            if (Array.isArray(_data["products"])) {
-                this.products = [] as any;
-                for (let item of _data["products"])
-                    this.products!.push(ProductInstance.fromJS(item));
-            }
-            this.title = _data["title"];
-            this.poNumber = _data["poNumber"];
-            this.startDate = _data["startDate"] ? new Date(_data["startDate"].toString()) : <any>undefined;
-            this.companyId = _data["companyId"];
-            this.createdById = _data["createdById"];
-            this.createdBy = _data["createdBy"] ? User.fromJS(_data["createdBy"]) : new User();
-            this.assignedToId = _data["assignedToId"];
-            this.assignedTo = _data["assignedTo"] ? User.fromJS(_data["assignedTo"]) : new User();
-            this.comments = _data["comments"];
-            this.company = _data["company"] ? Company.fromJS(_data["company"]) : new Company();
-            if (Array.isArray(_data["activities"])) {
-                this.activities = [] as any;
-                for (let item of _data["activities"])
-                    this.activities!.push(InvoiceActivity.fromJS(item));
-            }
-            if (Array.isArray(_data["files"])) {
-                this.files = [] as any;
-                for (let item of _data["files"])
-                    this.files!.push(InvoiceFile.fromJS(item));
-            }
-        }
-    }
-
-    static fromJS(data: any): Invoice {
-        data = typeof data === 'object' ? data : {};
-        let result = new Invoice();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
-        data["updatedAt"] = this.updatedAt ? this.updatedAt.toISOString() : <any>undefined;
-        data["deletedAt"] = this.deletedAt ? this.deletedAt.toISOString() : <any>undefined;
-        data["version"] = this.version;
-        if (Array.isArray(this.products)) {
-            data["products"] = [];
-            for (let item of this.products)
-                data["products"].push(item.toJSON());
-        }
-        data["title"] = this.title;
-        data["poNumber"] = this.poNumber;
-        data["startDate"] = this.startDate ? this.startDate.toISOString() : <any>undefined;
-        data["companyId"] = this.companyId;
-        data["createdById"] = this.createdById;
-        data["createdBy"] = this.createdBy ? this.createdBy.toJSON() : <any>undefined;
-        data["assignedToId"] = this.assignedToId;
-        data["assignedTo"] = this.assignedTo ? this.assignedTo.toJSON() : <any>undefined;
-        data["comments"] = this.comments;
-        data["company"] = this.company ? this.company.toJSON() : <any>undefined;
-        if (Array.isArray(this.activities)) {
-            data["activities"] = [];
-            for (let item of this.activities)
-                data["activities"].push(item.toJSON());
-        }
-        if (Array.isArray(this.files)) {
-            data["files"] = [];
-            for (let item of this.files)
-                data["files"].push(item.toJSON());
-        }
-        return data;
-    }
-}
-
-export interface IInvoice {
-    /** Incremental ID of the entity */
-    id: number;
-    /** Date at which this entity has been created */
-    createdAt: Date;
-    /** Date at which this entity has last been updated */
-    updatedAt: Date;
-    /** If this entity has been soft-deleted, this is the date at which the entity has been deleted */
-    deletedAt?: Date;
-    /** Version number of this entity */
-    version: number;
-    /** All products that have been invoiced */
-    products: ProductInstance[];
-    /** Name of the invoice (by default the same as the first contract) */
-    title: string;
-    /** PO number on the invoice, if needed */
-    poNumber?: string;
-    /** Date at which this invoice will be sent */
-    startDate: Date;
-    companyId: number;
-    createdById: number;
-    createdBy: User;
-    assignedToId: number;
-    assignedTo: User;
-    /** Any comments regarding this invoice */
-    comments?: string;
-    /** Company this invoice is directed to */
-    company: Company;
-    /** All activities regarding this invoice */
-    activities: InvoiceActivity[];
-    /** All files regarding this contract */
-    files: InvoiceFile[];
-}
-
-export enum InvoiceStatus {
-    CREATED = "CREATED",
-    PROPOSED = "PROPOSED",
-    SENT = "SENT",
-    PAID = "PAID",
-    IRRECOVERABLE = "IRRECOVERABLE",
-    CANCELLED = "CANCELLED",
-}
-
-export enum ActivityType {
-    STATUS = "STATUS",
-    COMMENT = "COMMENT",
-    EDIT = "EDIT",
-    REASSIGN = "REASSIGN",
-    ADDPRODUCT = "ADDPRODUCT",
-    DELPRODUCT = "DELPRODUCT",
-}
-
-export class InvoiceActivity implements IInvoiceActivity {
-    /** Incremental ID of the entity */
-    id!: number;
-    /** Date at which this entity has been created */
-    createdAt!: Date;
-    /** Date at which this entity has last been updated */
-    updatedAt!: Date;
-    /** If this entity has been soft-deleted, this is the date at which the entity has been deleted */
-    deletedAt?: Date;
-    /** Version number of this entity */
-    version!: number;
-    /** Type of the activity (status or comment) */
-    type!: ActivityType;
-    /** Description of this activity (English) */
-    descriptionEnglish!: string;
-    /** Description of this activity (Dutch) */
-    descriptionDutch!: string;
-    createdById!: number;
-    /** User who created this activity */
-    createdBy!: User;
-    invoiceId!: number;
-    /** Invoice related to this activity */
-    invoice!: Invoice;
-    /** Subtype of this activity, only used when the type = "STATUS" */
-    subType?: InvoiceStatus;
-
-    constructor(data?: IInvoiceActivity) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-        if (!data) {
-            this.createdBy = new User();
-            this.invoice = new Invoice();
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"];
-            this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
-            this.updatedAt = _data["updatedAt"] ? new Date(_data["updatedAt"].toString()) : <any>undefined;
-            this.deletedAt = _data["deletedAt"] ? new Date(_data["deletedAt"].toString()) : <any>undefined;
-            this.version = _data["version"];
-            this.type = _data["type"];
-            this.descriptionEnglish = _data["descriptionEnglish"];
-            this.descriptionDutch = _data["descriptionDutch"];
-            this.createdById = _data["createdById"];
-            this.createdBy = _data["createdBy"] ? User.fromJS(_data["createdBy"]) : new User();
-            this.invoiceId = _data["invoiceId"];
-            this.invoice = _data["invoice"] ? Invoice.fromJS(_data["invoice"]) : new Invoice();
-            this.subType = _data["subType"];
-        }
-    }
-
-    static fromJS(data: any): InvoiceActivity {
-        data = typeof data === 'object' ? data : {};
-        let result = new InvoiceActivity();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
-        data["updatedAt"] = this.updatedAt ? this.updatedAt.toISOString() : <any>undefined;
-        data["deletedAt"] = this.deletedAt ? this.deletedAt.toISOString() : <any>undefined;
-        data["version"] = this.version;
-        data["type"] = this.type;
-        data["descriptionEnglish"] = this.descriptionEnglish;
-        data["descriptionDutch"] = this.descriptionDutch;
-        data["createdById"] = this.createdById;
-        data["createdBy"] = this.createdBy ? this.createdBy.toJSON() : <any>undefined;
-        data["invoiceId"] = this.invoiceId;
-        data["invoice"] = this.invoice ? this.invoice.toJSON() : <any>undefined;
-        data["subType"] = this.subType;
-        return data;
-    }
-}
-
-export interface IInvoiceActivity {
-    /** Incremental ID of the entity */
-    id: number;
-    /** Date at which this entity has been created */
-    createdAt: Date;
-    /** Date at which this entity has last been updated */
-    updatedAt: Date;
-    /** If this entity has been soft-deleted, this is the date at which the entity has been deleted */
-    deletedAt?: Date;
-    /** Version number of this entity */
-    version: number;
-    /** Type of the activity (status or comment) */
-    type: ActivityType;
-    /** Description of this activity (English) */
-    descriptionEnglish: string;
-    /** Description of this activity (Dutch) */
-    descriptionDutch: string;
-    createdById: number;
-    /** User who created this activity */
-    createdBy: User;
-    invoiceId: number;
-    /** Invoice related to this activity */
-    invoice: Invoice;
-    /** Subtype of this activity, only used when the type = "STATUS" */
-    subType?: InvoiceStatus;
-}
-
-export class InvoiceFile implements IInvoiceFile {
-    /** Incremental ID of the entity */
-    id!: number;
-    /** Date at which this entity has been created */
-    createdAt!: Date;
-    /** Date at which this entity has last been updated */
-    updatedAt!: Date;
-    /** If this entity has been soft-deleted, this is the date at which the entity has been deleted */
-    deletedAt?: Date;
-    /** Version number of this entity */
-    version!: number;
-    /** Label of the file as shown in the front-end */
-    name!: string;
-    /** Name of the file as shown when downloaded */
-    downloadName!: string;
-    /** Location of the file on disk */
-    location!: string;
-    createdById!: number;
-    /** User who created this file */
-    createdBy!: User;
-    invoiceId!: number;
-    /** Invoice related to this file */
-    invoice!: Invoice;
-
-    constructor(data?: IInvoiceFile) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-        if (!data) {
-            this.createdBy = new User();
-            this.invoice = new Invoice();
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"];
-            this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
-            this.updatedAt = _data["updatedAt"] ? new Date(_data["updatedAt"].toString()) : <any>undefined;
-            this.deletedAt = _data["deletedAt"] ? new Date(_data["deletedAt"].toString()) : <any>undefined;
-            this.version = _data["version"];
-            this.name = _data["name"];
-            this.downloadName = _data["downloadName"];
-            this.location = _data["location"];
-            this.createdById = _data["createdById"];
-            this.createdBy = _data["createdBy"] ? User.fromJS(_data["createdBy"]) : new User();
-            this.invoiceId = _data["invoiceId"];
-            this.invoice = _data["invoice"] ? Invoice.fromJS(_data["invoice"]) : new Invoice();
-        }
-    }
-
-    static fromJS(data: any): InvoiceFile {
-        data = typeof data === 'object' ? data : {};
-        let result = new InvoiceFile();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
-        data["updatedAt"] = this.updatedAt ? this.updatedAt.toISOString() : <any>undefined;
-        data["deletedAt"] = this.deletedAt ? this.deletedAt.toISOString() : <any>undefined;
-        data["version"] = this.version;
-        data["name"] = this.name;
-        data["downloadName"] = this.downloadName;
-        data["location"] = this.location;
-        data["createdById"] = this.createdById;
-        data["createdBy"] = this.createdBy ? this.createdBy.toJSON() : <any>undefined;
-        data["invoiceId"] = this.invoiceId;
-        data["invoice"] = this.invoice ? this.invoice.toJSON() : <any>undefined;
-        return data;
-    }
-}
-
-export interface IInvoiceFile {
-    /** Incremental ID of the entity */
-    id: number;
-    /** Date at which this entity has been created */
-    createdAt: Date;
-    /** Date at which this entity has last been updated */
-    updatedAt: Date;
-    /** If this entity has been soft-deleted, this is the date at which the entity has been deleted */
-    deletedAt?: Date;
-    /** Version number of this entity */
-    version: number;
-    /** Label of the file as shown in the front-end */
-    name: string;
-    /** Name of the file as shown when downloaded */
-    downloadName: string;
-    /** Location of the file on disk */
-    location: string;
-    createdById: number;
-    /** User who created this file */
-    createdBy: User;
-    invoiceId: number;
-    /** Invoice related to this file */
-    invoice: Invoice;
-}
-
-export enum ContactFunction {
-    NORMAL = "NORMAL",
-    PRIMARY = "PRIMARY",
-    FINANCIAL = "FINANCIAL",
-    OLD = "OLD",
-}
-
-export class Contact implements IContact {
-    /** Incremental ID of the entity */
-    id!: number;
-    /** Date at which this entity has been created */
-    createdAt!: Date;
-    /** Date at which this entity has last been updated */
-    updatedAt!: Date;
-    /** If this entity has been soft-deleted, this is the date at which the entity has been deleted */
-    deletedAt?: Date;
-    /** Version number of this entity */
-    version!: number;
-    /** The gender of this contact */
-    gender!: Gender;
-    /** The first name of the contact */
-    firstName!: string;
-    /** The middle name of the contact, if he/she has one */
-    lastNamePreposition!: string;
-    /** The last name of the contact */
-    lastName!: string;
-    /** The (personal) email address of the contact */
-    email!: string;
-    /** The (personal) phone number of the contact */
-    telephone!: string;
-    /** Comments regarding the contact person, if there are any */
-    comments!: string;
-    /** Function of this contact person within the company, if known. Normal by default. */
-    function!: ContactFunction;
-    companyId!: number;
-    /** Company this contact person works at */
-    company!: Company;
-    /** All contracts that have been closed with this contact person */
-    contracts!: Contract[];
-
-    constructor(data?: IContact) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-        if (!data) {
-            this.company = new Company();
-            this.contracts = [];
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"];
-            this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
-            this.updatedAt = _data["updatedAt"] ? new Date(_data["updatedAt"].toString()) : <any>undefined;
-            this.deletedAt = _data["deletedAt"] ? new Date(_data["deletedAt"].toString()) : <any>undefined;
-            this.version = _data["version"];
-            this.gender = _data["gender"];
-            this.firstName = _data["firstName"];
-            this.lastNamePreposition = _data["lastNamePreposition"];
-            this.lastName = _data["lastName"];
-            this.email = _data["email"];
-            this.telephone = _data["telephone"];
-            this.comments = _data["comments"];
-            this.function = _data["function"];
-            this.companyId = _data["companyId"];
-            this.company = _data["company"] ? Company.fromJS(_data["company"]) : new Company();
-            if (Array.isArray(_data["contracts"])) {
-                this.contracts = [] as any;
-                for (let item of _data["contracts"])
-                    this.contracts!.push(Contract.fromJS(item));
-            }
-        }
-    }
-
-    static fromJS(data: any): Contact {
-        data = typeof data === 'object' ? data : {};
-        let result = new Contact();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
-        data["updatedAt"] = this.updatedAt ? this.updatedAt.toISOString() : <any>undefined;
-        data["deletedAt"] = this.deletedAt ? this.deletedAt.toISOString() : <any>undefined;
-        data["version"] = this.version;
-        data["gender"] = this.gender;
-        data["firstName"] = this.firstName;
-        data["lastNamePreposition"] = this.lastNamePreposition;
-        data["lastName"] = this.lastName;
-        data["email"] = this.email;
-        data["telephone"] = this.telephone;
-        data["comments"] = this.comments;
-        data["function"] = this.function;
-        data["companyId"] = this.companyId;
-        data["company"] = this.company ? this.company.toJSON() : <any>undefined;
-        if (Array.isArray(this.contracts)) {
-            data["contracts"] = [];
-            for (let item of this.contracts)
-                data["contracts"].push(item.toJSON());
-        }
-        return data;
-    }
-}
-
-export interface IContact {
-    /** Incremental ID of the entity */
-    id: number;
-    /** Date at which this entity has been created */
-    createdAt: Date;
-    /** Date at which this entity has last been updated */
-    updatedAt: Date;
-    /** If this entity has been soft-deleted, this is the date at which the entity has been deleted */
-    deletedAt?: Date;
-    /** Version number of this entity */
-    version: number;
-    /** The gender of this contact */
-    gender: Gender;
-    /** The first name of the contact */
-    firstName: string;
-    /** The middle name of the contact, if he/she has one */
-    lastNamePreposition: string;
-    /** The last name of the contact */
-    lastName: string;
-    /** The (personal) email address of the contact */
-    email: string;
-    /** The (personal) phone number of the contact */
-    telephone: string;
-    /** Comments regarding the contact person, if there are any */
-    comments: string;
-    /** Function of this contact person within the company, if known. Normal by default. */
-    function: ContactFunction;
-    companyId: number;
-    /** Company this contact person works at */
-    company: Company;
-    /** All contracts that have been closed with this contact person */
-    contracts: Contract[];
-}
-
-export class CompanyActivity implements ICompanyActivity {
-    /** Incremental ID of the entity */
-    id!: number;
-    /** Date at which this entity has been created */
-    createdAt!: Date;
-    /** Date at which this entity has last been updated */
-    updatedAt!: Date;
-    /** If this entity has been soft-deleted, this is the date at which the entity has been deleted */
-    deletedAt?: Date;
-    /** Version number of this entity */
-    version!: number;
-    /** Type of the activity (status or comment) */
-    type!: ActivityType;
-    /** Description of this activity (English) */
-    descriptionEnglish!: string;
-    /** Description of this activity (Dutch) */
-    descriptionDutch!: string;
-    createdById!: number;
-    /** User who created this activity */
-    createdBy!: User;
-    companyId!: number;
-    /** Company related to this activity */
-    company!: Company;
-
-    constructor(data?: ICompanyActivity) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-        if (!data) {
-            this.createdBy = new User();
-            this.company = new Company();
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"];
-            this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
-            this.updatedAt = _data["updatedAt"] ? new Date(_data["updatedAt"].toString()) : <any>undefined;
-            this.deletedAt = _data["deletedAt"] ? new Date(_data["deletedAt"].toString()) : <any>undefined;
-            this.version = _data["version"];
-            this.type = _data["type"];
-            this.descriptionEnglish = _data["descriptionEnglish"];
-            this.descriptionDutch = _data["descriptionDutch"];
-            this.createdById = _data["createdById"];
-            this.createdBy = _data["createdBy"] ? User.fromJS(_data["createdBy"]) : new User();
-            this.companyId = _data["companyId"];
-            this.company = _data["company"] ? Company.fromJS(_data["company"]) : new Company();
-        }
-    }
-
-    static fromJS(data: any): CompanyActivity {
-        data = typeof data === 'object' ? data : {};
-        let result = new CompanyActivity();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
-        data["updatedAt"] = this.updatedAt ? this.updatedAt.toISOString() : <any>undefined;
-        data["deletedAt"] = this.deletedAt ? this.deletedAt.toISOString() : <any>undefined;
-        data["version"] = this.version;
-        data["type"] = this.type;
-        data["descriptionEnglish"] = this.descriptionEnglish;
-        data["descriptionDutch"] = this.descriptionDutch;
-        data["createdById"] = this.createdById;
-        data["createdBy"] = this.createdBy ? this.createdBy.toJSON() : <any>undefined;
-        data["companyId"] = this.companyId;
-        data["company"] = this.company ? this.company.toJSON() : <any>undefined;
-        return data;
-    }
-}
-
-export interface ICompanyActivity {
-    /** Incremental ID of the entity */
-    id: number;
-    /** Date at which this entity has been created */
-    createdAt: Date;
-    /** Date at which this entity has last been updated */
-    updatedAt: Date;
-    /** If this entity has been soft-deleted, this is the date at which the entity has been deleted */
-    deletedAt?: Date;
-    /** Version number of this entity */
-    version: number;
-    /** Type of the activity (status or comment) */
-    type: ActivityType;
-    /** Description of this activity (English) */
-    descriptionEnglish: string;
-    /** Description of this activity (Dutch) */
-    descriptionDutch: string;
-    createdById: number;
-    /** User who created this activity */
-    createdBy: User;
-    companyId: number;
-    /** Company related to this activity */
-    company: Company;
-}
-
-export class CompanyFile implements ICompanyFile {
-    /** Incremental ID of the entity */
-    id!: number;
-    /** Date at which this entity has been created */
-    createdAt!: Date;
-    /** Date at which this entity has last been updated */
-    updatedAt!: Date;
-    /** If this entity has been soft-deleted, this is the date at which the entity has been deleted */
-    deletedAt?: Date;
-    /** Version number of this entity */
-    version!: number;
-    /** Label of the file as shown in the front-end */
-    name!: string;
-    /** Name of the file as shown when downloaded */
-    downloadName!: string;
-    /** Location of the file on disk */
-    location!: string;
-    createdById!: number;
-    /** User who created this file */
-    createdBy!: User;
-    companyId!: number;
-    /** Company related to this file */
-    company!: Company;
-
-    constructor(data?: ICompanyFile) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-        if (!data) {
-            this.createdBy = new User();
-            this.company = new Company();
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"];
-            this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
-            this.updatedAt = _data["updatedAt"] ? new Date(_data["updatedAt"].toString()) : <any>undefined;
-            this.deletedAt = _data["deletedAt"] ? new Date(_data["deletedAt"].toString()) : <any>undefined;
-            this.version = _data["version"];
-            this.name = _data["name"];
-            this.downloadName = _data["downloadName"];
-            this.location = _data["location"];
-            this.createdById = _data["createdById"];
-            this.createdBy = _data["createdBy"] ? User.fromJS(_data["createdBy"]) : new User();
-            this.companyId = _data["companyId"];
-            this.company = _data["company"] ? Company.fromJS(_data["company"]) : new Company();
-        }
-    }
-
-    static fromJS(data: any): CompanyFile {
-        data = typeof data === 'object' ? data : {};
-        let result = new CompanyFile();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
-        data["updatedAt"] = this.updatedAt ? this.updatedAt.toISOString() : <any>undefined;
-        data["deletedAt"] = this.deletedAt ? this.deletedAt.toISOString() : <any>undefined;
-        data["version"] = this.version;
-        data["name"] = this.name;
-        data["downloadName"] = this.downloadName;
-        data["location"] = this.location;
-        data["createdById"] = this.createdById;
-        data["createdBy"] = this.createdBy ? this.createdBy.toJSON() : <any>undefined;
-        data["companyId"] = this.companyId;
-        data["company"] = this.company ? this.company.toJSON() : <any>undefined;
-        return data;
-    }
-}
-
-export interface ICompanyFile {
-    /** Incremental ID of the entity */
-    id: number;
-    /** Date at which this entity has been created */
-    createdAt: Date;
-    /** Date at which this entity has last been updated */
-    updatedAt: Date;
-    /** If this entity has been soft-deleted, this is the date at which the entity has been deleted */
-    deletedAt?: Date;
-    /** Version number of this entity */
-    version: number;
-    /** Label of the file as shown in the front-end */
-    name: string;
-    /** Name of the file as shown when downloaded */
-    downloadName: string;
-    /** Location of the file on disk */
-    location: string;
-    createdById: number;
-    /** User who created this file */
-    createdBy: User;
-    companyId: number;
-    /** Company related to this file */
-    company: Company;
-}
-
-export enum ContractStatus {
-    CREATED = "CREATED",
-    PROPOSED = "PROPOSED",
-    SENT = "SENT",
-    CONFIRMED = "CONFIRMED",
-    FINISHED = "FINISHED",
-    CANCELLED = "CANCELLED",
-}
-
-export class ContractActivity implements IContractActivity {
-    /** Incremental ID of the entity */
-    id!: number;
-    /** Date at which this entity has been created */
-    createdAt!: Date;
-    /** Date at which this entity has last been updated */
-    updatedAt!: Date;
-    /** If this entity has been soft-deleted, this is the date at which the entity has been deleted */
-    deletedAt?: Date;
-    /** Version number of this entity */
-    version!: number;
-    /** Type of the activity (status or comment) */
-    type!: ActivityType;
-    /** Description of this activity (English) */
-    descriptionEnglish!: string;
-    /** Description of this activity (Dutch) */
-    descriptionDutch!: string;
-    createdById!: number;
-    /** User who created this activity */
-    createdBy!: User;
-    contractId!: number;
-    /** Contract related to this activity */
-    contract!: Contract;
-    /** Subtype of this activity, only used when the type = "STATUS" */
-    subType?: ContractStatus;
-
-    constructor(data?: IContractActivity) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-        if (!data) {
-            this.createdBy = new User();
-            this.contract = new Contract();
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"];
-            this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
-            this.updatedAt = _data["updatedAt"] ? new Date(_data["updatedAt"].toString()) : <any>undefined;
-            this.deletedAt = _data["deletedAt"] ? new Date(_data["deletedAt"].toString()) : <any>undefined;
-            this.version = _data["version"];
-            this.type = _data["type"];
-            this.descriptionEnglish = _data["descriptionEnglish"];
-            this.descriptionDutch = _data["descriptionDutch"];
-            this.createdById = _data["createdById"];
-            this.createdBy = _data["createdBy"] ? User.fromJS(_data["createdBy"]) : new User();
-            this.contractId = _data["contractId"];
-            this.contract = _data["contract"] ? Contract.fromJS(_data["contract"]) : new Contract();
-            this.subType = _data["subType"];
-        }
-    }
-
-    static fromJS(data: any): ContractActivity {
-        data = typeof data === 'object' ? data : {};
-        let result = new ContractActivity();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
-        data["updatedAt"] = this.updatedAt ? this.updatedAt.toISOString() : <any>undefined;
-        data["deletedAt"] = this.deletedAt ? this.deletedAt.toISOString() : <any>undefined;
-        data["version"] = this.version;
-        data["type"] = this.type;
-        data["descriptionEnglish"] = this.descriptionEnglish;
-        data["descriptionDutch"] = this.descriptionDutch;
-        data["createdById"] = this.createdById;
-        data["createdBy"] = this.createdBy ? this.createdBy.toJSON() : <any>undefined;
-        data["contractId"] = this.contractId;
-        data["contract"] = this.contract ? this.contract.toJSON() : <any>undefined;
-        data["subType"] = this.subType;
-        return data;
-    }
-}
-
-export interface IContractActivity {
-    /** Incremental ID of the entity */
-    id: number;
-    /** Date at which this entity has been created */
-    createdAt: Date;
-    /** Date at which this entity has last been updated */
-    updatedAt: Date;
-    /** If this entity has been soft-deleted, this is the date at which the entity has been deleted */
-    deletedAt?: Date;
-    /** Version number of this entity */
-    version: number;
-    /** Type of the activity (status or comment) */
-    type: ActivityType;
-    /** Description of this activity (English) */
-    descriptionEnglish: string;
-    /** Description of this activity (Dutch) */
-    descriptionDutch: string;
-    createdById: number;
-    /** User who created this activity */
-    createdBy: User;
-    contractId: number;
-    /** Contract related to this activity */
-    contract: Contract;
-    /** Subtype of this activity, only used when the type = "STATUS" */
-    subType?: ContractStatus;
-}
-
-export class ContractFile implements IContractFile {
-    /** Incremental ID of the entity */
-    id!: number;
-    /** Date at which this entity has been created */
-    createdAt!: Date;
-    /** Date at which this entity has last been updated */
-    updatedAt!: Date;
-    /** If this entity has been soft-deleted, this is the date at which the entity has been deleted */
-    deletedAt?: Date;
-    /** Version number of this entity */
-    version!: number;
-    /** Label of the file as shown in the front-end */
-    name!: string;
-    /** Name of the file as shown when downloaded */
-    downloadName!: string;
-    /** Location of the file on disk */
-    location!: string;
-    createdById!: number;
-    /** User who created this file */
-    createdBy!: User;
-    contractId!: number;
-    /** Contract related to this file */
-    contract!: Contract;
-
-    constructor(data?: IContractFile) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-        if (!data) {
-            this.createdBy = new User();
-            this.contract = new Contract();
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"];
-            this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
-            this.updatedAt = _data["updatedAt"] ? new Date(_data["updatedAt"].toString()) : <any>undefined;
-            this.deletedAt = _data["deletedAt"] ? new Date(_data["deletedAt"].toString()) : <any>undefined;
-            this.version = _data["version"];
-            this.name = _data["name"];
-            this.downloadName = _data["downloadName"];
-            this.location = _data["location"];
-            this.createdById = _data["createdById"];
-            this.createdBy = _data["createdBy"] ? User.fromJS(_data["createdBy"]) : new User();
-            this.contractId = _data["contractId"];
-            this.contract = _data["contract"] ? Contract.fromJS(_data["contract"]) : new Contract();
-        }
-    }
-
-    static fromJS(data: any): ContractFile {
-        data = typeof data === 'object' ? data : {};
-        let result = new ContractFile();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
-        data["updatedAt"] = this.updatedAt ? this.updatedAt.toISOString() : <any>undefined;
-        data["deletedAt"] = this.deletedAt ? this.deletedAt.toISOString() : <any>undefined;
-        data["version"] = this.version;
-        data["name"] = this.name;
-        data["downloadName"] = this.downloadName;
-        data["location"] = this.location;
-        data["createdById"] = this.createdById;
-        data["createdBy"] = this.createdBy ? this.createdBy.toJSON() : <any>undefined;
-        data["contractId"] = this.contractId;
-        data["contract"] = this.contract ? this.contract.toJSON() : <any>undefined;
-        return data;
-    }
-}
-
-export interface IContractFile {
-    /** Incremental ID of the entity */
-    id: number;
-    /** Date at which this entity has been created */
-    createdAt: Date;
-    /** Date at which this entity has last been updated */
-    updatedAt: Date;
-    /** If this entity has been soft-deleted, this is the date at which the entity has been deleted */
-    deletedAt?: Date;
-    /** Version number of this entity */
-    version: number;
-    /** Label of the file as shown in the front-end */
-    name: string;
-    /** Name of the file as shown when downloaded */
-    downloadName: string;
-    /** Location of the file on disk */
-    location: string;
-    createdById: number;
-    /** User who created this file */
-    createdBy: User;
-    contractId: number;
-    /** Contract related to this file */
-    contract: Contract;
-}
-
-export enum ProductInstanceStatus {
-    NOTDELIVERED = "NOTDELIVERED",
-    DELIVERED = "DELIVERED",
-    CANCELLED = "CANCELLED",
-    DEFERRED = "DEFERRED",
-}
-
-export class ProductInstanceActivity implements IProductInstanceActivity {
-    /** Incremental ID of the entity */
-    id!: number;
-    /** Date at which this entity has been created */
-    createdAt!: Date;
-    /** Date at which this entity has last been updated */
-    updatedAt!: Date;
-    /** If this entity has been soft-deleted, this is the date at which the entity has been deleted */
-    deletedAt?: Date;
-    /** Version number of this entity */
-    version!: number;
-    /** Type of the activity (status or comment) */
-    type!: ActivityType;
-    /** Description of this activity (English) */
-    descriptionEnglish!: string;
-    /** Description of this activity (Dutch) */
-    descriptionDutch!: string;
-    createdById!: number;
-    /** User who created this activity */
-    createdBy!: User;
-    productInstanceId!: number;
-    /** ProductInstance related to this activity */
-    productInstance!: ProductInstance;
-    /** Subtype of this activity, only used when the type = "STATUS" */
-    subType?: ProductInstanceStatus;
-
-    constructor(data?: IProductInstanceActivity) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-        if (!data) {
-            this.createdBy = new User();
-            this.productInstance = new ProductInstance();
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"];
-            this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
-            this.updatedAt = _data["updatedAt"] ? new Date(_data["updatedAt"].toString()) : <any>undefined;
-            this.deletedAt = _data["deletedAt"] ? new Date(_data["deletedAt"].toString()) : <any>undefined;
-            this.version = _data["version"];
-            this.type = _data["type"];
-            this.descriptionEnglish = _data["descriptionEnglish"];
-            this.descriptionDutch = _data["descriptionDutch"];
-            this.createdById = _data["createdById"];
-            this.createdBy = _data["createdBy"] ? User.fromJS(_data["createdBy"]) : new User();
-            this.productInstanceId = _data["productInstanceId"];
-            this.productInstance = _data["productInstance"] ? ProductInstance.fromJS(_data["productInstance"]) : new ProductInstance();
-            this.subType = _data["subType"];
-        }
-    }
-
-    static fromJS(data: any): ProductInstanceActivity {
-        data = typeof data === 'object' ? data : {};
-        let result = new ProductInstanceActivity();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
-        data["updatedAt"] = this.updatedAt ? this.updatedAt.toISOString() : <any>undefined;
-        data["deletedAt"] = this.deletedAt ? this.deletedAt.toISOString() : <any>undefined;
-        data["version"] = this.version;
-        data["type"] = this.type;
-        data["descriptionEnglish"] = this.descriptionEnglish;
-        data["descriptionDutch"] = this.descriptionDutch;
-        data["createdById"] = this.createdById;
-        data["createdBy"] = this.createdBy ? this.createdBy.toJSON() : <any>undefined;
-        data["productInstanceId"] = this.productInstanceId;
-        data["productInstance"] = this.productInstance ? this.productInstance.toJSON() : <any>undefined;
-        data["subType"] = this.subType;
-        return data;
-    }
-}
-
-export interface IProductInstanceActivity {
-    /** Incremental ID of the entity */
-    id: number;
-    /** Date at which this entity has been created */
-    createdAt: Date;
-    /** Date at which this entity has last been updated */
-    updatedAt: Date;
-    /** If this entity has been soft-deleted, this is the date at which the entity has been deleted */
-    deletedAt?: Date;
-    /** Version number of this entity */
-    version: number;
-    /** Type of the activity (status or comment) */
-    type: ActivityType;
-    /** Description of this activity (English) */
-    descriptionEnglish: string;
-    /** Description of this activity (Dutch) */
-    descriptionDutch: string;
-    createdById: number;
-    /** User who created this activity */
-    createdBy: User;
-    productInstanceId: number;
-    /** ProductInstance related to this activity */
-    productInstance: ProductInstance;
-    /** Subtype of this activity, only used when the type = "STATUS" */
-    subType?: ProductInstanceStatus;
-}
-
 export class ProductActivity implements IProductActivity {
     /** Incremental ID of the entity */
     id!: number;
@@ -9442,11 +7927,1250 @@ at which the entity has been deleted */
     version: number;
 }
 
-export class ProductListResponse implements IProductListResponse {
-    list!: Product[];
+export class Contract implements IContract {
+    /** Incremental ID of the entity */
+    id!: number;
+    /** Date at which this entity has been created */
+    createdAt!: Date;
+    /** Date at which this entity has last been updated */
+    updatedAt!: Date;
+    /** If this entity has been soft-deleted, this is the date at which the entity has been deleted */
+    deletedAt?: Date;
+    /** Version number of this entity */
+    version!: number;
+    /** Title or name of this contract/collaboration */
+    title!: string;
+    companyId!: number;
+    /** Company this contract has been closed with */
+    company!: Company;
+    /** All products in the contract */
+    products!: ProductInstance[];
+    createdById!: number;
+    createdBy!: User;
+    assignedToId!: number;
+    assignedTo!: User;
+    contactId!: number;
+    /** Comments regarding this contract, if there are any */
+    comments?: string;
+    /** The contact this contract has been closed with */
+    contact!: Contact;
+    /** All activities regarding this contract */
+    activities!: ContractActivity[];
+    /** All files regarding this contract */
+    files!: ContractFile[];
+
+    constructor(data?: IContract) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+        if (!data) {
+            this.company = new Company();
+            this.products = [];
+            this.createdBy = new User();
+            this.assignedTo = new User();
+            this.contact = new Contact();
+            this.activities = [];
+            this.files = [];
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
+            this.updatedAt = _data["updatedAt"] ? new Date(_data["updatedAt"].toString()) : <any>undefined;
+            this.deletedAt = _data["deletedAt"] ? new Date(_data["deletedAt"].toString()) : <any>undefined;
+            this.version = _data["version"];
+            this.title = _data["title"];
+            this.companyId = _data["companyId"];
+            this.company = _data["company"] ? Company.fromJS(_data["company"]) : new Company();
+            if (Array.isArray(_data["products"])) {
+                this.products = [] as any;
+                for (let item of _data["products"])
+                    this.products!.push(ProductInstance.fromJS(item));
+            }
+            this.createdById = _data["createdById"];
+            this.createdBy = _data["createdBy"] ? User.fromJS(_data["createdBy"]) : new User();
+            this.assignedToId = _data["assignedToId"];
+            this.assignedTo = _data["assignedTo"] ? User.fromJS(_data["assignedTo"]) : new User();
+            this.contactId = _data["contactId"];
+            this.comments = _data["comments"];
+            this.contact = _data["contact"] ? Contact.fromJS(_data["contact"]) : new Contact();
+            if (Array.isArray(_data["activities"])) {
+                this.activities = [] as any;
+                for (let item of _data["activities"])
+                    this.activities!.push(ContractActivity.fromJS(item));
+            }
+            if (Array.isArray(_data["files"])) {
+                this.files = [] as any;
+                for (let item of _data["files"])
+                    this.files!.push(ContractFile.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): Contract {
+        data = typeof data === 'object' ? data : {};
+        let result = new Contract();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
+        data["updatedAt"] = this.updatedAt ? this.updatedAt.toISOString() : <any>undefined;
+        data["deletedAt"] = this.deletedAt ? this.deletedAt.toISOString() : <any>undefined;
+        data["version"] = this.version;
+        data["title"] = this.title;
+        data["companyId"] = this.companyId;
+        data["company"] = this.company ? this.company.toJSON() : <any>undefined;
+        if (Array.isArray(this.products)) {
+            data["products"] = [];
+            for (let item of this.products)
+                data["products"].push(item.toJSON());
+        }
+        data["createdById"] = this.createdById;
+        data["createdBy"] = this.createdBy ? this.createdBy.toJSON() : <any>undefined;
+        data["assignedToId"] = this.assignedToId;
+        data["assignedTo"] = this.assignedTo ? this.assignedTo.toJSON() : <any>undefined;
+        data["contactId"] = this.contactId;
+        data["comments"] = this.comments;
+        data["contact"] = this.contact ? this.contact.toJSON() : <any>undefined;
+        if (Array.isArray(this.activities)) {
+            data["activities"] = [];
+            for (let item of this.activities)
+                data["activities"].push(item.toJSON());
+        }
+        if (Array.isArray(this.files)) {
+            data["files"] = [];
+            for (let item of this.files)
+                data["files"].push(item.toJSON());
+        }
+        return data;
+    }
+}
+
+export interface IContract {
+    /** Incremental ID of the entity */
+    id: number;
+    /** Date at which this entity has been created */
+    createdAt: Date;
+    /** Date at which this entity has last been updated */
+    updatedAt: Date;
+    /** If this entity has been soft-deleted, this is the date at which the entity has been deleted */
+    deletedAt?: Date;
+    /** Version number of this entity */
+    version: number;
+    /** Title or name of this contract/collaboration */
+    title: string;
+    companyId: number;
+    /** Company this contract has been closed with */
+    company: Company;
+    /** All products in the contract */
+    products: ProductInstance[];
+    createdById: number;
+    createdBy: User;
+    assignedToId: number;
+    assignedTo: User;
+    contactId: number;
+    /** Comments regarding this contract, if there are any */
+    comments?: string;
+    /** The contact this contract has been closed with */
+    contact: Contact;
+    /** All activities regarding this contract */
+    activities: ContractActivity[];
+    /** All files regarding this contract */
+    files: ContractFile[];
+}
+
+export class Invoice implements IInvoice {
+    /** Incremental ID of the entity */
+    id!: number;
+    /** Date at which this entity has been created */
+    createdAt!: Date;
+    /** Date at which this entity has last been updated */
+    updatedAt!: Date;
+    /** If this entity has been soft-deleted, this is the date at which the entity has been deleted */
+    deletedAt?: Date;
+    /** Version number of this entity */
+    version!: number;
+    /** All products that have been invoiced */
+    products!: ProductInstance[];
+    /** Name of the invoice (by default the same as the first contract) */
+    title!: string;
+    /** PO number on the invoice, if needed */
+    poNumber?: string;
+    /** Date at which this invoice will be sent */
+    startDate!: Date;
+    companyId!: number;
+    createdById!: number;
+    createdBy!: User;
+    assignedToId!: number;
+    assignedTo!: User;
+    /** Any comments regarding this invoice */
+    comments?: string;
+    /** Company this invoice is directed to */
+    company!: Company;
+    /** All activities regarding this invoice */
+    activities!: InvoiceActivity[];
+    /** All files regarding this contract */
+    files!: InvoiceFile[];
+
+    constructor(data?: IInvoice) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+        if (!data) {
+            this.products = [];
+            this.createdBy = new User();
+            this.assignedTo = new User();
+            this.company = new Company();
+            this.activities = [];
+            this.files = [];
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
+            this.updatedAt = _data["updatedAt"] ? new Date(_data["updatedAt"].toString()) : <any>undefined;
+            this.deletedAt = _data["deletedAt"] ? new Date(_data["deletedAt"].toString()) : <any>undefined;
+            this.version = _data["version"];
+            if (Array.isArray(_data["products"])) {
+                this.products = [] as any;
+                for (let item of _data["products"])
+                    this.products!.push(ProductInstance.fromJS(item));
+            }
+            this.title = _data["title"];
+            this.poNumber = _data["poNumber"];
+            this.startDate = _data["startDate"] ? new Date(_data["startDate"].toString()) : <any>undefined;
+            this.companyId = _data["companyId"];
+            this.createdById = _data["createdById"];
+            this.createdBy = _data["createdBy"] ? User.fromJS(_data["createdBy"]) : new User();
+            this.assignedToId = _data["assignedToId"];
+            this.assignedTo = _data["assignedTo"] ? User.fromJS(_data["assignedTo"]) : new User();
+            this.comments = _data["comments"];
+            this.company = _data["company"] ? Company.fromJS(_data["company"]) : new Company();
+            if (Array.isArray(_data["activities"])) {
+                this.activities = [] as any;
+                for (let item of _data["activities"])
+                    this.activities!.push(InvoiceActivity.fromJS(item));
+            }
+            if (Array.isArray(_data["files"])) {
+                this.files = [] as any;
+                for (let item of _data["files"])
+                    this.files!.push(InvoiceFile.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): Invoice {
+        data = typeof data === 'object' ? data : {};
+        let result = new Invoice();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
+        data["updatedAt"] = this.updatedAt ? this.updatedAt.toISOString() : <any>undefined;
+        data["deletedAt"] = this.deletedAt ? this.deletedAt.toISOString() : <any>undefined;
+        data["version"] = this.version;
+        if (Array.isArray(this.products)) {
+            data["products"] = [];
+            for (let item of this.products)
+                data["products"].push(item.toJSON());
+        }
+        data["title"] = this.title;
+        data["poNumber"] = this.poNumber;
+        data["startDate"] = this.startDate ? this.startDate.toISOString() : <any>undefined;
+        data["companyId"] = this.companyId;
+        data["createdById"] = this.createdById;
+        data["createdBy"] = this.createdBy ? this.createdBy.toJSON() : <any>undefined;
+        data["assignedToId"] = this.assignedToId;
+        data["assignedTo"] = this.assignedTo ? this.assignedTo.toJSON() : <any>undefined;
+        data["comments"] = this.comments;
+        data["company"] = this.company ? this.company.toJSON() : <any>undefined;
+        if (Array.isArray(this.activities)) {
+            data["activities"] = [];
+            for (let item of this.activities)
+                data["activities"].push(item.toJSON());
+        }
+        if (Array.isArray(this.files)) {
+            data["files"] = [];
+            for (let item of this.files)
+                data["files"].push(item.toJSON());
+        }
+        return data;
+    }
+}
+
+export interface IInvoice {
+    /** Incremental ID of the entity */
+    id: number;
+    /** Date at which this entity has been created */
+    createdAt: Date;
+    /** Date at which this entity has last been updated */
+    updatedAt: Date;
+    /** If this entity has been soft-deleted, this is the date at which the entity has been deleted */
+    deletedAt?: Date;
+    /** Version number of this entity */
+    version: number;
+    /** All products that have been invoiced */
+    products: ProductInstance[];
+    /** Name of the invoice (by default the same as the first contract) */
+    title: string;
+    /** PO number on the invoice, if needed */
+    poNumber?: string;
+    /** Date at which this invoice will be sent */
+    startDate: Date;
+    companyId: number;
+    createdById: number;
+    createdBy: User;
+    assignedToId: number;
+    assignedTo: User;
+    /** Any comments regarding this invoice */
+    comments?: string;
+    /** Company this invoice is directed to */
+    company: Company;
+    /** All activities regarding this invoice */
+    activities: InvoiceActivity[];
+    /** All files regarding this contract */
+    files: InvoiceFile[];
+}
+
+export enum InvoiceStatus {
+    CREATED = "CREATED",
+    PROPOSED = "PROPOSED",
+    SENT = "SENT",
+    PAID = "PAID",
+    IRRECOVERABLE = "IRRECOVERABLE",
+    CANCELLED = "CANCELLED",
+}
+
+export class InvoiceActivity implements IInvoiceActivity {
+    /** Incremental ID of the entity */
+    id!: number;
+    /** Date at which this entity has been created */
+    createdAt!: Date;
+    /** Date at which this entity has last been updated */
+    updatedAt!: Date;
+    /** If this entity has been soft-deleted, this is the date at which the entity has been deleted */
+    deletedAt?: Date;
+    /** Version number of this entity */
+    version!: number;
+    /** Type of the activity (status or comment) */
+    type!: ActivityType;
+    /** Description of this activity (English) */
+    descriptionEnglish!: string;
+    /** Description of this activity (Dutch) */
+    descriptionDutch!: string;
+    createdById!: number;
+    /** User who created this activity */
+    createdBy!: User;
+    invoiceId!: number;
+    /** Invoice related to this activity */
+    invoice!: Invoice;
+    /** Subtype of this activity, only used when the type = "STATUS" */
+    subType?: InvoiceStatus;
+
+    constructor(data?: IInvoiceActivity) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+        if (!data) {
+            this.createdBy = new User();
+            this.invoice = new Invoice();
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
+            this.updatedAt = _data["updatedAt"] ? new Date(_data["updatedAt"].toString()) : <any>undefined;
+            this.deletedAt = _data["deletedAt"] ? new Date(_data["deletedAt"].toString()) : <any>undefined;
+            this.version = _data["version"];
+            this.type = _data["type"];
+            this.descriptionEnglish = _data["descriptionEnglish"];
+            this.descriptionDutch = _data["descriptionDutch"];
+            this.createdById = _data["createdById"];
+            this.createdBy = _data["createdBy"] ? User.fromJS(_data["createdBy"]) : new User();
+            this.invoiceId = _data["invoiceId"];
+            this.invoice = _data["invoice"] ? Invoice.fromJS(_data["invoice"]) : new Invoice();
+            this.subType = _data["subType"];
+        }
+    }
+
+    static fromJS(data: any): InvoiceActivity {
+        data = typeof data === 'object' ? data : {};
+        let result = new InvoiceActivity();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
+        data["updatedAt"] = this.updatedAt ? this.updatedAt.toISOString() : <any>undefined;
+        data["deletedAt"] = this.deletedAt ? this.deletedAt.toISOString() : <any>undefined;
+        data["version"] = this.version;
+        data["type"] = this.type;
+        data["descriptionEnglish"] = this.descriptionEnglish;
+        data["descriptionDutch"] = this.descriptionDutch;
+        data["createdById"] = this.createdById;
+        data["createdBy"] = this.createdBy ? this.createdBy.toJSON() : <any>undefined;
+        data["invoiceId"] = this.invoiceId;
+        data["invoice"] = this.invoice ? this.invoice.toJSON() : <any>undefined;
+        data["subType"] = this.subType;
+        return data;
+    }
+}
+
+export interface IInvoiceActivity {
+    /** Incremental ID of the entity */
+    id: number;
+    /** Date at which this entity has been created */
+    createdAt: Date;
+    /** Date at which this entity has last been updated */
+    updatedAt: Date;
+    /** If this entity has been soft-deleted, this is the date at which the entity has been deleted */
+    deletedAt?: Date;
+    /** Version number of this entity */
+    version: number;
+    /** Type of the activity (status or comment) */
+    type: ActivityType;
+    /** Description of this activity (English) */
+    descriptionEnglish: string;
+    /** Description of this activity (Dutch) */
+    descriptionDutch: string;
+    createdById: number;
+    /** User who created this activity */
+    createdBy: User;
+    invoiceId: number;
+    /** Invoice related to this activity */
+    invoice: Invoice;
+    /** Subtype of this activity, only used when the type = "STATUS" */
+    subType?: InvoiceStatus;
+}
+
+export class InvoiceFile implements IInvoiceFile {
+    /** Incremental ID of the entity */
+    id!: number;
+    /** Date at which this entity has been created */
+    createdAt!: Date;
+    /** Date at which this entity has last been updated */
+    updatedAt!: Date;
+    /** If this entity has been soft-deleted, this is the date at which the entity has been deleted */
+    deletedAt?: Date;
+    /** Version number of this entity */
+    version!: number;
+    /** Label of the file as shown in the front-end */
+    name!: string;
+    /** Name of the file as shown when downloaded */
+    downloadName!: string;
+    /** Location of the file on disk */
+    location!: string;
+    createdById!: number;
+    /** User who created this file */
+    createdBy!: User;
+    invoiceId!: number;
+    /** Invoice related to this file */
+    invoice!: Invoice;
+
+    constructor(data?: IInvoiceFile) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+        if (!data) {
+            this.createdBy = new User();
+            this.invoice = new Invoice();
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
+            this.updatedAt = _data["updatedAt"] ? new Date(_data["updatedAt"].toString()) : <any>undefined;
+            this.deletedAt = _data["deletedAt"] ? new Date(_data["deletedAt"].toString()) : <any>undefined;
+            this.version = _data["version"];
+            this.name = _data["name"];
+            this.downloadName = _data["downloadName"];
+            this.location = _data["location"];
+            this.createdById = _data["createdById"];
+            this.createdBy = _data["createdBy"] ? User.fromJS(_data["createdBy"]) : new User();
+            this.invoiceId = _data["invoiceId"];
+            this.invoice = _data["invoice"] ? Invoice.fromJS(_data["invoice"]) : new Invoice();
+        }
+    }
+
+    static fromJS(data: any): InvoiceFile {
+        data = typeof data === 'object' ? data : {};
+        let result = new InvoiceFile();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
+        data["updatedAt"] = this.updatedAt ? this.updatedAt.toISOString() : <any>undefined;
+        data["deletedAt"] = this.deletedAt ? this.deletedAt.toISOString() : <any>undefined;
+        data["version"] = this.version;
+        data["name"] = this.name;
+        data["downloadName"] = this.downloadName;
+        data["location"] = this.location;
+        data["createdById"] = this.createdById;
+        data["createdBy"] = this.createdBy ? this.createdBy.toJSON() : <any>undefined;
+        data["invoiceId"] = this.invoiceId;
+        data["invoice"] = this.invoice ? this.invoice.toJSON() : <any>undefined;
+        return data;
+    }
+}
+
+export interface IInvoiceFile {
+    /** Incremental ID of the entity */
+    id: number;
+    /** Date at which this entity has been created */
+    createdAt: Date;
+    /** Date at which this entity has last been updated */
+    updatedAt: Date;
+    /** If this entity has been soft-deleted, this is the date at which the entity has been deleted */
+    deletedAt?: Date;
+    /** Version number of this entity */
+    version: number;
+    /** Label of the file as shown in the front-end */
+    name: string;
+    /** Name of the file as shown when downloaded */
+    downloadName: string;
+    /** Location of the file on disk */
+    location: string;
+    createdById: number;
+    /** User who created this file */
+    createdBy: User;
+    invoiceId: number;
+    /** Invoice related to this file */
+    invoice: Invoice;
+}
+
+export enum ProductInstanceStatus {
+    NOTDELIVERED = "NOTDELIVERED",
+    DELIVERED = "DELIVERED",
+    CANCELLED = "CANCELLED",
+    DEFERRED = "DEFERRED",
+}
+
+export class ProductInstanceActivity implements IProductInstanceActivity {
+    /** Incremental ID of the entity */
+    id!: number;
+    /** Date at which this entity has been created */
+    createdAt!: Date;
+    /** Date at which this entity has last been updated */
+    updatedAt!: Date;
+    /** If this entity has been soft-deleted, this is the date at which the entity has been deleted */
+    deletedAt?: Date;
+    /** Version number of this entity */
+    version!: number;
+    /** Type of the activity (status or comment) */
+    type!: ActivityType;
+    /** Description of this activity (English) */
+    descriptionEnglish!: string;
+    /** Description of this activity (Dutch) */
+    descriptionDutch!: string;
+    createdById!: number;
+    /** User who created this activity */
+    createdBy!: User;
+    productInstanceId!: number;
+    /** ProductInstance related to this activity */
+    productInstance!: ProductInstance;
+    /** Subtype of this activity, only used when the type = "STATUS" */
+    subType?: ProductInstanceStatus;
+
+    constructor(data?: IProductInstanceActivity) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+        if (!data) {
+            this.createdBy = new User();
+            this.productInstance = new ProductInstance();
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
+            this.updatedAt = _data["updatedAt"] ? new Date(_data["updatedAt"].toString()) : <any>undefined;
+            this.deletedAt = _data["deletedAt"] ? new Date(_data["deletedAt"].toString()) : <any>undefined;
+            this.version = _data["version"];
+            this.type = _data["type"];
+            this.descriptionEnglish = _data["descriptionEnglish"];
+            this.descriptionDutch = _data["descriptionDutch"];
+            this.createdById = _data["createdById"];
+            this.createdBy = _data["createdBy"] ? User.fromJS(_data["createdBy"]) : new User();
+            this.productInstanceId = _data["productInstanceId"];
+            this.productInstance = _data["productInstance"] ? ProductInstance.fromJS(_data["productInstance"]) : new ProductInstance();
+            this.subType = _data["subType"];
+        }
+    }
+
+    static fromJS(data: any): ProductInstanceActivity {
+        data = typeof data === 'object' ? data : {};
+        let result = new ProductInstanceActivity();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
+        data["updatedAt"] = this.updatedAt ? this.updatedAt.toISOString() : <any>undefined;
+        data["deletedAt"] = this.deletedAt ? this.deletedAt.toISOString() : <any>undefined;
+        data["version"] = this.version;
+        data["type"] = this.type;
+        data["descriptionEnglish"] = this.descriptionEnglish;
+        data["descriptionDutch"] = this.descriptionDutch;
+        data["createdById"] = this.createdById;
+        data["createdBy"] = this.createdBy ? this.createdBy.toJSON() : <any>undefined;
+        data["productInstanceId"] = this.productInstanceId;
+        data["productInstance"] = this.productInstance ? this.productInstance.toJSON() : <any>undefined;
+        data["subType"] = this.subType;
+        return data;
+    }
+}
+
+export interface IProductInstanceActivity {
+    /** Incremental ID of the entity */
+    id: number;
+    /** Date at which this entity has been created */
+    createdAt: Date;
+    /** Date at which this entity has last been updated */
+    updatedAt: Date;
+    /** If this entity has been soft-deleted, this is the date at which the entity has been deleted */
+    deletedAt?: Date;
+    /** Version number of this entity */
+    version: number;
+    /** Type of the activity (status or comment) */
+    type: ActivityType;
+    /** Description of this activity (English) */
+    descriptionEnglish: string;
+    /** Description of this activity (Dutch) */
+    descriptionDutch: string;
+    createdById: number;
+    /** User who created this activity */
+    createdBy: User;
+    productInstanceId: number;
+    /** ProductInstance related to this activity */
+    productInstance: ProductInstance;
+    /** Subtype of this activity, only used when the type = "STATUS" */
+    subType?: ProductInstanceStatus;
+}
+
+export enum ContactFunction {
+    NORMAL = "NORMAL",
+    PRIMARY = "PRIMARY",
+    FINANCIAL = "FINANCIAL",
+    OLD = "OLD",
+}
+
+export class Contact implements IContact {
+    /** Incremental ID of the entity */
+    id!: number;
+    /** Date at which this entity has been created */
+    createdAt!: Date;
+    /** Date at which this entity has last been updated */
+    updatedAt!: Date;
+    /** If this entity has been soft-deleted, this is the date at which the entity has been deleted */
+    deletedAt?: Date;
+    /** Version number of this entity */
+    version!: number;
+    /** The gender of this contact */
+    gender!: Gender;
+    /** The first name of the contact */
+    firstName!: string;
+    /** The middle name of the contact, if he/she has one */
+    lastNamePreposition!: string;
+    /** The last name of the contact */
+    lastName!: string;
+    /** The (personal) email address of the contact */
+    email!: string;
+    /** The (personal) phone number of the contact */
+    telephone!: string;
+    /** Comments regarding the contact person, if there are any */
+    comments!: string;
+    /** Function of this contact person within the company, if known. Normal by default. */
+    function!: ContactFunction;
+    companyId!: number;
+    /** Company this contact person works at */
+    company!: Company;
+    /** All contracts that have been closed with this contact person */
+    contracts!: Contract[];
+
+    constructor(data?: IContact) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+        if (!data) {
+            this.company = new Company();
+            this.contracts = [];
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
+            this.updatedAt = _data["updatedAt"] ? new Date(_data["updatedAt"].toString()) : <any>undefined;
+            this.deletedAt = _data["deletedAt"] ? new Date(_data["deletedAt"].toString()) : <any>undefined;
+            this.version = _data["version"];
+            this.gender = _data["gender"];
+            this.firstName = _data["firstName"];
+            this.lastNamePreposition = _data["lastNamePreposition"];
+            this.lastName = _data["lastName"];
+            this.email = _data["email"];
+            this.telephone = _data["telephone"];
+            this.comments = _data["comments"];
+            this.function = _data["function"];
+            this.companyId = _data["companyId"];
+            this.company = _data["company"] ? Company.fromJS(_data["company"]) : new Company();
+            if (Array.isArray(_data["contracts"])) {
+                this.contracts = [] as any;
+                for (let item of _data["contracts"])
+                    this.contracts!.push(Contract.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): Contact {
+        data = typeof data === 'object' ? data : {};
+        let result = new Contact();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
+        data["updatedAt"] = this.updatedAt ? this.updatedAt.toISOString() : <any>undefined;
+        data["deletedAt"] = this.deletedAt ? this.deletedAt.toISOString() : <any>undefined;
+        data["version"] = this.version;
+        data["gender"] = this.gender;
+        data["firstName"] = this.firstName;
+        data["lastNamePreposition"] = this.lastNamePreposition;
+        data["lastName"] = this.lastName;
+        data["email"] = this.email;
+        data["telephone"] = this.telephone;
+        data["comments"] = this.comments;
+        data["function"] = this.function;
+        data["companyId"] = this.companyId;
+        data["company"] = this.company ? this.company.toJSON() : <any>undefined;
+        if (Array.isArray(this.contracts)) {
+            data["contracts"] = [];
+            for (let item of this.contracts)
+                data["contracts"].push(item.toJSON());
+        }
+        return data;
+    }
+}
+
+export interface IContact {
+    /** Incremental ID of the entity */
+    id: number;
+    /** Date at which this entity has been created */
+    createdAt: Date;
+    /** Date at which this entity has last been updated */
+    updatedAt: Date;
+    /** If this entity has been soft-deleted, this is the date at which the entity has been deleted */
+    deletedAt?: Date;
+    /** Version number of this entity */
+    version: number;
+    /** The gender of this contact */
+    gender: Gender;
+    /** The first name of the contact */
+    firstName: string;
+    /** The middle name of the contact, if he/she has one */
+    lastNamePreposition: string;
+    /** The last name of the contact */
+    lastName: string;
+    /** The (personal) email address of the contact */
+    email: string;
+    /** The (personal) phone number of the contact */
+    telephone: string;
+    /** Comments regarding the contact person, if there are any */
+    comments: string;
+    /** Function of this contact person within the company, if known. Normal by default. */
+    function: ContactFunction;
+    companyId: number;
+    /** Company this contact person works at */
+    company: Company;
+    /** All contracts that have been closed with this contact person */
+    contracts: Contract[];
+}
+
+export enum ContractStatus {
+    CREATED = "CREATED",
+    PROPOSED = "PROPOSED",
+    SENT = "SENT",
+    CONFIRMED = "CONFIRMED",
+    FINISHED = "FINISHED",
+    CANCELLED = "CANCELLED",
+}
+
+export class ContractActivity implements IContractActivity {
+    /** Incremental ID of the entity */
+    id!: number;
+    /** Date at which this entity has been created */
+    createdAt!: Date;
+    /** Date at which this entity has last been updated */
+    updatedAt!: Date;
+    /** If this entity has been soft-deleted, this is the date at which the entity has been deleted */
+    deletedAt?: Date;
+    /** Version number of this entity */
+    version!: number;
+    /** Type of the activity (status or comment) */
+    type!: ActivityType;
+    /** Description of this activity (English) */
+    descriptionEnglish!: string;
+    /** Description of this activity (Dutch) */
+    descriptionDutch!: string;
+    createdById!: number;
+    /** User who created this activity */
+    createdBy!: User;
+    contractId!: number;
+    /** Contract related to this activity */
+    contract!: Contract;
+    /** Subtype of this activity, only used when the type = "STATUS" */
+    subType?: ContractStatus;
+
+    constructor(data?: IContractActivity) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+        if (!data) {
+            this.createdBy = new User();
+            this.contract = new Contract();
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
+            this.updatedAt = _data["updatedAt"] ? new Date(_data["updatedAt"].toString()) : <any>undefined;
+            this.deletedAt = _data["deletedAt"] ? new Date(_data["deletedAt"].toString()) : <any>undefined;
+            this.version = _data["version"];
+            this.type = _data["type"];
+            this.descriptionEnglish = _data["descriptionEnglish"];
+            this.descriptionDutch = _data["descriptionDutch"];
+            this.createdById = _data["createdById"];
+            this.createdBy = _data["createdBy"] ? User.fromJS(_data["createdBy"]) : new User();
+            this.contractId = _data["contractId"];
+            this.contract = _data["contract"] ? Contract.fromJS(_data["contract"]) : new Contract();
+            this.subType = _data["subType"];
+        }
+    }
+
+    static fromJS(data: any): ContractActivity {
+        data = typeof data === 'object' ? data : {};
+        let result = new ContractActivity();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
+        data["updatedAt"] = this.updatedAt ? this.updatedAt.toISOString() : <any>undefined;
+        data["deletedAt"] = this.deletedAt ? this.deletedAt.toISOString() : <any>undefined;
+        data["version"] = this.version;
+        data["type"] = this.type;
+        data["descriptionEnglish"] = this.descriptionEnglish;
+        data["descriptionDutch"] = this.descriptionDutch;
+        data["createdById"] = this.createdById;
+        data["createdBy"] = this.createdBy ? this.createdBy.toJSON() : <any>undefined;
+        data["contractId"] = this.contractId;
+        data["contract"] = this.contract ? this.contract.toJSON() : <any>undefined;
+        data["subType"] = this.subType;
+        return data;
+    }
+}
+
+export interface IContractActivity {
+    /** Incremental ID of the entity */
+    id: number;
+    /** Date at which this entity has been created */
+    createdAt: Date;
+    /** Date at which this entity has last been updated */
+    updatedAt: Date;
+    /** If this entity has been soft-deleted, this is the date at which the entity has been deleted */
+    deletedAt?: Date;
+    /** Version number of this entity */
+    version: number;
+    /** Type of the activity (status or comment) */
+    type: ActivityType;
+    /** Description of this activity (English) */
+    descriptionEnglish: string;
+    /** Description of this activity (Dutch) */
+    descriptionDutch: string;
+    createdById: number;
+    /** User who created this activity */
+    createdBy: User;
+    contractId: number;
+    /** Contract related to this activity */
+    contract: Contract;
+    /** Subtype of this activity, only used when the type = "STATUS" */
+    subType?: ContractStatus;
+}
+
+export class ContractFile implements IContractFile {
+    /** Incremental ID of the entity */
+    id!: number;
+    /** Date at which this entity has been created */
+    createdAt!: Date;
+    /** Date at which this entity has last been updated */
+    updatedAt!: Date;
+    /** If this entity has been soft-deleted, this is the date at which the entity has been deleted */
+    deletedAt?: Date;
+    /** Version number of this entity */
+    version!: number;
+    /** Label of the file as shown in the front-end */
+    name!: string;
+    /** Name of the file as shown when downloaded */
+    downloadName!: string;
+    /** Location of the file on disk */
+    location!: string;
+    createdById!: number;
+    /** User who created this file */
+    createdBy!: User;
+    contractId!: number;
+    /** Contract related to this file */
+    contract!: Contract;
+
+    constructor(data?: IContractFile) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+        if (!data) {
+            this.createdBy = new User();
+            this.contract = new Contract();
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
+            this.updatedAt = _data["updatedAt"] ? new Date(_data["updatedAt"].toString()) : <any>undefined;
+            this.deletedAt = _data["deletedAt"] ? new Date(_data["deletedAt"].toString()) : <any>undefined;
+            this.version = _data["version"];
+            this.name = _data["name"];
+            this.downloadName = _data["downloadName"];
+            this.location = _data["location"];
+            this.createdById = _data["createdById"];
+            this.createdBy = _data["createdBy"] ? User.fromJS(_data["createdBy"]) : new User();
+            this.contractId = _data["contractId"];
+            this.contract = _data["contract"] ? Contract.fromJS(_data["contract"]) : new Contract();
+        }
+    }
+
+    static fromJS(data: any): ContractFile {
+        data = typeof data === 'object' ? data : {};
+        let result = new ContractFile();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
+        data["updatedAt"] = this.updatedAt ? this.updatedAt.toISOString() : <any>undefined;
+        data["deletedAt"] = this.deletedAt ? this.deletedAt.toISOString() : <any>undefined;
+        data["version"] = this.version;
+        data["name"] = this.name;
+        data["downloadName"] = this.downloadName;
+        data["location"] = this.location;
+        data["createdById"] = this.createdById;
+        data["createdBy"] = this.createdBy ? this.createdBy.toJSON() : <any>undefined;
+        data["contractId"] = this.contractId;
+        data["contract"] = this.contract ? this.contract.toJSON() : <any>undefined;
+        return data;
+    }
+}
+
+export interface IContractFile {
+    /** Incremental ID of the entity */
+    id: number;
+    /** Date at which this entity has been created */
+    createdAt: Date;
+    /** Date at which this entity has last been updated */
+    updatedAt: Date;
+    /** If this entity has been soft-deleted, this is the date at which the entity has been deleted */
+    deletedAt?: Date;
+    /** Version number of this entity */
+    version: number;
+    /** Label of the file as shown in the front-end */
+    name: string;
+    /** Name of the file as shown when downloaded */
+    downloadName: string;
+    /** Location of the file on disk */
+    location: string;
+    createdById: number;
+    /** User who created this file */
+    createdBy: User;
+    contractId: number;
+    /** Contract related to this file */
+    contract: Contract;
+}
+
+export class CompanyActivity implements ICompanyActivity {
+    /** Incremental ID of the entity */
+    id!: number;
+    /** Date at which this entity has been created */
+    createdAt!: Date;
+    /** Date at which this entity has last been updated */
+    updatedAt!: Date;
+    /** If this entity has been soft-deleted, this is the date at which the entity has been deleted */
+    deletedAt?: Date;
+    /** Version number of this entity */
+    version!: number;
+    /** Type of the activity (status or comment) */
+    type!: ActivityType;
+    /** Description of this activity (English) */
+    descriptionEnglish!: string;
+    /** Description of this activity (Dutch) */
+    descriptionDutch!: string;
+    createdById!: number;
+    /** User who created this activity */
+    createdBy!: User;
+    companyId!: number;
+    /** Company related to this activity */
+    company!: Company;
+
+    constructor(data?: ICompanyActivity) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+        if (!data) {
+            this.createdBy = new User();
+            this.company = new Company();
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
+            this.updatedAt = _data["updatedAt"] ? new Date(_data["updatedAt"].toString()) : <any>undefined;
+            this.deletedAt = _data["deletedAt"] ? new Date(_data["deletedAt"].toString()) : <any>undefined;
+            this.version = _data["version"];
+            this.type = _data["type"];
+            this.descriptionEnglish = _data["descriptionEnglish"];
+            this.descriptionDutch = _data["descriptionDutch"];
+            this.createdById = _data["createdById"];
+            this.createdBy = _data["createdBy"] ? User.fromJS(_data["createdBy"]) : new User();
+            this.companyId = _data["companyId"];
+            this.company = _data["company"] ? Company.fromJS(_data["company"]) : new Company();
+        }
+    }
+
+    static fromJS(data: any): CompanyActivity {
+        data = typeof data === 'object' ? data : {};
+        let result = new CompanyActivity();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
+        data["updatedAt"] = this.updatedAt ? this.updatedAt.toISOString() : <any>undefined;
+        data["deletedAt"] = this.deletedAt ? this.deletedAt.toISOString() : <any>undefined;
+        data["version"] = this.version;
+        data["type"] = this.type;
+        data["descriptionEnglish"] = this.descriptionEnglish;
+        data["descriptionDutch"] = this.descriptionDutch;
+        data["createdById"] = this.createdById;
+        data["createdBy"] = this.createdBy ? this.createdBy.toJSON() : <any>undefined;
+        data["companyId"] = this.companyId;
+        data["company"] = this.company ? this.company.toJSON() : <any>undefined;
+        return data;
+    }
+}
+
+export interface ICompanyActivity {
+    /** Incremental ID of the entity */
+    id: number;
+    /** Date at which this entity has been created */
+    createdAt: Date;
+    /** Date at which this entity has last been updated */
+    updatedAt: Date;
+    /** If this entity has been soft-deleted, this is the date at which the entity has been deleted */
+    deletedAt?: Date;
+    /** Version number of this entity */
+    version: number;
+    /** Type of the activity (status or comment) */
+    type: ActivityType;
+    /** Description of this activity (English) */
+    descriptionEnglish: string;
+    /** Description of this activity (Dutch) */
+    descriptionDutch: string;
+    createdById: number;
+    /** User who created this activity */
+    createdBy: User;
+    companyId: number;
+    /** Company related to this activity */
+    company: Company;
+}
+
+export class CompanyFile implements ICompanyFile {
+    /** Incremental ID of the entity */
+    id!: number;
+    /** Date at which this entity has been created */
+    createdAt!: Date;
+    /** Date at which this entity has last been updated */
+    updatedAt!: Date;
+    /** If this entity has been soft-deleted, this is the date at which the entity has been deleted */
+    deletedAt?: Date;
+    /** Version number of this entity */
+    version!: number;
+    /** Label of the file as shown in the front-end */
+    name!: string;
+    /** Name of the file as shown when downloaded */
+    downloadName!: string;
+    /** Location of the file on disk */
+    location!: string;
+    createdById!: number;
+    /** User who created this file */
+    createdBy!: User;
+    companyId!: number;
+    /** Company related to this file */
+    company!: Company;
+
+    constructor(data?: ICompanyFile) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+        if (!data) {
+            this.createdBy = new User();
+            this.company = new Company();
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
+            this.updatedAt = _data["updatedAt"] ? new Date(_data["updatedAt"].toString()) : <any>undefined;
+            this.deletedAt = _data["deletedAt"] ? new Date(_data["deletedAt"].toString()) : <any>undefined;
+            this.version = _data["version"];
+            this.name = _data["name"];
+            this.downloadName = _data["downloadName"];
+            this.location = _data["location"];
+            this.createdById = _data["createdById"];
+            this.createdBy = _data["createdBy"] ? User.fromJS(_data["createdBy"]) : new User();
+            this.companyId = _data["companyId"];
+            this.company = _data["company"] ? Company.fromJS(_data["company"]) : new Company();
+        }
+    }
+
+    static fromJS(data: any): CompanyFile {
+        data = typeof data === 'object' ? data : {};
+        let result = new CompanyFile();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
+        data["updatedAt"] = this.updatedAt ? this.updatedAt.toISOString() : <any>undefined;
+        data["deletedAt"] = this.deletedAt ? this.deletedAt.toISOString() : <any>undefined;
+        data["version"] = this.version;
+        data["name"] = this.name;
+        data["downloadName"] = this.downloadName;
+        data["location"] = this.location;
+        data["createdById"] = this.createdById;
+        data["createdBy"] = this.createdBy ? this.createdBy.toJSON() : <any>undefined;
+        data["companyId"] = this.companyId;
+        data["company"] = this.company ? this.company.toJSON() : <any>undefined;
+        return data;
+    }
+}
+
+export interface ICompanyFile {
+    /** Incremental ID of the entity */
+    id: number;
+    /** Date at which this entity has been created */
+    createdAt: Date;
+    /** Date at which this entity has last been updated */
+    updatedAt: Date;
+    /** If this entity has been soft-deleted, this is the date at which the entity has been deleted */
+    deletedAt?: Date;
+    /** Version number of this entity */
+    version: number;
+    /** Label of the file as shown in the front-end */
+    name: string;
+    /** Name of the file as shown when downloaded */
+    downloadName: string;
+    /** Location of the file on disk */
+    location: string;
+    createdById: number;
+    /** User who created this file */
+    createdBy: User;
+    companyId: number;
+    /** Company related to this file */
+    company: Company;
+}
+
+export class CompanyListResponse implements ICompanyListResponse {
+    list!: Company[];
     count!: number;
 
-    constructor(data?: IProductListResponse) {
+    constructor(data?: ICompanyListResponse) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -9463,15 +9187,15 @@ export class ProductListResponse implements IProductListResponse {
             if (Array.isArray(_data["list"])) {
                 this.list = [] as any;
                 for (let item of _data["list"])
-                    this.list!.push(Product.fromJS(item));
+                    this.list!.push(Company.fromJS(item));
             }
             this.count = _data["count"];
         }
     }
 
-    static fromJS(data: any): ProductListResponse {
+    static fromJS(data: any): CompanyListResponse {
         data = typeof data === 'object' ? data : {};
-        let result = new ProductListResponse();
+        let result = new CompanyListResponse();
         result.init(data);
         return result;
     }
@@ -9488,9 +9212,112 @@ export class ProductListResponse implements IProductListResponse {
     }
 }
 
-export interface IProductListResponse {
-    list: Product[];
+export interface ICompanyListResponse {
+    list: Company[];
     count: number;
+}
+
+export class ApiError implements IApiError {
+    name!: string;
+    message!: string;
+    stack?: string;
+    /** The activity code of the error, as defined by HTTP activity codes. */
+    statusCode!: number;
+
+    constructor(data?: IApiError) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.name = _data["name"];
+            this.message = _data["message"];
+            this.stack = _data["stack"];
+            this.statusCode = _data["statusCode"];
+        }
+    }
+
+    static fromJS(data: any): ApiError {
+        data = typeof data === 'object' ? data : {};
+        let result = new ApiError();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["name"] = this.name;
+        data["message"] = this.message;
+        data["stack"] = this.stack;
+        data["statusCode"] = this.statusCode;
+        return data;
+    }
+}
+
+export interface IApiError {
+    name: string;
+    message: string;
+    stack?: string;
+    /** The activity code of the error, as defined by HTTP activity codes. */
+    statusCode: number;
+}
+
+/** WrappedApiError represents the type returned by the server. */
+export class WrappedApiError implements IWrappedApiError {
+    error!: ApiError;
+
+    [key: string]: any;
+
+    constructor(data?: IWrappedApiError) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+        if (!data) {
+            this.error = new ApiError();
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            for (var property in _data) {
+                if (_data.hasOwnProperty(property))
+                    this[property] = _data[property];
+            }
+            this.error = _data["error"] ? ApiError.fromJS(_data["error"]) : new ApiError();
+        }
+    }
+
+    static fromJS(data: any): WrappedApiError {
+        data = typeof data === 'object' ? data : {};
+        let result = new WrappedApiError();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        for (var property in this) {
+            if (this.hasOwnProperty(property))
+                data[property] = this[property];
+        }
+        data["error"] = this.error ? this.error.toJSON() : <any>undefined;
+        return data;
+    }
+}
+
+/** WrappedApiError represents the type returned by the server. */
+export interface IWrappedApiError {
+    error: ApiError;
+
+    [key: string]: any;
 }
 
 export enum SortDirection {
@@ -9647,974 +9474,6 @@ export interface IListParams {
     sorting?: ListSorting;
     search?: string;
     filters?: ListOrFilter[];
-}
-
-export class ProductSummary implements IProductSummary {
-    id!: number;
-    nameDutch!: string;
-    nameEnglish!: string;
-    targetPrice!: number;
-    valueAddedTax!: ValueAddedTax;
-    status!: ProductStatus;
-
-    constructor(data?: IProductSummary) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"];
-            this.nameDutch = _data["nameDutch"];
-            this.nameEnglish = _data["nameEnglish"];
-            this.targetPrice = _data["targetPrice"];
-            this.valueAddedTax = _data["valueAddedTax"];
-            this.status = _data["status"];
-        }
-    }
-
-    static fromJS(data: any): ProductSummary {
-        data = typeof data === 'object' ? data : {};
-        let result = new ProductSummary();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["nameDutch"] = this.nameDutch;
-        data["nameEnglish"] = this.nameEnglish;
-        data["targetPrice"] = this.targetPrice;
-        data["valueAddedTax"] = this.valueAddedTax;
-        data["status"] = this.status;
-        return data;
-    }
-}
-
-export interface IProductSummary {
-    id: number;
-    nameDutch: string;
-    nameEnglish: string;
-    targetPrice: number;
-    valueAddedTax: ValueAddedTax;
-    status: ProductStatus;
-}
-
-export class ProductParams implements IProductParams {
-    nameDutch!: string;
-    nameEnglish!: string;
-    targetPrice!: number;
-    valueAddedTax!: ValueAddedTax;
-    minTarget?: number;
-    maxTarget?: number;
-    status!: ProductStatus;
-    description?: string;
-    categoryId!: number;
-    contractTextDutch!: string;
-    contractTextEnglish!: string;
-    deliverySpecificationDutch?: string;
-    deliverySpecificationEnglish?: string;
-
-    constructor(data?: IProductParams) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.nameDutch = _data["nameDutch"];
-            this.nameEnglish = _data["nameEnglish"];
-            this.targetPrice = _data["targetPrice"];
-            this.valueAddedTax = _data["valueAddedTax"];
-            this.minTarget = _data["minTarget"];
-            this.maxTarget = _data["maxTarget"];
-            this.status = _data["status"];
-            this.description = _data["description"];
-            this.categoryId = _data["categoryId"];
-            this.contractTextDutch = _data["contractTextDutch"];
-            this.contractTextEnglish = _data["contractTextEnglish"];
-            this.deliverySpecificationDutch = _data["deliverySpecificationDutch"];
-            this.deliverySpecificationEnglish = _data["deliverySpecificationEnglish"];
-        }
-    }
-
-    static fromJS(data: any): ProductParams {
-        data = typeof data === 'object' ? data : {};
-        let result = new ProductParams();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["nameDutch"] = this.nameDutch;
-        data["nameEnglish"] = this.nameEnglish;
-        data["targetPrice"] = this.targetPrice;
-        data["valueAddedTax"] = this.valueAddedTax;
-        data["minTarget"] = this.minTarget;
-        data["maxTarget"] = this.maxTarget;
-        data["status"] = this.status;
-        data["description"] = this.description;
-        data["categoryId"] = this.categoryId;
-        data["contractTextDutch"] = this.contractTextDutch;
-        data["contractTextEnglish"] = this.contractTextEnglish;
-        data["deliverySpecificationDutch"] = this.deliverySpecificationDutch;
-        data["deliverySpecificationEnglish"] = this.deliverySpecificationEnglish;
-        return data;
-    }
-}
-
-export interface IProductParams {
-    nameDutch: string;
-    nameEnglish: string;
-    targetPrice: number;
-    valueAddedTax: ValueAddedTax;
-    minTarget?: number;
-    maxTarget?: number;
-    status: ProductStatus;
-    description?: string;
-    categoryId: number;
-    contractTextDutch: string;
-    contractTextEnglish: string;
-    deliverySpecificationDutch?: string;
-    deliverySpecificationEnglish?: string;
-}
-
-/** Make all properties in T optional */
-export class Partial_ProductParams implements IPartial_ProductParams {
-    nameDutch?: string;
-    nameEnglish?: string;
-    targetPrice?: number;
-    valueAddedTax?: ValueAddedTax;
-    minTarget?: number;
-    maxTarget?: number;
-    status?: ProductStatus;
-    description?: string;
-    categoryId?: number;
-    contractTextDutch?: string;
-    contractTextEnglish?: string;
-    deliverySpecificationDutch?: string;
-    deliverySpecificationEnglish?: string;
-
-    [key: string]: any;
-
-    constructor(data?: IPartial_ProductParams) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            for (var property in _data) {
-                if (_data.hasOwnProperty(property))
-                    this[property] = _data[property];
-            }
-            this.nameDutch = _data["nameDutch"];
-            this.nameEnglish = _data["nameEnglish"];
-            this.targetPrice = _data["targetPrice"];
-            this.valueAddedTax = _data["valueAddedTax"];
-            this.minTarget = _data["minTarget"];
-            this.maxTarget = _data["maxTarget"];
-            this.status = _data["status"];
-            this.description = _data["description"];
-            this.categoryId = _data["categoryId"];
-            this.contractTextDutch = _data["contractTextDutch"];
-            this.contractTextEnglish = _data["contractTextEnglish"];
-            this.deliverySpecificationDutch = _data["deliverySpecificationDutch"];
-            this.deliverySpecificationEnglish = _data["deliverySpecificationEnglish"];
-        }
-    }
-
-    static fromJS(data: any): Partial_ProductParams {
-        data = typeof data === 'object' ? data : {};
-        let result = new Partial_ProductParams();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        for (var property in this) {
-            if (this.hasOwnProperty(property))
-                data[property] = this[property];
-        }
-        data["nameDutch"] = this.nameDutch;
-        data["nameEnglish"] = this.nameEnglish;
-        data["targetPrice"] = this.targetPrice;
-        data["valueAddedTax"] = this.valueAddedTax;
-        data["minTarget"] = this.minTarget;
-        data["maxTarget"] = this.maxTarget;
-        data["status"] = this.status;
-        data["description"] = this.description;
-        data["categoryId"] = this.categoryId;
-        data["contractTextDutch"] = this.contractTextDutch;
-        data["contractTextEnglish"] = this.contractTextEnglish;
-        data["deliverySpecificationDutch"] = this.deliverySpecificationDutch;
-        data["deliverySpecificationEnglish"] = this.deliverySpecificationEnglish;
-        return data;
-    }
-}
-
-/** Make all properties in T optional */
-export interface IPartial_ProductParams {
-    nameDutch?: string;
-    nameEnglish?: string;
-    targetPrice?: number;
-    valueAddedTax?: ValueAddedTax;
-    minTarget?: number;
-    maxTarget?: number;
-    status?: ProductStatus;
-    description?: string;
-    categoryId?: number;
-    contractTextDutch?: string;
-    contractTextEnglish?: string;
-    deliverySpecificationDutch?: string;
-    deliverySpecificationEnglish?: string;
-
-    [key: string]: any;
-}
-
-/** Make all properties in T optional */
-export class Partial_PricingParams implements IPartial_PricingParams {
-    description?: string;
-    data?: string[][];
-
-    [key: string]: any;
-
-    constructor(data?: IPartial_PricingParams) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            for (var property in _data) {
-                if (_data.hasOwnProperty(property))
-                    this[property] = _data[property];
-            }
-            this.description = _data["description"];
-            if (Array.isArray(_data["data"])) {
-                this.data = [] as any;
-                for (let item of _data["data"])
-                    this.data!.push(item);
-            }
-        }
-    }
-
-    static fromJS(data: any): Partial_PricingParams {
-        data = typeof data === 'object' ? data : {};
-        let result = new Partial_PricingParams();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        for (var property in this) {
-            if (this.hasOwnProperty(property))
-                data[property] = this[property];
-        }
-        data["description"] = this.description;
-        if (Array.isArray(this.data)) {
-            data["data"] = [];
-            for (let item of this.data)
-                data["data"].push(item);
-        }
-        return data;
-    }
-}
-
-/** Make all properties in T optional */
-export interface IPartial_PricingParams {
-    description?: string;
-    data?: string[][];
-
-    [key: string]: any;
-}
-
-export class ProductInstanceListResponse implements IProductInstanceListResponse {
-    list!: ProductInstance[];
-    count!: number;
-
-    constructor(data?: IProductInstanceListResponse) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-        if (!data) {
-            this.list = [];
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            if (Array.isArray(_data["list"])) {
-                this.list = [] as any;
-                for (let item of _data["list"])
-                    this.list!.push(ProductInstance.fromJS(item));
-            }
-            this.count = _data["count"];
-        }
-    }
-
-    static fromJS(data: any): ProductInstanceListResponse {
-        data = typeof data === 'object' ? data : {};
-        let result = new ProductInstanceListResponse();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        if (Array.isArray(this.list)) {
-            data["list"] = [];
-            for (let item of this.list)
-                data["list"].push(item.toJSON());
-        }
-        data["count"] = this.count;
-        return data;
-    }
-}
-
-export interface IProductInstanceListResponse {
-    list: ProductInstance[];
-    count: number;
-}
-
-export class PaginationParams implements IPaginationParams {
-    skip?: number;
-    take?: number;
-
-    constructor(data?: IPaginationParams) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.skip = _data["skip"];
-            this.take = _data["take"];
-        }
-    }
-
-    static fromJS(data: any): PaginationParams {
-        data = typeof data === 'object' ? data : {};
-        let result = new PaginationParams();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["skip"] = this.skip;
-        data["take"] = this.take;
-        return data;
-    }
-}
-
-export interface IPaginationParams {
-    skip?: number;
-    take?: number;
-}
-
-export class AnalysisResultByYear implements IAnalysisResultByYear {
-    amount!: number;
-    nrOfProducts!: number;
-    year!: number;
-
-    constructor(data?: IAnalysisResultByYear) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.amount = _data["amount"];
-            this.nrOfProducts = _data["nrOfProducts"];
-            this.year = _data["year"];
-        }
-    }
-
-    static fromJS(data: any): AnalysisResultByYear {
-        data = typeof data === 'object' ? data : {};
-        let result = new AnalysisResultByYear();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["amount"] = this.amount;
-        data["nrOfProducts"] = this.nrOfProducts;
-        data["year"] = this.year;
-        return data;
-    }
-}
-
-export interface IAnalysisResultByYear {
-    amount: number;
-    nrOfProducts: number;
-    year: number;
-}
-
-export class BaseFile implements IBaseFile {
-    /** Incremental ID of the entity */
-    id!: number;
-    /** Date at which this entity has been created */
-    createdAt!: Date;
-    /** Date at which this entity has last been updated */
-    updatedAt!: Date;
-    /** If this entity has been soft-deleted, this is the date at which the entity has been deleted */
-    deletedAt?: Date;
-    /** Version number of this entity */
-    version!: number;
-    /** Label of the file as shown in the front-end */
-    name!: string;
-    /** Name of the file as shown when downloaded */
-    downloadName!: string;
-    /** Location of the file on disk */
-    location!: string;
-    createdById!: number;
-    /** User who created this file */
-    createdBy!: User;
-
-    constructor(data?: IBaseFile) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-        if (!data) {
-            this.createdBy = new User();
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"];
-            this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
-            this.updatedAt = _data["updatedAt"] ? new Date(_data["updatedAt"].toString()) : <any>undefined;
-            this.deletedAt = _data["deletedAt"] ? new Date(_data["deletedAt"].toString()) : <any>undefined;
-            this.version = _data["version"];
-            this.name = _data["name"];
-            this.downloadName = _data["downloadName"];
-            this.location = _data["location"];
-            this.createdById = _data["createdById"];
-            this.createdBy = _data["createdBy"] ? User.fromJS(_data["createdBy"]) : new User();
-        }
-    }
-
-    static fromJS(data: any): BaseFile {
-        data = typeof data === 'object' ? data : {};
-        let result = new BaseFile();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
-        data["updatedAt"] = this.updatedAt ? this.updatedAt.toISOString() : <any>undefined;
-        data["deletedAt"] = this.deletedAt ? this.deletedAt.toISOString() : <any>undefined;
-        data["version"] = this.version;
-        data["name"] = this.name;
-        data["downloadName"] = this.downloadName;
-        data["location"] = this.location;
-        data["createdById"] = this.createdById;
-        data["createdBy"] = this.createdBy ? this.createdBy.toJSON() : <any>undefined;
-        return data;
-    }
-}
-
-export interface IBaseFile {
-    /** Incremental ID of the entity */
-    id: number;
-    /** Date at which this entity has been created */
-    createdAt: Date;
-    /** Date at which this entity has last been updated */
-    updatedAt: Date;
-    /** If this entity has been soft-deleted, this is the date at which the entity has been deleted */
-    deletedAt?: Date;
-    /** Version number of this entity */
-    version: number;
-    /** Label of the file as shown in the front-end */
-    name: string;
-    /** Name of the file as shown when downloaded */
-    downloadName: string;
-    /** Location of the file on disk */
-    location: string;
-    createdById: number;
-    /** User who created this file */
-    createdBy: User;
-}
-
-/** Make all properties in T optional */
-export class Partial_FileParams implements IPartial_FileParams {
-    name?: string;
-    createdAt?: Date;
-
-    [key: string]: any;
-
-    constructor(data?: IPartial_FileParams) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            for (var property in _data) {
-                if (_data.hasOwnProperty(property))
-                    this[property] = _data[property];
-            }
-            this.name = _data["name"];
-            this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
-        }
-    }
-
-    static fromJS(data: any): Partial_FileParams {
-        data = typeof data === 'object' ? data : {};
-        let result = new Partial_FileParams();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        for (var property in this) {
-            if (this.hasOwnProperty(property))
-                data[property] = this[property];
-        }
-        data["name"] = this.name;
-        data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
-        return data;
-    }
-}
-
-/** Make all properties in T optional */
-export interface IPartial_FileParams {
-    name?: string;
-    createdAt?: Date;
-
-    [key: string]: any;
-}
-
-export class BaseActivity implements IBaseActivity {
-    /** Incremental ID of the entity */
-    id!: number;
-    /** Date at which this entity has been created */
-    createdAt!: Date;
-    /** Date at which this entity has last been updated */
-    updatedAt!: Date;
-    /** If this entity has been soft-deleted, this is the date at which the entity has been deleted */
-    deletedAt?: Date;
-    /** Version number of this entity */
-    version!: number;
-    /** Type of the activity (status or comment) */
-    type!: ActivityType;
-    /** Description of this activity (English) */
-    descriptionEnglish!: string;
-    /** Description of this activity (Dutch) */
-    descriptionDutch!: string;
-    createdById!: number;
-    /** User who created this activity */
-    createdBy!: User;
-
-    constructor(data?: IBaseActivity) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-        if (!data) {
-            this.createdBy = new User();
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"];
-            this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
-            this.updatedAt = _data["updatedAt"] ? new Date(_data["updatedAt"].toString()) : <any>undefined;
-            this.deletedAt = _data["deletedAt"] ? new Date(_data["deletedAt"].toString()) : <any>undefined;
-            this.version = _data["version"];
-            this.type = _data["type"];
-            this.descriptionEnglish = _data["descriptionEnglish"];
-            this.descriptionDutch = _data["descriptionDutch"];
-            this.createdById = _data["createdById"];
-            this.createdBy = _data["createdBy"] ? User.fromJS(_data["createdBy"]) : new User();
-        }
-    }
-
-    static fromJS(data: any): BaseActivity {
-        data = typeof data === 'object' ? data : {};
-        let result = new BaseActivity();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
-        data["updatedAt"] = this.updatedAt ? this.updatedAt.toISOString() : <any>undefined;
-        data["deletedAt"] = this.deletedAt ? this.deletedAt.toISOString() : <any>undefined;
-        data["version"] = this.version;
-        data["type"] = this.type;
-        data["descriptionEnglish"] = this.descriptionEnglish;
-        data["descriptionDutch"] = this.descriptionDutch;
-        data["createdById"] = this.createdById;
-        data["createdBy"] = this.createdBy ? this.createdBy.toJSON() : <any>undefined;
-        return data;
-    }
-}
-
-export interface IBaseActivity {
-    /** Incremental ID of the entity */
-    id: number;
-    /** Date at which this entity has been created */
-    createdAt: Date;
-    /** Date at which this entity has last been updated */
-    updatedAt: Date;
-    /** If this entity has been soft-deleted, this is the date at which the entity has been deleted */
-    deletedAt?: Date;
-    /** Version number of this entity */
-    version: number;
-    /** Type of the activity (status or comment) */
-    type: ActivityType;
-    /** Description of this activity (English) */
-    descriptionEnglish: string;
-    /** Description of this activity (Dutch) */
-    descriptionDutch: string;
-    createdById: number;
-    /** User who created this activity */
-    createdBy: User;
-}
-
-export class ActivityParams implements IActivityParams {
-    description!: string;
-
-    constructor(data?: IActivityParams) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.description = _data["description"];
-        }
-    }
-
-    static fromJS(data: any): ActivityParams {
-        data = typeof data === 'object' ? data : {};
-        let result = new ActivityParams();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["description"] = this.description;
-        return data;
-    }
-}
-
-export interface IActivityParams {
-    description: string;
-}
-
-/** Make all properties in T optional */
-export class Partial_ActivityParams implements IPartial_ActivityParams {
-    description?: string;
-
-    [key: string]: any;
-
-    constructor(data?: IPartial_ActivityParams) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            for (var property in _data) {
-                if (_data.hasOwnProperty(property))
-                    this[property] = _data[property];
-            }
-            this.description = _data["description"];
-        }
-    }
-
-    static fromJS(data: any): Partial_ActivityParams {
-        data = typeof data === 'object' ? data : {};
-        let result = new Partial_ActivityParams();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        for (var property in this) {
-            if (this.hasOwnProperty(property))
-                data[property] = this[property];
-        }
-        data["description"] = this.description;
-        return data;
-    }
-}
-
-/** Make all properties in T optional */
-export interface IPartial_ActivityParams {
-    description?: string;
-
-    [key: string]: any;
-}
-
-export class AnalysisResult implements IAnalysisResult {
-    amount!: number;
-    nrOfProducts!: number;
-
-    constructor(data?: IAnalysisResult) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.amount = _data["amount"];
-            this.nrOfProducts = _data["nrOfProducts"];
-        }
-    }
-
-    static fromJS(data: any): AnalysisResult {
-        data = typeof data === 'object' ? data : {};
-        let result = new AnalysisResult();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["amount"] = this.amount;
-        data["nrOfProducts"] = this.nrOfProducts;
-        return data;
-    }
-}
-
-export interface IAnalysisResult {
-    amount: number;
-    nrOfProducts: number;
-}
-
-export class InvoicedAmounts implements IInvoicedAmounts {
-    delivered!: AnalysisResult;
-    notDelivered!: AnalysisResult;
-
-    constructor(data?: IInvoicedAmounts) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-        if (!data) {
-            this.delivered = new AnalysisResult();
-            this.notDelivered = new AnalysisResult();
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.delivered = _data["delivered"] ? AnalysisResult.fromJS(_data["delivered"]) : new AnalysisResult();
-            this.notDelivered = _data["notDelivered"] ? AnalysisResult.fromJS(_data["notDelivered"]) : new AnalysisResult();
-        }
-    }
-
-    static fromJS(data: any): InvoicedAmounts {
-        data = typeof data === 'object' ? data : {};
-        let result = new InvoicedAmounts();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["delivered"] = this.delivered ? this.delivered.toJSON() : <any>undefined;
-        data["notDelivered"] = this.notDelivered ? this.notDelivered.toJSON() : <any>undefined;
-        return data;
-    }
-}
-
-export interface IInvoicedAmounts {
-    delivered: AnalysisResult;
-    notDelivered: AnalysisResult;
-}
-
-export class DashboardProductInstanceStats implements IDashboardProductInstanceStats {
-    suggested!: AnalysisResult;
-    contracted!: AnalysisResult;
-    delivered!: AnalysisResult;
-    invoiced!: InvoicedAmounts;
-    paid!: AnalysisResult;
-    financialYears!: number[];
-
-    constructor(data?: IDashboardProductInstanceStats) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-        if (!data) {
-            this.suggested = new AnalysisResult();
-            this.contracted = new AnalysisResult();
-            this.delivered = new AnalysisResult();
-            this.invoiced = new InvoicedAmounts();
-            this.paid = new AnalysisResult();
-            this.financialYears = [];
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.suggested = _data["suggested"] ? AnalysisResult.fromJS(_data["suggested"]) : new AnalysisResult();
-            this.contracted = _data["contracted"] ? AnalysisResult.fromJS(_data["contracted"]) : new AnalysisResult();
-            this.delivered = _data["delivered"] ? AnalysisResult.fromJS(_data["delivered"]) : new AnalysisResult();
-            this.invoiced = _data["invoiced"] ? InvoicedAmounts.fromJS(_data["invoiced"]) : new InvoicedAmounts();
-            this.paid = _data["paid"] ? AnalysisResult.fromJS(_data["paid"]) : new AnalysisResult();
-            if (Array.isArray(_data["financialYears"])) {
-                this.financialYears = [] as any;
-                for (let item of _data["financialYears"])
-                    this.financialYears!.push(item);
-            }
-        }
-    }
-
-    static fromJS(data: any): DashboardProductInstanceStats {
-        data = typeof data === 'object' ? data : {};
-        let result = new DashboardProductInstanceStats();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["suggested"] = this.suggested ? this.suggested.toJSON() : <any>undefined;
-        data["contracted"] = this.contracted ? this.contracted.toJSON() : <any>undefined;
-        data["delivered"] = this.delivered ? this.delivered.toJSON() : <any>undefined;
-        data["invoiced"] = this.invoiced ? this.invoiced.toJSON() : <any>undefined;
-        data["paid"] = this.paid ? this.paid.toJSON() : <any>undefined;
-        if (Array.isArray(this.financialYears)) {
-            data["financialYears"] = [];
-            for (let item of this.financialYears)
-                data["financialYears"].push(item);
-        }
-        return data;
-    }
-}
-
-export interface IDashboardProductInstanceStats {
-    suggested: AnalysisResult;
-    contracted: AnalysisResult;
-    delivered: AnalysisResult;
-    invoiced: InvoicedAmounts;
-    paid: AnalysisResult;
-    financialYears: number[];
-}
-
-export class CompanyListResponse implements ICompanyListResponse {
-    list!: Company[];
-    count!: number;
-
-    constructor(data?: ICompanyListResponse) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-        if (!data) {
-            this.list = [];
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            if (Array.isArray(_data["list"])) {
-                this.list = [] as any;
-                for (let item of _data["list"])
-                    this.list!.push(Company.fromJS(item));
-            }
-            this.count = _data["count"];
-        }
-    }
-
-    static fromJS(data: any): CompanyListResponse {
-        data = typeof data === 'object' ? data : {};
-        let result = new CompanyListResponse();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        if (Array.isArray(this.list)) {
-            data["list"] = [];
-            for (let item of this.list)
-                data["list"].push(item.toJSON());
-        }
-        data["count"] = this.count;
-        return data;
-    }
-}
-
-export interface ICompanyListResponse {
-    list: Company[];
-    count: number;
 }
 
 export class CompanySummary implements ICompanySummary {
@@ -11202,6 +10061,589 @@ export interface IContractedProductsAnalysis {
     categories: ProductsPerCategory[];
     labels?: string[];
     financialYears?: number[];
+}
+
+export class BaseFile implements IBaseFile {
+    /** Incremental ID of the entity */
+    id!: number;
+    /** Date at which this entity has been created */
+    createdAt!: Date;
+    /** Date at which this entity has last been updated */
+    updatedAt!: Date;
+    /** If this entity has been soft-deleted, this is the date at which the entity has been deleted */
+    deletedAt?: Date;
+    /** Version number of this entity */
+    version!: number;
+    /** Label of the file as shown in the front-end */
+    name!: string;
+    /** Name of the file as shown when downloaded */
+    downloadName!: string;
+    /** Location of the file on disk */
+    location!: string;
+    createdById!: number;
+    /** User who created this file */
+    createdBy!: User;
+
+    constructor(data?: IBaseFile) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+        if (!data) {
+            this.createdBy = new User();
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
+            this.updatedAt = _data["updatedAt"] ? new Date(_data["updatedAt"].toString()) : <any>undefined;
+            this.deletedAt = _data["deletedAt"] ? new Date(_data["deletedAt"].toString()) : <any>undefined;
+            this.version = _data["version"];
+            this.name = _data["name"];
+            this.downloadName = _data["downloadName"];
+            this.location = _data["location"];
+            this.createdById = _data["createdById"];
+            this.createdBy = _data["createdBy"] ? User.fromJS(_data["createdBy"]) : new User();
+        }
+    }
+
+    static fromJS(data: any): BaseFile {
+        data = typeof data === 'object' ? data : {};
+        let result = new BaseFile();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
+        data["updatedAt"] = this.updatedAt ? this.updatedAt.toISOString() : <any>undefined;
+        data["deletedAt"] = this.deletedAt ? this.deletedAt.toISOString() : <any>undefined;
+        data["version"] = this.version;
+        data["name"] = this.name;
+        data["downloadName"] = this.downloadName;
+        data["location"] = this.location;
+        data["createdById"] = this.createdById;
+        data["createdBy"] = this.createdBy ? this.createdBy.toJSON() : <any>undefined;
+        return data;
+    }
+}
+
+export interface IBaseFile {
+    /** Incremental ID of the entity */
+    id: number;
+    /** Date at which this entity has been created */
+    createdAt: Date;
+    /** Date at which this entity has last been updated */
+    updatedAt: Date;
+    /** If this entity has been soft-deleted, this is the date at which the entity has been deleted */
+    deletedAt?: Date;
+    /** Version number of this entity */
+    version: number;
+    /** Label of the file as shown in the front-end */
+    name: string;
+    /** Name of the file as shown when downloaded */
+    downloadName: string;
+    /** Location of the file on disk */
+    location: string;
+    createdById: number;
+    /** User who created this file */
+    createdBy: User;
+}
+
+/** Make all properties in T optional */
+export class Partial_FileParams implements IPartial_FileParams {
+    name?: string;
+    createdAt?: Date;
+
+    [key: string]: any;
+
+    constructor(data?: IPartial_FileParams) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            for (var property in _data) {
+                if (_data.hasOwnProperty(property))
+                    this[property] = _data[property];
+            }
+            this.name = _data["name"];
+            this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): Partial_FileParams {
+        data = typeof data === 'object' ? data : {};
+        let result = new Partial_FileParams();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        for (var property in this) {
+            if (this.hasOwnProperty(property))
+                data[property] = this[property];
+        }
+        data["name"] = this.name;
+        data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
+        return data;
+    }
+}
+
+/** Make all properties in T optional */
+export interface IPartial_FileParams {
+    name?: string;
+    createdAt?: Date;
+
+    [key: string]: any;
+}
+
+export class BaseActivity implements IBaseActivity {
+    /** Incremental ID of the entity */
+    id!: number;
+    /** Date at which this entity has been created */
+    createdAt!: Date;
+    /** Date at which this entity has last been updated */
+    updatedAt!: Date;
+    /** If this entity has been soft-deleted, this is the date at which the entity has been deleted */
+    deletedAt?: Date;
+    /** Version number of this entity */
+    version!: number;
+    /** Type of the activity (status or comment) */
+    type!: ActivityType;
+    /** Description of this activity (English) */
+    descriptionEnglish!: string;
+    /** Description of this activity (Dutch) */
+    descriptionDutch!: string;
+    createdById!: number;
+    /** User who created this activity */
+    createdBy!: User;
+
+    constructor(data?: IBaseActivity) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+        if (!data) {
+            this.createdBy = new User();
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
+            this.updatedAt = _data["updatedAt"] ? new Date(_data["updatedAt"].toString()) : <any>undefined;
+            this.deletedAt = _data["deletedAt"] ? new Date(_data["deletedAt"].toString()) : <any>undefined;
+            this.version = _data["version"];
+            this.type = _data["type"];
+            this.descriptionEnglish = _data["descriptionEnglish"];
+            this.descriptionDutch = _data["descriptionDutch"];
+            this.createdById = _data["createdById"];
+            this.createdBy = _data["createdBy"] ? User.fromJS(_data["createdBy"]) : new User();
+        }
+    }
+
+    static fromJS(data: any): BaseActivity {
+        data = typeof data === 'object' ? data : {};
+        let result = new BaseActivity();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
+        data["updatedAt"] = this.updatedAt ? this.updatedAt.toISOString() : <any>undefined;
+        data["deletedAt"] = this.deletedAt ? this.deletedAt.toISOString() : <any>undefined;
+        data["version"] = this.version;
+        data["type"] = this.type;
+        data["descriptionEnglish"] = this.descriptionEnglish;
+        data["descriptionDutch"] = this.descriptionDutch;
+        data["createdById"] = this.createdById;
+        data["createdBy"] = this.createdBy ? this.createdBy.toJSON() : <any>undefined;
+        return data;
+    }
+}
+
+export interface IBaseActivity {
+    /** Incremental ID of the entity */
+    id: number;
+    /** Date at which this entity has been created */
+    createdAt: Date;
+    /** Date at which this entity has last been updated */
+    updatedAt: Date;
+    /** If this entity has been soft-deleted, this is the date at which the entity has been deleted */
+    deletedAt?: Date;
+    /** Version number of this entity */
+    version: number;
+    /** Type of the activity (status or comment) */
+    type: ActivityType;
+    /** Description of this activity (English) */
+    descriptionEnglish: string;
+    /** Description of this activity (Dutch) */
+    descriptionDutch: string;
+    createdById: number;
+    /** User who created this activity */
+    createdBy: User;
+}
+
+export class ActivityParams implements IActivityParams {
+    description!: string;
+
+    constructor(data?: IActivityParams) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.description = _data["description"];
+        }
+    }
+
+    static fromJS(data: any): ActivityParams {
+        data = typeof data === 'object' ? data : {};
+        let result = new ActivityParams();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["description"] = this.description;
+        return data;
+    }
+}
+
+export interface IActivityParams {
+    description: string;
+}
+
+/** Make all properties in T optional */
+export class Partial_ActivityParams implements IPartial_ActivityParams {
+    description?: string;
+
+    [key: string]: any;
+
+    constructor(data?: IPartial_ActivityParams) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            for (var property in _data) {
+                if (_data.hasOwnProperty(property))
+                    this[property] = _data[property];
+            }
+            this.description = _data["description"];
+        }
+    }
+
+    static fromJS(data: any): Partial_ActivityParams {
+        data = typeof data === 'object' ? data : {};
+        let result = new Partial_ActivityParams();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        for (var property in this) {
+            if (this.hasOwnProperty(property))
+                data[property] = this[property];
+        }
+        data["description"] = this.description;
+        return data;
+    }
+}
+
+/** Make all properties in T optional */
+export interface IPartial_ActivityParams {
+    description?: string;
+
+    [key: string]: any;
+}
+
+export class ContactListResponse implements IContactListResponse {
+    list!: Contact[];
+    count!: number;
+
+    constructor(data?: IContactListResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+        if (!data) {
+            this.list = [];
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["list"])) {
+                this.list = [] as any;
+                for (let item of _data["list"])
+                    this.list!.push(Contact.fromJS(item));
+            }
+            this.count = _data["count"];
+        }
+    }
+
+    static fromJS(data: any): ContactListResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new ContactListResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.list)) {
+            data["list"] = [];
+            for (let item of this.list)
+                data["list"].push(item.toJSON());
+        }
+        data["count"] = this.count;
+        return data;
+    }
+}
+
+export interface IContactListResponse {
+    list: Contact[];
+    count: number;
+}
+
+export class ContactSummary implements IContactSummary {
+    id!: number;
+    firstName!: string;
+    lastNamePreposition!: string;
+    lastName!: string;
+    companyId!: number;
+    function!: ContactFunction;
+
+    constructor(data?: IContactSummary) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.firstName = _data["firstName"];
+            this.lastNamePreposition = _data["lastNamePreposition"];
+            this.lastName = _data["lastName"];
+            this.companyId = _data["companyId"];
+            this.function = _data["function"];
+        }
+    }
+
+    static fromJS(data: any): ContactSummary {
+        data = typeof data === 'object' ? data : {};
+        let result = new ContactSummary();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["firstName"] = this.firstName;
+        data["lastNamePreposition"] = this.lastNamePreposition;
+        data["lastName"] = this.lastName;
+        data["companyId"] = this.companyId;
+        data["function"] = this.function;
+        return data;
+    }
+}
+
+export interface IContactSummary {
+    id: number;
+    firstName: string;
+    lastNamePreposition: string;
+    lastName: string;
+    companyId: number;
+    function: ContactFunction;
+}
+
+export class ContactParams implements IContactParams {
+    gender!: Gender;
+    firstName?: string;
+    lastNamePreposition?: string;
+    lastName!: string;
+    email!: string;
+    telephone?: string;
+    comments?: string;
+    companyId!: number;
+    function!: ContactFunction;
+
+    constructor(data?: IContactParams) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.gender = _data["gender"];
+            this.firstName = _data["firstName"];
+            this.lastNamePreposition = _data["lastNamePreposition"];
+            this.lastName = _data["lastName"];
+            this.email = _data["email"];
+            this.telephone = _data["telephone"];
+            this.comments = _data["comments"];
+            this.companyId = _data["companyId"];
+            this.function = _data["function"];
+        }
+    }
+
+    static fromJS(data: any): ContactParams {
+        data = typeof data === 'object' ? data : {};
+        let result = new ContactParams();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["gender"] = this.gender;
+        data["firstName"] = this.firstName;
+        data["lastNamePreposition"] = this.lastNamePreposition;
+        data["lastName"] = this.lastName;
+        data["email"] = this.email;
+        data["telephone"] = this.telephone;
+        data["comments"] = this.comments;
+        data["companyId"] = this.companyId;
+        data["function"] = this.function;
+        return data;
+    }
+}
+
+export interface IContactParams {
+    gender: Gender;
+    firstName?: string;
+    lastNamePreposition?: string;
+    lastName: string;
+    email: string;
+    telephone?: string;
+    comments?: string;
+    companyId: number;
+    function: ContactFunction;
+}
+
+/** Make all properties in T optional */
+export class Partial_ContactParams implements IPartial_ContactParams {
+    gender?: Gender;
+    firstName?: string;
+    lastNamePreposition?: string;
+    lastName?: string;
+    email?: string;
+    telephone?: string;
+    comments?: string;
+    companyId?: number;
+    function?: ContactFunction;
+
+    [key: string]: any;
+
+    constructor(data?: IPartial_ContactParams) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            for (var property in _data) {
+                if (_data.hasOwnProperty(property))
+                    this[property] = _data[property];
+            }
+            this.gender = _data["gender"];
+            this.firstName = _data["firstName"];
+            this.lastNamePreposition = _data["lastNamePreposition"];
+            this.lastName = _data["lastName"];
+            this.email = _data["email"];
+            this.telephone = _data["telephone"];
+            this.comments = _data["comments"];
+            this.companyId = _data["companyId"];
+            this.function = _data["function"];
+        }
+    }
+
+    static fromJS(data: any): Partial_ContactParams {
+        data = typeof data === 'object' ? data : {};
+        let result = new Partial_ContactParams();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        for (var property in this) {
+            if (this.hasOwnProperty(property))
+                data[property] = this[property];
+        }
+        data["gender"] = this.gender;
+        data["firstName"] = this.firstName;
+        data["lastNamePreposition"] = this.lastNamePreposition;
+        data["lastName"] = this.lastName;
+        data["email"] = this.email;
+        data["telephone"] = this.telephone;
+        data["comments"] = this.comments;
+        data["companyId"] = this.companyId;
+        data["function"] = this.function;
+        return data;
+    }
+}
+
+/** Make all properties in T optional */
+export interface IPartial_ContactParams {
+    gender?: Gender;
+    firstName?: string;
+    lastNamePreposition?: string;
+    lastName?: string;
+    email?: string;
+    telephone?: string;
+    comments?: string;
+    companyId?: number;
+    function?: ContactFunction;
+
+    [key: string]: any;
 }
 
 export class ContractListResponse implements IContractListResponse {
@@ -12370,11 +11812,11 @@ export interface IInvoiceStatusParams {
     subType: InvoiceStatus;
 }
 
-export class ContactListResponse implements IContactListResponse {
-    list!: Contact[];
+export class CategoryListResponse implements ICategoryListResponse {
+    list!: ProductCategory[];
     count!: number;
 
-    constructor(data?: IContactListResponse) {
+    constructor(data?: ICategoryListResponse) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -12391,15 +11833,15 @@ export class ContactListResponse implements IContactListResponse {
             if (Array.isArray(_data["list"])) {
                 this.list = [] as any;
                 for (let item of _data["list"])
-                    this.list!.push(Contact.fromJS(item));
+                    this.list!.push(ProductCategory.fromJS(item));
             }
             this.count = _data["count"];
         }
     }
 
-    static fromJS(data: any): ContactListResponse {
+    static fromJS(data: any): CategoryListResponse {
         data = typeof data === 'object' ? data : {};
-        let result = new ContactListResponse();
+        let result = new CategoryListResponse();
         result.init(data);
         return result;
     }
@@ -12416,20 +11858,16 @@ export class ContactListResponse implements IContactListResponse {
     }
 }
 
-export interface IContactListResponse {
-    list: Contact[];
+export interface ICategoryListResponse {
+    list: ProductCategory[];
     count: number;
 }
 
-export class ContactSummary implements IContactSummary {
+export class CategorySummary implements ICategorySummary {
     id!: number;
-    firstName!: string;
-    lastNamePreposition!: string;
-    lastName!: string;
-    companyId!: number;
-    function!: ContactFunction;
+    name!: string;
 
-    constructor(data?: IContactSummary) {
+    constructor(data?: ICategorySummary) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -12441,17 +11879,13 @@ export class ContactSummary implements IContactSummary {
     init(_data?: any) {
         if (_data) {
             this.id = _data["id"];
-            this.firstName = _data["firstName"];
-            this.lastNamePreposition = _data["lastNamePreposition"];
-            this.lastName = _data["lastName"];
-            this.companyId = _data["companyId"];
-            this.function = _data["function"];
+            this.name = _data["name"];
         }
     }
 
-    static fromJS(data: any): ContactSummary {
+    static fromJS(data: any): CategorySummary {
         data = typeof data === 'object' ? data : {};
-        let result = new ContactSummary();
+        let result = new CategorySummary();
         result.init(data);
         return result;
     }
@@ -12459,36 +11893,20 @@ export class ContactSummary implements IContactSummary {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["id"] = this.id;
-        data["firstName"] = this.firstName;
-        data["lastNamePreposition"] = this.lastNamePreposition;
-        data["lastName"] = this.lastName;
-        data["companyId"] = this.companyId;
-        data["function"] = this.function;
+        data["name"] = this.name;
         return data;
     }
 }
 
-export interface IContactSummary {
+export interface ICategorySummary {
     id: number;
-    firstName: string;
-    lastNamePreposition: string;
-    lastName: string;
-    companyId: number;
-    function: ContactFunction;
+    name: string;
 }
 
-export class ContactParams implements IContactParams {
-    gender!: Gender;
-    firstName?: string;
-    lastNamePreposition?: string;
-    lastName!: string;
-    email!: string;
-    telephone?: string;
-    comments?: string;
-    companyId!: number;
-    function!: ContactFunction;
+export class CategoryParams implements ICategoryParams {
+    name!: string;
 
-    constructor(data?: IContactParams) {
+    constructor(data?: ICategoryParams) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -12499,67 +11917,35 @@ export class ContactParams implements IContactParams {
 
     init(_data?: any) {
         if (_data) {
-            this.gender = _data["gender"];
-            this.firstName = _data["firstName"];
-            this.lastNamePreposition = _data["lastNamePreposition"];
-            this.lastName = _data["lastName"];
-            this.email = _data["email"];
-            this.telephone = _data["telephone"];
-            this.comments = _data["comments"];
-            this.companyId = _data["companyId"];
-            this.function = _data["function"];
+            this.name = _data["name"];
         }
     }
 
-    static fromJS(data: any): ContactParams {
+    static fromJS(data: any): CategoryParams {
         data = typeof data === 'object' ? data : {};
-        let result = new ContactParams();
+        let result = new CategoryParams();
         result.init(data);
         return result;
     }
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["gender"] = this.gender;
-        data["firstName"] = this.firstName;
-        data["lastNamePreposition"] = this.lastNamePreposition;
-        data["lastName"] = this.lastName;
-        data["email"] = this.email;
-        data["telephone"] = this.telephone;
-        data["comments"] = this.comments;
-        data["companyId"] = this.companyId;
-        data["function"] = this.function;
+        data["name"] = this.name;
         return data;
     }
 }
 
-export interface IContactParams {
-    gender: Gender;
-    firstName?: string;
-    lastNamePreposition?: string;
-    lastName: string;
-    email: string;
-    telephone?: string;
-    comments?: string;
-    companyId: number;
-    function: ContactFunction;
+export interface ICategoryParams {
+    name: string;
 }
 
 /** Make all properties in T optional */
-export class Partial_ContactParams implements IPartial_ContactParams {
-    gender?: Gender;
-    firstName?: string;
-    lastNamePreposition?: string;
-    lastName?: string;
-    email?: string;
-    telephone?: string;
-    comments?: string;
-    companyId?: number;
-    function?: ContactFunction;
+export class Partial_CategoryParams implements IPartial_CategoryParams {
+    name?: string;
 
     [key: string]: any;
 
-    constructor(data?: IPartial_ContactParams) {
+    constructor(data?: IPartial_CategoryParams) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -12574,21 +11960,13 @@ export class Partial_ContactParams implements IPartial_ContactParams {
                 if (_data.hasOwnProperty(property))
                     this[property] = _data[property];
             }
-            this.gender = _data["gender"];
-            this.firstName = _data["firstName"];
-            this.lastNamePreposition = _data["lastNamePreposition"];
-            this.lastName = _data["lastName"];
-            this.email = _data["email"];
-            this.telephone = _data["telephone"];
-            this.comments = _data["comments"];
-            this.companyId = _data["companyId"];
-            this.function = _data["function"];
+            this.name = _data["name"];
         }
     }
 
-    static fromJS(data: any): Partial_ContactParams {
+    static fromJS(data: any): Partial_CategoryParams {
         data = typeof data === 'object' ? data : {};
-        let result = new Partial_ContactParams();
+        let result = new Partial_CategoryParams();
         result.init(data);
         return result;
     }
@@ -12599,32 +11977,1180 @@ export class Partial_ContactParams implements IPartial_ContactParams {
             if (this.hasOwnProperty(property))
                 data[property] = this[property];
         }
-        data["gender"] = this.gender;
-        data["firstName"] = this.firstName;
-        data["lastNamePreposition"] = this.lastNamePreposition;
-        data["lastName"] = this.lastName;
-        data["email"] = this.email;
-        data["telephone"] = this.telephone;
-        data["comments"] = this.comments;
-        data["companyId"] = this.companyId;
-        data["function"] = this.function;
+        data["name"] = this.name;
         return data;
     }
 }
 
 /** Make all properties in T optional */
-export interface IPartial_ContactParams {
-    gender?: Gender;
-    firstName?: string;
-    lastNamePreposition?: string;
-    lastName?: string;
-    email?: string;
-    telephone?: string;
-    comments?: string;
-    companyId?: number;
-    function?: ContactFunction;
+export interface IPartial_CategoryParams {
+    name?: string;
 
     [key: string]: any;
+}
+
+export class ProductListResponse implements IProductListResponse {
+    list!: Product[];
+    count!: number;
+
+    constructor(data?: IProductListResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+        if (!data) {
+            this.list = [];
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["list"])) {
+                this.list = [] as any;
+                for (let item of _data["list"])
+                    this.list!.push(Product.fromJS(item));
+            }
+            this.count = _data["count"];
+        }
+    }
+
+    static fromJS(data: any): ProductListResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new ProductListResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.list)) {
+            data["list"] = [];
+            for (let item of this.list)
+                data["list"].push(item.toJSON());
+        }
+        data["count"] = this.count;
+        return data;
+    }
+}
+
+export interface IProductListResponse {
+    list: Product[];
+    count: number;
+}
+
+export class ProductSummary implements IProductSummary {
+    id!: number;
+    vatId!: number;
+    nameDutch!: string;
+    nameEnglish!: string;
+    targetPrice!: number;
+    status!: ProductStatus;
+
+    constructor(data?: IProductSummary) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.vatId = _data["vatId"];
+            this.nameDutch = _data["nameDutch"];
+            this.nameEnglish = _data["nameEnglish"];
+            this.targetPrice = _data["targetPrice"];
+            this.status = _data["status"];
+        }
+    }
+
+    static fromJS(data: any): ProductSummary {
+        data = typeof data === 'object' ? data : {};
+        let result = new ProductSummary();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["vatId"] = this.vatId;
+        data["nameDutch"] = this.nameDutch;
+        data["nameEnglish"] = this.nameEnglish;
+        data["targetPrice"] = this.targetPrice;
+        data["status"] = this.status;
+        return data;
+    }
+}
+
+export interface IProductSummary {
+    id: number;
+    vatId: number;
+    nameDutch: string;
+    nameEnglish: string;
+    targetPrice: number;
+    status: ProductStatus;
+}
+
+export class ProductParams implements IProductParams {
+    nameDutch!: string;
+    nameEnglish!: string;
+    targetPrice!: number;
+    minTarget?: number;
+    maxTarget?: number;
+    status!: ProductStatus;
+    description?: string;
+    vatId!: number;
+    categoryId!: number;
+    contractTextDutch!: string;
+    contractTextEnglish!: string;
+    deliverySpecificationDutch?: string;
+    deliverySpecificationEnglish?: string;
+
+    constructor(data?: IProductParams) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.nameDutch = _data["nameDutch"];
+            this.nameEnglish = _data["nameEnglish"];
+            this.targetPrice = _data["targetPrice"];
+            this.minTarget = _data["minTarget"];
+            this.maxTarget = _data["maxTarget"];
+            this.status = _data["status"];
+            this.description = _data["description"];
+            this.vatId = _data["vatId"];
+            this.categoryId = _data["categoryId"];
+            this.contractTextDutch = _data["contractTextDutch"];
+            this.contractTextEnglish = _data["contractTextEnglish"];
+            this.deliverySpecificationDutch = _data["deliverySpecificationDutch"];
+            this.deliverySpecificationEnglish = _data["deliverySpecificationEnglish"];
+        }
+    }
+
+    static fromJS(data: any): ProductParams {
+        data = typeof data === 'object' ? data : {};
+        let result = new ProductParams();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["nameDutch"] = this.nameDutch;
+        data["nameEnglish"] = this.nameEnglish;
+        data["targetPrice"] = this.targetPrice;
+        data["minTarget"] = this.minTarget;
+        data["maxTarget"] = this.maxTarget;
+        data["status"] = this.status;
+        data["description"] = this.description;
+        data["vatId"] = this.vatId;
+        data["categoryId"] = this.categoryId;
+        data["contractTextDutch"] = this.contractTextDutch;
+        data["contractTextEnglish"] = this.contractTextEnglish;
+        data["deliverySpecificationDutch"] = this.deliverySpecificationDutch;
+        data["deliverySpecificationEnglish"] = this.deliverySpecificationEnglish;
+        return data;
+    }
+}
+
+export interface IProductParams {
+    nameDutch: string;
+    nameEnglish: string;
+    targetPrice: number;
+    minTarget?: number;
+    maxTarget?: number;
+    status: ProductStatus;
+    description?: string;
+    vatId: number;
+    categoryId: number;
+    contractTextDutch: string;
+    contractTextEnglish: string;
+    deliverySpecificationDutch?: string;
+    deliverySpecificationEnglish?: string;
+}
+
+/** Make all properties in T optional */
+export class Partial_ProductParams implements IPartial_ProductParams {
+    nameDutch?: string;
+    nameEnglish?: string;
+    targetPrice?: number;
+    minTarget?: number;
+    maxTarget?: number;
+    status?: ProductStatus;
+    description?: string;
+    vatId?: number;
+    categoryId?: number;
+    contractTextDutch?: string;
+    contractTextEnglish?: string;
+    deliverySpecificationDutch?: string;
+    deliverySpecificationEnglish?: string;
+
+    [key: string]: any;
+
+    constructor(data?: IPartial_ProductParams) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            for (var property in _data) {
+                if (_data.hasOwnProperty(property))
+                    this[property] = _data[property];
+            }
+            this.nameDutch = _data["nameDutch"];
+            this.nameEnglish = _data["nameEnglish"];
+            this.targetPrice = _data["targetPrice"];
+            this.minTarget = _data["minTarget"];
+            this.maxTarget = _data["maxTarget"];
+            this.status = _data["status"];
+            this.description = _data["description"];
+            this.vatId = _data["vatId"];
+            this.categoryId = _data["categoryId"];
+            this.contractTextDutch = _data["contractTextDutch"];
+            this.contractTextEnglish = _data["contractTextEnglish"];
+            this.deliverySpecificationDutch = _data["deliverySpecificationDutch"];
+            this.deliverySpecificationEnglish = _data["deliverySpecificationEnglish"];
+        }
+    }
+
+    static fromJS(data: any): Partial_ProductParams {
+        data = typeof data === 'object' ? data : {};
+        let result = new Partial_ProductParams();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        for (var property in this) {
+            if (this.hasOwnProperty(property))
+                data[property] = this[property];
+        }
+        data["nameDutch"] = this.nameDutch;
+        data["nameEnglish"] = this.nameEnglish;
+        data["targetPrice"] = this.targetPrice;
+        data["minTarget"] = this.minTarget;
+        data["maxTarget"] = this.maxTarget;
+        data["status"] = this.status;
+        data["description"] = this.description;
+        data["vatId"] = this.vatId;
+        data["categoryId"] = this.categoryId;
+        data["contractTextDutch"] = this.contractTextDutch;
+        data["contractTextEnglish"] = this.contractTextEnglish;
+        data["deliverySpecificationDutch"] = this.deliverySpecificationDutch;
+        data["deliverySpecificationEnglish"] = this.deliverySpecificationEnglish;
+        return data;
+    }
+}
+
+/** Make all properties in T optional */
+export interface IPartial_ProductParams {
+    nameDutch?: string;
+    nameEnglish?: string;
+    targetPrice?: number;
+    minTarget?: number;
+    maxTarget?: number;
+    status?: ProductStatus;
+    description?: string;
+    vatId?: number;
+    categoryId?: number;
+    contractTextDutch?: string;
+    contractTextEnglish?: string;
+    deliverySpecificationDutch?: string;
+    deliverySpecificationEnglish?: string;
+
+    [key: string]: any;
+}
+
+/** Make all properties in T optional */
+export class Partial_PricingParams implements IPartial_PricingParams {
+    description?: string;
+    data?: string[][];
+
+    [key: string]: any;
+
+    constructor(data?: IPartial_PricingParams) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            for (var property in _data) {
+                if (_data.hasOwnProperty(property))
+                    this[property] = _data[property];
+            }
+            this.description = _data["description"];
+            if (Array.isArray(_data["data"])) {
+                this.data = [] as any;
+                for (let item of _data["data"])
+                    this.data!.push(item);
+            }
+        }
+    }
+
+    static fromJS(data: any): Partial_PricingParams {
+        data = typeof data === 'object' ? data : {};
+        let result = new Partial_PricingParams();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        for (var property in this) {
+            if (this.hasOwnProperty(property))
+                data[property] = this[property];
+        }
+        data["description"] = this.description;
+        if (Array.isArray(this.data)) {
+            data["data"] = [];
+            for (let item of this.data)
+                data["data"].push(item);
+        }
+        return data;
+    }
+}
+
+/** Make all properties in T optional */
+export interface IPartial_PricingParams {
+    description?: string;
+    data?: string[][];
+
+    [key: string]: any;
+}
+
+export class ProductInstanceListResponse implements IProductInstanceListResponse {
+    list!: ProductInstance[];
+    count!: number;
+
+    constructor(data?: IProductInstanceListResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+        if (!data) {
+            this.list = [];
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["list"])) {
+                this.list = [] as any;
+                for (let item of _data["list"])
+                    this.list!.push(ProductInstance.fromJS(item));
+            }
+            this.count = _data["count"];
+        }
+    }
+
+    static fromJS(data: any): ProductInstanceListResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new ProductInstanceListResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.list)) {
+            data["list"] = [];
+            for (let item of this.list)
+                data["list"].push(item.toJSON());
+        }
+        data["count"] = this.count;
+        return data;
+    }
+}
+
+export interface IProductInstanceListResponse {
+    list: ProductInstance[];
+    count: number;
+}
+
+export class PaginationParams implements IPaginationParams {
+    skip?: number;
+    take?: number;
+
+    constructor(data?: IPaginationParams) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.skip = _data["skip"];
+            this.take = _data["take"];
+        }
+    }
+
+    static fromJS(data: any): PaginationParams {
+        data = typeof data === 'object' ? data : {};
+        let result = new PaginationParams();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["skip"] = this.skip;
+        data["take"] = this.take;
+        return data;
+    }
+}
+
+export interface IPaginationParams {
+    skip?: number;
+    take?: number;
+}
+
+export class AnalysisResultByYear implements IAnalysisResultByYear {
+    amount!: number;
+    nrOfProducts!: number;
+    year!: number;
+
+    constructor(data?: IAnalysisResultByYear) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.amount = _data["amount"];
+            this.nrOfProducts = _data["nrOfProducts"];
+            this.year = _data["year"];
+        }
+    }
+
+    static fromJS(data: any): AnalysisResultByYear {
+        data = typeof data === 'object' ? data : {};
+        let result = new AnalysisResultByYear();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["amount"] = this.amount;
+        data["nrOfProducts"] = this.nrOfProducts;
+        data["year"] = this.year;
+        return data;
+    }
+}
+
+export interface IAnalysisResultByYear {
+    amount: number;
+    nrOfProducts: number;
+    year: number;
+}
+
+export class AnalysisResult implements IAnalysisResult {
+    amount!: number;
+    nrOfProducts!: number;
+
+    constructor(data?: IAnalysisResult) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.amount = _data["amount"];
+            this.nrOfProducts = _data["nrOfProducts"];
+        }
+    }
+
+    static fromJS(data: any): AnalysisResult {
+        data = typeof data === 'object' ? data : {};
+        let result = new AnalysisResult();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["amount"] = this.amount;
+        data["nrOfProducts"] = this.nrOfProducts;
+        return data;
+    }
+}
+
+export interface IAnalysisResult {
+    amount: number;
+    nrOfProducts: number;
+}
+
+export class InvoicedAmounts implements IInvoicedAmounts {
+    delivered!: AnalysisResult;
+    notDelivered!: AnalysisResult;
+
+    constructor(data?: IInvoicedAmounts) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+        if (!data) {
+            this.delivered = new AnalysisResult();
+            this.notDelivered = new AnalysisResult();
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.delivered = _data["delivered"] ? AnalysisResult.fromJS(_data["delivered"]) : new AnalysisResult();
+            this.notDelivered = _data["notDelivered"] ? AnalysisResult.fromJS(_data["notDelivered"]) : new AnalysisResult();
+        }
+    }
+
+    static fromJS(data: any): InvoicedAmounts {
+        data = typeof data === 'object' ? data : {};
+        let result = new InvoicedAmounts();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["delivered"] = this.delivered ? this.delivered.toJSON() : <any>undefined;
+        data["notDelivered"] = this.notDelivered ? this.notDelivered.toJSON() : <any>undefined;
+        return data;
+    }
+}
+
+export interface IInvoicedAmounts {
+    delivered: AnalysisResult;
+    notDelivered: AnalysisResult;
+}
+
+export class DashboardProductInstanceStats implements IDashboardProductInstanceStats {
+    suggested!: AnalysisResult;
+    contracted!: AnalysisResult;
+    delivered!: AnalysisResult;
+    invoiced!: InvoicedAmounts;
+    paid!: AnalysisResult;
+    financialYears!: number[];
+
+    constructor(data?: IDashboardProductInstanceStats) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+        if (!data) {
+            this.suggested = new AnalysisResult();
+            this.contracted = new AnalysisResult();
+            this.delivered = new AnalysisResult();
+            this.invoiced = new InvoicedAmounts();
+            this.paid = new AnalysisResult();
+            this.financialYears = [];
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.suggested = _data["suggested"] ? AnalysisResult.fromJS(_data["suggested"]) : new AnalysisResult();
+            this.contracted = _data["contracted"] ? AnalysisResult.fromJS(_data["contracted"]) : new AnalysisResult();
+            this.delivered = _data["delivered"] ? AnalysisResult.fromJS(_data["delivered"]) : new AnalysisResult();
+            this.invoiced = _data["invoiced"] ? InvoicedAmounts.fromJS(_data["invoiced"]) : new InvoicedAmounts();
+            this.paid = _data["paid"] ? AnalysisResult.fromJS(_data["paid"]) : new AnalysisResult();
+            if (Array.isArray(_data["financialYears"])) {
+                this.financialYears = [] as any;
+                for (let item of _data["financialYears"])
+                    this.financialYears!.push(item);
+            }
+        }
+    }
+
+    static fromJS(data: any): DashboardProductInstanceStats {
+        data = typeof data === 'object' ? data : {};
+        let result = new DashboardProductInstanceStats();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["suggested"] = this.suggested ? this.suggested.toJSON() : <any>undefined;
+        data["contracted"] = this.contracted ? this.contracted.toJSON() : <any>undefined;
+        data["delivered"] = this.delivered ? this.delivered.toJSON() : <any>undefined;
+        data["invoiced"] = this.invoiced ? this.invoiced.toJSON() : <any>undefined;
+        data["paid"] = this.paid ? this.paid.toJSON() : <any>undefined;
+        if (Array.isArray(this.financialYears)) {
+            data["financialYears"] = [];
+            for (let item of this.financialYears)
+                data["financialYears"].push(item);
+        }
+        return data;
+    }
+}
+
+export interface IDashboardProductInstanceStats {
+    suggested: AnalysisResult;
+    contracted: AnalysisResult;
+    delivered: AnalysisResult;
+    invoiced: InvoicedAmounts;
+    paid: AnalysisResult;
+    financialYears: number[];
+}
+
+/** Make all properties in T optional */
+export class Partial_RoleParams implements IPartial_RoleParams {
+    ldapGroup?: string;
+
+    [key: string]: any;
+
+    constructor(data?: IPartial_RoleParams) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            for (var property in _data) {
+                if (_data.hasOwnProperty(property))
+                    this[property] = _data[property];
+            }
+            this.ldapGroup = _data["ldapGroup"];
+        }
+    }
+
+    static fromJS(data: any): Partial_RoleParams {
+        data = typeof data === 'object' ? data : {};
+        let result = new Partial_RoleParams();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        for (var property in this) {
+            if (this.hasOwnProperty(property))
+                data[property] = this[property];
+        }
+        data["ldapGroup"] = this.ldapGroup;
+        return data;
+    }
+}
+
+/** Make all properties in T optional */
+export interface IPartial_RoleParams {
+    ldapGroup?: string;
+
+    [key: string]: any;
+}
+
+export enum Roles {
+    SIGNEE = "SIGNEE",
+    FINANCIAL = "FINANCIAL",
+    ADMIN = "ADMIN",
+    GENERAL = "GENERAL",
+    AUDIT = "AUDIT",
+}
+
+export class UserParams implements IUserParams {
+    email!: string;
+    firstName!: string;
+    lastNamePreposition?: string;
+    lastName!: string;
+    function!: string;
+    gender!: Gender;
+    replyToEmail?: string;
+    receiveEmails?: boolean;
+    sendEmailsToReplyToEmail?: boolean;
+    comment?: string;
+    ldapOverrideEmail?: boolean;
+    roles?: Roles[];
+
+    constructor(data?: IUserParams) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.email = _data["email"];
+            this.firstName = _data["firstName"];
+            this.lastNamePreposition = _data["lastNamePreposition"];
+            this.lastName = _data["lastName"];
+            this.function = _data["function"];
+            this.gender = _data["gender"];
+            this.replyToEmail = _data["replyToEmail"];
+            this.receiveEmails = _data["receiveEmails"];
+            this.sendEmailsToReplyToEmail = _data["sendEmailsToReplyToEmail"];
+            this.comment = _data["comment"];
+            this.ldapOverrideEmail = _data["ldapOverrideEmail"];
+            if (Array.isArray(_data["roles"])) {
+                this.roles = [] as any;
+                for (let item of _data["roles"])
+                    this.roles!.push(item);
+            }
+        }
+    }
+
+    static fromJS(data: any): UserParams {
+        data = typeof data === 'object' ? data : {};
+        let result = new UserParams();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["email"] = this.email;
+        data["firstName"] = this.firstName;
+        data["lastNamePreposition"] = this.lastNamePreposition;
+        data["lastName"] = this.lastName;
+        data["function"] = this.function;
+        data["gender"] = this.gender;
+        data["replyToEmail"] = this.replyToEmail;
+        data["receiveEmails"] = this.receiveEmails;
+        data["sendEmailsToReplyToEmail"] = this.sendEmailsToReplyToEmail;
+        data["comment"] = this.comment;
+        data["ldapOverrideEmail"] = this.ldapOverrideEmail;
+        if (Array.isArray(this.roles)) {
+            data["roles"] = [];
+            for (let item of this.roles)
+                data["roles"].push(item);
+        }
+        return data;
+    }
+}
+
+export interface IUserParams {
+    email: string;
+    firstName: string;
+    lastNamePreposition?: string;
+    lastName: string;
+    function: string;
+    gender: Gender;
+    replyToEmail?: string;
+    receiveEmails?: boolean;
+    sendEmailsToReplyToEmail?: boolean;
+    comment?: string;
+    ldapOverrideEmail?: boolean;
+    roles?: Roles[];
+}
+
+export class SetupParams implements ISetupParams {
+    admin!: UserParams;
+
+    constructor(data?: ISetupParams) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+        if (!data) {
+            this.admin = new UserParams();
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.admin = _data["admin"] ? UserParams.fromJS(_data["admin"]) : new UserParams();
+        }
+    }
+
+    static fromJS(data: any): SetupParams {
+        data = typeof data === 'object' ? data : {};
+        let result = new SetupParams();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["admin"] = this.admin ? this.admin.toJSON() : <any>undefined;
+        return data;
+    }
+}
+
+export interface ISetupParams {
+    admin: UserParams;
+}
+
+export class AuthStatus implements IAuthStatus {
+    authenticated!: boolean;
+
+    constructor(data?: IAuthStatus) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.authenticated = _data["authenticated"];
+        }
+    }
+
+    static fromJS(data: any): AuthStatus {
+        data = typeof data === 'object' ? data : {};
+        let result = new AuthStatus();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["authenticated"] = this.authenticated;
+        return data;
+    }
+}
+
+export interface IAuthStatus {
+    authenticated: boolean;
+}
+
+export class Profile implements IProfile {
+    /** Incremental ID of the entity */
+    id!: number;
+    /** Date at which this entity has been created */
+    createdAt!: Date;
+    /** Date at which this entity has last been updated */
+    updatedAt!: Date;
+    /** If this entity has been soft-deleted, this is the date at which the entity has been deleted */
+    deletedAt?: Date;
+    /** Version number of this entity */
+    version!: number;
+    /** Gender of this user */
+    gender!: Gender;
+    /** First name of this user */
+    firstName!: string;
+    /** Middle name of this user, if he/she has any */
+    lastNamePreposition!: string;
+    /** Last name of this user */
+    lastName!: string;
+    /** Email address of the user */
+    email!: string;
+    /** Email address used in PDF files */
+    replyToEmail!: string;
+    /** Any comments regarding this user */
+    comment!: string;
+    /** Function of this user, used when generating documents and printed below this user's name */
+    function!: string;
+    /** Optional filename of the user's avatar */
+    avatarFilename!: string;
+    /** Optional filename of the user's background */
+    backgroundFilename!: string;
+    /** Whether this user wishes to receive (regular) email updates, e.g. sent invoices */
+    receiveEmails!: boolean;
+    /** Whether the update emails (from the boolean above) should
+be sent to "email", or "replyToEmail" */
+    sendEmailsToReplyToEmail!: boolean;
+    /** The roles this user has */
+    roles!: Role[];
+    /** Identity for local login */
+    identityLocal?: IdentityLocal;
+    /** Identity for LDAP */
+    identityLdap?: IdentityLDAP;
+    hasApiKey?: boolean;
+
+    constructor(data?: IProfile) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+        if (!data) {
+            this.roles = [];
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
+            this.updatedAt = _data["updatedAt"] ? new Date(_data["updatedAt"].toString()) : <any>undefined;
+            this.deletedAt = _data["deletedAt"] ? new Date(_data["deletedAt"].toString()) : <any>undefined;
+            this.version = _data["version"];
+            this.gender = _data["gender"];
+            this.firstName = _data["firstName"];
+            this.lastNamePreposition = _data["lastNamePreposition"];
+            this.lastName = _data["lastName"];
+            this.email = _data["email"];
+            this.replyToEmail = _data["replyToEmail"];
+            this.comment = _data["comment"];
+            this.function = _data["function"];
+            this.avatarFilename = _data["avatarFilename"];
+            this.backgroundFilename = _data["backgroundFilename"];
+            this.receiveEmails = _data["receiveEmails"];
+            this.sendEmailsToReplyToEmail = _data["sendEmailsToReplyToEmail"];
+            if (Array.isArray(_data["roles"])) {
+                this.roles = [] as any;
+                for (let item of _data["roles"])
+                    this.roles!.push(Role.fromJS(item));
+            }
+            this.identityLocal = _data["identityLocal"] ? IdentityLocal.fromJS(_data["identityLocal"]) : <any>undefined;
+            this.identityLdap = _data["identityLdap"] ? IdentityLDAP.fromJS(_data["identityLdap"]) : <any>undefined;
+            this.hasApiKey = _data["hasApiKey"];
+        }
+    }
+
+    static fromJS(data: any): Profile {
+        data = typeof data === 'object' ? data : {};
+        let result = new Profile();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
+        data["updatedAt"] = this.updatedAt ? this.updatedAt.toISOString() : <any>undefined;
+        data["deletedAt"] = this.deletedAt ? this.deletedAt.toISOString() : <any>undefined;
+        data["version"] = this.version;
+        data["gender"] = this.gender;
+        data["firstName"] = this.firstName;
+        data["lastNamePreposition"] = this.lastNamePreposition;
+        data["lastName"] = this.lastName;
+        data["email"] = this.email;
+        data["replyToEmail"] = this.replyToEmail;
+        data["comment"] = this.comment;
+        data["function"] = this.function;
+        data["avatarFilename"] = this.avatarFilename;
+        data["backgroundFilename"] = this.backgroundFilename;
+        data["receiveEmails"] = this.receiveEmails;
+        data["sendEmailsToReplyToEmail"] = this.sendEmailsToReplyToEmail;
+        if (Array.isArray(this.roles)) {
+            data["roles"] = [];
+            for (let item of this.roles)
+                data["roles"].push(item.toJSON());
+        }
+        data["identityLocal"] = this.identityLocal ? this.identityLocal.toJSON() : <any>undefined;
+        data["identityLdap"] = this.identityLdap ? this.identityLdap.toJSON() : <any>undefined;
+        data["hasApiKey"] = this.hasApiKey;
+        return data;
+    }
+}
+
+export interface IProfile {
+    /** Incremental ID of the entity */
+    id: number;
+    /** Date at which this entity has been created */
+    createdAt: Date;
+    /** Date at which this entity has last been updated */
+    updatedAt: Date;
+    /** If this entity has been soft-deleted, this is the date at which the entity has been deleted */
+    deletedAt?: Date;
+    /** Version number of this entity */
+    version: number;
+    /** Gender of this user */
+    gender: Gender;
+    /** First name of this user */
+    firstName: string;
+    /** Middle name of this user, if he/she has any */
+    lastNamePreposition: string;
+    /** Last name of this user */
+    lastName: string;
+    /** Email address of the user */
+    email: string;
+    /** Email address used in PDF files */
+    replyToEmail: string;
+    /** Any comments regarding this user */
+    comment: string;
+    /** Function of this user, used when generating documents and printed below this user's name */
+    function: string;
+    /** Optional filename of the user's avatar */
+    avatarFilename: string;
+    /** Optional filename of the user's background */
+    backgroundFilename: string;
+    /** Whether this user wishes to receive (regular) email updates, e.g. sent invoices */
+    receiveEmails: boolean;
+    /** Whether the update emails (from the boolean above) should
+be sent to "email", or "replyToEmail" */
+    sendEmailsToReplyToEmail: boolean;
+    /** The roles this user has */
+    roles: Role[];
+    /** Identity for local login */
+    identityLocal?: IdentityLocal;
+    /** Identity for LDAP */
+    identityLdap?: IdentityLDAP;
+    hasApiKey?: boolean;
+}
+
+export class ResetPasswordRequest implements IResetPasswordRequest {
+    password!: string;
+    repeatPassword!: string;
+    token!: string;
+
+    constructor(data?: IResetPasswordRequest) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.password = _data["password"];
+            this.repeatPassword = _data["repeatPassword"];
+            this.token = _data["token"];
+        }
+    }
+
+    static fromJS(data: any): ResetPasswordRequest {
+        data = typeof data === 'object' ? data : {};
+        let result = new ResetPasswordRequest();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["password"] = this.password;
+        data["repeatPassword"] = this.repeatPassword;
+        data["token"] = this.token;
+        return data;
+    }
+}
+
+export interface IResetPasswordRequest {
+    password: string;
+    repeatPassword: string;
+    token: string;
+}
+
+export class GeneralPrivateInfo implements IGeneralPrivateInfo {
+    financialYears!: number[];
+
+    constructor(data?: IGeneralPrivateInfo) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+        if (!data) {
+            this.financialYears = [];
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["financialYears"])) {
+                this.financialYears = [] as any;
+                for (let item of _data["financialYears"])
+                    this.financialYears!.push(item);
+            }
+        }
+    }
+
+    static fromJS(data: any): GeneralPrivateInfo {
+        data = typeof data === 'object' ? data : {};
+        let result = new GeneralPrivateInfo();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.financialYears)) {
+            data["financialYears"] = [];
+            for (let item of this.financialYears)
+                data["financialYears"].push(item);
+        }
+        return data;
+    }
+}
+
+export interface IGeneralPrivateInfo {
+    financialYears: number[];
+}
+
+export enum LoginMethods {
+    Local = "local",
+    Ldap = "ldap",
+}
+
+export class GeneralPublicInfo implements IGeneralPublicInfo {
+    loginMethod!: LoginMethods;
+
+    constructor(data?: IGeneralPublicInfo) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.loginMethod = _data["loginMethod"];
+        }
+    }
+
+    static fromJS(data: any): GeneralPublicInfo {
+        data = typeof data === 'object' ? data : {};
+        let result = new GeneralPublicInfo();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["loginMethod"] = this.loginMethod;
+        return data;
+    }
+}
+
+export interface IGeneralPublicInfo {
+    loginMethod: LoginMethods;
 }
 
 export class UserListResponse implements IUserListResponse {
@@ -12977,11 +13503,11 @@ export interface IPartial_LdapIdentityParams {
     [key: string]: any;
 }
 
-export class CategoryListResponse implements ICategoryListResponse {
-    list!: ProductCategory[];
+export class VATListResponse implements IVATListResponse {
+    list!: ValueAddedTax[];
     count!: number;
 
-    constructor(data?: ICategoryListResponse) {
+    constructor(data?: IVATListResponse) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -12998,15 +13524,15 @@ export class CategoryListResponse implements ICategoryListResponse {
             if (Array.isArray(_data["list"])) {
                 this.list = [] as any;
                 for (let item of _data["list"])
-                    this.list!.push(ProductCategory.fromJS(item));
+                    this.list!.push(ValueAddedTax.fromJS(item));
             }
             this.count = _data["count"];
         }
     }
 
-    static fromJS(data: any): CategoryListResponse {
+    static fromJS(data: any): VATListResponse {
         data = typeof data === 'object' ? data : {};
-        let result = new CategoryListResponse();
+        let result = new VATListResponse();
         result.init(data);
         return result;
     }
@@ -13023,16 +13549,16 @@ export class CategoryListResponse implements ICategoryListResponse {
     }
 }
 
-export interface ICategoryListResponse {
-    list: ProductCategory[];
+export interface IVATListResponse {
+    list: ValueAddedTax[];
     count: number;
 }
 
-export class CategorySummary implements ICategorySummary {
+export class VATSummary implements IVATSummary {
     id!: number;
-    name!: string;
+    amount!: number;
 
-    constructor(data?: ICategorySummary) {
+    constructor(data?: IVATSummary) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -13044,13 +13570,13 @@ export class CategorySummary implements ICategorySummary {
     init(_data?: any) {
         if (_data) {
             this.id = _data["id"];
-            this.name = _data["name"];
+            this.amount = _data["amount"];
         }
     }
 
-    static fromJS(data: any): CategorySummary {
+    static fromJS(data: any): VATSummary {
         data = typeof data === 'object' ? data : {};
-        let result = new CategorySummary();
+        let result = new VATSummary();
         result.init(data);
         return result;
     }
@@ -13058,59 +13584,24 @@ export class CategorySummary implements ICategorySummary {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["id"] = this.id;
-        data["name"] = this.name;
+        data["amount"] = this.amount;
         return data;
     }
 }
 
-export interface ICategorySummary {
+export interface IVATSummary {
     id: number;
-    name: string;
-}
-
-export class CategoryParams implements ICategoryParams {
-    name!: string;
-
-    constructor(data?: ICategoryParams) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.name = _data["name"];
-        }
-    }
-
-    static fromJS(data: any): CategoryParams {
-        data = typeof data === 'object' ? data : {};
-        let result = new CategoryParams();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["name"] = this.name;
-        return data;
-    }
-}
-
-export interface ICategoryParams {
-    name: string;
+    amount: number;
 }
 
 /** Make all properties in T optional */
-export class Partial_CategoryParams implements IPartial_CategoryParams {
-    name?: string;
+export class Partial_VATParams implements IPartial_VATParams {
+    category?: VAT;
+    amount?: number;
 
     [key: string]: any;
 
-    constructor(data?: IPartial_CategoryParams) {
+    constructor(data?: IPartial_VATParams) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -13125,13 +13616,14 @@ export class Partial_CategoryParams implements IPartial_CategoryParams {
                 if (_data.hasOwnProperty(property))
                     this[property] = _data[property];
             }
-            this.name = _data["name"];
+            this.category = _data["category"];
+            this.amount = _data["amount"];
         }
     }
 
-    static fromJS(data: any): Partial_CategoryParams {
+    static fromJS(data: any): Partial_VATParams {
         data = typeof data === 'object' ? data : {};
-        let result = new Partial_CategoryParams();
+        let result = new Partial_VATParams();
         result.init(data);
         return result;
     }
@@ -13142,64 +13634,16 @@ export class Partial_CategoryParams implements IPartial_CategoryParams {
             if (this.hasOwnProperty(property))
                 data[property] = this[property];
         }
-        data["name"] = this.name;
+        data["category"] = this.category;
+        data["amount"] = this.amount;
         return data;
     }
 }
 
 /** Make all properties in T optional */
-export interface IPartial_CategoryParams {
-    name?: string;
-
-    [key: string]: any;
-}
-
-/** Make all properties in T optional */
-export class Partial_RoleParams implements IPartial_RoleParams {
-    ldapGroup?: string;
-
-    [key: string]: any;
-
-    constructor(data?: IPartial_RoleParams) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            for (var property in _data) {
-                if (_data.hasOwnProperty(property))
-                    this[property] = _data[property];
-            }
-            this.ldapGroup = _data["ldapGroup"];
-        }
-    }
-
-    static fromJS(data: any): Partial_RoleParams {
-        data = typeof data === 'object' ? data : {};
-        let result = new Partial_RoleParams();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        for (var property in this) {
-            if (this.hasOwnProperty(property))
-                data[property] = this[property];
-        }
-        data["ldapGroup"] = this.ldapGroup;
-        return data;
-    }
-}
-
-/** Make all properties in T optional */
-export interface IPartial_RoleParams {
-    ldapGroup?: string;
+export interface IPartial_VATParams {
+    category?: VAT;
+    amount?: number;
 
     [key: string]: any;
 }

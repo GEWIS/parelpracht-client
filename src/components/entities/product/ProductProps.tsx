@@ -2,14 +2,14 @@ import React, { ChangeEvent } from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import {
-  Checkbox, Dropdown, Form, Input, Label,
+  Checkbox, Form, Input, Label,
 } from 'semantic-ui-react';
 import { withTranslation, WithTranslation } from 'react-i18next';
 import validator from 'validator';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import {
   Client, PaginationParams,
-  Product, ProductParams, ProductStatus, Roles, ValueAddedTax,
+  Product, ProductParams, ProductStatus, Roles,
 } from '../../../clients/server.generated';
 import ProductCategorySelector from '../productcategories/ProductCategorySelector';
 import { formatPrice } from '../../../helpers/monetary';
@@ -23,6 +23,7 @@ import { TransientAlert } from '../../../stores/alerts/actions';
 import { showTransientAlert } from '../../../stores/alerts/actionCreators';
 import TextArea from '../../TextArea';
 import { authedUserHasRole } from '../../../stores/auth/selectors';
+import ProductVatSelector from './ProductVatSelector';
 
 interface Props extends WithTranslation, RouteComponentProps {
   create?: boolean;
@@ -49,10 +50,10 @@ interface State {
   nameDutch: string;
   nameEnglish: string;
   targetPrice: string;
-  valueAddedTax: ValueAddedTax;
   status: ProductStatus;
   description: string;
   categoryId: number;
+  vatId: number;
   contractTextDutch: string;
   contractTextEnglish: string;
   deliverySpecDutch: string | undefined;
@@ -88,9 +89,9 @@ class ProductProps extends React.Component<Props, State> {
       nameDutch: product.nameDutch,
       nameEnglish: product.nameEnglish,
       targetPrice: formatPrice(product.targetPrice),
-      valueAddedTax: product.valueAddedTax,
       status: product.status,
       description: product.description,
+      vatId: product.vatId,
       categoryId: product.categoryId,
       contractTextDutch: product.contractTextDutch,
       contractTextEnglish: product.contractTextEnglish,
@@ -108,6 +109,7 @@ class ProductProps extends React.Component<Props, State> {
       status: this.state.status,
       description: this.state.description,
       categoryId: this.state.categoryId,
+      vatId: this.state.vatId,
       contractTextDutch: this.state.contractTextDutch,
       contractTextEnglish: this.state.contractTextEnglish,
       deliverySpecificationEnglish: this.state.deliverySpecEnglish,
@@ -115,7 +117,6 @@ class ProductProps extends React.Component<Props, State> {
       minTarget: this.state.minTarget,
       maxTarget: this.state.maxTarget,
       targetPrice: Math.round(Number.parseFloat(this.state.targetPrice.replace(',', '')) * 100),
-      valueAddedTax: this.state.valueAddedTax,
     });
   };
 
@@ -148,11 +149,12 @@ class ProductProps extends React.Component<Props, State> {
 
   propsHaveErrors = (): boolean => {
     const {
-      nameDutch, nameEnglish, categoryId, targetPrice, minTarget, maxTarget,
+      nameDutch, nameEnglish, vatId, categoryId, targetPrice, minTarget, maxTarget,
       contractTextDutch, contractTextEnglish,
     } = this.state;
     return (validator.isEmpty(nameDutch)
       || validator.isEmpty(nameEnglish)
+      || vatId < 0
       || categoryId < 0
       || (parseFloat(targetPrice.replace(',', '.')) <= 0 || Number.isNaN(parseFloat(targetPrice.replace(',', '.'))))
       || (minTarget !== undefined ? minTarget < 0 : false)
@@ -185,10 +187,10 @@ class ProductProps extends React.Component<Props, State> {
       nameDutch,
       nameEnglish,
       targetPrice,
-      valueAddedTax,
       status,
       description,
       categoryId,
+      vatId,
       contractTextDutch,
       contractTextEnglish,
       deliverySpecDutch,
@@ -316,23 +318,17 @@ class ProductProps extends React.Component<Props, State> {
               required
             >
               {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-              <label htmlFor="form-input-value-added-tax">
+              <label htmlFor="form-input-vat">
                 {t('entities.product.props.valueAddedTax')}
               </label>
-              <Dropdown
-                id="form-input-value-added-tax"
-                selection
-                placeholder={t('entities.product.props.valueAddedTaxValue.high')}
-                value={valueAddedTax}
-                options={[
-                  { key: 0, text: t('entities.product.props.valueAddedTaxValue.zero'), value: ValueAddedTax.ZERO },
-                  { key: 1, text: t('entities.product.props.valueAddedTaxValue.low'), value: ValueAddedTax.LOW },
-                  { key: 2, text: t('entities.product.props.valueAddedTaxValue.high'), value: ValueAddedTax.HIGH },
-                ]}
-                onChange={(e, data) => this.setState(
-                  { valueAddedTax: data.value as ValueAddedTax },
-                )}
-                fluid
+              <ProductVatSelector
+                id="form-input-vat"
+                value={vatId}
+                onChange={(val: number) => {
+                  this.setState({
+                    vatId: val,
+                  });
+                }}
               />
             </Form.Field>
           </Form.Group>

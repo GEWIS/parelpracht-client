@@ -4,7 +4,7 @@ import { Table } from 'semantic-ui-react';
 import { withTranslation, WithTranslation } from 'react-i18next';
 import InvoiceProductRow from './InvoiceProductRow';
 import {
-  Client, Invoice, InvoiceStatus, ValueAddedTax,
+  Client, Invoice, InvoiceStatus,
 } from '../../../clients/server.generated';
 import { formatPriceFull } from '../../../helpers/monetary';
 
@@ -24,19 +24,8 @@ class InvoiceProductList extends React.Component<Props, State> {
   removeProduct = async (instanceId: number) => {
     const { invoice, fetchInvoice } = this.props;
     const client = new Client();
-    await client.deleteProduct2(invoice?.id, instanceId);
+    await client.deleteProductInstance(invoice?.id, instanceId);
     fetchInvoice(invoice.id);
-  };
-
-  enumToVatAmount = (valueAddedTax: ValueAddedTax) => {
-    switch (valueAddedTax) {
-      case ValueAddedTax.LOW:
-        return 1.09;
-      case ValueAddedTax.HIGH:
-        return 1.21;
-      default:
-        return 1;
-    }
   };
 
   deleteButtonActive() {
@@ -51,26 +40,24 @@ class InvoiceProductList extends React.Component<Props, State> {
     const { invoice, t } = this.props;
 
     const { products } = invoice;
-    let priceSum = 0;
-    let discountAmount = 0;
-    let discountSum = 0;
-    let priceSumVAT = 0;
-    let lowVATsum = 0;
-    let highVATsum = 0;
+    let totalPriceNoVat = 0;
+    let discountValue = 0;
+    let totalPriceWithVat = 0;
+    let totalLowVatValue = 0;
+    let totalHighVatValue = 0;
 
-    invoice.products.forEach((p) => {
-      priceSum += p.basePrice;
-      discountSum += p.discount;
-      if (p.discount !== 0) discountAmount++;
+    products.forEach((p) => {
+      totalPriceNoVat += p.basePrice;
+      discountValue += p.discount;
 
       const currentPrice = p.basePrice - p.discount;
-      const currentPriceVAT = currentPrice * this.enumToVatAmount(p.product.valueAddedTax);
-      priceSumVAT += currentPriceVAT;
-      if (p.product.valueAddedTax === ValueAddedTax.LOW) {
-        lowVATsum += currentPriceVAT - currentPrice;
+      const currentPriceVAT = currentPrice * (p.product.valueAddedTax.amount / 100 + 1);
+      totalPriceWithVat += currentPriceVAT;
+      if (p.product.valueAddedTax.amount === 9) {
+        totalLowVatValue += currentPriceVAT - currentPrice;
       }
-      if (p.product.valueAddedTax === ValueAddedTax.HIGH) {
-        highVATsum += currentPriceVAT - currentPrice;
+      if (p.product.valueAddedTax.amount === 21) {
+        totalHighVatValue += currentPriceVAT - currentPrice;
       }
     });
 
@@ -110,21 +97,17 @@ class InvoiceProductList extends React.Component<Props, State> {
                 <b>{t('entities.productInstance.props.priceHighVat')}</b>
               </Table.HeaderCell>
               <Table.HeaderCell singleLine collapsing>
-                {formatPriceFull(discountSum)}
-                {' '}
-                (
-                {discountAmount}
-                )
+                {formatPriceFull(discountValue)}
                 <br />
                 <br />
                 <br />
               </Table.HeaderCell>
               <Table.HeaderCell collapsing>
-                {formatPriceFull(priceSum - discountSum)}
+                {formatPriceFull(totalPriceNoVat - discountValue)}
                 <br />
-                {formatPriceFull(lowVATsum)}
+                {formatPriceFull(totalLowVatValue)}
                 <br />
-                {formatPriceFull(highVATsum)}
+                {formatPriceFull(totalHighVatValue)}
               </Table.HeaderCell>
               <Table.HeaderCell />
               <Table.HeaderCell />
@@ -135,7 +118,7 @@ class InvoiceProductList extends React.Component<Props, State> {
               </Table.HeaderCell>
               <Table.HeaderCell />
               <Table.HeaderCell collapsing>
-                {formatPriceFull(priceSumVAT)}
+                {formatPriceFull(totalPriceWithVat)}
               </Table.HeaderCell>
               <Table.HeaderCell />
               <Table.HeaderCell />

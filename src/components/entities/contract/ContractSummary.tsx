@@ -44,8 +44,12 @@ function ContractSummary(props: Props) {
     && status !== ResourceStatus.SAVING
     && status !== ResourceStatus.ERROR);
 
-  const totalValue = contract.products
+  const totalPriceNoVat = contract.products
     .reduce((a, b) => a + (b.basePrice - b.discount), 0);
+
+  const totalPriceWithVat = contract.products
+    .reduce((a, b) => a + (b.basePrice - b.discount)
+      * (b.product.valueAddedTax.amount / 100 + 1), 0);
 
   const logo = logoFilename !== '' ? (
     <Image
@@ -78,8 +82,12 @@ function ContractSummary(props: Props) {
         <UserLink id={contract.assignedToId} />
       </div>
       <div>
-        <h5>{t('entities.contract.props.totalValue')}</h5>
-        <p>{formatPriceFull(totalValue)}</p>
+        <h5>{t('entities.contract.props.realPriceNoVat')}</h5>
+        <p>{formatPriceFull(totalPriceNoVat)}</p>
+      </div>
+      <div>
+        <h5>{t('entities.contract.props.realPriceWithVat')}</h5>
+        <p>{formatPriceFull(totalPriceWithVat)}</p>
       </div>
     </EntitySummary>
   );

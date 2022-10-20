@@ -153,7 +153,8 @@
     "contract": {
       "props": {
         "title": "Title",
-        "totalValue": "Total value"
+        "realPriceNoVat": "Price excl. VAT",
+        "realPriceWithVat": "Price incl. VAT"
       }
     },
     "details": "Details",
@@ -198,7 +199,8 @@
         "invoiceDate": "Invoice date",
         "poNumber": "PO Number",
         "title": "Title",
-        "totalValue": "Total value"
+        "realPriceNoVat": "Price excl. VAT",
+        "realPriceWithVat": "Price incl. VAT"
       }
     },
     "product": {
