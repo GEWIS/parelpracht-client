@@ -10,7 +10,7 @@ import {
   ActivityType,
   Invoice,
   InvoiceStatus,
-  Partial_InvoiceParams,
+  Partial_InvoiceParams_,
   Roles,
 } from '../../../clients/server.generated';
 import { getCompanyName } from '../../../stores/company/selectors';
@@ -40,7 +40,7 @@ interface Props extends RouteComponentProps, WithTranslation {
 
   companyName: string;
 
-  saveInvoice: (id: number, invoice: Partial_InvoiceParams) => void;
+  saveInvoice: (id: number, invoice: Partial_InvoiceParams_) => void;
   deleteInvoice: (id: number) => void;
   showTransientAlert: (alert: TransientAlert) => void;
 }
@@ -99,8 +99,8 @@ class InvoiceProps extends React.Component<Props, State> {
     };
   };
 
-  toParams = (): Partial_InvoiceParams => {
-    return new Partial_InvoiceParams({
+  toParams = (): Partial_InvoiceParams_ => {
+    return new Partial_InvoiceParams_({
       title: this.state.title,
       comments: this.state.comments,
       assignedToId: this.state.assignedToId,
@@ -286,7 +286,7 @@ const mapStateToProps = (state: RootState, props: { invoice: Invoice }) => {
 };
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
-  saveInvoice: (id: number, invoice: Partial_InvoiceParams) => dispatch(
+  saveInvoice: (id: number, invoice: Partial_InvoiceParams_) => dispatch(
     saveSingle(SingleEntities.Invoice, id, invoice),
   ),
   deleteInvoice: (id: number) => dispatch(

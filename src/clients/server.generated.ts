@@ -220,7 +220,7 @@ export class Client {
      * @param body Update subset of parameter of company
      * @return Ok
      */
-    updateCompany(id: number, body: Partial_CompanyParams): Promise<Company> {
+    updateCompany(id: number, body: Partial_CompanyParams_): Promise<Company> {
         let url_ = this.baseUrl + "/company/{id}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -693,7 +693,7 @@ export class Client {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
                 result200 = resultData200 !== undefined ? resultData200 : <any>null;
-
+    
             return result200;
             });
         } else if (status === 401) {
@@ -717,7 +717,7 @@ export class Client {
      * @param body Update subset of the parameters of the file
      * @return Ok
      */
-    updateCompanyFile(id: number, fileId: number, body: Partial_FileParams): Promise<BaseFile> {
+    updateCompanyFile(id: number, fileId: number, body: Partial_FileParams_): Promise<BaseFile> {
         let url_ = this.baseUrl + "/company/{id}/file/{fileId}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -875,7 +875,7 @@ export class Client {
      * @param body Update subset of parameter of comment activity
      * @return Ok
      */
-    updateCompanyActivity(id: number, activityId: number, body: Partial_ActivityParams): Promise<BaseActivity> {
+    updateCompanyActivity(id: number, activityId: number, body: Partial_ActivityParams_): Promise<BaseActivity> {
         let url_ = this.baseUrl + "/company/{id}/activity/{activityId}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -1127,7 +1127,7 @@ export class Client {
      * @param body Update subset of parameter of contact
      * @return Ok
      */
-    updateContact(id: number, body: Partial_ContactParams): Promise<Contact> {
+    updateContact(id: number, body: Partial_ContactParams_): Promise<Contact> {
         let url_ = this.baseUrl + "/contact/{id}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -1472,7 +1472,7 @@ export class Client {
      * @param body Update subset of parameter of contract
      * @return Ok
      */
-    updateContract(id: number, body: Partial_ContractParams): Promise<Contract> {
+    updateContract(id: number, body: Partial_ContractParams_): Promise<Contract> {
         let url_ = this.baseUrl + "/contract/{id}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -1672,7 +1672,7 @@ export class Client {
      * @param body Update subset of product instance
      * @return Ok
      */
-    updateProductInstance(id: number, prodId: number, body: Partial_ProductInstanceParams): Promise<ProductInstance> {
+    updateProductInstance(id: number, prodId: number, body: Partial_ProductInstanceParams_): Promise<ProductInstance> {
         let url_ = this.baseUrl + "/contract/{id}/product/{prodId}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -1892,7 +1892,7 @@ export class Client {
      * @param body Update subset of parameter of the activity
      * @return Ok
      */
-    updateProductInstanceActivity(id: number, prodId: number, activityId: number, body: Partial_ActivityParams): Promise<BaseActivity> {
+    updateProductInstanceActivity(id: number, prodId: number, activityId: number, body: Partial_ActivityParams_): Promise<BaseActivity> {
         let url_ = this.baseUrl + "/contract/{id}/product/{prodId}/activity/{activityId}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -2034,7 +2034,7 @@ export class Client {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
                 result200 = resultData200 !== undefined ? resultData200 : <any>null;
-
+    
             return result200;
             });
         } else if (status === 401) {
@@ -2144,7 +2144,7 @@ export class Client {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
                 result200 = resultData200 !== undefined ? resultData200 : <any>null;
-
+    
             return result200;
             });
         } else if (status === 401) {
@@ -2168,7 +2168,7 @@ export class Client {
      * @param body Update subset of the parameters of the file
      * @return Ok
      */
-    updateContractFile(id: number, fileId: number, body: Partial_FileParams): Promise<BaseFile> {
+    updateContractFile(id: number, fileId: number, body: Partial_FileParams_): Promise<BaseFile> {
         let url_ = this.baseUrl + "/contract/{id}/file/{fileId}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -2379,7 +2379,7 @@ export class Client {
      * @param body Update subset of parameter of the activity
      * @return Ok
      */
-    updateContractActivity(id: number, activityId: number, body: Partial_ActivityParams): Promise<BaseActivity> {
+    updateContractActivity(id: number, activityId: number, body: Partial_ActivityParams_): Promise<BaseActivity> {
         let url_ = this.baseUrl + "/contract/{id}/activity/{activityId}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -2722,7 +2722,7 @@ export class Client {
      * @param body Update subset of parameter of invoice
      * @return Ok
      */
-    updateInvoice(id: number, body: Partial_InvoiceParams): Promise<Invoice> {
+    updateInvoice(id: number, body: Partial_InvoiceParams_): Promise<Invoice> {
         let url_ = this.baseUrl + "/invoice/{id}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -3000,7 +3000,7 @@ export class Client {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
                 result200 = resultData200 !== undefined ? resultData200 : <any>null;
-
+    
             return result200;
             });
         } else if (status === 401) {
@@ -3110,7 +3110,7 @@ export class Client {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
                 result200 = resultData200 !== undefined ? resultData200 : <any>null;
-
+    
             return result200;
             });
         } else if (status === 401) {
@@ -3134,7 +3134,7 @@ export class Client {
      * @param body Update subset of the parameters of the file
      * @return Ok
      */
-    updateInvoiceFile(id: number, fileId: number, body: Partial_FileParams): Promise<BaseFile> {
+    updateInvoiceFile(id: number, fileId: number, body: Partial_FileParams_): Promise<BaseFile> {
         let url_ = this.baseUrl + "/invoice/{id}/file/{fileId}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -3265,7 +3265,7 @@ export class Client {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
                 result200 = resultData200 !== undefined ? resultData200 : <any>null;
-
+    
             return result200;
             });
         } else if (status === 401) {
@@ -3395,7 +3395,7 @@ export class Client {
      * @param body Update subset of parameter of the activity
      * @return Ok
      */
-    updateInvoiceActivity(id: number, activityId: number, body: Partial_ActivityParams): Promise<BaseActivity> {
+    updateInvoiceActivity(id: number, activityId: number, body: Partial_ActivityParams_): Promise<BaseActivity> {
         let url_ = this.baseUrl + "/invoice/{id}/activity/{activityId}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -3648,7 +3648,7 @@ export class Client {
      * @param body Update subset of parameter of category
      * @return Ok
      */
-    updateCategory(id: number, body: Partial_CategoryParams): Promise<ProductCategory> {
+    updateCategory(id: number, body: Partial_CategoryParams_): Promise<ProductCategory> {
         let url_ = this.baseUrl + "/category/{id}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -3941,7 +3941,7 @@ export class Client {
      * @param body Update subset of parameter of product
      * @return Ok
      */
-    updateProduct(id: number, body: Partial_ProductParams): Promise<Product> {
+    updateProduct(id: number, body: Partial_ProductParams_): Promise<Product> {
         let url_ = this.baseUrl + "/product/{id}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -4149,7 +4149,7 @@ export class Client {
      * @param body Description string and JSON table (nested array)
      * @return Ok
      */
-    updatePricing(id: number, body: Partial_PricingParams): Promise<ProductPricing> {
+    updatePricing(id: number, body: Partial_PricingParams_): Promise<ProductPricing> {
         let url_ = this.baseUrl + "/product/{id}/pricing";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -4493,7 +4493,7 @@ export class Client {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
                 result200 = resultData200 !== undefined ? resultData200 : <any>null;
-
+    
             return result200;
             });
         } else if (status === 401) {
@@ -4517,7 +4517,7 @@ export class Client {
      * @param body Update subset of the parameters of the file
      * @return Ok
      */
-    updateProductFile(id: number, fileId: number, body: Partial_FileParams): Promise<BaseFile> {
+    updateProductFile(id: number, fileId: number, body: Partial_FileParams_): Promise<BaseFile> {
         let url_ = this.baseUrl + "/product/{id}/file/{fileId}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -4675,7 +4675,7 @@ export class Client {
      * @param body Update subset of parameter of comment activity
      * @return Ok
      */
-    updateProductActivity(id: number, activityId: number, body: Partial_ActivityParams): Promise<BaseActivity> {
+    updateProductActivity(id: number, activityId: number, body: Partial_ActivityParams_): Promise<BaseActivity> {
         let url_ = this.baseUrl + "/product/{id}/activity/{activityId}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -4923,7 +4923,7 @@ export class Client {
     /**
      * @return Ok
      */
-    updateRole(id: string, body: Partial_RoleParams): Promise<Role> {
+    updateRole(id: string, body: Partial_RoleParams_): Promise<Role> {
         let url_ = this.baseUrl + "/role/{id}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -5230,7 +5230,7 @@ export class Client {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
                 result200 = resultData200 !== undefined ? resultData200 : <any>null;
-
+    
             return result200;
             });
         } else if (status === 400) {
@@ -5275,7 +5275,7 @@ export class Client {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
                 result200 = resultData200 !== undefined ? resultData200 : <any>null;
-
+    
             return result200;
             });
         } else if (status === 400) {
@@ -5625,7 +5625,7 @@ export class Client {
      * @param body Update subset of parameter of user
      * @return Ok
      */
-    updateUser(id: number, body: Partial_UserParams): Promise<User> {
+    updateUser(id: number, body: Partial_UserParams_): Promise<User> {
         let url_ = this.baseUrl + "/user/{id}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -6099,7 +6099,7 @@ export class Client {
     /**
      * @return Ok
      */
-    updateLdapIdentity(id: number, body: Partial_LdapIdentityParams): Promise<IdentityLDAP> {
+    updateLdapIdentity(id: number, body: Partial_LdapIdentityParams_): Promise<IdentityLDAP> {
         let url_ = this.baseUrl + "/user/{id}/auth/ldap";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -6343,7 +6343,7 @@ export class Client {
      * @param body Update subset of parameter of VAT
      * @return Ok
      */
-    updateVAT(id: number, body: Partial_VATParams): Promise<ValueAddedTax> {
+    updateVAT(id: number, body: Partial_VATParams_): Promise<ValueAddedTax> {
         let url_ = this.baseUrl + "/VAT/{id}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -9835,7 +9835,7 @@ export interface ICompanyParams {
 }
 
 /** Make all properties in T optional */
-export class Partial_CompanyParams implements IPartial_CompanyParams {
+export class Partial_CompanyParams_ implements IPartial_CompanyParams_ {
     name?: string;
     comments?: string;
     phoneNumber?: string;
@@ -9851,7 +9851,7 @@ export class Partial_CompanyParams implements IPartial_CompanyParams {
 
     [key: string]: any;
 
-    constructor(data?: IPartial_CompanyParams) {
+    constructor(data?: IPartial_CompanyParams_) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -9881,9 +9881,9 @@ export class Partial_CompanyParams implements IPartial_CompanyParams {
         }
     }
 
-    static fromJS(data: any): Partial_CompanyParams {
+    static fromJS(data: any): Partial_CompanyParams_ {
         data = typeof data === 'object' ? data : {};
-        let result = new Partial_CompanyParams();
+        let result = new Partial_CompanyParams_();
         result.init(data);
         return result;
     }
@@ -9911,7 +9911,7 @@ export class Partial_CompanyParams implements IPartial_CompanyParams {
 }
 
 /** Make all properties in T optional */
-export interface IPartial_CompanyParams {
+export interface IPartial_CompanyParams_ {
     name?: string;
     comments?: string;
     phoneNumber?: string;
@@ -10157,13 +10157,13 @@ export interface IBaseFile {
 }
 
 /** Make all properties in T optional */
-export class Partial_FileParams implements IPartial_FileParams {
+export class Partial_FileParams_ implements IPartial_FileParams_ {
     name?: string;
     createdAt?: Date;
 
     [key: string]: any;
 
-    constructor(data?: IPartial_FileParams) {
+    constructor(data?: IPartial_FileParams_) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -10183,9 +10183,9 @@ export class Partial_FileParams implements IPartial_FileParams {
         }
     }
 
-    static fromJS(data: any): Partial_FileParams {
+    static fromJS(data: any): Partial_FileParams_ {
         data = typeof data === 'object' ? data : {};
-        let result = new Partial_FileParams();
+        let result = new Partial_FileParams_();
         result.init(data);
         return result;
     }
@@ -10203,7 +10203,7 @@ export class Partial_FileParams implements IPartial_FileParams {
 }
 
 /** Make all properties in T optional */
-export interface IPartial_FileParams {
+export interface IPartial_FileParams_ {
     name?: string;
     createdAt?: Date;
 
@@ -10340,12 +10340,12 @@ export interface IActivityParams {
 }
 
 /** Make all properties in T optional */
-export class Partial_ActivityParams implements IPartial_ActivityParams {
+export class Partial_ActivityParams_ implements IPartial_ActivityParams_ {
     description?: string;
 
     [key: string]: any;
 
-    constructor(data?: IPartial_ActivityParams) {
+    constructor(data?: IPartial_ActivityParams_) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -10364,9 +10364,9 @@ export class Partial_ActivityParams implements IPartial_ActivityParams {
         }
     }
 
-    static fromJS(data: any): Partial_ActivityParams {
+    static fromJS(data: any): Partial_ActivityParams_ {
         data = typeof data === 'object' ? data : {};
-        let result = new Partial_ActivityParams();
+        let result = new Partial_ActivityParams_();
         result.init(data);
         return result;
     }
@@ -10383,7 +10383,7 @@ export class Partial_ActivityParams implements IPartial_ActivityParams {
 }
 
 /** Make all properties in T optional */
-export interface IPartial_ActivityParams {
+export interface IPartial_ActivityParams_ {
     description?: string;
 
     [key: string]: any;
@@ -10565,7 +10565,7 @@ export interface IContactParams {
 }
 
 /** Make all properties in T optional */
-export class Partial_ContactParams implements IPartial_ContactParams {
+export class Partial_ContactParams_ implements IPartial_ContactParams_ {
     gender?: Gender;
     firstName?: string;
     lastNamePreposition?: string;
@@ -10578,7 +10578,7 @@ export class Partial_ContactParams implements IPartial_ContactParams {
 
     [key: string]: any;
 
-    constructor(data?: IPartial_ContactParams) {
+    constructor(data?: IPartial_ContactParams_) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -10605,9 +10605,9 @@ export class Partial_ContactParams implements IPartial_ContactParams {
         }
     }
 
-    static fromJS(data: any): Partial_ContactParams {
+    static fromJS(data: any): Partial_ContactParams_ {
         data = typeof data === 'object' ? data : {};
-        let result = new Partial_ContactParams();
+        let result = new Partial_ContactParams_();
         result.init(data);
         return result;
     }
@@ -10632,7 +10632,7 @@ export class Partial_ContactParams implements IPartial_ContactParams {
 }
 
 /** Make all properties in T optional */
-export interface IPartial_ContactParams {
+export interface IPartial_ContactParams_ {
     gender?: Gender;
     firstName?: string;
     lastNamePreposition?: string;
@@ -10874,7 +10874,7 @@ export interface IContractParams {
 }
 
 /** Make all properties in T optional */
-export class Partial_ContractParams implements IPartial_ContractParams {
+export class Partial_ContractParams_ implements IPartial_ContractParams_ {
     title?: string;
     companyId?: number;
     contactId?: number;
@@ -10883,7 +10883,7 @@ export class Partial_ContractParams implements IPartial_ContractParams {
 
     [key: string]: any;
 
-    constructor(data?: IPartial_ContractParams) {
+    constructor(data?: IPartial_ContractParams_) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -10906,9 +10906,9 @@ export class Partial_ContractParams implements IPartial_ContractParams {
         }
     }
 
-    static fromJS(data: any): Partial_ContractParams {
+    static fromJS(data: any): Partial_ContractParams_ {
         data = typeof data === 'object' ? data : {};
-        let result = new Partial_ContractParams();
+        let result = new Partial_ContractParams_();
         result.init(data);
         return result;
     }
@@ -10929,7 +10929,7 @@ export class Partial_ContractParams implements IPartial_ContractParams {
 }
 
 /** Make all properties in T optional */
-export interface IPartial_ContractParams {
+export interface IPartial_ContractParams_ {
     title?: string;
     companyId?: number;
     contactId?: number;
@@ -10988,7 +10988,7 @@ export interface IProductInstanceParams {
 }
 
 /** Make all properties in T optional */
-export class Partial_ProductInstanceParams implements IPartial_ProductInstanceParams {
+export class Partial_ProductInstanceParams_ implements IPartial_ProductInstanceParams_ {
     productId?: number;
     basePrice?: number;
     discount?: number;
@@ -10996,7 +10996,7 @@ export class Partial_ProductInstanceParams implements IPartial_ProductInstancePa
 
     [key: string]: any;
 
-    constructor(data?: IPartial_ProductInstanceParams) {
+    constructor(data?: IPartial_ProductInstanceParams_) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -11018,9 +11018,9 @@ export class Partial_ProductInstanceParams implements IPartial_ProductInstancePa
         }
     }
 
-    static fromJS(data: any): Partial_ProductInstanceParams {
+    static fromJS(data: any): Partial_ProductInstanceParams_ {
         data = typeof data === 'object' ? data : {};
-        let result = new Partial_ProductInstanceParams();
+        let result = new Partial_ProductInstanceParams_();
         result.init(data);
         return result;
     }
@@ -11040,7 +11040,7 @@ export class Partial_ProductInstanceParams implements IPartial_ProductInstancePa
 }
 
 /** Make all properties in T optional */
-export interface IPartial_ProductInstanceParams {
+export interface IPartial_ProductInstanceParams_ {
     productId?: number;
     basePrice?: number;
     discount?: number;
@@ -11463,7 +11463,7 @@ export interface IInvoiceCreateParams {
 }
 
 /** Make all properties in T optional */
-export class Partial_InvoiceParams implements IPartial_InvoiceParams {
+export class Partial_InvoiceParams_ implements IPartial_InvoiceParams_ {
     title?: string;
     poNumber?: string;
     comments?: string;
@@ -11472,7 +11472,7 @@ export class Partial_InvoiceParams implements IPartial_InvoiceParams {
 
     [key: string]: any;
 
-    constructor(data?: IPartial_InvoiceParams) {
+    constructor(data?: IPartial_InvoiceParams_) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -11495,9 +11495,9 @@ export class Partial_InvoiceParams implements IPartial_InvoiceParams {
         }
     }
 
-    static fromJS(data: any): Partial_InvoiceParams {
+    static fromJS(data: any): Partial_InvoiceParams_ {
         data = typeof data === 'object' ? data : {};
-        let result = new Partial_InvoiceParams();
+        let result = new Partial_InvoiceParams_();
         result.init(data);
         return result;
     }
@@ -11518,7 +11518,7 @@ export class Partial_InvoiceParams implements IPartial_InvoiceParams {
 }
 
 /** Make all properties in T optional */
-export interface IPartial_InvoiceParams {
+export interface IPartial_InvoiceParams_ {
     title?: string;
     poNumber?: string;
     comments?: string;
@@ -11589,8 +11589,8 @@ export interface IGenerateInvoiceParams {
 }
 
 export class CustomRecipient implements ICustomRecipient {
+    number!: string;
     name!: string;
-    gender!: Gender;
     organizationName?: string;
     street?: string;
     postalCode?: string;
@@ -11608,8 +11608,8 @@ export class CustomRecipient implements ICustomRecipient {
 
     init(_data?: any) {
         if (_data) {
+            this.number = _data["number"];
             this.name = _data["name"];
-            this.gender = _data["gender"];
             this.organizationName = _data["organizationName"];
             this.street = _data["street"];
             this.postalCode = _data["postalCode"];
@@ -11627,8 +11627,8 @@ export class CustomRecipient implements ICustomRecipient {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
+        data["number"] = this.number;
         data["name"] = this.name;
-        data["gender"] = this.gender;
         data["organizationName"] = this.organizationName;
         data["street"] = this.street;
         data["postalCode"] = this.postalCode;
@@ -11639,8 +11639,8 @@ export class CustomRecipient implements ICustomRecipient {
 }
 
 export interface ICustomRecipient {
+    number: string;
     name: string;
-    gender: Gender;
     organizationName?: string;
     street?: string;
     postalCode?: string;
@@ -11652,6 +11652,7 @@ export class CustomProduct implements ICustomProduct {
     name!: string;
     amount!: number;
     pricePerOne!: number;
+    valueAddedTax!: VAT;
 
     constructor(data?: ICustomProduct) {
         if (data) {
@@ -11667,6 +11668,7 @@ export class CustomProduct implements ICustomProduct {
             this.name = _data["name"];
             this.amount = _data["amount"];
             this.pricePerOne = _data["pricePerOne"];
+            this.valueAddedTax = _data["valueAddedTax"];
         }
     }
 
@@ -11682,6 +11684,7 @@ export class CustomProduct implements ICustomProduct {
         data["name"] = this.name;
         data["amount"] = this.amount;
         data["pricePerOne"] = this.pricePerOne;
+        data["valueAddedTax"] = this.valueAddedTax;
         return data;
     }
 }
@@ -11690,6 +11693,7 @@ export interface ICustomProduct {
     name: string;
     amount: number;
     pricePerOne: number;
+    valueAddedTax: VAT;
 }
 
 export class CustomInvoiceGenSettings implements ICustomInvoiceGenSettings {
@@ -11697,7 +11701,6 @@ export class CustomInvoiceGenSettings implements ICustomInvoiceGenSettings {
     fileType!: ReturnFileType;
     recipient!: CustomRecipient;
     subject!: string;
-    invoiceReason!: string;
     ourReference!: string;
     theirReference?: string;
     products!: CustomProduct[];
@@ -11722,7 +11725,6 @@ export class CustomInvoiceGenSettings implements ICustomInvoiceGenSettings {
             this.fileType = _data["fileType"];
             this.recipient = _data["recipient"] ? CustomRecipient.fromJS(_data["recipient"]) : new CustomRecipient();
             this.subject = _data["subject"];
-            this.invoiceReason = _data["invoiceReason"];
             this.ourReference = _data["ourReference"];
             this.theirReference = _data["theirReference"];
             if (Array.isArray(_data["products"])) {
@@ -11747,7 +11749,6 @@ export class CustomInvoiceGenSettings implements ICustomInvoiceGenSettings {
         data["fileType"] = this.fileType;
         data["recipient"] = this.recipient ? this.recipient.toJSON() : <any>undefined;
         data["subject"] = this.subject;
-        data["invoiceReason"] = this.invoiceReason;
         data["ourReference"] = this.ourReference;
         data["theirReference"] = this.theirReference;
         if (Array.isArray(this.products)) {
@@ -11765,7 +11766,6 @@ export interface ICustomInvoiceGenSettings {
     fileType: ReturnFileType;
     recipient: CustomRecipient;
     subject: string;
-    invoiceReason: string;
     ourReference: string;
     theirReference?: string;
     products: CustomProduct[];
@@ -11940,12 +11940,12 @@ export interface ICategoryParams {
 }
 
 /** Make all properties in T optional */
-export class Partial_CategoryParams implements IPartial_CategoryParams {
+export class Partial_CategoryParams_ implements IPartial_CategoryParams_ {
     name?: string;
 
     [key: string]: any;
 
-    constructor(data?: IPartial_CategoryParams) {
+    constructor(data?: IPartial_CategoryParams_) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -11964,9 +11964,9 @@ export class Partial_CategoryParams implements IPartial_CategoryParams {
         }
     }
 
-    static fromJS(data: any): Partial_CategoryParams {
+    static fromJS(data: any): Partial_CategoryParams_ {
         data = typeof data === 'object' ? data : {};
-        let result = new Partial_CategoryParams();
+        let result = new Partial_CategoryParams_();
         result.init(data);
         return result;
     }
@@ -11983,7 +11983,7 @@ export class Partial_CategoryParams implements IPartial_CategoryParams {
 }
 
 /** Make all properties in T optional */
-export interface IPartial_CategoryParams {
+export interface IPartial_CategoryParams_ {
     name?: string;
 
     [key: string]: any;
@@ -12181,7 +12181,7 @@ export interface IProductParams {
 }
 
 /** Make all properties in T optional */
-export class Partial_ProductParams implements IPartial_ProductParams {
+export class Partial_ProductParams_ implements IPartial_ProductParams_ {
     nameDutch?: string;
     nameEnglish?: string;
     targetPrice?: number;
@@ -12198,7 +12198,7 @@ export class Partial_ProductParams implements IPartial_ProductParams {
 
     [key: string]: any;
 
-    constructor(data?: IPartial_ProductParams) {
+    constructor(data?: IPartial_ProductParams_) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -12229,9 +12229,9 @@ export class Partial_ProductParams implements IPartial_ProductParams {
         }
     }
 
-    static fromJS(data: any): Partial_ProductParams {
+    static fromJS(data: any): Partial_ProductParams_ {
         data = typeof data === 'object' ? data : {};
-        let result = new Partial_ProductParams();
+        let result = new Partial_ProductParams_();
         result.init(data);
         return result;
     }
@@ -12260,7 +12260,7 @@ export class Partial_ProductParams implements IPartial_ProductParams {
 }
 
 /** Make all properties in T optional */
-export interface IPartial_ProductParams {
+export interface IPartial_ProductParams_ {
     nameDutch?: string;
     nameEnglish?: string;
     targetPrice?: number;
@@ -12279,13 +12279,13 @@ export interface IPartial_ProductParams {
 }
 
 /** Make all properties in T optional */
-export class Partial_PricingParams implements IPartial_PricingParams {
+export class Partial_PricingParams_ implements IPartial_PricingParams_ {
     description?: string;
     data?: string[][];
 
     [key: string]: any;
 
-    constructor(data?: IPartial_PricingParams) {
+    constructor(data?: IPartial_PricingParams_) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -12309,9 +12309,9 @@ export class Partial_PricingParams implements IPartial_PricingParams {
         }
     }
 
-    static fromJS(data: any): Partial_PricingParams {
+    static fromJS(data: any): Partial_PricingParams_ {
         data = typeof data === 'object' ? data : {};
-        let result = new Partial_PricingParams();
+        let result = new Partial_PricingParams_();
         result.init(data);
         return result;
     }
@@ -12333,7 +12333,7 @@ export class Partial_PricingParams implements IPartial_PricingParams {
 }
 
 /** Make all properties in T optional */
-export interface IPartial_PricingParams {
+export interface IPartial_PricingParams_ {
     description?: string;
     data?: string[][];
 
@@ -12632,12 +12632,12 @@ export interface IDashboardProductInstanceStats {
 }
 
 /** Make all properties in T optional */
-export class Partial_RoleParams implements IPartial_RoleParams {
+export class Partial_RoleParams_ implements IPartial_RoleParams_ {
     ldapGroup?: string;
 
     [key: string]: any;
 
-    constructor(data?: IPartial_RoleParams) {
+    constructor(data?: IPartial_RoleParams_) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -12656,9 +12656,9 @@ export class Partial_RoleParams implements IPartial_RoleParams {
         }
     }
 
-    static fromJS(data: any): Partial_RoleParams {
+    static fromJS(data: any): Partial_RoleParams_ {
         data = typeof data === 'object' ? data : {};
-        let result = new Partial_RoleParams();
+        let result = new Partial_RoleParams_();
         result.init(data);
         return result;
     }
@@ -12675,7 +12675,7 @@ export class Partial_RoleParams implements IPartial_RoleParams {
 }
 
 /** Make all properties in T optional */
-export interface IPartial_RoleParams {
+export interface IPartial_RoleParams_ {
     ldapGroup?: string;
 
     [key: string]: any;
@@ -13280,7 +13280,7 @@ export interface IUserSummary {
 }
 
 /** Make all properties in T optional */
-export class Partial_UserParams implements IPartial_UserParams {
+export class Partial_UserParams_ implements IPartial_UserParams_ {
     email?: string;
     firstName?: string;
     lastNamePreposition?: string;
@@ -13296,7 +13296,7 @@ export class Partial_UserParams implements IPartial_UserParams {
 
     [key: string]: any;
 
-    constructor(data?: IPartial_UserParams) {
+    constructor(data?: IPartial_UserParams_) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -13330,9 +13330,9 @@ export class Partial_UserParams implements IPartial_UserParams {
         }
     }
 
-    static fromJS(data: any): Partial_UserParams {
+    static fromJS(data: any): Partial_UserParams_ {
         data = typeof data === 'object' ? data : {};
-        let result = new Partial_UserParams();
+        let result = new Partial_UserParams_();
         result.init(data);
         return result;
     }
@@ -13364,7 +13364,7 @@ export class Partial_UserParams implements IPartial_UserParams {
 }
 
 /** Make all properties in T optional */
-export interface IPartial_UserParams {
+export interface IPartial_UserParams_ {
     email?: string;
     firstName?: string;
     lastNamePreposition?: string;
@@ -13454,12 +13454,12 @@ export interface ILdapIdentityParams {
 }
 
 /** Make all properties in T optional */
-export class Partial_LdapIdentityParams implements IPartial_LdapIdentityParams {
+export class Partial_LdapIdentityParams_ implements IPartial_LdapIdentityParams_ {
     username?: string;
 
     [key: string]: any;
 
-    constructor(data?: IPartial_LdapIdentityParams) {
+    constructor(data?: IPartial_LdapIdentityParams_) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -13478,9 +13478,9 @@ export class Partial_LdapIdentityParams implements IPartial_LdapIdentityParams {
         }
     }
 
-    static fromJS(data: any): Partial_LdapIdentityParams {
+    static fromJS(data: any): Partial_LdapIdentityParams_ {
         data = typeof data === 'object' ? data : {};
-        let result = new Partial_LdapIdentityParams();
+        let result = new Partial_LdapIdentityParams_();
         result.init(data);
         return result;
     }
@@ -13497,7 +13497,7 @@ export class Partial_LdapIdentityParams implements IPartial_LdapIdentityParams {
 }
 
 /** Make all properties in T optional */
-export interface IPartial_LdapIdentityParams {
+export interface IPartial_LdapIdentityParams_ {
     username?: string;
 
     [key: string]: any;
@@ -13595,13 +13595,13 @@ export interface IVATSummary {
 }
 
 /** Make all properties in T optional */
-export class Partial_VATParams implements IPartial_VATParams {
+export class Partial_VATParams_ implements IPartial_VATParams_ {
     category?: VAT;
     amount?: number;
 
     [key: string]: any;
 
-    constructor(data?: IPartial_VATParams) {
+    constructor(data?: IPartial_VATParams_) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -13621,9 +13621,9 @@ export class Partial_VATParams implements IPartial_VATParams {
         }
     }
 
-    static fromJS(data: any): Partial_VATParams {
+    static fromJS(data: any): Partial_VATParams_ {
         data = typeof data === 'object' ? data : {};
-        let result = new Partial_VATParams();
+        let result = new Partial_VATParams_();
         result.init(data);
         return result;
     }
@@ -13641,7 +13641,7 @@ export class Partial_VATParams implements IPartial_VATParams {
 }
 
 /** Make all properties in T optional */
-export interface IPartial_VATParams {
+export interface IPartial_VATParams_ {
     category?: VAT;
     amount?: number;
 

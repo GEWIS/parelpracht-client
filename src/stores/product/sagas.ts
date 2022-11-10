@@ -7,7 +7,7 @@ import {
   ListOrFilter,
   ListParams,
   ListSorting,
-  Partial_FileParams,
+  Partial_FileParams_,
   Product, ProductListResponse,
   ProductParams,
   ProductSummary,
@@ -186,7 +186,7 @@ function* watchDeleteSingleProduct() {
 }
 
 function* saveSingleProductFile(
-  action: SingleSaveFileAction<SingleEntities.Product, Partial_FileParams>,
+  action: SingleSaveFileAction<SingleEntities.Product, Partial_FileParams_>,
 ) {
   const client = new Client();
   yield call([client, client.updateProductFile], action.id, action.fileId, action.data);

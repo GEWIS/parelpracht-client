@@ -452,6 +452,7 @@
       "generateButton": "Generate invoice",
       "header": "Generate Custom Invoice",
       "organizationName": "Organization name",
+      "customerNumber": "Customer number",
       "products": {
         "addProduct": "Add product",
         "amount": "Amount",
@@ -459,7 +460,8 @@
         "header": "Products",
         "name": "Name",
         "price": "Price",
-        "total": "Total"
+        "total": "Total",
+        "valueAddedTax": "VAT"
       },
       "recipientDetails": "Recipient details",
       "subheader": "Making the treasurer's life easier",

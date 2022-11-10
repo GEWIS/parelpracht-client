@@ -450,6 +450,7 @@
       "generateButton": "Genereer factuur",
       "header": "Genereer Handmatige Factuur",
       "organizationName": "Naam van organisatie",
+      "customerNumber": "Crediteurnummer",
       "products": {
         "addProduct": "Product toevoegen",
         "amount": "Aantal",
@@ -457,7 +458,8 @@
         "header": "Producten",
         "name": "Naam",
         "price": "Prijs",
-        "total": "Totaal"
+        "total": "Totaal",
+        "valueAddedTax": "BTW"
       },
       "recipientDetails": "Ontvangerinformatie",
       "subheader": "Het leven van de penno makkelijker maken",

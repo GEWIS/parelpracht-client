@@ -4,7 +4,7 @@ import { Table } from 'semantic-ui-react';
 import { withTranslation, WithTranslation } from 'react-i18next';
 import InvoiceProductRow from './InvoiceProductRow';
 import {
-  Client, Invoice, InvoiceStatus,
+  Client, Invoice, InvoiceStatus, VAT,
 } from '../../../clients/server.generated';
 import { formatPriceFull } from '../../../helpers/monetary';
 
@@ -53,10 +53,10 @@ class InvoiceProductList extends React.Component<Props, State> {
       const currentPrice = p.basePrice - p.discount;
       const currentPriceVAT = currentPrice * (p.product.valueAddedTax.amount / 100 + 1);
       totalPriceWithVat += currentPriceVAT;
-      if (p.product.valueAddedTax.amount === 9) {
+      if (p.product.valueAddedTax.category === VAT.HIGH) {
         totalLowVatValue += currentPriceVAT - currentPrice;
       }
-      if (p.product.valueAddedTax.amount === 21) {
+      if (p.product.valueAddedTax.category === VAT.LOW) {
         totalHighVatValue += currentPriceVAT - currentPrice;
       }
     });

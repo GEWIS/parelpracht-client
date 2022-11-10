@@ -7,7 +7,7 @@ import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import { WithTranslation, withTranslation } from 'react-i18next';
 import {
-  Partial_FileParams, Roles,
+  Partial_FileParams_, Roles,
 } from '../../clients/server.generated';
 import { FilesClient } from '../../clients/filesClient';
 import { formatLastUpdate } from '../../helpers/timestamp';
@@ -28,7 +28,7 @@ interface Props extends RouteComponentProps, WithTranslation {
   entityId: number;
 
   saveFile: (entityId: number, fileId: number,
-    file: Partial_FileParams, entity: SingleEntities) => void;
+    file: Partial_FileParams_, entity: SingleEntities) => void;
   deleteFile: (entityId: number, fileId: number, entity: SingleEntities) => void;
   fetchEntity: (entityId: number) => void;
   status: ResourceStatus;
@@ -75,8 +75,8 @@ class SingleFile extends React.Component<Props, State> {
     return formData;
   };
 
-  private toPOSTParams = (): Partial_FileParams => {
-    return new Partial_FileParams({
+  private toPOSTParams = (): Partial_FileParams_ => {
+    return new Partial_FileParams_({
       name: this.state.fileName,
     });
   };
@@ -335,7 +335,7 @@ class SingleFile extends React.Component<Props, State> {
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
   saveFile: (entityId: number, fileId: number,
-    file: Partial_FileParams, entity: SingleEntities) => dispatch(
+    file: Partial_FileParams_, entity: SingleEntities) => dispatch(
     saveSingleFile(entity, entityId, fileId, file),
   ),
   deleteFile: (entityId: number, fileId: number, entity: SingleEntities) => dispatch(

@@ -5,7 +5,7 @@ import {
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import { withTranslation, WithTranslation } from 'react-i18next';
-import { Client, Partial_PricingParams, ProductPricing } from '../../clients/server.generated';
+import { Client, Partial_PricingParams_, ProductPricing } from '../../clients/server.generated';
 import PricingRow from './PricingRow';
 import PropsButtons from '../PropsButtons';
 import { SingleEntities } from '../../stores/single/single';
@@ -91,7 +91,7 @@ class PricingTable extends React.Component<Props, State> {
     await client.updatePricing(productId, {
       description,
       data: pricingData,
-    } as Partial_PricingParams);
+    } as Partial_PricingParams_);
     fetchProduct(productId);
     this.setState({ editing: false });
   };
