@@ -21,7 +21,7 @@ export function takeEveryWithErrorHandling<A extends Action>(
   return takeEvery(pattern, function* errorSaga(action: A) {
     try {
       yield* saga(action);
-    } catch (err) {
+    } catch (err: any) {
       let apiError: ApiError | undefined;
 
       try {

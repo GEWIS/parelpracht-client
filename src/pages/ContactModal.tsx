@@ -42,6 +42,10 @@ interface Props extends RouteComponentProps<{ companyId: string, contactId?: str
 }
 
 class ContactModal extends React.Component<Props> {
+  static defaultProps = {
+    create: undefined,
+  };
+
   componentDidMount() {
     this.props.clearContact();
 

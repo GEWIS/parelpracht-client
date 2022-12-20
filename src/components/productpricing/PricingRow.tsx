@@ -33,9 +33,9 @@ class PricingRow extends React.Component<Props, State> {
     if (!editing) {
       return (
         <Table.Row>
-          {pricing.map((p, i) => (header
-            ? <Table.HeaderCell key={i.toString()}>{p}</Table.HeaderCell>
-            : <Table.Cell key={i.toString()}>{p}</Table.Cell>))}
+          {pricing.map((p) => (header
+            ? <Table.HeaderCell key={p}>{p}</Table.HeaderCell>
+            : <Table.Cell key={p}>{p}</Table.Cell>))}
         </Table.Row>
       );
     }
@@ -45,7 +45,7 @@ class PricingRow extends React.Component<Props, State> {
         {pricing.map((p, i) => {
           if (header) {
             return (
-              <Table.HeaderCell key={i.toString()}>
+              <Table.HeaderCell key={p}>
                 <Input
                   fluid
                   onChange={(e) => updateField(row, i, e.target.value)}
@@ -56,7 +56,7 @@ class PricingRow extends React.Component<Props, State> {
             );
           }
           return (
-            <Table.Cell key={i.toString()}>
+            <Table.Cell key={p}>
               <Input
                 fluid
                 onChange={(e) => updateField(row, i, e.target.value)}

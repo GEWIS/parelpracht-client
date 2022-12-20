@@ -3,6 +3,7 @@ import { Button, Grid, Input } from 'semantic-ui-react';
 import TimeAgo from 'javascript-time-ago';
 import { useTranslation } from 'react-i18next';
 import ResourceStatus from '../stores/resourceStatus';
+import { getLanguage } from '../localization';
 
 interface Props {
   status: ResourceStatus;
@@ -28,7 +29,7 @@ function TableControls(props: Props) {
     };
   }, []);
 
-  const timeAgo = new TimeAgo();
+  const timeAgo = new TimeAgo(getLanguage());
   const { t } = useTranslation();
   return (
     <Grid columns={2}>

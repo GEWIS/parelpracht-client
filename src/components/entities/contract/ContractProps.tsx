@@ -47,6 +47,12 @@ interface State {
 }
 
 class ContractProps extends React.Component<Props, State> {
+  static defaultProps = {
+    create: undefined,
+    companyPredefined: undefined,
+    onCancel: undefined,
+  };
+
   public constructor(props: Props) {
     super(props);
 

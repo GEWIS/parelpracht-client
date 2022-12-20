@@ -20,6 +20,7 @@ interface Props {
   createSingleStatus: (entity: SingleEntities, id: number, statusParams: object) => void;
   createSingleInstanceStatus: (id: number, instanceId: number, statusParam: object) => void;
 
+  // eslint-disable-next-line react/no-unused-prop-types
   documentStatusParams: InvoiceStatusParams | ContractStatusParams;
   resourceStatus: ResourceStatus;
   documentId: number;
@@ -38,6 +39,11 @@ interface State {
 }
 
 class DocumentStatusProps extends React.Component<Props, State> {
+  static defaultProps = {
+    parentId: undefined,
+    create: undefined,
+  };
+
   public constructor(props: Props) {
     super(props);
 

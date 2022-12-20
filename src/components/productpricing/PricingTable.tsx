@@ -172,7 +172,7 @@ class PricingTable extends React.Component<Props, State> {
               if (i === 0) return null;
               return (
                 <PricingRow
-                  key={i.toString()}
+                  key={p.toString()}
                   pricing={p}
                   header={false}
                   editing={editing}
@@ -187,7 +187,7 @@ class PricingTable extends React.Component<Props, State> {
             <Table.Footer>
               <Table.Row>
                 {pricingData[0].map((p, i) => (
-                  <Table.HeaderCell key={i.toString()} style={{ textAlign: 'center' }}>
+                  <Table.HeaderCell key={p} style={{ textAlign: 'center' }}>
                     <Button
                       negative
                       onClick={() => this.removeColumn(i)}

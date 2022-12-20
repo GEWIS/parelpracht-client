@@ -2,7 +2,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Step } from 'semantic-ui-react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
-import { Dispatch } from 'redux';
 import {
   formatStatus,
 } from '../../helpers/activity';
@@ -10,8 +9,6 @@ import DocumentStatusModal from './DocumentStatusModal';
 import { SingleEntities } from '../../stores/single/single';
 import { DocumentStatus } from './DocumentStatus';
 import ResourceStatus from '../../stores/resourceStatus';
-import { TransientAlert } from '../../stores/alerts/actions';
-import { showTransientAlert } from '../../stores/alerts/actionCreators';
 import { Roles } from '../../clients/server.generated';
 import { RootState } from '../../stores/store';
 import { authedUserHasRole } from '../../stores/auth/selectors';
@@ -32,7 +29,6 @@ interface Props extends RouteComponentProps {
   statusIcon: JSX.Element;
 
   resourceStatus: ResourceStatus;
-  showTransientAlert: (alert: TransientAlert) => void;
 
   hasRole: (role: Roles) => boolean;
 
@@ -44,6 +40,10 @@ interface State {
 }
 
 class FinancialDocumentProgress extends React.Component<Props, State> {
+  static defaultProps = {
+    parentId: undefined,
+  };
+
   public constructor(props: Props) {
     super(props);
     this.state = {
@@ -110,14 +110,10 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
   }
 }
 
-const mapDispatchToProps = (dispatch: Dispatch) => ({
-  showTransientAlert: (alert: TransientAlert) => dispatch(showTransientAlert(alert)),
-});
-
 const mapStateToProps = (state: RootState) => {
   return {
     hasRole: (role: Roles): boolean => authedUserHasRole(state, role),
   };
 };
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(FinancialDocumentProgress));
+export default withRouter(connect(mapStateToProps)(FinancialDocumentProgress));

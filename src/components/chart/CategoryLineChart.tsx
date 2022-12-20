@@ -27,6 +27,10 @@ interface State {
 }
 
 class CategoryLineChart extends React.Component<Props, State> {
+  static defaultProps = {
+    extraDropdown: undefined,
+  };
+
   private chartReference: React.RefObject<Line>;
 
   constructor(props: Props) {

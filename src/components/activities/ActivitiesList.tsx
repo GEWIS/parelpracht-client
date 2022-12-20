@@ -27,6 +27,10 @@ interface State {
 }
 
 class ActivitiesList extends React.Component<Props, State> {
+  static defaultProps = {
+    parentId: undefined,
+  };
+
   public constructor(props: Props) {
     super(props);
     this.state = {

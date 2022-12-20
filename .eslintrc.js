@@ -17,6 +17,7 @@ module.exports = {
     "@typescript-eslint/no-unused-vars": ["warn"],
     "react/prefer-stateless-function": "off",
     "react/prop-types": "off",
-    "unicode-bom": "off"
+    "unicode-bom": "off",
+    "react/static-property-placement": ["off"],
   }
 };

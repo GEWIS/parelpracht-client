@@ -5,7 +5,7 @@ import {
 import {
   Button, Container, Header, Icon, Segment,
 } from 'semantic-ui-react';
-import jwt from 'jsonwebtoken';
+import * as jose from 'jose';
 import validator from 'validator';
 import queryString from 'query-string';
 import { Dispatch } from 'redux';
@@ -35,8 +35,8 @@ function ResetPasswordPage(props: Props) {
     return <Redirect to="/login" />;
   }
 
-  const payload = jwt.decode(token);
-  if (!(payload && typeof payload !== 'string')) {
+  const payload = jose.decodeJwt(token);
+  if (!(payload)) {
     return <Redirect to="/login" />;
   }
 

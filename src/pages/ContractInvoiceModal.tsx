@@ -23,7 +23,6 @@ interface Props extends SelfProps {
   productInstanceIds: number[];
   clearSelection: () => void;
   invoices: InvoiceSummary[];
-  onCancel?: () => void;
   createInvoice: (invoice: InvoiceCreateParams) => void;
   fetchContract: (id: number) => void;
 }

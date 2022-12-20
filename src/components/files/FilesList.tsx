@@ -25,6 +25,10 @@ interface State {
 }
 
 class FilesList extends React.Component<Props, State> {
+  static defaultProps = {
+    generateModal: undefined,
+  };
+
   public constructor(props: Props) {
     super(props);
     this.state = {
@@ -41,7 +45,7 @@ class FilesList extends React.Component<Props, State> {
 
   render() {
     const {
-      files, entityId, entity, fetchEntity, generateModal, status, t,
+      files, entityId, entity, generateModal, status, t,
     } = this.props;
     const { creating } = this.state;
 
@@ -65,7 +69,6 @@ class FilesList extends React.Component<Props, State> {
           closeCreate={this.cancelCreate}
           entity={entity}
           entityId={entityId}
-          fetchEntity={fetchEntity}
           status={status}
         />
       );
@@ -89,7 +92,6 @@ class FilesList extends React.Component<Props, State> {
                 create={false}
                 entity={entity}
                 entityId={entityId}
-                fetchEntity={fetchEntity}
                 status={status}
               />
             ))}
