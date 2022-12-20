@@ -1,4 +1,4 @@
-import { LoginMethods } from "../../clients/server.generated";
+import { LoginMethods } from '../../clients/server.generated';
 
 export interface GeneralState {
   loginMethod: LoginMethods;

@@ -1,4 +1,4 @@
-import { Contact, VATSummary} from '../../clients/server.generated';
+import { Contact, VATSummary } from '../../clients/server.generated';
 import { RootState } from '../store';
 import { getSummary } from '../summaries/selectors';
 import { SummaryCollections } from '../summaries/summaries';

@@ -1,0 +1,11 @@
+name: ESLint
+on: push
+
+jobs:
+  build:
+    name: Linter
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+      - name: run
+        run: npm install && npm run lint
