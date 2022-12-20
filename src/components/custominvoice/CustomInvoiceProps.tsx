@@ -108,7 +108,7 @@ function CustomInvoiceProps(props: Props) {
           />
         </Form.Group>
         <Form.Group widths="equal">
-          <Form.Field>
+          <Form.Field required>
             <label htmlFor="form-input-date">{t('entities.invoice.props.invoiceDate')}</label>
             <DateInput
               onChange={(e, { value }) => {

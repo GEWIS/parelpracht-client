@@ -1,8 +1,10 @@
 import React, { ChangeEvent, useState } from 'react';
-import { Button, Input, Table } from 'semantic-ui-react';
+import {
+  Button, Input, Table, Dropdown,
+} from 'semantic-ui-react';
 import validator from 'validator';
 import { useTranslation } from 'react-i18next';
-import { CustomProduct } from '../../clients/server.generated';
+import { CustomProduct, VAT } from '../../clients/server.generated';
 import { formatPriceFull } from '../../helpers/monetary';
 
 interface Props {
@@ -22,6 +24,18 @@ function CustomInvoiceProductRow(props: Props) {
   // @ts-ignore
   return (
     <Table.Row>
+      <Table.Cell width="2">
+        <Input
+          placeholder={t('pages.customInvoice.products.amount')}
+          value={props.product.amount}
+          onChange={(e: ChangeEvent<HTMLInputElement>) => {
+            props.updateProduct(props.id, 'amount', e.target.value);
+          }}
+          // @ts-ignore
+          error={props.product.amount === 0 || !validator.isInt(props.product.amount)}
+          fluid
+        />
+      </Table.Cell>
       <Table.Cell>
         <Input
           placeholder={t('pages.customInvoice.products.name')}
@@ -33,7 +47,7 @@ function CustomInvoiceProductRow(props: Props) {
           fluid
         />
       </Table.Cell>
-      <Table.Cell width="4">
+      <Table.Cell width="3">
         <Input
           placeholder={t('pages.customInvoice.products.price')}
           value={pricePerOne}
@@ -47,19 +61,23 @@ function CustomInvoiceProductRow(props: Props) {
           iconPosition="left"
         />
       </Table.Cell>
-      <Table.Cell width="3">
-        <Input
-          placeholder={t('pages.customInvoice.products.amount')}
-          value={props.product.amount}
-          onChange={(e: ChangeEvent<HTMLInputElement>) => {
-            props.updateProduct(props.id, 'amount', e.target.value);
+      <Table.Cell width="2">
+        <Dropdown
+          selection
+          placeholder={VAT.HIGH}
+          value={props.product.valueAddedTax}
+          options={[
+            { key: 0, text: '21%', value: VAT.HIGH },
+            { key: 1, text: '9%', value: VAT.LOW },
+            { key: 2, text: '0%', value: VAT.ZERO },
+          ]}
+          onChange={(e, data) => {
+            props.updateProduct(props.id, 'valueAddedTax', data.value);
           }}
-          // @ts-ignore
-          error={props.product.amount === 0 || !validator.isInt(props.product.amount)}
           fluid
         />
       </Table.Cell>
-      <Table.Cell collapsing>
+      <Table.Cell width="2">
         {formatPriceFull(props.product.amount * props.product.pricePerOne)}
       </Table.Cell>
       <Table.Cell collapsing>

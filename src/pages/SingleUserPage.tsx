@@ -111,7 +111,7 @@ class SingleUserPage extends React.Component<Props> {
             <Grid.Column>
               {user ? (
                 <Segment>
-                  <UserProps user={user} />
+                  <UserProps user={user} canEdit={[Roles.ADMIN]} />
                 </Segment>
               ) : <Segment placeholder />}
             </Grid.Column>

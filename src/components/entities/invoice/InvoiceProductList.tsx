@@ -3,7 +3,9 @@ import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { Table } from 'semantic-ui-react';
 import { withTranslation, WithTranslation } from 'react-i18next';
 import InvoiceProductRow from './InvoiceProductRow';
-import { Client, Invoice, InvoiceStatus } from '../../../clients/server.generated';
+import {
+  Client, Invoice, InvoiceStatus, VAT,
+} from '../../../clients/server.generated';
 import { formatPriceFull } from '../../../helpers/monetary';
 
 interface Props extends RouteComponentProps, WithTranslation {
@@ -22,7 +24,7 @@ class InvoiceProductList extends React.Component<Props, State> {
   removeProduct = async (instanceId: number) => {
     const { invoice, fetchInvoice } = this.props;
     const client = new Client();
-    await client.deleteProduct2(invoice?.id, instanceId);
+    await client.deleteProductInstance(invoice?.id, instanceId);
     fetchInvoice(invoice.id);
   };
 
@@ -38,19 +40,26 @@ class InvoiceProductList extends React.Component<Props, State> {
     const { invoice, t } = this.props;
 
     const { products } = invoice;
-    let priceSum = 0;
-    let discountAmount = 0;
-    let discountSum = 0;
+    let totalPriceNoVat = 0;
+    let discountValue = 0;
+    let totalPriceWithVat = 0;
+    let totalLowVatValue = 0;
+    let totalHighVatValue = 0;
 
     products.forEach((p) => {
-      priceSum += p.basePrice;
-      discountSum += p.discount;
-      if (p.discount !== 0) {
-        discountAmount++;
+      totalPriceNoVat += p.basePrice;
+      discountValue += p.discount;
+
+      const currentPrice = p.basePrice - p.discount;
+      const currentPriceVAT = currentPrice * (p.product.valueAddedTax.amount / 100 + 1);
+      totalPriceWithVat += currentPriceVAT;
+      if (p.product.valueAddedTax.category === VAT.HIGH) {
+        totalLowVatValue += currentPriceVAT - currentPrice;
+      }
+      if (p.product.valueAddedTax.category === VAT.LOW) {
+        totalHighVatValue += currentPriceVAT - currentPrice;
       }
     });
-
-    const discountedPriceSum = priceSum - discountSum;
 
     return (
       <>
@@ -81,18 +90,35 @@ class InvoiceProductList extends React.Component<Props, State> {
           <Table.Footer>
             <Table.Row>
               <Table.HeaderCell>
-                {t('pages.tables.total')}
-                :
+                <b>{t('entities.productInstance.props.realPriceNoVat')}</b>
+                <br />
+                <b>{t('entities.productInstance.props.priceLowVat')}</b>
+                <br />
+                <b>{t('entities.productInstance.props.priceHighVat')}</b>
+              </Table.HeaderCell>
+              <Table.HeaderCell singleLine collapsing>
+                {formatPriceFull(discountValue)}
+                <br />
+                <br />
+                <br />
               </Table.HeaderCell>
               <Table.HeaderCell collapsing>
-                {formatPriceFull(discountSum)}
-                {' '}
-                (
-                {discountAmount}
-                )
+                {formatPriceFull(totalPriceNoVat - discountValue)}
+                <br />
+                {formatPriceFull(totalLowVatValue)}
+                <br />
+                {formatPriceFull(totalHighVatValue)}
               </Table.HeaderCell>
+              <Table.HeaderCell />
+              <Table.HeaderCell />
+            </Table.Row>
+            <Table.Row>
+              <Table.HeaderCell>
+                <b>{t('entities.productInstance.props.realPriceWithVat')}</b>
+              </Table.HeaderCell>
+              <Table.HeaderCell />
               <Table.HeaderCell collapsing>
-                {formatPriceFull(discountedPriceSum)}
+                {formatPriceFull(totalPriceWithVat)}
               </Table.HeaderCell>
               <Table.HeaderCell />
               <Table.HeaderCell />

@@ -1,16 +1,15 @@
 import {
-  Dropdown, Form, Input, Segment,
+  Form, Input, Segment,
 } from 'semantic-ui-react';
 import React, { ChangeEvent } from 'react';
 import validator from 'validator';
 import { withTranslation, WithTranslation } from 'react-i18next';
-import { CustomRecipient, Gender } from '../../clients/server.generated';
+import { CustomRecipient } from '../../clients/server.generated';
 
 interface Props extends WithTranslation {
   recipient: CustomRecipient;
 
   updateRecipientAttribute: (attribute: string, value: string) => void;
-  updateRecipientGender: (gender: Gender) => void;
 }
 
 interface State {}
@@ -23,7 +22,7 @@ class CustomInvoiceRecipient extends React.Component<Props, State> {
 
   render() {
     const {
-      recipient, updateRecipientAttribute, updateRecipientGender, t,
+      recipient, updateRecipientAttribute, t,
     } = this.props;
 
     return (
@@ -55,25 +54,18 @@ class CustomInvoiceRecipient extends React.Component<Props, State> {
                 'organizationName', e.target.value,
               )}
             />
-            <Form.Field required>
-              {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-              <label htmlFor="form-input-gender">{t('entities.user.props.gender.header')}</label>
-              <Dropdown
-                id="form-recipient-gender"
-                selection
-                placeholder="Gender"
-                value={recipient.gender}
-                options={[
-                  { key: 0, text: t('entities.user.props.gender.male'), value: Gender.MALE },
-                  { key: 1, text: t('entities.user.props.gender.female'), value: Gender.FEMALE },
-                  { key: 2, text: t('entities.user.props.gender.unknown'), value: Gender.UNKNOWN },
-                ]}
-                onChange={(e, data) => {
-                  updateRecipientGender(data.value as Gender);
-                }}
-                fluid
-              />
-            </Form.Field>
+            <Form.Field
+              required
+              id="form-recipient-customer-number"
+              fluid
+              control={Input}
+              label={t('pages.customInvoice.customerNumber')}
+              value={recipient.number}
+              onChange={(e: ChangeEvent<HTMLInputElement>) => updateRecipientAttribute(
+                'number', e.target.value,
+              )}
+              error={validator.isEmpty(recipient.number)}
+            />
           </Form.Group>
           <Form.Group widths="equal">
             <Form.Field

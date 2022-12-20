@@ -7,7 +7,7 @@ import {
   Product,
   ProductCategory,
   ProductInstance,
-  User,
+  User, ValueAddedTax,
 } from '../../clients/server.generated';
 import createSingleReducer from './singleReducer';
 import { SingleEntities } from './single';
@@ -16,6 +16,7 @@ import { SingleEntityState } from './singleState';
 export interface SingleEntitiesState {
   [SingleEntities.Product]: SingleEntityState<Product>;
   [SingleEntities.ProductCategory]: SingleEntityState<ProductCategory>;
+  [SingleEntities.ValueAddedTax]: SingleEntityState<ValueAddedTax>;
   [SingleEntities.ProductInstance]: SingleEntityState<ProductInstance>;
   [SingleEntities.Contact]: SingleEntityState<Contact>;
   [SingleEntities.Company]: SingleEntityState<Company>;
@@ -27,6 +28,7 @@ export interface SingleEntitiesState {
 export const singleEntitiesReducer = combineReducers<SingleEntitiesState>({
   [SingleEntities.Product]: createSingleReducer(SingleEntities.Product),
   [SingleEntities.ProductCategory]: createSingleReducer(SingleEntities.ProductCategory),
+  [SingleEntities.ValueAddedTax]: createSingleReducer(SingleEntities.ValueAddedTax),
   [SingleEntities.ProductInstance]: createSingleReducer(SingleEntities.ProductInstance),
   [SingleEntities.Contact]: createSingleReducer(SingleEntities.Contact),
   [SingleEntities.Company]: createSingleReducer(SingleEntities.Company),

@@ -13,7 +13,7 @@ import {
   ListOrFilter,
   ListParams,
   ListSorting,
-  Partial_FileParams,
+  Partial_FileParams_,
   SortDirection,
 } from '../../clients/server.generated';
 import { takeEveryWithErrorHandling } from '../errorHandling';
@@ -217,7 +217,7 @@ function* watchDeleteSingleCompany() {
 }
 
 function* saveSingleCompanyFile(
-  action: SingleSaveFileAction<SingleEntities.Company, Partial_FileParams>,
+  action: SingleSaveFileAction<SingleEntities.Company, Partial_FileParams_>,
 ) {
   const client = new Client();
   yield call([client, client.updateCompanyFile], action.id, action.fileId, action.data);

@@ -7,7 +7,7 @@ import {
   ListOrFilter,
   ListParams,
   ListSorting,
-  Partial_FileParams,
+  Partial_FileParams_,
   Product, ProductListResponse,
   ProductParams,
   ProductSummary,
@@ -45,6 +45,7 @@ import { TableState } from '../tables/tableState';
 function toSummary(product: Product): ProductSummary {
   return new ProductSummary({
     id: product.id,
+    vatId: product.vatId,
     nameDutch: product.nameDutch,
     nameEnglish: product.nameEnglish,
     targetPrice: product.targetPrice,
@@ -168,7 +169,7 @@ function* watchCreateSingleProduct() {
 
 function* deleteSingleProduct(action: SingleDeleteAction<SingleEntities.Product>) {
   const client = new Client();
-  yield call([client, client.deleteProduct], action.id);
+  yield call([client, client.deleteProduct2], action.id);
   yield put(clearSingle(SingleEntities.Product));
   yield put(deleteSummary(SummaryCollections.Products, action.id));
 }
@@ -185,7 +186,7 @@ function* watchDeleteSingleProduct() {
 }
 
 function* saveSingleProductFile(
-  action: SingleSaveFileAction<SingleEntities.Product, Partial_FileParams>,
+  action: SingleSaveFileAction<SingleEntities.Product, Partial_FileParams_>,
 ) {
   const client = new Client();
   yield call([client, client.updateProductFile], action.id, action.fileId, action.data);

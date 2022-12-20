@@ -14,6 +14,7 @@ import alertsSagas from './alerts/sagas';
 import generalSagas, { fetchGeneralPublicInfo } from './general/sagas';
 import productSagas from './product/sagas';
 import productCategorySagas from './productcategory/sagas';
+import valueAddedTaxSagas from './vat/sagas';
 import productInstanceSagas from './productinstance/sagas';
 import contactSagas from './contact/sagas';
 import companySagas from './company/sagas';
@@ -32,6 +33,7 @@ const watchSagas = [
   ...generalSagas,
   ...productSagas,
   ...productCategorySagas,
+  ...valueAddedTaxSagas,
   ...productInstanceSagas,
   ...companySagas,
   ...contactSagas,
