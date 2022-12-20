@@ -393,7 +393,8 @@
     "credits": {
       "description1": "ParelPracht was built in the winter of 2020-2021 during the second lockdown of the corona crisis by the 39th board of GEWIS. Special thanks to everyone who contributed:",
       "description2": "Also special thanks to Gijs de Man and everyone at Stijl for their help with the PDF template and Wout de Ruiter for sharing his knowledge regarding Docker containers.",
-      "header": "About ParelPracht"
+      "header": "About ParelPracht",
+      "abc": "Since version 1.2.0 further development and support has been taken over by the ABC."
     },
     "gewis": "Study Association GEWIS"
   },

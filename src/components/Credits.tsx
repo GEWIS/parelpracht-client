@@ -29,8 +29,10 @@ function Credits() {
           <li>Wouter van der Heijden</li>
           <li>Irne Verwijst</li>
         </ul>
-        <br />
         {t('footer.credits.description2')}
+        <br />
+        <br />
+        {t('footer.credits.abc')}
       </Modal.Content>
     </Modal>
   );

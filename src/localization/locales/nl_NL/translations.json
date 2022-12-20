@@ -391,7 +391,8 @@
     "credits": {
       "description1": "ParelPracht is ontwikkeld in de winter van 2020-2021 tijdens de tweede lockdown van de coronacrisis door het 39 bestuur van GEWIS. Veel dank aan iedereen die heeft bijdragen:",
       "description2": "Ook nog veel dank aan Gijs de Man en iedereen van Stijl voor hun hulp met de PDF templates en Wout de Ruiter voor het delen van zijn kennis van Docker containers.",
-      "header": "Over ParelPracht"
+      "header": "Over ParelPracht",
+      "abc": "Sinds versie 1.2.0 is de verdere ontwikkeling en ondersteuning van ParelPracht overgenomen door de ABC."
     },
     "gewis": "Studievereniging GEWIS"
   },
