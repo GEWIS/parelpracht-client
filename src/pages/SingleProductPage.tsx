@@ -237,7 +237,6 @@ class SingleProductPage extends React.Component<Props, State> {
               <Segment secondary style={{ backgroundColor: 'rgba(243, 244, 245, 0.98)' }}>
                 <ProductProps
                   product={product}
-                  productPricingActive={product.pricing === undefined}
                   canEdit={[Roles.ADMIN]}
                   canDelete={[Roles.ADMIN]}
                 />

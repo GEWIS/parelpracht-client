@@ -28,6 +28,10 @@ interface State {
 }
 
 class LogoAvatarModal extends React.Component<Props, State> {
+  static defaultProps = {
+    loggedInUser: undefined,
+  };
+
   constructor(props: Props) {
     super(props);
     this.state = {

@@ -27,7 +27,6 @@ interface Props extends RouteComponentProps, WithTranslation {
   user: User;
   status: ResourceStatus;
   loginMethod: LoginMethods;
-  actorIsAdmin: boolean;
 
   hasRole: (role: Roles) => boolean;
   canEdit: Roles[];
@@ -60,6 +59,11 @@ interface State {
 }
 
 class UserProps extends React.Component<Props, State> {
+  static defaultProps = {
+    create: undefined,
+    onCancel: undefined,
+  };
+
   public constructor(props: Props) {
     super(props);
 

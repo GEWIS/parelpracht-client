@@ -17,8 +17,6 @@ import PropsButtons from '../../PropsButtons';
 import { getSingle } from '../../../stores/single/selectors';
 import { SingleEntities } from '../../../stores/single/single';
 import CountrySelector from './CountrySelector';
-import { TransientAlert } from '../../../stores/alerts/actions';
-import { showTransientAlert } from '../../../stores/alerts/actionCreators';
 import AuthorizationComponent from '../../AuthorizationComponent';
 import TextArea from '../../TextArea';
 import { authedUserHasRole } from '../../../stores/auth/selectors';
@@ -37,7 +35,6 @@ interface Props extends WithTranslation, RouteComponentProps {
   saveCompany: (id: number, company: CompanyParams) => void;
   createCompany: (company: CompanyParams) => void;
   deleteCompany: (id: number) => void;
-  showTransientAlert: (alert: TransientAlert) => void;
 }
 
 interface State {
@@ -57,6 +54,11 @@ interface State {
 }
 
 class CompanyProps extends React.Component<Props, State> {
+  static defaultProps = {
+    create: undefined,
+    onCancel: undefined,
+  };
+
   public constructor(props: Props) {
     super(props);
 
@@ -408,7 +410,6 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   deleteCompany: (id: number) => dispatch(
     deleteSingle(SingleEntities.Company, id),
   ),
-  showTransientAlert: (alert: TransientAlert) => dispatch(showTransientAlert(alert)),
 });
 
 export default withTranslation()(

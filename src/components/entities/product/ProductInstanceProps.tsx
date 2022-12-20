@@ -51,6 +51,11 @@ interface State {
 }
 
 class ProductInstanceProps extends React.Component<Props, State> {
+  static defaultProps = {
+    create: undefined,
+    onCancel: undefined,
+  };
+
   public constructor(props: Props) {
     super(props);
 
