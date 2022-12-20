@@ -53,10 +53,10 @@ class InvoiceProductList extends React.Component<Props, State> {
       const currentPrice = p.basePrice - p.discount;
       const currentPriceVAT = currentPrice * (p.product.valueAddedTax.amount / 100 + 1);
       totalPriceWithVat += currentPriceVAT;
-      if (p.product.valueAddedTax.category === VAT.HIGH) {
+      if (p.product.valueAddedTax.category === VAT.LOW) {
         totalLowVatValue += currentPriceVAT - currentPrice;
       }
-      if (p.product.valueAddedTax.category === VAT.LOW) {
+      if (p.product.valueAddedTax.category === VAT.HIGH) {
         totalHighVatValue += currentPriceVAT - currentPrice;
       }
     });

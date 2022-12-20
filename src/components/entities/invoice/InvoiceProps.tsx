@@ -2,10 +2,10 @@ import React, { ChangeEvent } from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import { Form, Input, TextArea } from 'semantic-ui-react';
-import { DateInput } from 'semantic-ui-calendar-react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import validator from 'validator';
 import { withTranslation, WithTranslation } from 'react-i18next';
+import SemanticDatepicker from 'react-semantic-ui-datepickers';
 import {
   ActivityType,
   Invoice,
@@ -21,7 +21,6 @@ import { SingleEntities } from '../../../stores/single/single';
 import { RootState } from '../../../stores/store';
 import PropsButtons from '../../PropsButtons';
 import {
-  formatDateToString,
   formatTimestampToDate,
   isInvalidDate,
 } from '../../../helpers/timestamp';
@@ -54,7 +53,6 @@ interface State {
   assignedToId: number;
   poNumber: string;
   startDate: Date;
-  dateValue: string;
 }
 
 class InvoiceProps extends React.Component<Props, State> {
@@ -95,7 +93,6 @@ class InvoiceProps extends React.Component<Props, State> {
       assignedToId: invoice.assignedToId,
       poNumber: invoice.poNumber ?? '',
       startDate: invoice.startDate,
-      dateValue: formatDateToString(invoice.startDate),
     };
   };
 
@@ -162,7 +159,6 @@ class InvoiceProps extends React.Component<Props, State> {
       title,
       poNumber,
       startDate,
-      dateValue,
       assignedToId,
     } = this.state;
     const { companyName, t } = this.props;
@@ -244,17 +240,17 @@ class InvoiceProps extends React.Component<Props, State> {
             >
               {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
               <label htmlFor="form-input-startdate">{t('entities.invoice.props.invoiceDate')}</label>
-              <DateInput
+              <SemanticDatepicker
                 onChange={(e, { value }) => {
-                  this.setState({ dateValue: value, startDate: new Date(value) });
+                  if (!(value instanceof Date)) return;
+                  this.setState({ startDate: value });
                 }}
                 error={(startDate.setHours(0, 0, 0, 0) < new Date().setHours(0, 0, 0, 0)
                 && startDate.setHours(0, 0, 0, 0)
                 < this.props.invoice.startDate.setHours(0, 0, 0, 0)) || isInvalidDate(startDate)}
-                value={dateValue}
+                value={startDate}
                 id="form-input-startdate"
-                dateFormat="YYYY-MM-DD"
-                fluid
+                format="YYYY-MM-DD"
               />
             </Form.Field>
           </Form.Group>

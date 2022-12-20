@@ -1,12 +1,12 @@
-import React, { ChangeEvent, useState } from 'react';
+import React, { ChangeEvent } from 'react';
 import {
   Dropdown, Form, Input, Segment,
 } from 'semantic-ui-react';
 import validator from 'validator';
 import { useTranslation } from 'react-i18next';
-import { DateInput } from 'semantic-ui-calendar-react';
+import SemanticDatepicker from 'react-semantic-ui-datepickers';
 import { Language, ReturnFileType } from '../../clients/server.generated';
-import { formatDateToString, isInvalidDate } from '../../helpers/timestamp';
+import { isInvalidDate } from '../../helpers/timestamp';
 
 interface Props {
   language: Language;
@@ -24,8 +24,6 @@ interface Props {
 
 function CustomInvoiceProps(props: Props) {
   const { t } = useTranslation();
-
-  const [dateValue, setDateValue] = useState(formatDateToString(props.date));
 
   return (
     <Segment secondary style={{ backgroundColor: 'rgba(255, 255, 255, 0.95)', color: 'black' }}>
@@ -110,16 +108,14 @@ function CustomInvoiceProps(props: Props) {
         <Form.Group widths="equal">
           <Form.Field required>
             <label htmlFor="form-input-date">{t('entities.invoice.props.invoiceDate')}</label>
-            <DateInput
+            <SemanticDatepicker
               onChange={(e, { value }) => {
-                setDateValue(value);
-                props.setDate(new Date(value));
+                if (!(value instanceof Date)) return;
+                props.setDate(value);
               }}
-              value={dateValue}
+              value={props.date}
               error={isInvalidDate(props.date)}
               id="form-input-date"
-              dateFormat="YYYY-MM-DD"
-              fluid
             />
           </Form.Field>
         </Form.Group>
