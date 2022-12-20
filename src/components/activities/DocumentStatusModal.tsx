@@ -2,8 +2,6 @@ import * as React from 'react';
 import {
   Dimmer, Loader, Modal, Segment,
 } from 'semantic-ui-react';
-import { Dispatch } from 'redux';
-import { connect } from 'react-redux';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import {
   ContractStatus,
@@ -11,7 +9,6 @@ import {
   InvoiceStatus,
   InvoiceStatusParams,
 } from '../../clients/server.generated';
-import { fetchSingle } from '../../stores/single/actionCreators';
 import ResourceStatus from '../../stores/resourceStatus';
 import AlertContainer from '../alerts/AlertContainer';
 import { SingleEntities } from '../../stores/single/single';
@@ -20,8 +17,6 @@ import { DocumentStatus } from './DocumentStatus';
 
 interface Props extends RouteComponentProps {
   resourceStatus: ResourceStatus;
-  fetchInvoice: (id: number) => void;
-  fetchContract: (id: number) => void;
   close: () => void;
 
   open: boolean;
@@ -33,6 +28,10 @@ interface Props extends RouteComponentProps {
 }
 
 class DocumentStatusModal extends React.Component<Props> {
+  static defaultProps = {
+    parentId: undefined,
+  };
+
   public constructor(props: Props) {
     super(props);
   }
@@ -104,9 +103,4 @@ class DocumentStatusModal extends React.Component<Props> {
   }
 }
 
-const mapDispatchToProps = (dispatch: Dispatch) => ({
-  fetchInvoice: (id: number) => dispatch(fetchSingle(SingleEntities.Invoice, id)),
-  fetchContract: (id: number) => dispatch(fetchSingle(SingleEntities.Contract, id)),
-});
-
-export default withRouter(connect(null, mapDispatchToProps)(DocumentStatusModal));
+export default withRouter(DocumentStatusModal);

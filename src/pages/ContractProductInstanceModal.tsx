@@ -24,8 +24,6 @@ import {
   deleteInstanceSingle,
   saveInstanceSingle,
 } from '../stores/productinstance/actionCreator';
-import { TransientAlert } from '../stores/alerts/actions';
-import { showTransientAlert } from '../stores/alerts/actionCreators';
 import { getProductName } from '../stores/product/selectors';
 import { TitleContext } from '../components/TitleContext';
 
@@ -45,10 +43,14 @@ interface Props extends SelfProps, WithTranslation {
   saveProductInstance: (contractId: number, id: number, inst: ProductInstanceParams) => void;
   createProductInstance: (contractId: number, inst: ProductInstanceParams) => void;
   removeProductInstance: (contractId: number, id: number) => void;
-  showTransientAlert: (alert: TransientAlert) => void;
 }
 
 class ContractProductInstanceModal extends React.Component<Props> {
+  static defaultProps = {
+    create: undefined,
+    contract: undefined,
+  };
+
   componentDidUpdate() {
     const { productInstance, productName, t } = this.props;
     if (!productInstance) {
@@ -208,7 +210,6 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   removeProductInstance: (contractId: number, id: number) => dispatch(
     deleteInstanceSingle(contractId, id),
   ),
-  showTransientAlert: (alert: TransientAlert) => dispatch(showTransientAlert(alert)),
 });
 
 ContractProductInstanceModal.contextType = TitleContext;

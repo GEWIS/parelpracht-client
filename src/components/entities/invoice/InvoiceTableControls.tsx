@@ -11,6 +11,7 @@ import { fetchTable, searchTable } from '../../../stores/tables/actionCreators';
 import { Tables } from '../../../stores/tables/tables';
 import { Invoice } from '../../../clients/server.generated';
 import { countFetched, countTotal, getTable } from '../../../stores/tables/selectors';
+import { getLanguage } from '../../../localization';
 
 interface Props {
   status: ResourceStatus;
@@ -27,7 +28,7 @@ interface Props {
 }
 
 function InvoiceTableControls(props: Props) {
-  const timeAgo = new TimeAgo();
+  const timeAgo = new TimeAgo(getLanguage());
   const { t } = useTranslation();
 
   const formatLastSeenDate = (): string => {

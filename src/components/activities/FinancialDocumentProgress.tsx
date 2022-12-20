@@ -46,6 +46,11 @@ interface State {
 }
 
 class FinancialDocumentProgress extends React.Component<Props, State> {
+  static defaultProps = {
+    parentId: undefined,
+    cancelReason: undefined,
+  };
+
   public constructor(props: Props) {
     super(props);
     this.state = {
@@ -322,7 +327,7 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
         >
           {allPossibleDocumentStatuses.map((currentStatus, i) => (
             <FinancialDocumentStep
-              key={i.toString()}
+              key={currentStatus}
               documentId={documentId}
               documentType={documentType}
               statusChecked={statusDoneList[i]}

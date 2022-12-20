@@ -20,8 +20,6 @@ import {
   ActivityType, ContractStatus, InvoiceStatus, ProductInstanceStatus, Roles,
 } from '../../clients/server.generated';
 import UserAvatar from '../entities/user/UserAvatar';
-import { TransientAlert } from '../../stores/alerts/actions';
-import { showTransientAlert } from '../../stores/alerts/actionCreators';
 import AuthorizationComponent from '../AuthorizationComponent';
 import { getLanguage } from '../../localization';
 
@@ -36,10 +34,13 @@ interface Props extends RouteComponentProps, WithTranslation {
 
   deleteActivitySingle: (entity: SingleEntities, id: number, activityId: number) => void;
   deleteInstanceActivitySingle: (id: number, instanceId: number, activityId: number) => void;
-  showTransientAlert: (alert: TransientAlert) => void;
 }
 
 class ActivityComponent extends React.Component<Props> {
+  static defaultProps = {
+    parentId: undefined,
+  };
+
   deleteComment = () => {
     if (this.props.componentType === SingleEntities.ProductInstance) {
       this.props.deleteInstanceActivitySingle(
@@ -153,7 +154,6 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   deleteInstanceActivitySingle: (id: number, instanceId: number, activityId: number) => dispatch(
     deleteInstanceActivitySingle(id, instanceId, activityId),
   ),
-  showTransientAlert: (alert: TransientAlert) => dispatch(showTransientAlert(alert)),
 });
 
 export default withTranslation()(withRouter(connect(mapStateToProps,

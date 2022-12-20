@@ -32,6 +32,10 @@ interface Props extends WithTranslation, RouteComponentProps<{ categoryId: strin
 }
 
 class ProductCategoryModal extends React.Component<Props> {
+  static defaultProps = {
+    create: undefined,
+  };
+
   componentDidMount() {
     this.props.clearCategory();
 

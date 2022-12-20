@@ -19,8 +19,6 @@ import { getSingle } from '../../../stores/single/selectors';
 import { SingleEntities } from '../../../stores/single/single';
 import { RootState } from '../../../stores/store';
 import PropsButtons from '../../PropsButtons';
-import { TransientAlert } from '../../../stores/alerts/actions';
-import { showTransientAlert } from '../../../stores/alerts/actionCreators';
 import TextArea from '../../TextArea';
 import { authedUserHasRole } from '../../../stores/auth/selectors';
 import ProductVatSelector from './ProductVatSelector';
@@ -30,7 +28,6 @@ interface Props extends WithTranslation, RouteComponentProps {
   onCancel?: () => void;
 
   product: Product;
-  productPricingActive?: boolean;
   status: ResourceStatus;
 
   hasRole: (role: Roles) => boolean;
@@ -40,7 +37,6 @@ interface Props extends WithTranslation, RouteComponentProps {
   saveProduct: (id: number, product: ProductParams) => void;
   createProduct: (product: ProductParams) => void;
   deleteProduct: (id: number) => void;
-  showTransientAlert: (alert: TransientAlert) => void;
 }
 
 interface State {
@@ -63,6 +59,11 @@ interface State {
 }
 
 class ProductProps extends React.Component<Props, State> {
+  static defaultProps = {
+    create: undefined,
+    onCancel: undefined,
+  };
+
   public constructor(props: Props) {
     super(props);
 
@@ -463,7 +464,6 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   deleteProduct: (id: number) => dispatch(
     deleteSingle(SingleEntities.Product, id),
   ),
-  showTransientAlert: (alert: TransientAlert) => dispatch(showTransientAlert(alert)),
 });
 
 export default withTranslation()(

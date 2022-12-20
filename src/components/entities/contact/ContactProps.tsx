@@ -53,6 +53,11 @@ interface State {
 }
 
 class ContactProps extends React.Component<Props, State> {
+  static defaultProps = {
+    create: undefined,
+    onCancel: undefined,
+  };
+
   public constructor(props: Props) {
     super(props);
 

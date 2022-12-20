@@ -60,7 +60,7 @@ function CustomInvoiceProducts(props: Props) {
             <CustomInvoiceProductRow
               product={product}
               id={id}
-              key={id.toString()}
+              key={product.name}
               updateProduct={props.updateProduct}
               removeProduct={props.removeProduct}
             />

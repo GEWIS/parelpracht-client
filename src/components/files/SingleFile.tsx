@@ -15,8 +15,6 @@ import { deleteFileSingle, saveSingleFile } from '../../stores/single/actionCrea
 import { SingleEntities } from '../../stores/single/single';
 import { GeneralFile } from './GeneralFile';
 import ResourceStatus from '../../stores/resourceStatus';
-import { TransientAlert } from '../../stores/alerts/actions';
-import { showTransientAlert } from '../../stores/alerts/actionCreators';
 import AuthorizationComponent from '../AuthorizationComponent';
 
 interface Props extends RouteComponentProps, WithTranslation {
@@ -30,9 +28,7 @@ interface Props extends RouteComponentProps, WithTranslation {
   saveFile: (entityId: number, fileId: number,
     file: Partial_FileParams_, entity: SingleEntities) => void;
   deleteFile: (entityId: number, fileId: number, entity: SingleEntities) => void;
-  fetchEntity: (entityId: number) => void;
   status: ResourceStatus;
-  showTransientAlert: (alert: TransientAlert) => void;
 }
 
 interface State {
@@ -45,6 +41,10 @@ interface State {
 }
 
 class SingleFile extends React.Component<Props, State> {
+  static defaultProps = {
+    closeCreate: undefined,
+  };
+
   constructor(props: Props) {
     super(props);
     this.state = {
@@ -341,7 +341,6 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   deleteFile: (entityId: number, fileId: number, entity: SingleEntities) => dispatch(
     deleteFileSingle(entity, entityId, fileId),
   ),
-  showTransientAlert: (alert: TransientAlert) => dispatch(showTransientAlert(alert)),
 });
 
 export default withTranslation()(withRouter(connect(null, mapDispatchToProps)(SingleFile)));

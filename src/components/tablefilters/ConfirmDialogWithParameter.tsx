@@ -13,7 +13,6 @@ interface Props extends WithTranslation {
   defaultInput?: string;
 
   onApprove: (parameter?: string) => Promise<void>;
-  onCancel?: () => void;
 
   disabled: boolean;
 }
@@ -25,6 +24,11 @@ interface State {
 }
 
 class ConfirmationDialogWithParameter extends React.Component<Props, State> {
+  static defaultProps = {
+    inputField: undefined,
+    defaultInput: undefined,
+  };
+
   constructor(props: Props) {
     super(props);
 
