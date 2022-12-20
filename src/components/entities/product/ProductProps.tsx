@@ -21,9 +21,9 @@ import { RootState } from '../../../stores/store';
 import PropsButtons from '../../PropsButtons';
 import { TransientAlert } from '../../../stores/alerts/actions';
 import { showTransientAlert } from '../../../stores/alerts/actionCreators';
-import CreatePricing from '../../productpricing/CreatePricing';
-import AuthorizationComponent from '../../AuthorizationComponent';
 import TextArea from '../../TextArea';
+import { authedUserHasRole } from '../../../stores/auth/selectors';
+import ProductVatSelector from './ProductVatSelector';
 
 interface Props extends WithTranslation, RouteComponentProps {
   create?: boolean;
@@ -32,6 +32,10 @@ interface Props extends WithTranslation, RouteComponentProps {
   product: Product;
   productPricingActive?: boolean;
   status: ResourceStatus;
+
+  hasRole: (role: Roles) => boolean;
+  canEdit: Roles[];
+  canDelete: Roles[];
 
   saveProduct: (id: number, product: ProductParams) => void;
   createProduct: (product: ProductParams) => void;
@@ -49,6 +53,7 @@ interface State {
   status: ProductStatus;
   description: string;
   categoryId: number;
+  vatId: number;
   contractTextDutch: string;
   contractTextEnglish: string;
   deliverySpecDutch: string | undefined;
@@ -86,6 +91,7 @@ class ProductProps extends React.Component<Props, State> {
       targetPrice: formatPrice(product.targetPrice),
       status: product.status,
       description: product.description,
+      vatId: product.vatId,
       categoryId: product.categoryId,
       contractTextDutch: product.contractTextDutch,
       contractTextEnglish: product.contractTextEnglish,
@@ -103,6 +109,7 @@ class ProductProps extends React.Component<Props, State> {
       status: this.state.status,
       description: this.state.description,
       categoryId: this.state.categoryId,
+      vatId: this.state.vatId,
       contractTextDutch: this.state.contractTextDutch,
       contractTextEnglish: this.state.contractTextEnglish,
       deliverySpecificationEnglish: this.state.deliverySpecEnglish,
@@ -142,11 +149,12 @@ class ProductProps extends React.Component<Props, State> {
 
   propsHaveErrors = (): boolean => {
     const {
-      nameDutch, nameEnglish, categoryId, targetPrice, minTarget, maxTarget,
+      nameDutch, nameEnglish, vatId, categoryId, targetPrice, minTarget, maxTarget,
       contractTextDutch, contractTextEnglish,
     } = this.state;
     return (validator.isEmpty(nameDutch)
       || validator.isEmpty(nameEnglish)
+      || vatId < 0
       || categoryId < 0
       || (parseFloat(targetPrice.replace(',', '.')) <= 0 || Number.isNaN(parseFloat(targetPrice.replace(',', '.'))))
       || (minTarget !== undefined ? minTarget < 0 : false)
@@ -182,6 +190,7 @@ class ProductProps extends React.Component<Props, State> {
       status,
       description,
       categoryId,
+      vatId,
       contractTextDutch,
       contractTextEnglish,
       deliverySpecDutch,
@@ -198,8 +207,8 @@ class ProductProps extends React.Component<Props, State> {
 
           <PropsButtons
             editing={editing}
-            canEdit
-            canDelete={this.deleteButtonActive()}
+            canEdit={this.props.canEdit.some(this.props.hasRole)}
+            canDelete={this.deleteButtonActive() && this.props.canDelete.some(this.props.hasRole)}
             canSave={!this.propsHaveErrors()}
             entity={SingleEntities.Product}
             status={this.props.status}
@@ -304,19 +313,24 @@ class ProductProps extends React.Component<Props, State> {
                 <input />
               </Input>
             </Form.Field>
-            {this.props.productPricingActive ? (
-              <AuthorizationComponent roles={[Roles.ADMIN]} notFound={false}>
-                <Form.Field
-                  disabled={!editing}
-                >
-                  {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-                  <label htmlFor="form-check-status">
-                    {t('entities.product.props.customPrice')}
-                  </label>
-                  <CreatePricing productId={this.props.product.id} />
-                </Form.Field>
-              </AuthorizationComponent>
-            ) : null }
+            <Form.Field
+              disabled={!editing}
+              required
+            >
+              {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
+              <label htmlFor="form-input-vat">
+                {t('entities.product.props.valueAddedTax')}
+              </label>
+              <ProductVatSelector
+                id="form-input-vat"
+                value={vatId}
+                onChange={(val: number) => {
+                  this.setState({
+                    vatId: val,
+                  });
+                }}
+              />
+            </Form.Field>
           </Form.Group>
           <Form.Group widths="equal">
             <Form.Field
@@ -435,6 +449,7 @@ class ProductProps extends React.Component<Props, State> {
 const mapStateToProps = (state: RootState) => {
   return {
     status: getSingle<Product>(state, SingleEntities.Product).status,
+    hasRole: (role: Roles): boolean => authedUserHasRole(state, role),
   };
 };
 

@@ -9,12 +9,11 @@ import {
   ProductInstance,
   ProductInstanceParams,
   ProductSummary,
-  Roles,
+  Roles, VATSummary,
 } from '../../../clients/server.generated';
 import ResourceStatus from '../../../stores/resourceStatus';
 import { RootState } from '../../../stores/store';
 import { getSummary } from '../../../stores/summaries/selectors';
-import { SummaryCollections } from '../../../stores/summaries/summaries';
 import PropsButtons from '../../PropsButtons';
 import ProductSelector from './ProductSelector';
 import { SingleEntities } from '../../../stores/single/single';
@@ -22,6 +21,7 @@ import AuthorizationComponent from '../../AuthorizationComponent';
 import { getLastStatus } from '../../../helpers/activity';
 import { authedUserHasRole } from '../../../stores/auth/selectors';
 import ProductLink from './ProductLink';
+import { SummaryCollections } from '../../../stores/summaries/summaries';
 
 interface Props extends WithTranslation {
   create?: boolean;
@@ -34,7 +34,9 @@ interface Props extends WithTranslation {
   saveProductInstance: (productInstance: ProductInstanceParams) => void;
   createProductInstance: (productInstance: ProductInstanceParams) => void;
   removeProductInstance: () => void;
+
   getBasePrice: (id: number) => number;
+  getValueAddedTax: (id: number) => number;
   hasRole: (role: Roles) => boolean;
 }
 
@@ -42,6 +44,7 @@ interface State {
   editing: boolean;
 
   productId: number;
+  valueAddedTax: string;
   basePrice: string;
   discount: string;
   details?: string;
@@ -53,6 +56,8 @@ class ProductInstanceProps extends React.Component<Props, State> {
 
     this.state = {
       editing: props.create ?? false,
+      valueAddedTax: props.productInstance.product
+        ? props.productInstance.product.valueAddedTax.amount.toString() : '0',
       ...this.extractState(props),
     };
   }
@@ -153,9 +158,9 @@ class ProductInstanceProps extends React.Component<Props, State> {
       discount,
       details,
       productId,
+      valueAddedTax,
     } = this.state;
     const { productInstance, t } = this.props;
-
     let productNameElement = (
       <Form.Field>
         {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
@@ -184,6 +189,7 @@ class ProductInstanceProps extends React.Component<Props, State> {
                 this.setState({
                   productId: parseInt(id, 10),
                   basePrice: (this.props.getBasePrice(parseInt(id, 10)) / 100).toString(),
+                  valueAddedTax: (this.props.getValueAddedTax(parseInt(id, 10))).toString(),
                 });
               }
             }}
@@ -281,13 +287,47 @@ class ProductInstanceProps extends React.Component<Props, State> {
               disabled={!editing}
             >
               {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-              <label htmlFor="form-input-real-price">
-                {t('entities.productInstance.props.realPrice')}
+              <label htmlFor="form-input-value-added-tax">
+                {t('entities.productInstance.props.valueAddedTax')}
               </label>
               <Input
                 labelPosition="left"
-                id="form-input-real-price"
+                id="form-input-value-added-tax"
+                value={valueAddedTax}
+                fluid
+              >
+                <Label basic>%</Label>
+                <input />
+              </Input>
+            </Form.Field>
+            <Form.Field
+              disabled={!editing}
+            >
+              {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
+              <label htmlFor="form-input-real-price-no-vat">
+                {t('entities.productInstance.props.realPriceNoVat')}
+              </label>
+              <Input
+                labelPosition="left"
+                id="form-input-real-price-no-vat"
                 value={(parseFloat(basePrice.replace(',', '.')) - parseFloat(discount.replace(',', '.'))).toFixed(2)}
+                fluid
+              >
+                <Label basic>€</Label>
+                <input />
+              </Input>
+            </Form.Field>
+            <Form.Field
+              disabled={!editing}
+            >
+              {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
+              <label htmlFor="form-input-real-price-with-vat">
+                {t('entities.productInstance.props.realPriceWithVat')}
+              </label>
+              <Input
+                labelPosition="left"
+                id="form-input-real-price-with-vat"
+                value={((parseFloat(basePrice.replace(',', '.')) - parseFloat(discount.replace(',', '.'))) * (parseFloat(valueAddedTax) / 100 + 1)).toFixed(2)}
                 fluid
               >
                 <Label basic>€</Label>
@@ -306,6 +346,9 @@ const mapStateToProps = (state: RootState) => ({
   hasRole: (role: Roles): boolean => authedUserHasRole(state, role),
   getBasePrice: (id: number) => getSummary<ProductSummary>(state,
     SummaryCollections.Products, id).targetPrice,
+  getValueAddedTax: (id: number) => getSummary<VATSummary>(state,
+    SummaryCollections.ValueAddedTax, getSummary<ProductSummary>(state,
+      SummaryCollections.Products, id).vatId).amount,
 });
 
 export default withTranslation()(connect(mapStateToProps)(ProductInstanceProps));

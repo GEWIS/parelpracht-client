@@ -229,6 +229,12 @@
         "nameEn": "Titel (Engels)",
         "nameNl": "Titel (Nederlands)",
         "price": "Prijs",
+        "valueAddedTax": "BTW",
+        "valueAddedTaxValue": {
+          "zero": "0%",
+          "low": "9%",
+          "high": "21%"
+        },
         "specsEn": "Aanleverspecificaties (Engels)",
         "specsNl": "Aanleverspecificaties (Nederlands)",
         "status": {
@@ -247,7 +253,17 @@
         "discount": "Korting",
         "invoiced": "Gefactureerd",
         "price": "Prijs",
-        "realPrice": "Werkelijke prijs"
+        "realPrice": "Werkelijke prijs",
+        "realPriceNoVat": "Prijs excl. BTW",
+        "realPriceWithVat": "Prijs incl. BTW",
+        "priceLowVat": "BTW laag (9%)",
+        "priceHighVat": "BTW hoog (21%)",
+        "valueAddedTax": "BTW",
+        "valueAddedTaxValue": {
+          "zero": "0%",
+          "low": "9%",
+          "high": "21%"
+        }
       }
     },
     "status": {
@@ -375,7 +391,8 @@
     "credits": {
       "description1": "ParelPracht is ontwikkeld in de winter van 2020-2021 tijdens de tweede lockdown van de coronacrisis door het 39 bestuur van GEWIS. Veel dank aan iedereen die heeft bijdragen:",
       "description2": "Ook nog veel dank aan Gijs de Man en iedereen van Stijl voor hun hulp met de PDF templates en Wout de Ruiter voor het delen van zijn kennis van Docker containers.",
-      "header": "Over ParelPracht"
+      "header": "Over ParelPracht",
+      "abc": "Sinds versie 1.2.0 is de verdere ontwikkeling en ondersteuning van ParelPracht overgenomen door de ABC."
     },
     "gewis": "Studievereniging GEWIS"
   },
@@ -434,6 +451,7 @@
       "generateButton": "Genereer factuur",
       "header": "Genereer Handmatige Factuur",
       "organizationName": "Naam van organisatie",
+      "customerNumber": "Crediteurnummer",
       "products": {
         "addProduct": "Product toevoegen",
         "amount": "Aantal",
@@ -441,7 +459,8 @@
         "header": "Producten",
         "name": "Naam",
         "price": "Prijs",
-        "total": "Totaal"
+        "total": "Totaal",
+        "valueAddedTax": "BTW"
       },
       "recipientDetails": "Ontvangerinformatie",
       "subheader": "Het leven van de penno makkelijker maken",

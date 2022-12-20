@@ -6,7 +6,7 @@ import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { withTranslation, WithTranslation } from 'react-i18next';
-import { Company, CompanyStatus } from '../clients/server.generated';
+import { Company, CompanyStatus, Roles } from '../clients/server.generated';
 import { clearSingle } from '../stores/single/actionCreators';
 import { RootState } from '../stores/store';
 import CompanyProps from '../components/entities/company/CompanyProps';
@@ -72,7 +72,13 @@ class CompaniesCreatePage extends React.Component<Props> {
         <Modal.Content>
           <AlertContainer />
           <Modal.Description>
-            <CompanyProps company={company} create onCancel={this.close} />
+            <CompanyProps
+              company={company}
+              create
+              onCancel={this.close}
+              canEdit={[Roles.ADMIN, Roles.GENERAL]}
+              canDelete={[Roles.ADMIN]}
+            />
           </Modal.Description>
         </Modal.Content>
       </Modal>

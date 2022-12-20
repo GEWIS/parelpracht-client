@@ -6,7 +6,7 @@ import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { withTranslation, WithTranslation } from 'react-i18next';
-import { Gender, User } from '../clients/server.generated';
+import { Gender, Roles, User } from '../clients/server.generated';
 import { RootState } from '../stores/store';
 import UserProps from '../components/entities/user/UserProps';
 import ResourceStatus from '../stores/resourceStatus';
@@ -62,7 +62,12 @@ class UserCreatePage extends React.Component<Props> {
       >
         <Segment>
           <AlertContainer />
-          <UserProps user={user} create onCancel={this.close} />
+          <UserProps
+            user={user}
+            create
+            onCancel={this.close}
+            canEdit={[Roles.GENERAL]}
+          />
         </Segment>
       </Modal>
     );

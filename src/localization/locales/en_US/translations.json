@@ -153,7 +153,8 @@
     "contract": {
       "props": {
         "title": "Title",
-        "totalValue": "Total value"
+        "realPriceNoVat": "Price excl. VAT",
+        "realPriceWithVat": "Price incl. VAT"
       }
     },
     "details": "Details",
@@ -198,7 +199,8 @@
         "invoiceDate": "Invoice date",
         "poNumber": "PO Number",
         "title": "Title",
-        "totalValue": "Total value"
+        "realPriceNoVat": "Price excl. VAT",
+        "realPriceWithVat": "Price incl. VAT"
       }
     },
     "product": {
@@ -229,6 +231,12 @@
         "nameEn": "Title (English)",
         "nameNl": "Title (Dutch)",
         "price": "Target price",
+        "valueAddedTax": "VAT",
+        "valueAddedTaxValue": {
+          "zero": "0%",
+          "low": "9%",
+          "high": "21%"
+        },
         "specsEn": "Delivery specifications (English)",
         "specsNl": "Delivery specifications (Dutch)",
         "status": {
@@ -247,7 +255,17 @@
         "discount": "Discount",
         "invoiced": "Invoiced",
         "price": "Price",
-        "realPrice": "Real price"
+        "realPrice": "Real price",
+        "realPriceNoVat": "Price excl. VAT",
+        "realPriceWithVat": "Price incl. VAT",
+        "priceLowVat": "VAT low (9%)",
+        "priceHighVat": "VAT high (21%)",
+        "valueAddedTax": "VAT",
+        "valueAddedTaxValue": {
+          "zero": "0%",
+          "low": "9%",
+          "high": "21%"
+        }
       }
     },
     "status": {
@@ -375,7 +393,8 @@
     "credits": {
       "description1": "ParelPracht was built in the winter of 2020-2021 during the second lockdown of the corona crisis by the 39th board of GEWIS. Special thanks to everyone who contributed:",
       "description2": "Also special thanks to Gijs de Man and everyone at Stijl for their help with the PDF template and Wout de Ruiter for sharing his knowledge regarding Docker containers.",
-      "header": "About ParelPracht"
+      "header": "About ParelPracht",
+      "abc": "Since version 1.2.0 further development and support has been taken over by the ABC."
     },
     "gewis": "Study Association GEWIS"
   },
@@ -434,6 +453,7 @@
       "generateButton": "Generate invoice",
       "header": "Generate Custom Invoice",
       "organizationName": "Organization name",
+      "customerNumber": "Customer number",
       "products": {
         "addProduct": "Add product",
         "amount": "Amount",
@@ -441,7 +461,8 @@
         "header": "Products",
         "name": "Name",
         "price": "Price",
-        "total": "Total"
+        "total": "Total",
+        "valueAddedTax": "VAT"
       },
       "recipientDetails": "Recipient details",
       "subheader": "Making the treasurer's life easier",

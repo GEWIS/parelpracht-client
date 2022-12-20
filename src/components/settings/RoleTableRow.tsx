@@ -1,7 +1,7 @@
 import React from 'react';
 import { withTranslation, WithTranslation } from 'react-i18next';
 import { Button, Input, Table } from 'semantic-ui-react';
-import { Client, Partial_RoleParams, Role } from '../../clients/server.generated';
+import { Client, Partial_RoleParams_, Role } from '../../clients/server.generated';
 
 interface Props extends WithTranslation {
   role: Role;
@@ -32,7 +32,7 @@ class RoleTableRow extends React.Component<Props, State> {
     const { ldapGroup } = this.state;
     this.setState({ saving: true });
     const client = new Client();
-    const newRole = await client.updateRole(role.name, new Partial_RoleParams({ ldapGroup }));
+    const newRole = await client.updateRole(role.name, new Partial_RoleParams_({ ldapGroup }));
     updateTable(newRole);
     this.setState({ saving: false, editing: false });
   };

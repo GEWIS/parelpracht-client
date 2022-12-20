@@ -29,6 +29,9 @@ interface Props extends RouteComponentProps, WithTranslation {
   loginMethod: LoginMethods;
   actorIsAdmin: boolean;
 
+  hasRole: (role: Roles) => boolean;
+  canEdit: Roles[];
+
   saveUser: (id: number, user: UserParams) => void;
   createUser: (user: UserParams) => void;
   deleteUser: (id: number) => void;
@@ -246,7 +249,7 @@ class UserProps extends React.Component<Props, State> {
 
           <PropsButtons
             editing={editing}
-            canEdit
+            canEdit={this.props.canEdit.some(this.props.hasRole)}
             canDelete={this.deleteButtonActive()}
             canSave={!this.propsHaveErrors()}
             entity={SingleEntities.User}
@@ -498,6 +501,7 @@ const mapStateToProps = (state: RootState) => ({
   status: getSingle<User>(state, SingleEntities.User).status,
   loginMethod: state.general.loginMethod,
   actorIsAdmin: authedUserHasRole(state, Roles.ADMIN),
+  hasRole: (role: Roles): boolean => authedUserHasRole(state, role),
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({

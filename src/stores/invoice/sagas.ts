@@ -14,8 +14,8 @@ import {
   ListOrFilter,
   ListParams,
   ListSorting,
-  Partial_FileParams,
-  Partial_InvoiceParams,
+  Partial_FileParams_,
+  Partial_InvoiceParams_,
   ProductInstance,
   SortDirection,
 } from '../../clients/server.generated';
@@ -137,7 +137,7 @@ function* errorFetchSingleInvoice(
 }
 
 function* saveSingleInvoice(
-  action: SingleSaveAction<SingleEntities.Invoice, Partial_InvoiceParams>,
+  action: SingleSaveAction<SingleEntities.Invoice, Partial_InvoiceParams_>,
 ) {
   const client = new Client();
   yield call([client, client.updateInvoice], action.id, action.data);
@@ -204,7 +204,7 @@ function* watchDeleteSingleInvoice() {
 }
 
 function* saveSingleInvoiceFile(
-  action: SingleSaveFileAction<SingleEntities.Invoice, Partial_FileParams>,
+  action: SingleSaveFileAction<SingleEntities.Invoice, Partial_FileParams_>,
 ) {
   const client = new Client();
   yield call([client, client.updateInvoiceFile], action.id, action.fileId, action.data);

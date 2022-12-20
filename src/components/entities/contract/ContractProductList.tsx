@@ -7,7 +7,7 @@ import _ from 'lodash';
 import { withTranslation, WithTranslation } from 'react-i18next';
 import ContractProductRow from './ContractProductRow';
 import {
-  ActivityType, Contract, ContractStatus, Roles,
+  ActivityType, Contract, ContractStatus, Roles, VAT,
 } from '../../../clients/server.generated';
 import { formatPriceFull } from '../../../helpers/monetary';
 import ContractInvoiceModal from '../../../pages/ContractInvoiceModal';
@@ -64,19 +64,26 @@ class ContractProductList extends React.Component<Props, State> {
       .filter((a) => a.type === ActivityType.STATUS))?.subType;
 
     const { products } = contract;
-    let priceSum = 0;
-    let discountAmount = 0;
-    let discountSum = 0;
+    let totalPriceNoVat = 0;
+    let discountValue = 0;
+    let totalPriceWithVat = 0;
+    let totalLowVatValue = 0;
+    let totalHighVatValue = 0;
 
     products.forEach((p) => {
-      priceSum += p.basePrice;
-      discountSum += p.discount;
-      if (p.discount !== 0) {
-        discountAmount++;
+      totalPriceNoVat += p.basePrice;
+      discountValue += p.discount;
+
+      const currentPrice = p.basePrice - p.discount;
+      const currentPriceVAT = currentPrice * (p.product.valueAddedTax.amount / 100 + 1);
+      totalPriceWithVat += currentPriceVAT;
+      if (p.product.valueAddedTax.category === VAT.HIGH) {
+        totalLowVatValue += currentPriceVAT - currentPrice;
+      }
+      if (p.product.valueAddedTax.category === VAT.LOW) {
+        totalHighVatValue += currentPriceVAT - currentPrice;
       }
     });
-
-    const discountedPriceSum = priceSum - discountSum;
 
     const canChangeProducts = contractStatus === ContractStatus.CREATED
       || contractStatus === ContractStatus.PROPOSED
@@ -134,18 +141,36 @@ class ContractProductList extends React.Component<Props, State> {
             <Table.Row>
               <Table.HeaderCell />
               <Table.HeaderCell>
-                {t('pages.tables.total')}
-                :
+                <b>{t('entities.productInstance.props.realPriceNoVat')}</b>
+                <br />
+                <b>{t('entities.productInstance.props.priceLowVat')}</b>
+                <br />
+                <b>{t('entities.productInstance.props.priceHighVat')}</b>
               </Table.HeaderCell>
               <Table.HeaderCell singleLine collapsing>
-                {formatPriceFull(discountSum)}
-                {' '}
-                (
-                {discountAmount}
-                )
+                {formatPriceFull(discountValue)}
+                <br />
+                <br />
+                <br />
               </Table.HeaderCell>
               <Table.HeaderCell collapsing>
-                {formatPriceFull(discountedPriceSum)}
+                {formatPriceFull(totalPriceNoVat - discountValue)}
+                <br />
+                {formatPriceFull(totalLowVatValue)}
+                <br />
+                {formatPriceFull(totalHighVatValue)}
+              </Table.HeaderCell>
+              <Table.HeaderCell />
+              <Table.HeaderCell />
+            </Table.Row>
+            <Table.Row>
+              <Table.HeaderCell />
+              <Table.HeaderCell>
+                <b>{t('entities.productInstance.props.realPriceWithVat')}</b>
+              </Table.HeaderCell>
+              <Table.HeaderCell />
+              <Table.HeaderCell collapsing>
+                {formatPriceFull(totalPriceWithVat)}
               </Table.HeaderCell>
               <Table.HeaderCell />
               <Table.HeaderCell />

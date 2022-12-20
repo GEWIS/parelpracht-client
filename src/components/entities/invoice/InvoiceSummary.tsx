@@ -38,8 +38,12 @@ function InvoiceSummary(props: Props) {
     && status !== ResourceStatus.SAVING
     && status !== ResourceStatus.ERROR);
 
-  const totalValue = invoice.products
+  const totalPriceNoVat = invoice.products
     .reduce((a, b) => a + (b.basePrice - b.discount), 0);
+
+  const totalPriceWithVat = invoice.products
+    .reduce((a, b) => a + (b.basePrice - b.discount)
+      * (b.product.valueAddedTax.amount / 100 + 1), 0);
 
   const logo = logoFilename !== '' ? (
     <Image
@@ -70,8 +74,12 @@ function InvoiceSummary(props: Props) {
         <UserLink id={invoice.assignedToId} />
       </div>
       <div>
-        <h5>{t('entities.invoice.props.totalValue')}</h5>
-        <p>{formatPriceFull(totalValue)}</p>
+        <h5>{t('entities.invoice.props.realPriceNoVat')}</h5>
+        <p>{formatPriceFull(totalPriceNoVat)}</p>
+      </div>
+      <div>
+        <h5>{t('entities.invoice.props.realPriceWithVat')}</h5>
+        <p>{formatPriceFull(totalPriceWithVat)}</p>
       </div>
     </EntitySummary>
   );
