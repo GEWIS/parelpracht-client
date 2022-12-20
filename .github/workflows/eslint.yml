@@ -4,8 +4,13 @@ on: push
 jobs:
   build:
     name: Linter
+    runs-on: ubuntu-latest
     steps:
       - name: checkout
         uses: actions/checkout@v2
+      - name: install node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16.x
       - name: run
         run: npm install && npm run lint
