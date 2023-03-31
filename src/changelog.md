@@ -1,7 +1,15 @@
 # Change log
-The current version of ParelPracht is **v1.3.0**, released on December 20th, 2022.
+The current version of ParelPracht is **v1.3.1**, released on March 31st, 2023.
 You can find the release notes below.
 ----------------------
+
+## v1.3.1 (31-03-2023)
+### Changes
+- Updated backend dependencies.
+
+### Bugfixes
+- Fixed not being able to remove products from invoices.
+- Fixed some translation errors.
 
 ## v1.3.0 (20-12-2022)
 ### Added
@@ -14,7 +22,7 @@ You can find the release notes below.
 - Updated templates for contracts, proposals and invoices.
 - Moved "Add custom pricing" button to the Custom pricing tab, instead of the product details.
 
-### Bugfix
+### Bugfixes
 - Fixed special characters not compiling correctly in PDF files.
 
 ## v1.2.0 (15-04-2022)
