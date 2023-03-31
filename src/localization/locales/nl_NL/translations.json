@@ -307,7 +307,7 @@
         "segmentDescription": "Verander deze instellingen alleen als je weet wat je aan het doen bent!",
         "segmentHeader": "Loginmethodes bewerken",
         "updateLdap": {
-          "button": "LDAP login toevoegen",
+          "button": "LDAP login bijwerken",
           "description": "Weet je zeker dat je LDAP authenticatie wilt aanpassen voor deze gebruiker? Deze gebruiker kan dan misschien niet meer inloggen met LDAP!"
         }
       },
