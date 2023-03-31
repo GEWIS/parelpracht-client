@@ -24,7 +24,7 @@ class InvoiceProductList extends React.Component<Props, State> {
   removeProduct = async (instanceId: number) => {
     const { invoice, fetchInvoice } = this.props;
     const client = new Client();
-    await client.deleteProductInstance(invoice?.id, instanceId);
+    await client.deleteProductFromInvoice(invoice?.id, instanceId);
     fetchInvoice(invoice.id);
   };
 
