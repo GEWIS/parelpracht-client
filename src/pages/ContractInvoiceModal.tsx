@@ -58,7 +58,7 @@ class ContractInvoiceModal extends React.Component<Props, State> {
     } else if (this.state.selectedInvoice !== undefined) {
       const client = new Client();
       await Promise.all(this.props.productInstanceIds.map((x) => {
-        return client.addProduct(this.state.selectedInvoice!, new Body({ productId: x }));
+        return client.addProductToInvoice(this.state.selectedInvoice!, new Body({ productId: x }));
       }));
       fetchContract(contract.id);
     }

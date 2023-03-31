@@ -47,7 +47,7 @@
       "errorProduct": "Je kunt dit product niet verwijderen, omdat het nog bestanden heeft of nog gebruikt wordt in contracten en/of facturen.",
       "errorProductCategory": "Je kunt deze productcategorie niet verwijderne, omdat het nog gebruikt wordt door één of meer producten.",
       "errorProductInstance": "Je kunt dit product niet verwijderen, omdat het al op een factuur staat, het al geleverd/geannulleerd/uitgesteld is, of omdat het contract al voorgesteld of verstuurd is.",
-      "errorUser": "Je kunt deze gebruiker niet verwijdern, omdat deze gebruiker nog actieve rollen heeft.",
+      "errorUser": "Je kunt deze gebruiker niet verwijderen, omdat deze gebruiker nog actieve rollen heeft.",
       "header": "Verwijder {{entity}}",
       "short": "Verwijderen"
     },
@@ -307,7 +307,7 @@
         "segmentDescription": "Verander deze instellingen alleen als je weet wat je aan het doen bent!",
         "segmentHeader": "Loginmethodes bewerken",
         "updateLdap": {
-          "button": "LDAP login toevoegen",
+          "button": "LDAP login bijwerken",
           "description": "Weet je zeker dat je LDAP authenticatie wilt aanpassen voor deze gebruiker? Deze gebruiker kan dan misschien niet meer inloggen met LDAP!"
         }
       },
@@ -356,6 +356,7 @@
     "insights": "Inzichten",
     "invoice": "Factuur",
     "invoices": "Facturen",
+    "invoiceproduct": "Product",
     "product": "Product",
     "productcategory": "Product Categorie",
     "productinstance": "Product",

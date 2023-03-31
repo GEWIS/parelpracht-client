@@ -27,7 +27,8 @@ function* saveSingleProductInstance(
   action: SingleSaveInstanceAction<ProductInstanceParams>,
 ) {
   const client = new Client();
-  yield call([client, client.updateProductInstance], action.id, action.instanceId, action.data);
+  yield call([client, client.updateProductInstanceOnContract], action.id,
+    action.instanceId, action.data);
   yield put(fetchSingle(SingleEntities.Contract, action.id));
 }
 
@@ -43,7 +44,7 @@ function* createSingleProductInstance(
   action: SingleCreateInstanceAction<ProductInstanceParams>,
 ) {
   const client = new Client();
-  const instance: ProductInstance = yield call([client, client.addProductInstance],
+  const instance: ProductInstance = yield call([client, client.addProductInstanceToContract],
     action.id, action.data);
   yield put(fetchSingle(SingleEntities.Contract, instance.contractId));
 }
@@ -76,7 +77,8 @@ function* createSingleProductInstanceStatus(
   action: SingleCreateInstanceStatusAction<ProductInstanceStatusParams>,
 ) {
   const client = new Client();
-  yield call([client, client.addProductInstanceStatus], action.id, action.instanceId, action.data);
+  yield call([client, client.addProductInstanceStatusToContract], action.id,
+    action.instanceId, action.data);
   yield put(fetchSingle(SingleEntities.Contract, action.id));
 }
 
@@ -92,7 +94,8 @@ function* createSingleProductInstanceComment(
   action: SingleCreateInstanceCommentAction<ActivityParams>,
 ) {
   const client = new Client();
-  yield call([client, client.addProductInstanceComment], action.id, action.instanceId, action.data);
+  yield call([client, client.addProductInstanceCommentToContract], action.id,
+    action.instanceId, action.data);
   yield put(fetchSingle(SingleEntities.Contract, action.id));
 }
 
@@ -108,7 +111,7 @@ function* saveSingleProductInstanceActivity(
   action: SingleSaveInstanceActivityAction<ActivityParams>,
 ) {
   const client = new Client();
-  yield call([client, client.updateProductInstanceActivity],
+  yield call([client, client.updateProductInstanceActivityOnContract],
     action.id, action.instanceId, action.activityId, action.data);
   yield put(fetchSingle(SingleEntities.Contract, action.id));
 }
@@ -125,7 +128,7 @@ function* deleteSingleProductInstanceActivity(
   action: SingleDeleteInstanceActivityAction,
 ) {
   const client = new Client();
-  yield call([client, client.deleteProductInstanceActivity],
+  yield call([client, client.deleteProductInstanceActivityFromContract],
     action.id, action.instanceId, action.activityId);
   yield put(fetchSingle(SingleEntities.Contract, action.id));
 }
