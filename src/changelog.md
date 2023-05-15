@@ -5,7 +5,7 @@ You can find the release notes below.
 
 ## v1.3.2 (15-05-2023)
 ### Bugfixes
-- Fixed corrupt images & fonts in Docker production images.
+- Fixed corrupt images in Docker production images.
 - Fix not being able to remove products from invoices.
 
 ## v1.3.1 (31-03-2023)
