@@ -22,4 +22,4 @@ jobs:
           context: .
           push: true
           tags: parelpracht.docker-registry.gewis.nl/parelpracht-client:latest
-
+          no-cache: true

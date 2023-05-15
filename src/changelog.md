@@ -1,7 +1,12 @@
 # Change log
-The current version of ParelPracht is **v1.3.1**, released on March 31st, 2023.
+The current version of ParelPracht is **v1.3.2**, released on May 15th, 2023.
 You can find the release notes below.
 ----------------------
+
+## v1.3.2 (15-05-2023)
+### Bugfixes
+- Fixed corrupt images & fonts in Docker production images.
+- Fix not being able to remove products from invoices.
 
 ## v1.3.1 (31-03-2023)
 ### Changes
