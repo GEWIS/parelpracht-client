@@ -7,7 +7,7 @@ module.exports = {
     project: './tsconfig.json'
   },
   rules: {
-    'linebreak-style': ['error', 'windows'],
+    'linebreak-style': ['off' ],
     'no-console': ['warn', { allow: ['warn', 'error'] }],
     'arrow-body-style': ['off'],
     'react/destructuring-assignment': ['off'],
