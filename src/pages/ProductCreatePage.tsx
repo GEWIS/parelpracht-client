@@ -2,7 +2,6 @@ import * as React from 'react';
 import { Modal } from 'semantic-ui-react';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
-import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { withTranslation, WithTranslation } from 'react-i18next';
 import { Product, ProductStatus, Roles } from '../clients/server.generated';
 import { RootState } from '../stores/store';
@@ -15,8 +14,9 @@ import { clearSingle } from '../stores/single/actionCreators';
 import { TransientAlert } from '../stores/alerts/actions';
 import { showTransientAlert } from '../stores/alerts/actionCreators';
 import { TitleContext } from '../components/TitleContext';
+import { withRouter, WithRouter } from '../WithRouter';
 
-interface Props extends RouteComponentProps, WithTranslation {
+interface Props extends WithTranslation, WithRouter {
   status: ResourceStatus;
 
   clearProduct: () => void;
@@ -27,13 +27,14 @@ class ProductCreatePage extends React.Component<Props> {
   componentDidMount() {
     const { clearProduct, t } = this.props;
     clearProduct();
-    this.context.setTitle(t('pages.product.newProduct'));
+    document.title = t('pages.product.newProduct');
   }
 
   componentDidUpdate(prevProps: Props) {
+    const { navigate } = this.props.router;
     if (prevProps.status === ResourceStatus.SAVING
       && this.props.status === ResourceStatus.FETCHED) {
-      this.props.history.push('/product');
+      navigate('/product');
       this.props.showTransientAlert({
         title: 'Success',
         message: 'Product successfully created',
@@ -43,7 +44,10 @@ class ProductCreatePage extends React.Component<Props> {
     }
   }
 
-  close = () => { this.props.history.goBack(); };
+  close = () => {
+    const { navigate } = this.props.router;
+    navigate(-1);
+  };
 
   public render() {
     const product: Product = {

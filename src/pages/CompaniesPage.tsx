@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-import { RouteComponentProps, withRouter } from 'react-router-dom';
 import {
   Button, Container, Grid, Header, Icon, Segment,
 } from 'semantic-ui-react';
@@ -9,10 +8,13 @@ import AuthorizationComponent from '../components/AuthorizationComponent';
 import CompanyTable from '../components/entities/company/CompanyTable';
 import CompanyTableControls from '../components/entities/company/CompanyTableControls';
 import { useTitle } from '../components/TitleContext';
+import { useNavigate } from 'react-router-dom';
+import { withRouter } from '../WithRouter';
 
-function CompaniesPage(props: RouteComponentProps) {
+function CompaniesPage() {
   const { t } = useTranslation();
   const { setTitle } = useTitle();
+  const navigate = useNavigate();
 
   React.useEffect(() => {
     setTitle(t('entity.companies'));
@@ -40,7 +42,7 @@ function CompaniesPage(props: RouteComponentProps) {
                 roles={[Roles.ADMIN]}
                 notFound={false}
               >
-                <Button icon labelPosition="left" primary floated="right" onClick={() => props.history.push('/company/new')}>
+                <Button icon labelPosition="left" primary floated="right" onClick={() => navigate('/company/new')}>
                   <Icon name="plus" />
                   {t('pages.companies.addCompany')}
                 </Button>

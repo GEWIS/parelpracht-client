@@ -2,7 +2,6 @@ import * as React from 'react';
 import { Modal } from 'semantic-ui-react';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
-import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { ProductCategory } from '../clients/server.generated';
 import { clearSingle } from '../stores/single/actionCreators';
 import { RootState } from '../stores/store';
@@ -13,8 +12,9 @@ import { SingleEntities } from '../stores/single/single';
 import ProductCategoryProps from '../components/entities/productcategories/ProductCategoryProps';
 import { TransientAlert } from '../stores/alerts/actions';
 import { showTransientAlert } from '../stores/alerts/actionCreators';
+import { withRouter, WithRouter } from '../WithRouter';
 
-interface Props extends RouteComponentProps {
+interface Props extends WithRouter {
   status: ResourceStatus;
 
   clearCategory: () => void;
@@ -40,10 +40,14 @@ class ProductCategoriesCreatePage extends React.Component<Props> {
   }
 
   closeWithPopupMessage = () => {
-    this.props.history.push('/category');
+    const { navigate } = this.props.router;
+    navigate('/category');
   };
 
-  close = () => { this.props.history.goBack(); };
+  close = () => {
+    const { navigate } = this.props.router;
+    navigate(-1);
+  };
 
   public render() {
     const category = {
@@ -63,7 +67,7 @@ class ProductCategoriesCreatePage extends React.Component<Props> {
       >
         <Modal.Content>
           <AlertContainer />
-          <ProductCategoryProps category={category} create onCancel={this.close} />
+          <ProductCategoryProps category={category} create onCancel={this.close} router={this.props.router} />
         </Modal.Content>
       </Modal>
     );

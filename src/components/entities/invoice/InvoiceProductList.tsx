@@ -1,5 +1,4 @@
 import React from 'react';
-import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { Table } from 'semantic-ui-react';
 import { withTranslation, WithTranslation } from 'react-i18next';
 import InvoiceProductRow from './InvoiceProductRow';
@@ -7,8 +6,9 @@ import {
   Client, Invoice, InvoiceStatus, VAT,
 } from '../../../clients/server.generated';
 import { formatPriceFull } from '../../../helpers/monetary';
+import { withRouter } from '../../../WithRouter';
 
-interface Props extends RouteComponentProps, WithTranslation {
+interface Props extends WithTranslation {
   invoice: Invoice;
 
   fetchInvoice: (id: number) => void;

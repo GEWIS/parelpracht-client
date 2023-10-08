@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {
-  NavLink, Redirect, RouteComponentProps, withRouter,
+  NavLink, Navigate as Redirect, useLocation,
 } from 'react-router-dom';
 import {
   Button, Container, Header, Icon, Segment,
@@ -19,17 +19,30 @@ import { authRequestClear } from '../stores/auth/actionCreators';
 import ResourceStatus from '../stores/resourceStatus';
 import CenterInPage from '../components/CenterInPage';
 import { useTitle } from '../components/TitleContext';
+import { withRouter } from '../WithRouter';
 
-interface Props extends RouteComponentProps {
+interface Props {
   status: ResourceStatus;
 
   clearStatus: () => void;
 }
 
 function ResetPasswordPage(props: Props) {
-  const { token } = queryString.parse(props.location.search);
+  const location = useLocation();
+  const { token } = queryString.parse(location.search);
   const { t } = useTranslation();
   const { setTitle } = useTitle();
+
+  const [eightCharacters, changeEightCharacters] = useState(false);
+  const [lowerCase, changeLowerCase] = useState(false);
+  const [upperCase, changeUpperCase] = useState(false);
+  const [numbers, changeNumbers] = useState(false);
+  const [symbols, changeSymbols] = useState(false);
+
+  useEffect(() => {
+    props.clearStatus();
+    setTitle(t('pages.resetPassword.title'));
+  }, []);
 
   if (typeof token !== 'string') {
     return <Redirect to="/login" />;
@@ -39,12 +52,6 @@ function ResetPasswordPage(props: Props) {
   if (!(payload)) {
     return <Redirect to="/login" />;
   }
-
-  const [eightCharacters, changeEightCharacters] = useState(false);
-  const [lowerCase, changeLowerCase] = useState(false);
-  const [upperCase, changeUpperCase] = useState(false);
-  const [numbers, changeNumbers] = useState(false);
-  const [symbols, changeSymbols] = useState(false);
 
   const hasEightCharacters = (password: string) => {
     changeEightCharacters(password.length >= 8);
@@ -77,11 +84,6 @@ function ResetPasswordPage(props: Props) {
   };
 
   const newUser = payload.type === 'PASSWORD_SET';
-
-  useEffect(() => {
-    props.clearStatus();
-    setTitle(t('pages.resetPassword.title'));
-  }, []);
 
   if (props.status === ResourceStatus.FETCHED) {
     return (

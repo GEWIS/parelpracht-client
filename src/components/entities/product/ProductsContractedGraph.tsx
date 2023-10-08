@@ -2,11 +2,11 @@ import React from 'react';
 import { Dropdown, Grid, Tab } from 'semantic-ui-react';
 import { withTranslation, WithTranslation } from 'react-i18next';
 import { Bar } from 'react-chartjs-2';
-import * as chartjs from 'chart.js';
 import 'chartjs-plugin-annotation';
 import { AnalysisResultByYear, Client, Product } from '../../../clients/server.generated';
 import { DataSet } from '../../chart/CategoryLineChart';
 import { formatPriceFull } from '../../../helpers/monetary';
+import { ChartData, ChartOptions, TooltipItem } from 'chart.js';
 
 interface Props extends WithTranslation {
   product: Product;
@@ -42,15 +42,21 @@ class ProductsContractedGraph extends React.Component<Props, State> {
     this.setState({ dataSetSelection: dataSet });
   };
 
-  createBarChartDataObject = (data: AnalysisResultByYear[]): object => {
+  createBarChartDataObject = (data: AnalysisResultByYear[]): ChartData<'bar'> => {
     const { t } = this.props;
     const { dataSetSelection } = this.state;
     const labels = data.map((x) => x.year);
-    let datasets;
+
+    const result: ChartData<'bar'> = {
+      labels,
+      datasets: [],
+    };
+
     switch (dataSetSelection) {
       case DataSet.VALUES:
-        datasets = [{
-          text: t('entities.graph.label.value'),
+        result.datasets = [{
+          // TODO CHECK
+          label: t('entities.graph.label.value'),
           backgroundColor: 'rgba(41, 48, 101, 0.8)',
           borderColor: 'rgba(41, 48, 101, 1)',
           borderWidth: 1,
@@ -60,8 +66,9 @@ class ProductsContractedGraph extends React.Component<Props, State> {
         }];
         break;
       case DataSet.AMOUNTS:
-        datasets = [{
-          text: t('entities.graph.label.amount'),
+        result.datasets = [{
+          // TODO CHECK
+          label: t('entities.graph.label.amount'),
           backgroundColor: 'rgba(41, 48, 101, 0.8)',
           borderColor: 'rgba(41, 48, 101, 1)',
           borderWidth: 1,
@@ -72,118 +79,122 @@ class ProductsContractedGraph extends React.Component<Props, State> {
         break;
       default:
     }
-    return { labels, datasets };
+    return result;
   };
 
-  createBarChartOptionsObject = () => {
+  createBarChartOptionsObject = (): ChartOptions<'bar'> => {
     const { t } = this.props;
     const { product } = this.props;
     const { dataSetSelection } = this.state;
-    let options: chartjs.ChartOptions;
+    let options: ChartOptions<'bar'>;
     switch (dataSetSelection) {
       case DataSet.VALUES:
         if (product.minTarget === 0) {
           options = {
-            legend: {
-              display: false,
-            },
+
             scales: {
-              xAxes: [{
+              x: {
                 stacked: true,
-              }],
-              yAxes: [{
+              },
+              y: {
+                beginAtZero: true,
                 stacked: true,
                 ticks: {
-                  beginAtZero: true,
-                  callback(value: number) {
+                  callback(value: number | string) {
+                    if (typeof value === 'string') return 'TEMP';
                     return formatPriceFull(value);
                   },
                 },
-              }],
-            },
-            tooltips: {
-              callbacks: {
-                label(tooltipItem: any) {
-                  return formatPriceFull(tooltipItem.yLabel);
-                },
               },
             },
-            annotation: {
-              annotations: [
-                {
-                  id: 'maxTarget',
-                  type: 'line',
-                  value: product.maxTarget * product.targetPrice,
-                  mode: 'horizontal',
-                  scaleID: 'y-axis-0',
-                  borderColor: 'rgba(41, 48, 101, 1)',
-                  borderWidth: 2,
-                  label: {
-                    backgroundColor: 'rgba(41, 48, 101, 0.8)',
-                    content: t('entities.graph.target.maximum'),
-                    enabled: true,
+            plugins: {
+              annotation: {
+                annotations: [
+                  {
+                    id: 'maxTarget',
+                    type: 'line',
+                    value: product.maxTarget * product.targetPrice,
+                    scaleID: 'y-axis-0',
+                    borderColor: 'rgba(41, 48, 101, 1)',
+                    borderWidth: 2,
+                    label: {
+                      backgroundColor: 'rgba(41, 48, 101, 0.8)',
+                      content: t('entities.graph.target.maximum'),
+                      display: true,
+                    },
+                  },
+                ],
+              },
+              legend: {
+                display: false,
+              },
+              tooltip: {
+                callbacks: {
+                  label(tooltipItem: any) {
+                    return formatPriceFull(tooltipItem.yLabel);
                   },
                 },
-              ],
+              },
             },
           };
         } else {
           options = {
-            legend: {
-              display: false,
-            },
             scales: {
-              xAxes: [{
+              x: {
                 stacked: true,
-              }],
-              yAxes: [{
+              },
+              y: {
+                beginAtZero: true,
                 stacked: true,
                 ticks: {
-                  beginAtZero: true,
-                  callback(value: number) {
+                  callback(value: number | string) {
+                    if (typeof value === 'string') return 'TEMP';
                     return formatPriceFull(value);
                   },
                 },
-              }],
-            },
-            tooltips: {
-              callbacks: {
-                label(tooltipItem: any) {
-                  return formatPriceFull(tooltipItem.yLabel);
-                },
               },
             },
-            annotation: {
-              annotations: [
-                {
-                  id: 'minTarget',
-                  type: 'line',
-                  value: product.minTarget * product.targetPrice,
-                  mode: 'horizontal',
-                  scaleID: 'y-axis-0',
-                  borderColor: 'rgba(41, 48, 101, 1)',
-                  borderWidth: 2,
-                  label: {
-                    backgroundColor: 'rgba(41, 48, 101, 0.8)',
-                    content: t('entities.graph.target.minimum'),
-                    enabled: true,
+            plugins: {
+              annotation: {
+                annotations: [
+                  {
+                    id: 'minTarget',
+                    type: 'line',
+                    value: product.minTarget * product.targetPrice,
+                    scaleID: 'y-axis-0',
+                    borderColor: 'rgba(41, 48, 101, 1)',
+                    borderWidth: 2,
+                    label: {
+                      backgroundColor: 'rgba(41, 48, 101, 0.8)',
+                      content: t('entities.graph.target.minimum'),
+                      display: true,
+                    },
+                  },
+                  {
+                    id: 'maxTarget',
+                    type: 'line',
+                    value: product.maxTarget * product.targetPrice,
+                    scaleID: 'y-axis-0',
+                    borderColor: 'rgba(41, 48, 101, 1)',
+                    borderWidth: 2,
+                    label: {
+                      backgroundColor: 'rgba(41, 48, 101, 0.8)',
+                      content: t('entities.graph.target.maximum'),
+                      display: true,
+                    },
+                  },
+                ],
+              },
+              legend: {
+                display: false,
+              },
+              tooltip: {
+                callbacks: {
+                  label(tooltipItem: TooltipItem<'bar'>) {
+                    return formatPriceFull(parseInt(tooltipItem.label));
                   },
                 },
-                {
-                  id: 'maxTarget',
-                  type: 'line',
-                  value: product.maxTarget * product.targetPrice,
-                  mode: 'horizontal',
-                  scaleID: 'y-axis-0',
-                  borderColor: 'rgba(41, 48, 101, 1)',
-                  borderWidth: 2,
-                  label: {
-                    backgroundColor: 'rgba(41, 48, 101, 0.8)',
-                    content: t('entities.graph.target.maximum'),
-                    enabled: true,
-                  },
-                },
-              ],
+              },
             },
           };
         }
@@ -191,104 +202,108 @@ class ProductsContractedGraph extends React.Component<Props, State> {
       case DataSet.AMOUNTS:
         if (product.minTarget === 0) {
           options = {
-            legend: {
-              display: false,
-            },
             scales: {
-              xAxes: [{
+              x: {
                 stacked: true,
-              }],
-              yAxes: [{
+              },
+              y: {
                 stacked: true,
+                beginAtZero: true,
                 ticks: {
-                  beginAtZero: true,
-                  callback(value: number) {
+                  callback(value: number | string) {
+                    if (typeof value === 'string') return 'TEMP';
                     return value;
                   },
                 },
-              }],
+              },
             },
-            annotation: {
-              annotations: [
-                {
-                  id: 'maxTarget',
-                  type: 'line',
-                  value: product.maxTarget,
-                  mode: 'horizontal',
-                  scaleID: 'y-axis-0',
-                  borderColor: 'rgba(41, 48, 101, 1)',
-                  borderWidth: 2,
-                  label: {
-                    backgroundColor: 'rgba(41, 48, 101, 0.8)',
-                    content: t('entities.graph.target.maximum'),
-                    enabled: true,
+            plugins: {
+              annotation: {
+                annotations: [
+                  {
+                    id: 'maxTarget',
+                    type: 'line',
+                    value: product.maxTarget,
+                    scaleID: 'y-axis-0',
+                    borderColor: 'rgba(41, 48, 101, 1)',
+                    borderWidth: 2,
+                    label: {
+                      backgroundColor: 'rgba(41, 48, 101, 0.8)',
+                      content: t('entities.graph.target.maximum'),
+                      display: true,
+                    },
                   },
-                },
-              ],
-            },
-            tooltips: {
-              callbacks: {
-                label(tooltipItem: any) {
-                  return formatPriceFull(tooltipItem.yLabel);
+                ],
+              },
+              legend: {
+                display: false,
+              },
+              tooltip: {
+                callbacks: {
+                  // TODO CHECK
+                  label(tooltipItem: TooltipItem<'bar'>) {
+                    return formatPriceFull(parseInt(tooltipItem.label));
+                  },
                 },
               },
             },
           };
         } else {
           options = {
-            legend: {
-              display: false,
-            },
             scales: {
-              xAxes: [{
+              x: {
                 stacked: true,
-              }],
-              yAxes: [{
+              },
+              y: {
                 stacked: true,
+                beginAtZero: true,
                 ticks: {
-                  beginAtZero: true,
-                  callback(value: number) {
+                  callback(value: number | string ) {
                     return value;
                   },
                 },
-              }],
+              },
             },
-            annotation: {
-              annotations: [
-                {
-                  id: 'minTarget',
-                  type: 'line',
-                  value: product.minTarget,
-                  mode: 'horizontal',
-                  scaleID: 'y-axis-0',
-                  borderColor: 'rgba(41, 48, 101, 1)',
-                  borderWidth: 2,
-                  label: {
-                    backgroundColor: 'rgba(41, 48, 101, 0.8)',
-                    content: t('entities.graph.target.minimum'),
-                    enabled: true,
+            plugins: {
+              annotation: {
+                annotations: [
+                  {
+                    id: 'minTarget',
+                    type: 'line',
+                    value: product.minTarget,
+                    scaleID: 'y-axis-0',
+                    borderColor: 'rgba(41, 48, 101, 1)',
+                    borderWidth: 2,
+                    label: {
+                      backgroundColor: 'rgba(41, 48, 101, 0.8)',
+                      content: t('entities.graph.target.minimum'),
+                      display: true,
+                    },
                   },
-                },
-                {
-                  id: 'maxTarget',
-                  type: 'line',
-                  value: product.maxTarget,
-                  mode: 'horizontal',
-                  scaleID: 'y-axis-0',
-                  borderColor: 'rgba(41, 48, 101, 1)',
-                  borderWidth: 2,
-                  label: {
-                    backgroundColor: 'rgba(41, 48, 101, 0.8)',
-                    content: t('entities.graph.target.maximum'),
-                    enabled: true,
+                  {
+                    id: 'maxTarget',
+                    type: 'line',
+                    value: product.maxTarget,
+                    scaleID: 'y-axis-0',
+                    borderColor: 'rgba(41, 48, 101, 1)',
+                    borderWidth: 2,
+                    label: {
+                      backgroundColor: 'rgba(41, 48, 101, 0.8)',
+                      content: t('entities.graph.target.maximum'),
+                      display: true,
+                    },
                   },
-                },
-              ],
-            },
-            tooltips: {
-              callbacks: {
-                label(tooltipItem: any) {
-                  return formatPriceFull(tooltipItem.yLabel);
+                ],
+              },
+              legend: {
+                display: false,
+              },
+              tooltip: {
+                callbacks: {
+                  // TODO CHECK
+                  label(tooltipItem: TooltipItem<'bar'>) {
+                    return formatPriceFull(parseInt(tooltipItem.label));
+                  },
                 },
               },
             },

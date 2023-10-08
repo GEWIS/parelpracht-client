@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-import { RouteComponentProps, withRouter } from 'react-router-dom';
 import {
   Button, Container, Grid, Header, Icon, Segment,
 } from 'semantic-ui-react';
@@ -9,10 +8,13 @@ import AuthorizationComponent from '../components/AuthorizationComponent';
 import ProductCategoriesTable from '../components/entities/productcategories/ProductCategoriesTable';
 import ProductCategoriesTableControls from '../components/entities/productcategories/ProductCategoriesTableControls';
 import { useTitle } from '../components/TitleContext';
+import { useNavigate } from 'react-router-dom';
+import { withRouter } from '../WithRouter';
 
-function ProductCategoriesPage(props: RouteComponentProps) {
+function ProductCategoriesPage() {
   const { t } = useTranslation();
   const { setTitle } = useTitle();
+  const history = useNavigate();
 
   React.useEffect(() => {
     setTitle(t('entity.categories'));
@@ -34,7 +36,7 @@ function ProductCategoriesPage(props: RouteComponentProps) {
             </Grid.Column>
             <Grid.Column>
               <AuthorizationComponent roles={[Roles.ADMIN]} notFound={false}>
-                <Button icon labelPosition="left" primary floated="right" onClick={() => props.history.push('/category/new')}>
+                <Button icon labelPosition="left" primary floated="right" onClick={() => history('/category/new')}>
                   <Icon name="plus" />
                   {t('entities.category.addCategory')}
                 </Button>

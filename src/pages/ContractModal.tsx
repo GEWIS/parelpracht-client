@@ -2,7 +2,6 @@ import * as React from 'react';
 import { Modal } from 'semantic-ui-react';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
-import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { withTranslation, WithTranslation } from 'react-i18next';
 import { Contract } from '../clients/server.generated';
 import { fetchSingle, clearSingle } from '../stores/single/actionCreators';
@@ -13,11 +12,9 @@ import AlertContainer from '../components/alerts/AlertContainer';
 import { SingleEntities } from '../stores/single/single';
 import { getSingle } from '../stores/single/selectors';
 import { TitleContext } from '../components/TitleContext';
+import { withRouter, WithRouter } from '../WithRouter';
 
-interface SelfProps extends RouteComponentProps<{ companyId?: string }> {
-}
-
-interface Props extends SelfProps, WithTranslation {
+interface Props extends WithTranslation, WithRouter {
   status: ResourceStatus;
 
   clearContract: () => void;
@@ -31,7 +28,7 @@ class ContractModal extends React.Component<Props> {
 
   componentDidUpdate(prevProps: Props) {
     const { t } = this.props;
-    this.context.setTitle(t('pages.contract.newContract'));
+    document.title = t('pages.contract.newContract');
 
     if (prevProps.status === ResourceStatus.SAVING
       && this.props.status === ResourceStatus.FETCHED) {
@@ -40,19 +37,20 @@ class ContractModal extends React.Component<Props> {
   }
 
   close = () => {
-    const { companyId } = this.props.match.params;
+    const { params, navigate } = this.props.router;
     // If the modal is not opened on a company page, we cannot refresh the company information
-    if (companyId !== undefined) {
-      this.props.fetchCompany(parseInt(companyId, 10));
+    if (params.companyId !== undefined) {
+      this.props.fetchCompany(parseInt(params.companyId, 10));
     }
-    this.props.history.goBack();
+    navigate(-1);
   };
 
   public render() {
     let compId = -1;
     let companyPredefined: boolean = false;
-    if (this.props.match.params.companyId) {
-      compId = parseInt(this.props.match.params.companyId, 10);
+    const { params } = this.props.router;
+    if (params.companyId) {
+      compId = parseInt(params.companyId, 10);
       companyPredefined = true;
     }
     const contract: Contract = {

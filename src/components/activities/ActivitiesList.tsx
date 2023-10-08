@@ -2,7 +2,6 @@ import React from 'react';
 import {
   Button, Feed, Icon, Loader,
 } from 'semantic-ui-react';
-import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { WithTranslation, withTranslation } from 'react-i18next';
 import ActivityComponent from './ActivityComponent';
 import { GeneralActivity } from './GeneralActivity';
@@ -11,8 +10,9 @@ import CreateCommentRow from './CreateCommentRow';
 import ResourceStatus from '../../stores/resourceStatus';
 import AuthorizationComponent from '../AuthorizationComponent';
 import { Roles } from '../../clients/server.generated';
+import { withRouter } from '../../WithRouter';
 
-interface Props extends WithTranslation, RouteComponentProps {
+interface Props extends WithTranslation {
   activities: GeneralActivity[];
   componentId: number;
   componentType: SingleEntities;

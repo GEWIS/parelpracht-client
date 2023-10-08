@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { NavLink, RouteComponentProps, withRouter } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import {
   Breadcrumb, Container, Grid, Header, Loader, Segment,
 } from 'semantic-ui-react';
@@ -25,8 +25,9 @@ import AuthorizationComponent from '../components/AuthorizationComponent';
 import NotFound from './NotFound';
 import UserAuthSettings from '../components/entities/user/UserAuthSettings';
 import { TitleContext } from '../components/TitleContext';
+import { withRouter, WithRouter } from '../WithRouter';
 
-interface Props extends RouteComponentProps<{ userId: string }>, WithTranslation {
+interface Props extends WithTranslation, WithRouter {
   user: User | undefined;
   status: ResourceStatus;
   isProfilePage: boolean;
@@ -38,28 +39,29 @@ interface Props extends RouteComponentProps<{ userId: string }>, WithTranslation
 
 class SingleUserPage extends React.Component<Props> {
   componentDidMount() {
-    const { userId } = this.props.match.params;
+    const { params } = this.props.router;
 
     this.props.clearUser();
-    this.props.fetchUser(Number.parseInt(userId, 10));
+    this.props.fetchUser(Number.parseInt(params.userId, 10));
   }
 
   componentDidUpdate(prevProps: Readonly<Props>) {
     const { status, user, t } = this.props;
+    const { navigate } = this.props.router;
     if (user === undefined) {
-      this.context.setTitle(t('entity.user'));
+      document.title = t('entity.user');
     } else {
-      this.context.setTitle(formatContactName(
+      document.title = formatContactName(
         user.firstName,
         user.lastNamePreposition,
         user.lastName,
-      ));
+      );
     }
 
     if (status === ResourceStatus.EMPTY
       && prevProps.status === ResourceStatus.DELETING
     ) {
-      this.props.history.push('/users');
+      navigate('/users');
       this.props.showTransientAlert({
         title: 'Success',
         message: `User ${prevProps.user?.firstName} successfully deleted`,
@@ -111,7 +113,10 @@ class SingleUserPage extends React.Component<Props> {
             <Grid.Column>
               {user ? (
                 <Segment>
-                  <UserProps user={user} canEdit={[Roles.ADMIN]} />
+                  <UserProps
+                    user={user}
+                    canEdit={[Roles.ADMIN]}
+                  />
                 </Segment>
               ) : <Segment placeholder />}
             </Grid.Column>

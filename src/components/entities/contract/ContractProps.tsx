@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import { Form, Input, TextArea } from 'semantic-ui-react';
 import validator from 'validator';
-import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { withTranslation, WithTranslation } from 'react-i18next';
 import {
   ActivityType, Contract, ContractParams, Roles,
@@ -21,8 +20,9 @@ import { TransientAlert } from '../../../stores/alerts/actions';
 import { showTransientAlert } from '../../../stores/alerts/actionCreators';
 import { formatDocumentIdTitle } from '../../../helpers/documents';
 import AuthorizationComponent from '../../AuthorizationComponent';
+import { WithRouter, withRouter } from '../../../WithRouter';
 
-interface Props extends RouteComponentProps, WithTranslation {
+interface Props extends WithTranslation, WithRouter {
   create?: boolean;
   companyPredefined?: boolean;
   onCancel?: () => void;
@@ -123,7 +123,8 @@ class ContractProps extends React.Component<Props, State> {
 
   remove = () => {
     if (!this.props.create) {
-      this.props.history.push('/contract');
+      const { navigate } = this.props.router;
+      navigate('/contract');
       this.props.deleteContract(this.props.contract.id);
     }
   };

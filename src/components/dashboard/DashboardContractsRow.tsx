@@ -3,15 +3,16 @@ import { connect } from 'react-redux';
 import {
   Button, Header, Icon, Segment, Image, Table,
 } from 'semantic-ui-react';
-import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { withTranslation, WithTranslation } from 'react-i18next';
 import { RecentContract } from '../../clients/server.generated';
 import { RootState } from '../../stores/store';
 import { formatActivityDate } from '../../helpers/activity';
 import { getUserName } from '../../stores/user/selectors';
 import { getCompanyLogo, getCompanyName } from '../../stores/company/selectors';
+import { useNavigate } from 'react-router-dom';
+import { withRouter } from '../../WithRouter';
 
-interface Props extends RouteComponentProps, WithTranslation {
+interface Props extends WithTranslation {
   contract: RecentContract;
   company: string;
   user: string;
@@ -41,7 +42,8 @@ class DashboardContractsRow extends React.Component<Props> {
         horizontal
         style={{ margin: 0, marginTop: '0.2em' }}
         onClick={() => {
-          this.props.history.push(`./contract/${contract.id}`);
+          const history = useNavigate();
+          history(`./contract/${contract.id}`);
         }}
       >
         <Segment

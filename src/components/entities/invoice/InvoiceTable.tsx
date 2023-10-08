@@ -52,18 +52,11 @@ function InvoicesTable({
 }: Props) {
   const { t } = useTranslation();
 
-  if ([Roles.FINANCIAL].some(hasRole) && ![Roles.ADMIN].some(hasRole)) {
-    useEffect(() => {
-      setSort('id', 'DESC');
-      setTableFilter({ column: 'activityStatus', values: ['SENT'] });
-      fetchInvoices();
-    }, []);
-  } else {
-    useEffect(() => {
-      setSort('id', 'DESC');
-      fetchInvoices();
-    }, []);
-  }
+  useEffect(() => {
+    setSort('id', 'DESC');
+    if (([Roles.FINANCIAL].some(hasRole) && ![Roles.ADMIN].some(hasRole))) setTableFilter({ column: 'activityStatus', values: ['SENT'] });
+    fetchInvoices();
+  }, []);
 
   const table = (
     <>

@@ -4,7 +4,6 @@ import {
 } from 'semantic-ui-react';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
-import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { withTranslation, WithTranslation } from 'react-i18next';
 import {
   Contract, ProductInstance, ProductInstanceParams, ProductInstanceStatus, Roles,
@@ -26,14 +25,12 @@ import {
 } from '../stores/productinstance/actionCreator';
 import { getProductName } from '../stores/product/selectors';
 import { TitleContext } from '../components/TitleContext';
+import { withRouter, WithRouter } from '../WithRouter';
 
-interface SelfProps extends RouteComponentProps<{
-  contractId: string, productInstanceId?: string
-}> {
+interface SelfProps extends WithRouter {
   create?: boolean;
 }
-
-interface Props extends SelfProps, WithTranslation {
+interface Props extends WithTranslation, SelfProps {
   productInstance: ProductInstance | undefined;
   status: ResourceStatus;
   contract?: Contract;
@@ -54,51 +51,54 @@ class ContractProductInstanceModal extends React.Component<Props> {
   componentDidUpdate() {
     const { productInstance, productName, t } = this.props;
     if (!productInstance) {
-      this.context.setTitle(t('pages.contract.products.addProduct'));
+      document.title = t('pages.contract.products.addProduct');
     } else {
-      this.context.setTitle(productName);
+      document.title = productName;
     }
   }
 
   close = () => {
-    const { contractId } = this.props.match.params;
-    this.props.fetchContract(parseInt(contractId, 10));
-    this.props.history.goBack();
+    const { params, navigate } = this.props.router;
+    this.props.fetchContract(parseInt(params.contractId, 10));
+    navigate(-1);
   };
 
   saveProductInstance = async (productInstance: ProductInstanceParams) => {
+    const { params } = this.props.router;
     this.props.saveProductInstance(
-      parseInt(this.props.match.params.contractId!, 10),
-      parseInt(this.props.match.params.productInstanceId!, 10),
+      parseInt(params.contractId, 10),
+      parseInt(params.productInstanceId, 10),
       productInstance,
     );
     this.close();
   };
 
   createProductInstance = async (productInstance: ProductInstanceParams) => {
+    const { params } = this.props.router;
     this.props.createProductInstance(
-      parseInt(this.props.match.params.contractId!, 10),
+      parseInt(params.contractId, 10),
       productInstance,
     );
     this.close();
   };
 
   removeProductInstance = async () => {
+    const { params } = this.props.router;
     this.props.removeProductInstance(
-      parseInt(this.props.match.params.contractId!, 10),
-      parseInt(this.props.match.params.productInstanceId!, 10),
+      parseInt(params.contractId, 10),
+      parseInt(params.productInstanceId, 10),
     );
     this.close();
   };
 
   public render() {
     const { create, status, contract } = this.props;
+    const { params } = this.props.router;
     let productInstance: ProductInstance | undefined;
     if (create) {
-      const { contractId } = this.props.match.params;
       productInstance = {
         id: -1,
-        contractId: parseInt(contractId, 10),
+        contractId: parseInt(params.contractId, 10),
         productId: -1,
         basePrice: 0,
         discount: 0,
@@ -182,9 +182,10 @@ class ContractProductInstanceModal extends React.Component<Props> {
 }
 
 const mapStateToProps = (state: RootState, props: SelfProps) => {
+  const { params } = props.router;
   const prodInstance = !props.create
     ? getSingle<Contract>(state, SingleEntities.Contract).data?.products.find(
-      (p) => p.id === parseInt(props.match.params.productInstanceId!, 10),
+      (p) => p.id === parseInt(params.productInstanceId, 10),
     )
     : undefined;
   let prodName = '';

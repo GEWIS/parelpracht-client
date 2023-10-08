@@ -2,7 +2,6 @@ import * as React from 'react';
 import {
   Dimmer, Loader, Modal, Segment,
 } from 'semantic-ui-react';
-import { RouteComponentProps, withRouter } from 'react-router-dom';
 import {
   ContractStatus,
   ContractStatusParams,
@@ -14,8 +13,9 @@ import AlertContainer from '../alerts/AlertContainer';
 import { SingleEntities } from '../../stores/single/single';
 import DocumentStatusProps from './DocumentStatusProps';
 import { DocumentStatus } from './DocumentStatus';
+import { withRouter } from '../../WithRouter';
 
-interface Props extends RouteComponentProps {
+interface Props {
   resourceStatus: ResourceStatus;
   close: () => void;
 

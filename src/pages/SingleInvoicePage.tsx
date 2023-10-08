@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { NavLink, RouteComponentProps, withRouter } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import {
   Breadcrumb,
   Container, Grid, Loader, Segment, Tab,
@@ -25,8 +25,9 @@ import AuthorizationComponent from '../components/AuthorizationComponent';
 import { authedUserHasRole } from '../stores/auth/selectors';
 import NotFound from './NotFound';
 import { TitleContext } from '../components/TitleContext';
+import { WithRouter, withRouter } from '../WithRouter';
 
-interface Props extends RouteComponentProps<{ invoiceId: string }>, WithTranslation {
+interface Props extends WithTranslation, WithRouter {
   invoice: Invoice | undefined;
   status: ResourceStatus;
 
@@ -42,9 +43,10 @@ interface State {
 class SingleInvoicePage extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
+    const { location, navigate } = props.router;
 
     const panes = this.getPanes();
-    let { hash } = this.props.location;
+    let { hash } = location;
     // If there is no hash, do not take the first (#) character
     if (hash.length > 0) {
       hash = hash.substr(1);
@@ -55,7 +57,8 @@ class SingleInvoicePage extends React.Component<Props, State> {
     // select the first one by default
     if (index < 0) {
       index = 0;
-      this.props.history.replace(`#${panes[0].menuItem.toLowerCase()}`);
+
+      navigate(`#${panes[0].menuItem.toLowerCase()}`, { replace: true });
     }
 
     this.state = {
@@ -64,18 +67,18 @@ class SingleInvoicePage extends React.Component<Props, State> {
   }
 
   componentDidMount() {
-    const { invoiceId } = this.props.match.params;
+    const { params } = this.props.router;
 
     this.props.clearInvoice();
-    this.props.fetchInvoice(Number.parseInt(invoiceId, 10));
+    this.props.fetchInvoice(Number.parseInt(params.invoiceId, 10));
   }
 
   componentDidUpdate() {
     const { invoice, t } = this.props;
     if (invoice === undefined) {
-      this.context.setTitle(t('entity.contract'));
+      document.title = t('entity.contract');
     } else {
-      this.context.setTitle(`F${invoice.id} ${invoice.title}`);
+      document.title = `F${invoice.id} ${invoice.title}`;
     }
   }
 
@@ -141,6 +144,7 @@ class SingleInvoicePage extends React.Component<Props, State> {
   public render() {
     const { invoice, status, t } = this.props;
     const { paneIndex } = this.state;
+    const { navigate } = this.props.router;
 
     if (status === ResourceStatus.NOTFOUND) {
       return <NotFound />;
@@ -194,14 +198,16 @@ class SingleInvoicePage extends React.Component<Props, State> {
                   menu={{ pointing: true, inverted: true }}
                   onTabChange={(e, data) => {
                     this.setState({ paneIndex: data.activeIndex! as number });
-                    this.props.history.replace(`#${data.panes![data.activeIndex! as number].menuItem.toLowerCase()}`);
+                    navigate(`#${data.panes![data.activeIndex! as number].menuItem.toLowerCase()}`, { replace: true });
                   }}
                   activeIndex={paneIndex}
                 />
               </Grid.Column>
               <Grid.Column width={6}>
                 <Segment secondary style={{ backgroundColor: 'rgba(243, 244, 245, 0.98)' }}>
-                  <InvoiceProps invoice={invoice} />
+                  <InvoiceProps
+                    invoice={invoice}
+                  />
                 </Segment>
               </Grid.Column>
             </Grid.Row>

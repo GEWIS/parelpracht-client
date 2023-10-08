@@ -7,7 +7,7 @@ import { fetchSingle } from '../../stores/single/actionCreators';
 import { SingleEntities } from '../../stores/single/single';
 import { Client } from '../../clients/server.generated';
 
-interface Props extends WithTranslation{
+interface Props extends WithTranslation {
   fetchProduct: (id: number) => void;
   productId: number;
 }

@@ -4,7 +4,6 @@ import {
 } from 'semantic-ui-react';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
-import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { withTranslation, WithTranslation } from 'react-i18next';
 import { Company, CompanyStatus, Roles } from '../clients/server.generated';
 import { clearSingle } from '../stores/single/actionCreators';
@@ -17,8 +16,9 @@ import { SingleEntities } from '../stores/single/single';
 import { TransientAlert } from '../stores/alerts/actions';
 import { showTransientAlert } from '../stores/alerts/actionCreators';
 import { TitleContext } from '../components/TitleContext';
+import { withRouter, WithRouter } from '../WithRouter';
 
-interface Props extends RouteComponentProps, WithTranslation {
+interface Props extends WithTranslation, WithRouter {
   status: ResourceStatus;
 
   clearCompany: () => void;
@@ -29,13 +29,14 @@ class CompaniesCreatePage extends React.Component<Props> {
   componentDidMount() {
     const { clearCompany, t } = this.props;
     clearCompany();
-    this.context.setTitle(t('entities.company.newCompany'));
+    document.title = t('entities.company.newCompany');
   }
 
   componentDidUpdate(prevProps: Props) {
     if (prevProps.status === ResourceStatus.SAVING
       && this.props.status === ResourceStatus.FETCHED) {
-      this.props.history.push('/company');
+      const { navigate } = this.props.router;
+      navigate('/company');
       this.props.showTransientAlert({
         title: 'Success',
         message: 'Company successfully created',
@@ -45,7 +46,10 @@ class CompaniesCreatePage extends React.Component<Props> {
     }
   }
 
-  close = () => { this.props.history.goBack(); };
+  close = () => {
+    const { navigate } = this.props.router;
+    navigate(-1);
+  };
 
   public render() {
     const company = {
@@ -99,5 +103,4 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
 
 CompaniesCreatePage.contextType = TitleContext;
 
-export default withTranslation()(withRouter(connect(mapStateToProps,
-  mapDispatchToProps)(CompaniesCreatePage)));
+export default withTranslation()(withRouter(connect(mapStateToProps, mapDispatchToProps)(CompaniesCreatePage)));

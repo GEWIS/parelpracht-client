@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { NavLink, RouteComponentProps, withRouter } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import { Dispatch } from 'redux';
 import {
   Dropdown, Icon, Loader, Menu, Flag,
@@ -14,8 +14,9 @@ import { RootState } from '../../stores/store';
 import UserAvatar from '../entities/user/UserAvatar';
 import { authedUserHasRole } from '../../stores/auth/selectors';
 import { changeLanguage, getLanguage } from '../../localization';
+import { WithRouter, withRouter } from '../../WithRouter';
 
-interface Props extends RouteComponentProps {
+interface Props extends WithRouter {
   authStatus: AuthStatus | undefined;
   status: ResourceStatus;
 
@@ -27,6 +28,8 @@ interface Props extends RouteComponentProps {
 }
 
 function AuthMenu(props: Props) {
+  const { t } = useTranslation();
+  const { navigate } = props.router;
   if (props.status !== ResourceStatus.FETCHED || props.authStatus === undefined
     || props.profileStatus !== ResourceStatus.FETCHED || props.profile === undefined) {
     return (
@@ -36,10 +39,9 @@ function AuthMenu(props: Props) {
     );
   }
 
-  const { t } = useTranslation();
 
   const logout = () => {
-    props.history.push('/login');
+    navigate('/login');
     props.logout();
   };
 

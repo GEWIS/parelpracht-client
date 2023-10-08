@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { RouteComponentProps, withRouter } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import {
   Button, Container, Grid, Header, Icon, Segment,
 } from 'semantic-ui-react';
@@ -9,14 +9,17 @@ import AuthorizationComponent from '../components/AuthorizationComponent';
 import ProductsTable from '../components/entities/product/ProductTable';
 import ProductTableControls from '../components/entities/product/ProductTableControls';
 import { useTitle } from '../components/TitleContext';
+import { withRouter } from '../WithRouter';
 
-function ProductsPage(props: RouteComponentProps) {
+function ProductsPage() {
   const { t } = useTranslation();
   const { setTitle } = useTitle();
 
   React.useEffect(() => {
     setTitle(t('entity.products'));
   }, []);
+
+  const history = useNavigate();
 
   return (
     <AuthorizationComponent roles={[Roles.GENERAL, Roles.ADMIN]} notFound>
@@ -36,7 +39,7 @@ function ProductsPage(props: RouteComponentProps) {
             </Grid.Column>
             <Grid.Column>
               <AuthorizationComponent roles={[Roles.ADMIN]} notFound={false}>
-                <Button icon labelPosition="left" primary floated="right" onClick={() => props.history.push('/product/new')}>
+                <Button icon labelPosition="left" primary floated="right" onClick={() => history('/product/new')}>
                   <Icon name="plus" />
                   {t('pages.products.addProduct')}
                 </Button>

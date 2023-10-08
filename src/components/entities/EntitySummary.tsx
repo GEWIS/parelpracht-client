@@ -3,8 +3,8 @@ import {
   Header, Icon, Loader, Placeholder, Segment, SemanticICONS,
 } from 'semantic-ui-react';
 import { SingleEntities } from '../../stores/single/single';
-import { formatEntity } from '../../helpers/entity';
 import './EntitySummary.scss';
+import { useTranslation } from 'react-i18next';
 
 interface Props {
   loading: boolean;
@@ -18,13 +18,15 @@ interface Props {
 }
 
 export function EntitySummary(props: Props) {
+  const { t } = useTranslation();
+
   if (props.loading) {
     return (
       <>
         <Header as="h1" attached="top" style={{ backgroundColor: 'rgba(238, 238, 238, 0.98)' }}>
           <Icon name={props.icon} />
           <Header.Content>
-            <Header.Subheader>{formatEntity(props.entity)}</Header.Subheader>
+            <Header.Subheader>{t(`entity.${props.entity.toLowerCase()}`)}</Header.Subheader>
             <Loader active inline />
           </Header.Content>
         </Header>
@@ -44,7 +46,7 @@ export function EntitySummary(props: Props) {
           </div>
           <div className="name">
             <Header.Content style={{ paddingLeft: '1.25rem' }}>
-              <Header.Subheader>{formatEntity(props.entity)}</Header.Subheader>
+              <Header.Subheader>{t(`entity.${props.entity.toLowerCase()}`)}</Header.Subheader>
               {props.title}
             </Header.Content>
           </div>

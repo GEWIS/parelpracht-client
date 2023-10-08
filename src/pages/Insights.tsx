@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { withRouter } from 'react-router-dom';
 import {
   Container, Grid, Header, Icon, Segment,
 } from 'semantic-ui-react';
@@ -7,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import ContractTableExtensive from '../components/megatable/MegaTable';
 import ContractTableExtensiveControls from '../components/megatable/MegaTableControls';
 import { useTitle } from '../components/TitleContext';
+import { withRouter } from '../WithRouter';
 
 function Insights() {
   const { t } = useTranslation();
@@ -38,7 +38,7 @@ function Insights() {
         </Container>
       </Segment>
       <Container style={{ marginTop: '20px' }}>
-        <ContractTableExtensive />
+        <ContractTableExtensive/>
       </Container>
     </>
   );

@@ -6,7 +6,6 @@ import {
 } from 'semantic-ui-react';
 import validator from 'validator';
 import _ from 'lodash';
-import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { withTranslation, WithTranslation } from 'react-i18next';
 import {
   Gender, LoginMethods, Roles, User, UserParams,
@@ -19,8 +18,9 @@ import { SingleEntities } from '../../../stores/single/single';
 import { getSingle } from '../../../stores/single/selectors';
 import TextArea from '../../TextArea';
 import { authedUserHasRole } from '../../../stores/auth/selectors';
+import { WithRouter, withRouter } from '../../../WithRouter';
 
-interface Props extends RouteComponentProps, WithTranslation {
+interface Props extends WithTranslation, WithRouter {
   create?: boolean;
   onCancel?: () => void;
 
@@ -171,7 +171,8 @@ class UserProps extends React.Component<Props, State> {
 
   remove = () => {
     if (!this.props.create) {
-      this.props.history.push('/users');
+      const { navigate } = this.props.router;
+      navigate('/users');
       this.props.deleteUser(this.props.user.id);
     }
   };

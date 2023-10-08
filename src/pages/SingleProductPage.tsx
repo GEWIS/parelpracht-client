@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { NavLink, RouteComponentProps, withRouter } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import {
   Breadcrumb, Container, Grid, Loader, Segment, Tab,
 } from 'semantic-ui-react';
@@ -28,8 +28,9 @@ import NotFound from './NotFound';
 import { getLanguage } from '../localization';
 import { TitleContext } from '../components/TitleContext';
 import CreatePricing from '../components/productpricing/CreatePricing';
+import { WithRouter, withRouter } from '../WithRouter';
 
-interface Props extends WithTranslation, RouteComponentProps<{ productId: string }> {
+interface Props extends WithTranslation, WithRouter {
   product: Product | undefined;
   status: ResourceStatus;
 
@@ -45,9 +46,10 @@ interface State {
 class SingleProductPage extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
+    const { location, navigate } = this.props.router;
 
     const panes = this.getPanes();
-    let { hash } = this.props.location;
+    let { hash } = location;
     // If there is no hash, do not take the first (#) character
     if (hash.length > 0) {
       hash = hash.substr(1);
@@ -58,7 +60,7 @@ class SingleProductPage extends React.Component<Props, State> {
     // select the first one by default
     if (index < 0) {
       index = 0;
-      this.props.history.replace(`#${panes[0].menuItem.toLowerCase()}`);
+      navigate(`#${panes[0].menuItem.toLowerCase()}`, { replace: true });
     }
 
     this.state = {
@@ -67,27 +69,28 @@ class SingleProductPage extends React.Component<Props, State> {
   }
 
   componentDidMount() {
-    const { productId } = this.props.match.params;
+    const { params } = this.props.router;
 
     this.props.clearProduct();
-    this.props.fetchProduct(Number.parseInt(productId, 10));
+    this.props.fetchProduct(Number.parseInt(params.productId, 10));
   }
 
   componentDidUpdate(prevProps: Readonly<Props>) {
     const { product, status, t } = this.props;
+    const { navigate } = this.props.router;
 
     if (product === undefined) {
-      this.context.setTitle(t('entity.product'));
+      document.title = t('entity.product');
     } else if (getLanguage() === 'nl-NL') {
-      this.context.setTitle(product.nameDutch);
+      document.title = product.nameDutch;
     } else {
-      this.context.setTitle(product.nameEnglish);
+      document.title = product.nameEnglish;
     }
 
     if (status === ResourceStatus.EMPTY
       && prevProps.status === ResourceStatus.DELETING
     ) {
-      this.props.history.push('/product');
+      navigate('/product');
       this.props.showTransientAlert({
         title: 'Success',
         message: `Product ${prevProps.product?.nameEnglish} successfully deleted`,
@@ -187,6 +190,7 @@ class SingleProductPage extends React.Component<Props, State> {
 
   public render() {
     const { product, status, t } = this.props;
+    const { navigate } = this.props.router;
     const { paneIndex } = this.state;
     const useDutch = getLanguage() === 'nl-NL';
 
@@ -228,7 +232,7 @@ class SingleProductPage extends React.Component<Props, State> {
                 menu={{ pointing: true, inverted: true }}
                 onTabChange={(e, data) => {
                   this.setState({ paneIndex: data.activeIndex! as number });
-                  this.props.history.replace(`#${data.panes![data.activeIndex! as number].menuItem.toLowerCase()}`);
+                  navigate(`#${data.panes![data.activeIndex! as number].menuItem.toLowerCase()}`, { replace: true });
                 }}
                 activeIndex={paneIndex}
               />

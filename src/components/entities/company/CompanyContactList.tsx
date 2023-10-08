@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { NavLink, RouteComponentProps, withRouter } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import {
   Button, Icon, Loader,
 } from 'semantic-ui-react';
@@ -12,8 +12,9 @@ import { RootState } from '../../../stores/store';
 import AuthorizationComponent from '../../AuthorizationComponent';
 import CompanyContact from './CompanyContact';
 import { sortContactsByFunction } from '../../../helpers/contact';
+import { withRouter, WithRouter } from '../../../WithRouter';
 
-interface Props extends WithTranslation, RouteComponentProps {
+interface Props extends WithTranslation, WithRouter {
   company: Company | undefined;
 }
 
@@ -28,6 +29,7 @@ class CompanyContactList extends React.Component<Props, State> {
 
   public render() {
     const { company, t } = this.props;
+    const { location } = this.props.router;
 
     if (company === undefined) {
       return (
@@ -54,7 +56,7 @@ class CompanyContactList extends React.Component<Props, State> {
                 style={{ marginTop: '-0.5em' }}
                 basic
                 as={NavLink}
-                to={`${this.props.location.pathname}/contact/new`}
+                to={`${location.pathname}/contact/new`}
               >
                 <Icon name="plus" />
                 {t('pages.contacts.addContact')}
@@ -79,14 +81,14 @@ class CompanyContactList extends React.Component<Props, State> {
             style={{ marginTop: '-0.5em' }}
             basic
             as={NavLink}
-            to={`${this.props.location.pathname}/contact/new`}
+            to={`${location.pathname}/contact/new`}
           >
             <Icon name="plus" />
             {t('pages.contacts.addContact')}
           </Button>
         </h3>
         {contacts.map((contact) => (
-          <CompanyContact key={contact.id} contact={contact} />
+          <CompanyContact key={contact.id} contact={contact}/>
         ))}
       </>
     );

@@ -1,5 +1,4 @@
 import React from 'react';
-import { RouteComponentProps, withRouter } from 'react-router-dom';
 import {
   Button, Feed, Popup, Segment,
 } from 'semantic-ui-react';
@@ -22,8 +21,9 @@ import {
 import UserAvatar from '../entities/user/UserAvatar';
 import AuthorizationComponent from '../AuthorizationComponent';
 import { getLanguage } from '../../localization';
+import { withRouter } from '../../WithRouter';
 
-interface Props extends RouteComponentProps, WithTranslation {
+interface Props extends WithTranslation {
   activity: GeneralActivity;
   componentId: number;
   componentType: SingleEntities;

@@ -1,9 +1,8 @@
-import { applyMiddleware, combineReducers, createStore } from 'redux';
-import { createBrowserHistory } from 'history';
-import { composeWithDevTools } from 'redux-devtools-extension';
+import { combineReducers } from 'redux';
+import { BrowserHistory, createBrowserHistory } from 'history';
 import createSagaMiddleware from 'redux-saga';
 import { all, fork } from 'redux-saga/effects';
-import { connectRouter, routerMiddleware, RouterState } from 'connected-react-router';
+import { createRouterReducer, createRouterMiddleware } from '@lagunovsky/redux-react-router';
 
 import authReducer from './auth/reducer';
 import alertsReducer from './alerts/reducer';
@@ -25,6 +24,8 @@ import userSagas from './user/sagas';
 import { tablesReducer } from './tables/reducer';
 import { singleEntitiesReducer } from './single/reducer';
 import { summariesReducer } from './summaries/reducer';
+
+import { configureStore } from '@reduxjs/toolkit';
 
 // Import all watching sagas
 const watchSagas = [
@@ -52,18 +53,10 @@ const reducers = {
   single: singleEntitiesReducer,
 };
 
-export const history = createBrowserHistory();
-
-const createRootReducer = (historyObject: any) => combineReducers({
+const createRootReducer = (historyObject: BrowserHistory) => combineReducers({
   ...reducers,
-  router: connectRouter(historyObject),
+  router: createRouterReducer(historyObject),
 });
-
-export type RootState = {
-  [P in keyof typeof reducers]: ReturnType<typeof reducers[P]>;
-} & {
-  router: RouterState<any>;
-};
 
 function* rootSaga() {
   // Fetch general information
@@ -76,15 +69,17 @@ function* rootSaga() {
   yield all(watchSagas.map((saga) => saga()));
 }
 
-// Create store
-const sagaMiddleware = createSagaMiddleware();
-const store = createStore(
-  createRootReducer(history),
-  process.env.NODE_ENV === 'development'
-    ? composeWithDevTools(applyMiddleware(routerMiddleware(history), sagaMiddleware))
-    : applyMiddleware(routerMiddleware(history), sagaMiddleware),
-);
+export type RootState = ReturnType<typeof store.getState>;
 
+export const history = createBrowserHistory();
+const routerMiddleware = createRouterMiddleware(history);
+const sagaMiddleware = createSagaMiddleware();
+
+const store = configureStore({
+  reducer: createRootReducer(history),
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware({ serializableCheck: false }).prepend(sagaMiddleware).prepend(routerMiddleware),
+  // devTools: process.env.NODE_ENV === 'development',
+});
 sagaMiddleware.run(rootSaga);
 
 export default store;

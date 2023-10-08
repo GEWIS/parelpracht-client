@@ -3,19 +3,19 @@ import {
   Button, Dropdown, Icon, Modal,
 } from 'semantic-ui-react';
 import { connect } from 'react-redux';
-import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { Dispatch } from 'redux';
 import { withTranslation, WithTranslation } from 'react-i18next';
 import {
-  Body, Client, Contract, InvoiceCreateParams, InvoiceStatus, InvoiceSummary,
+  Body as SBody, Client, Contract, InvoiceCreateParams, InvoiceStatus, InvoiceSummary,
 } from '../clients/server.generated';
 import { RootState } from '../stores/store';
 import { SummaryCollections } from '../stores/summaries/summaries';
 import { getSummaryCollection } from '../stores/summaries/selectors';
 import { createSingle, fetchSingle } from '../stores/single/actionCreators';
 import { SingleEntities } from '../stores/single/single';
+import { withRouter } from '../WithRouter';
 
-interface SelfProps extends RouteComponentProps<{ contractId: string }>, WithTranslation {
+interface SelfProps extends WithTranslation {
 }
 
 interface Props extends SelfProps {
@@ -58,7 +58,7 @@ class ContractInvoiceModal extends React.Component<Props, State> {
     } else if (this.state.selectedInvoice !== undefined) {
       const client = new Client();
       await Promise.all(this.props.productInstanceIds.map((x) => {
-        return client.addProductToInvoice(this.state.selectedInvoice!, new Body({ productId: x }));
+        return client.addProductToInvoice(this.state.selectedInvoice!, new SBody({ productId: x }));
       }));
       fetchContract(contract.id);
     }
