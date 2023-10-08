@@ -1,4 +1,4 @@
-import { Invoice, InvoiceStatus, InvoiceSummary } from '../../clients/server.generated';
+import { ContractStatus, Invoice, InvoiceStatus, InvoiceSummary } from '../../clients/server.generated';
 import { RootState } from '../store';
 import { getSummary } from '../summaries/selectors';
 import { SummaryCollections } from '../summaries/summaries';
@@ -27,7 +27,7 @@ export function getInvoiceTitle(state: RootState, id: number): string {
 export function getInvoiceStatus(state: RootState, id: number): InvoiceStatus {
   return getSummary<InvoiceSummary>(
     state, SummaryCollections.Invoices, id,
-  )?.status ?? '...';
+  )?.status ?? '...' as InvoiceStatus;
 }
 
 export function getInvoiceValue(state: RootState, id: number): number {

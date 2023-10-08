@@ -26,7 +26,7 @@ export function getContractTitle(state: RootState, id: number): string {
 export function getContractStatus(state: RootState, id: number): ContractStatus {
   return getSummary<ContractSummary>(
     state, SummaryCollections.Contracts, id,
-  )?.status ?? '...';
+  )?.status ?? '...' as ContractStatus;
 }
 
 export function getContractValue(state: RootState, id: number): number {
