@@ -5,7 +5,6 @@ import {
   Checkbox, Form, Input,
 } from 'semantic-ui-react';
 import validator from 'validator';
-import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { withTranslation, WithTranslation } from 'react-i18next';
 import {
   Company, CompanyParams, CompanyStatus, Roles,
@@ -20,8 +19,9 @@ import CountrySelector from './CountrySelector';
 import AuthorizationComponent from '../../AuthorizationComponent';
 import TextArea from '../../TextArea';
 import { authedUserHasRole } from '../../../stores/auth/selectors';
+import { withRouter, WithRouter } from '../../../WithRouter';
 
-interface Props extends WithTranslation, RouteComponentProps {
+interface Props extends WithTranslation, WithRouter {
   create?: boolean;
   onCancel?: () => void;
 
@@ -71,7 +71,6 @@ class CompanyProps extends React.Component<Props, State> {
   componentDidUpdate(prevProps: Props) {
     if (prevProps.status === ResourceStatus.SAVING
       && this.props.status === ResourceStatus.FETCHED) {
-      // eslint-disable-next-line react/no-did-update-set-state
       this.setState({ editing: false });
     }
   }
@@ -134,7 +133,8 @@ class CompanyProps extends React.Component<Props, State> {
 
   remove = () => {
     if (!this.props.create && this.props.deleteCompany) {
-      this.props.history.push('/company');
+      const { navigate } = this.props.router;
+      navigate('/company');
       this.props.deleteCompany(this.props.company.id);
     }
   };
@@ -412,6 +412,5 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   ),
 });
 
-export default withTranslation()(
-  withRouter(connect(mapStateToProps, mapDispatchToProps)(CompanyProps)),
+export default withTranslation()(withRouter(connect(mapStateToProps, mapDispatchToProps)(CompanyProps)),
 );

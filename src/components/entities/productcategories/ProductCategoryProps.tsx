@@ -6,7 +6,6 @@ import {
 } from 'semantic-ui-react';
 import validator from 'validator';
 import { WithTranslation, withTranslation } from 'react-i18next';
-import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { CategoryParams, ProductCategory, Roles } from '../../../clients/server.generated';
 import { createSingle, deleteSingle, saveSingle } from '../../../stores/single/actionCreators';
 import ResourceStatus from '../../../stores/resourceStatus';
@@ -15,8 +14,9 @@ import PropsButtons from '../../PropsButtons';
 import { getSingle } from '../../../stores/single/selectors';
 import { SingleEntities } from '../../../stores/single/single';
 import AuthorizationComponent from '../../AuthorizationComponent';
+import { withRouter, WithRouter } from '../../../WithRouter';
 
-interface Props extends WithTranslation, RouteComponentProps {
+interface Props extends WithTranslation, WithRouter {
   create?: boolean;
   onCancel?: () => void;
 
@@ -93,7 +93,8 @@ class ProductCategoryProps extends React.Component<Props, State> {
 
   remove = () => {
     if (!this.props.create && this.props.deleteCategory) {
-      this.props.history.push('/category');
+      const { navigate } = this.props.router;
+      navigate('/category');
       this.props.deleteCategory(this.props.category.id);
     }
   };

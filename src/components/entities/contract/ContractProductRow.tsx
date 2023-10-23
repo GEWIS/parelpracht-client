@@ -1,5 +1,4 @@
 import React from 'react';
-import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { Checkbox, Table } from 'semantic-ui-react';
 import { ActivityType, ProductInstance, ProductInstanceStatus } from '../../../clients/server.generated';
 import './ContractComponent.scss';
@@ -8,8 +7,9 @@ import ProductInstanceLink from '../product/ProductInstanceLink';
 import { SingleEntities } from '../../../stores/single/single';
 import { formatStatus, getLastStatus } from '../../../helpers/activity';
 import InvoiceLink from '../invoice/InvoiceLink';
+import { withRouter } from '../../../WithRouter';
 
-interface Props extends RouteComponentProps {
+interface Props {
   productInstance: ProductInstance;
 
   selectFunction: (id: number) => void;

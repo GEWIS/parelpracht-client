@@ -6,7 +6,6 @@ import {
 } from 'semantic-ui-react';
 import { WithTranslation, withTranslation } from 'react-i18next';
 import validator from 'validator';
-import { RouteComponentProps, withRouter } from 'react-router-dom';
 import {
   Contact, ContactFunction, ContactParams, Gender, Roles,
 } from '../../../clients/server.generated';
@@ -23,8 +22,9 @@ import { TransientAlert } from '../../../stores/alerts/actions';
 import { showTransientAlert } from '../../../stores/alerts/actionCreators';
 
 import AuthorizationComponent from '../../AuthorizationComponent';
+import { withRouter, WithRouter } from '../../../WithRouter';
 
-interface Props extends WithTranslation, RouteComponentProps {
+interface Props extends WithTranslation, WithRouter {
   create?: boolean;
   onCompanyPage: boolean;
   onCancel?: () => void;
@@ -145,11 +145,12 @@ class ContactProps extends React.Component<Props, State> {
   remove = () => {
     if (!this.props.create) {
       this.props.deleteContact(this.props.contact.id);
+      const { navigate } = this.props.router;
       if (this.props.onCompanyPage) {
-        this.props.history.push(`/company/${this.props.contact.companyId}`);
+        navigate(`/company/${this.props.contact.companyId}`);
         this.props.fetchCompany(this.props.contact.companyId);
       } else {
-        this.props.history.push('/contact');
+        navigate('/contact');
       }
     }
   };

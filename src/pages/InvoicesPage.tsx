@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { RouteComponentProps, withRouter } from 'react-router-dom';
 import {
   Button,
   Container, Grid, Header, Icon, Popup, Segment,
@@ -14,15 +13,16 @@ import { fetchTable } from '../stores/tables/actionCreators';
 import { Tables } from '../stores/tables/tables';
 import AuthorizationComponent from '../components/AuthorizationComponent';
 import { TitleContext } from '../components/TitleContext';
+import { withRouter } from '../WithRouter';
 
-interface Props extends RouteComponentProps, WithTranslation {
+interface Props extends WithTranslation {
   refresh: () => void;
 }
 
 class InvoicesPage extends React.Component<Props> {
   componentDidMount() {
     const { t } = this.props;
-    this.context.setTitle(t('entity.invoices'));
+    document.title = t('entity.invoices');
   }
 
   updateTreasurerLastSeen = async () => {

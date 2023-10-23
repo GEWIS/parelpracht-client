@@ -2,7 +2,6 @@ import React, { ChangeEvent } from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import { Form, Input, TextArea } from 'semantic-ui-react';
-import { RouteComponentProps, withRouter } from 'react-router-dom';
 import validator from 'validator';
 import { withTranslation, WithTranslation } from 'react-i18next';
 import SemanticDatepicker from 'react-semantic-ui-datepickers';
@@ -29,8 +28,9 @@ import { formatDocumentIdTitle } from '../../../helpers/documents';
 import { TransientAlert } from '../../../stores/alerts/actions';
 import { showTransientAlert } from '../../../stores/alerts/actionCreators';
 import AuthorizationComponent from '../../AuthorizationComponent';
+import { withRouter, WithRouter } from '../../../WithRouter';
 
-interface Props extends RouteComponentProps, WithTranslation {
+interface Props extends WithTranslation, WithRouter {
   create?: boolean;
   onCancel?: () => void;
 
@@ -131,7 +131,8 @@ class InvoiceProps extends React.Component<Props, State> {
 
   remove = () => {
     if (!this.props.create) {
-      this.props.history.push('/invoice');
+      const { navigate } = this.props.router;
+      navigate('/invoice');
       this.props.deleteInvoice(this.props.invoice.id);
     }
   };

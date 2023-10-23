@@ -1,10 +1,10 @@
 import React from 'react';
 import { Provider } from 'react-redux';
-import { ConnectedRouter } from 'connected-react-router';
+import { ReduxRouter, ReduxRouterSelector } from '@lagunovsky/redux-react-router';
 import './App.scss';
 import './Form.scss';
 
-import store, { history } from './stores/store';
+import store, { history, RootState } from './stores/store';
 import Routes from './Routes';
 import { showAlert } from './stores/alerts/actionCreators';
 import AlertContainer from './components/alerts/AlertContainer';
@@ -42,11 +42,12 @@ class App extends React.Component<{}, State> {
         <AlertContainer />
       );
     }
+    const routerSelector: ReduxRouterSelector<RootState> = (state) => state.router;
     return (
       <Provider store={store}>
-        <ConnectedRouter history={history}>
+        <ReduxRouter history={history} routerSelector={routerSelector}>
           <Routes />
-        </ConnectedRouter>
+        </ReduxRouter>
       </Provider>
     );
   }

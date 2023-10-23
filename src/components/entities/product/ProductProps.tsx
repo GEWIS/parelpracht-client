@@ -6,7 +6,6 @@ import {
 } from 'semantic-ui-react';
 import { withTranslation, WithTranslation } from 'react-i18next';
 import validator from 'validator';
-import { RouteComponentProps, withRouter } from 'react-router-dom';
 import {
   Client, PaginationParams,
   Product, ProductParams, ProductStatus, Roles,
@@ -22,8 +21,9 @@ import PropsButtons from '../../PropsButtons';
 import TextArea from '../../TextArea';
 import { authedUserHasRole } from '../../../stores/auth/selectors';
 import ProductVatSelector from './ProductVatSelector';
+import { withRouter, WithRouter } from '../../../WithRouter';
 
-interface Props extends WithTranslation, RouteComponentProps {
+interface Props extends WithTranslation, WithRouter {
   create?: boolean;
   onCancel?: () => void;
 
@@ -142,8 +142,9 @@ class ProductProps extends React.Component<Props, State> {
   };
 
   remove = () => {
+    const { navigate } = this.props.router;
     if (!this.props.create && this.props.deleteProduct) {
-      this.props.history.push('/product');
+      navigate('/product');
       this.props.deleteProduct(this.props.product.id);
     }
   };

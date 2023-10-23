@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import {
   Button, Grid, Icon, Popup, Step,
 } from 'semantic-ui-react';
-import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { withTranslation, WithTranslation } from 'react-i18next';
 import { GeneralActivity } from './GeneralActivity';
 import FinancialDocumentStep from './FinancialDocumentStep';
@@ -24,8 +23,9 @@ import ResourceStatus from '../../stores/resourceStatus';
 import { Roles } from '../../clients/server.generated';
 import AuthorizationComponent from '../AuthorizationComponent';
 import { getLanguage } from '../../localization';
+import { withRouter } from '../../WithRouter';
 
-interface Props extends RouteComponentProps, WithTranslation {
+interface Props extends WithTranslation {
   documentId: number;
   // If the document is a ProductInstance, the parentId is the contract ID
   parentId?: number;

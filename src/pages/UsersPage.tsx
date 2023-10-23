@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { RouteComponentProps, withRouter } from 'react-router-dom';
 import {
   Button, Container, Grid, Header, Icon, Segment,
 } from 'semantic-ui-react';
@@ -7,10 +6,12 @@ import { useTranslation } from 'react-i18next';
 import UsersTable from '../components/entities/user/UserTable';
 import UserTableControls from '../components/entities/user/UserTableControls';
 import { useTitle } from '../components/TitleContext';
+import { withRouter, WithRouter } from '../WithRouter';
 
-function UsersPage(props: RouteComponentProps) {
+function UsersPage(props: WithRouter) {
   const { t } = useTranslation();
   const { setTitle } = useTitle();
+  const { navigate } = props.router;
 
   React.useEffect(() => {
     setTitle(t('entity.users'));
@@ -31,7 +32,7 @@ function UsersPage(props: RouteComponentProps) {
               </Header>
             </Grid.Column>
             <Grid.Column>
-              <Button icon labelPosition="left" primary floated="right" onClick={() => props.history.push('/user/new')}>
+              <Button icon labelPosition="left" primary floated="right" onClick={() => navigate('/users/new')}>
                 <Icon name="plus" />
                 {t('pages.users.addUser')}
               </Button>

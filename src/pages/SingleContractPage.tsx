@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { NavLink, RouteComponentProps, withRouter } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import {
   Breadcrumb, Container, Grid, Loader, Segment, Tab,
 } from 'semantic-ui-react';
@@ -25,8 +25,9 @@ import GenerateContractModal from '../components/files/GenerateContractModal';
 import { authedUserHasRole } from '../stores/auth/selectors';
 import NotFound from './NotFound';
 import { TitleContext } from '../components/TitleContext';
+import { withRouter, WithRouter } from '../WithRouter';
 
-interface Props extends RouteComponentProps<{ contractId: string }>, WithTranslation {
+interface Props extends WithTranslation, WithRouter {
   contract: Contract | undefined;
   status: ResourceStatus;
 
@@ -43,9 +44,10 @@ interface State {
 class SingleContractPage extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
+    const { location, navigate } = this.props.router;
 
     const panes = this.getPanes();
-    let { hash } = this.props.location;
+    let { hash } = location;
     // If there is no hash, do not take the first (#) character
     if (hash.length > 0) {
       hash = hash.substr(1);
@@ -56,7 +58,7 @@ class SingleContractPage extends React.Component<Props, State> {
     // select the first one by default
     if (index < 0) {
       index = 0;
-      this.props.history.replace(`#${panes[0].menuItem.toLowerCase()}`);
+      navigate(`#${panes[0].menuItem.toLowerCase()}`, { replace: true });
     }
 
     this.state = {
@@ -65,25 +67,26 @@ class SingleContractPage extends React.Component<Props, State> {
   }
 
   componentDidMount() {
-    const { contractId } = this.props.match.params;
+    const { params } = this.props.router;
 
     this.props.clearContract();
-    this.props.fetchContract(Number.parseInt(contractId, 10));
+    this.props.fetchContract(Number.parseInt(params.contractId, 10));
   }
 
   public componentDidUpdate(prevProps: Readonly<Props>) {
     const { contract, status, t } = this.props;
+    const { navigate } = this.props.router;
 
     if (contract === undefined) {
-      this.context.setTitle(t('entity.contract'));
+      document.title = t('entity.contract');
     } else {
-      this.context.setTitle(`C${contract.id} ${contract.title}`);
+      document.title = `C${contract.id} ${contract.title}`;
     }
 
     if (status === ResourceStatus.EMPTY
       && prevProps.status === ResourceStatus.DELETING
     ) {
-      this.props.history.push('/contract');
+      navigate('/contract');
       this.props.showTransientAlert({
         title: 'Success',
         message: `Contract ${prevProps.contract?.title} successfully deleted`,
@@ -154,6 +157,7 @@ class SingleContractPage extends React.Component<Props, State> {
   public render() {
     const { contract, status, t } = this.props;
     const { paneIndex } = this.state;
+    const { navigate } = this.props.router;
 
     if (status === ResourceStatus.NOTFOUND) {
       return <NotFound />;
@@ -207,14 +211,16 @@ class SingleContractPage extends React.Component<Props, State> {
                   menu={{ pointing: true, inverted: true }}
                   onTabChange={(e, data) => {
                     this.setState({ paneIndex: data.activeIndex! as number });
-                    this.props.history.replace(`#${data.panes![data.activeIndex! as number].menuItem.toLowerCase()}`);
+                    navigate(`#${data.panes![data.activeIndex! as number].menuItem.toLowerCase()}`, { replace: true });
                   }}
                   activeIndex={paneIndex}
                 />
               </Grid.Column>
               <Grid.Column width={6}>
                 <Segment secondary style={{ backgroundColor: 'rgba(243, 244, 245, 0.98)' }}>
-                  <ContractProps contract={contract} />
+                  <ContractProps
+                    contract={contract}
+                  />
                 </Segment>
               </Grid.Column>
             </Grid.Row>

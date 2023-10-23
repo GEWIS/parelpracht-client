@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { RouteComponentProps, withRouter } from 'react-router-dom';
 import {
   Button, Container, Grid, Header, Icon, Segment,
 } from 'semantic-ui-react';
@@ -9,10 +8,13 @@ import AuthorizationComponent from '../components/AuthorizationComponent';
 import ContractsTable from '../components/entities/contract/ContractTable';
 import ContractTableControls from '../components/entities/contract/ContractTableControls';
 import { useTitle } from '../components/TitleContext';
+import { useNavigate } from 'react-router-dom';
+import { withRouter } from '../WithRouter';
 
-function ContractsPage(props: RouteComponentProps) {
+function ContractsPage() {
   const { t } = useTranslation();
   const { setTitle } = useTitle();
+  const history = useNavigate();
 
   React.useEffect(() => {
     setTitle(t('entity.contracts'));
@@ -37,7 +39,7 @@ function ContractsPage(props: RouteComponentProps) {
             </Grid.Column>
             <Grid.Column>
               <AuthorizationComponent roles={[Roles.GENERAL, Roles.ADMIN]} notFound={false}>
-                <Button icon labelPosition="left" primary floated="right" onClick={() => props.history.push('/contract/new')}>
+                <Button icon labelPosition="left" primary floated="right" onClick={() => history('/contract/new')}>
                   <Icon name="plus" />
                   {t('pages.contracts.addContract')}
                 </Button>

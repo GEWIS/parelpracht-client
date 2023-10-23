@@ -1,6 +1,6 @@
 import React from 'react';
 import { Modal, Segment } from 'semantic-ui-react';
-import marked from 'marked';
+import { marked } from 'marked';
 import releaseNotes from '../changelog.md';
 
 export const version = 'v1.3.2';
@@ -20,7 +20,7 @@ class VersionModal extends React.Component<Props, State> {
 
   async componentDidMount() {
     const rawLog = await fetch(releaseNotes);
-    const changelog = await marked(await rawLog.text());
+    const changelog = marked(await rawLog.text());
     this.setState({
       changelog,
     });

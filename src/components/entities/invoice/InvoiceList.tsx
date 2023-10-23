@@ -1,7 +1,6 @@
 import React from 'react';
 import { withTranslation, WithTranslation } from 'react-i18next';
 import { connect } from 'react-redux';
-import { RouteComponentProps, withRouter } from 'react-router-dom';
 import {
   Loader, Table,
 } from 'semantic-ui-react';
@@ -10,8 +9,9 @@ import { getSingle } from '../../../stores/single/selectors';
 import { SingleEntities } from '../../../stores/single/single';
 import { RootState } from '../../../stores/store';
 import InvoiceComponent from './InvoiceComponent';
+import { withRouter } from '../../../WithRouter';
 
-interface Props extends WithTranslation, RouteComponentProps {
+interface Props extends WithTranslation {
   company: Company | undefined;
 }
 

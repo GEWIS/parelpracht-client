@@ -1,5 +1,4 @@
 import React from 'react';
-import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { Button, Icon, Table } from 'semantic-ui-react';
 import { withTranslation, WithTranslation } from 'react-i18next';
 import { SingleEntities } from '../../stores/single/single';
@@ -9,8 +8,9 @@ import { GeneralFile } from './GeneralFile';
 import SingleFile from './SingleFile';
 import AuthorizationComponent from '../AuthorizationComponent';
 import './FilesList.scss';
+import { withRouter } from '../../WithRouter';
 
-interface Props extends WithTranslation, RouteComponentProps {
+interface Props extends WithTranslation {
   files: GeneralFile[];
   entityId: number;
   entity: SingleEntities;

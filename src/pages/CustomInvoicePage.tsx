@@ -1,5 +1,4 @@
 import React from 'react';
-import { RouteComponentProps, withRouter } from 'react-router-dom';
 import {
   Button, Container, Grid, Header, Icon, Segment,
 } from 'semantic-ui-react';
@@ -20,8 +19,9 @@ import { FilesClient } from '../clients/filesClient';
 import AuthorizationComponent from '../components/AuthorizationComponent';
 import { isInvalidDate } from '../helpers/timestamp';
 import { TitleContext } from '../components/TitleContext';
+import { WithRouter, withRouter } from '../WithRouter';
 
-interface Props extends RouteComponentProps, WithTranslation {}
+interface Props extends WithTranslation, WithRouter {}
 
 interface State {
   language: Language;
@@ -69,7 +69,7 @@ class CustomInvoicePage extends React.Component<Props, State> {
 
   componentDidMount() {
     const { t } = this.props;
-    this.context.setTitle(t('pages.customInvoice.title'));
+    document.title = t('pages.customInvoice.title');
   }
 
   setAttribute = (attribute: string, value: string) => {

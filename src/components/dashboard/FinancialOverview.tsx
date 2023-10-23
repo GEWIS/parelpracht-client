@@ -3,15 +3,17 @@ import {
   Dropdown, Grid, Popup, Segment, Table,
 } from 'semantic-ui-react';
 import { WithTranslation, withTranslation } from 'react-i18next';
-import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { Bar } from 'react-chartjs-2';
 import { Client, DashboardProductInstanceStats } from '../../clients/server.generated';
 import { dateToFinancialYear } from '../../helpers/timestamp';
 import { formatPriceFull } from '../../helpers/monetary';
 import './FinancialOverview.scss';
 import { FinancialOverviewField } from './FinancialOverviewField';
-
-interface Props extends RouteComponentProps, WithTranslation {}
+import { ChartData } from 'chart.js';
+import { ChartJSOrUndefined } from 'react-chartjs-2/dist/types';
+import { useNavigate } from 'react-router-dom';
+import { withRouter } from '../../WithRouter';
+interface Props extends WithTranslation {}
 
 interface State {
   data?: DashboardProductInstanceStats;
@@ -21,7 +23,8 @@ interface State {
 }
 
 class FinancialOverview extends React.Component<Props, State> {
-  private readonly chart: React.RefObject<Bar>;
+  private readonly chart: React.RefObject<ChartJSOrUndefined<'bar'>>;
+
 
   constructor(props: Props) {
     super(props);
@@ -44,7 +47,7 @@ class FinancialOverview extends React.Component<Props, State> {
   }
 
   componentWillUnmount() {
-    this.chart.current?.chartInstance.destroy();
+    this.chart.current?.destroy();
   }
 
   // goToInsightsTable = (e: MouseEvent | undefined, data: any[]) => {
@@ -63,7 +66,8 @@ class FinancialOverview extends React.Component<Props, State> {
 
   goToInsightsTable = (status: 'suggested' | 'contracted' | 'delivered' | 'invoiced') => {
     const { financialYear } = this.state;
-    this.props.history.push(`/insights#${status}&${financialYear}`);
+    const history = useNavigate();
+    history(`/insights#${status}&${financialYear}`);
   };
 
   async updateGraph(year: number) {
@@ -76,7 +80,7 @@ class FinancialOverview extends React.Component<Props, State> {
     });
   }
 
-  createBarChartDataObject(): object {
+  createBarChartDataObject(): ChartData<'bar'> {
     const { t } = this.props;
     const { data } = this.state;
     return {
@@ -94,8 +98,8 @@ class FinancialOverview extends React.Component<Props, State> {
           borderWidth: 1,
           hoverBackgroundColor: 'rgba(255, 148, 128, 0.8)',
           hoverBorderColor: 'rgba(41, 48, 101, 1)',
-          data: [data?.suggested.amount, data?.contracted.amount, data?.delivered.amount,
-            data?.invoiced.delivered.amount, data?.paid.amount],
+          data: data ? [data?.suggested.amount, data?.contracted.amount, data?.delivered.amount,
+            data?.invoiced.delivered.amount, data?.paid.amount] : [],
         },
         {
           label: t('dashboard.financialOverview.delivered'),
@@ -104,7 +108,7 @@ class FinancialOverview extends React.Component<Props, State> {
           borderWidth: 1,
           hoverBackgroundColor: 'rgba(255, 148, 128, 0.8)',
           hoverBorderColor: 'rgba(41, 48, 101, 1)',
-          data: [0, 0, 0, data?.invoiced.notDelivered.amount, 0],
+          data: data ? [0, 0, 0, data?.invoiced.notDelivered.amount, 0] : [],
         },
       ],
     };
@@ -154,27 +158,30 @@ class FinancialOverview extends React.Component<Props, State> {
             ref={this.chart}
             data={chartData}
             options={{
-              legend: {
-                display: false,
-              },
               scales: {
-                xAxes: [{
+                x: {
                   stacked: true,
-                }],
-                yAxes: [{
+                },
+                y : {
                   stacked: true,
+                  beginAtZero: true,
                   ticks: {
-                    beginAtZero: true,
-                    callback(value: number) {
+                    callback(value: number | string) {
+                      if (typeof value === 'string') return 'TEMP';
                       return formatPriceFull(value);
                     },
                   },
-                }],
+                },
               },
-              tooltips: {
-                callbacks: {
-                  label(tooltipItem: any) {
-                    return formatPriceFull(tooltipItem.yLabel);
+              plugins: {
+                legend: {
+                  display: false,
+                },
+                tooltip: {
+                  callbacks: {
+                    label(tooltipItem: any) {
+                      return formatPriceFull(tooltipItem.raw);
+                    },
                   },
                 },
               },

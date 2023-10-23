@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { NavLink, RouteComponentProps, withRouter } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import { Table } from 'semantic-ui-react';
 import { Contract, ContractStatus } from '../../../clients/server.generated';
 import { getCompanyName } from '../../../stores/company/selectors';
@@ -11,8 +11,9 @@ import { getContractStatus, getContractValue } from '../../../stores/contract/se
 import { formatStatus } from '../../../helpers/activity';
 import CompanyLink from '../company/CompanyLink';
 import { formatPriceFull } from '../../../helpers/monetary';
+import { withRouter } from '../../../WithRouter';
 
-interface Props extends RouteComponentProps {
+interface Props {
   contract: Contract;
   contactName: string;
   contractStatus: ContractStatus;

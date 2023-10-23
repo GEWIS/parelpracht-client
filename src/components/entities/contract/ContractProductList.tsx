@@ -1,5 +1,5 @@
 import React from 'react';
-import { NavLink, RouteComponentProps, withRouter } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import {
   Button, Icon, Loader, Table,
 } from 'semantic-ui-react';
@@ -13,8 +13,9 @@ import { formatPriceFull } from '../../../helpers/monetary';
 import ContractInvoiceModal from '../../../pages/ContractInvoiceModal';
 import AuthorizationComponent from '../../AuthorizationComponent';
 import { getLastStatus } from '../../../helpers/activity';
+import { WithRouter, withRouter } from '../../../WithRouter';
 
-interface Props extends RouteComponentProps, WithTranslation {
+interface Props extends WithTranslation, WithRouter {
   contract: Contract;
 }
 
@@ -53,6 +54,7 @@ class ContractProductList extends React.Component<Props, State> {
   public render() {
     const { contract, t } = this.props;
     const { selected } = this.state;
+    const { location } = this.props.router;
 
     if (contract === undefined) {
       return (
@@ -101,7 +103,7 @@ class ContractProductList extends React.Component<Props, State> {
               style={{ marginTop: '-0.5em' }}
               basic
               as={NavLink}
-              to={`${this.props.location.pathname}/product/new`}
+              to={`${location.pathname}/product/new`}
               disabled={!canChangeProducts}
             >
               <Icon name="plus" />

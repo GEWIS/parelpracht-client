@@ -1,18 +1,19 @@
 import React from 'react';
-import { RouteComponentProps, withRouter } from 'react-router-dom';
 import {
   Button, Header, Icon, Segment,
 } from 'semantic-ui-react';
 import { Contact, ContactFunction } from '../../../clients/server.generated';
 import { formatContactName, formatFunction } from '../../../helpers/contact';
 import './CompanyContact.scss';
+import { withRouter, WithRouter } from '../../../WithRouter';
 
-interface Props extends RouteComponentProps {
+interface Props extends WithRouter {
   contact: Contact;
 }
 
 function CompanyContact(props: Props) {
   const { contact } = props;
+  const { navigate, location } = props.router;
 
   return (
     <Segment.Group
@@ -20,9 +21,7 @@ function CompanyContact(props: Props) {
       className="company-contact"
       style={{ margin: 0, marginTop: '0.2em' }}
       onClick={() => {
-        props.history.push(
-          `${props.location.pathname}/contact/${contact.id}`,
-        );
+        navigate(`${location.pathname}/contact/${contact.id}`);
       }}
     >
       <Segment

@@ -4,7 +4,6 @@ import {
 } from 'semantic-ui-react';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
-import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { withTranslation, WithTranslation } from 'react-i18next';
 import { Gender, Roles, User } from '../clients/server.generated';
 import { RootState } from '../stores/store';
@@ -15,8 +14,9 @@ import { SingleEntities } from '../stores/single/single';
 import { getSingle } from '../stores/single/selectors';
 import { clearSingle, fetchSingle } from '../stores/single/actionCreators';
 import { TitleContext } from '../components/TitleContext';
+import { withRouter, WithRouter } from '../WithRouter';
 
-interface Props extends RouteComponentProps, WithTranslation {
+interface Props extends WithTranslation, WithRouter {
   status: ResourceStatus;
 
   clearUser: () => void;
@@ -26,7 +26,7 @@ class UserCreatePage extends React.Component<Props> {
   componentDidMount() {
     const { clearUser, t } = this.props;
     clearUser();
-    this.context.setTitle(t('pages.user.newUser'));
+    document.title = t('pages.user.newUser');
   }
 
   componentDidUpdate(prevProps: Props) {
@@ -36,7 +36,10 @@ class UserCreatePage extends React.Component<Props> {
     }
   }
 
-  close = () => { this.props.history.push('/users'); };
+  close = () => {
+    const { navigate } = this.props.router;
+    navigate('/users');
+  };
 
   public render() {
     const user: User = {

@@ -1,7 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Step } from 'semantic-ui-react';
-import { RouteComponentProps, withRouter } from 'react-router-dom';
 import {
   formatStatus,
 } from '../../helpers/activity';
@@ -12,11 +11,12 @@ import ResourceStatus from '../../stores/resourceStatus';
 import { Roles } from '../../clients/server.generated';
 import { RootState } from '../../stores/store';
 import { authedUserHasRole } from '../../stores/auth/selectors';
+import { withRouter } from '../../WithRouter';
 
 /**
  * Definition of used variables
  */
-interface Props extends RouteComponentProps {
+interface Props {
   documentId: number;
   documentType: SingleEntities;
   // If the document is a ProductInstance, the parentId is the contract ID

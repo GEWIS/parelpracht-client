@@ -111,7 +111,6 @@ function* errorFetchSingleValueAddedTax(
 
 function* saveSingleValueAddedTax(
   action: SingleSaveAction<SingleEntities.ValueAddedTax, CategoryParams>,
-  // TODO; set params for saving in backend!!!
 ) {
   const client = new Client();
   yield call([client, client.updateVAT], action.id, action.data);
@@ -201,6 +200,4 @@ export default [
     );
   },
   watchSaveSingleValueAddedTax,
-  // watchCreateSingleProductCategory,
-  // watchDeleteSingleProductCategory,
 ];

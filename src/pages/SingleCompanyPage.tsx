@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { NavLink, RouteComponentProps, withRouter } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import {
   Breadcrumb, Container, Grid, Loader, Segment, Tab,
 } from 'semantic-ui-react';
@@ -27,8 +27,9 @@ import { authedUserHasRole } from '../stores/auth/selectors';
 import AuthorizationComponent from '../components/AuthorizationComponent';
 import NotFound from './NotFound';
 import { TitleContext } from '../components/TitleContext';
+import { WithRouter, withRouter } from '../WithRouter';
 
-interface Props extends WithTranslation, RouteComponentProps<{ companyId: string }> {
+interface Props extends WithTranslation, WithRouter {
   company: Company | undefined;
   status: ResourceStatus;
 
@@ -45,9 +46,10 @@ interface State {
 class SingleCompanyPage extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
+    const { location, navigate } = this.props.router;
 
     const panes = this.getPanes();
-    let { hash } = this.props.location;
+    let { hash } = location;
     // If there is no hash, do not take the first (#) character
     if (hash.length > 0) {
       hash = hash.substr(1);
@@ -58,7 +60,7 @@ class SingleCompanyPage extends React.Component<Props, State> {
     // select the first one by default
     if (index < 0) {
       index = 0;
-      this.props.history.replace(`#${panes[0].menuItem.toLowerCase()}`);
+      navigate(`#${panes[0].menuItem.toLowerCase()}`, { replace: true });
     }
 
     this.state = {
@@ -67,25 +69,26 @@ class SingleCompanyPage extends React.Component<Props, State> {
   }
 
   componentDidMount() {
-    const { companyId } = this.props.match.params;
+    const { params } = this.props.router;
 
     this.props.clearCompany();
-    this.props.fetchCompany(Number.parseInt(companyId, 10));
+    this.props.fetchCompany(Number.parseInt(params.companyId, 10));
   }
 
   componentDidUpdate(prevProps: Readonly<Props>) {
     const { company, status, t } = this.props;
+    const { navigate } = this.props.router;
 
     if (company === undefined) {
-      this.context.setTitle(t('entity.company'));
+      document.title = t('entity.company');
     } else {
-      this.context.setTitle(company.name);
+      document.title = company.name;
     }
 
     if (status === ResourceStatus.EMPTY
       && prevProps.status === ResourceStatus.DELETING
     ) {
-      this.props.history.push('/company');
+      navigate('/company');
       this.props.showTransientAlert({
         title: 'Success',
         message: `Company ${prevProps.company?.name} successfully deleted`,
@@ -184,13 +187,14 @@ class SingleCompanyPage extends React.Component<Props, State> {
   public render() {
     const { company, status, t } = this.props;
     const { paneIndex } = this.state;
+    const { navigate } = this.props.router;
 
     if (status === ResourceStatus.NOTFOUND) {
       return <NotFound />;
     }
 
     if (company === undefined) {
-      this.context.setTitle(t('entity.company'));
+      document.title = t('entity.company');
       return (
         <AuthorizationComponent
           roles={[Roles.GENERAL, Roles.ADMIN, Roles.AUDIT]}
@@ -204,7 +208,7 @@ class SingleCompanyPage extends React.Component<Props, State> {
     }
 
     const panes = this.getPanes();
-    this.context.setTitle(company.name);
+    document.title = company.name;
 
     return (
       <AuthorizationComponent
@@ -231,7 +235,7 @@ class SingleCompanyPage extends React.Component<Props, State> {
                 menu={{ pointing: true, inverted: true }}
                 onTabChange={(e, data) => {
                   this.setState({ paneIndex: data.activeIndex! as number });
-                  this.props.history.replace(`#${data.panes![data.activeIndex! as number].menuItem.toLowerCase()}`);
+                  navigate(`#${data.panes![data.activeIndex! as number].menuItem.toLowerCase()}`, { replace: true });
                 }}
                 activeIndex={paneIndex}
               />

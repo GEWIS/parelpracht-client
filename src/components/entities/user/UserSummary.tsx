@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { connect } from 'react-redux';
-import { Redirect, RouteComponentProps, withRouter } from 'react-router-dom';
+import { Navigate as Redirect } from 'react-router-dom';
 import { Dispatch } from 'redux';
 import { useTranslation } from 'react-i18next';
 import { User } from '../../../clients/server.generated';
@@ -12,8 +12,9 @@ import { RootState } from '../../../stores/store';
 import LogoAvatarModal from '../../files/LogoAvatarModal';
 import { fetchSingle } from '../../../stores/single/actionCreators';
 import { EntitySummary } from '../EntitySummary';
+import { withRouter } from '../../../WithRouter';
 
-interface Props extends RouteComponentProps {
+interface Props {
   user: User | undefined;
   status: ResourceStatus;
   fetchUser: (id: number) => void;

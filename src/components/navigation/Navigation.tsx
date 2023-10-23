@@ -18,7 +18,7 @@ function Navigation() {
   return (
     <Menu fixed="top" inverted size="large" className="main-menu">
       <Container>
-        <Menu.Item as={NavLink} header to="/" exact title="Home">
+        <Menu.Item as={NavLink} header to="/" title="Home">
           <Image
             className="logo"
             src="/ParelPracht-whitesvg.svg"

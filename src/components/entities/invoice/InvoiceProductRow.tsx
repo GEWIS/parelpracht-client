@@ -1,5 +1,4 @@
 import React from 'react';
-import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { Icon, Table } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
@@ -13,8 +12,9 @@ import ResourceStatus from '../../../stores/resourceStatus';
 import { TransientAlert } from '../../../stores/alerts/actions';
 import { showTransientAlert } from '../../../stores/alerts/actionCreators';
 import AuthorizationComponent from '../../AuthorizationComponent';
+import { withRouter } from '../../../WithRouter';
 
-interface Props extends RouteComponentProps {
+interface Props {
   productInstance: ProductInstance;
   removeProduct: (id: number) => void;
   canDelete: boolean;

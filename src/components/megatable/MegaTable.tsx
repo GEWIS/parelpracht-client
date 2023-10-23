@@ -5,7 +5,6 @@ import {
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import { withTranslation, WithTranslation } from 'react-i18next';
-import { RouteComponentProps, withRouter } from 'react-router-dom';
 import MegaTableRow from './MegaTableRow';
 import { RootState } from '../../stores/store';
 import { countFetched, countTotal, getTable } from '../../stores/tables/selectors';
@@ -29,8 +28,9 @@ import { ContractStatus, ETCompany, ProductInstanceStatus } from '../../clients/
 import { formatPriceFull } from '../../helpers/monetary';
 import ContractStatusFilter from '../tablefilters/ContractStatusFilter';
 import { dateToFinancialYear } from '../../helpers/timestamp';
+import { withRouter, WithRouter } from '../../WithRouter';
 
-interface Props extends WithTranslation, RouteComponentProps {
+interface Props extends WithTranslation, WithRouter {
   companies: ETCompany[];
   nrOfProducts: number;
   sumProducts: number;
@@ -60,7 +60,8 @@ class MegaTable extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
 
-    let { hash } = this.props.location;
+    const { location } = this.props.router;
+    let { hash } = location;
     // If there is no hash, do not take the first (#) character
     if (hash.length > 0) {
       hash = hash.substr(1);

@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { NavLink, RouteComponentProps, withRouter } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import {
   Button, Icon, Loader, Table,
 } from 'semantic-ui-react';
@@ -11,8 +11,9 @@ import { getSingle } from '../../../stores/single/selectors';
 import { SingleEntities } from '../../../stores/single/single';
 import { RootState } from '../../../stores/store';
 import AuthorizationComponent from '../../AuthorizationComponent';
+import { withRouter, WithRouter } from '../../../WithRouter';
 
-interface Props extends WithTranslation, RouteComponentProps {
+interface Props extends WithTranslation, WithRouter {
   company: Company | undefined;
 }
 
@@ -27,6 +28,7 @@ class ContractList extends React.Component<Props, State> {
 
   public render() {
     const { company, t } = this.props;
+    const { location } = this.props.router;
 
     if (company === undefined) {
       return (
@@ -48,7 +50,7 @@ class ContractList extends React.Component<Props, State> {
               style={{ marginTop: '-0.5em' }}
               basic
               as={NavLink}
-              to={`${this.props.location.pathname}/contract/new`}
+              to={`${location.pathname}/contract/new`}
             >
               <Icon name="plus" />
               {t('pages.contracts.addContract')}
@@ -74,7 +76,7 @@ class ContractList extends React.Component<Props, State> {
               style={{ marginTop: '-0.5em' }}
               basic
               as={NavLink}
-              to={`${this.props.location.pathname}/contract/new`}
+              to={`${location.pathname}/contract/new`}
             >
               <Icon name="plus" />
               {t('pages.contracts.addContract')}

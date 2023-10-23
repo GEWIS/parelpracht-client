@@ -1,5 +1,4 @@
 import React from 'react';
-import { RouteComponentProps, withRouter } from 'react-router-dom';
 import {
   Container, Grid, Header, Icon, Segment,
 } from 'semantic-ui-react';
@@ -12,8 +11,9 @@ import DashboardContracts from '../components/dashboard/DashboardContracts';
 import FinancialOverview from '../components/dashboard/FinancialOverview';
 import DashboardContractedCategoryGraph from '../components/dashboard/DashboardContractedCategoryGraph';
 import { useTitle } from '../components/TitleContext';
+import { withRouter } from '../WithRouter';
 
-interface Props extends WithTranslation, RouteComponentProps {
+interface Props extends WithTranslation {
   // eslint-disable-next-line react/no-unused-prop-types
   user: User | undefined;
 }

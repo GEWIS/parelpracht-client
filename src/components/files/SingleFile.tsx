@@ -1,5 +1,4 @@
 import React from 'react';
-import { RouteComponentProps, withRouter } from 'react-router-dom';
 import {
   Button, Icon, Input, Popup, Table,
 } from 'semantic-ui-react';
@@ -16,8 +15,9 @@ import { SingleEntities } from '../../stores/single/single';
 import { GeneralFile } from './GeneralFile';
 import ResourceStatus from '../../stores/resourceStatus';
 import AuthorizationComponent from '../AuthorizationComponent';
+import { withRouter } from '../../WithRouter';
 
-interface Props extends RouteComponentProps, WithTranslation {
+interface Props extends WithTranslation {
   file: GeneralFile;
   create: boolean;
   closeCreate?: (shouldUpdate: boolean) => void;

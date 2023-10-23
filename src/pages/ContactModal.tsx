@@ -7,7 +7,7 @@ import {
 } from 'semantic-ui-react';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
-import { NavLink, RouteComponentProps, withRouter } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import { withTranslation, WithTranslation } from 'react-i18next';
 import {
   Contact, ContactFunction, ContractStatus, Gender,
@@ -26,9 +26,9 @@ import { formatStatus } from '../helpers/activity';
 import { getContractStatus } from '../stores/contract/selectors';
 import CompanyLink from '../components/entities/company/CompanyLink';
 import { TitleContext } from '../components/TitleContext';
+import { withRouter, WithRouter } from '../WithRouter';
 
-interface Props extends RouteComponentProps<{ companyId: string, contactId?: string }>,
-  WithTranslation {
+interface Props extends WithTranslation, WithRouter {
   create?: boolean;
   onCompanyPage: boolean;
   contact: Contact | undefined;
@@ -48,10 +48,9 @@ class ContactModal extends React.Component<Props> {
 
   componentDidMount() {
     this.props.clearContact();
-
-    const { contactId } = this.props.match.params;
-    if (!this.props.create && contactId !== undefined) {
-      this.props.fetchContact(parseInt(contactId, 10));
+    const { params } = this.props.router;
+    if (!this.props.create && params.contactId !== undefined) {
+      this.props.fetchContact(parseInt(params.contactId, 10));
     }
   }
 
@@ -81,26 +80,26 @@ class ContactModal extends React.Component<Props> {
   }
 
   closeWithPopupMessage = () => {
-    const { companyId } = this.props.match.params;
+    const { params, navigate } = this.props.router;
 
     // If the modal is not opened on a company page, we cannot refresh the company information
-    if (companyId !== undefined) {
-      this.props.fetchCompany(parseInt(companyId, 10));
+    if (params.companyId !== undefined) {
+      this.props.fetchCompany(parseInt(params.companyId, 10));
     }
-    if (companyId === undefined) {
-      this.props.history.push('/contact');
+    if (params.companyId === undefined) {
+      navigate('/contact');
     } else {
-      this.props.history.push(`/company/${companyId}`);
+      navigate(`/company/${params.companyId}`);
     }
   };
 
   close = () => {
-    const { companyId } = this.props.match.params;
+    const { params, navigate } = this.props.router;
     // If the modal is not opened on a company page, we cannot refresh the company information
-    if (companyId !== undefined) {
-      this.props.fetchCompany(parseInt(companyId, 10));
+    if (params.companyId !== undefined) {
+      this.props.fetchCompany(parseInt(params.companyId, 10));
     }
-    this.props.history.goBack();
+    navigate(-1);
   };
 
   public render() {
@@ -108,8 +107,9 @@ class ContactModal extends React.Component<Props> {
     let contact: Contact | undefined;
 
     if (this.props.create) {
-      this.context.setTitle(t('entities.contact.newContact'));
-      const { companyId } = this.props.match.params;
+      document.title = t('entities.contact.newContact');
+      const { params } = this.props.router;
+      const companyId = params.companyId;
       contact = {
         id: 0,
         firstName: '',
@@ -127,7 +127,7 @@ class ContactModal extends React.Component<Props> {
     }
 
     if (contact === undefined) {
-      this.context.setTitle(t('entity.contact'));
+      document.title = t('entity.contact');
       return (
         <Modal
           onClose={this.close}
@@ -137,16 +137,16 @@ class ContactModal extends React.Component<Props> {
           size="tiny"
         >
           <Segment placeholder attached="bottom">
-            <AlertContainer />
+            <AlertContainer/>
             <Dimmer active inverted>
-              <Loader />
+              <Loader/>
             </Dimmer>
           </Segment>
         </Modal>
       );
     }
 
-    this.context.setTitle(formatContactName(contact.firstName, contact.lastName, contact.lastName));
+    document.title = formatContactName(contact.firstName, contact.lastName, contact.lastName);
 
     let contractOverview;
 
@@ -160,31 +160,35 @@ class ContactModal extends React.Component<Props> {
           <Header>{t('entity.contracts')}</Header>
           <Table>
             <Table.Header>
-              <Table.HeaderCell>
-                {t('entities.contract.props.title')}
-              </Table.HeaderCell>
-              <Table.HeaderCell>
-                {t('entity.company')}
-              </Table.HeaderCell>
-              <Table.HeaderCell>
-                {t('entities.generalProps.status')}
-              </Table.HeaderCell>
+              <Table.Row>
+                <Table.HeaderCell>
+                  {t('entities.contract.props.title')}
+                </Table.HeaderCell>
+                <Table.HeaderCell>
+                  {t('entity.company')}
+                </Table.HeaderCell>
+                <Table.HeaderCell>
+                  {t('entities.generalProps.status')}
+                </Table.HeaderCell>
+              </Table.Row>
             </Table.Header>
-            {contact.contracts.map((contract) => {
-              return (
-                <Table.Row>
-                  <Table.Cell>
-                    <NavLink to={`/contract/${contract.id}`}>{contract.title}</NavLink>
-                  </Table.Cell>
-                  <Table.Cell>
-                    <CompanyLink id={contract.companyId} />
-                  </Table.Cell>
-                  <Table.Cell>
-                    {formatStatus(this.props.getContractStatus(contract.id))}
-                  </Table.Cell>
-                </Table.Row>
-              );
-            })}
+            <Table.Body>
+              {contact.contracts.map((contract) => {
+                return (
+                  <Table.Row key={contract.id}>
+                    <Table.Cell>
+                      <NavLink to={`/contract/${contract.id}`}>{contract.title}</NavLink>
+                    </Table.Cell>
+                    <Table.Cell>
+                      <CompanyLink id={contract.companyId}/>
+                    </Table.Cell>
+                    <Table.Cell>
+                      {formatStatus(this.props.getContractStatus(contract.id))}
+                    </Table.Cell>
+                  </Table.Row>
+                );
+              })}
+            </Table.Body>
           </Table>
         </Segment>
       );
@@ -199,12 +203,14 @@ class ContactModal extends React.Component<Props> {
         size="tiny"
       >
         <Segment attached="bottom">
-          <AlertContainer />
+          <AlertContainer/>
           <ContactProps
             onCompanyPage={this.props.onCompanyPage}
             contact={contact}
             create={this.props.create}
-            onCancel={() => { this.close(); }}
+            onCancel={() => {
+              this.close();
+            }}
           />
           {contractOverview}
         </Segment>

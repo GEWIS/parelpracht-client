@@ -8,7 +8,7 @@ import {
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import { withTranslation, WithTranslation } from 'react-i18next';
-import { NavLink, RouteComponentProps, withRouter } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import { ProductCategory } from '../clients/server.generated';
 import { clearSingle, fetchSingle } from '../stores/single/actionCreators';
 import { RootState } from '../stores/store';
@@ -20,8 +20,9 @@ import { TransientAlert } from '../stores/alerts/actions';
 import { showTransientAlert } from '../stores/alerts/actionCreators';
 import ProductCategoryProps from '../components/entities/productcategories/ProductCategoryProps';
 import { TitleContext } from '../components/TitleContext';
+import { withRouter, WithRouter } from '../WithRouter';
 
-interface Props extends WithTranslation, RouteComponentProps<{ categoryId: string }> {
+interface Props extends WithTranslation, WithRouter {
   create?: boolean;
   category: ProductCategory | undefined;
   status: ResourceStatus;
@@ -38,10 +39,9 @@ class ProductCategoryModal extends React.Component<Props> {
 
   componentDidMount() {
     this.props.clearCategory();
-
-    const { categoryId } = this.props.match.params;
-    if (!this.props.create && categoryId !== undefined) {
-      this.props.fetchCategory(parseInt(categoryId, 10));
+    const { params } = this.props.router;
+    if (!this.props.create && params.categoryId !== undefined) {
+      this.props.fetchCategory(parseInt(params.categoryId, 10));
     }
   }
 
@@ -51,11 +51,11 @@ class ProductCategoryModal extends React.Component<Props> {
     } = this.props;
 
     if (create) {
-      this.context.setTitle(t('entities.category.newCategory'));
+      document.title = t('entities.category.newCategory');
     } else if (category === undefined) {
-      this.context.setTitle(t('entity.category'));
+      document.title = t('entity.category');
     } else {
-      this.context.setTitle(category.name);
+      document.title = category.name;
     }
 
     if (status === ResourceStatus.FETCHED
@@ -84,11 +84,13 @@ class ProductCategoryModal extends React.Component<Props> {
   }
 
   closeWithPopupMessage = () => {
-    this.props.history.push('/category');
+    const { navigate } = this.props.router;
+    navigate('/category');
   };
 
   close = () => {
-    this.props.history.goBack();
+    const { navigate } = this.props.router;
+    navigate(-1);
   };
 
   public render() {

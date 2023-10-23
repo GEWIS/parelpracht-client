@@ -3,12 +3,14 @@ import { Dropdown, Grid } from 'semantic-ui-react';
 import { withTranslation, WithTranslation } from 'react-i18next';
 import { Line } from 'react-chartjs-2';
 import { connect } from 'react-redux';
-import { ChartOptions } from 'chart.js';
+import { ChartData, ChartOptions } from 'chart.js';
 import { formatPriceFull } from '../../helpers/monetary';
 import { randomColorSet } from '../../helpers/colors';
 import { ProductsPerCategory } from '../../clients/server.generated';
 import { RootState } from '../../stores/store';
 import { getCategoryName } from '../../stores/productcategory/selectors';
+import { TooltipItem } from 'chart.js/dist/types';
+import { ChartJSOrUndefined } from 'react-chartjs-2/dist/types';
 
 export enum DataSet {
   VALUES,
@@ -31,7 +33,7 @@ class CategoryLineChart extends React.Component<Props, State> {
     extraDropdown: undefined,
   };
 
-  private chartReference: React.RefObject<Line>;
+  private chartReference: React.RefObject<ChartJSOrUndefined<'line'>>;
 
   constructor(props: Props) {
     super(props);
@@ -45,7 +47,7 @@ class CategoryLineChart extends React.Component<Props, State> {
     this.setState({ dataSetSelection: newDataset });
   };
 
-  createLineChartDataObject(): object {
+  createLineChartDataObject(): ChartData<'line'> {
     const {
       data, labels, getCatName,
     } = this.props;
@@ -58,23 +60,22 @@ class CategoryLineChart extends React.Component<Props, State> {
       default: throw new Error();
     }
 
-    const result = {
+    const result: ChartData<'line'> = {
       labels,
-      datasets: [] as object[],
+      datasets: [],
     };
 
     data.forEach((c, i) => {
-      // @ts-ignore
       result.datasets.push({
         label: getCatName(c.categoryId),
         data: c[valueArray],
         fill: false,
-        lineTension: 0,
         backgroundColor: randomColorSet(i),
         borderColor: randomColorSet(i),
         pointBackgroundColor: randomColorSet(i),
       });
     });
+
     return result;
   }
 
@@ -84,26 +85,33 @@ class CategoryLineChart extends React.Component<Props, State> {
     const { dataSetSelection } = this.state;
     const chartData = this.createLineChartDataObject();
 
-    let options: ChartOptions = {};
+    let options: ChartOptions<'line'> = {};
     switch (dataSetSelection) {
       case DataSet.VALUES:
         options = {
           scales: {
-            yAxes: [{
+            y: {
+              beginAtZero: true,
               ticks: {
-                beginAtZero: true,
-                callback(value: number) {
+                callback(value: number | string) {
+                  // First case should never apply
+                  if (typeof value === 'string') return formatPriceFull(parseInt(value));
                   return formatPriceFull(value);
                 },
               },
-            }],
+            },
           },
-          tooltips: {
-            callbacks: {
-              label(tooltipItem: any, data: any) {
-                const value = formatPriceFull(tooltipItem.yLabel);
-                const { label } = data.datasets[tooltipItem.datasetIndex];
-                return ` ${label}: ${value}`;
+          plugins: {
+            legend: {
+              display: false,
+            },
+            tooltip: {
+              callbacks: {
+                label(tooltipItem: TooltipItem<'line'>) {
+                  const value = formatPriceFull(tooltipItem.raw as number);
+                  const { label } = tooltipItem.dataset;
+                  return ` ${label}: ${value}`;
+                },
               },
             },
           },
@@ -112,22 +120,27 @@ class CategoryLineChart extends React.Component<Props, State> {
       case DataSet.AMOUNTS:
         options = {
           scales: {
-            yAxes: [{
+            y: {
+              beginAtZero: true,
               ticks: {
-                beginAtZero: true,
-                callback(value: number) {
+                callback(value: number | string ) {
                   return value;
                 },
                 precision: 0,
               },
-            }],
+            },
           },
-          tooltips: {
-            callbacks: {
-              label(tooltipItem: any, data: any) {
-                const value = tooltipItem.yLabel;
-                const { label } = data.datasets[tooltipItem.datasetIndex];
-                return ` ${label}: ${value}`;
+          plugins: {
+            legend: {
+              display: false,
+            },
+            tooltip: {
+              callbacks: {
+                label(tooltipItem: TooltipItem<'line'>) {
+                  const value = tooltipItem.raw;
+                  const { label } = tooltipItem.dataset;
+                  return ` ${label}: ${value}`;
+                },
               },
             },
           },
@@ -163,12 +176,7 @@ class CategoryLineChart extends React.Component<Props, State> {
           <Line
             ref={this.chartReference}
             data={chartData}
-            options={{
-              legend: {
-                display: false,
-              },
-              ...options,
-            }}
+            options={options}
             redraw
           />
         </div>
