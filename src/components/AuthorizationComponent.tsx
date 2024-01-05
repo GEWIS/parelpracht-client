@@ -5,8 +5,7 @@ import NoRights from '../pages/NoRights';
 import { authedUserHasRole } from '../stores/auth/selectors';
 import { RootState } from '../stores/store';
 
-interface Props {
-  children: any;
+interface Props extends React.PropsWithChildren {
   roles: Roles[];
   notFound: boolean;
   hasRole: (role: Roles) => boolean;

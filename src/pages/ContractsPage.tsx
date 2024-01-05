@@ -22,7 +22,7 @@ function ContractsPage() {
 
   return (
     <AuthorizationComponent
-      roles={[Roles.SIGNEE, Roles.GENERAL, Roles.FINANCIAL, Roles.AUDIT, Roles.AUDIT]}
+      roles={[Roles.SIGNEE, Roles.GENERAL, Roles.FINANCIAL, Roles.AUDIT, Roles.ADMIN]}
       notFound
     >
       <Segment style={{ backgroundColor: 'rgba(237, 237, 237, 0.98)' }} vertical basic>
