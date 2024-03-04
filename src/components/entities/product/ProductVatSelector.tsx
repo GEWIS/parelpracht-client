@@ -18,7 +18,7 @@ function ProductVATSelector(props: Props & DropdownProps) {
     value, onChange, options,
   } = props;
 
-  const dropdownOptions = options.sort((v1, v2) => {
+  const dropdownOptions = [...options].sort((v1, v2) => {
     return v1.amount >= v2.amount ? 1 : -1;
   }).map((x) => ({
     key: x.id,
