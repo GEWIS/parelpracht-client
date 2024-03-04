@@ -83,7 +83,7 @@ class FilesList extends React.Component<Props, State> {
       <Table compact fixed singleLine unstackable className="files">
         <Table.Body>
           {createRow}
-          {files
+          {[...files]
             .sort((a, b) => { return b.createdAt.getTime() - a.createdAt.getTime(); })
             .map((file) => (
               <SingleFile
@@ -100,7 +100,7 @@ class FilesList extends React.Component<Props, State> {
     );
 
     return (
-      <AuthorizationComponent roles={[Roles.GENERAL, Roles.ADMIN, Roles.AUDIT]} notFound={false}>
+      <AuthorizationComponent roles={[Roles.GENERAL, Roles.ADMIN, Roles.AUDIT, Roles.FINANCIAL]} notFound={false}>
         <h3>
           {t('entity.files')}
           <AuthorizationComponent

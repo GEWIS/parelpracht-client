@@ -22,7 +22,7 @@ function showRecentStatus(productInstance: ProductInstance): string {
     return null;
   });
 
-  const sortedArray = statusArray.sort((a, b) => (b.createdAt.getTime() - a.createdAt.getTime()));
+  const sortedArray = [...statusArray].sort((a, b) => (b.createdAt.getTime() - a.createdAt.getTime()));
   if (sortedArray.length === 0) return '';
   return sortedArray[0].subType!;
 }

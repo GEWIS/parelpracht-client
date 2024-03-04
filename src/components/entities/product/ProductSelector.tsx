@@ -20,7 +20,7 @@ function ProductSelector(props: Props & DropdownProps) {
   const {
     value, onChange, options,
   } = props;
-  const dropdownOptions = options
+  const dropdownOptions = [...options]
     .filter((p) => p.status === ProductStatus.ACTIVE)
     .sort((p1, p2) => {
       const n1 = currentLanguage === 'nl-NL' ? p1.nameDutch.toUpperCase() : p1.nameEnglish.toUpperCase();

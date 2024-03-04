@@ -31,7 +31,7 @@ function Navigation() {
         <AuthorizationComponent roles={[Roles.GENERAL, Roles.ADMIN]} notFound={false}>
           <ProductsMenu />
         </AuthorizationComponent>
-        <AuthorizationComponent roles={[Roles.GENERAL, Roles.ADMIN, Roles.AUDIT]} notFound={false}>
+        <AuthorizationComponent roles={[Roles.GENERAL, Roles.ADMIN, Roles.AUDIT, Roles.FINANCIAL]} notFound={false}>
           <CompaniesMenu />
         </AuthorizationComponent>
         <Menu.Item as={NavLink} to="/contract" title={t('mainMenu.contracts')}>

@@ -17,7 +17,7 @@ function ProductCategorySelector(props: Props & DropdownProps) {
   const {
     value, onChange, options,
   } = props;
-  const dropdownOptions = options.sort((c1, c2) => {
+  const dropdownOptions = [...options].sort((c1, c2) => {
     const n1 = c1.name.toUpperCase();
     const n2 = c2.name.toUpperCase();
     if (n1 < n2) return -1;
