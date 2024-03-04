@@ -1,13 +1,11 @@
 import * as React from 'react';
 import { NavLink } from 'react-router-dom';
-import {
-  Breadcrumb, Container, Grid, Loader, Segment, Tab,
-} from 'semantic-ui-react';
+import { Breadcrumb, Container, Grid, Loader, Segment, Tab } from 'semantic-ui-react';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import { WithTranslation, withTranslation } from 'react-i18next';
 import { Company, Roles } from '../clients/server.generated';
-import { fetchSingle, clearSingle } from '../stores/single/actionCreators';
+import { clearSingle, fetchSingle } from '../stores/single/actionCreators';
 import { RootState } from '../stores/store';
 import CompanyProps from '../components/entities/company/CompanyProps';
 import ResourceStatus from '../stores/resourceStatus';
@@ -197,7 +195,7 @@ class SingleCompanyPage extends React.Component<Props, State> {
       document.title = t('entity.company');
       return (
         <AuthorizationComponent
-          roles={[Roles.GENERAL, Roles.ADMIN, Roles.AUDIT]}
+          roles={[Roles.GENERAL, Roles.ADMIN, Roles.AUDIT, Roles.FINANCIAL]}
           notFound
         >
           <Container style={{ paddingTop: '1em' }}>
@@ -212,7 +210,7 @@ class SingleCompanyPage extends React.Component<Props, State> {
 
     return (
       <AuthorizationComponent
-        roles={[Roles.GENERAL, Roles.ADMIN, Roles.AUDIT]}
+        roles={[Roles.GENERAL, Roles.ADMIN, Roles.AUDIT, Roles.FINANCIAL]}
         notFound
       >
         <Segment style={{ backgroundColor: 'rgba(255, 255, 255, 0.95)' }} vertical basic>

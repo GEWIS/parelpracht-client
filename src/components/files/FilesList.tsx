@@ -100,7 +100,7 @@ class FilesList extends React.Component<Props, State> {
     );
 
     return (
-      <AuthorizationComponent roles={[Roles.GENERAL, Roles.ADMIN, Roles.AUDIT]} notFound={false}>
+      <AuthorizationComponent roles={[Roles.GENERAL, Roles.ADMIN, Roles.AUDIT, Roles.FINANCIAL]} notFound={false}>
         <h3>
           {t('entity.files')}
           <AuthorizationComponent
