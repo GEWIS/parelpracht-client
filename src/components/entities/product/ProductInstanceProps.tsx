@@ -130,14 +130,19 @@ class ProductInstanceProps extends React.Component<Props, State> {
   };
 
   deleteButtonActive = () => {
+    if (this.props.hasRole(Roles.ADMIN)) {
+      return true;
+    }
+
     if (this.props.create) {
       return undefined;
     }
-    return !(this.props.contract.activities
-      .filter((a) => a.type === ActivityType.STATUS).length > 1
-      || this.props.productInstance.activities
-        .filter((a) => a.type === ActivityType.STATUS).length > 1
-      || this.props.productInstance.invoiceId === undefined);
+    const status = getLastStatus(this.props.contract.activities
+      .filter((a) => a.type === ActivityType.STATUS));
+    return !(status!.subType === ContractStatus.CONFIRMED
+      || status!.subType === ContractStatus.FINISHED
+      || status!.subType === ContractStatus.CANCELLED
+      || this.props.productInstance.invoiceId !== undefined);
   };
 
   editButtonActive = () => {
