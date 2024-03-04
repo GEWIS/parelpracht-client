@@ -45,8 +45,9 @@ export function sortContactsByFunction(
   contacts: Contact[] | ContactSummary[],
   sortAlphabetically?: boolean,
 ): Contact[] | ContactSummary[] {
+  let c = [...contacts];
   if (sortAlphabetically) {
-    contacts.sort((c1, c2) => {
+    c.sort((c1, c2) => {
       const n1 = formatContactName(c1.firstName, c1.lastNamePreposition, c1.lastName).toUpperCase();
       const n2 = formatContactName(c2.firstName, c2.lastNamePreposition, c2.lastName).toUpperCase();
       if (n1 < n2) return -1;
@@ -55,7 +56,7 @@ export function sortContactsByFunction(
     });
   }
 
-  contacts.sort((c1, c2) => {
+  c.sort((c1, c2) => {
     switch (c1.function) {
       case ContactFunction.PRIMARY: return -1;
       case ContactFunction.NORMAL:
@@ -79,5 +80,5 @@ export function sortContactsByFunction(
     }
   });
 
-  return contacts;
+  return c;
 }

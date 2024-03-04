@@ -21,7 +21,7 @@ function ContactSelector(props: Props & DropdownProps) {
     value, onChange, options, disabled, companyId, placeholder,
   } = props;
 
-  const dropdownOptions = sortContactsByFunction(options, true)
+  const dropdownOptions = sortContactsByFunction([...options], true)
     .filter((c) => c.companyId === companyId && c.function !== ContactFunction.OLD)
     .map((x) => ({
       key: x.id,

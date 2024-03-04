@@ -36,6 +36,17 @@ class App extends React.Component<{}, State> {
     }));
   }
 
+  private getContent() {
+    if (this.state.hasError) {
+      return (
+        <AlertContainer />
+      );
+    }
+    return (
+      <Routes />
+    );
+  }
+
   public render() {
     if (this.state.hasError) {
       return (
@@ -46,7 +57,7 @@ class App extends React.Component<{}, State> {
     return (
       <Provider store={store}>
         <ReduxRouter history={history} routerSelector={routerSelector}>
-          <Routes />
+          {this.getContent()}
         </ReduxRouter>
       </Provider>
     );

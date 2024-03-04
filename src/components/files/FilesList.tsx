@@ -83,7 +83,7 @@ class FilesList extends React.Component<Props, State> {
       <Table compact fixed singleLine unstackable className="files">
         <Table.Body>
           {createRow}
-          {files
+          {[...files]
             .sort((a, b) => { return b.createdAt.getTime() - a.createdAt.getTime(); })
             .map((file) => (
               <SingleFile

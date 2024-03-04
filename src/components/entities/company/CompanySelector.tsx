@@ -18,7 +18,7 @@ function CompanySelector(props: Props & DropdownProps) {
   const {
     value, onChange, options, disabled,
   } = props;
-  const dropdownOptions = options.filter((c) => c.status !== CompanyStatus.INACTIVE)
+  const dropdownOptions = [...options].filter((c) => c.status !== CompanyStatus.INACTIVE)
     .sort((c1, c2) => {
       const n1 = c1.name.toUpperCase();
       const n2 = c2.name.toUpperCase();

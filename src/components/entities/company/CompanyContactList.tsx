@@ -37,8 +37,7 @@ class CompanyContactList extends React.Component<Props, State> {
       );
     }
 
-    const { contacts } = company;
-    sortContactsByFunction(contacts, true);
+    const contacts = sortContactsByFunction(company.contacts, true);
 
     if (contacts.length === 0) {
       return (
