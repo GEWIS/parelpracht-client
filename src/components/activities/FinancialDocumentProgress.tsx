@@ -127,7 +127,7 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
     } else if (documentType === SingleEntities.Invoice) {
       leftButton = (
         <AuthorizationComponent
-          roles={[Roles.GENERAL, Roles.ADMIN, Roles.FINANCIAL]}
+          roles={[Roles.ADMIN, Roles.FINANCIAL]}
           notFound={false}
         >
           <Popup

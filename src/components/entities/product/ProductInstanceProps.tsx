@@ -134,7 +134,10 @@ class ProductInstanceProps extends React.Component<Props, State> {
       return undefined;
     }
     return !(this.props.contract.activities
-      .filter((a) => a.type === ActivityType.STATUS).length > 1
+      .filter((a) => a.type === ActivityType.STATUS && a.subType !== null)
+      .some((a) =>
+        [ContractStatus.SENT, ContractStatus.CONFIRMED, ContractStatus.CANCELLED, ContractStatus.FINISHED]
+          .includes(a.subType))
       || this.props.productInstance.activities
         .filter((a) => a.type === ActivityType.STATUS).length > 1
       || this.props.productInstance.invoiceId === undefined);
