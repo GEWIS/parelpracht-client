@@ -1,7 +1,18 @@
 # Change log
-The current version of ParelPracht is **v1.3.2**, released on May 15th, 2023.
+The current version of ParelPracht is **v1.3.3**, released on March 4th, 2024.
 You can find the release notes below.
 ----------------------
+
+## v1.3.3 (04-03-2024)
+### Changes
+- Allow removing products from proposed contracts.
+- Update dependencies.
+
+### Bugfixes
+- Fix static (binary) files not being included correctly in Docker images.
+- Fix treasurer not being able to see invoices.
+- Fix treasurer and signees getting errors when opening ParelPracht.
+- Fix everyone being able to mark invoices as paid.
 
 ## v1.3.2 (15-05-2023)
 ### Bugfixes
