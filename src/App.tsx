@@ -1,5 +1,4 @@
 import React from 'react';
-import { Provider } from 'react-redux';
 import { ReduxRouter, ReduxRouterSelector } from '@lagunovsky/redux-react-router';
 import './App.scss';
 import './Form.scss';

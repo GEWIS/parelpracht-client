@@ -1,4 +1,4 @@
-import React, { ChangeEvent, forwardRef } from 'react';
+import React, { ChangeEvent } from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import { Form, Input, TextArea } from 'semantic-ui-react';

@@ -46,9 +46,9 @@ interface Props {
 }
 
 function InvoicesTable({
-  invoices, fetchInvoices, column, direction, changeSort, setSort, setTableFilter,
+  invoices, column, direction, changeSort, setSort,
   total, fetched, skip, take, status,
-  prevPage, nextPage, setTake, hasRole,
+  prevPage, nextPage, setTake,
 }: Props) {
   const { t } = useTranslation();
 
