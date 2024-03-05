@@ -8,6 +8,8 @@ import TitleRenderer from './components/TitleContext';
 import { Chart, registerables } from 'chart.js';
 Chart.register(...registerables);
 import 'semantic-ui-less/semantic.less';
+import store from './stores/store';
+import { Provider } from 'react-redux';
 
 // We have to disable the following "errors", because they are actually warnings.
 // The components that throw them work fine, so to keep the console clean from errors,
@@ -27,7 +29,9 @@ const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
 root.render(
     <I18nextProvider i18n={i18n}>
       <TitleRenderer>
-        <App />
+        <Provider store={store}>
+          <App />
+        </Provider>
       </TitleRenderer>
     </I18nextProvider>,
 );
