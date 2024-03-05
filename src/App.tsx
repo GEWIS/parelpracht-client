@@ -55,11 +55,9 @@ class App extends React.Component<{}, State> {
     }
     const routerSelector: ReduxRouterSelector<RootState> = (state) => state.router;
     return (
-      <Provider store={store}>
-        <ReduxRouter history={history} routerSelector={routerSelector}>
-          {this.getContent()}
-        </ReduxRouter>
-      </Provider>
+      <ReduxRouter history={history} routerSelector={routerSelector}>
+        {this.getContent()}
+      </ReduxRouter>
     );
   }
 }
