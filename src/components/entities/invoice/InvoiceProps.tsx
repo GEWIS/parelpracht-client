@@ -1,10 +1,9 @@
-import React, { ChangeEvent } from 'react';
+import React, { ChangeEvent, forwardRef } from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import { Form, Input, TextArea } from 'semantic-ui-react';
 import validator from 'validator';
 import { withTranslation, WithTranslation } from 'react-i18next';
-import SemanticDatepicker from 'react-semantic-ui-datepickers';
 import {
   ActivityType,
   Invoice,
@@ -19,16 +18,15 @@ import { getSingle } from '../../../stores/single/selectors';
 import { SingleEntities } from '../../../stores/single/single';
 import { RootState } from '../../../stores/store';
 import PropsButtons from '../../PropsButtons';
-import {
-  formatTimestampToDate,
-  isInvalidDate,
-} from '../../../helpers/timestamp';
+import { isInvalidDate } from '../../../helpers/timestamp';
 import UserSelector from '../user/UserSelector';
 import { formatDocumentIdTitle } from '../../../helpers/documents';
 import { TransientAlert } from '../../../stores/alerts/actions';
 import { showTransientAlert } from '../../../stores/alerts/actionCreators';
 import AuthorizationComponent from '../../AuthorizationComponent';
 import { withRouter, WithRouter } from '../../../WithRouter';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 
 interface Props extends WithTranslation, WithRouter {
   create?: boolean;
@@ -242,21 +240,20 @@ class InvoiceProps extends React.Component<Props, State> {
             />
             <Form.Field
               disabled={!editing}
-              error={validator.isEmpty(formatTimestampToDate(startDate))}
+              error={(startDate.setHours(0, 0, 0, 0) < new Date().setHours(0, 0, 0, 0)
+                && startDate.setHours(0, 0, 0, 0)
+                < this.props.invoice.startDate.setHours(0, 0, 0, 0)) || isInvalidDate(startDate)}
             >
               {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
               <label htmlFor="form-input-startdate">{t('entities.invoice.props.invoiceDate')}</label>
-              <SemanticDatepicker
-                onChange={(e, { value }) => {
-                  if (!(value instanceof Date)) return;
-                  this.setState({ startDate: value });
+              <DatePicker
+                onChange={(date) => {
+                  this.setState({ startDate: date });
                 }}
-                error={(startDate.setHours(0, 0, 0, 0) < new Date().setHours(0, 0, 0, 0)
-                && startDate.setHours(0, 0, 0, 0)
-                < this.props.invoice.startDate.setHours(0, 0, 0, 0)) || isInvalidDate(startDate)}
-                value={startDate}
+                selected={startDate}
+                minDate={new Date(new Date().setHours(0, 0, 0, 0))}
+                onChangeRaw={e => e.preventDefault()}
                 id="form-input-startdate"
-                format="YYYY-MM-DD"
               />
             </Form.Field>
           </Form.Group>

@@ -4,9 +4,10 @@ import {
 } from 'semantic-ui-react';
 import validator from 'validator';
 import { useTranslation } from 'react-i18next';
-import SemanticDatepicker from 'react-semantic-ui-datepickers';
 import { Language, ReturnFileType } from '../../clients/server.generated';
 import { isInvalidDate } from '../../helpers/timestamp';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 
 interface Props {
   language: Language;
@@ -106,15 +107,14 @@ function CustomInvoiceProps(props: Props) {
           />
         </Form.Group>
         <Form.Group widths="equal">
-          <Form.Field required>
+          <Form.Field required error={isInvalidDate(props.date)}>
             <label htmlFor="form-input-date">{t('entities.invoice.props.invoiceDate')}</label>
-            <SemanticDatepicker
-              onChange={(e, { value }) => {
-                if (!(value instanceof Date)) return;
-                props.setDate(value);
+            <DatePicker
+              onChange={(date) => {
+                props.setDate(date);
               }}
-              value={props.date}
-              error={isInvalidDate(props.date)}
+              selected={props.date}
+              onChangeRaw={e => e.preventDefault()}
               id="form-input-date"
             />
           </Form.Field>
