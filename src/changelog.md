@@ -1,7 +1,15 @@
 # Change log
-The current version of ParelPracht is **v1.3.3**, released on March 4th, 2024.
+The current version of ParelPracht is **v1.3.4**, released on March 5th, 2024.
 You can find the release notes below.
 ----------------------
+
+## v1.3.4 (05-03-2024)
+### Changes
+- Hide broken contract and invoice filter buttons
+- Update dependencies.
+
+### Bugfixes
+- Fix not being to open individual or custom invoice pages.
 
 ## v1.3.3 (04-03-2024)
 ### Changes

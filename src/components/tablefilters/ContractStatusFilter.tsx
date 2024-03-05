@@ -14,6 +14,10 @@ function ContractStatusFilter(props: Props) {
   const options = Object.values(ContractStatus).map((s: string, i) => {
     return { key: i, value: s, text: formatStatus(s) };
   });
+
+  // TODO: Fix status filtering in the backend
+  return null;
+
   return (
     <ColumnFilter
       column={props.column!}

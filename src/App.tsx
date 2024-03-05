@@ -1,5 +1,4 @@
 import React from 'react';
-import { Provider } from 'react-redux';
 import { ReduxRouter, ReduxRouterSelector } from '@lagunovsky/redux-react-router';
 import './App.scss';
 import './Form.scss';
@@ -55,11 +54,9 @@ class App extends React.Component<{}, State> {
     }
     const routerSelector: ReduxRouterSelector<RootState> = (state) => state.router;
     return (
-      <Provider store={store}>
-        <ReduxRouter history={history} routerSelector={routerSelector}>
-          {this.getContent()}
-        </ReduxRouter>
-      </Provider>
+      <ReduxRouter history={history} routerSelector={routerSelector}>
+        {this.getContent()}
+      </ReduxRouter>
     );
   }
 }
