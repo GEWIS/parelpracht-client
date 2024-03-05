@@ -8,6 +8,10 @@ function InvoiceStatusFilter() {
   const options = Object.values(InvoiceStatus).map((s: string, i) => {
     return { key: i, value: s, text: formatStatus(s) };
   });
+
+  // TODO: Fix status filtering in the backend
+  return null;
+
   return (
     <ColumnFilter
       column="activityStatus"

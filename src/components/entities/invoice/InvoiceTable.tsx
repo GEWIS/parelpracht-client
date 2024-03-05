@@ -54,8 +54,9 @@ function InvoicesTable({
 
   useEffect(() => {
     setSort('id', 'DESC');
-    if (([Roles.FINANCIAL].some(hasRole) && ![Roles.ADMIN].some(hasRole))) setTableFilter({ column: 'activityStatus', values: ['SENT'] });
-    fetchInvoices();
+    // TODO: Fix status filtering in backend
+    // if (([Roles.FINANCIAL].some(hasRole) && ![Roles.ADMIN].some(hasRole))) setTableFilter({ column: 'activityStatus', values: ['SENT'] });
+    // fetchInvoices();
   }, []);
 
   const table = (
