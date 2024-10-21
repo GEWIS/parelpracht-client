@@ -1,5 +1,6 @@
 import { Action } from 'redux';
-import { AuthStatus, User } from '../../clients/server.generated';
+import { AuthStatus, Gender, User } from '../../clients/server.generated';
+import {NavigateFunction} from "react-router/dist/lib/hooks";
 
 // Action types
 export enum AuthActionType {
@@ -22,6 +23,8 @@ export enum AuthActionType {
   GetApiKey = 'Auth/GetApiKey',
   SetApiKey = 'Auth/SetApiKey',
   RevokeApiKey = 'Auth/RevokeApiKey',
+
+  Setup = 'Auth/Setup',
 }
 
 export type AuthFetchStatus = Action<AuthActionType.FetchStatus>;
@@ -65,3 +68,11 @@ export type AuthSetApiKey = Action<AuthActionType.SetApiKey> & {
   apiKey: string | undefined;
 };
 export type AuthRevokeApiKey = Action<AuthActionType.RevokeApiKey>;
+
+export type AuthSetup = Action<AuthActionType.Setup> & {
+  email: string,
+  firstname: string,
+  lastname: string,
+  gender: Gender,
+  navigate: NavigateFunction
+};

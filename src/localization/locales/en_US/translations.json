@@ -581,6 +581,23 @@
       },
       "total": "Total"
     },
+    "setup": {
+      "email": "Email address",
+      "firstname": "First name",
+      "gender": {
+        "label": "Gender",
+        "options": {
+          "female": "Female",
+          "male": "Male",
+          "other": "Other"
+
+        },
+        "placeholder": "Gender"
+      },
+      "lastname": "Last name",
+      "setupButton": "Setup",
+      "title": "Setup"
+    },
     "user": {
       "apiKey": {
         "description1": "You can generate an API key to use ParelPracht in external tools. With this key, actions can be performed on your behalf. To use the API key, place the entire key in the",

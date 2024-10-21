@@ -1,12 +1,13 @@
-import { AuthStatus, User } from '../../clients/server.generated';
+import { AuthStatus, Gender, User } from '../../clients/server.generated';
 import {
   AuthActionType, AuthFetchProfile, AuthFetchStatus,
   AuthForgotPassword,
   AuthGenerateApiKey,
   AuthGetApiKey, AuthLoginLDAP,
   AuthLoginLocal, AuthLogout, AuthRequestClear, AuthRequestError, AuthRequestSuccess,
-  AuthResetPassword, AuthRevokeApiKey, AuthSetApiKey, AuthSetProfile, AuthSetStatus,
+  AuthResetPassword, AuthRevokeApiKey, AuthSetApiKey, AuthSetProfile, AuthSetStatus, AuthSetup,
 } from './actions';
+import { NavigateFunction } from 'react-router/dist/lib/hooks';
 
 export function authFetchStatus(): AuthFetchStatus {
   return { type: AuthActionType.FetchStatus };
@@ -82,4 +83,11 @@ export function authRevokeApiKey(): AuthRevokeApiKey {
 
 export function authSetApiKey(apiKey: string | undefined): AuthSetApiKey {
   return { type: AuthActionType.SetApiKey, apiKey };
+}
+
+export function authSetup(
+  email: string, firstname: string, lastname: string, gender: Gender, navigate: NavigateFunction): AuthSetup {
+  return {
+    type: AuthActionType.Setup, email, firstname, lastname, gender, navigate,
+  };
 }

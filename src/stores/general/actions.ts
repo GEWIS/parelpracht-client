@@ -15,4 +15,5 @@ export type PrivateGeneralSetInfo = Action<GeneralActionType.SetPrivateInfo> & {
 };
 export type PublicGeneralSetInfo = Action<GeneralActionType.SetPublicInfo> & {
   loginMethod: LoginMethods;
+  setupDone: boolean;
 };

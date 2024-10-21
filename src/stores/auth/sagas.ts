@@ -1,6 +1,6 @@
 import { call, put } from 'redux-saga/effects';
 import {
-  AuthStatus, Client, LDAPLoginParams, LoginParams, ResetPasswordRequest,
+  AuthStatus, Client, LDAPLoginParams, LoginParams, ResetPasswordRequest, SetupParams, UserParams,
 } from '../../clients/server.generated';
 import { takeEveryWithErrorHandling } from '../errorHandling';
 import { fetchSummaries } from '../summaries/actionCreators';
@@ -10,9 +10,9 @@ import {
   authRequestSuccess, authSetApiKey, authSetProfile, authSetStatus,
 } from './actionCreators';
 import {
-  AuthActionType, AuthForgotPassword, AuthLoginLDAP, AuthLoginLocal, AuthResetPassword,
+  AuthActionType, AuthForgotPassword, AuthLoginLDAP, AuthLoginLocal, AuthResetPassword, AuthSetup,
 } from './actions';
-import { generalPrivateFetchInfo } from '../general/actionCreators';
+import {generalPrivateFetchInfo, generalPublicFetchInfo } from '../general/actionCreators';
 
 export function* fetchAuthStatus() {
   const client = new Client();
@@ -126,6 +126,25 @@ function* revokeApiKey() {
   yield put(authSetApiKey(undefined));
 }
 
+function* setup(action: AuthSetup) {
+  const client = new Client();
+
+  const url = yield call([client, client.postSetup],
+    new SetupParams(
+      {
+        admin: new UserParams({
+          email: action.email,
+          firstName: action.firstname,
+          lastName: action.lastname,
+          gender: action.gender,
+          function: '',
+        }),
+      }));
+
+  yield put(generalPublicFetchInfo());
+  action.navigate(url);
+}
+
 export default [
   function* watchFetchAuthStatus() {
     yield takeEveryWithErrorHandling(AuthActionType.FetchStatus, fetchAuthStatus);
@@ -161,5 +180,8 @@ export default [
   },
   function* watchRevokeApiKey() {
     yield takeEveryWithErrorHandling(AuthActionType.RevokeApiKey, revokeApiKey);
+  },
+  function* watchSetup() {
+    yield takeEveryWithErrorHandling(AuthActionType.Setup, setup);
   },
 ];
