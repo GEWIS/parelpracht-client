@@ -12,7 +12,7 @@ import {
 import {
   AuthActionType, AuthForgotPassword, AuthLoginLDAP, AuthLoginLocal, AuthResetPassword, AuthSetup,
 } from './actions';
-import {generalPrivateFetchInfo, generalPublicFetchInfo } from '../general/actionCreators';
+import { generalPrivateFetchInfo, generalPublicFetchInfo } from '../general/actionCreators';
 
 export function* fetchAuthStatus() {
   const client = new Client();
@@ -129,7 +129,7 @@ function* revokeApiKey() {
 function* setup(action: AuthSetup) {
   const client = new Client();
 
-  const url = yield call([client, client.postSetup],
+  yield call([client, client.postSetup],
     new SetupParams(
       {
         admin: new UserParams({
@@ -137,12 +137,13 @@ function* setup(action: AuthSetup) {
           firstName: action.firstname,
           lastName: action.lastname,
           gender: action.gender,
+          password: action.password,
+          rememberMe: action.rememberMe,
           function: '',
         }),
       }));
-
   yield put(generalPublicFetchInfo());
-  action.navigate(url);
+  yield put(authFetchStatus());
 }
 
 export default [

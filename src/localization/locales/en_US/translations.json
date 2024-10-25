@@ -595,6 +595,7 @@
         "placeholder": "Gender"
       },
       "lastname": "Last name",
+      "password": "Password",
       "setupButton": "Setup",
       "title": "Setup"
     },

@@ -86,8 +86,14 @@ export function authSetApiKey(apiKey: string | undefined): AuthSetApiKey {
 }
 
 export function authSetup(
-  email: string, firstname: string, lastname: string, gender: Gender, navigate: NavigateFunction): AuthSetup {
+  email: string,
+  firstname: string,
+  lastname: string,
+  gender: Gender,
+  password: string,
+  rememberMe: boolean,
+  navigate: NavigateFunction): AuthSetup {
   return {
-    type: AuthActionType.Setup, email, firstname, lastname, gender, navigate,
+    type: AuthActionType.Setup, email, firstname, lastname, gender, password, rememberMe, navigate,
   };
 }

@@ -4972,9 +4972,9 @@ export class Client {
     }
 
     /**
-     * @return Ok
+     * @return No content
      */
-    postSetup(body: SetupParams): Promise<string> {
+    postSetup(body: SetupParams): Promise<void> {
         let url_ = this.baseUrl + "/setup";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -4985,7 +4985,6 @@ export class Client {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                "Accept": "application/json"
             }
         };
 
@@ -4994,30 +4993,19 @@ export class Client {
         });
     }
 
-    protected processPostSetup(response: Response): Promise<string> {
+    protected processPostSetup(response: Response): Promise<void> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
-        if (status === 200) {
+        if (status === 204) {
             return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-                result200 = resultData200 !== undefined ? resultData200 : <any>null;
-    
-            return result200;
-            });
-        } else if (status === 400) {
-            return response.text().then((_responseText) => {
-            let result400: any = null;
-            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result400 = WrappedApiError.fromJS(resultData400);
-            return throwException("A server side error occurred.", status, _responseText, _headers, result400);
+            return;
             });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<string>(null as any);
+        return Promise.resolve<void>(null as any);
     }
 
     /**
@@ -12754,6 +12742,8 @@ export class UserParams implements IUserParams {
     lastName!: string;
     function!: string;
     gender!: Gender;
+    password!: string;
+    rememberMe!: boolean;
     replyToEmail?: string;
     receiveEmails?: boolean;
     sendEmailsToReplyToEmail?: boolean;
@@ -12778,6 +12768,8 @@ export class UserParams implements IUserParams {
             this.lastName = _data["lastName"];
             this.function = _data["function"];
             this.gender = _data["gender"];
+            this.password = _data["password"];
+            this.rememberMe = _data["rememberMe"];
             this.replyToEmail = _data["replyToEmail"];
             this.receiveEmails = _data["receiveEmails"];
             this.sendEmailsToReplyToEmail = _data["sendEmailsToReplyToEmail"];
@@ -12806,6 +12798,8 @@ export class UserParams implements IUserParams {
         data["lastName"] = this.lastName;
         data["function"] = this.function;
         data["gender"] = this.gender;
+        data["password"] = this.password;
+        data["rememberMe"] = this.rememberMe;
         data["replyToEmail"] = this.replyToEmail;
         data["receiveEmails"] = this.receiveEmails;
         data["sendEmailsToReplyToEmail"] = this.sendEmailsToReplyToEmail;
@@ -12827,6 +12821,8 @@ export interface IUserParams {
     lastName: string;
     function: string;
     gender: Gender;
+    password: string;
+    rememberMe: boolean;
     replyToEmail?: string;
     receiveEmails?: boolean;
     sendEmailsToReplyToEmail?: boolean;
@@ -13349,6 +13345,8 @@ export class Partial_UserParams_ implements IPartial_UserParams_ {
     lastName?: string;
     function?: string;
     gender?: Gender;
+    password?: string;
+    rememberMe?: boolean;
     replyToEmail?: string;
     receiveEmails?: boolean;
     sendEmailsToReplyToEmail?: boolean;
@@ -13379,6 +13377,8 @@ export class Partial_UserParams_ implements IPartial_UserParams_ {
             this.lastName = _data["lastName"];
             this.function = _data["function"];
             this.gender = _data["gender"];
+            this.password = _data["password"];
+            this.rememberMe = _data["rememberMe"];
             this.replyToEmail = _data["replyToEmail"];
             this.receiveEmails = _data["receiveEmails"];
             this.sendEmailsToReplyToEmail = _data["sendEmailsToReplyToEmail"];
@@ -13411,6 +13411,8 @@ export class Partial_UserParams_ implements IPartial_UserParams_ {
         data["lastName"] = this.lastName;
         data["function"] = this.function;
         data["gender"] = this.gender;
+        data["password"] = this.password;
+        data["rememberMe"] = this.rememberMe;
         data["replyToEmail"] = this.replyToEmail;
         data["receiveEmails"] = this.receiveEmails;
         data["sendEmailsToReplyToEmail"] = this.sendEmailsToReplyToEmail;
@@ -13433,6 +13435,8 @@ export interface IPartial_UserParams_ {
     lastName?: string;
     function?: string;
     gender?: Gender;
+    password?: string;
+    rememberMe?: boolean;
     replyToEmail?: string;
     receiveEmails?: boolean;
     sendEmailsToReplyToEmail?: boolean;

@@ -592,6 +592,7 @@
         }
       },
       "lastname": "Achternaam",
+      "password": "Password",
       "setupButton": "Setup",
       "title": "Setup"
     },

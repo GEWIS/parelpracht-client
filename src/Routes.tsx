@@ -128,6 +128,10 @@ function Routes(props: Props) {
       element: <Redirect to="/"/>,
     },
     {
+      path: '/setup',
+      element: <Redirect to="/"/>,
+    },
+    {
       path: '/',
       element: <DashboardPage/>,
     },
