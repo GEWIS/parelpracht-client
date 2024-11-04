@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Dropdown, Grid, Popup, Segment, Table,
 } from 'semantic-ui-react';
-import { WithTranslation, withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { Bar } from 'react-chartjs-2';
 import { Client, DashboardProductInstanceStats } from '../../clients/server.generated';
 import { dateToFinancialYear } from '../../helpers/timestamp';
@@ -12,77 +12,29 @@ import { FinancialOverviewField } from './FinancialOverviewField';
 import { ChartData } from 'chart.js';
 import { ChartJSOrUndefined } from 'react-chartjs-2/dist/types';
 import { useNavigate } from 'react-router-dom';
-import { withRouter } from '../../WithRouter';
-interface Props extends WithTranslation {}
 
-interface State {
-  data?: DashboardProductInstanceStats;
-  financialYear: number;
-  loading: boolean;
-  redirect: boolean;
-}
+function FinancialOverview() {
+  const chart = React.createRef<ChartJSOrUndefined<'bar'>>();
+  const navigate = useNavigate();
+  const { t } = useTranslation();
 
-class FinancialOverview extends React.Component<Props, State> {
-  private readonly chart: React.RefObject<ChartJSOrUndefined<'bar'>>;
+  const [data, setData] = useState<DashboardProductInstanceStats | undefined>(undefined);
+  const [financialYear, setFinancialYear] = useState<number>(dateToFinancialYear(new Date()));
+  const [loading, setLoading] = useState<boolean>(true);
 
-
-  constructor(props: Props) {
-    super(props);
-    this.chart = React.createRef();
-    this.state = {
-      data: undefined,
-      financialYear: dateToFinancialYear(new Date()),
-      loading: true,
-      redirect: false,
-    };
-  }
-
-  async componentDidMount() {
-    const { financialYear } = this.state;
-    await this.updateGraph(financialYear);
-  }
-
-  shouldComponentUpdate(nextProps: Readonly<Props>, nextState: Readonly<State>): boolean {
-    return !nextState.redirect;
-  }
-
-  componentWillUnmount() {
-    this.chart.current?.destroy();
-  }
-
-  // goToInsightsTable = (e: MouseEvent | undefined, data: any[]) => {
-  //   if (data) {
-  //     const bars = ['suggested', 'contracted', 'delivered', 'invoiced', 'paid'];
-  //     // eslint-disable-next-line no-underscore-dangle
-  //     const i = data[0]._index;
-  //     // There is no way to list all paid invoices in the Insights table
-  //     if (i < 4) {
-  //       const { financialYear } = this.state;
-  //       this.setState({ redirect: true });
-  //       this.props.history.push(`/insights#${bars[i]}&${financialYear}`);
-  //     }
-  //   }
-  // };
-
-  goToInsightsTable = (status: 'suggested' | 'contracted' | 'delivered' | 'invoiced') => {
-    const { financialYear } = this.state;
-    const history = useNavigate();
-    history(`/insights#${status}&${financialYear}`);
+  const updateGraph = async (year: number) => {
+    setLoading(true);
+    const client = new Client();
+    const graphData = await client.getDashboardProductInstanceStatistics(year);
+    setData(graphData);
+    setLoading(false);
   };
 
-  async updateGraph(year: number) {
-    this.setState({ loading: true });
-    const client = new Client();
-    const data = await client.getDashboardProductInstanceStatistics(year);
-    this.setState({
-      data,
-      loading: false,
-    });
-  }
+  const goToInsightsTable = (status: 'suggested' | 'contracted' | 'delivered' | 'invoiced') => {
+    navigate(`/insights#${status}&${financialYear}`);
+  };
 
-  createBarChartDataObject(): ChartData<'bar'> {
-    const { t } = this.props;
-    const { data } = this.state;
+  const createBarChartDataObject = (): ChartData<'bar'> => {
     return {
       labels: [
         t('dashboard.financialOverview.suggested'),
@@ -112,15 +64,9 @@ class FinancialOverview extends React.Component<Props, State> {
         },
       ],
     };
-  }
+  };
 
-  async changeFinancialYear(value: number) {
-    this.setState({ financialYear: value, loading: true });
-    await this.updateGraph(value);
-  }
-
-  createDropdownOptions() {
-    const { data } = this.state;
+  const createDropdownOptions = () => {
     const financialYears = data?.financialYears || [];
     const result: object[] = [];
     financialYears.forEach((y: number) => {
@@ -129,220 +75,213 @@ class FinancialOverview extends React.Component<Props, State> {
       });
     });
     return result;
-  }
+  };
 
-  render() {
-    const { t } = this.props;
-    const { loading, data, financialYear } = this.state;
-    const chartData = this.createBarChartDataObject();
-    return (
-      <Segment loading={loading} className="financial-overview">
-        <Grid style={{ marginBottom: '1em' }}>
-          <Grid.Row columns={2}>
-            <Grid.Column textAlign="left">
-              <h3>{t('dashboard.financialOverview.header')}</h3>
-            </Grid.Column>
-            <Grid.Column textAlign="right" verticalAlign="bottom" style={{ fontSize: '1.2em' }}>
-              <Dropdown
-                options={this.createDropdownOptions()}
-                basic
-                value={financialYear}
-                float="right"
-                onChange={(value, d) => this.changeFinancialYear(d.value as number)}
-              />
-            </Grid.Column>
-          </Grid.Row>
-        </Grid>
-        <div>
-          <Bar
-            ref={this.chart}
-            data={chartData}
-            options={{
-              scales: {
-                x: {
-                  stacked: true,
-                },
-                y : {
-                  stacked: true,
-                  beginAtZero: true,
-                  ticks: {
-                    callback(value: number | string) {
-                      if (typeof value === 'string') return 'TEMP';
-                      return formatPriceFull(value);
-                    },
+  useEffect(() => {
+    updateGraph(financialYear);
+  }, [financialYear]);
+
+  return (
+    <Segment loading={loading} className="financial-overview">
+      <Grid style={{ marginBottom: '1em' }}>
+        <Grid.Row columns={2}>
+          <Grid.Column textAlign="left">
+            <h3>{t('dashboard.financialOverview.header')}</h3>
+          </Grid.Column>
+          <Grid.Column textAlign="right" verticalAlign="bottom" style={{ fontSize: '1.2em' }}>
+            <Dropdown
+              options={createDropdownOptions()}
+              basic
+              value={financialYear}
+              float="right"
+              onChange={(_value, d) => setFinancialYear(d.value as number)}
+            />
+          </Grid.Column>
+        </Grid.Row>
+      </Grid>
+      <div>
+        <Bar
+          ref={chart}
+          data={createBarChartDataObject()}
+          options={{
+            scales: {
+              x: {
+                stacked: true,
+              },
+              y : {
+                stacked: true,
+                beginAtZero: true,
+                ticks: {
+                  callback(value: number | string) {
+                    if (typeof value === 'string') return 'TEMP';
+                    return formatPriceFull(value);
                   },
                 },
               },
-              plugins: {
-                legend: {
-                  display: false,
-                },
-                tooltip: {
-                  callbacks: {
-                    label(tooltipItem: any) {
-                      return formatPriceFull(tooltipItem.raw);
-                    },
+            },
+            plugins: {
+              legend: {
+                display: false,
+              },
+              tooltip: {
+                callbacks: {
+                  label(tooltipItem: any) {
+                    return formatPriceFull(tooltipItem.raw);
                   },
                 },
               },
-              // onClick: this.goToInsightsTable,
-              // onHover: (event, chartElement) => {
-              //   // @ts-ignore
-              //   // eslint-disable-next-line no-param-reassign
-              //   event.target!.style.cursor = chartElement[0] ? 'pointer' : 'default';
-              // },
-            }}
-          />
-        </div>
-        <Table celled definition style={{ marginTop: '2em' }} unstackable>
-          <Table.Header>
-            <Table.Row>
-              <Table.HeaderCell />
-              <Table.HeaderCell>
-                <Popup
-                  trigger={(
-                    <span>
+            },
+          }}
+        />
+      </div>
+      <Table celled definition style={{ marginTop: '2em' }} unstackable>
+        <Table.Header>
+          <Table.Row>
+            <Table.HeaderCell />
+            <Table.HeaderCell>
+              <Popup
+                trigger={(
+                  <span>
                       {t('dashboard.financialOverview.suggested')}
                     </span>
-                  )}
-                  header={t('dashboard.financialOverview.suggested')}
-                  content={t('dashboard.financialOverview.description.suggested')}
-                />
-              </Table.HeaderCell>
-              <Table.HeaderCell>
-                <Popup
-                  trigger={(
-                    <span>
+                )}
+                header={t('dashboard.financialOverview.suggested')}
+                content={t('dashboard.financialOverview.description.suggested')}
+              />
+            </Table.HeaderCell>
+            <Table.HeaderCell>
+              <Popup
+                trigger={(
+                  <span>
                       {t('dashboard.financialOverview.contracted')}
                     </span>
-                  )}
-                  header={t('dashboard.financialOverview.contracted')}
-                  content={t('dashboard.financialOverview.description.contracted')}
-                />
-              </Table.HeaderCell>
-              <Table.HeaderCell>
-                <Popup
-                  trigger={(
-                    <span>
+                )}
+                header={t('dashboard.financialOverview.contracted')}
+                content={t('dashboard.financialOverview.description.contracted')}
+              />
+            </Table.HeaderCell>
+            <Table.HeaderCell>
+              <Popup
+                trigger={(
+                  <span>
                       {t('dashboard.financialOverview.delivered')}
                     </span>
-                  )}
-                  header={t('dashboard.financialOverview.delivered')}
-                  content={t('dashboard.financialOverview.description.delivered')}
-                />
-              </Table.HeaderCell>
-              <Table.HeaderCell>
-                <Popup
-                  trigger={(
-                    <span>
+                )}
+                header={t('dashboard.financialOverview.delivered')}
+                content={t('dashboard.financialOverview.description.delivered')}
+              />
+            </Table.HeaderCell>
+            <Table.HeaderCell>
+              <Popup
+                trigger={(
+                  <span>
                       {t('dashboard.financialOverview.invoiced')}
                     </span>
-                  )}
-                  header={t('dashboard.financialOverview.invoiced')}
-                  content={t('dashboard.financialOverview.description.invoiced')}
-                />
-              </Table.HeaderCell>
-              <Table.HeaderCell>
-                <Popup
-                  trigger={(
-                    <span>
+                )}
+                header={t('dashboard.financialOverview.invoiced')}
+                content={t('dashboard.financialOverview.description.invoiced')}
+              />
+            </Table.HeaderCell>
+            <Table.HeaderCell>
+              <Popup
+                trigger={(
+                  <span>
                       {t('dashboard.financialOverview.paid')}
                     </span>
-                  )}
-                  header={t('dashboard.financialOverview.paid')}
-                  content={t('dashboard.financialOverview.description.paid')}
-                />
-              </Table.HeaderCell>
-            </Table.Row>
-          </Table.Header>
-          <Table.Body>
-            <Table.Row>
-              <Table.Cell>{t('dashboard.financialOverview.value')}</Table.Cell>
-              <Table.Cell onClick={() => this.goToInsightsTable('suggested')}>
-                <FinancialOverviewField
-                  fields={[t('dashboard.financialOverview.suggested')]}
-                  values={[data?.suggested.amount || 0]}
-                  type="value"
-                />
-              </Table.Cell>
-              <Table.Cell onClick={() => this.goToInsightsTable('contracted')}>
-                <FinancialOverviewField
-                  fields={[t('dashboard.financialOverview.contracted')]}
-                  values={[data?.contracted.amount || 0]}
-                  type="value"
-                />
-              </Table.Cell>
-              <Table.Cell onClick={() => this.goToInsightsTable('delivered')}>
-                <FinancialOverviewField
-                  fields={[t('dashboard.financialOverview.delivered')]}
-                  values={[data?.delivered.amount || 0]}
-                  type="value"
-                />
-              </Table.Cell>
-              <Table.Cell onClick={() => this.goToInsightsTable('invoiced')}>
-                <FinancialOverviewField
-                  fields={[t('dashboard.financialOverview.delivered'), t('dashboard.financialOverview.notDelivered')]}
-                  values={[
-                    data?.invoiced.delivered.amount || 0, data?.invoiced.notDelivered.amount || 0]}
-                  type="value"
-                  header={t('dashboard.financialOverview.invoiced')}
-                />
-              </Table.Cell>
-              <Table.Cell>
-                <FinancialOverviewField
-                  fields={[t('dashboard.financialOverview.paid')]}
-                  values={[data?.paid.amount || 0]}
-                  type="value"
-                />
-              </Table.Cell>
-            </Table.Row>
-            <Table.Row>
-              <Table.Cell>{t('dashboard.financialOverview.nrOfProducts')}</Table.Cell>
-              <Table.Cell onClick={() => this.goToInsightsTable('suggested')}>
-                <FinancialOverviewField
-                  fields={[t('dashboard.financialOverview.suggested')]}
-                  values={[data?.suggested.nrOfProducts || 0]}
-                  type="amount"
-                />
-              </Table.Cell>
-              <Table.Cell onClick={() => this.goToInsightsTable('contracted')}>
-                <FinancialOverviewField
-                  fields={[t('dashboard.financialOverview.contracted')]}
-                  values={[data?.contracted.nrOfProducts || 0]}
-                  type="amount"
-                />
-              </Table.Cell>
-              <Table.Cell onClick={() => this.goToInsightsTable('delivered')}>
-                <FinancialOverviewField
-                  fields={[t('dashboard.financialOverview.delivered')]}
-                  values={[data?.delivered.nrOfProducts || 0]}
-                  type="amount"
-                />
-              </Table.Cell>
-              <Table.Cell onClick={() => this.goToInsightsTable('delivered')}>
-                <FinancialOverviewField
-                  fields={[t('dashboard.financialOverview.delivered'), t('dashboard.financialOverview.notDelivered')]}
-                  values={[
-                    data?.invoiced.delivered.nrOfProducts || 0,
-                    data?.invoiced.notDelivered.nrOfProducts || 0]}
-                  type="amount"
-                  header={t('dashboard.financialOverview.invoiced')}
-                />
-              </Table.Cell>
-              <Table.Cell>
-                <FinancialOverviewField
-                  fields={[t('dashboard.financialOverview.paid')]}
-                  values={[data?.paid.nrOfProducts || 0]}
-                  type="amount"
-                />
-              </Table.Cell>
-            </Table.Row>
-          </Table.Body>
-        </Table>
+                )}
+                header={t('dashboard.financialOverview.paid')}
+                content={t('dashboard.financialOverview.description.paid')}
+              />
+            </Table.HeaderCell>
+          </Table.Row>
+        </Table.Header>
+        <Table.Body>
+          <Table.Row>
+            <Table.Cell>{t('dashboard.financialOverview.value')}</Table.Cell>
+            <Table.Cell onClick={() => goToInsightsTable('suggested')}>
+              <FinancialOverviewField
+                fields={[t('dashboard.financialOverview.suggested')]}
+                values={[data?.suggested.amount || 0]}
+                type="value"
+              />
+            </Table.Cell>
+            <Table.Cell onClick={() => goToInsightsTable('contracted')}>
+              <FinancialOverviewField
+                fields={[t('dashboard.financialOverview.contracted')]}
+                values={[data?.contracted.amount || 0]}
+                type="value"
+              />
+            </Table.Cell>
+            <Table.Cell onClick={() => goToInsightsTable('delivered')}>
+              <FinancialOverviewField
+                fields={[t('dashboard.financialOverview.delivered')]}
+                values={[data?.delivered.amount || 0]}
+                type="value"
+              />
+            </Table.Cell>
+            <Table.Cell onClick={() => goToInsightsTable('invoiced')}>
+              <FinancialOverviewField
+                fields={[t('dashboard.financialOverview.delivered'), t('dashboard.financialOverview.notDelivered')]}
+                values={[
+                  data?.invoiced.delivered.amount || 0, data?.invoiced.notDelivered.amount || 0]}
+                type="value"
+                header={t('dashboard.financialOverview.invoiced')}
+              />
+            </Table.Cell>
+            <Table.Cell>
+              <FinancialOverviewField
+                fields={[t('dashboard.financialOverview.paid')]}
+                values={[data?.paid.amount || 0]}
+                type="value"
+              />
+            </Table.Cell>
+          </Table.Row>
+          <Table.Row>
+            <Table.Cell>{t('dashboard.financialOverview.nrOfProducts')}</Table.Cell>
+            <Table.Cell onClick={() => goToInsightsTable('suggested')}>
+              <FinancialOverviewField
+                fields={[t('dashboard.financialOverview.suggested')]}
+                values={[data?.suggested.nrOfProducts || 0]}
+                type="amount"
+              />
+            </Table.Cell>
+            <Table.Cell onClick={() => goToInsightsTable('contracted')}>
+              <FinancialOverviewField
+                fields={[t('dashboard.financialOverview.contracted')]}
+                values={[data?.contracted.nrOfProducts || 0]}
+                type="amount"
+              />
+            </Table.Cell>
+            <Table.Cell onClick={() => goToInsightsTable('delivered')}>
+              <FinancialOverviewField
+                fields={[t('dashboard.financialOverview.delivered')]}
+                values={[data?.delivered.nrOfProducts || 0]}
+                type="amount"
+              />
+            </Table.Cell>
+            <Table.Cell onClick={() => goToInsightsTable('delivered')}>
+              <FinancialOverviewField
+                fields={[t('dashboard.financialOverview.delivered'), t('dashboard.financialOverview.notDelivered')]}
+                values={[
+                  data?.invoiced.delivered.nrOfProducts || 0,
+                  data?.invoiced.notDelivered.nrOfProducts || 0]}
+                type="amount"
+                header={t('dashboard.financialOverview.invoiced')}
+              />
+            </Table.Cell>
+            <Table.Cell>
+              <FinancialOverviewField
+                fields={[t('dashboard.financialOverview.paid')]}
+                values={[data?.paid.nrOfProducts || 0]}
+                type="amount"
+              />
+            </Table.Cell>
+          </Table.Row>
+        </Table.Body>
+      </Table>
 
-      </Segment>
-    );
-  }
+    </Segment>
+  );
 }
 
-export default withTranslation()(withRouter(FinancialOverview));
+export default FinancialOverview;
