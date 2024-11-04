@@ -1,6 +1,5 @@
 import { Action } from 'redux';
 import { AuthStatus, Gender, User } from '../../clients/server.generated';
-import { NavigateFunction } from 'react-router/dist/lib/hooks';
 
 // Action types
 export enum AuthActionType {
@@ -72,9 +71,9 @@ export type AuthRevokeApiKey = Action<AuthActionType.RevokeApiKey>;
 export type AuthSetup = Action<AuthActionType.Setup> & {
   email: string,
   firstname: string,
+  preposition: string
   lastname: string,
   gender: Gender,
   password: string,
   rememberMe: boolean,
-  navigate: NavigateFunction
 };

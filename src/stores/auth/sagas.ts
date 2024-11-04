@@ -135,6 +135,7 @@ function* setup(action: AuthSetup) {
         admin: new UserParams({
           email: action.email,
           firstName: action.firstname,
+          lastNamePreposition: action.preposition,
           lastName: action.lastname,
           gender: action.gender,
           password: action.password,

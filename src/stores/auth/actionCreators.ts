@@ -7,7 +7,6 @@ import {
   AuthLoginLocal, AuthLogout, AuthRequestClear, AuthRequestError, AuthRequestSuccess,
   AuthResetPassword, AuthRevokeApiKey, AuthSetApiKey, AuthSetProfile, AuthSetStatus, AuthSetup,
 } from './actions';
-import { NavigateFunction } from 'react-router/dist/lib/hooks';
 
 export function authFetchStatus(): AuthFetchStatus {
   return { type: AuthActionType.FetchStatus };
@@ -88,12 +87,12 @@ export function authSetApiKey(apiKey: string | undefined): AuthSetApiKey {
 export function authSetup(
   email: string,
   firstname: string,
+  preposition: string,
   lastname: string,
   gender: Gender,
   password: string,
-  rememberMe: boolean,
-  navigate: NavigateFunction): AuthSetup {
+  rememberMe: boolean): AuthSetup {
   return {
-    type: AuthActionType.Setup, email, firstname, lastname, gender, password, rememberMe, navigate,
+    type: AuthActionType.Setup, email, firstname, preposition, lastname, gender, password, rememberMe,
   };
 }

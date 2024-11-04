@@ -5,24 +5,24 @@ import { Gender } from '../../clients/server.generated';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import { authSetup } from '../../stores/auth/actionCreators';
-import { useNavigate } from 'react-router-dom';
-import { NavigateFunction } from 'react-router/dist/lib/hooks';
+import validator from 'validator';
 
 interface Props {
   setup: (
     email: string,
     firstname: string,
+    preposition: string,
     lastname: string,
     gender: string,
     password: string,
-    rememberMe: boolean,
-    navigate: NavigateFunction) => void;
+    rememberMe: boolean) => void;
 }
 
 function SetupForm(props: Props) {
   const { t } = useTranslation();
   const [email, changeEmail] = useState('');
   const [firstName, changeFirstName] = useState('');
+  const [preposition, changePreposition] = useState('');
   const [lastName, changeLastName] = useState('');
   const [gender, changeGender] = useState(Gender.UNKNOWN);
   const [password, changePassword] = useState('');
@@ -33,52 +33,91 @@ function SetupForm(props: Props) {
     inputRef.current!.focus();
   }, []);
 
-  const navigate = useNavigate();
+  const formHasErrors = () =>{
+    return !validator.isEmail(email) || !validator.isStrongPassword(password);
+  };
 
   return (
-    <Form siz={'large'}>
-      <Form.Field>
+    <Form
+      error={
+        !validator.isStrongPassword(password) || !validator.isEmpty(email)
+      }
+      onSubmit={() => {
+        if (!formHasErrors()) {
+          props.setup(email, firstName, preposition, lastName, gender, password, rememberMe);
+        }
+      }}
+    >
+      <Form.Field
+        error={
+        !validator.isEmail(email)
+      }
+      >
         <Input
           value={email}
-          placeholder={t('pages.setup.email')}
+          placeholder={t('pages.login.email')}
           onChange={(e: ChangeEvent<HTMLInputElement>) => changeEmail(e.target.value)}
           ref={inputRef}
-        />
-      </Form.Field>
-      <Form.Field>
-        <Input
-          placeholder={t('pages.setup.firstname')}
-          value={firstName}
-          onChange={(e: ChangeEvent<HTMLInputElement>) => changeFirstName(e.target.value)}
-        />
-      </Form.Field>
-      <Form.Field>
-        <Input
-          placeholder={t('pages.setup.lastname')}
-          value={lastName}
-          onChange={(e: ChangeEvent<HTMLInputElement>) => changeLastName(e.target.value)}
-        />
-      </Form.Field>
-      <Form.Field>
-        <Dropdown
-          placeholder={t('pages.setup.gender.placeholder')}
-          fluid
-          selection
-          options={[
-            { key: 'male', text: t('pages.setup.gender.options.male'), value: Gender.MALE },
-            { key: 'female', text: t('pages.setup.gender.options.female'), value: Gender.FEMALE },
-            { key: 'other', text: t('pages.setup.gender.options.other'), value: Gender.OTHER },
-          ]}
-          onChange={(_e, data) => changeGender(data.value as Gender)}
+          required={true}
+          type="email"
         />
       </Form.Field>
       <Form.Field
+        error={validator.isEmpty(firstName)}
+      >
+        <Input
+          placeholder={t('entities.user.props.firstName')}
+          value={firstName}
+          onChange={(e: ChangeEvent<HTMLInputElement>) => changeFirstName(e.target.value)}
+          required={true}
+        />
+      </Form.Field>
+      <Form.Field>
+        <Input
+          placeholder={t('entities.user.props.preposition')}
+          value={preposition}
+          onChange={(e: ChangeEvent<HTMLInputElement>) => changePreposition(e.target.value)}
+        />
+      </Form.Field>
+      <Form.Field
+        error={validator.isEmpty(lastName)}
+      >
+        <Input
+          placeholder={t('entities.user.props.lastName')}
+          value={lastName}
+          onChange={(e: ChangeEvent<HTMLInputElement>) => changeLastName(e.target.value)}
+          required={true}
+        />
+      </Form.Field>
+      <Form.Field
+        error={gender === Gender.UNKNOWN}
+      >
+        <Dropdown
+          placeholder={t('entities.user.props.gender.header')}
+          fluid
+          selection
+          options={[
+            { key: 'male', text: t('entities.user.props.gender.male'), value: Gender.MALE },
+            { key: 'female', text: t('entities.user.props.gender.female'), value: Gender.FEMALE },
+            { key: 'other', text: t('entities.user.props.gender.other'), value: Gender.OTHER },
+          ]}
+          onChange={(_e, data) => changeGender(data.value as Gender)}
+          required={true}
+          color='purple'
+        />
+      </Form.Field>
+      <Form.Field
+        name='password-field'
         id="form-input-password"
         control={Input}
         value={password}
         type="password"
-        placeholder={t('pages.setup.password')}
+        placeholder={t('pages.login.password')}
         onChange={(e: ChangeEvent<HTMLInputElement>) => changePassword(e.target.value)}
+        required={true}
+        error={
+          !validator.isStrongPassword(password)
+        }
       />
       <Form.Field>
         <Checkbox
@@ -94,32 +133,26 @@ function SetupForm(props: Props) {
         primary
         size="large"
         type="submit"
-        onClick={() => props.setup(email, firstName, lastName, gender, password, rememberMe, navigate)}
       >
-        {t('pages.setup.setupButton')}
+        {t('pages.setup')}
       </Button>
 
     </Form>
   );
 }
 
-
-const mapStateToProps = () => ({
-
-});
-
 const mapDispatchToProps = (dispatch: Dispatch) => ({
   setup: (
     email: string,
     firstName: string,
+    preposition: string,
     lastName: string,
     gender: Gender,
     password: string,
     rememberMe: boolean,
-    navigate: NavigateFunction,
   )=> dispatch(
-    authSetup(email, firstName, lastName, gender, password, rememberMe, navigate),
+    authSetup(email, firstName, preposition, lastName, gender, password, rememberMe),
   ),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(SetupForm);
+export default connect(null, mapDispatchToProps)(SetupForm);

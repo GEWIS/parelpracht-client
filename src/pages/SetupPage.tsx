@@ -17,7 +17,7 @@ function SetupPage({ setupDone }: Props) {
   const { setTitle } = useTitle();
 
   React.useEffect(() => {
-    setTitle(t('pages.setup.title'));
+    setTitle(t('pages.setup'));
   });
 
   if (setupDone) {
