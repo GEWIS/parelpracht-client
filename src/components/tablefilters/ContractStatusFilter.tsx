@@ -15,9 +15,6 @@ function ContractStatusFilter(props: Props) {
     return { key: i, value: s, text: formatStatus(s) };
   });
 
-  // TODO: Fix status filtering in the backend
-  return null;
-
   return (
     <ColumnFilter
       column={props.column!}
@@ -29,7 +26,7 @@ function ContractStatusFilter(props: Props) {
 }
 
 ContractStatusFilter.defaultProps = {
-  column: 'activityStatus',
+  column: 'activities.subType',
   columnName: 'Status',
   table: Tables.Contracts,
 };
