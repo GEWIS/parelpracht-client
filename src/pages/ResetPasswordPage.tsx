@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import {
   NavLink, Navigate as Redirect, useLocation,
 } from 'react-router-dom';
@@ -6,7 +6,6 @@ import {
   Button, Container, Header, Icon, Segment,
 } from 'semantic-ui-react';
 import * as jose from 'jose';
-import validator from 'validator';
 import queryString from 'query-string';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
@@ -33,12 +32,6 @@ function ResetPasswordPage(props: Props) {
   const { t } = useTranslation();
   const { setTitle } = useTitle();
 
-  const [eightCharacters, changeEightCharacters] = useState(false);
-  const [lowerCase, changeLowerCase] = useState(false);
-  const [upperCase, changeUpperCase] = useState(false);
-  const [numbers, changeNumbers] = useState(false);
-  const [symbols, changeSymbols] = useState(false);
-
   useEffect(() => {
     props.clearStatus();
     setTitle(t('pages.resetPassword.title'));
@@ -52,36 +45,6 @@ function ResetPasswordPage(props: Props) {
   if (!(payload)) {
     return <Redirect to="/login" />;
   }
-
-  const hasEightCharacters = (password: string) => {
-    changeEightCharacters(password.length >= 8);
-  };
-
-  const hasLowerCase = (password: string) => {
-    changeLowerCase(/[a-z]/.test(password));
-  };
-  const hasUpperCase = (password: string) => {
-    changeUpperCase(/[A-Z]/.test(password));
-  };
-  const hasNumbers = (password: string) => {
-    changeNumbers(/[0-9]/.test(password));
-  };
-  const hasSymbols = (password: string) => {
-    changeSymbols(validator.isStrongPassword(password, {
-      minLength: 0,
-      minLowercase: 0,
-      minUppercase: 0,
-      minNumbers: 0,
-      minSymbols: 1,
-    }));
-  };
-  const validatePassword = (password: string) => {
-    hasEightCharacters(password);
-    hasLowerCase(password);
-    hasUpperCase(password);
-    hasNumbers(password);
-    hasSymbols(password);
-  };
 
   const newUser = payload.type === 'PASSWORD_SET';
 
@@ -118,56 +81,12 @@ function ResetPasswordPage(props: Props) {
       <AlertContainer internal />
       <Container>
         <CenterInPage>
-          <Header as="h1">
-            {newUser ? t('pages.resetPassword.setPassword') : t('pages.resetPassword.resetPassword')}
-          </Header>
           <Segment>
-            <h3>
-              {t('pages.resetPassword.requirements.header')}
-            </h3>
-            <p>
-              <table
-                style={{
-                  textAlign: 'left',
-                  marginLeft: 'auto',
-                  marginRight: 'auto',
-                }}
-              >
-                <tr>
-                  <td>
-                    {eightCharacters ? <Icon name="check" color="green" /> : <Icon name="close" color="red" />}
-                  </td>
-                  <td>{t('pages.resetPassword.requirements.length')}</td>
-                </tr>
-                <tr>
-                  <td>
-                    {lowerCase ? <Icon name="check" color="green" /> : <Icon name="close" color="red" />}
-                  </td>
-                  <td>{t('pages.resetPassword.requirements.lowerCase')}</td>
-                </tr>
-                <tr>
-                  <td>
-                    {upperCase ? <Icon name="check" color="green" /> : <Icon name="close" color="red" />}
-                  </td>
-                  <td>{t('pages.resetPassword.requirements.upperCase')}</td>
-                </tr>
-                <tr>
-                  <td>
-                    {numbers ? <Icon name="check" color="green" /> : <Icon name="close" color="red" />}
-                  </td>
-                  <td>{t('pages.resetPassword.requirements.number')}</td>
-                </tr>
-                <tr>
-                  <td>
-                    {symbols ? <Icon name="check" color="green" /> : <Icon name="close" color="red" />}
-                  </td>
-                  <td>{t('pages.resetPassword.requirements.symbol')}</td>
-                </tr>
-              </table>
-            </p>
+            <Header as="h1">
+              {newUser ? t('pages.resetPassword.setPassword') : t('pages.resetPassword.resetPassword')}
+            </Header>
             <ResetPasswordForm
               token={token}
-              validatePassword={validatePassword}
             />
             <Button as={NavLink} to="/login" style={{ marginTop: '1em' }} basic>
               <Icon name="arrow left" basic />

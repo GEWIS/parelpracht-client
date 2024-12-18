@@ -6,6 +6,7 @@ import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import { authSetup } from '../../stores/auth/actionCreators';
 import validator from 'validator';
+import PasswordStrength from './PasswordStrength';
 
 interface Props {
   setup: (
@@ -24,9 +25,10 @@ function SetupForm(props: Props) {
   const [firstName, changeFirstName] = useState('');
   const [preposition, changePreposition] = useState('');
   const [lastName, changeLastName] = useState('');
-  const [gender, changeGender] = useState(Gender.UNKNOWN);
+  const [gender, changeGender] = useState(Gender.MALE);
   const [password, changePassword] = useState('');
   const [rememberMe, changeRememberMe] = useState(false);
+  const [passwordIsValid, setPasswordIsValid] = useState(false);
 
   const inputRef = useRef<Input>(null);
   useEffect(() => {
@@ -34,13 +36,13 @@ function SetupForm(props: Props) {
   }, []);
 
   const formHasErrors = () =>{
-    return !validator.isEmail(email) || !validator.isStrongPassword(password);
+    return !validator.isEmail(email) || validator.isEmpty(firstName) || validator.isEmpty(lastName) || !passwordIsValid || gender == Gender.UNKNOWN;
   };
 
   return (
     <Form
       error={
-        !validator.isStrongPassword(password) || !validator.isEmpty(email)
+        formHasErrors()
       }
       onSubmit={() => {
         if (!formHasErrors()) {
@@ -103,7 +105,7 @@ function SetupForm(props: Props) {
           ]}
           onChange={(_e, data) => changeGender(data.value as Gender)}
           required={true}
-          color='purple'
+          value={gender}
         />
       </Form.Field>
       <Form.Field
@@ -116,9 +118,10 @@ function SetupForm(props: Props) {
         onChange={(e: ChangeEvent<HTMLInputElement>) => changePassword(e.target.value)}
         required={true}
         error={
-          !validator.isStrongPassword(password)
+          !passwordIsValid
         }
       />
+      <PasswordStrength password={password} setPasswordIsValid={setPasswordIsValid} />
       <Form.Field>
         <Checkbox
           toggle
@@ -133,6 +136,7 @@ function SetupForm(props: Props) {
         primary
         size="large"
         type="submit"
+        disabled={formHasErrors()}
       >
         {t('pages.setup')}
       </Button>
