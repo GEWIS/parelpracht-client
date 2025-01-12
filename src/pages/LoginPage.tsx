@@ -1,5 +1,5 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
+import { Navigate as Redirect, NavLink } from 'react-router-dom';
 import {
   Container, Image, Message, Segment,
 } from 'semantic-ui-react';
@@ -15,9 +15,10 @@ import { useTitle } from '../components/TitleContext';
 
 interface Props {
   loginMethod: LoginMethods;
+  setupDone: boolean;
 }
 
-function LoginPage({ loginMethod }: Props) {
+function LoginPage({ loginMethod, setupDone }: Props) {
   const { t } = useTranslation();
   const { setTitle } = useTitle();
 
@@ -33,6 +34,10 @@ function LoginPage({ loginMethod }: Props) {
       loginForm = <LoginLDAPForm />; break;
     default:
       throw new Error(`Unknown login method: ${loginMethod}`);
+  }
+
+  if (!setupDone) {
+    return <><Redirect to={'/setup'}/></>;
   }
 
   return (

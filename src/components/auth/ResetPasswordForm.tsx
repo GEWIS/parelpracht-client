@@ -9,17 +9,18 @@ import { useTranslation } from 'react-i18next';
 import { authResetPassword } from '../../stores/auth/actionCreators';
 import ResourceStatus from '../../stores/resourceStatus';
 import { RootState } from '../../stores/store';
+import PasswordStrength from './PasswordStrength';
 
 interface Props {
   token: string;
   status: ResourceStatus;
   resetPassword: (password: string, passwordRepeat: string, token: string) => void;
-  validatePassword: (password: string) => void;
 }
 
 function ResetPasswordForm(props: Props) {
   const { t } = useTranslation();
   const [password, changePassword] = useState('');
+  const [passwordIsValid, setPasswordIsValid] = useState(false);
   const [passwordRepeat, changePasswordRepeat] = useState('');
 
   return (
@@ -37,7 +38,6 @@ function ResetPasswordForm(props: Props) {
         }
         onChange={(e: ChangeEvent<HTMLInputElement>) => {
           changePassword(e.target.value);
-          props.validatePassword(e.target.value);
         }}
       />
       <Form.Field
@@ -48,16 +48,21 @@ function ResetPasswordForm(props: Props) {
         icon="lock"
         iconPosition="left"
         error={
-          validator.isEmpty(passwordRepeat) || !validator.equals(passwordRepeat, password)
+          !passwordIsValid || !validator.equals(passwordRepeat, password)
         }
         label={t('pages.resetPassword.repeatPassword')}
         onChange={(e: ChangeEvent<HTMLInputElement>) => changePasswordRepeat(e.target.value)}
+      />
+      <PasswordStrength
+        password={password}
+        setPasswordIsValid={setPasswordIsValid}
       />
       <Button
         fluid
         primary
         size="large"
         type="submit"
+        disabled={!passwordIsValid}
         onClick={() => props.resetPassword(password, passwordRepeat, props.token)}
         loading={props.status === ResourceStatus.FETCHING}
       >

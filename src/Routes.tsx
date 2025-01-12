@@ -21,6 +21,7 @@ import { RootState } from './stores/store';
 import ResourceStatus from './stores/resourceStatus';
 import { AuthStatus, LoginMethods, Roles, User } from './clients/server.generated';
 import LoginPage from './pages/LoginPage';
+import SetupPage from './pages/SetupPage';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
 import ResetPasswordPage from './pages/ResetPasswordPage';
 import ContactModal from './pages/ContactModal';
@@ -48,6 +49,7 @@ interface Props extends WithRouter {
   status: ResourceStatus;
   profile: User | undefined;
   loginMethod: LoginMethods;
+  setupDone: boolean;
 
   hasRole: (role: Roles) => boolean;
 }
@@ -67,7 +69,7 @@ function Routes(props: Props) {
       path: '/login',
       element:
         <>
-          <LoginPage loginMethod={props.loginMethod}/>
+          <LoginPage loginMethod={props.loginMethod} setupDone={props.setupDone}/>
           <Footer/>
         </>,
     },
@@ -75,7 +77,7 @@ function Routes(props: Props) {
       path: '*',
       element:
         <>
-          <LoginPage loginMethod={props.loginMethod}/>
+          <LoginPage loginMethod={props.loginMethod} setupDone={props.setupDone}/>
           <Footer/>
         </>,
     },
@@ -95,6 +97,14 @@ function Routes(props: Props) {
           <Footer/>
         </>,
     },
+    {
+      path: '/setup',
+      element:
+        <>
+          <SetupPage setupDone={props.setupDone}/>
+          <Footer/>
+        </>,
+    },
   ];
 
   if (props.loginMethod !== LoginMethods.Local) {
@@ -102,7 +112,7 @@ function Routes(props: Props) {
       path: '/login/local',
       element:
         <>
-          <LoginPage loginMethod={LoginMethods.Local}/>
+          <LoginPage loginMethod={LoginMethods.Local} setupDone={props.setupDone}/>
           <Footer/>
         </>,
     });
@@ -115,6 +125,10 @@ function Routes(props: Props) {
     },
     {
       path: '/login/local',
+      element: <Redirect to="/"/>,
+    },
+    {
+      path: '/setup',
       element: <Redirect to="/"/>,
     },
     {
@@ -456,6 +470,7 @@ const mapStateToProps = (state: RootState) => {
     profileStatus: state.auth.profileStatus,
     hasRole: (role: Roles): boolean => authedUserHasRole(state, role),
     loginMethod: state.general.loginMethod,
+    setupDone: state.general.setupDone,
   };
 };
 
