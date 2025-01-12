@@ -46,17 +46,16 @@ interface Props {
 }
 
 function InvoicesTable({
-  invoices, column, direction, changeSort, setSort,
+  invoices, fetchInvoices, column, direction, changeSort, setSort, setTableFilter,
   total, fetched, skip, take, status,
-  prevPage, nextPage, setTake,
+  prevPage, nextPage, setTake, hasRole,
 }: Props) {
   const { t } = useTranslation();
 
   useEffect(() => {
     setSort('id', 'DESC');
-    // TODO: Fix status filtering in backend
-    // if (([Roles.FINANCIAL].some(hasRole) && ![Roles.ADMIN].some(hasRole))) setTableFilter({ column: 'activityStatus', values: ['SENT'] });
-    // fetchInvoices();
+    if (([Roles.FINANCIAL].some(hasRole) && ![Roles.ADMIN].some(hasRole))) setTableFilter({ column: 'activityStatus', values: ['SENT'] });
+    fetchInvoices();
   }, []);
 
   const table = (
