@@ -62,7 +62,7 @@ function ResetPasswordForm(props: Props) {
         primary
         size="large"
         type="submit"
-        disabled={validator.isEmpty(passwordRepeat) || !validator.equals(passwordRepeat, password) || !validator.isStrongPassword(password)}
+        disabled={!passwordIsValid}
         onClick={() => props.resetPassword(password, passwordRepeat, props.token)}
         loading={props.status === ResourceStatus.FETCHING}
       >
