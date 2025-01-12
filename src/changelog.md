@@ -1,5 +1,5 @@
 # Change log
-The current version of ParelPracht is **v1.3.4**, released on March 5th, 2024.
+The current version of ParelPracht is **v1.4.0**, released on January 12th, 2025.
 You can find the release notes below.
 ----------------------
 
