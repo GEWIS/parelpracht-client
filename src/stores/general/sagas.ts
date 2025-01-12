@@ -19,9 +19,9 @@ export function* fetchGeneralPublicInfo() {
 
   const generalPublicInfo: IGeneralPublicInfo = yield call([
     client, client.getPublicGeneralInfo]);
-  const { loginMethod } = generalPublicInfo;
+  const { loginMethod, setupDone } = generalPublicInfo;
 
-  yield put(generalPublicSetInfo(loginMethod));
+  yield put(generalPublicSetInfo(loginMethod, setupDone));
 }
 
 export default [

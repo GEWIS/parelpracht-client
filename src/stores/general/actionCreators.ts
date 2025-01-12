@@ -16,6 +16,6 @@ export function generalPrivateSetInfo(financialYears: number[]): PrivateGeneralS
   return { type: GeneralActionType.SetPrivateInfo, financialYears };
 }
 
-export function generalPublicSetInfo(loginMethod: LoginMethods): PublicGeneralSetInfo {
-  return { type: GeneralActionType.SetPublicInfo, loginMethod };
+export function generalPublicSetInfo(loginMethod: LoginMethods, setupDone: boolean): PublicGeneralSetInfo {
+  return { type: GeneralActionType.SetPublicInfo, loginMethod, setupDone };
 }

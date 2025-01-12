@@ -579,6 +579,7 @@
       },
       "total": "Totaa"
     },
+    "setup": "Setup",
     "user": {
       "apiKey": {
         "description1": "Je kunt een API Key genereren om ParelPracht te gebruiken in externe applicaties. Met deze key kunnen operaties uitgevoerd worden namens jou. Om deze key te gebruiken zet je de gehele key in de",

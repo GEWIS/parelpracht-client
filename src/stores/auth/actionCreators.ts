@@ -1,11 +1,11 @@
-import { AuthStatus, User } from '../../clients/server.generated';
+import { AuthStatus, Gender, User } from '../../clients/server.generated';
 import {
   AuthActionType, AuthFetchProfile, AuthFetchStatus,
   AuthForgotPassword,
   AuthGenerateApiKey,
   AuthGetApiKey, AuthLoginLDAP,
   AuthLoginLocal, AuthLogout, AuthRequestClear, AuthRequestError, AuthRequestSuccess,
-  AuthResetPassword, AuthRevokeApiKey, AuthSetApiKey, AuthSetProfile, AuthSetStatus,
+  AuthResetPassword, AuthRevokeApiKey, AuthSetApiKey, AuthSetProfile, AuthSetStatus, AuthSetup,
 } from './actions';
 
 export function authFetchStatus(): AuthFetchStatus {
@@ -82,4 +82,17 @@ export function authRevokeApiKey(): AuthRevokeApiKey {
 
 export function authSetApiKey(apiKey: string | undefined): AuthSetApiKey {
   return { type: AuthActionType.SetApiKey, apiKey };
+}
+
+export function authSetup(
+  email: string,
+  firstname: string,
+  preposition: string,
+  lastname: string,
+  gender: Gender,
+  password: string,
+  rememberMe: boolean): AuthSetup {
+  return {
+    type: AuthActionType.Setup, email, firstname, preposition, lastname, gender, password, rememberMe,
+  };
 }

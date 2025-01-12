@@ -5,6 +5,7 @@ import { LoginMethods } from '../../clients/server.generated';
 
 const initialState: GeneralState = {
   loginMethod: LoginMethods.Local,
+  setupDone: false,
   financialYears: [],
 };
 
@@ -23,6 +24,7 @@ export default function generalReducer(
       return {
         ...state,
         loginMethod: action.loginMethod,
+        setupDone: action.setupDone,
       };
     default:
       return state;
