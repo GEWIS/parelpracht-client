@@ -130,12 +130,14 @@
         "email": "Emailadres",
         "firstName": "Voornaam",
         "function": {
+          "assisting": "Ondersteunend",
           "extensive": "{{function}} contactpersoon",
           "financial": "Financieel",
           "header": "Functie",
           "normal": "Normaal",
           "old": "Oud",
           "primary": "Primair",
+          "signatory_authorized": "Tekengerechtigd",
           "unknown": "Onbekend"
         },
         "gender": {

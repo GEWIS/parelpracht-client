@@ -1,371 +1,318 @@
-import React, { ChangeEvent } from 'react';
-import { connect } from 'react-redux';
-import { Dispatch } from 'redux';
-import {
-  Dropdown, Form, Input, TextArea,
-} from 'semantic-ui-react';
-import { WithTranslation, withTranslation } from 'react-i18next';
-import validator from 'validator';
-import {
-  Contact, ContactFunction, ContactParams, Gender, Roles,
-} from '../../../clients/server.generated';
-import {
-  createSingle, deleteSingle, fetchSingle, saveSingle,
-} from '../../../stores/single/actionCreators';
-import ResourceStatus from '../../../stores/resourceStatus';
-import { RootState } from '../../../stores/store';
+import { useTranslation } from 'react-i18next';
+import { Contact, ContactFunction, ContactParams, Gender, Roles } from '../../../clients/server.generated';
+import { ChangeEvent, useEffect, useRef, useState } from 'react';
+import AuthorizationComponent from '../../AuthorizationComponent';
 import PropsButtons from '../../PropsButtons';
 import { SingleEntities } from '../../../stores/single/single';
+import ResourceStatus from '../../../stores/resourceStatus';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../../stores/store';
 import { getSingle } from '../../../stores/single/selectors';
 import { formatContactName, formatFunction } from '../../../helpers/contact';
-import { TransientAlert } from '../../../stores/alerts/actions';
+import { Dropdown, Form, Input, TextArea } from 'semantic-ui-react';
+import validator from 'validator';
+import { createSingle, deleteSingle, fetchSingle, saveSingle } from '../../../stores/single/actionCreators';
 import { showTransientAlert } from '../../../stores/alerts/actionCreators';
+import { TransientAlert } from '../../../stores/alerts/actions';
+import { useNavigate } from 'react-router';
 
-import AuthorizationComponent from '../../AuthorizationComponent';
-import { withRouter, WithRouter } from '../../../WithRouter';
-
-interface Props extends WithTranslation, WithRouter {
+interface Props {
   create?: boolean;
+  contact: Contact;
   onCompanyPage: boolean;
   onCancel?: () => void;
 
-  contact: Contact;
-  status: ResourceStatus;
-
-  saveContact: (id: number, contact: ContactParams) => void;
-  createContact: (contact: ContactParams) => void;
-  deleteContact: (id: number) => void;
-  showTransientAlert: (alert: TransientAlert) => void;
-  fetchCompany: (id: number) => void;
 }
 
-interface State {
-  editing: boolean;
+const ContactProps = (props: Props) => {
+  const { t } = useTranslation();
+  const navigate = useNavigate();
+  const [editing, setEditing] = useState<boolean>(props.create ?? false);
+  const [formState, setFormState] = useState<ContactParams>(props.contact);
 
-  firstName: string;
-  lastNamePreposition: string;
-  lastName: string;
-  gender: Gender;
-  email: string;
-  telephone: string;
-  comments: string;
-  func: ContactFunction;
-}
+  const status = useSelector((state: RootState) => {
+    return getSingle<Contact>(state, SingleEntities.Contact).status;
+  });
+  const prevStatusRef = useRef(status);
 
-class ContactProps extends React.Component<Props, State> {
-  static defaultProps = {
-    create: undefined,
-    onCancel: undefined,
+  const updateFormState = (updatedValues: Partial<ContactParams>) => {
+    setFormState((prevState) => ({
+      ...prevState,
+      ...updatedValues,
+    } as ContactParams));
   };
 
-  public constructor(props: Props) {
-    super(props);
+  const dispatch = useDispatch();
 
-    this.state = {
-      editing: props.create ?? false,
-      ...this.extractState(props),
-    };
-  }
+  const saveContact = (id: number, contact: ContactParams) => {
+    dispatch(saveSingle(SingleEntities.Contact, id, contact));
+  };
+  const createContact = (contact: ContactParams) => {
+    dispatch(createSingle(SingleEntities.Contact, contact));
+  };
+  const deleteContact = (id: number) => {
+    dispatch(deleteSingle(SingleEntities.Contact, id));
+  };
+  const showAlert = (alert: TransientAlert) => {
+    dispatch(showTransientAlert(alert));
+  };
+  const fetchCompany = (id: number) => {
+    dispatch(fetchSingle(SingleEntities.Company, id));
+  };
 
-  componentDidUpdate(prevProps: Props) {
-    if (prevProps.status === ResourceStatus.SAVING
-      && this.props.status === ResourceStatus.FETCHED) {
+  useEffect(() => {
+    if (prevStatusRef.current === ResourceStatus.SAVING
+      && status === ResourceStatus.FETCHED) {
       // eslint-disable-next-line react/no-did-update-set-state
-      this.setState({ editing: false });
-      if (this.props.create) {
-        this.props.showTransientAlert({
+      setEditing(false);
+      if (props.create) {
+        showAlert({
           title: 'Success',
           message: 'Successfully created new contact.',
           type: 'success',
           displayTimeInMs: 3000,
         });
       } else {
-        this.props.showTransientAlert({
+        showAlert({
           title: 'Success',
           message: `Properties of ${formatContactName(
-            this.props.contact?.firstName,
-            this.props.contact?.lastNamePreposition,
-            this.props.contact?.lastName,
+            formState.firstName,
+            formState.lastNamePreposition,
+            formState.lastName,
           )} successfully updated.`,
           type: 'success',
           displayTimeInMs: 3000,
         });
       }
     }
-  }
+    prevStatusRef.current = status;
+  }, [status]);
 
-  extractState = (props: Props) => {
-    const { contact } = props;
-    return {
-      firstName: contact.firstName,
-      lastNamePreposition: contact.lastNamePreposition,
-      lastName: contact.lastName,
-      gender: contact.gender,
-      email: contact.email,
-      telephone: contact.telephone,
-      func: contact.function,
-      comments: contact.comments ?? '',
-    };
-  };
-
-  toParams = (): ContactParams => {
+  const toParams = (): ContactParams => {
     return new ContactParams({
-      firstName: this.state.firstName,
-      lastNamePreposition: this.state.lastNamePreposition,
-      lastName: this.state.lastName,
-      gender: this.state.gender,
-      email: this.state.email,
-      telephone: this.state.telephone,
-      function: this.state.func,
-      comments: this.state.comments,
-      companyId: this.props.contact.companyId,
+      firstName: formState.firstName,
+      lastNamePreposition: formState.lastNamePreposition,
+      lastName: formState.lastName,
+      gender: formState.gender,
+      email: formState.email,
+      telephone: formState.telephone,
+      function: formState.function,
+      comments: formState.comments,
+      companyId: props.contact.companyId,
+
     });
   };
 
-  edit = () => {
-    this.setState({ editing: true, ...this.extractState(this.props) });
+  const edit = () => {
+    setEditing(true);
   };
 
-  cancel = () => {
-    if (!this.props.create) {
-      this.setState({ editing: false, ...this.extractState(this.props) });
-    } else if (this.props.onCancel) {
-      this.props.onCancel();
+  const cancel = () => {
+    if (!props.create) {
+      setEditing(false);
+    } else if (props.onCancel) {
+      props.onCancel();
     }
   };
 
-  save = () => {
-    if (this.props.create) {
-      this.props.createContact(this.toParams());
+  const save = () => {
+    if (props.create) {
+      createContact(toParams());
     } else {
-      this.props.saveContact(this.props.contact.id, this.toParams());
+      saveContact(props.contact.id, toParams());
     }
   };
 
-  remove = () => {
-    if (!this.props.create) {
-      this.props.deleteContact(this.props.contact.id);
-      const { navigate } = this.props.router;
-      if (this.props.onCompanyPage) {
-        navigate(`/company/${this.props.contact.companyId}`);
-        this.props.fetchCompany(this.props.contact.companyId);
-      } else {
-        navigate('/contact');
-      }
+  const remove = () => {
+    if (props.create) {
+      return;
+    }
+    deleteContact(props.contact.id);
+    if (props.onCompanyPage) {
+      navigate(`/company/${props.contact.companyId}`);
+      fetchCompany(props.contact.companyId);
+    } else {
+      navigate('/contact');
     }
   };
 
-  propsHaveErrors = (): boolean => {
-    const {
-      lastName, email, telephone,
-    } = this.state;
-    return (validator.isEmpty(lastName)
-      || !validator.isEmail(email)
-      || (!validator.isEmpty(telephone!) && !validator.isMobilePhone(telephone!))
+  const emailIsValid = (): boolean => {
+    if ([ContactFunction.SIGNATORY_AUTHORIZED, ContactFunction.ASSISTING].includes(formState.function)) {
+      return validator.isEmpty(formState.email) || validator.isEmail(formState.email);
+    } else {
+      return validator.isEmail(formState.email);
+    }
+  };
+
+  const propsHaveErrors = () => {
+    return (validator.isEmpty(formState.lastName)
+      || (!validator.isEmpty(formState.telephone!) && !validator.isMobilePhone(formState.telephone!))
+      || !emailIsValid()
     );
   };
 
-  deleteButtonActive = () => {
-    if (this.props.create) {
+  const deleteButtonActive = () => {
+    if (props.create) {
       return undefined;
     }
-    return !(this.props.contact.contracts.length > 0);
+    return !(props.contact.contracts.length > 0);
   };
 
-  render() {
-    const {
-      editing,
-      firstName,
-      lastNamePreposition,
-      lastName,
-      gender,
-      email,
-      telephone,
-      func,
-      comments,
-    } = this.state;
-    const { t } = this.props;
+  return (
+    <>
+      <h2>
+        {props.create ? t('entities.contact.newContact') : t('entities.company.props.details')}
 
-    return (
-      <>
-        <h2>
-          {this.props.create ? t('entities.contact.newContact') : t('entities.company.props.details')}
+        <AuthorizationComponent roles={[Roles.GENERAL, Roles.ADMIN]} notFound={false}>
+          <PropsButtons
+            editing={editing}
+            canEdit
+            canDelete={deleteButtonActive()}
+            canSave={!propsHaveErrors()}
+            entity={SingleEntities.Contact}
+            status={ResourceStatus.FETCHING}
+            cancel={cancel}
+            edit={edit}
+            save={save}
+            remove={remove}
+          />
+        </AuthorizationComponent>
+      </h2>
 
-          <AuthorizationComponent roles={[Roles.GENERAL, Roles.ADMIN]} notFound={false}>
-            <PropsButtons
-              editing={editing}
-              canEdit
-              canDelete={this.deleteButtonActive()}
-              canSave={!this.propsHaveErrors()}
-              entity={SingleEntities.Contact}
-              status={this.props.status}
-              cancel={this.cancel}
-              edit={this.edit}
-              save={this.save}
-              remove={this.remove}
-            />
-          </AuthorizationComponent>
-        </h2>
-
-        <Form style={{ marginTop: '2em' }}>
-          <Form.Group>
-            <Form.Field
-              disabled={!editing}
-              id="form-input-first-name"
-              fluid
-              control={Input}
-              label={t('entities.contact.props.firstName')}
-              placeholder={t('entities.contact.props.firstName')}
-              value={firstName}
-              onChange={(e: ChangeEvent<HTMLInputElement>) => this.setState({
-                firstName: e.target.value,
-              })}
-              width={6}
-            />
-            <Form.Field
-              disabled={!editing}
-              id="form-input-middle-name"
-              fluid
-              control={Input}
-              label={t('entities.contact.props.middleName')}
-              placeholder={t('entities.contact.props.middleName')}
-              value={lastNamePreposition}
-              onChange={(e: ChangeEvent<HTMLInputElement>) => this.setState({
-                lastNamePreposition: e.target.value,
-              })}
-              width={4}
-            />
-            <Form.Field
-              disabled={!editing}
-              required
-              id="form-input-last-name"
-              fluid
-              control={Input}
-              label={t('entities.contact.props.lastName')}
-              placeholder={t('entities.contact.props.lastName')}
-              value={lastName}
-              onChange={(e: ChangeEvent<HTMLInputElement>) => this.setState({
-                lastName: e.target.value,
-              })}
-              width={6}
-              error={
-                validator.isEmpty(lastName)
-              }
-            />
-          </Form.Group>
-          <Form.Group widths="equal">
-            <Form.Field required disabled={!editing}>
-              {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-              <label htmlFor="form-input-gender">{t('entities.contact.props.gender.gender')}</label>
-              <Dropdown
-                id="form-input-gender"
-                selection
-                placeholder="Gender"
-                value={gender}
-                options={[
-                  { key: 0, text: t('entities.contact.props.gender.male'), value: Gender.MALE },
-                  { key: 1, text: t('entities.contact.props.gender.female'), value: Gender.FEMALE },
-                  { key: 2, text: t('entities.contact.props.gender.unknown'), value: Gender.UNKNOWN },
-                ]}
-                onChange={(e, data) => this.setState({
-                  gender: data.value as Gender,
-                })}
-                fluid
-              />
-            </Form.Field>
-            <Form.Field required disabled={!editing}>
-              {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-              <label htmlFor="form-input-function">{t('entities.contact.props.function.header')}</label>
-              <Dropdown
-                id="form-input-function"
-                selection
-                placeholder={t('entities.contact.props.function.header')}
-                value={func}
-                options={Object.values(ContactFunction).map((x, i) => ({
-                  key: i, value: x, text: formatFunction(x),
-                }))}
-                onChange={(e, data) => this.setState({
-                  func: data.value as ContactFunction,
-                })}
-                fluid
-              />
-            </Form.Field>
-          </Form.Group>
-          <Form.Group widths="equal">
-            <Form.Field
-              disabled={!editing}
-              id="form-input-email"
-              fluid
-              control={Input}
-              label={t('entities.contact.props.email')}
-              placeholder={t('entities.contact.props.email')}
-              value={email}
-              onChange={(e: ChangeEvent<HTMLInputElement>) => this.setState({
-                email: e.target.value,
-              })}
-              error={
-                !validator.isEmail(email)
-              }
-            />
-            <Form.Field
-              disabled={!editing}
-              id="form-input-telephone"
-              fluid
-              placeholder={t('entities.company.props.number')}
-              control={Input}
-              label={t('entities.company.props.number')}
-              value={telephone}
-              onChange={(e: ChangeEvent<HTMLInputElement>) => this.setState({
-                telephone: e.target.value,
-              })}
-              error={
-                !validator.isEmpty(telephone!) && !validator.isMobilePhone(telephone!)
-              }
-            />
-          </Form.Group>
-          <Form.Field>
+      <Form style={{ marginTop: '2em' }}>
+        <Form.Group>
+          <Form.Field
+            disabled={!editing}
+            id="form-input-first-name"
+            fluid
+            control={Input}
+            label={t('entities.contact.props.firstName')}
+            placeholder={t('entities.contact.props.firstName')}
+            value={formState.firstName}
+            onChange={(e: ChangeEvent<HTMLInputElement>) => updateFormState({
+              firstName: e.target.value,
+            })}
+            width={6}
+          />
+          <Form.Field
+            disabled={!editing}
+            id="form-input-middle-name"
+            fluid
+            control={Input}
+            label={t('entities.contact.props.middleName')}
+            placeholder={t('entities.contact.props.middleName')}
+            value={formState.lastNamePreposition}
+            onChange={(e: ChangeEvent<HTMLInputElement>) => updateFormState({
+              lastNamePreposition: e.target.value,
+            })}
+            width={4}
+          />
+          <Form.Field
+            disabled={!editing}
+            required
+            id="form-input-last-name"
+            fluid
+            control={Input}
+            label={t('entities.contact.props.lastName')}
+            placeholder={t('entities.contact.props.lastName')}
+            value={formState.lastName}
+            onChange={(e: ChangeEvent<HTMLInputElement>) => updateFormState({
+              lastName: e.target.value,
+            })}
+            width={6}
+            error={
+              validator.isEmpty(formState.lastName)
+            }
+          />
+        </Form.Group>
+        <Form.Group widths="equal">
+          <Form.Field required disabled={!editing}>
             {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-            <label htmlFor="form-input-comments">
-              {t('entities.contact.props.comments')}
-            </label>
-            <TextArea
-              id="form-delivery-spec-english"
-              value={comments}
-              onChange={
-                (e) => this.setState({ comments: e.target.value })
-              }
-              placeholder={t('entities.contact.props.comments')}
+            <label htmlFor="form-input-gender">{t('entities.contact.props.gender.gender')}</label>
+            <Dropdown
+              id="form-input-gender"
+              selection
+              placeholder="Gender"
+              value={formState.gender}
+              options={[
+                { key: 0, text: t('entities.contact.props.gender.male'), value: Gender.MALE },
+                { key: 1, text: t('entities.contact.props.gender.female'), value: Gender.FEMALE },
+                { key: 2, text: t('entities.contact.props.gender.unknown'), value: Gender.UNKNOWN },
+              ]}
+              onChange={(e, data) => updateFormState({
+                gender: data.value as Gender,
+              })}
+              fluid
             />
           </Form.Field>
-        </Form>
-      </>
-    );
-  }
-}
+          <Form.Field required disabled={!editing}>
+            {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
+            <label htmlFor="form-input-function">{t('entities.contact.props.function.header')}</label>
+            <Dropdown
+              id="form-input-function"
+              selection
+              placeholder={t('entities.contact.props.function.header')}
+              value={formState.function}
+              options={Object.values(ContactFunction).map((x, i) => ({
+                key: i, value: x, text: formatFunction(x),
+              }))}
+              onChange={(e, data) => updateFormState({
+                function: data.value as ContactFunction,
+              })}
+              fluid
+            />
+          </Form.Field>
+        </Form.Group>
+        <Form.Group widths="equal">
+          <Form.Field
+            disabled={!editing}
+            id="form-input-email"
+            fluid
+            control={Input}
+            label={t('entities.contact.props.email')}
+            placeholder={t('entities.contact.props.email')}
+            value={formState.email}
+            onChange={(e: ChangeEvent<HTMLInputElement>) => updateFormState({
+              email: e.target.value,
+            })}
+            error={
+              !emailIsValid()
+            }
+          />
+          <Form.Field
+            disabled={!editing}
+            id="form-input-telephone"
+            fluid
+            placeholder={t('entities.company.props.number')}
+            control={Input}
+            label={t('entities.company.props.number')}
+            value={formState.telephone}
+            onChange={(e: ChangeEvent<HTMLInputElement>) => updateFormState({
+              telephone: e.target.value,
+            })}
+            error={
+              !validator.isEmpty(formState.telephone!) && !validator.isMobilePhone(formState.telephone!)
+            }
+          />
+        </Form.Group>
+        <Form.Field>
+          {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
+          <label htmlFor="form-input-comments">
+            {t('entities.contact.props.comments')}
+          </label>
+          <TextArea
+            id="form-delivery-spec-english"
+            value={formState.comments}
+            onChange={
+              (e) => updateFormState({ comments: e.target.value })
+            }
+            placeholder={t('entities.contact.props.comments')}
+          />
+        </Form.Field>
+      </Form>
 
-const mapStateToProps = (state: RootState) => {
-  return {
-    status: getSingle<Contact>(state, SingleEntities.Contact).status,
-  };
+    </>
+  );
 };
 
-const mapDispatchToProps = (dispatch: Dispatch) => ({
-  saveContact: (id: number,
-    contact: ContactParams) => dispatch(
-    saveSingle(SingleEntities.Contact, id, contact),
-  ),
-  createContact: (contact: ContactParams) => dispatch(
-    createSingle(SingleEntities.Contact, contact),
-  ),
-  deleteContact: (id: number) => dispatch(
-    deleteSingle(SingleEntities.Contact, id),
-  ),
-  showTransientAlert: (alert: TransientAlert) => dispatch(showTransientAlert(alert)),
-  fetchCompany: (id: number) => dispatch(
-    fetchSingle(SingleEntities.Company, id),
-  ),
-});
-
-export default withTranslation()(
-  withRouter(connect(mapStateToProps, mapDispatchToProps)(ContactProps)),
-);
+export default ContactProps;
