@@ -137,7 +137,11 @@ const ContactProps = (props: Props) => {
   };
 
   const emailIsValid = (): boolean => {
-    if ([ContactFunction.SIGNATORY_AUTHORIZED, ContactFunction.ASSISTING].includes(formState.function)) {
+    if ([
+      ContactFunction.SIGNATORY_AUTHORIZED,
+      ContactFunction.ASSISTING,
+      ContactFunction.OLD,
+    ].includes(formState.function)) {
       return validator.isEmpty(formState.email) || validator.isEmail(formState.email);
     } else {
       return validator.isEmail(formState.email);
