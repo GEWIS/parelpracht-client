@@ -130,12 +130,14 @@
         "email": "Email address",
         "firstName": "First name",
         "function": {
+          "assisting": "Assisting",
           "extensive": "{{function}} contact",
           "financial": "Financial",
           "header": "Function",
           "normal": "Normal",
           "old": "Old",
           "primary": "Primary",
+          "signatory_authorized": "Signature authorized",
           "unknown": "Unknown"
         },
         "gender": {

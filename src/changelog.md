@@ -1,7 +1,10 @@
 # Change log
-The current version of ParelPracht is **v1.4.0**, released on January 12th, 2025.
+The current version of ParelPracht is **v1.4.1**, released on February 17th, 2025.
 You can find the release notes below.
 ----------------------
+## v1.4.1 (17-02-2025)
+### Added
+- New contact types for which the email property is not required.
 
 ## v1.4.0 (12-01-2025)
 ### Added

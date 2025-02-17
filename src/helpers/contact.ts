@@ -23,6 +23,8 @@ export function formatFunctionShort(func: ContactFunction) {
     case ContactFunction.PRIMARY: return i18n.t('entities.contact.props.function.primary');
     case ContactFunction.FINANCIAL: return i18n.t('entities.contact.props.function.financial');
     case ContactFunction.OLD: return i18n.t('entities.contact.props.function.old');
+    case ContactFunction.SIGNATORY_AUTHORIZED: return i18n.t('entities.contact.props.function.signatory_authorized');
+    case ContactFunction.ASSISTING: return i18n.t('entities.contact.props.function.assisting');
     default: return i18n.t('entities.contact.props.function.unknown');
   }
 }

@@ -3,9 +3,9 @@ import { Modal, Segment } from 'semantic-ui-react';
 import { marked } from 'marked';
 import releaseNotes from '../changelog.md';
 
-export const version = 'v1.4.0';
+export const version = 'v1.4.1';
 
-interface Props {}
+interface Props { }
 interface State {
   changelog: string;
 }

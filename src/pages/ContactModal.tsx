@@ -14,7 +14,6 @@ import {
 } from '../clients/server.generated';
 import { clearSingle, fetchSingle } from '../stores/single/actionCreators';
 import { RootState } from '../stores/store';
-import ContactProps from '../components/entities/contact/ContactProps';
 import ResourceStatus from '../stores/resourceStatus';
 import AlertContainer from '../components/alerts/AlertContainer';
 import { getSingle } from '../stores/single/selectors';
@@ -27,6 +26,7 @@ import { getContractStatus } from '../stores/contract/selectors';
 import CompanyLink from '../components/entities/company/CompanyLink';
 import { TitleContext } from '../components/TitleContext';
 import { withRouter, WithRouter } from '../WithRouter';
+import ContactProps from '../components/entities/contact/ContactProps';
 
 interface Props extends WithTranslation, WithRouter {
   create?: boolean;
@@ -203,14 +203,12 @@ class ContactModal extends React.Component<Props> {
         size="tiny"
       >
         <Segment attached="bottom">
-          <AlertContainer/>
+          <AlertContainer />
           <ContactProps
-            onCompanyPage={this.props.onCompanyPage}
-            contact={contact}
             create={this.props.create}
-            onCancel={() => {
-              this.close();
-            }}
+            contact={contact}
+            onCompanyPage={this.props.onCompanyPage}
+            onCancel={() => { this.close(); }}
           />
           {contractOverview}
         </Segment>
