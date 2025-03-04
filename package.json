@@ -1,6 +1,6 @@
 {
   "name": "parelpracht-client",
-  "version": "1.0410",
+  "version": "1.0.0",
   "type": "module",
   "proxy": "http://localhost:3001",
   "author": "The 39th board of Study Association GEWIS",
