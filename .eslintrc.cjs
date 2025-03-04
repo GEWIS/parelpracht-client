@@ -4,7 +4,7 @@ module.exports = {
   plugins: ['@typescript-eslint', 'import', 'jsx-a11y', 'react', 'react-hooks'],
   extends: ['airbnb-typescript'],
   parserOptions: {
-    project: './tsconfig.json'
+    project: './tsconfig.app.json'
   },
   rules: {
     'linebreak-style': ['off' ],
