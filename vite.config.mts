@@ -4,10 +4,14 @@ import * as path from "path";
 
 export default defineConfig({
   base: '/',
-  plugins: [react()],
-  build: {
-    outDir: './build'
+  css: {
+    preprocessorOptions: {
+      less: {
+        math: "always",
+      },
+    },
   },
+  plugins: [react()],
   server: {
     port: 3000,
     proxy: {
@@ -17,19 +21,25 @@ export default defineConfig({
       },
     },
   },
+  build: {
+    outDir: './build',
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (id.includes('node_modules')) {
+            return id.toString().split('node_modules/')[1].split('/')[0].toString();
+          }
+        }
+      }
+    },
+    chunkSizeWarningLimit: 750
+  },
   resolve: {
     alias: {
       "../../theme.config": path.resolve(
         __dirname,
         "./src/semantic-ui/theme.config"
       ),
-    },
-  },
-  css: {
-    preprocessorOptions: {
-      less: {
-        math: "always",
-      },
     },
   },
   assetsInclude: ['**/*.md']

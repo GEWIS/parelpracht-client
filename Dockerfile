@@ -1,5 +1,5 @@
 # build environment
-FROM node:20 as build
+FROM node:22 as build
 WORKDIR /app
 ENV PATH /app/node_modules/.bin:$PATH
 COPY package*.json ./
