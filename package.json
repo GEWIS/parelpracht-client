@@ -8,8 +8,10 @@
     "start": "vite",
     "build": "vite build && tsc",
     "serve": "vite preview",
-    "lint": "eslint src",
-    "lint:fix": "eslint src --fix"
+    "lint": "eslint src --max-warnings=1",
+    "lint-fix": "eslint src --fix",
+    "format": "prettier --ignore-path .gitignore --check ./src/",
+    "format-fix": "prettier --ignore-path .gitignore --write ./src/"
   },
   "dependencies": {
     "@lagunovsky/redux-react-router": "^4.4.1",
@@ -64,6 +66,9 @@
     ]
   },
   "devDependencies": {
+    "@gewis/eslint-config-react": "^2.4.0",
+    "@gewis/eslint-config-typescript": "^2.4.0",
+    "@gewis/prettier-config": "^2.2.2",
     "@rollup/plugin-alias": "^5.1.1",
     "@types/chartjs-plugin-annotation": "^1.0.0",
     "@types/file-saver": "^2.0.7",
@@ -76,13 +81,7 @@
     "@types/validator": "^13.15.1",
     "@typescript-eslint/eslint-plugin": "^8.33.1",
     "@typescript-eslint/parser": "^8.33.1",
-    "eslint": "^8.57.1",
-    "eslint-config-airbnb-typescript": "^18.0.0",
-    "eslint-plugin-flowtype": "^8.0.3",
-    "eslint-plugin-import": "^2.31.0",
-    "eslint-plugin-jsx-a11y": "^6.10.2",
-    "eslint-plugin-react": "^7.37.4",
-    "eslint-plugin-react-hooks": "^4.6.2",
+    "eslint": "^9.26.0",
     "less": "^4.3.0",
     "prettier": "^3.5.3",
     "redux-immutable-state-invariant": "^2.1.0",
