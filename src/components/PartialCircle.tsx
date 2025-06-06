@@ -31,7 +31,7 @@ function describeArc(x: number, y: number, radius: number, startAngle: number, e
 }
 
 function PartialCircle(props: Props) {
-  const { startAngle, endAngle, fillColor } = props;
+  const { startAngle, endAngle, fillColor = 'none' } = props;
 
   if (startAngle < 0 || startAngle >= 360) {
     throw new TypeError(`Start angle should be in the range "0 <= startAngle < 360. Actual value: ${startAngle}`);
@@ -51,9 +51,5 @@ function PartialCircle(props: Props) {
     </svg>
   );
 }
-
-PartialCircle.defaultProps = {
-  fillColor: 'none',
-};
 
 export default PartialCircle;

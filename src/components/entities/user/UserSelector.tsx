@@ -57,9 +57,4 @@ const mapStateToProps = (state: RootState) => ({
   options: state.summaries.Users.options,
 });
 
-UserSelector.defaultProps = {
-  correct: undefined,
-  role: undefined,
-};
-
 export default connect(mapStateToProps)(UserSelector);

@@ -10,25 +10,23 @@ interface Props {
   table?: Tables;
 }
 
-function ContractStatusFilter(props: Props) {
+function ContractStatusFilter({
+  column = 'activities.subType',
+  columnName = 'Status',
+  table = Tables.Contracts,
+}: Props) {
   const options = Object.values(ContractStatus).map((s: string, i) => {
     return { key: i, value: s, text: formatStatus(s) };
   });
 
   return (
     <ColumnFilter
-      column={props.column!}
-      columnName={props.columnName!}
-      table={props.table!}
+      column={column}
+      columnName={columnName}
+      table={table}
       options={options}
     />
   );
 }
-
-ContractStatusFilter.defaultProps = {
-  column: 'activities.subType',
-  columnName: 'Status',
-  table: Tables.Contracts,
-};
 
 export default ContractStatusFilter;

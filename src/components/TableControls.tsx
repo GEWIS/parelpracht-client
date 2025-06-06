@@ -67,8 +67,4 @@ function TableControls(props: Props) {
   );
 }
 
-TableControls.defaultProps = {
-  bottomLine: undefined,
-};
-
 export default TableControls;

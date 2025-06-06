@@ -17,7 +17,7 @@ interface DeleteProps {
 
 function DeleteButton(props: DeleteProps) {
   const {
-    canDelete, entity, remove, status, size, color, style,
+    canDelete, entity, remove, status, size = 'medium', color, style = {},
   } = props;
   const { t } = useTranslation();
 
@@ -106,11 +106,5 @@ function DeleteButton(props: DeleteProps) {
   }
   return null;
 }
-
-DeleteButton.defaultProps = {
-  size: 'medium',
-  color: undefined,
-  style: {},
-};
 
 export default DeleteButton;

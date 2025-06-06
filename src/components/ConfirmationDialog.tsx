@@ -21,8 +21,4 @@ const ConfirmationDialog = (props: Props) => {
   );
 };
 
-ConfirmationDialog.defaultProps = ({
-  onCancel: undefined,
-});
-
 export default ConfirmationDialog;

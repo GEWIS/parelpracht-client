@@ -18,7 +18,7 @@ interface Props {
 
 function ProductInstanceLink(props: Props) {
   const {
-    entity, entityId, productInstanceId, productName, details,
+    entity, entityId, productInstanceId, productName, details = '',
   } = props;
   return (
     <NavLink to={`/${entity.toLowerCase()}/${entityId}/product/${productInstanceId}`}>
@@ -28,10 +28,6 @@ function ProductInstanceLink(props: Props) {
     </NavLink>
   );
 }
-
-ProductInstanceLink.defaultProps = {
-  details: '',
-};
 
 const mapStateToProps = (state: RootState, props: { productId: number }) => {
   return {

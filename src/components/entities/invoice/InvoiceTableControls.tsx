@@ -73,8 +73,4 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   },
 });
 
-InvoiceTableControls.defaultProps = {
-  lastSeenDate: undefined,
-};
-
 export default connect(mapStateToProps, mapDispatchToProps)(InvoiceTableControls);

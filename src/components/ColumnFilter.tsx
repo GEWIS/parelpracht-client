@@ -30,7 +30,10 @@ interface Props extends SelfProps {
   refresh: () => void;
 }
 
-function ColumnFilter(props: Props) {
+function ColumnFilter({
+  options, column, columnName, table,
+  multiple = true, filter, filterOn, setFilter, clearFilter, refresh,
+}: Props) {
   const [open, changeOpen] = useState(false);
   const trigger = (
     <Button
@@ -42,14 +45,14 @@ function ColumnFilter(props: Props) {
         float: 'right',
         padding: '11px',
       }}
-      color={props.filterOn ? 'blue' : undefined}
+      color={filterOn ? 'blue' : undefined}
       onClick={(e: any) => e.stopPropagation()}
     />
   );
 
   const close = () => {
     changeOpen(false);
-    props.refresh();
+    refresh();
   };
 
   return (
@@ -61,29 +64,29 @@ function ColumnFilter(props: Props) {
       size="tiny"
       onClick={(e: any) => e.stopPropagation()}
     >
-      <Modal.Header>{`Filter: ${props.columnName}`}</Modal.Header>
+      <Modal.Header>{`Filter: ${columnName}`}</Modal.Header>
       <Modal.Content>
         <Dropdown
-          placeholder={`Select ${props.columnName}...`}
+          placeholder={`Select ${columnName}...`}
           selection
-          multiple={props.multiple}
+          multiple={multiple}
           search
           button
           clearable
           fluid
-          value={props.multiple ? props.filter.values : props.filter.values[0]}
+          value={multiple ? filter.values : filter.values[0]}
           onChange={(e, data) => {
-            if (props.multiple) {
-              props.setFilter(data.value as string[]);
+            if (multiple) {
+              setFilter(data.value as string[]);
             } else {
-              props.setFilter([data.value as string]);
+              setFilter([data.value as string]);
             }
           }}
-          options={props.options}
+          options={options}
         />
       </Modal.Content>
       <Modal.Actions>
-        <Button onClick={() => { props.clearFilter(); close(); }}>Clear</Button>
+        <Button onClick={() => { clearFilter(); close(); }}>Clear</Button>
         <Button primary onClick={close}>Confirm</Button>
       </Modal.Actions>
     </Modal>
@@ -106,9 +109,5 @@ const mapDispatchToProps = (dispatch: Dispatch, props: SelfProps) => ({
   )),
   refresh: () => dispatch(fetchTable(props.table)),
 });
-
-ColumnFilter.defaultProps = {
-  multiple: true,
-};
 
 export default connect(mapStateToProps, mapDispatchToProps)(ColumnFilter);

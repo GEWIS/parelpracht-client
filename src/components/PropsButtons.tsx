@@ -22,7 +22,7 @@ interface Props {
 
 function PropsButtons(props: Props) {
   const {
-    editing, canEdit, canDelete, canSave, entity, status, cancel, edit, save, remove, style,
+    editing, canEdit, canDelete, canSave, entity, status, cancel, edit, save, remove, style = {},
   } = props;
   const { t } = useTranslation();
 
@@ -100,9 +100,5 @@ function PropsButtons(props: Props) {
       );
   }
 }
-
-PropsButtons.defaultProps = {
-  style: {},
-};
 
 export default PropsButtons;

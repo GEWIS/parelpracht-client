@@ -62,10 +62,6 @@ function ContractLink(props: Props) {
   );
 }
 
-ContractLink.defaultProps = {
-  status: undefined,
-};
-
 const mapStateToProps = (state: RootState, props: { id: number }) => {
   return {
     contractTitle: getContractTitle(state, props.id),

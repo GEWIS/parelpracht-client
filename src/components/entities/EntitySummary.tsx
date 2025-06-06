@@ -17,16 +17,16 @@ interface Props {
   children?: ReactNode;
 }
 
-export function EntitySummary(props: Props) {
+export function EntitySummary({ loading, icon, entity, title = '', rightHeader, children }: Props) {
   const { t } = useTranslation();
 
-  if (props.loading) {
+  if (loading) {
     return (
       <>
         <Header as="h1" attached="top" style={{ backgroundColor: 'rgba(238, 238, 238, 0.98)' }}>
-          <Icon name={props.icon} />
+          <Icon name={icon} />
           <Header.Content>
-            <Header.Subheader>{t(`entity.${props.entity.toLowerCase()}`)}</Header.Subheader>
+            <Header.Subheader>{t(`entity.${entity.toLowerCase()}`)}</Header.Subheader>
             <Loader active inline />
           </Header.Content>
         </Header>
@@ -42,17 +42,17 @@ export function EntitySummary(props: Props) {
       <Header as="h1" attached="top" style={{ backgroundColor: 'rgba(238, 238, 238, 0.98)' }}>
         <div className="header-container">
           <div className="icon">
-            <Icon name={props.icon} size="large" />
+            <Icon name={icon} size="large" />
           </div>
           <div className="name">
             <Header.Content style={{ paddingLeft: '1.25rem' }}>
-              <Header.Subheader>{t(`entity.${props.entity.toLowerCase()}`)}</Header.Subheader>
-              {props.title}
+              <Header.Subheader>{t(`entity.${entity.toLowerCase()}`)}</Header.Subheader>
+              {title}
             </Header.Content>
           </div>
-          { props.rightHeader ? (
+          { rightHeader ? (
             <div className="logo">
-              {props.rightHeader}
+              {rightHeader}
             </div>
           ) : undefined }
 
@@ -82,15 +82,9 @@ export function EntitySummary(props: Props) {
       </Header>
       <Segment attached="bottom" style={{ backgroundColor: 'rgba(255, 255, 255, 0.95)' }}>
         <div className="summary-container">
-          {props.children}
+          {children}
         </div>
       </Segment>
     </>
   );
 }
-
-EntitySummary.defaultProps = {
-  title: '',
-  rightHeader: undefined,
-  children: undefined,
-};

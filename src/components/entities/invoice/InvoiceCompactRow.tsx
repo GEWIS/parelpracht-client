@@ -39,10 +39,6 @@ function InvoiceCompactRow(props: Props): JSX.Element {
   );
 }
 
-InvoiceCompactRow.defaultProps = {
-  invoice: undefined,
-};
-
 const mapStateToProps = (state: RootState, props: { invoice: Invoice }) => {
   if (props.invoice === undefined) {
     return {

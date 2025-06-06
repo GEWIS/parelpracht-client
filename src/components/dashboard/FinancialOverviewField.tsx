@@ -58,7 +58,3 @@ export function FinancialOverviewField(props: Props) {
     />
   );
 }
-
-FinancialOverviewField.defaultProps = {
-  header: undefined,
-};

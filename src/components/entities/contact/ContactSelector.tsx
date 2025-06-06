@@ -18,7 +18,7 @@ function ContactSelector(props: Props & DropdownProps) {
   const [open, changeOpen] = useState(false);
 
   const {
-    value, onChange, options, disabled, companyId, placeholder,
+    value, onChange, options, disabled = false, companyId, placeholder,
   } = props;
 
   const dropdownOptions = sortContactsByFunction([...options], true)
@@ -48,10 +48,6 @@ function ContactSelector(props: Props & DropdownProps) {
     />
   );
 }
-
-ContactSelector.defaultProps = {
-  disabled: false,
-};
 
 const mapStateToProps = (state: RootState) => ({
   options: state.summaries.Contacts.options,

@@ -16,7 +16,7 @@ function CompanySelector(props: Props & DropdownProps) {
   const [open, changeOpen] = useState(false);
 
   const {
-    value, onChange, options, disabled,
+    value, onChange, options, disabled = false,
   } = props;
   const dropdownOptions = [...options].filter((c) => c.status !== CompanyStatus.INACTIVE)
     .sort((c1, c2) => {
@@ -48,10 +48,6 @@ function CompanySelector(props: Props & DropdownProps) {
     />
   );
 }
-
-CompanySelector.defaultProps = {
-  disabled: false,
-};
 
 const mapStateToProps = (state: RootState) => ({
   options: state.summaries.Companies.options,
