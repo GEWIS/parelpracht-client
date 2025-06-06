@@ -4470,7 +4470,7 @@ __metadata:
     query-string: "npm:^9.1.1"
     react: "npm:^18.3.1"
     react-chartjs-2: "npm:^5.3.0"
-    react-datepicker: "npm:^8.1.0"
+    react-datepicker: "npm:^8.4.0"
     react-dom: "npm:^18.3.1"
     react-i18next: "npm:^14.1.3"
     react-redux: "npm:^9.2.0"
@@ -4687,7 +4687,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-datepicker@npm:*, react-datepicker@npm:^8.1.0":
+"react-datepicker@npm:*":
   version: 8.1.0
   resolution: "react-datepicker@npm:8.1.0"
   dependencies:
@@ -4698,6 +4698,20 @@ __metadata:
     react: ^16.9.0 || ^17 || ^18 || ^19 || ^19.0.0-rc
     react-dom: ^16.9.0 || ^17 || ^18 || ^19 || ^19.0.0-rc
   checksum: 10c0/c4116720488c3e22290d3d933495747e865f237a9dae4d88dcede617888e791ed1e2724dd9ee4a48aeea029ec0bc09bcb6c3ef55e88371f57cd6e9280f65f388
+  languageName: node
+  linkType: hard
+
+"react-datepicker@npm:^8.4.0":
+  version: 8.4.0
+  resolution: "react-datepicker@npm:8.4.0"
+  dependencies:
+    "@floating-ui/react": "npm:^0.27.3"
+    clsx: "npm:^2.1.1"
+    date-fns: "npm:^4.1.0"
+  peerDependencies:
+    react: ^16.9.0 || ^17 || ^18 || ^19 || ^19.0.0-rc
+    react-dom: ^16.9.0 || ^17 || ^18 || ^19 || ^19.0.0-rc
+  checksum: 10c0/e96ba4f2b54476f66bfa33aa0c21729095c83d293671b07a9ddd96ab48dad85b6530acc5ca016e83ef8907feeebfefb7133bf7a02dc550175c48c5d9f66d70ac
   languageName: node
   linkType: hard
 
