@@ -156,6 +156,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@babel/runtime@npm:^7.26.10":
+  version: 7.27.6
+  resolution: "@babel/runtime@npm:7.27.6"
+  checksum: 10c0/89726be83f356f511dcdb74d3ea4d873a5f0cf0017d4530cb53aa27380c01ca102d573eff8b8b77815e624b1f8c24e7f0311834ad4fb632c90a770fda00bd4c8
+  languageName: node
+  linkType: hard
+
 "@babel/template@npm:^7.26.9":
   version: 7.26.9
   resolution: "@babel/template@npm:7.26.9"
@@ -1946,12 +1953,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"chart.js@npm:^4.4.8":
-  version: 4.4.8
-  resolution: "chart.js@npm:4.4.8"
+"chart.js@npm:^4.4.9":
+  version: 4.4.9
+  resolution: "chart.js@npm:4.4.9"
   dependencies:
     "@kurkle/color": "npm:^0.3.0"
-  checksum: 10c0/4777e3fef7ccfb664c02b79f90e53fb0e46c01293bc56af5ab81aa8ffef4b1ccc675bef948b7efd071a5dd0ebd59c0e95c42ef606f728da8e3ff1741fc2d1df0
+  checksum: 10c0/970e06bf1f8f498671b19b3105bb5fc5c25558286baa6141e7895815efca303c4b1a8f9c82430e61d8c772795fd8e40ddf9bc33fdf7559e3a016d7580c2d987c
   languageName: node
   linkType: hard
 
@@ -3295,17 +3302,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"i18next@npm:^24.2.2":
-  version: 24.2.2
-  resolution: "i18next@npm:24.2.2"
+"i18next@npm:^24.2.3":
+  version: 24.2.3
+  resolution: "i18next@npm:24.2.3"
   dependencies:
-    "@babel/runtime": "npm:^7.23.2"
+    "@babel/runtime": "npm:^7.26.10"
   peerDependencies:
     typescript: ^5
   peerDependenciesMeta:
     typescript:
       optional: true
-  checksum: 10c0/df2f08f7e7a813d0c38f67e9a9f67f6e86cd105a58b6419cab1118833e0a8ebf8d31e2df9033c12890fc1db18740fc227acc593c0a30887f8f7f94cd0293d051
+  checksum: 10c0/7ac11a67d618ec714beef303aa497c1249bf5f1977dd3ebe9ca2673dfa6cadbba9e2d39ec1337688903ae3866ce9c1bc22cd6b265e66cce54c5db3a9bbedd390
   languageName: node
   linkType: hard
 
@@ -3729,10 +3736,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jose@npm:^6.0.8":
-  version: 6.0.8
-  resolution: "jose@npm:6.0.8"
-  checksum: 10c0/ab795679225a72eafef31e2d8aefa8196de9917e9f6c76c997963e617fba86762c19c6713c83d836adb28854d99fbd6547c83d825585094be29f0d6f9712f6cd
+"jose@npm:^6.0.11":
+  version: 6.0.11
+  resolution: "jose@npm:6.0.11"
+  checksum: 10c0/d290be4532174e7a53730b7fb84c74327531172bd403b196c592b312b73eedb7489949837bfe831fdbd280799bfc5ba778bc807495a73eda08ae6c49414f405a
   languageName: node
   linkType: hard
 
@@ -4023,12 +4030,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"marked@npm:^15.0.7":
-  version: 15.0.7
-  resolution: "marked@npm:15.0.7"
+"marked@npm:^15.0.12":
+  version: 15.0.12
+  resolution: "marked@npm:15.0.12"
   bin:
     marked: bin/marked.js
-  checksum: 10c0/0b9d07bace37bbf0548bae356c4184765afa4d2296ed0be4418aa4bb0ce703f323dc1a475125d536581f9fe264797e6265dd0b57499d97c0fe0f29bc6d016343
+  checksum: 10c0/e09da211544b787ecfb25fed07af206060bf7cd6d9de6cb123f15c496a57f83b7aabea93340aaa94dae9c94e097ae129377cad6310abc16009590972e85f4212
   languageName: node
   linkType: hard
 
@@ -4449,7 +4456,7 @@ __metadata:
     "@typescript-eslint/eslint-plugin": "npm:^7.18.0"
     "@typescript-eslint/parser": "npm:^7.18.0"
     "@vitejs/plugin-react-swc": "npm:^3.8.0"
-    chart.js: "npm:^4.4.8"
+    chart.js: "npm:^4.4.9"
     chartjs-plugin-annotation: "npm:^3.1.0"
     eslint: "npm:^8.57.1"
     eslint-config-airbnb-typescript: "npm:^18.0.0"
@@ -4460,13 +4467,13 @@ __metadata:
     eslint-plugin-react-hooks: "npm:^4.6.2"
     file-saver: "npm:^2.0.5"
     history: "npm:^5.3.0"
-    i18next: "npm:^24.2.2"
+    i18next: "npm:^24.2.3"
     i18next-browser-languagedetector: "npm:^8.0.4"
     javascript-time-ago: "npm:^2.5.11"
-    jose: "npm:^6.0.8"
+    jose: "npm:^6.0.11"
     less: "npm:^4.2.2"
     lodash: "npm:^4.17.21"
-    marked: "npm:^15.0.7"
+    marked: "npm:^15.0.12"
     query-string: "npm:^9.1.1"
     react: "npm:^18.3.1"
     react-chartjs-2: "npm:^5.3.0"
@@ -4474,8 +4481,8 @@ __metadata:
     react-dom: "npm:^18.3.1"
     react-i18next: "npm:^14.1.3"
     react-redux: "npm:^9.2.0"
-    react-router: "npm:^6.30.0"
-    react-router-dom: "npm:^6.30.0"
+    react-router: "npm:^6.30.1"
+    react-router-dom: "npm:^6.30.1"
     redux: "npm:^5.0.1"
     redux-immutable-state-invariant: "npm:^2.1.0"
     redux-saga: "npm:^1.3.0"
@@ -4785,27 +4792,27 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-router-dom@npm:^6.30.0":
-  version: 6.30.0
-  resolution: "react-router-dom@npm:6.30.0"
+"react-router-dom@npm:^6.30.1":
+  version: 6.30.1
+  resolution: "react-router-dom@npm:6.30.1"
   dependencies:
     "@remix-run/router": "npm:1.23.0"
-    react-router: "npm:6.30.0"
+    react-router: "npm:6.30.1"
   peerDependencies:
     react: ">=16.8"
     react-dom: ">=16.8"
-  checksum: 10c0/262954ba894d6a241ceda5f61098f7d6a292d0018a6ebb9c9c67425b7deb6e59b6191a9233a03d38e287e60f7ac3702e9e84c8e20b39a6487698fe088b71e27a
+  checksum: 10c0/e9e1297236b0faa864424ad7d51c392fc6e118595d4dad4cd542fd217c479a81601a81c6266d5801f04f9e154de02d3b094fc22ccb544e755c2eb448fab4ec6b
   languageName: node
   linkType: hard
 
-"react-router@npm:6.30.0, react-router@npm:^6.30.0":
-  version: 6.30.0
-  resolution: "react-router@npm:6.30.0"
+"react-router@npm:6.30.1, react-router@npm:^6.30.1":
+  version: 6.30.1
+  resolution: "react-router@npm:6.30.1"
   dependencies:
     "@remix-run/router": "npm:1.23.0"
   peerDependencies:
     react: ">=16.8"
-  checksum: 10c0/e6f20cf5c47ec057a057a4cfb9a55983d0a5b4b3314d20e07f0a70e59e004f51778d4dac415aee1e4e64db69cc4cd72e5acf8fd60dcf07d909895b8863b0b023
+  checksum: 10c0/0414326f2d8e0c107fb4603cf4066dacba6a1f6f025c6e273f003e177b2f18888aca3de06d9b5522908f0e41de93be1754c37e82aa97b3a269c4742c08e82539
   languageName: node
   linkType: hard
 
