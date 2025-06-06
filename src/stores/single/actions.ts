@@ -19,7 +19,6 @@ export enum SingleActionType {
   DeleteActivity = 'Single/DeleteActivity',
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 type SingleAction<A, S> = Action<string>;
 
 export type SingleFetchAction<S> = SingleAction<SingleActionType.Fetch, S> & {
@@ -85,7 +84,7 @@ export type SingleDeleteActivityAction<S> = SingleAction<SingleActionType.Delete
 
 export type SingleActions<S extends SingleEntities, R, RSave, RCreate> =
   SingleFetchAction<S> | SingleSetAction<S, R> | SingleClearAction<S>
-  | SingleErrorAction<S> | SingleSaveAction<S, RSave> | SingleCreateAction<S, RCreate>;
+    | SingleSaveAction<S, RSave> | SingleCreateAction<S, RCreate>;
 
 export const singleActionPattern = <S extends SingleEntities>(
   singleEntity: S, action: SingleActionType,

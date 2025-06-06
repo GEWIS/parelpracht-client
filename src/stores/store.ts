@@ -4,6 +4,7 @@ import createSagaMiddleware from 'redux-saga';
 import { all, fork } from 'redux-saga/effects';
 import { createRouterReducer, createRouterMiddleware } from '@lagunovsky/redux-react-router';
 
+import { configureStore } from '@reduxjs/toolkit';
 import authReducer from './auth/reducer';
 import alertsReducer from './alerts/reducer';
 import generalReducer from './general/reducer';
@@ -25,7 +26,6 @@ import { tablesReducer } from './tables/reducer';
 import { singleEntitiesReducer } from './single/reducer';
 import { summariesReducer } from './summaries/reducer';
 
-import { configureStore } from '@reduxjs/toolkit';
 
 // Import all watching sagas
 const watchSagas = [

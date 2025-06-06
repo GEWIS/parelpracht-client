@@ -5,6 +5,7 @@ import {
 import { takeEveryWithErrorHandling } from '../errorHandling';
 import { fetchSummaries } from '../summaries/actionCreators';
 import { SummaryCollections } from '../summaries/summaries';
+import { generalPrivateFetchInfo, generalPublicFetchInfo } from '../general/actionCreators';
 import {
   authFetchProfile, authFetchStatus, authRequestError,
   authRequestSuccess, authSetApiKey, authSetProfile, authSetStatus,
@@ -12,7 +13,6 @@ import {
 import {
   AuthActionType, AuthForgotPassword, AuthLoginLDAP, AuthLoginLocal, AuthResetPassword, AuthSetup,
 } from './actions';
-import { generalPrivateFetchInfo, generalPublicFetchInfo } from '../general/actionCreators';
 
 export function* fetchAuthStatus() {
   const client = new Client();

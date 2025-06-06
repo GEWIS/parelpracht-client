@@ -1,16 +1,15 @@
-import React from 'react';
 import {
   Button, Feed, Icon, Loader,
 } from 'semantic-ui-react';
 import { WithTranslation, withTranslation } from 'react-i18next';
-import ActivityComponent from './ActivityComponent';
-import { GeneralActivity } from './GeneralActivity';
 import { SingleEntities } from '../../stores/single/single';
-import CreateCommentRow from './CreateCommentRow';
 import ResourceStatus from '../../stores/resourceStatus';
 import AuthorizationComponent from '../AuthorizationComponent';
 import { Roles } from '../../clients/server.generated';
 import { withRouter } from '../../WithRouter';
+import CreateCommentRow from './CreateCommentRow';
+import { GeneralActivity } from './GeneralActivity';
+import ActivityComponent from './ActivityComponent';
 
 interface Props extends WithTranslation {
   activities: GeneralActivity[];
@@ -69,7 +68,7 @@ class ActivitiesList extends React.Component<Props, State> {
             .map((activity) => (
               <ActivityComponent
                 key={activity.id}
-                activity={activity as GeneralActivity}
+                activity={activity}
                 componentId={componentId}
                 componentType={componentType}
                 parentId={parentId}

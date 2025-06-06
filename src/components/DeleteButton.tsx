@@ -1,5 +1,4 @@
 import { Button, Popup, SemanticCOLORS } from 'semantic-ui-react';
-import React from 'react';
 import { SemanticSIZES } from 'semantic-ui-react/dist/commonjs/generic';
 import { useTranslation } from 'react-i18next';
 import ResourceStatus from '../stores/resourceStatus';

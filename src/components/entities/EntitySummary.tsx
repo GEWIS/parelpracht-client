@@ -1,10 +1,11 @@
-import React, { ReactNode } from 'react';
+import { ReactNode } from 'react';
 import {
   Header, Icon, Loader, Placeholder, Segment, SemanticICONS,
 } from 'semantic-ui-react';
+import { useTranslation } from 'react-i18next';
 import { SingleEntities } from '../../stores/single/single';
 import './EntitySummary.scss';
-import { useTranslation } from 'react-i18next';
+
 
 interface Props {
   loading: boolean;

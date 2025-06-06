@@ -53,7 +53,7 @@ class UserCreatePage extends React.Component<Props> {
       function: '',
       comment: '',
       roles: [],
-    } as any;
+    } as User;
 
     return (
       <Modal

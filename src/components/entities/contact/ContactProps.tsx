@@ -1,20 +1,20 @@
 import { useTranslation } from 'react-i18next';
-import { Contact, ContactFunction, ContactParams, Gender, Roles } from '../../../clients/server.generated';
 import { ChangeEvent, useEffect, useRef, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Dropdown, Form, Input, TextArea } from 'semantic-ui-react';
+import validator from 'validator';
+import { useNavigate } from 'react-router';
+import { Contact, ContactFunction, ContactParams, Gender, Roles } from '../../../clients/server.generated';
 import AuthorizationComponent from '../../AuthorizationComponent';
 import PropsButtons from '../../PropsButtons';
 import { SingleEntities } from '../../../stores/single/single';
 import ResourceStatus from '../../../stores/resourceStatus';
-import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../stores/store';
 import { getSingle } from '../../../stores/single/selectors';
 import { formatContactName, formatFunction } from '../../../helpers/contact';
-import { Dropdown, Form, Input, TextArea } from 'semantic-ui-react';
-import validator from 'validator';
 import { createSingle, deleteSingle, fetchSingle, saveSingle } from '../../../stores/single/actionCreators';
 import { showTransientAlert } from '../../../stores/alerts/actionCreators';
 import { TransientAlert } from '../../../stores/alerts/actions';
-import { useNavigate } from 'react-router';
 
 interface Props {
   create?: boolean;
@@ -63,7 +63,7 @@ const ContactProps = (props: Props) => {
   useEffect(() => {
     if (prevStatusRef.current === ResourceStatus.SAVING
       && status === ResourceStatus.FETCHED) {
-      // eslint-disable-next-line react/no-did-update-set-state
+
       setEditing(false);
       if (props.create) {
         showAlert({
@@ -231,8 +231,7 @@ const ContactProps = (props: Props) => {
         </Form.Group>
         <Form.Group widths="equal">
           <Form.Field required disabled={!editing}>
-            {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-            <label htmlFor="form-input-gender">{t('entities.contact.props.gender.gender')}</label>
+                        <label htmlFor="form-input-gender">{t('entities.contact.props.gender.gender')}</label>
             <Dropdown
               id="form-input-gender"
               selection
@@ -250,8 +249,7 @@ const ContactProps = (props: Props) => {
             />
           </Form.Field>
           <Form.Field required disabled={!editing}>
-            {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-            <label htmlFor="form-input-function">{t('entities.contact.props.function.header')}</label>
+                        <label htmlFor="form-input-function">{t('entities.contact.props.function.header')}</label>
             <Dropdown
               id="form-input-function"
               selection
@@ -300,8 +298,7 @@ const ContactProps = (props: Props) => {
           />
         </Form.Group>
         <Form.Field>
-          {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-          <label htmlFor="form-input-comments">
+                    <label htmlFor="form-input-comments">
             {t('entities.contact.props.comments')}
           </label>
           <TextArea

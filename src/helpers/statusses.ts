@@ -12,6 +12,6 @@ export function prodInsStatus(status: ProductInstanceStatus) {
     case ProductInstanceStatus.CANCELLED:
       return i18n.t('entities.status.cancelled');
     default:
-      throw new TypeError(`Unknown ProductInstanceStatus ${status}`);
+      throw new TypeError(`Unknown ProductInstanceStatus ${status as string}`);
   }
 }

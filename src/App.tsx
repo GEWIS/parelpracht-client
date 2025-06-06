@@ -1,4 +1,3 @@
-import React from 'react';
 import { ReduxRouter, ReduxRouterSelector } from '@lagunovsky/redux-react-router';
 import './App.scss';
 import './Form.scss';
@@ -12,8 +11,8 @@ interface State {
   hasError: boolean;
 }
 
-class App extends React.Component<{}, State> {
-  constructor(props: {}) {
+class App extends React.Component<object, State> {
+  constructor(props: object) {
     super(props);
     this.state = {
       hasError: false,

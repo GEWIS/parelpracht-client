@@ -1,13 +1,12 @@
-import React from 'react';
 import { Table } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import { Invoice, InvoiceStatus } from '../../../clients/server.generated';
 import { dateToFullFinancialYear, formatLastUpdate } from '../../../helpers/timestamp';
 import { RootState } from '../../../stores/store';
 import { formatStatus } from '../../../helpers/activity';
-import InvoiceLink from './InvoiceLink';
 import { getInvoiceStatus } from '../../../stores/invoice/selectors';
 import CompanyLink from '../company/CompanyLink';
+import InvoiceLink from './InvoiceLink';
 
 interface Props {
   invoice?: Invoice,

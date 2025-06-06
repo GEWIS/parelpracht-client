@@ -1,4 +1,3 @@
-import React from 'react';
 
 interface Props {
   startAngle: number;
@@ -7,7 +6,7 @@ interface Props {
 }
 
 function polarToCartesian(centerX: number, centerY: number, radius: number, angleInDegr: number) {
-  // eslint-disable-next-line no-mixed-operators
+
   const angleInRadians = (angleInDegr - 90) * Math.PI / 180.0;
 
   return {
@@ -43,7 +42,7 @@ function PartialCircle(props: Props) {
   return (
     <svg>
       <path
-        fill={fillColor!}
+        fill={fillColor}
         stroke="#446688"
         strokeWidth="2"
         d={describeArc(7, 7, 6, startAngle, endAngle)}

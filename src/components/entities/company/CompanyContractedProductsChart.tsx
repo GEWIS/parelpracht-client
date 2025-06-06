@@ -1,6 +1,6 @@
-import React from 'react';
+import { Component } from 'react';
 import { withTranslation, WithTranslation } from 'react-i18next';
-import { Tab } from 'semantic-ui-react';
+import { TabPane } from 'semantic-ui-react';
 import { Client, Company, ContractedProductsAnalysis } from '../../../clients/server.generated';
 import CategoryLineChart from '../../chart/CategoryLineChart';
 
@@ -13,7 +13,7 @@ interface State {
   loading: boolean;
 }
 
-class CompanyContractedProductsChart extends React.Component<Props, State> {
+class CompanyContractedProductsChart extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
@@ -22,14 +22,17 @@ class CompanyContractedProductsChart extends React.Component<Props, State> {
     };
   }
 
-  async componentDidMount() {
+  componentDidMount() {
     const { company } = this.props;
     const client = new Client();
-    const data = await client.getCompanyStatistics(company.id);
-    this.setState({
-      data,
-      loading: false,
-    });
+    client.getCompanyStatistics(company.id)
+      .then((data) => {
+        this.setState({
+          data,
+          loading: false,
+        });
+      })
+      .catch(console.error);
   }
 
   render() {
@@ -37,11 +40,11 @@ class CompanyContractedProductsChart extends React.Component<Props, State> {
     const { t } = this.props;
 
     if (data === undefined) {
-      return <Tab.Pane loading={loading} />;
+      return <TabPane loading={loading} />;
     }
 
     return (
-      <Tab.Pane loading={loading}>
+      <TabPane loading={loading}>
         <CategoryLineChart
           data={data.categories}
           labels={data.labels || []}
@@ -49,7 +52,7 @@ class CompanyContractedProductsChart extends React.Component<Props, State> {
         <p style={{ textAlign: 'center', fontStyle: 'italic', marginTop: '0.5em' }}>
           {t('entities.product.warningFinancialYear')}
         </p>
-      </Tab.Pane>
+      </TabPane>
     );
   }
 }

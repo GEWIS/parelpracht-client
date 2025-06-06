@@ -1,4 +1,4 @@
-import React from 'react';
+import {ReactNode} from "react";
 import { Table } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import { useTranslation } from 'react-i18next';
@@ -23,7 +23,7 @@ function MegaTableRow(props: Props) {
   const { company, products } = props;
 
   const productMap: Record<number, string> = {};
-  // eslint-disable-next-line array-callback-return
+
   products.map((p) => { productMap[p.id] = p.nameEnglish; });
 
   const getNrOfProducts = () => {
@@ -35,8 +35,8 @@ function MegaTableRow(props: Props) {
   };
 
   let [contractNr, productInstanceNr] = [0, 0];
-  const result: JSX.Element[] = [];
-  let innerResult: JSX.Element[] = [];
+  const result: ReactNode[] = [];
+  let innerResult: ReactNode[] = [];
   let contract: ETContract;
   let product: ETProductInstance;
 

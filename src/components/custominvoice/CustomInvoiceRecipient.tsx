@@ -9,12 +9,10 @@ import { CustomRecipient } from '../../clients/server.generated';
 interface Props extends WithTranslation {
   recipient: CustomRecipient;
 
-  updateRecipientAttribute: (attribute: string, value: string) => void;
+  updateRecipientAttribute: <T extends keyof CustomRecipient = keyof CustomRecipient>(attribute: T, value: CustomRecipient[T]) => void;
 }
 
-interface State {}
-
-class CustomInvoiceRecipient extends React.Component<Props, State> {
+class CustomInvoiceRecipient extends React.Component<Props> {
   constructor(props: Props) {
     super(props);
     this.state = {};

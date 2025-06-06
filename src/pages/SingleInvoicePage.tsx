@@ -23,9 +23,9 @@ import FilesList from '../components/files/FilesList';
 import GenerateInvoiceModal from '../components/files/GenerateInvoiceModal';
 import AuthorizationComponent from '../components/AuthorizationComponent';
 import { authedUserHasRole } from '../stores/auth/selectors';
-import NotFound from './NotFound';
 import { TitleContext } from '../components/TitleContext';
 import { WithRouter, withRouter } from '../WithRouter';
+import NotFound from './NotFound';
 
 interface Props extends WithTranslation, WithRouter {
   invoice: Invoice | undefined;

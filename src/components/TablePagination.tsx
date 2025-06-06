@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import {
   Button, Dropdown, Grid, Segment,
 } from 'semantic-ui-react';
@@ -10,9 +10,9 @@ interface Props {
   skip: number;
   take: number;
 
-  setTake: (take: number) => void;
-  nextPage: () => void;
-  prevPage: () => void;
+  setTake: (take: number) => Promise<void> | void;
+  nextPage: () => Promise<void> | void;
+  prevPage: () => Promise<void> | void;
 }
 
 function TablePagination({
@@ -45,8 +45,8 @@ function TablePagination({
         </Grid.Column>
         <Grid.Column>
           <Button.Group floated="right">
-            <Button icon="chevron left" disabled={!canPrev} onClick={prevPage} title={t('pages.tables.footer.pagination.previous')} />
-            <Button icon="chevron right" disabled={!canNext} onClick={nextPage} title={t('pages.tables.footer.pagination.next')} />
+            <Button icon="chevron left" disabled={!canPrev} onClick={() => { Promise.resolve(prevPage()).catch(console.error); }} title={t('pages.tables.footer.pagination.previous')} />
+            <Button icon="chevron right" disabled={!canNext} onClick={() => { Promise.resolve(nextPage()).catch(console.error); }} title={t('pages.tables.footer.pagination.next')} />
           </Button.Group>
           <Button.Group floated="right">
             <Dropdown
@@ -60,10 +60,10 @@ function TablePagination({
               onChange={(_, data) => {
                 if (data.value === 'All') {
                   changeSelectedAll(true);
-                  setTake(countTotal);
+                  Promise.resolve(setTake(countTotal)).catch(console.error);
                 } else {
                   changeSelectedAll(false);
-                  setTake(data.value as number);
+                  Promise.resolve(setTake(data.value as number)).catch(console.error);
                 }
               }}
               style={{ marginRight: '1em' }}

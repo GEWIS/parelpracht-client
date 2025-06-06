@@ -15,13 +15,13 @@ import ResourceStatus from '../../../stores/resourceStatus';
 import { RootState } from '../../../stores/store';
 import { getSummary } from '../../../stores/summaries/selectors';
 import PropsButtons from '../../PropsButtons';
-import ProductSelector from './ProductSelector';
 import { SingleEntities } from '../../../stores/single/single';
 import AuthorizationComponent from '../../AuthorizationComponent';
 import { getLastStatus } from '../../../helpers/activity';
 import { authedUserHasRole } from '../../../stores/auth/selectors';
-import ProductLink from './ProductLink';
 import { SummaryCollections } from '../../../stores/summaries/summaries';
+import ProductLink from './ProductLink';
+import ProductSelector from './ProductSelector';
 
 interface Props extends WithTranslation {
   create?: boolean;
@@ -70,7 +70,7 @@ class ProductInstanceProps extends React.Component<Props, State> {
   componentDidUpdate(prevProps: Props) {
     if (prevProps.status === ResourceStatus.SAVING
       && this.props.status === ResourceStatus.FETCHED) {
-      // eslint-disable-next-line react/no-did-update-set-state
+
       this.setState({ editing: false });
     }
   }
@@ -137,7 +137,7 @@ class ProductInstanceProps extends React.Component<Props, State> {
       .filter((a) => a.type === ActivityType.STATUS && a.subType !== null)
       .some((a) =>
         [ContractStatus.SENT, ContractStatus.CONFIRMED, ContractStatus.CANCELLED, ContractStatus.FINISHED]
-          .includes(a.subType))
+          .includes(a.subType!))
       || this.props.productInstance.activities
         .filter((a) => a.type === ActivityType.STATUS).length > 1
       || this.props.productInstance.invoiceId === undefined);
@@ -171,8 +171,7 @@ class ProductInstanceProps extends React.Component<Props, State> {
     const { productInstance, t } = this.props;
     let productNameElement = (
       <Form.Field>
-        {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-        <label htmlFor="form-product-dropdown">{t('entity.product')}</label>
+                <label htmlFor="form-product-dropdown">{t('entity.product')}</label>
         <br />
         <ProductLink id={productId} />
       </Form.Field>
@@ -182,8 +181,7 @@ class ProductInstanceProps extends React.Component<Props, State> {
         <Form.Field
           disabled={!editing || productInstance.id >= 0}
         >
-          {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-          <label htmlFor="form-product-dropdown">{t('entity.product')}</label>
+                    <label htmlFor="form-product-dropdown">{t('entity.product')}</label>
           <ProductSelector
             id="form-product-dropdown"
             value={productId}
@@ -232,8 +230,7 @@ class ProductInstanceProps extends React.Component<Props, State> {
           <Form.Group widths="equal">
             {productNameElement}
             <Form.Field disabled={!editing}>
-              {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-              <label htmlFor="form-input-details">
+                            <label htmlFor="form-input-details">
                 {t('entities.productInstance.props.details')}
               </label>
               <Input
@@ -253,8 +250,7 @@ class ProductInstanceProps extends React.Component<Props, State> {
               error={Number.isNaN(Math.round(parseFloat(this.state.basePrice.replace(',', '.')) * 100))}
               value={parseFloat(basePrice.replace(',', '.')).toFixed(2)}
             >
-              {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-              <label htmlFor="form-input-base-price">
+                            <label htmlFor="form-input-base-price">
                 {t('entities.productInstance.props.basePrice')}
               </label>
               <Input
@@ -274,8 +270,7 @@ class ProductInstanceProps extends React.Component<Props, State> {
               disabled={!editing}
               error={Number.isNaN(Math.round(parseFloat(this.state.discount.replace(',', '.')) * 100))}
             >
-              {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-              <label htmlFor="form-input-discount">
+                            <label htmlFor="form-input-discount">
                 {t('entities.productInstance.props.discount')}
               </label>
               <Input
@@ -294,8 +289,7 @@ class ProductInstanceProps extends React.Component<Props, State> {
             <Form.Field
               disabled={!editing}
             >
-              {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-              <label htmlFor="form-input-value-added-tax">
+                            <label htmlFor="form-input-value-added-tax">
                 {t('entities.productInstance.props.valueAddedTax')}
               </label>
               <Input
@@ -311,8 +305,7 @@ class ProductInstanceProps extends React.Component<Props, State> {
             <Form.Field
               disabled={!editing}
             >
-              {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-              <label htmlFor="form-input-real-price-no-vat">
+                            <label htmlFor="form-input-real-price-no-vat">
                 {t('entities.productInstance.props.realPriceNoVat')}
               </label>
               <Input
@@ -328,8 +321,7 @@ class ProductInstanceProps extends React.Component<Props, State> {
             <Form.Field
               disabled={!editing}
             >
-              {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-              <label htmlFor="form-input-real-price-with-vat">
+                            <label htmlFor="form-input-real-price-with-vat">
                 {t('entities.productInstance.props.realPriceWithVat')}
               </label>
               <Input

@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { Component } from 'react';
 import {
   Button, Dropdown, Icon, Modal,
 } from 'semantic-ui-react';
@@ -13,12 +13,9 @@ import { SummaryCollections } from '../stores/summaries/summaries';
 import { getSummaryCollection } from '../stores/summaries/selectors';
 import { createSingle, fetchSingle } from '../stores/single/actionCreators';
 import { SingleEntities } from '../stores/single/single';
-import { withRouter } from '../WithRouter';
+import {WithRouter, withRouter} from '../WithRouter';
 
-interface SelfProps extends WithTranslation {
-}
-
-interface Props extends SelfProps {
+interface Props extends WithTranslation, WithRouter {
   contract: Contract;
   productInstanceIds: number[];
   clearSelection: () => void;
@@ -33,7 +30,7 @@ interface State {
   loading: boolean;
 }
 
-class ContractInvoiceModal extends React.Component<Props, State> {
+class ContractInvoiceModal extends Component<Props, State> {
   public constructor(props: Props) {
     super(props);
     this.state = {
@@ -50,7 +47,7 @@ class ContractInvoiceModal extends React.Component<Props, State> {
     this.setState({ loading: true });
 
     if (this.state.selectedInvoice === -1) {
-      await createInvoice(new InvoiceCreateParams({
+      createInvoice(new InvoiceCreateParams({
         title: contract.title,
         companyId: contract.companyId,
         productInstanceIds,
@@ -95,7 +92,7 @@ class ContractInvoiceModal extends React.Component<Props, State> {
         selection
         options={dropdownOptions}
         value={selectedInvoice}
-        onChange={(e, data) => this.setState({ selectedInvoice: data.value as any })}
+        onChange={(_, data) => this.setState({ selectedInvoice: Number(data.value) })}
       />
     );
 
@@ -130,7 +127,7 @@ class ContractInvoiceModal extends React.Component<Props, State> {
             labelPosition="left"
             color="green"
             floated="right"
-            onClick={this.save}
+            onClick={() => { this.save().catch(console.error) }}
             loading={loading}
           >
             <Icon name="save" />

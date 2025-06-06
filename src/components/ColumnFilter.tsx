@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import {
   Button, Dropdown, DropdownItemProps, Modal,
 } from 'semantic-ui-react';
+import * as React from "react";
 import { RootState } from '../stores/store';
 import { fetchTable, setFilterTable } from '../stores/tables/actionCreators';
 import { getFilter, isFilterOn } from '../stores/tables/selectors';
@@ -12,10 +13,10 @@ import { ListFilter } from '../stores/tables/tableState';
 
 interface SelfProps {
   options: DropdownItemProps[];
-  // eslint-disable-next-line react/no-unused-prop-types
+
   column: string;
   columnName: string;
-  // eslint-disable-next-line react/no-unused-prop-types
+
   table: Tables;
 }
 
@@ -31,7 +32,7 @@ interface Props extends SelfProps {
 }
 
 function ColumnFilter({
-  options, column, columnName, table,
+  options, columnName,
   multiple = true, filter, filterOn, setFilter, clearFilter, refresh,
 }: Props) {
   const [open, changeOpen] = useState(false);
@@ -46,7 +47,7 @@ function ColumnFilter({
         padding: '11px',
       }}
       color={filterOn ? 'blue' : undefined}
-      onClick={(e: any) => e.stopPropagation()}
+      onClick={(e) => e.stopPropagation()}
     />
   );
 
@@ -62,7 +63,7 @@ function ColumnFilter({
       onClose={close}
       trigger={trigger}
       size="tiny"
-      onClick={(e: any) => e.stopPropagation()}
+      onClick={(e: React.MouseEvent<HTMLButtonElement>) => e.stopPropagation()}
     >
       <Modal.Header>{`Filter: ${columnName}`}</Modal.Header>
       <Modal.Content>
@@ -75,7 +76,7 @@ function ColumnFilter({
           clearable
           fluid
           value={multiple ? filter.values : filter.values[0]}
-          onChange={(e, data) => {
+          onChange={(_, data) => {
             if (multiple) {
               setFilter(data.value as string[]);
             } else {

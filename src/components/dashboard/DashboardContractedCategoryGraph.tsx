@@ -1,11 +1,11 @@
-import React from 'react';
+import { Component} from 'react';
 import { Dropdown, Segment } from 'semantic-ui-react';
 import { WithTranslation, withTranslation } from 'react-i18next';
 import { Client, ContractedProductsAnalysis } from '../../clients/server.generated';
 import { dateToFinancialYear } from '../../helpers/timestamp';
 import CategoryLineChart from '../chart/CategoryLineChart';
 
-interface Props extends WithTranslation {}
+type Props = WithTranslation
 
 interface State {
   data?: ContractedProductsAnalysis;
@@ -13,7 +13,7 @@ interface State {
   loading: boolean;
 }
 
-class DashboardContractedCategoryGraph extends React.Component<Props, State> {
+class DashboardContractedCategoryGraph extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
@@ -23,9 +23,9 @@ class DashboardContractedCategoryGraph extends React.Component<Props, State> {
     };
   }
 
-  async componentDidMount() {
+  componentDidMount() {
     const { financialYear } = this.state;
-    await this.updateGraph(financialYear);
+    this.updateGraph(financialYear).catch(console.error);
   }
 
   async updateGraph(year: number) {
@@ -90,7 +90,7 @@ class DashboardContractedCategoryGraph extends React.Component<Props, State> {
               basic
               value={financialYear}
               float="right"
-              onChange={(value, d) => this.changeFinancialYear(d.value as number)}
+              onChange={(_, d) => { this.changeFinancialYear(d.value as number).catch(console.error); }}
             />
           )}
         />

@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import {
   Button, Icon, Input, Popup, Table,
 } from 'semantic-ui-react';
@@ -12,12 +12,12 @@ import { FilesClient } from '../../clients/filesClient';
 import { formatLastUpdate } from '../../helpers/timestamp';
 import { deleteFileSingle, saveSingleFile } from '../../stores/single/actionCreators';
 import { SingleEntities } from '../../stores/single/single';
-import { GeneralFile } from './GeneralFile';
 import ResourceStatus from '../../stores/resourceStatus';
 import AuthorizationComponent from '../AuthorizationComponent';
-import { withRouter } from '../../WithRouter';
+import {WithRouter, withRouter} from '../../WithRouter';
+import { GeneralFile } from './GeneralFile';
 
-interface Props extends WithTranslation {
+interface Props extends WithTranslation, WithRouter {
   file: GeneralFile;
   create: boolean;
   closeCreate?: (shouldUpdate: boolean) => void;
@@ -35,12 +35,12 @@ interface State {
   editing: boolean;
 
   fileName: string;
-  fileData: any;
+  fileData?: Blob;
 
   saveLoading: boolean;
 }
 
-class SingleFile extends React.Component<Props, State> {
+class SingleFile extends Component<Props, State> {
   static defaultProps = {
     closeCreate: undefined,
   };
@@ -71,7 +71,9 @@ class SingleFile extends React.Component<Props, State> {
   private toFormDataParams = (): FormData => {
     const formData = new FormData();
     formData.append('name', this.state.fileName);
-    formData.append('file', this.state.fileData);
+    if (this.state.fileData) {
+      formData.append('file', this.state.fileData);
+    }
     return formData;
   };
 
@@ -102,6 +104,8 @@ class SingleFile extends React.Component<Props, State> {
   };
 
   save = async () => {
+    if (this.state.fileData === undefined) return;
+
     this.setState({ saveLoading: true });
 
     if (this.props.create) {
@@ -223,9 +227,10 @@ class SingleFile extends React.Component<Props, State> {
             <Button
               icon="save"
               positive
-              onClick={() => this.save()}
+              onClick={() => { this.save().catch(console.error); }}
               loading={this.state.saveLoading}
               title={t('buttons.files.save')}
+              disabled={this.state.fileData === undefined}
             />
           </Table.Cell>
         </Table.Row>
@@ -248,7 +253,7 @@ class SingleFile extends React.Component<Props, State> {
               onChange={(e) => this.setState({ fileName: e.target.value })}
             />
           </Table.Cell>
-          <Table.Cell>{formatLastUpdate(file!.updatedAt)}</Table.Cell>
+          <Table.Cell>{formatLastUpdate(file.updatedAt)}</Table.Cell>
           <Table.Cell>
             <Button
               icon="x"
@@ -259,14 +264,15 @@ class SingleFile extends React.Component<Props, State> {
             <Button
               icon="save"
               positive
-              onClick={() => this.save()}
+              onClick={() => { this.save().catch(console.error); }}
               loading={this.state.saveLoading}
               title={t('buttons.files.save')}
+              disabled={this.state.fileData === undefined}
             />
             <Button
               icon="download"
               primary
-              onClick={() => this.getFile()}
+              onClick={() => { this.getFile().catch(console.error); }}
               title={t('buttons.files.download')}
             />
           </Table.Cell>
@@ -274,21 +280,21 @@ class SingleFile extends React.Component<Props, State> {
       );
     }
 
-    const fileHasLabel = file!.name !== undefined && file!.name !== '';
+    const fileHasLabel = file.name !== undefined && file.name !== '';
 
     return (
       <Table.Row>
         <Table.Cell>
-          <Icon name={this.getFileIcon(file!.downloadName)} />
-          <span title={file!.downloadName}>{file!.downloadName}</span>
+          <Icon name={this.getFileIcon(file.downloadName)} />
+          <span title={file.downloadName}>{file.downloadName}</span>
           {fileHasLabel ? (
             <>
               <br />
-              <span className="label" title={file!.name}>{file!.name}</span>
+              <span className="label" title={file.name}>{file.name}</span>
             </>
           ) : undefined}
         </Table.Cell>
-        <Table.Cell>{formatLastUpdate(file!.createdAt)}</Table.Cell>
+        <Table.Cell>{formatLastUpdate(file.createdAt)}</Table.Cell>
         <Table.Cell>
           <AuthorizationComponent roles={[Roles.GENERAL, Roles.ADMIN]} notFound={false}>
             <Popup
@@ -324,7 +330,7 @@ class SingleFile extends React.Component<Props, State> {
           <Button
             icon="download"
             primary
-            onClick={() => this.getFile()}
+            onClick={() => { this.getFile().catch(console.error); }}
             title={t('buttons.files.download')}
           />
         </Table.Cell>

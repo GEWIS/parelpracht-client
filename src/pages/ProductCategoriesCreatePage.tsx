@@ -54,7 +54,7 @@ class ProductCategoriesCreatePage extends React.Component<Props> {
       id: 0,
       name: '',
       products: [],
-    } as any as ProductCategory;
+    } as unknown as ProductCategory;
 
     return (
       <Modal
@@ -67,7 +67,7 @@ class ProductCategoriesCreatePage extends React.Component<Props> {
       >
         <Modal.Content>
           <AlertContainer />
-          <ProductCategoryProps category={category} create onCancel={this.close} router={this.props.router} />
+          <ProductCategoryProps category={category} create onCancel={this.close} />
         </Modal.Content>
       </Modal>
     );
@@ -85,5 +85,5 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   showTransientAlert: (alert: TransientAlert) => dispatch(showTransientAlert(alert)),
 });
 
-// eslint-disable-next-line max-len
+
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ProductCategoriesCreatePage));

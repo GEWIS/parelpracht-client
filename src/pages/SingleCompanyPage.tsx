@@ -23,9 +23,9 @@ import CompanyContractedProductsChart from '../components/entities/company/Compa
 import FilesList from '../components/files/FilesList';
 import { authedUserHasRole } from '../stores/auth/selectors';
 import AuthorizationComponent from '../components/AuthorizationComponent';
-import NotFound from './NotFound';
 import { TitleContext } from '../components/TitleContext';
 import { WithRouter, withRouter } from '../WithRouter';
+import NotFound from './NotFound';
 
 interface Props extends WithTranslation, WithRouter {
   company: Company | undefined;

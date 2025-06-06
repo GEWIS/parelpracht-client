@@ -1,4 +1,4 @@
-import React from 'react';
+import { useEffect } from 'react';
 import {
   Container, Grid, Header, Icon, Segment, Image,
 } from 'semantic-ui-react';
@@ -9,9 +9,9 @@ function NotFound() {
   const { t } = useTranslation();
   const { setTitle } = useTitle();
 
-  React.useEffect(() => {
+  useEffect(() => {
     setTitle(t('pages.notFound.title'));
-  }, []);
+  }, [setTitle, t]);
 
   return (
     <>

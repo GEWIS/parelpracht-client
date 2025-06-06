@@ -2,8 +2,8 @@ import { Action } from 'redux';
 import {
   ActionPattern, put, takeEvery,
 } from 'redux-saga/effects';
-import { showTransientAlert } from './alerts/actionCreators';
 import { ApiError, ApiException } from '../clients/server.generated';
+import { showTransientAlert } from './alerts/actionCreators';
 
 function errorToString(err?: ApiError) {
   if (err && err.statusCode && err.message) return `${err.statusCode}: ${err.message}`;

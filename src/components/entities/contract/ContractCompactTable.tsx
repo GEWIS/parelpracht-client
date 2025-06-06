@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import { withTranslation, WithTranslation } from 'react-i18next';
 import { Loader, Table } from 'semantic-ui-react';
 import {
@@ -20,7 +20,7 @@ interface State {
   take: number;
 }
 
-class ContractCompactTable extends React.Component<Props, State> {
+class ContractCompactTable extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
@@ -32,8 +32,8 @@ class ContractCompactTable extends React.Component<Props, State> {
     };
   }
 
-  async componentDidMount() {
-    await this.getProductAttributes();
+  componentDidMount() {
+    this.getProductAttributes().catch(console.error);
   }
 
   async getProductAttributes() {
@@ -58,22 +58,25 @@ class ContractCompactTable extends React.Component<Props, State> {
   nextPage = async () => {
     const { skip, take, countTotal } = this.state;
     if (skip + take <= countTotal) {
-      this.setState({ skip: skip + take }, () => this.getProductAttributes());
+      this.setState({ skip: skip + take });
     }
+    await this.getProductAttributes();
   };
 
   prevPage = async () => {
     const { skip, take } = this.state;
     if (skip - take >= 0) {
-      this.setState({ skip: skip - take }, () => this.getProductAttributes());
+      this.setState({ skip: skip - take });
     }
+    await this.getProductAttributes();
   };
 
   setTake = async (take: number) => {
     this.setState({
       take,
       skip: 0,
-    }, () => this.getProductAttributes());
+    });
+    await this.getProductAttributes()
   };
 
   render() {

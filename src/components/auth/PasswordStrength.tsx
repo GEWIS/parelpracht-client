@@ -1,5 +1,5 @@
 import { Icon } from 'semantic-ui-react';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import validator from 'validator';
 
@@ -39,6 +39,7 @@ function PasswordStrength(props: PasswordStrengthProps) {
       minSymbols: 1,
     });
   };
+
   const validatePassword = (p: string) => {
     const passwordHasEightCharacters = hasEightCharacters(p);
     const passwordHasLowerCase = hasLowerCase(p);
@@ -55,6 +56,7 @@ function PasswordStrength(props: PasswordStrengthProps) {
 
   useEffect(() => {
     validatePassword(password);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [password]);
 
   return (

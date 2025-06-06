@@ -1,29 +1,31 @@
-import React from 'react';
-import {
-  Button, Feed, Popup, Segment,
-} from 'semantic-ui-react';
-import { connect } from 'react-redux';
+import { Component } from 'react';
+import {Button, Feed, Popup, Segment,} from 'semantic-ui-react';
+import {connect} from 'react-redux';
 import './Activity.scss';
-import { Dispatch } from 'redux';
-import { withTranslation, WithTranslation } from 'react-i18next';
-import { RootState } from '../../stores/store';
-import { getUserAvatar } from '../../stores/user/selectors';
-import { formatActivitySummary } from '../../helpers/activity';
-import { GeneralActivity } from './GeneralActivity';
-import { formatLastUpdate } from '../../helpers/timestamp';
-import { SingleEntities } from '../../stores/single/single';
-import { deleteActivitySingle } from '../../stores/single/actionCreators';
+import {Dispatch} from 'redux';
+import {withTranslation, WithTranslation} from 'react-i18next';
+import {RootState} from '../../stores/store';
+import {getUserAvatar} from '../../stores/user/selectors';
+import {formatActivitySummary} from '../../helpers/activity';
+import {formatLastUpdate} from '../../helpers/timestamp';
+import {SingleEntities} from '../../stores/single/single';
+import {deleteActivitySingle} from '../../stores/single/actionCreators';
 import UserLinkWithoutImage from '../entities/user/UserLinkWithoutImage';
-import { deleteInstanceActivitySingle } from '../../stores/productinstance/actionCreator';
+import {deleteInstanceActivitySingle} from '../../stores/productinstance/actionCreator';
 import {
-  ActivityType, ContractStatus, InvoiceStatus, ProductInstanceStatus, Roles,
+  ActivityType,
+  ContractStatus,
+  InvoiceStatus,
+  ProductInstanceStatus,
+  Roles,
 } from '../../clients/server.generated';
 import UserAvatar from '../entities/user/UserAvatar';
 import AuthorizationComponent from '../AuthorizationComponent';
-import { getLanguage } from '../../localization';
-import { withRouter } from '../../WithRouter';
+import {getLanguage} from '../../localization';
+import {WithRouter, withRouter} from '../../WithRouter';
+import {GeneralActivity} from './GeneralActivity';
 
-interface Props extends WithTranslation {
+interface Props extends WithTranslation, WithRouter {
   activity: GeneralActivity;
   componentId: number;
   componentType: SingleEntities;
@@ -36,7 +38,7 @@ interface Props extends WithTranslation {
   deleteInstanceActivitySingle: (id: number, instanceId: number, activityId: number) => void;
 }
 
-class ActivityComponent extends React.Component<Props> {
+class ActivityComponent extends Component<Props> {
   static defaultProps = {
     parentId: undefined,
   };
@@ -72,7 +74,7 @@ class ActivityComponent extends React.Component<Props> {
     const deleteMessage = `Delete ${activity.type.toLowerCase()}`;
     let deleteButton;
 
-    if (componentType !== 'Invoice' && !(activity.type === ActivityType.STATUS && (activity.subType === ContractStatus.CREATED
+    if (componentType !== SingleEntities.Invoice && !(activity.type === ActivityType.STATUS && (activity.subType === ContractStatus.CREATED
       || activity.subType === InvoiceStatus.CREATED
       || activity.subType === ProductInstanceStatus.NOTDELIVERED))) {
       const headerString = 'Are you sure you want to delete this activity?';

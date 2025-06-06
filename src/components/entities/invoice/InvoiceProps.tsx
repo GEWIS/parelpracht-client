@@ -4,6 +4,7 @@ import { Dispatch } from 'redux';
 import { Form, Input, TextArea } from 'semantic-ui-react';
 import validator from 'validator';
 import { withTranslation, WithTranslation } from 'react-i18next';
+import DatePicker from 'react-datepicker';
 import {
   ActivityType,
   Invoice,
@@ -25,7 +26,6 @@ import { TransientAlert } from '../../../stores/alerts/actions';
 import { showTransientAlert } from '../../../stores/alerts/actionCreators';
 import AuthorizationComponent from '../../AuthorizationComponent';
 import { withRouter, WithRouter } from '../../../WithRouter';
-import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 
 interface Props extends WithTranslation, WithRouter {
@@ -71,7 +71,7 @@ class InvoiceProps extends React.Component<Props, State> {
   componentDidUpdate(prevProps: Props) {
     if (prevProps.status === ResourceStatus.SAVING
       && this.props.status === ResourceStatus.FETCHED) {
-      // eslint-disable-next-line react/no-did-update-set-state
+
       this.setState({ editing: false });
       this.props.showTransientAlert({
         title: 'Success',
@@ -204,8 +204,7 @@ class InvoiceProps extends React.Component<Props, State> {
             <Form.Field
               disabled={!editing}
             >
-              {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-              <label htmlFor="form-assigned-to-selector">{t('entities.generalProps.assignedTo')}</label>
+                            <label htmlFor="form-assigned-to-selector">{t('entities.generalProps.assignedTo')}</label>
               <UserSelector
                 id="form-assigned-to-selector"
                 value={assignedToId}
@@ -244,8 +243,7 @@ class InvoiceProps extends React.Component<Props, State> {
                 && startDate.setHours(0, 0, 0, 0)
                 < this.props.invoice.startDate.setHours(0, 0, 0, 0)) || isInvalidDate(startDate)}
             >
-              {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-              <label htmlFor="form-input-startdate">{t('entities.invoice.props.invoiceDate')}</label>
+                            <label htmlFor="form-input-startdate">{t('entities.invoice.props.invoiceDate')}</label>
               <DatePicker
                 onChange={(date) => {
                   this.setState({ startDate: date });
@@ -259,8 +257,7 @@ class InvoiceProps extends React.Component<Props, State> {
           </Form.Group>
           <Form.Group widths="equal">
             <Form.Field disabled={!editing}>
-              {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-              <label htmlFor="form-input-comments">
+                            <label htmlFor="form-input-comments">
                 {t('entities.generalProps.comments')}
               </label>
               <TextArea

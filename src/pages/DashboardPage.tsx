@@ -1,4 +1,4 @@
-import React from 'react';
+import { useEffect } from "react";
 import {
   Container, Grid, Header, Icon, Segment,
 } from 'semantic-ui-react';
@@ -11,10 +11,9 @@ import DashboardContracts from '../components/dashboard/DashboardContracts';
 import FinancialOverview from '../components/dashboard/FinancialOverview';
 import DashboardContractedCategoryGraph from '../components/dashboard/DashboardContractedCategoryGraph';
 import { useTitle } from '../components/TitleContext';
-import { withRouter } from '../WithRouter';
+import { WithRouter, withRouter } from '../WithRouter';
 
-interface Props extends WithTranslation {
-  // eslint-disable-next-line react/no-unused-prop-types
+interface Props extends WithTranslation, WithRouter {
   user: User | undefined;
 }
 
@@ -22,9 +21,9 @@ function DashboardPage(props: Props) {
   const { user, t } = props;
   const { setTitle } = useTitle();
 
-  React.useEffect(() => {
+  useEffect(() => {
     setTitle(t('dashboard.title'));
-  }, []);
+  }, [setTitle, t]);
 
   const beerTime = () => {
     const current = new Date();

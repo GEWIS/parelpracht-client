@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import {
@@ -13,10 +13,10 @@ import {
 } from '../../../stores/tables/actionCreators';
 import { countFetched, countTotal, getTable } from '../../../stores/tables/selectors';
 import { Tables } from '../../../stores/tables/tables';
-import ContactRow from './ContactRow';
 import ContactCompanyFilter from '../../tablefilters/CompanyFilter';
 import ResourceStatus from '../../../stores/resourceStatus';
 import ContactFunctionFilter from '../../tablefilters/ContactFunctionFilter';
+import ContactRow from './ContactRow';
 
 interface Props extends WithTranslation {
   contacts: Contact[];
@@ -42,7 +42,7 @@ function ContactsTable({
 }: Props) {
   useEffect(() => {
     fetchContacts();
-  }, []);
+  }, [fetchContacts]);
   const { t } = useTranslation();
 
   const table = (

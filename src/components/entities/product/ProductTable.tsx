@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import {
@@ -14,10 +14,10 @@ import {
 } from '../../../stores/tables/actionCreators';
 import { countFetched, countTotal, getTable } from '../../../stores/tables/selectors';
 import { Tables } from '../../../stores/tables/tables';
-import ProductRow from './ProductRow';
 import ProductStatusFilter from '../../tablefilters/ProductStatusFilter';
 import ProductCategoryFilter from '../../tablefilters/ProductCategoryFilter';
 import ResourceStatus from '../../../stores/resourceStatus';
+import ProductRow from './ProductRow';
 
 interface Props {
   products: Product[];

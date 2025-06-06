@@ -19,11 +19,11 @@ import {
 } from '../../../stores/tables/actionCreators';
 import { countFetched, countTotal, getTable } from '../../../stores/tables/selectors';
 import { Tables } from '../../../stores/tables/tables';
-import InvoiceRow from './InvoiceRow';
 import CompanyFilter from '../../tablefilters/CompanyFilter';
 import InvoiceStatusFilter from '../../tablefilters/InvoiceStatusFilter';
 import ResourceStatus from '../../../stores/resourceStatus';
 import { authedUserHasRole } from '../../../stores/auth/selectors';
+import InvoiceRow from './InvoiceRow';
 
 interface Props {
   invoices: Invoice[];

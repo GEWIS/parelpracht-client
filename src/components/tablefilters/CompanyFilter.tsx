@@ -1,4 +1,3 @@
-import React from 'react';
 import { connect } from 'react-redux';
 import { CompanySummary } from '../../clients/server.generated';
 import { RootState } from '../../stores/store';

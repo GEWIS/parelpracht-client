@@ -1,30 +1,31 @@
-import React from 'react';
+import {Component, ReactNode} from "react";
 import { Button, Icon, Table } from 'semantic-ui-react';
 import { withTranslation, WithTranslation } from 'react-i18next';
 import { SingleEntities } from '../../stores/single/single';
 import { ContractFile, Roles } from '../../clients/server.generated';
 import ResourceStatus from '../../stores/resourceStatus';
+import AuthorizationComponent from '../AuthorizationComponent';
+import {WithRouter, withRouter} from '../../WithRouter';
 import { GeneralFile } from './GeneralFile';
 import SingleFile from './SingleFile';
-import AuthorizationComponent from '../AuthorizationComponent';
 import './FilesList.scss';
-import { withRouter } from '../../WithRouter';
 
-interface Props extends WithTranslation {
+
+interface Props extends WithTranslation, WithRouter {
   files: GeneralFile[];
   entityId: number;
   entity: SingleEntities;
   status: ResourceStatus;
 
   fetchEntity: (entityId: number) => void;
-  generateModal?: JSX.Element;
+  generateModal?: ReactNode;
 }
 
 interface State {
   creating: boolean
 }
 
-class FilesList extends React.Component<Props, State> {
+class FilesList extends Component<Props, State> {
   static defaultProps = {
     generateModal: undefined,
   };

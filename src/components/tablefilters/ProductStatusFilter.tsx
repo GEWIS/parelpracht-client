@@ -1,4 +1,3 @@
-import React from 'react';
 import { Tables } from '../../stores/tables/tables';
 import ColumnFilter from '../ColumnFilter';
 

@@ -1,6 +1,6 @@
 import FileSaver from 'file-saver';
-import { CustomInvoiceGenSettings, GenerateContractParams, GenerateInvoiceParams } from './server.generated';
 import { SingleEntities } from '../stores/single/single';
+import { CustomInvoiceGenSettings, GenerateContractParams, GenerateInvoiceParams } from './server.generated';
 
 export class FilesClient {
   private readonly http: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> };
@@ -74,7 +74,7 @@ export class FilesClient {
 
   async uploadFile(
     entityId: number, file: FormData, entity: SingleEntities,
-  ): Promise<Boolean> {
+  ): Promise<boolean> {
     let url = `${this.getBaseUrl(entity)}/file/upload`;
 
     if (entityId === undefined || entityId === null) throw new Error("The parameter 'id' must be defined.");
@@ -95,7 +95,7 @@ export class FilesClient {
 
   async uploadLogo(
     entityId: number, file: FormData, entity: SingleEntities,
-  ): Promise<Boolean> {
+  ): Promise<boolean> {
     let url = `${this.getBaseUrl(entity)}/logo`;
 
     if (entityId === undefined || entityId === null) throw new Error("The parameter 'id' must be defined.");
@@ -116,7 +116,7 @@ export class FilesClient {
 
   async uploadBackground(
     entityId: number, file: FormData, entity: SingleEntities,
-  ): Promise<Boolean> {
+  ): Promise<boolean> {
     let url = `${this.getBaseUrl(entity)}/background`;
 
     if (entityId === undefined || entityId === null) throw new Error("The parameter 'id' must be defined.");

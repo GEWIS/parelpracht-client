@@ -1,4 +1,3 @@
-import * as React from 'react';
 import {
   Dimmer, Loader, Modal, Segment,
 } from 'semantic-ui-react';
@@ -13,7 +12,6 @@ import AlertContainer from '../alerts/AlertContainer';
 import { SingleEntities } from '../../stores/single/single';
 import DocumentStatusProps from './DocumentStatusProps';
 import { DocumentStatus } from './DocumentStatus';
-import { withRouter } from '../../WithRouter';
 
 interface Props {
   resourceStatus: ResourceStatus;
@@ -27,80 +25,62 @@ interface Props {
   parentId?: number;
 }
 
-class DocumentStatusModal extends React.Component<Props> {
-  static defaultProps = {
-    parentId: undefined,
-  };
-
-  public constructor(props: Props) {
-    super(props);
+function DocumentStatusModal({ resourceStatus, documentId, documentType, documentStatus, open, close, parentId}: Props) {
+  let documentStatusParams: InvoiceStatusParams | ContractStatusParams | undefined;
+  if (documentType === SingleEntities.Contract) {
+    documentStatusParams = {
+      description: '',
+      subType: documentStatus as unknown as ContractStatus,
+    } as ContractStatusParams;
+  } else {
+    documentStatusParams = {
+      description: '',
+      subType: documentStatus as unknown as InvoiceStatus,
+    } as InvoiceStatusParams;
   }
 
-  public render() {
-    const {
-      documentId,
-      documentType,
-      documentStatus,
-      open,
-      close,
-      parentId,
-    } = this.props;
-    let documentStatusParams: InvoiceStatusParams | ContractStatusParams | undefined;
-    if (documentType === SingleEntities.Contract) {
-      documentStatusParams = {
-        description: '',
-        subType: documentStatus as any as ContractStatus,
-      } as any as ContractStatusParams;
-    } else {
-      documentStatusParams = {
-        description: '',
-        subType: documentStatus as any as InvoiceStatus,
-      } as any as InvoiceStatusParams;
-    }
-
-    if (documentStatusParams === undefined) {
-      return (
-        <Modal
-          onClose={() => close()}
-          closeIcon
-          open={open}
-          dimmer="blurring"
-          size="tiny"
-        >
-          <Segment placeholder attached="bottom">
-            <AlertContainer />
-            <Dimmer active inverted>
-              <Loader />
-            </Dimmer>
-          </Segment>
-        </Modal>
-      );
-    }
-
+  if (documentStatusParams === undefined) {
     return (
       <Modal
         onClose={() => close()}
-        open={open}
         closeIcon
+        open={open}
         dimmer="blurring"
         size="tiny"
       >
-        <Segment attached="bottom">
+        <Segment placeholder attached="bottom">
           <AlertContainer />
-          <DocumentStatusProps
-            documentStatusParams={documentStatusParams}
-            documentId={documentId}
-            documentType={documentType}
-            documentStatus={documentStatus}
-            resourceStatus={this.props.resourceStatus}
-            create
-            close={close}
-            parentId={parentId}
-          />
+          <Dimmer active inverted>
+            <Loader />
+          </Dimmer>
         </Segment>
       </Modal>
     );
   }
+
+  return (
+    <Modal
+      onClose={() => close()}
+      open={open}
+      closeIcon
+      dimmer="blurring"
+      size="tiny"
+    >
+      <Segment attached="bottom">
+        <AlertContainer />
+        <DocumentStatusProps
+          documentStatusParams={documentStatusParams}
+          documentId={documentId}
+          documentType={documentType}
+          documentStatus={documentStatus}
+          resourceStatus={resourceStatus}
+          create
+          close={close}
+          parentId={parentId}
+        />
+      </Segment>
+    </Modal>
+  );
 }
 
-export default withRouter(DocumentStatusModal);
+export default DocumentStatusModal;

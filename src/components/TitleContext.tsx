@@ -1,4 +1,4 @@
-import React, { Dispatch } from 'react';
+import {createContext, Dispatch, PropsWithChildren, useContext, useEffect, useMemo, useState} from 'react';
 
 const TITLE_UNDEFINED = 'ParelPracht';
 const TITLE_TEMPLATE = '{} - ParelPracht';
@@ -10,21 +10,17 @@ export interface ITitleContext {
   setTitle: Dispatch<string>;
 }
 
-export const TitleContext = React.createContext<ITitleContext>({
+export const TitleContext = createContext<ITitleContext>({
   title: undefined,
   setTitle: () => null,
 });
 
-export const useTitle = () => React.useContext(TitleContext);
+export const useTitle = () => useContext(TitleContext);
 
-interface Props {
-  children: any;
-}
+const TitleRenderer = ({ children }: PropsWithChildren) => {
+  const [title, setTitle] = useState<Title>(undefined);
 
-const TitleRenderer = ({ children }: Props) => {
-  const [title, setTitle] = React.useState<Title>(undefined);
-
-  React.useEffect(() => {
+  useEffect(() => {
     if (title === undefined || title === '') {
       document.title = TITLE_UNDEFINED;
     } else {
@@ -32,7 +28,7 @@ const TitleRenderer = ({ children }: Props) => {
     }
   }, [title]);
 
-  const titleContext = React.useMemo(() => ({
+  const titleContext = useMemo(() => ({
     title,
     setTitle,
   }), [title]);

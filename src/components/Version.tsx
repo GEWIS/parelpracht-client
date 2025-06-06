@@ -1,47 +1,36 @@
-import React from 'react';
 import { Modal, Segment } from 'semantic-ui-react';
 import { marked } from 'marked';
+import {useEffect, useState} from "react";
 import releaseNotes from '../changelog.md';
 
 export const version = 'v1.5.0';
 
-interface Props { }
-interface State {
-  changelog: string;
-}
+function VersionModal() {
+  const [changeLog, setChangeLog] = useState('');
 
-class VersionModal extends React.Component<Props, State> {
-  constructor(props: Props) {
-    super(props);
-    this.state = {
-      changelog: '',
-    };
-  }
+  useEffect(() => {
+    const fillLog = async () => {
+      const rawLog = await fetch(releaseNotes as string);
+      const c = await marked(await rawLog.text());
+      setChangeLog(c);
+    }
+    fillLog().catch(console.error);
+  }, []);
 
-  async componentDidMount() {
-    const rawLog = await fetch(releaseNotes);
-    const changelog = await marked(await rawLog.text());
-    this.setState({
-      changelog,
-    });
-  }
-
-  render() {
-    return (
-      <Modal
-        trigger={(
-          <span style={{ cursor: 'pointer' }}>
-            ParelPracht
-            {' '}
-            {version}
-          </span>
-        )}
-        closeIcon
-      >
-        <Segment style={{ marginTop: '0' }} dangerouslySetInnerHTML={{ __html: this.state.changelog }} />
-      </Modal>
-    );
-  }
+  return (
+    <Modal
+      trigger={(
+        <span style={{ cursor: 'pointer' }}>
+          ParelPracht
+          {' '}
+          {version}
+        </span>
+      )}
+      closeIcon
+    >
+      <Segment style={{ marginTop: '0' }} dangerouslySetInnerHTML={{ __html: changeLog }} />
+    </Modal>
+  );
 }
 
 export default VersionModal;

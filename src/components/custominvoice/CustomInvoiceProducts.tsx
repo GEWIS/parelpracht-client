@@ -1,9 +1,8 @@
-import React from 'react';
 import {
   Button, Icon, Segment, Table,
 } from 'semantic-ui-react';
 import { useTranslation } from 'react-i18next';
-import { CustomProduct, VAT } from '../../clients/server.generated';
+import {CustomProduct, VAT} from '../../clients/server.generated';
 import { formatPriceFull } from '../../helpers/monetary';
 import CustomInvoiceProductRow from './CustomInvoiceProductRow';
 
@@ -11,7 +10,7 @@ interface Props {
   products: CustomProduct[];
   addProduct: () => void;
   removeProduct: (id: number) => void;
-  updateProduct: (id: number, attribute: string, value: any) => void;
+  updateProduct: <T extends keyof CustomProduct = keyof CustomProduct>(id: number, attribute: T, value: CustomProduct[T]) => void;
 }
 
 function VATtoNumber(valueAddedTax: VAT) {

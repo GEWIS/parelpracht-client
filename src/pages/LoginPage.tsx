@@ -1,4 +1,4 @@
-import React from 'react';
+import { useEffect } from 'react';
 import { Navigate as Redirect, NavLink } from 'react-router-dom';
 import {
   Container, Image, Message, Segment,
@@ -22,9 +22,9 @@ function LoginPage({ loginMethod, setupDone }: Props) {
   const { t } = useTranslation();
   const { setTitle } = useTitle();
 
-  React.useEffect(() => {
+  useEffect(() => {
     setTitle(t('pages.login.title'));
-  }, []);
+  }, [setTitle, t]);
 
   let loginForm;
   switch (loginMethod) {
@@ -33,7 +33,7 @@ function LoginPage({ loginMethod, setupDone }: Props) {
     case LoginMethods.Ldap:
       loginForm = <LoginLDAPForm />; break;
     default:
-      throw new Error(`Unknown login method: ${loginMethod}`);
+      throw new Error(`Unknown login method: ${loginMethod as string}`);
   }
 
   if (!setupDone) {

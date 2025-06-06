@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useState } from 'react';
 import {
   Button,
   Checkbox,
@@ -86,7 +86,7 @@ function GenerateContract(props: Props) {
         <h2>
           {t('files.generate.header')}
           <Button
-            onClick={save}
+            onClick={() => { save().catch(console.error); }}
             floated="right"
             loading={loading}
             color="green"
@@ -108,8 +108,7 @@ function GenerateContract(props: Props) {
         <Form style={{ marginTop: '2em' }}>
           <Form.Group widths="equal">
             <Form.Field required>
-              {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-              <label htmlFor="form-contact-selector">{t('files.generate.recipient')}</label>
+                            <label htmlFor="form-contact-selector">{t('files.generate.recipient')}</label>
               <ContactSelector
                 id="form-contact-selector"
                 disabled={false}
@@ -131,7 +130,6 @@ function GenerateContract(props: Props) {
             <Form.Field
               required
             >
-              {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
               <label htmlFor="form-input-File-Type">{t('files.generate.fileType')}</label>
               <Dropdown
                 id="form-input-File-Type"
@@ -142,14 +140,13 @@ function GenerateContract(props: Props) {
                   { key: 0, text: 'PDF', value: ReturnFileType.PDF },
                   { key: 1, text: 'TEX', value: ReturnFileType.TEX },
                 ]}
-                onChange={(e, data) => changeFileType(data.value as ReturnFileType)}
+                onChange={(_, data) => changeFileType(data.value as ReturnFileType)}
                 fluid
               />
             </Form.Field>
             <Form.Field
               required
             >
-              {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
               <label htmlFor="form-input-language">{t('language.header')}</label>
               <Dropdown
                 id="form-input-language"
@@ -160,30 +157,28 @@ function GenerateContract(props: Props) {
                   { key: 0, text: t('language.dutch'), value: Language.DUTCH },
                   { key: 1, text: t('language.english'), value: Language.ENGLISH },
                 ]}
-                onChange={(e, data) => changeLanguage(data.value as Language)}
+                onChange={(_, data) => changeLanguage(data.value as Language)}
                 fluid
               />
             </Form.Field>
           </Form.Group>
           <Form.Group>
             <Form.Field>
-              {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
               <label htmlFor="form-input-Discount">{t('files.generate.showDiscount')}</label>
               <Checkbox
                 toggle
                 id="form-input-Discount"
                 checked={showDiscountPercentages}
-                onChange={(e, data) => changeDiscount(data.checked as boolean)}
+                onChange={(_, data) => changeDiscount(data.checked as boolean)}
               />
             </Form.Field>
             <Form.Field>
-              {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
               <label htmlFor="form-input-SaveToDisk">{t('files.generate.saveToDisk')}</label>
               <Checkbox
                 id="form-input-SaveToDisk"
                 toggle
                 checked={saveToDisk}
-                onChange={(e, data) => changeSaveToDisk(data.checked as boolean)}
+                onChange={(_, data) => changeSaveToDisk(data.checked as boolean)}
               />
             </Form.Field>
           </Form.Group>

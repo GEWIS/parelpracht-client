@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { Navigate as Redirect, useRoutes, Outlet } from 'react-router-dom';
 import { Container, Dimmer, Header, Loader } from 'semantic-ui-react';
 import { connect } from 'react-redux';
@@ -57,7 +56,7 @@ interface Props extends WithRouter {
 function Routes(props: Props) {
   const { t } = useTranslation();
 
-  let loginRoutes = [
+  const loginRoutes = [
     {
       path: '*',
       element:
@@ -118,7 +117,7 @@ function Routes(props: Props) {
     });
   }
 
-  let mainRoutes = [
+  const mainRoutes = [
     {
       path: '/login',
       element: <Redirect to="/"/>,

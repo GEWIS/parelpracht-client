@@ -1,4 +1,3 @@
-import React from 'react';
 import { withTranslation, WithTranslation } from 'react-i18next';
 import { Button, Input, Table } from 'semantic-ui-react';
 import { Client, Partial_RoleParams_, Role } from '../../clients/server.generated';

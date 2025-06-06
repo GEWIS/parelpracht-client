@@ -1,16 +1,15 @@
-import React from 'react';
+import { createRef, Component, ReactNode, RefObject } from "react";
 import { Dropdown, Grid } from 'semantic-ui-react';
 import { withTranslation, WithTranslation } from 'react-i18next';
 import { Line } from 'react-chartjs-2';
 import { connect } from 'react-redux';
 import { ChartData, ChartOptions } from 'chart.js';
+import { ChartJSOrUndefined } from 'react-chartjs-2/dist/types';
 import { formatPriceFull } from '../../helpers/monetary';
 import { randomColorSet } from '../../helpers/colors';
 import { ProductsPerCategory } from '../../clients/server.generated';
 import { RootState } from '../../stores/store';
 import { getCategoryName } from '../../stores/productcategory/selectors';
-import { TooltipItem } from 'chart.js/dist/types';
-import { ChartJSOrUndefined } from 'react-chartjs-2/dist/types';
 
 export enum DataSet {
   VALUES,
@@ -21,26 +20,26 @@ interface Props extends WithTranslation {
   getCatName: (id: number) => string;
   data: ProductsPerCategory[];
   labels: string[];
-  extraDropdown?: JSX.Element;
+  extraDropdown?: ReactNode;
 }
 
 interface State {
   dataSetSelection: DataSet;
 }
 
-class CategoryLineChart extends React.Component<Props, State> {
+class CategoryLineChart extends Component<Props, State> {
   static defaultProps = {
     extraDropdown: undefined,
   };
 
-  private chartReference: React.RefObject<ChartJSOrUndefined<'line'>>;
+  private chartReference: RefObject<ChartJSOrUndefined<'line'>>;
 
   constructor(props: Props) {
     super(props);
     this.state = {
       dataSetSelection: DataSet.VALUES,
     };
-    this.chartReference = React.createRef();
+    this.chartReference = createRef();
   }
 
   changeDataset = (newDataset: DataSet) => {
@@ -107,7 +106,7 @@ class CategoryLineChart extends React.Component<Props, State> {
             },
             tooltip: {
               callbacks: {
-                label(tooltipItem: TooltipItem<'line'>) {
+                label(tooltipItem) {
                   const value = formatPriceFull(tooltipItem.raw as number);
                   const { label } = tooltipItem.dataset;
                   return ` ${label}: ${value}`;
@@ -136,8 +135,8 @@ class CategoryLineChart extends React.Component<Props, State> {
             },
             tooltip: {
               callbacks: {
-                label(tooltipItem: TooltipItem<'line'>) {
-                  const value = tooltipItem.raw;
+                label(tooltipItem) {
+                  const value = tooltipItem.raw as number;
                   const { label } = tooltipItem.dataset;
                   return ` ${label}: ${value}`;
                 },
@@ -167,7 +166,7 @@ class CategoryLineChart extends React.Component<Props, State> {
                 value={dataSetSelection}
                 float="right"
                 style={{ marginLeft: '1em' }}
-                onChange={(value, d) => this.changeDataset(d.value as DataSet)}
+                onChange={(_, d) => this.changeDataset(d.value as DataSet)}
               />
             </Grid.Column>
           </Grid.Row>

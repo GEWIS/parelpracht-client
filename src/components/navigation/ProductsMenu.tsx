@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import {
   Dropdown, Icon, Menu,
@@ -27,7 +27,7 @@ function ProductsMenu() {
               {t('mainMenu.products')}
             </span>
           </NavLink>
-        ) as any}
+        )}
       >
         <Dropdown.Menu>
           <AuthorizationComponent roles={[Roles.GENERAL, Roles.ADMIN]} notFound={false}>

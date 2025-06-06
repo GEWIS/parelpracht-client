@@ -6,6 +6,9 @@ import {
   ProductInstanceParams,
   ProductInstanceStatusParams,
 } from '../../clients/server.generated';
+import { errorSingle, fetchSingle } from '../single/actionCreators';
+import { takeEveryWithErrorHandling } from '../errorHandling';
+import { singleActionPattern, SingleActionType } from '../single/actions';
 import {
   SingleCreateInstanceAction,
   SingleCreateInstanceCommentAction,
@@ -15,9 +18,6 @@ import {
   SingleSaveInstanceAction,
   SingleSaveInstanceActivityAction,
 } from './actions';
-import { errorSingle, fetchSingle } from '../single/actionCreators';
-import { takeEveryWithErrorHandling } from '../errorHandling';
-import { singleActionPattern, SingleActionType } from '../single/actions';
 
 function* errorProductInstance() {
   yield put(errorSingle(SingleEntities.ProductInstance));

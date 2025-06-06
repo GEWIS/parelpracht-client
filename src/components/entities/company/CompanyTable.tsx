@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import {
@@ -14,9 +14,9 @@ import {
 } from '../../../stores/tables/actionCreators';
 import { countFetched, countTotal, getTable } from '../../../stores/tables/selectors';
 import { Tables } from '../../../stores/tables/tables';
-import { CompanyRow } from './CompanyRow';
 import CompanyStatusFilter from '../../tablefilters/CompanyStatusFilter';
 import ResourceStatus from '../../../stores/resourceStatus';
+import { CompanyRow } from './CompanyRow';
 
 interface Props {
   companies: Company[];
@@ -46,7 +46,7 @@ function CompaniesTable({
     setSort('name', 'ASC');
     setTableFilter({ column: 'status', values: ['ACTIVE'] });
     fetchCompanies();
-  }, []);
+  }, [setSort, setTableFilter, fetchCompanies]);
   const { t } = useTranslation();
 
   const table = (

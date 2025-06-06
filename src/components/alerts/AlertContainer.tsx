@@ -1,5 +1,4 @@
 /* eslint no-trailing-spaces: 0 */
-import React from 'react';
 import { connect } from 'react-redux';
 import { Rail } from 'semantic-ui-react';
 import { AlertItemState } from '../../stores/alerts/reducer';

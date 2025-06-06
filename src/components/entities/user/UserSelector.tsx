@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { connect } from 'react-redux';
 import { Dropdown, DropdownProps } from 'semantic-ui-react';
 import { useTranslation } from 'react-i18next';
@@ -46,7 +46,7 @@ function UserSelector(props: Props & DropdownProps) {
       error={(value < 1 && !open) && correct !== true}
       options={dropdownOptions}
       value={props.value}
-      onChange={(e, data) => onChange(data.value as any)}
+      onChange={(_, data) => onChange(data.value as number | number[])}
       onOpen={() => changeOpen(true)}
       onClose={() => changeOpen(false)}
     />

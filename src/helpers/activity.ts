@@ -1,5 +1,4 @@
 import { GeneralActivity } from '../components/activities/GeneralActivity';
-import { formatLastUpdate } from './timestamp';
 import {
   ActivityType,
   BaseActivity,
@@ -10,6 +9,7 @@ import {
 import { SingleEntities } from '../stores/single/single';
 import { DocumentStatus } from '../components/activities/DocumentStatus';
 import i18n from '../localization';
+import { formatLastUpdate } from './timestamp';
 
 /**
  * Format an SingleEntity to a document string, which can be used in the activities

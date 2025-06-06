@@ -17,7 +17,6 @@ function ExtendableTextArea(props: TextAreaProps) {
 
   return (
     <TextArea
-      // eslint-disable-next-line react/jsx-props-no-spreading
       {...props}
       onChange={(event, x) => {
         setHeight();

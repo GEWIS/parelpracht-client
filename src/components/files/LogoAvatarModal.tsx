@@ -1,4 +1,4 @@
-import React from 'react';
+import {Component, ReactNode} from "react";
 import {
   Button, Icon, Image, Input, Modal,
 } from 'semantic-ui-react';
@@ -27,7 +27,7 @@ interface State {
   open: boolean;
 }
 
-class LogoAvatarModal extends React.Component<Props, State> {
+class LogoAvatarModal extends Component<Props, State> {
   static defaultProps = {
     loggedInUser: undefined,
   };
@@ -57,7 +57,7 @@ class LogoAvatarModal extends React.Component<Props, State> {
     this.setState({ open: false });
   };
 
-  updateImage = async (fileData: any) => {
+  updateImage = async (fileData: Blob) => {
     const client = new FilesClient();
     const {
       entityId, entity, fetchEntity,
@@ -90,7 +90,7 @@ class LogoAvatarModal extends React.Component<Props, State> {
     if (entity === SingleEntities.User) this.updateAuthedUser();
   };
 
-  public renderUserAvatar(): JSX.Element {
+  public renderUserAvatar(): ReactNode {
     const {
       entityName, entityId, fileName, t,
     } = this.props;
@@ -136,7 +136,7 @@ class LogoAvatarModal extends React.Component<Props, State> {
       <Button
         color="red"
         floated="left"
-        onClick={() => this.removeImage()}
+        onClick={() => { this.removeImage().catch(console.error); } }
       >
         <Icon name="trash" />
         {t('pages.user.avatar.deleteUsersAvatar', { name: entityName })}
@@ -163,7 +163,7 @@ class LogoAvatarModal extends React.Component<Props, State> {
             <Input
               type="file"
               id={`form-file-${entityId}-file`}
-              onChange={(e) => this.updateImage(e.target.files![0])}
+              onChange={(e) => { this.updateImage(e.target.files![0]).catch(console.error) }}
               style={{ width: '80%' }}
             />
           </Modal.Description>
@@ -176,7 +176,7 @@ class LogoAvatarModal extends React.Component<Props, State> {
     );
   }
 
-  public renderCompanyLogo(): JSX.Element {
+  public renderCompanyLogo(): ReactNode {
     const { entityName, entityId, fileName } = this.props;
     const { open } = this.state;
     const image = fileName === '' ? (
@@ -225,7 +225,7 @@ class LogoAvatarModal extends React.Component<Props, State> {
       <Button
         color="red"
         floated="left"
-        onClick={() => this.removeImage()}
+        onClick={() => { this.removeImage().catch(console.error) }}
       >
         <Icon name="trash" />
         Delete
@@ -262,7 +262,7 @@ class LogoAvatarModal extends React.Component<Props, State> {
             <Input
               type="file"
               id={`form-file-${entityId}-file`}
-              onChange={(e) => this.updateImage(e.target.files![0])}
+              onChange={(e) => { this.updateImage(e.target.files![0]).catch(console.error) }}
               style={{ width: '80%' }}
             />
           </Modal.Description>

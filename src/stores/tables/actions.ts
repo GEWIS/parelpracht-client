@@ -54,9 +54,9 @@ export type TableSetFilterAction<T> = TableAction<TableActionType.SetFilter, T> 
 };
 
 export type TableActions<T extends Tables, R> =
-  TableFetchAction<T> | TableSetAction<T, R> | TableClearAction<T>
+  TableFetchAction<T> | TableSetAction<T, R>  
   | TableChangeSortAction<T> | TableSetTakeAction<T> | TableSearchAction<T>
-  | TableNextPageAction<T> | TablePrevPageAction<T> | TableSetFilterAction<T>;
+      | TableSetFilterAction<T>;
 
 export const tableActionPattern = <T extends Tables>(
   table: T, action: TableActionType,

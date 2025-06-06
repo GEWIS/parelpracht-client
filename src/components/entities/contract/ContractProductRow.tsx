@@ -1,4 +1,3 @@
-import React from 'react';
 import { Checkbox, Table } from 'semantic-ui-react';
 import { ActivityType, ProductInstance, ProductInstanceStatus } from '../../../clients/server.generated';
 import './ContractComponent.scss';

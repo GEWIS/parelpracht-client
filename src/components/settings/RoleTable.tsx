@@ -1,17 +1,17 @@
-import React from 'react';
+import { Component } from 'react';
 import { Loader, Table } from 'semantic-ui-react';
 import { withTranslation, WithTranslation } from 'react-i18next';
 import { Client, Role } from '../../clients/server.generated';
 import RoleTableRow from './RoleTableRow';
 
-interface Props extends WithTranslation {}
+type Props = WithTranslation
 
 interface State {
   roles: Role[];
   loading: boolean;
 }
 
-class RoleTable extends React.Component<Props, State> {
+class RoleTable extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
 
@@ -21,13 +21,16 @@ class RoleTable extends React.Component<Props, State> {
     };
   }
 
-  async componentDidMount() {
+  componentDidMount() {
     const client = new Client();
-    const roles = await client.getAllRoles();
-    this.setState({
-      roles,
-      loading: false,
-    });
+    client.getAllRoles()
+      .then((roles) => {
+        this.setState({
+          roles,
+          loading: false,
+        });
+      })
+      .catch(console.error);
   }
 
   updateTable = (role: Role) => {

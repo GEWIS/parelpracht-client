@@ -1,4 +1,3 @@
-import React from 'react';
 import {
   Button, Table, TextArea, Form,
 } from 'semantic-ui-react';
@@ -6,11 +5,11 @@ import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import { withTranslation, WithTranslation } from 'react-i18next';
 import { Client, Partial_PricingParams_, ProductPricing } from '../../clients/server.generated';
-import PricingRow from './PricingRow';
 import PropsButtons from '../PropsButtons';
 import { SingleEntities } from '../../stores/single/single';
 import ResourceStatus from '../../stores/resourceStatus';
 import { fetchSingle } from '../../stores/single/actionCreators';
+import PricingRow from './PricingRow';
 
 interface Props extends WithTranslation {
   pricing: ProductPricing;

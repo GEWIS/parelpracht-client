@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useState } from 'react';
 import {
   Button, Input, Table, Dropdown,
 } from 'semantic-ui-react';
@@ -11,8 +11,8 @@ interface Props {
   product: CustomProduct;
   id: number;
 
-  updateProduct: (id: number, attribute: string, value: any) => void;
-  // eslint-disable-next-line react/no-unused-prop-types
+  updateProduct: <T extends keyof CustomProduct = keyof CustomProduct>(id: number, attribute: T, value: CustomProduct[T]) => void;
+
   removeProduct: (id: number) => void;
 }
 
@@ -21,7 +21,6 @@ function CustomInvoiceProductRow(props: Props) {
 
   const [pricePerOne, changePricePerOne] = useState('0.00');
 
-  // @ts-ignore
   return (
     <Table.Row>
       <Table.Cell width="2">
@@ -29,10 +28,9 @@ function CustomInvoiceProductRow(props: Props) {
           placeholder={t('pages.customInvoice.products.amount')}
           value={props.product.amount}
           onChange={(e: ChangeEvent<HTMLInputElement>) => {
-            props.updateProduct(props.id, 'amount', e.target.value);
+            props.updateProduct(props.id, 'amount', Number(e.target.value));
           }}
-          // @ts-ignore
-          error={props.product.amount === 0 || !validator.isInt(props.product.amount)}
+          error={props.product.amount === 0 || !Number.isInteger(props.product.amount)}
           fluid
         />
       </Table.Cell>
@@ -71,8 +69,8 @@ function CustomInvoiceProductRow(props: Props) {
             { key: 1, text: '9%', value: VAT.LOW },
             { key: 2, text: '0%', value: VAT.ZERO },
           ]}
-          onChange={(e, data) => {
-            props.updateProduct(props.id, 'valueAddedTax', data.value);
+          onChange={(_, data) => {
+            props.updateProduct(props.id, 'valueAddedTax', data.value as VAT);
           }}
           fluid
         />

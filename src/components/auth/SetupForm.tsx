@@ -1,11 +1,11 @@
 import { useTranslation } from 'react-i18next';
 import { Button, Checkbox, Dropdown, Form, Input } from 'semantic-ui-react';
-import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
-import { Gender } from '../../clients/server.generated';
+import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
-import { authSetup } from '../../stores/auth/actionCreators';
 import validator from 'validator';
+import { authSetup } from '../../stores/auth/actionCreators';
+import { Gender } from '../../clients/server.generated';
 import PasswordStrength from './PasswordStrength';
 
 interface Props {
@@ -14,7 +14,7 @@ interface Props {
     firstname: string,
     preposition: string,
     lastname: string,
-    gender: string,
+    gender: Gender,
     password: string,
     rememberMe: boolean) => void;
 }
@@ -30,7 +30,7 @@ function SetupForm(props: Props) {
   const [rememberMe, changeRememberMe] = useState(false);
   const [passwordIsValid, setPasswordIsValid] = useState(false);
 
-  const inputRef = useRef<Input>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
   useEffect(() => {
     inputRef.current!.focus();
   }, []);

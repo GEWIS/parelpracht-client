@@ -1,4 +1,3 @@
-import React from 'react';
 import { connect } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import {
@@ -10,9 +9,9 @@ import { getSingle } from '../../../stores/single/selectors';
 import { SingleEntities } from '../../../stores/single/single';
 import { RootState } from '../../../stores/store';
 import AuthorizationComponent from '../../AuthorizationComponent';
-import CompanyContact from './CompanyContact';
 import { sortContactsByFunction } from '../../../helpers/contact';
 import { withRouter, WithRouter } from '../../../WithRouter';
+import CompanyContact from './CompanyContact';
 
 interface Props extends WithTranslation, WithRouter {
   company: Company | undefined;

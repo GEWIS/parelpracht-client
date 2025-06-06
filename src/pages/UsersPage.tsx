@@ -15,7 +15,7 @@ function UsersPage(props: WithRouter) {
 
   React.useEffect(() => {
     setTitle(t('entity.users'));
-  }, []);
+  }, [setTitle, t]);
 
   return (
     <>

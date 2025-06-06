@@ -1,5 +1,5 @@
-/* eslint-disable react/jsx-props-no-spreading */
-import React, { useState } from 'react';
+
+import { useState } from 'react';
 import { connect } from 'react-redux';
 import { Dropdown, DropdownProps } from 'semantic-ui-react';
 import { CompanyStatus, CompanySummary } from '../../../clients/server.generated';

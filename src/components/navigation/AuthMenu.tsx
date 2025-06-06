@@ -1,4 +1,3 @@
-import React from 'react';
 import { connect } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import { Dispatch } from 'redux';
@@ -67,7 +66,7 @@ function AuthMenu(props: Props) {
             />
             {name}
           </>
-        ) as any}
+        )}
         item
         className="icon"
       >

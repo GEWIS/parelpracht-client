@@ -1,13 +1,12 @@
-import React from 'react';
 import { Table } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import { Contract, ContractStatus } from '../../../clients/server.generated';
 import CompanyLink from '../company/CompanyLink';
-import ContractLink from './ContractLink';
 import { formatLastUpdate } from '../../../helpers/timestamp';
 import { RootState } from '../../../stores/store';
 import { getContractStatus } from '../../../stores/contract/selectors';
 import { formatStatus } from '../../../helpers/activity';
+import ContractLink from './ContractLink';
 
 interface Props {
   contract: Contract,

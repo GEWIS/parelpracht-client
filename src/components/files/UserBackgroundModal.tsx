@@ -1,4 +1,3 @@
-import React from 'react';
 import {
   Button, Icon, Image, Input, Modal,
 } from 'semantic-ui-react';

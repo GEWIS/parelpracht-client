@@ -1,4 +1,3 @@
-import React from 'react';
 import { connect } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import { Checkbox, Table } from 'semantic-ui-react';
@@ -13,11 +12,11 @@ function UserRow(props: Props) {
   const { user } = props;
 
   const permissions = {
-    roleGeneral: user.roles.find((r) => r.name === Roles.GENERAL) !== undefined,
-    roleSignee: user.roles.find((r) => r.name === Roles.SIGNEE) !== undefined,
-    roleFinancial: user.roles.find((r) => r.name === Roles.FINANCIAL) !== undefined,
-    roleAudit: user.roles.find((r) => r.name === Roles.AUDIT) !== undefined,
-    roleAdmin: user.roles.find((r) => r.name === Roles.ADMIN) !== undefined,
+    roleGeneral: user.roles.find((r) => r.name as Roles === Roles.GENERAL) !== undefined,
+    roleSignee: user.roles.find((r) => r.name as Roles === Roles.SIGNEE) !== undefined,
+    roleFinancial: user.roles.find((r) => r.name as Roles === Roles.FINANCIAL) !== undefined,
+    roleAudit: user.roles.find((r) => r.name as Roles === Roles.AUDIT) !== undefined,
+    roleAdmin: user.roles.find((r) => r.name as Roles === Roles.ADMIN) !== undefined,
   };
 
   return (

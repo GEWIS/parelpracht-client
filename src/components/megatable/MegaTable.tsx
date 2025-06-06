@@ -1,11 +1,9 @@
-import React from 'react';
 import {
   Dimmer, Loader, Segment, Table,
 } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import { withTranslation, WithTranslation } from 'react-i18next';
-import MegaTableRow from './MegaTableRow';
 import { RootState } from '../../stores/store';
 import { countFetched, countTotal, getTable } from '../../stores/tables/selectors';
 import { Tables } from '../../stores/tables/tables';
@@ -29,6 +27,7 @@ import { formatPriceFull } from '../../helpers/monetary';
 import ContractStatusFilter from '../tablefilters/ContractStatusFilter';
 import { dateToFinancialYear } from '../../helpers/timestamp';
 import { withRouter, WithRouter } from '../../WithRouter';
+import MegaTableRow from './MegaTableRow';
 
 interface Props extends WithTranslation, WithRouter {
   companies: ETCompany[];
@@ -210,9 +209,7 @@ const mapStateToProps = (state: RootState) => {
     skip: contractTable.skip,
     take: contractTable.take,
     companies: contractTable.data,
-    // @ts-ignore
     nrOfProducts: contractTable.extra.nrOfProducts,
-    // @ts-ignore
     sumProducts: contractTable.extra.sumProducts,
     column: contractTable.sortColumn,
     direction: contractTable.sortDirection === 'ASC'

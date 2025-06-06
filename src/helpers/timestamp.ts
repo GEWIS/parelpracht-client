@@ -26,10 +26,10 @@ function parseDateToSplitDateObj(date: Date): SplitDate {
   return {
     month: monthNames[date.getMonth()],
     day: dayString,
-    year: date.getFullYear(),
+    year: date.getFullYear().toString(),
     hour: String(date.getHours()).padStart(2, '0'),
     minutes: String(date.getMinutes()).padStart(2, '0'),
-  } as any as SplitDate;
+  } as SplitDate;
 }
 
 export function formatLastUpdate(date: Date): string {

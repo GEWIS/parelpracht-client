@@ -10,7 +10,7 @@ import nl_NL from './locales/nl_NL/translations.json';
 TimeAgo.addLocale(en);
 TimeAgo.addLocale(nl);
 
-// eslint-disable-next-line @typescript-eslint/naming-convention
+
 type locales = 'en-US' | 'nl-NL';
 
 const resources = {
@@ -22,6 +22,7 @@ const resources = {
   },
 };
 
+// eslint-disable-next-line import/no-named-as-default-member
 i18n
   .use(initReactI18next)
   .use(LanguageDetector)
@@ -31,10 +32,13 @@ i18n
     interpolation: {
       escapeValue: false,
     },
-  });
+  })
+  .catch(console.error);
 
 export const changeLanguage = (language: locales) => {
-  i18n.changeLanguage(language);
+  // eslint-disable-next-line import/no-named-as-default-member
+  i18n.changeLanguage(language)
+    .catch(console.error);
 };
 
 export const getLanguage = (): locales => {

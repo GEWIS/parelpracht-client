@@ -1,4 +1,3 @@
-import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { Icon } from 'semantic-ui-react';
 import { connect } from 'react-redux';
@@ -45,7 +44,7 @@ function ContractLink(props: Props) {
       statusCircle = <PartialCircle endAngle={359.99999} startAngle={0} fillColor="#ff6966" />;
       break;
     default:
-      throw new TypeError(`Unknown contract status: ${status} from contract ${id}`);
+      throw new TypeError(`Unknown contract status: ${status as string} from contract ${id}`);
   }
 
   return (

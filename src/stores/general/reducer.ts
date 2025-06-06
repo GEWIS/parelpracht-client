@@ -1,7 +1,7 @@
+import { LoginMethods } from '../../clients/server.generated';
 import { GeneralState } from './state';
 import * as actionCreators from './actionCreators';
 import { GeneralActionType } from './actions';
-import { LoginMethods } from '../../clients/server.generated';
 
 const initialState: GeneralState = {
   loginMethod: LoginMethods.Local,

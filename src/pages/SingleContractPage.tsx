@@ -23,9 +23,9 @@ import { TransientAlert } from '../stores/alerts/actions';
 import FilesList from '../components/files/FilesList';
 import GenerateContractModal from '../components/files/GenerateContractModal';
 import { authedUserHasRole } from '../stores/auth/selectors';
-import NotFound from './NotFound';
 import { TitleContext } from '../components/TitleContext';
 import { withRouter, WithRouter } from '../WithRouter';
+import NotFound from './NotFound';
 
 interface Props extends WithTranslation, WithRouter {
   contract: Contract | undefined;

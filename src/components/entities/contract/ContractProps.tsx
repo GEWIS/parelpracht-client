@@ -65,7 +65,7 @@ class ContractProps extends React.Component<Props, State> {
   componentDidUpdate(prevProps: Props) {
     if (prevProps.status === ResourceStatus.SAVING
       && this.props.status === ResourceStatus.FETCHED) {
-      // eslint-disable-next-line react/no-did-update-set-state
+
       this.setState({ editing: false });
       this.props.showTransientAlert({
         title: 'Success',
@@ -203,8 +203,7 @@ class ContractProps extends React.Component<Props, State> {
             <Form.Field
               disabled={!editing}
             >
-              {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-              <label htmlFor="form-assigned-to-selector">{t('entities.generalProps.assignedTo')}</label>
+                            <label htmlFor="form-assigned-to-selector">{t('entities.generalProps.assignedTo')}</label>
               <UserSelector
                 id="form-assigned-to-selector"
                 value={assignedToSelection}
@@ -220,8 +219,7 @@ class ContractProps extends React.Component<Props, State> {
             disabled={!this.props.create}
             required
           >
-            {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-            <label htmlFor="form-company-selector">{t('entity.company')}</label>
+                        <label htmlFor="form-company-selector">{t('entity.company')}</label>
             <CompanySelector
               id="form-company-selector"
               disabled={this.props.companyPredefined}
@@ -235,8 +233,7 @@ class ContractProps extends React.Component<Props, State> {
             disabled={!editing}
             required
           >
-            {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-            <label htmlFor="form-contact-selector">{t('entity.contact')}</label>
+                        <label htmlFor="form-contact-selector">{t('entity.contact')}</label>
             <ContactSelector
               id="form-contact-selector"
               // disabled={editing && (companySelection === -1)}
@@ -250,8 +247,7 @@ class ContractProps extends React.Component<Props, State> {
             />
           </Form.Field>
           <Form.Field disabled={!editing}>
-            {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-            <label htmlFor="form-input-comments">
+                        <label htmlFor="form-input-comments">
               {t('entities.generalProps.comments')}
             </label>
             <TextArea

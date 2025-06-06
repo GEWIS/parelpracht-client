@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import {
   NavLink, Navigate as Redirect, useLocation,
 } from 'react-router-dom';
@@ -26,16 +26,16 @@ interface Props {
   clearStatus: () => void;
 }
 
-function ResetPasswordPage(props: Props) {
+function ResetPasswordPage({ status, clearStatus }: Props) {
   const location = useLocation();
   const { token } = queryString.parse(location.search);
   const { t } = useTranslation();
   const { setTitle } = useTitle();
 
   useEffect(() => {
-    props.clearStatus();
+    clearStatus();
     setTitle(t('pages.resetPassword.title'));
-  }, []);
+  }, [clearStatus, setTitle, t]);
 
   if (typeof token !== 'string') {
     return <Redirect to="/login" />;
@@ -48,7 +48,7 @@ function ResetPasswordPage(props: Props) {
 
   const newUser = payload.type === 'PASSWORD_SET';
 
-  if (props.status === ResourceStatus.FETCHED) {
+  if (status === ResourceStatus.FETCHED) {
     return (
       <>
         <div className="bg" />

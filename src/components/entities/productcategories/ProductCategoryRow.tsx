@@ -1,4 +1,3 @@
-import React from 'react';
 import { Table } from 'semantic-ui-react';
 import { ProductCategory } from '../../../clients/server.generated';
 import CategoryLink from './ProductCategoryLink';

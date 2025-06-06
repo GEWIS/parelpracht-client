@@ -1,11 +1,9 @@
-import React from 'react';
 import { NavLink } from 'react-router-dom';
 import {
   Button, Icon, Loader, Table,
 } from 'semantic-ui-react';
 import _ from 'lodash';
 import { withTranslation, WithTranslation } from 'react-i18next';
-import ContractProductRow from './ContractProductRow';
 import {
   ActivityType, Contract, ContractStatus, Roles, VAT,
 } from '../../../clients/server.generated';
@@ -14,6 +12,7 @@ import ContractInvoiceModal from '../../../pages/ContractInvoiceModal';
 import AuthorizationComponent from '../../AuthorizationComponent';
 import { getLastStatus } from '../../../helpers/activity';
 import { WithRouter, withRouter } from '../../../WithRouter';
+import ContractProductRow from './ContractProductRow';
 
 interface Props extends WithTranslation, WithRouter {
   contract: Contract;
@@ -37,7 +36,7 @@ class ContractProductList extends React.Component<Props, State> {
       // The following operation is safe, because we only change the state if one
       // of the products has been removed. We do this check on the props and not
       // on the state, so there is no infinite loop.
-      // eslint-disable-next-line react/no-did-update-set-state
+
       this.setState({ selected: [] });
     }
   }

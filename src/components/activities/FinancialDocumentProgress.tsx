@@ -1,11 +1,9 @@
-import React from 'react';
+import { Component ,ReactNode} from 'react';
 import { connect } from 'react-redux';
 import {
   Button, Grid, Icon, Popup, Step,
 } from 'semantic-ui-react';
 import { withTranslation, WithTranslation } from 'react-i18next';
-import { GeneralActivity } from './GeneralActivity';
-import FinancialDocumentStep from './FinancialDocumentStep';
 import {
   formatDocumentStatusTitle,
   formatDocumentType,
@@ -16,16 +14,18 @@ import {
   getStatusesFromActivities,
   getToDoStatus,
 } from '../../helpers/activity';
-import DocumentStatusModal from './DocumentStatusModal';
 import { SingleEntities } from '../../stores/single/single';
-import { DocumentStatus } from './DocumentStatus';
 import ResourceStatus from '../../stores/resourceStatus';
 import { Roles } from '../../clients/server.generated';
 import AuthorizationComponent from '../AuthorizationComponent';
 import { getLanguage } from '../../localization';
-import { withRouter } from '../../WithRouter';
+import {WithRouter, withRouter} from '../../WithRouter';
+import { DocumentStatus } from './DocumentStatus';
+import DocumentStatusModal from './DocumentStatusModal';
+import FinancialDocumentStep from './FinancialDocumentStep';
+import { GeneralActivity } from './GeneralActivity';
 
-interface Props extends WithTranslation {
+interface Props extends WithTranslation, WithRouter {
   documentId: number;
   // If the document is a ProductInstance, the parentId is the contract ID
   parentId?: number;
@@ -45,7 +45,7 @@ interface State {
   irrecoverableModalOpen: boolean;
 }
 
-class FinancialDocumentProgress extends React.Component<Props, State> {
+class FinancialDocumentProgress extends Component<Props, State> {
   static defaultProps = {
     parentId: undefined,
     cancelReason: undefined,
@@ -278,7 +278,7 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
     const statusDisabledList: boolean[] = [];
     const statusClickableList: boolean[] = [];
     const statusDescriptionList: string[] = [];
-    const statusIconsList: JSX.Element[] = [];
+    const statusIconsList: ReactNode[] = [];
 
     for (let i = 0; i < allPossibleDocumentStatuses.length; i++) {
       const documentStatus = allPossibleDocumentStatuses[i];

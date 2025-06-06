@@ -1,12 +1,12 @@
-import React from 'react';
-import { Dropdown, Grid, Tab } from 'semantic-ui-react';
+import { Component } from 'react';
+import {Dropdown, Grid, TabPane} from 'semantic-ui-react';
 import { withTranslation, WithTranslation } from 'react-i18next';
 import { Bar } from 'react-chartjs-2';
 import 'chartjs-plugin-annotation';
+import { ChartData, ChartOptions, TooltipItem } from 'chart.js';
 import { AnalysisResultByYear, Client, Product } from '../../../clients/server.generated';
 import { DataSet } from '../../chart/CategoryLineChart';
 import { formatPriceFull } from '../../../helpers/monetary';
-import { ChartData, ChartOptions, TooltipItem } from 'chart.js';
 
 interface Props extends WithTranslation {
   product: Product;
@@ -18,7 +18,7 @@ interface State {
   dataSetSelection: DataSet;
 }
 
-class ProductsContractedGraph extends React.Component<Props, State> {
+class ProductsContractedGraph extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
@@ -28,14 +28,17 @@ class ProductsContractedGraph extends React.Component<Props, State> {
     };
   }
 
-  async componentDidMount() {
+  componentDidMount() {
     const { product } = this.props;
     const client = new Client();
-    const data = await client.getProductStatistics(product.id);
-    this.setState({
-      data,
-      loading: false,
-    });
+    client.getProductStatistics(product.id)
+      .then((data) => {
+        this.setState({
+          data,
+          loading: false,
+        });
+      })
+      .catch(console.error);
   }
 
   changeDataset = (dataSet: DataSet) => {
@@ -130,8 +133,8 @@ class ProductsContractedGraph extends React.Component<Props, State> {
               },
               tooltip: {
                 callbacks: {
-                  label(tooltipItem: any) {
-                    return formatPriceFull(tooltipItem.yLabel);
+                  label(tooltipItem) {
+                    return formatPriceFull(Number(tooltipItem.label));
                   },
                 },
               },
@@ -321,14 +324,14 @@ class ProductsContractedGraph extends React.Component<Props, State> {
     const { data, loading, dataSetSelection } = this.state;
 
     if (data === undefined || loading) {
-      return <Tab.Pane loading={loading} />;
+      return <TabPane loading={loading} />;
     }
 
     const chartData = this.createBarChartDataObject(data);
     const chartOptions = this.createBarChartOptionsObject();
 
     return (
-      <Tab.Pane>
+      <TabPane>
         <Grid style={{ marginBottom: '1em' }}>
           <Grid.Row columns={2}>
             <Grid.Column textAlign="left">
@@ -344,7 +347,7 @@ class ProductsContractedGraph extends React.Component<Props, State> {
                 value={dataSetSelection}
                 float="right"
                 style={{ marginLeft: '1em' }}
-                onChange={(value, d) => this.changeDataset(d.value as DataSet)}
+                onChange={(_, d) => this.changeDataset(d.value as DataSet)}
               />
             </Grid.Column>
           </Grid.Row>
@@ -359,7 +362,7 @@ class ProductsContractedGraph extends React.Component<Props, State> {
         <p style={{ textAlign: 'center', fontStyle: 'italic', marginTop: '0.5em' }}>
           {t('entities.product.warningFinancialYear')}
         </p>
-      </Tab.Pane>
+      </TabPane>
     );
   }
 }

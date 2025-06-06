@@ -22,10 +22,10 @@ import { isProfile } from '../stores/user/selectors';
 import UserApiKey from '../components/entities/user/UserApiKey';
 import UserBackgroundModal from '../components/files/UserBackgroundModal';
 import AuthorizationComponent from '../components/AuthorizationComponent';
-import NotFound from './NotFound';
 import UserAuthSettings from '../components/entities/user/UserAuthSettings';
 import { TitleContext } from '../components/TitleContext';
 import { withRouter, WithRouter } from '../WithRouter';
+import NotFound from './NotFound';
 
 interface Props extends WithTranslation, WithRouter {
   user: User | undefined;

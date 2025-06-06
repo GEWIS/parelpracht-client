@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import {
@@ -13,8 +13,8 @@ import {
 } from '../../../stores/tables/actionCreators';
 import { countFetched, countTotal, getTable } from '../../../stores/tables/selectors';
 import { Tables } from '../../../stores/tables/tables';
-import UserRow from './UserRow';
 import ResourceStatus from '../../../stores/resourceStatus';
+import UserRow from './UserRow';
 
 interface Props {
   users: User[];
@@ -40,7 +40,7 @@ function UsersTable({
 }: Props) {
   useEffect(() => {
     fetchUsers();
-  }, []);
+  }, [fetchUsers]);
   const { t } = useTranslation();
 
   const table = (

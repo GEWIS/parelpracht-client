@@ -52,6 +52,7 @@ class CompaniesCreatePage extends React.Component<Props> {
   };
 
   public render() {
+    // TODO: Fix partial type in server so we do not need to override here
     const company = {
       id: 0,
       name: '',
@@ -63,7 +64,7 @@ class CompaniesCreatePage extends React.Component<Props> {
       addressCity: '',
       addressPostalCode: '',
       addressCountry: '',
-    } as any as Company;
+    } as unknown as Company;
 
     return (
       <Modal

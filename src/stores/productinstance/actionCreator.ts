@@ -1,11 +1,11 @@
+import { singleActionPattern, SingleActionType } from '../single/actions';
+import { SingleEntities } from '../single/single';
 import {
   SingleCreateInstanceAction, SingleCreateInstanceCommentAction,
   SingleCreateInstanceStatusAction,
   SingleDeleteInstanceAction, SingleDeleteInstanceActivityAction,
   SingleSaveInstanceAction, SingleSaveInstanceActivityAction,
 } from './actions';
-import { singleActionPattern, SingleActionType } from '../single/actions';
-import { SingleEntities } from '../single/single';
 
 export function createInstanceSingle<RCreate>(
   id: number, data: RCreate,

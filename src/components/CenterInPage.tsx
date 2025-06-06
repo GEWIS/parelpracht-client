@@ -1,8 +1,6 @@
-import React from 'react';
+import { PropsWithChildren } from "react";
 
-interface Props {
-  children: any;
-}
+type Props = PropsWithChildren
 
 function CenterInPage(props: Props) {
   return (

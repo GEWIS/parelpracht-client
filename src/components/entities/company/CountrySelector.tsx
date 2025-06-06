@@ -31,8 +31,7 @@ class CountrySelector extends React.Component<Props> {
       <Form.Field
         disabled={!this.props.editing}
       >
-        {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-        <label htmlFor={this.props.id}>
+                <label htmlFor={this.props.id}>
           {t('entities.company.props.country')}
         </label>
         <Dropdown

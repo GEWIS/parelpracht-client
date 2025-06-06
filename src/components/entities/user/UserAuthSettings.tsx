@@ -1,4 +1,3 @@
-import React from 'react';
 import { withTranslation, WithTranslation } from 'react-i18next';
 import { Header, Label, Segment } from 'semantic-ui-react';
 import { Dispatch } from 'redux';
@@ -16,13 +15,9 @@ interface Props extends WithTranslation {
   user: User,
 }
 
-interface State {}
-
-class UserAuthSettings extends React.Component<Props, State> {
+class UserAuthSettings extends React.Component<Props, null> {
   constructor(props: Props) {
     super(props);
-
-    this.state = {};
   }
 
   createLocalIdentity = async () => {

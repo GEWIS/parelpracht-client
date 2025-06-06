@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import { WithTranslation, withTranslation } from 'react-i18next';
 import { Loader, Table } from 'semantic-ui-react';
 import {
@@ -20,7 +20,7 @@ interface State {
   take: number;
 }
 
-class ContractCompactTable extends React.Component<Props, State> {
+class ContractCompactTable extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
@@ -32,8 +32,9 @@ class ContractCompactTable extends React.Component<Props, State> {
     };
   }
 
-  async componentDidMount() {
-    await this.getProductAttributes();
+  componentDidMount() {
+    this.getProductAttributes()
+      .catch(console.error);
   }
 
   async getProductAttributes() {
@@ -72,7 +73,7 @@ class ContractCompactTable extends React.Component<Props, State> {
   };
 
   setTake = async (take: number) => {
-    await this.setState({
+    this.setState({
       take,
       skip: 0,
     });

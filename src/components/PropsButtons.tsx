@@ -1,9 +1,8 @@
-import React from 'react';
 import { Button, Icon } from 'semantic-ui-react';
 import { useTranslation } from 'react-i18next';
 import ResourceStatus from '../stores/resourceStatus';
-import DeleteButton from './DeleteButton';
 import { SingleEntities } from '../stores/single/single';
+import DeleteButton from './DeleteButton';
 
 interface Props {
   editing: boolean;

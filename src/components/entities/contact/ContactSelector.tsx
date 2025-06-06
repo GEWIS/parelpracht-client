@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { connect } from 'react-redux';
 import { Dropdown, DropdownProps } from 'semantic-ui-react';
 import { ContactFunction, ContactSummary } from '../../../clients/server.generated';
@@ -39,7 +39,7 @@ function ContactSelector(props: Props & DropdownProps) {
       error={(value <= 0) && !open}
       options={dropdownOptions}
       value={value < 0 ? '' : value}
-      onChange={(e, data) => onChange(data.value as any)}
+      onChange={(_, data) => onChange(data.value as number | number[])}
       // Because the text is also red when error=true, we need to
       // keep a state whether the dropdown is open
       onOpen={() => changeOpen(true)}

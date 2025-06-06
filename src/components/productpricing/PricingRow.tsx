@@ -20,7 +20,7 @@ class PricingRow extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
-      // eslint-disable-next-line react/no-unused-state
+       
       fields: props.pricing,
     };
   }

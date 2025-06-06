@@ -2,19 +2,19 @@ import { withTranslation, WithTranslation } from 'react-i18next';
 import {
   Container, Grid, Header, Icon, Message, Segment,
 } from 'semantic-ui-react';
-import React from 'react';
+import { useEffect } from "react";
 import RoleTable from '../components/settings/RoleTable';
 import { useTitle } from '../components/TitleContext';
 
-interface Props extends WithTranslation {}
+type Props = WithTranslation
 
 function SettingsPage(props: Props) {
   const { t } = props;
   const { setTitle } = useTitle();
 
-  React.useEffect(() => {
+  useEffect(() => {
     setTitle(t('pages.settings.title'));
-  }, []);
+  }, [setTitle, t]);
 
   return (
     <>

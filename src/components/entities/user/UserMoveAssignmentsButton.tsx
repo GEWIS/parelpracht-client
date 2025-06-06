@@ -1,4 +1,3 @@
-import React from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import {
@@ -74,7 +73,7 @@ class UserMoveAssignmentsButton extends React.Component<Props, State> {
             positive
             disabled={this.state.selectedUser === undefined}
             loading={this.state.isLoading}
-            onClick={() => this.moveAssignmentsUser()}
+            onClick={() => { this.moveAssignmentsUser().catch(console.error); }}
             floated="right"
           >
             <Icon name="arrow right" />

@@ -1,25 +1,25 @@
-import React from 'react';
+import { Component } from 'react';
 import { connect } from 'react-redux';
 import {
   Button, Header, Icon, Segment, Image, Table,
 } from 'semantic-ui-react';
 import { withTranslation, WithTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 import { RecentContract } from '../../clients/server.generated';
 import { RootState } from '../../stores/store';
 import { formatActivityDate } from '../../helpers/activity';
 import { getUserName } from '../../stores/user/selectors';
 import { getCompanyLogo, getCompanyName } from '../../stores/company/selectors';
-import { useNavigate } from 'react-router-dom';
-import { withRouter } from '../../WithRouter';
+import {WithRouter, withRouter} from '../../WithRouter';
 
-interface Props extends WithTranslation {
+interface Props extends WithTranslation, WithRouter {
   contract: RecentContract;
   company: string;
   user: string;
   logoFilename: string;
 }
 
-class DashboardContractsRow extends React.Component<Props> {
+class DashboardContractsRow extends Component<Props> {
   render() {
     const {
       contract, logoFilename, company, user,

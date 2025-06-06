@@ -17,7 +17,7 @@ function ProductsPage() {
 
   React.useEffect(() => {
     setTitle(t('entity.products'));
-  }, []);
+  }, [setTitle, t]);
 
   const history = useNavigate();
 

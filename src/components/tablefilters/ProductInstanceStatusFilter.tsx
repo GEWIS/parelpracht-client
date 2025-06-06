@@ -1,4 +1,3 @@
-import React from 'react';
 import ColumnFilter from '../ColumnFilter';
 import { Tables } from '../../stores/tables/tables';
 import { ProductInstanceStatus } from '../../clients/server.generated';

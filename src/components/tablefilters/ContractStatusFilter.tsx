@@ -1,4 +1,3 @@
-import React from 'react';
 import ColumnFilter from '../ColumnFilter';
 import { ContractStatus } from '../../clients/server.generated';
 import { formatStatus } from '../../helpers/activity';

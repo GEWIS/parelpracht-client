@@ -47,7 +47,7 @@ export function sortContactsByFunction(
   contacts: Contact[] | ContactSummary[],
   sortAlphabetically?: boolean,
 ): Contact[] | ContactSummary[] {
-  let c = [...contacts];
+  const c = [...contacts];
   if (sortAlphabetically) {
     c.sort((c1, c2) => {
       const n1 = formatContactName(c1.firstName, c1.lastNamePreposition, c1.lastName).toUpperCase();

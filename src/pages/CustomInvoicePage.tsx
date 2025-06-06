@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from "react";
 import {
   Button, Container, Grid, Header, Icon, Segment,
 } from 'semantic-ui-react';
@@ -7,7 +7,7 @@ import validator from 'validator';
 import {
   CustomInvoiceGenSettings,
   CustomProduct,
-  CustomRecipient,
+  CustomRecipient, ICustomInvoiceGenSettings,
   Language,
   ReturnFileType,
   Roles, VAT,
@@ -24,45 +24,38 @@ import { WithRouter, withRouter } from '../WithRouter';
 interface Props extends WithTranslation, WithRouter {}
 
 interface State {
-  language: Language;
-  fileType: ReturnFileType;
-  subject: string;
-  ourReference: string;
-  theirReference: string;
-  date: Date;
-
-  // invoiceReason: string;
-  recipient: CustomRecipient;
-  products: CustomProduct[];
+  customInvoice: ICustomInvoiceGenSettings;
 
   loading: boolean;
 }
 
-class CustomInvoicePage extends React.Component<Props, State> {
+class CustomInvoicePage extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
-      language: Language.DUTCH,
-      fileType: ReturnFileType.PDF,
-      subject: '',
-      ourReference: '',
-      theirReference: '',
-      date: new Date(),
-      recipient: new CustomRecipient({
-        name: '',
-        organizationName: '',
-        number: '',
-        street: '',
-        postalCode: '',
-        city: '',
-        country: '',
-      }),
-      products: [new CustomProduct({
-        name: '',
-        amount: 0,
-        pricePerOne: 0,
-        valueAddedTax: VAT.HIGH,
-      })],
+      customInvoice: {
+        language: Language.DUTCH,
+        fileType: ReturnFileType.PDF,
+        subject: '',
+        ourReference: '',
+        theirReference: '',
+        date: new Date(),
+        recipient: new CustomRecipient({
+          name: '',
+          organizationName: '',
+          number: '',
+          street: '',
+          postalCode: '',
+          city: '',
+          country: '',
+        }),
+        products: [new CustomProduct({
+          name: '',
+          amount: 0,
+          pricePerOne: 0,
+          valueAddedTax: VAT.HIGH,
+        })],
+      },
       loading: false,
     };
   }
@@ -72,29 +65,15 @@ class CustomInvoicePage extends React.Component<Props, State> {
     document.title = t('pages.customInvoice.title');
   }
 
-  setAttribute = (attribute: string, value: string) => {
-    // @ts-ignore
-    this.setState({ [attribute]: value });
-  };
-
-  setRecipient = (recipient: CustomRecipient) => {
-    this.setState({ recipient });
-  };
-
-  setLanguage = (language: Language) => {
-    this.setState({ language });
-  };
-
-  setFileType = (fileType: ReturnFileType) => {
-    this.setState({ fileType });
-  };
-
-  setDate = (date: Date) => {
-    this.setState({ date });
+  setAttribute = <T extends keyof ICustomInvoiceGenSettings = keyof ICustomInvoiceGenSettings>(attribute: T, value: ICustomInvoiceGenSettings[T]) => {
+    this.setState({ customInvoice: {
+      ...this.state.customInvoice,
+      [attribute]: value,
+    } });
   };
 
   addProduct = () => {
-    const { products } = this.state;
+    const { products } = this.state.customInvoice;
     const newProduct = new CustomProduct({
       name: '',
       amount: 0,
@@ -102,47 +81,31 @@ class CustomInvoicePage extends React.Component<Props, State> {
       valueAddedTax: VAT.HIGH,
     });
     products.push(newProduct);
-    this.setState({ products });
+    this.setAttribute('products', products);
   };
 
-  updateProduct = (id: number, attribute: string, value: any) => {
-    const { products } = this.state;
-    // @ts-ignore
+  updateProduct = <T extends keyof CustomProduct = keyof CustomProduct>(id: number, attribute: T, value: CustomProduct[T])  => {
+    const { products } = this.state.customInvoice;
     products[id][attribute] = value;
-    this.setState({ products });
+    this.setAttribute('products', products);
   };
 
   removeProduct = (id: number) => {
-    const { products } = this.state;
+    const { products } = this.state.customInvoice;
     products.splice(id, 1);
-    this.setState({ products });
+    this.setAttribute('products', products);
   };
 
-  updateRecipientAttribute = (attribute: string, value: string) => {
-    const { recipient } = this.state;
-    // @ts-ignore
+  updateRecipientAttribute = <T extends keyof CustomRecipient = keyof CustomRecipient>(attribute: T, value: CustomRecipient[T]) => {
+    const { recipient } = this.state.customInvoice;
     recipient[attribute] = value;
-    this.setState({
-      recipient,
-    });
+    this.setAttribute('recipient', recipient);
   };
 
   generate = async () => {
-    const {
-      language, fileType, ourReference, theirReference, subject, recipient, products, date,
-    } = this.state;
     this.setState({ loading: true });
     const client = new FilesClient();
-    await client.generateCustomInvoiceFile(new CustomInvoiceGenSettings({
-      language,
-      fileType,
-      ourReference,
-      theirReference,
-      subject,
-      recipient,
-      products,
-      date,
-    }));
+    await client.generateCustomInvoiceFile(new CustomInvoiceGenSettings(this.state.customInvoice));
 
     this.setState({ loading: false });
   };
@@ -150,8 +113,8 @@ class CustomInvoicePage extends React.Component<Props, State> {
   render() {
     const { t } = this.props;
     const {
-      language, fileType, subject, ourReference, theirReference, recipient, products, date, loading,
-    } = this.state;
+      subject, ourReference, recipient, products, date,
+    } = this.state.customInvoice;
 
     return (
       <AuthorizationComponent roles={[Roles.FINANCIAL, Roles.ADMIN]} notFound>
@@ -175,8 +138,8 @@ class CustomInvoicePage extends React.Component<Props, State> {
                   labelPosition="left"
                   primary
                   floated="right"
-                  onClick={() => this.generate()}
-                  loading={loading}
+                  onClick={() => { this.generate().catch(console.error) }}
+                  loading={this.state.loading}
                   disabled={(isInvalidDate(date) || validator.isEmpty(subject)
                     || validator.isEmpty(ourReference) || validator.isEmpty(recipient.name))}
                 >
@@ -193,16 +156,8 @@ class CustomInvoicePage extends React.Component<Props, State> {
             <Grid.Row columns={2}>
               <Grid.Column>
                 <CustomInvoiceProps
-                  language={language}
-                  fileType={fileType}
-                  subject={subject}
-                  ourReference={ourReference}
-                  theirReference={theirReference}
-                  date={date}
+                  customInvoice={this.state.customInvoice}
                   setAttribute={this.setAttribute}
-                  setLanguage={this.setLanguage}
-                  setFileType={this.setFileType}
-                  setDate={this.setDate}
                 />
               </Grid.Column>
               <Grid.Column>

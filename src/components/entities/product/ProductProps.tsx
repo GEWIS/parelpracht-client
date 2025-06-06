@@ -20,8 +20,8 @@ import { RootState } from '../../../stores/store';
 import PropsButtons from '../../PropsButtons';
 import TextArea from '../../TextArea';
 import { authedUserHasRole } from '../../../stores/auth/selectors';
-import ProductVatSelector from './ProductVatSelector';
 import { withRouter, WithRouter } from '../../../WithRouter';
+import ProductVatSelector from './ProductVatSelector';
 
 interface Props extends WithTranslation, WithRouter {
   create?: boolean;
@@ -79,7 +79,7 @@ class ProductProps extends React.Component<Props, State> {
   componentDidUpdate(prevProps: Props) {
     if (prevProps.status === ResourceStatus.SAVING
       && this.props.status === ResourceStatus.FETCHED) {
-      // eslint-disable-next-line react/no-did-update-set-state
+
       this.setState({ editing: false });
     }
   }
@@ -261,7 +261,6 @@ class ProductProps extends React.Component<Props, State> {
               disabled={!editing}
               required
             >
-              {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
               <label htmlFor="form-input-category">
                 {t('entities.product.props.category')}
               </label>
@@ -278,7 +277,6 @@ class ProductProps extends React.Component<Props, State> {
             <Form.Field
               disabled={!editing}
             >
-              {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
               <label htmlFor="form-check-status">
                 {t('entities.product.props.status.header')}
               </label>
@@ -300,7 +298,6 @@ class ProductProps extends React.Component<Props, State> {
               required
               error={parseFloat(targetPrice.replace(',', '.')) <= 0 || Number.isNaN(parseFloat(targetPrice.replace(',', '.')))}
             >
-              {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
               <label htmlFor="form-input-target-price">
                 {t('entities.product.props.price')}
               </label>
@@ -319,7 +316,6 @@ class ProductProps extends React.Component<Props, State> {
               disabled={!editing}
               required
             >
-              {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
               <label htmlFor="form-input-vat">
                 {t('entities.product.props.valueAddedTax')}
               </label>
@@ -339,7 +335,6 @@ class ProductProps extends React.Component<Props, State> {
               disabled={!editing}
               error={minTarget !== undefined ? minTarget < 0 : false}
             >
-              {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
               <label htmlFor="form-input-minimal-target">
                 {t('entities.product.props.minTarget')}
               </label>
@@ -350,7 +345,7 @@ class ProductProps extends React.Component<Props, State> {
                 value={minTarget}
                 fluid
                 onChange={(e: ChangeEvent<HTMLInputElement>) => this.setState({
-                  minTarget: e.target.value as any as number,
+                  minTarget: Number(e.target.value),
                 })}
               />
             </Form.Field>
@@ -358,7 +353,6 @@ class ProductProps extends React.Component<Props, State> {
               disabled={!editing}
               error={maxTarget < (minTarget || 0)}
             >
-              {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
               <label htmlFor="form-input-maximum-target">
                 {t('entities.product.props.maxTarget')}
               </label>
@@ -369,13 +363,12 @@ class ProductProps extends React.Component<Props, State> {
                 value={maxTarget}
                 fluid
                 onChange={(e: ChangeEvent<HTMLInputElement>) => this.setState({
-                  maxTarget: e.target.value as any as number,
+                  maxTarget: Number(e.target.value),
                 })}
               />
             </Form.Field>
           </Form.Group>
           <Form.Field disabled={!editing}>
-            {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
             <label htmlFor="form-input-description">
               {t('entities.product.props.comments')}
             </label>
@@ -387,7 +380,6 @@ class ProductProps extends React.Component<Props, State> {
             />
           </Form.Field>
           <Form.Field required error={validator.isEmpty(contractTextDutch)} disabled={!editing}>
-            {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
             <label htmlFor="form-input-contract-text-dutch">
               {t('entities.product.props.contractTextNl')}
             </label>
@@ -401,7 +393,6 @@ class ProductProps extends React.Component<Props, State> {
             />
           </Form.Field>
           <Form.Field required error={validator.isEmpty(contractTextEnglish)} disabled={!editing}>
-            {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
             <label htmlFor="form-input-contract-text-english">
               {t('entities.product.props.contractTextEn')}
             </label>
@@ -415,7 +406,6 @@ class ProductProps extends React.Component<Props, State> {
             />
           </Form.Field>
           <Form.Field disabled={!editing}>
-            {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
             <label htmlFor="form-input-delivery-spec-dutch">
               {t('entities.product.props.specsNl')}
             </label>
@@ -429,7 +419,6 @@ class ProductProps extends React.Component<Props, State> {
             />
           </Form.Field>
           <Form.Field disabled={!editing}>
-            {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
             <label htmlFor="form-input-delivery-spec-english">
               {t('entities.product.props.specsEn')}
             </label>

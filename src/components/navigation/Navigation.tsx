@@ -1,15 +1,14 @@
-import React from 'react';
 import { NavLink } from 'react-router-dom';
 import {
   Container, Icon, Menu, Image,
 } from 'semantic-ui-react';
 import { useTranslation } from 'react-i18next';
+import AuthorizationComponent from '../AuthorizationComponent';
+import { Roles } from '../../clients/server.generated';
 import AuthMenu from './AuthMenu';
 import CompaniesMenu from './CompaniesMenu';
 import ProductsMenu from './ProductsMenu';
 import InvoicesMenu from './InvoicesMenu';
-import AuthorizationComponent from '../AuthorizationComponent';
-import { Roles } from '../../clients/server.generated';
 import './Navigation.scss';
 
 function Navigation() {

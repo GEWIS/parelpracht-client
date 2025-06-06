@@ -99,7 +99,7 @@ class ProductCategoryModal extends React.Component<Props> {
       category = {
         id: 0,
         name: '',
-      } as any as ProductCategory;
+      } as ProductCategory;
     } else {
       category = this.props.category;
     }

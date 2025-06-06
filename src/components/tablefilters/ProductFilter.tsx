@@ -1,5 +1,4 @@
 import { connect } from 'react-redux';
-import React from 'react';
 import { ProductSummary } from '../../clients/server.generated';
 import ColumnFilter from '../ColumnFilter';
 import { RootState } from '../../stores/store';

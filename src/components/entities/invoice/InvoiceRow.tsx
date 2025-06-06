@@ -1,5 +1,4 @@
 import { connect } from 'react-redux';
-import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { Table } from 'semantic-ui-react';
 import { Invoice, InvoiceStatus } from '../../../clients/server.generated';

@@ -24,11 +24,11 @@ import InvoiceCompactTable from '../components/entities/invoice/InvoiceCompactTa
 import ProductsContractedGraph from '../components/entities/product/ProductsContractedGraph';
 import PricingTable from '../components/productpricing/PricingTable';
 import AuthorizationComponent from '../components/AuthorizationComponent';
-import NotFound from './NotFound';
 import { getLanguage } from '../localization';
 import { TitleContext } from '../components/TitleContext';
 import CreatePricing from '../components/productpricing/CreatePricing';
 import { WithRouter, withRouter } from '../WithRouter';
+import NotFound from './NotFound';
 
 interface Props extends WithTranslation, WithRouter {
   product: Product | undefined;
@@ -175,11 +175,10 @@ class SingleProductPage extends React.Component<Props, State> {
                   {t('entities.product.insights.header')}
                 </h3>
                 <AuthorizationComponent roles={[Roles.ADMIN]} notFound={false}>
-                  {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-                  <CreatePricing productId={product.id} />
+                                    <CreatePricing productId={product.id} />
                 </AuthorizationComponent>
               </>
-            ) : <PricingTable pricing={product.pricing!} productId={product.id} /> }
+            ) : <PricingTable pricing={product.pricing} productId={product.id} /> }
           </Tab.Pane>
         ) : () => <Tab.Pane />,
       },

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import {
@@ -13,11 +13,11 @@ import {
 } from '../../../stores/tables/actionCreators';
 import { countFetched, countTotal, getTable } from '../../../stores/tables/selectors';
 import { Tables } from '../../../stores/tables/tables';
-import ContractRow from './ContractRow';
 import ContractContactFilter from '../../tablefilters/ContractContactFilter';
 import CompanyFilter from '../../tablefilters/CompanyFilter';
 import ContractStatusFilter from '../../tablefilters/ContractStatusFilter';
 import ResourceStatus from '../../../stores/resourceStatus';
+import ContractRow from './ContractRow';
 
 interface Props {
   contracts: Contract[];
@@ -45,7 +45,7 @@ function ContractsTable({
   useEffect(() => {
     setSort('id', 'DESC');
     fetchContracts();
-  }, []);
+  }, [setSort, fetchContracts]);
   const { t } = useTranslation();
 
   const table = (

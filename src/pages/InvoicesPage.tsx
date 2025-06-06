@@ -13,9 +13,9 @@ import { fetchTable } from '../stores/tables/actionCreators';
 import { Tables } from '../stores/tables/tables';
 import AuthorizationComponent from '../components/AuthorizationComponent';
 import { TitleContext } from '../components/TitleContext';
-import { withRouter } from '../WithRouter';
+import {WithRouter, withRouter} from '../WithRouter';
 
-interface Props extends WithTranslation {
+interface Props extends WithTranslation, WithRouter {
   refresh: () => void;
 }
 
@@ -29,7 +29,7 @@ class InvoicesPage extends React.Component<Props> {
     const { refresh } = this.props;
     const client = new Client();
     await client.updateLastSeenByTreasurer();
-    await refresh();
+    refresh();
   };
 
   render() {
@@ -56,7 +56,9 @@ class InvoicesPage extends React.Component<Props> {
                 <AuthorizationComponent roles={[Roles.FINANCIAL]} notFound={false}>
                   <Popup
                     trigger={(
-                      <Button icon labelPosition="left" primary floated="right" onClick={() => this.updateTreasurerLastSeen()}>
+                      <Button icon labelPosition="left" primary floated="right" onClick={(): void => {
+                          this.updateTreasurerLastSeen().catch(console.error);
+                        }}>
                         <Icon name="eye" />
                         {t('pages.tables.invoices.updateLastSeen')}
                       </Button>

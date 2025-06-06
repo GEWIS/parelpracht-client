@@ -136,7 +136,7 @@ function* watchSaveSingleValueAddedTax() {
 //   action: SingleCreateAction<SingleEntities.ProductCategory, CategoryParams>,
 // ) {
 //   const client = new Client();
-// eslint-disable-next-line max-len
+ 
 //   const productCategory: ProductCategory = yield call([client, client.createCategory], action.data);
 //   yield put(setSingle(SingleEntities.ProductCategory, productCategory));
 //   yield put(fetchTable(Tables.ProductCategories));
@@ -155,7 +155,7 @@ function* watchSaveSingleValueAddedTax() {
 //   );
 // }
 //
-// eslint-disable-next-line max-len
+ 
 // function* deleteSingleProductCategory(action: SingleDeleteAction<SingleEntities.ProductCategory>) {
 //   const client = new Client();
 //   yield call([client, client.deleteCategory], action.id);

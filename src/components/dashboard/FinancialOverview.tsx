@@ -1,20 +1,20 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import {
   Dropdown, Grid, Popup, Segment, Table,
 } from 'semantic-ui-react';
 import { useTranslation } from 'react-i18next';
 import { Bar } from 'react-chartjs-2';
+import {ChartJSOrUndefined} from "react-chartjs-2/dist/types";
+import { ChartData } from 'chart.js';
+import { useNavigate } from 'react-router-dom';
 import { Client, DashboardProductInstanceStats } from '../../clients/server.generated';
 import { dateToFinancialYear } from '../../helpers/timestamp';
 import { formatPriceFull } from '../../helpers/monetary';
 import './FinancialOverview.scss';
 import { FinancialOverviewField } from './FinancialOverviewField';
-import { ChartData } from 'chart.js';
-import { ChartJSOrUndefined } from 'react-chartjs-2/dist/types';
-import { useNavigate } from 'react-router-dom';
 
 function FinancialOverview() {
-  const chart = React.createRef<ChartJSOrUndefined<'bar'>>();
+  const chart = useRef<ChartJSOrUndefined<'bar'> | null>(null);
   const navigate = useNavigate();
   const { t } = useTranslation();
 
@@ -78,7 +78,7 @@ function FinancialOverview() {
   };
 
   useEffect(() => {
-    updateGraph(financialYear);
+    updateGraph(financialYear).catch(console.error);
   }, [financialYear]);
 
   return (
@@ -125,8 +125,8 @@ function FinancialOverview() {
               },
               tooltip: {
                 callbacks: {
-                  label(tooltipItem: any) {
-                    return formatPriceFull(tooltipItem.raw);
+                  label(tooltipItem) {
+                    return formatPriceFull(tooltipItem.raw as number);
                   },
                 },
               },

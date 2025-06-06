@@ -1,4 +1,3 @@
-import React from 'react';
 import { connect } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import { Table } from 'semantic-ui-react';
@@ -11,9 +10,9 @@ import { getContractStatus, getContractValue } from '../../../stores/contract/se
 import { formatStatus } from '../../../helpers/activity';
 import CompanyLink from '../company/CompanyLink';
 import { formatPriceFull } from '../../../helpers/monetary';
-import { withRouter } from '../../../WithRouter';
+import {WithRouter, withRouter} from '../../../WithRouter';
 
-interface Props {
+interface Props extends WithRouter {
   contract: Contract;
   contactName: string;
   contractStatus: ContractStatus;

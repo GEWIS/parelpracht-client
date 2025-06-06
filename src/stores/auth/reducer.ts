@@ -88,7 +88,7 @@ export default function authReducer(
     case AuthActionType.SetApiKey:
       return {
         ...state,
-        apiKey: (action as AuthSetApiKey).apiKey,
+        apiKey: (action).apiKey,
         apiKeyRequest: ResourceStatus.FETCHED,
       };
     default:

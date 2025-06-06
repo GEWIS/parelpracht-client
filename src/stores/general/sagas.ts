@@ -1,7 +1,7 @@
 import { call, put } from 'redux-saga/effects';
 import { Client, IGeneralPrivateInfo, IGeneralPublicInfo } from '../../clients/server.generated';
-import { generalPrivateSetInfo, generalPublicSetInfo } from './actionCreators';
 import { takeEveryWithErrorHandling } from '../errorHandling';
+import { generalPrivateSetInfo, generalPublicSetInfo } from './actionCreators';
 import { GeneralActionType } from './actions';
 
 export function* fetchGeneralPrivateInfo() {

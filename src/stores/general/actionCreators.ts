@@ -1,8 +1,8 @@
+import { LoginMethods } from '../../clients/server.generated';
 import {
   FetchGeneralPrivateInfo, FetchGeneralPublicInfo, GeneralActionType,
   PrivateGeneralSetInfo, PublicGeneralSetInfo,
 } from './actions';
-import { LoginMethods } from '../../clients/server.generated';
 
 export function generalPrivateFetchInfo(): FetchGeneralPrivateInfo {
   return { type: GeneralActionType.FetchPrivateInfo };

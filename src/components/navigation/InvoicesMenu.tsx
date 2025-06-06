@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import {
   Dropdown, Icon, Menu,
@@ -28,7 +28,7 @@ function InvoicesMenu() {
               {t('mainMenu.invoices')}
             </span>
           </NavLink>
-        ) as any}
+        )}
       >
 
         <Dropdown.Menu>

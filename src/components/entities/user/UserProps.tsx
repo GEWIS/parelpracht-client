@@ -8,7 +8,7 @@ import validator from 'validator';
 import _ from 'lodash';
 import { withTranslation, WithTranslation } from 'react-i18next';
 import {
-  Gender, LoginMethods, Roles, User, UserParams,
+  Gender, LoginMethods, Partial_UserParams_, Roles, User, UserParams,
 } from '../../../clients/server.generated';
 import { createSingle, deleteSingle, saveSingle } from '../../../stores/single/actionCreators';
 import ResourceStatus from '../../../stores/resourceStatus';
@@ -31,7 +31,7 @@ interface Props extends WithTranslation, WithRouter {
   hasRole: (role: Roles) => boolean;
   canEdit: Roles[];
 
-  saveUser: (id: number, user: UserParams) => void;
+  saveUser: (id: number, user: Partial_UserParams_) => void;
   createUser: (user: UserParams) => void;
   deleteUser: (id: number) => void;
 }
@@ -76,7 +76,7 @@ class UserProps extends React.Component<Props, State> {
   componentDidUpdate(prevProps: Props) {
     if (prevProps.status === ResourceStatus.SAVING
       && this.props.status === ResourceStatus.FETCHED) {
-      // eslint-disable-next-line react/no-did-update-set-state
+
       this.setState({ editing: false });
     }
   }
@@ -86,9 +86,9 @@ class UserProps extends React.Component<Props, State> {
       && this.props.user.identityLdap !== undefined;
   };
 
-  extractState = (props: Props) => {
+  extractState = (props: Props): Omit<State, 'editing'> => {
     const { user } = props;
-    const result: any = {
+    const result: Omit<State, 'editing'> = {
       firstName: user.firstName,
       lastNamePreposition: user.lastNamePreposition,
       lastName: user.lastName,
@@ -100,19 +100,17 @@ class UserProps extends React.Component<Props, State> {
 
       receiveEmails: user.receiveEmails,
       sendEmailsToReplyToEmail: user.sendEmailsToReplyToEmail,
-      roleGeneral: user.roles.find((r) => r.name === Roles.GENERAL) !== undefined,
-      roleSignee: user.roles.find((r) => r.name === Roles.SIGNEE) !== undefined,
-      roleFinancial: user.roles.find((r) => r.name === Roles.FINANCIAL) !== undefined,
-      roleAudit: user.roles.find((r) => r.name === Roles.AUDIT) !== undefined,
-      roleAdmin: user.roles.find((r) => r.name === Roles.ADMIN) !== undefined,
+      roleGeneral: user.roles.find((r) => r.name as Roles === Roles.GENERAL) !== undefined,
+      roleSignee: user.roles.find((r) => r.name as Roles === Roles.SIGNEE) !== undefined,
+      roleFinancial: user.roles.find((r) => r.name as Roles === Roles.FINANCIAL) !== undefined,
+      roleAudit: user.roles.find((r) => r.name as Roles === Roles.AUDIT) !== undefined,
+      roleAdmin: user.roles.find((r) => r.name as Roles === Roles.ADMIN) !== undefined,
     };
 
     if (this.ldapEnabled()) {
       if (user.identityLdap) {
-        result.ldapUsername = user.identityLdap.username ? user.identityLdap.username : '';
         result.ldapOverrideEmail = user.identityLdap.overrideEmail;
       } else {
-        result.ldapUsername = '';
         result.ldapOverrideEmail = false;
       }
     }
@@ -120,6 +118,7 @@ class UserProps extends React.Component<Props, State> {
     return result;
   };
 
+  // TODO: Change backend interface so password and rememberMe are not included in IUserParams
   toParams = (): UserParams => {
     const result = new UserParams({
       firstName: this.state.firstName,
@@ -132,6 +131,38 @@ class UserProps extends React.Component<Props, State> {
       receiveEmails: this.state.receiveEmails,
       replyToEmail: this.state.replyToEmail,
       sendEmailsToReplyToEmail: this.state.sendEmailsToReplyToEmail,
+      password: '',
+      rememberMe: false,
+
+      roles: _.compact([
+        this.state.roleGeneral ? Roles.GENERAL : undefined,
+        this.state.roleSignee ? Roles.SIGNEE : undefined,
+        this.state.roleFinancial ? Roles.FINANCIAL : undefined,
+        this.state.roleAudit ? Roles.AUDIT : undefined,
+        this.state.roleAdmin ? Roles.ADMIN : undefined,
+      ]),
+    });
+
+    if (this.ldapEnabled()) {
+      result.ldapOverrideEmail = this.state.ldapOverrideEmail;
+    }
+
+    return result;
+  }
+
+  toPartialParams = (): Partial_UserParams_ => {
+    const result = new Partial_UserParams_({
+      firstName: this.state.firstName,
+      lastNamePreposition: this.state.lastNamePreposition,
+      lastName: this.state.lastName,
+      gender: this.state.gender,
+      email: this.state.email,
+      comment: this.state.comment,
+      function: this.state.functionName,
+      receiveEmails: this.state.receiveEmails,
+      replyToEmail: this.state.replyToEmail,
+      sendEmailsToReplyToEmail: this.state.sendEmailsToReplyToEmail,
+
 
       roles: _.compact([
         this.state.roleGeneral ? Roles.GENERAL : undefined,
@@ -165,7 +196,7 @@ class UserProps extends React.Component<Props, State> {
     if (this.props.create) {
       this.props.createUser(this.toParams());
     } else {
-      this.props.saveUser(this.props.user.id, this.toParams());
+      this.props.saveUser(this.props.user.id, this.toPartialParams());
     }
   };
 
@@ -222,7 +253,7 @@ class UserProps extends React.Component<Props, State> {
           disabled={!editing}
           id="form-override-ldap-email"
           checked={ldapOverrideEmail}
-          onChange={(e, data) => this.setState({
+          onChange={(_, data) => this.setState({
             ldapOverrideEmail: data.checked!,
           })}
         />
@@ -237,7 +268,7 @@ class UserProps extends React.Component<Props, State> {
             disabled={!editing}
             id="form-receive-emails"
             checked={receiveEmails}
-            onChange={(e, data) => this.setState({
+            onChange={(_, data) => this.setState({
               receiveEmails: data.checked!,
             })}
           />
@@ -315,8 +346,7 @@ class UserProps extends React.Component<Props, State> {
           </Form.Group>
           <Form.Group widths="equal">
             <Form.Field required disabled={!editing} width={3}>
-              {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-              <label htmlFor="form-input-gender">Gender</label>
+                            <label htmlFor="form-input-gender">Gender</label>
               <Dropdown
                 id="form-input-gender"
                 selection
@@ -327,7 +357,7 @@ class UserProps extends React.Component<Props, State> {
                   { key: 1, text: t('entities.user.props.gender.female'), value: Gender.FEMALE },
                   { key: 2, text: t('entities.user.props.gender.unknown'), value: Gender.UNKNOWN },
                 ]}
-                onChange={(e, data) => this.setState({
+                onChange={(_, data) => this.setState({
                   gender: data.value as Gender,
                 })}
                 fluid
@@ -387,7 +417,7 @@ class UserProps extends React.Component<Props, State> {
               disabled={!editing}
               id="form-send-emails-to-reply-to"
               checked={sendEmailsToReplyToEmail}
-              onChange={(e, data) => this.setState({
+              onChange={(_, data) => this.setState({
                 sendEmailsToReplyToEmail: data.checked!,
               })}
             />
@@ -406,7 +436,6 @@ class UserProps extends React.Component<Props, State> {
             </h3>
             <Form.Group widths="equal">
               <Form.Field>
-                {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
                 <label htmlFor="form-check-role-signee">
                   {t('entities.user.props.roles.signee')}
                 </label>
@@ -415,13 +444,12 @@ class UserProps extends React.Component<Props, State> {
                   toggle
                   id="form-check-role-signee"
                   checked={roleSignee}
-                  onChange={(e, data) => this.setState({
+                  onChange={(_, data) => this.setState({
                     roleSignee: data.checked!,
                   })}
                 />
               </Form.Field>
               <Form.Field>
-                {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
                 <label htmlFor="form-check-role-financial">
                   {t('entities.user.props.roles.financial')}
                 </label>
@@ -430,13 +458,12 @@ class UserProps extends React.Component<Props, State> {
                   toggle
                   id="form-check-role-financial"
                   checked={roleFinancial}
-                  onChange={(e, data) => this.setState({
+                  onChange={(_, data) => this.setState({
                     roleFinancial: data.checked!,
                   })}
                 />
               </Form.Field>
               <Form.Field>
-                {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
                 <label htmlFor="form-check-role-general">
                   {t('entities.user.props.roles.general')}
                 </label>
@@ -445,14 +472,13 @@ class UserProps extends React.Component<Props, State> {
                   toggle
                   id="form-check-role-general"
                   checked={roleGeneral}
-                  onChange={(e, data) => this.setState({
+                  onChange={(_, data) => this.setState({
                     roleGeneral: data.checked!,
                   })}
                 />
               </Form.Field>
               <Form.Field>
-                {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-                <label htmlFor="form-check-role-audit">
+                                <label htmlFor="form-check-role-audit">
                   {t('entities.user.props.roles.audit')}
                 </label>
                 <Checkbox
@@ -460,13 +486,12 @@ class UserProps extends React.Component<Props, State> {
                   toggle
                   id="form-check-role-audit"
                   checked={roleAudit}
-                  onChange={(e, data) => this.setState({
+                  onChange={(_, data) => this.setState({
                     roleAudit: data.checked!,
                   })}
                 />
               </Form.Field>
               <Form.Field>
-                {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
                 <label htmlFor="form-check-role-admin">
                   {t('entities.user.props.roles.admin')}
                 </label>
@@ -475,7 +500,7 @@ class UserProps extends React.Component<Props, State> {
                   toggle
                   id="form-check-role-admin"
                   checked={roleAdmin}
-                  onChange={(e, data) => this.setState({
+                  onChange={(_, data) => this.setState({
                     roleAdmin: data.checked!,
                   })}
                 />
@@ -483,7 +508,6 @@ class UserProps extends React.Component<Props, State> {
             </Form.Group>
           </Segment>
           <Form.Field disabled={!editing}>
-            {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
             <label htmlFor="form-input-comment">
               {t('entities.user.props.comments')}
             </label>
@@ -510,7 +534,7 @@ const mapStateToProps = (state: RootState) => ({
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
-  saveUser: (id: number, user: UserParams) => dispatch(
+  saveUser: (id: number, user: Partial_UserParams_) => dispatch(
     saveSingle(SingleEntities.User, id, user),
   ),
   createUser: (user: UserParams) => dispatch(
