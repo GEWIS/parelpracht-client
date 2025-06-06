@@ -15,7 +15,7 @@
     "@lagunovsky/redux-react-router": "^4.3.2",
     "@redux-devtools/extension": "^3.3.0",
     "@reduxjs/toolkit": "^2.6.0",
-    "@vitejs/plugin-react-swc": "^3.8.0",
+    "@vitejs/plugin-react-swc": "^3.10.1",
     "chart.js": "^4.4.8",
     "chartjs-plugin-annotation": "^3.1.0",
     "file-saver": "^2.0.5",
