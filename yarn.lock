@@ -4467,7 +4467,7 @@ __metadata:
     less: "npm:^4.2.2"
     lodash: "npm:^4.17.21"
     marked: "npm:^15.0.7"
-    query-string: "npm:^9.1.1"
+    query-string: "npm:^9.2.0"
     react: "npm:^18.3.1"
     react-chartjs-2: "npm:^5.3.0"
     react-datepicker: "npm:^8.1.0"
@@ -4659,14 +4659,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"query-string@npm:^9.1.1":
-  version: 9.1.1
-  resolution: "query-string@npm:9.1.1"
+"query-string@npm:^9.2.0":
+  version: 9.2.0
+  resolution: "query-string@npm:9.2.0"
   dependencies:
     decode-uri-component: "npm:^0.4.1"
     filter-obj: "npm:^5.1.0"
     split-on-first: "npm:^3.0.0"
-  checksum: 10c0/16481f17754f660aec3cae7abb838a70e383dfcf152414d184e0d0f81fae426acf112b4d51bf754f9c256eaf83ba4241241ba907c8d58b6ed9704425e1712e8c
+  checksum: 10c0/111cdc184c35d75f08c2dcb260c3cb038e7112d888a872dcbafd015d0ee790e57fd5ad8ebcad9c7a964f130c3711fef21ed2c28eb2dbf9c163bc56c144cac926
   languageName: node
   linkType: hard
 
