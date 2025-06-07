@@ -1,7 +1,7 @@
 import {
   Form, Input, Segment,
 } from 'semantic-ui-react';
-import React, { ChangeEvent } from 'react';
+import { ChangeEvent, Component } from 'react';
 import validator from 'validator';
 import { withTranslation, WithTranslation } from 'react-i18next';
 import { CustomRecipient } from '../../clients/server.generated';
@@ -12,7 +12,7 @@ interface Props extends WithTranslation {
   updateRecipientAttribute: <T extends keyof CustomRecipient = keyof CustomRecipient>(attribute: T, value: CustomRecipient[T]) => void;
 }
 
-class CustomInvoiceRecipient extends React.Component<Props> {
+class CustomInvoiceRecipient extends Component<Props> {
   constructor(props: Props) {
     super(props);
     this.state = {};

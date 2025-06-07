@@ -1,4 +1,4 @@
-import React, {ChangeEvent} from 'react';
+import {ChangeEvent, Component} from 'react';
 import {connect} from 'react-redux';
 import {Dispatch} from 'redux';
 import {
@@ -34,7 +34,7 @@ interface State {
   // products: [];
 }
 
-class ProductCategoryProps extends React.Component<Props, State> {
+class ProductCategoryProps extends Component<Props, State> {
   static defaultProps = {
     create: undefined,
     onCancel: undefined,

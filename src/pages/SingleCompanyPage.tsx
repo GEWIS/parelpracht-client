@@ -1,6 +1,6 @@
-import * as React from 'react';
+import { Component } from "react";
 import { NavLink } from 'react-router-dom';
-import { Breadcrumb, Container, Grid, Loader, Segment, Tab } from 'semantic-ui-react';
+import { Breadcrumb, Container, Grid, Loader, Segment, Tab, TabPane } from 'semantic-ui-react';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import { WithTranslation, withTranslation } from 'react-i18next';
@@ -41,7 +41,7 @@ interface State {
   paneIndex: number;
 }
 
-class SingleCompanyPage extends React.Component<Props, State> {
+class SingleCompanyPage extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
     const { location, navigate } = this.props.router;
@@ -114,25 +114,25 @@ class SingleCompanyPage extends React.Component<Props, State> {
       {
         menuItem: t('entity.contacts'),
         render: () => (
-          <Tab.Pane>
+          <TabPane>
             <CompanyContactList />
-          </Tab.Pane>
+          </TabPane>
         ),
       },
       {
         menuItem: t('entity.contracts'),
         render: () => (
-          <Tab.Pane>
+          <TabPane>
             <ContractList />
-          </Tab.Pane>
+          </TabPane>
         ),
       },
       {
         menuItem: t('entity.invoices'),
         render: () => (
-          <Tab.Pane>
+          <TabPane>
             <InvoiceList />
-          </Tab.Pane>
+          </TabPane>
         ),
       },
     ];
@@ -141,7 +141,7 @@ class SingleCompanyPage extends React.Component<Props, State> {
       panes.push({
         menuItem: t('entity.files'),
         render: company ? () => (
-          <Tab.Pane>
+          <TabPane>
             <FilesList
               files={company.files}
               entityId={company.id}
@@ -149,22 +149,22 @@ class SingleCompanyPage extends React.Component<Props, State> {
               fetchEntity={fetchCompany}
               status={status}
             />
-          </Tab.Pane>
-        ) : () => <Tab.Pane />,
+          </TabPane>
+        ) : () => <TabPane />,
       });
 
       panes.push({
         menuItem: t('entity.activities'),
         render: company ? () => (
-          <Tab.Pane>
+          <TabPane>
             <ActivitiesList
               activities={company.activities as GeneralActivity[]}
               componentId={company.id}
               componentType={SingleEntities.Company}
               resourceStatus={status}
             />
-          </Tab.Pane>
-        ) : () => <Tab.Pane />,
+          </TabPane>
+        ) : () => <TabPane />,
       });
     }
 
@@ -172,10 +172,10 @@ class SingleCompanyPage extends React.Component<Props, State> {
       panes.push({
         menuItem: t('entity.insights'),
         render: company ? () => (
-          // <Tab.Pane> is set in this tab, because it needs to fetch data and
+          // <TabPane> is set in this tab, because it needs to fetch data and
           /// therefore needs to show a loading animation
           <CompanyContractedProductsChart company={company} />
-        ) : () => <Tab.Pane />,
+        ) : () => <TabPane />,
       });
     }
 

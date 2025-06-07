@@ -1,3 +1,4 @@
+import { Component } from "react";
 import { Checkbox, Table } from 'semantic-ui-react';
 import { ActivityType, ProductInstance, ProductInstanceStatus } from '../../../clients/server.generated';
 import './ContractComponent.scss';
@@ -6,9 +7,9 @@ import ProductInstanceLink from '../product/ProductInstanceLink';
 import { SingleEntities } from '../../../stores/single/single';
 import { formatStatus, getLastStatus } from '../../../helpers/activity';
 import InvoiceLink from '../invoice/InvoiceLink';
-import { withRouter } from '../../../WithRouter';
+import {WithRouter, withRouter} from '../../../WithRouter';
 
-interface Props {
+interface Props extends WithRouter {
   productInstance: ProductInstance;
 
   selectFunction: (id: number) => void;
@@ -26,7 +27,7 @@ function showRecentStatus(productInstance: ProductInstance): string {
   return sortedArray[0].subType!;
 }
 
-class ContractProductRow extends React.Component<Props> {
+class ContractProductRow extends Component<Props> {
   public render() {
     const {
       productInstance, selectFunction, selected,

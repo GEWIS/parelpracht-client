@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { Component } from "react";
 import {
   Dimmer, Loader, Modal, Segment,
 } from 'semantic-ui-react';
@@ -42,7 +42,7 @@ interface Props extends WithTranslation, SelfProps {
   removeProductInstance: (contractId: number, id: number) => void;
 }
 
-class ContractProductInstanceModal extends React.Component<Props> {
+class ContractProductInstanceModal extends Component<Props> {
   static defaultProps = {
     create: undefined,
     contract: undefined,
@@ -59,12 +59,14 @@ class ContractProductInstanceModal extends React.Component<Props> {
 
   close = () => {
     const { params, navigate } = this.props.router;
+    if (!params.contractId) return;
     this.props.fetchContract(parseInt(params.contractId, 10));
     navigate(-1);
   };
 
-  saveProductInstance = async (productInstance: ProductInstanceParams) => {
+  saveProductInstance = (productInstance: ProductInstanceParams) => {
     const { params } = this.props.router;
+    if (!params.contractId || !params.productInstanceId) return;
     this.props.saveProductInstance(
       parseInt(params.contractId, 10),
       parseInt(params.productInstanceId, 10),
@@ -73,8 +75,9 @@ class ContractProductInstanceModal extends React.Component<Props> {
     this.close();
   };
 
-  createProductInstance = async (productInstance: ProductInstanceParams) => {
+  createProductInstance = (productInstance: ProductInstanceParams) => {
     const { params } = this.props.router;
+    if (!params.contractId) return;
     this.props.createProductInstance(
       parseInt(params.contractId, 10),
       productInstance,
@@ -82,8 +85,9 @@ class ContractProductInstanceModal extends React.Component<Props> {
     this.close();
   };
 
-  removeProductInstance = async () => {
+  removeProductInstance = () => {
     const { params } = this.props.router;
+    if (!params.contractId || !params.productInstanceId) return;
     this.props.removeProductInstance(
       parseInt(params.contractId, 10),
       parseInt(params.productInstanceId, 10),
@@ -95,7 +99,7 @@ class ContractProductInstanceModal extends React.Component<Props> {
     const { create, status, contract } = this.props;
     const { params } = this.props.router;
     let productInstance: ProductInstance | undefined;
-    if (create) {
+    if (create && params.contractId) {
       productInstance = {
         id: -1,
         contractId: parseInt(params.contractId, 10),
@@ -104,8 +108,8 @@ class ContractProductInstanceModal extends React.Component<Props> {
         discount: 0,
         details: '',
         status: ProductInstanceStatus.NOTDELIVERED,
-      } as any as ProductInstance;
-    } else {
+      } as unknown as ProductInstance;
+    } else if (params.contractId) {
       productInstance = this.props.productInstance;
     }
 
@@ -185,7 +189,7 @@ const mapStateToProps = (state: RootState, props: SelfProps) => {
   const { params } = props.router;
   const prodInstance = !props.create
     ? getSingle<Contract>(state, SingleEntities.Contract).data?.products.find(
-      (p) => p.id === parseInt(params.productInstanceId, 10),
+      (p) => p.id === parseInt(params.productInstanceId || '', 10),
     )
     : undefined;
   let prodName = '';

@@ -1,4 +1,4 @@
-import React, { ChangeEvent } from 'react';
+import { ChangeEvent, Component } from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import {
@@ -58,7 +58,7 @@ interface State {
   ldapOverrideEmail?: boolean;
 }
 
-class UserProps extends React.Component<Props, State> {
+class UserProps extends Component<Props, State> {
   static defaultProps = {
     create: undefined,
     onCancel: undefined,

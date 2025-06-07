@@ -1,4 +1,4 @@
-import React, { ChangeEvent } from 'react';
+import { ChangeEvent, Component } from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import { Form, Input, TextArea } from 'semantic-ui-react';
@@ -46,7 +46,7 @@ interface State {
   assignedToSelection?: number;
 }
 
-class ContractProps extends React.Component<Props, State> {
+class ContractProps extends Component<Props, State> {
   static defaultProps = {
     create: undefined,
     companyPredefined: undefined,

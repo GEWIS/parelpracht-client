@@ -17,18 +17,8 @@ interface Props extends WithTranslation, WithRouter {
   company: Company | undefined;
 }
 
-interface State {
-
-}
-
-class CompanyContactList extends React.Component<Props, State> {
-  public constructor(props: Props) {
-    super(props);
-  }
-
-  public render() {
-    const { company, t } = this.props;
-    const { location } = this.props.router;
+function CompanyContactList({ company, t, router }: Props) {
+    const { location } = router;
 
     if (company === undefined) {
       return (
@@ -91,7 +81,6 @@ class CompanyContactList extends React.Component<Props, State> {
       </>
     );
   }
-}
 
 const mapStateToProps = (state: RootState) => {
   return {

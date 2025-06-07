@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { Component } from "react";
 import {
   Button,
   Container, Grid, Header, Icon, Popup, Segment,
@@ -19,7 +19,7 @@ interface Props extends WithTranslation, WithRouter {
   refresh: () => void;
 }
 
-class InvoicesPage extends React.Component<Props> {
+class InvoicesPage extends Component<Props> {
   componentDidMount() {
     const { t } = this.props;
     document.title = t('entity.invoices');

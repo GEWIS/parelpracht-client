@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useTranslation } from 'react-i18next';
 import { Navigate as Redirect } from 'react-router-dom';
 import { Container, Image, Segment } from 'semantic-ui-react';
@@ -15,9 +16,9 @@ function SetupPage({ setupDone }: Props) {
   const { t } = useTranslation();
   const { setTitle } = useTitle();
 
-  React.useEffect(() => {
+  useEffect(() => {
     setTitle(t('pages.setup'));
-  });
+  }, [setTitle, t]);
 
   if (setupDone) {
     return <><Redirect to={'/login'}/></>;

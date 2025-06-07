@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { Component } from "react";
 import {
   Modal,
 } from 'semantic-ui-react';
@@ -25,7 +25,7 @@ interface Props extends WithTranslation, WithRouter {
   showTransientAlert: (alert: TransientAlert) => void;
 }
 
-class CompaniesCreatePage extends React.Component<Props> {
+class CompaniesCreatePage extends Component<Props> {
   componentDidMount() {
     const { clearCompany, t } = this.props;
     clearCompany();

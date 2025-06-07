@@ -1,3 +1,4 @@
+import { Component } from "react";
 import { withTranslation, WithTranslation } from 'react-i18next';
 import { Button, Input, Table } from 'semantic-ui-react';
 import { Client, Partial_RoleParams_, Role } from '../../clients/server.generated';
@@ -15,7 +16,7 @@ interface State {
   saving: boolean;
 }
 
-class RoleTableRow extends React.Component<Props, State> {
+class RoleTableRow extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
 

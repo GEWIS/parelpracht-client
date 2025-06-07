@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { Component } from "react";
 import { Modal } from 'semantic-ui-react';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
@@ -21,7 +21,7 @@ interface Props extends WithRouter {
   showTransientAlert: (alert: TransientAlert) => void;
 }
 
-class ProductCategoriesCreatePage extends React.Component<Props> {
+class ProductCategoriesCreatePage extends Component<Props> {
   componentDidMount() {
     this.props.clearCategory();
   }

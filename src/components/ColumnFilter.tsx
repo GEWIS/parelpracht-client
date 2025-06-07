@@ -1,10 +1,9 @@
-import { useState } from 'react';
+import { MouseEvent, useState } from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import {
   Button, Dropdown, DropdownItemProps, Modal,
 } from 'semantic-ui-react';
-import * as React from "react";
 import { RootState } from '../stores/store';
 import { fetchTable, setFilterTable } from '../stores/tables/actionCreators';
 import { getFilter, isFilterOn } from '../stores/tables/selectors';
@@ -63,7 +62,7 @@ function ColumnFilter({
       onClose={close}
       trigger={trigger}
       size="tiny"
-      onClick={(e: React.MouseEvent<HTMLButtonElement>) => e.stopPropagation()}
+      onClick={(e: MouseEvent<HTMLButtonElement>) => e.stopPropagation()}
     >
       <Modal.Header>{`Filter: ${columnName}`}</Modal.Header>
       <Modal.Content>

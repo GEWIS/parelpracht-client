@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { Component } from "react";
 import { withTranslation, WithTranslation } from 'react-i18next';
 import { Button, Input, Table } from 'semantic-ui-react';
 
@@ -16,11 +16,11 @@ interface State {
   fields: string[]
 }
 
-class PricingRow extends React.Component<Props, State> {
+class PricingRow extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
-       
+
       fields: props.pricing,
     };
   }

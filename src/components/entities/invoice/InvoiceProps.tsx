@@ -1,4 +1,4 @@
-import React, { ChangeEvent } from 'react';
+import { ChangeEvent, Component } from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import { Form, Input, TextArea } from 'semantic-ui-react';
@@ -48,12 +48,12 @@ interface State {
   title: string;
   comments: string | undefined;
   companyId: number;
-  assignedToId: number;
+  assignedToId: number | undefined;
   poNumber: string;
   startDate: Date;
 }
 
-class InvoiceProps extends React.Component<Props, State> {
+class InvoiceProps extends Component<Props, State> {
   static defaultProps = {
     create: undefined,
     onCancel: undefined,
@@ -246,11 +246,11 @@ class InvoiceProps extends React.Component<Props, State> {
                             <label htmlFor="form-input-startdate">{t('entities.invoice.props.invoiceDate')}</label>
               <DatePicker
                 onChange={(date) => {
-                  this.setState({ startDate: date });
+                  if (date) this.setState({ startDate: date });
                 }}
                 selected={startDate}
                 minDate={new Date(new Date().setHours(0, 0, 0, 0))}
-                onChangeRaw={e => e.preventDefault()}
+                onChangeRaw={e => e?.preventDefault()}
                 id="form-input-startdate"
               />
             </Form.Field>

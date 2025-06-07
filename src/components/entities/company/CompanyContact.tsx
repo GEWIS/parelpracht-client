@@ -1,13 +1,13 @@
 import {
   Button, Header, Icon, Segment,
 } from 'semantic-ui-react';
-import { Contact, ContactFunction } from '../../../clients/server.generated';
+import {Contact, ContactFunction, ContactSummary} from '../../../clients/server.generated';
 import { formatContactName, formatFunction } from '../../../helpers/contact';
 import './CompanyContact.scss';
 import { withRouter, WithRouter } from '../../../WithRouter';
 
 interface Props extends WithRouter {
-  contact: Contact;
+  contact: Contact | ContactSummary;
 }
 
 function CompanyContact(props: Props) {

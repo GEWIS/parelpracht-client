@@ -1,3 +1,4 @@
+import { Component } from "react";
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import {
@@ -21,7 +22,7 @@ interface State {
   selectedUser: number | undefined;
 }
 
-class UserMoveAssignmentsButton extends React.Component<Props, State> {
+class UserMoveAssignmentsButton extends Component<Props, State> {
   public constructor(props: Props) {
     super(props);
 

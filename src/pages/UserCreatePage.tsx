@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { Component } from "react";
 import {
   Modal, Segment,
 } from 'semantic-ui-react';
@@ -22,7 +22,7 @@ interface Props extends WithTranslation, WithRouter {
   clearUser: () => void;
 }
 
-class UserCreatePage extends React.Component<Props> {
+class UserCreatePage extends Component<Props> {
   componentDidMount() {
     const { clearUser, t } = this.props;
     clearUser();
@@ -53,7 +53,7 @@ class UserCreatePage extends React.Component<Props> {
       function: '',
       comment: '',
       roles: [],
-    } as User;
+    } as unknown as User;
 
     return (
       <Modal

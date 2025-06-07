@@ -1,3 +1,4 @@
+import { Component } from "react";
 import {
   Button, Icon, Input, Modal,
 } from 'semantic-ui-react';
@@ -22,7 +23,7 @@ interface State {
   input: string;
 }
 
-class ConfirmationDialogWithParameter extends React.Component<Props, State> {
+class ConfirmationDialogWithParameter extends Component<Props, State> {
   static defaultProps = {
     inputField: undefined,
     defaultInput: undefined,

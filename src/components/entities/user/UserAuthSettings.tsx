@@ -1,3 +1,4 @@
+import { Component } from "react";
 import { withTranslation, WithTranslation } from 'react-i18next';
 import { Header, Label, Segment } from 'semantic-ui-react';
 import { Dispatch } from 'redux';
@@ -15,7 +16,7 @@ interface Props extends WithTranslation {
   user: User,
 }
 
-class UserAuthSettings extends React.Component<Props, null> {
+class UserAuthSettings extends Component<Props, null> {
   constructor(props: Props) {
     super(props);
   }

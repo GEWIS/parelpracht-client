@@ -1,3 +1,4 @@
+import { Component } from "react";
 import {
   Button, Feed, Icon, Loader,
 } from 'semantic-ui-react';
@@ -6,12 +7,12 @@ import { SingleEntities } from '../../stores/single/single';
 import ResourceStatus from '../../stores/resourceStatus';
 import AuthorizationComponent from '../AuthorizationComponent';
 import { Roles } from '../../clients/server.generated';
-import { withRouter } from '../../WithRouter';
+import {WithRouter, withRouter} from '../../WithRouter';
 import CreateCommentRow from './CreateCommentRow';
 import { GeneralActivity } from './GeneralActivity';
 import ActivityComponent from './ActivityComponent';
 
-interface Props extends WithTranslation {
+interface Props extends WithTranslation, WithRouter {
   activities: GeneralActivity[];
   componentId: number;
   componentType: SingleEntities;
@@ -25,7 +26,7 @@ interface State {
   creating: boolean;
 }
 
-class ActivitiesList extends React.Component<Props, State> {
+class ActivitiesList extends Component<Props, State> {
   static defaultProps = {
     parentId: undefined,
   };

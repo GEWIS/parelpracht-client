@@ -1,3 +1,4 @@
+import { Component } from "react";
 import {
   Dimmer, Loader, Segment, Table,
 } from 'semantic-ui-react';
@@ -55,7 +56,7 @@ interface State {
   year?: number;
 }
 
-class MegaTable extends React.Component<Props, State> {
+class MegaTable extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
 

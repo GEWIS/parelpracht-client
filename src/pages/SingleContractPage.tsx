@@ -1,7 +1,7 @@
-import * as React from 'react';
+import { Component } from "react";
 import { NavLink } from 'react-router-dom';
 import {
-  Breadcrumb, Container, Grid, Loader, Segment, Tab,
+  Breadcrumb, Container, Grid, Loader, Segment, Tab, TabPane, TabProps,
 } from 'semantic-ui-react';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
@@ -41,7 +41,7 @@ interface State {
   paneIndex: number;
 }
 
-class SingleContractPage extends React.Component<Props, State> {
+class SingleContractPage extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
     const { location, navigate } = this.props.router;
@@ -70,7 +70,9 @@ class SingleContractPage extends React.Component<Props, State> {
     const { params } = this.props.router;
 
     this.props.clearContract();
-    this.props.fetchContract(Number.parseInt(params.contractId, 10));
+    if (params.contractId) {
+      this.props.fetchContract(Number.parseInt(params.contractId, 10));
+    }
   }
 
   public componentDidUpdate(prevProps: Readonly<Props>) {
@@ -105,12 +107,12 @@ class SingleContractPage extends React.Component<Props, State> {
       {
         menuItem: t('entity.productinstances'),
         render: contract ? () => (
-          <Tab.Pane>
+          <TabPane>
             <ContractProductList
               contract={contract}
             />
-          </Tab.Pane>
-        ) : () => <Tab.Pane />,
+          </TabPane>
+        ) : () => <TabPane />,
       },
     ];
 
@@ -118,7 +120,7 @@ class SingleContractPage extends React.Component<Props, State> {
       panes.push({
         menuItem: t('entity.files'),
         render: contract ? () => (
-          <Tab.Pane>
+          <TabPane>
             <FilesList
               files={contract.files}
               entityId={contract.id}
@@ -132,22 +134,22 @@ class SingleContractPage extends React.Component<Props, State> {
               )}
               status={status}
             />
-          </Tab.Pane>
-        ) : () => <Tab.Pane />,
+          </TabPane>
+        ) : () => <TabPane />,
       });
 
       panes.push({
         menuItem: t('entity.activities'),
         render: contract ? () => (
-          <Tab.Pane>
+          <TabPane>
             <ActivitiesList
               activities={contract.activities as GeneralActivity[]}
               componentId={contract.id}
               componentType={SingleEntities.Contract}
               resourceStatus={status}
             />
-          </Tab.Pane>
-        ) : () => <Tab.Pane />,
+          </TabPane>
+        ) : () => <TabPane />,
       });
     }
 
@@ -209,7 +211,7 @@ class SingleContractPage extends React.Component<Props, State> {
                 <Tab
                   panes={panes}
                   menu={{ pointing: true, inverted: true }}
-                  onTabChange={(e, data) => {
+                  onTabChange={(_, data) => {
                     this.setState({ paneIndex: data.activeIndex! as number });
                     navigate(`#${data.panes![data.activeIndex! as number].menuItem.toLowerCase()}`, { replace: true });
                   }}

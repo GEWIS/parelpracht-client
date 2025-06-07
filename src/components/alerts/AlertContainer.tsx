@@ -1,4 +1,5 @@
 /* eslint no-trailing-spaces: 0 */
+import { Component } from "react";
 import { connect } from 'react-redux';
 import { Rail } from 'semantic-ui-react';
 import { AlertItemState } from '../../stores/alerts/reducer';
@@ -11,7 +12,7 @@ interface AlertsProps {
   alerts: AlertItemState[];
 }
 
-class AlertContainer extends React.Component<AlertsProps> {
+class AlertContainer extends Component<AlertsProps> {
   static defaultProps = {
     internal: undefined,
   };

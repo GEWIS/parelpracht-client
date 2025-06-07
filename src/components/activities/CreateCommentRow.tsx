@@ -1,3 +1,4 @@
+import { Component } from "react";
 import { connect } from 'react-redux';
 import { Button, Input } from 'semantic-ui-react';
 import { Dispatch } from 'redux';
@@ -30,7 +31,7 @@ interface State {
   comment: string;
 }
 
-class CreateCommentRow extends React.Component<Props, State> {
+class CreateCommentRow extends Component<Props, State> {
   static defaultProps = {
     parentId: undefined,
   };

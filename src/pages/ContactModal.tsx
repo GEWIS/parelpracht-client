@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { Component } from "react";
 import {
   Dimmer,
   Header,
@@ -41,7 +41,7 @@ interface Props extends WithTranslation, WithRouter {
   showTransientAlert: (alert: TransientAlert) => void;
 }
 
-class ContactModal extends React.Component<Props> {
+class ContactModal extends Component<Props> {
   static defaultProps = {
     create: undefined,
   };

@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { useEffect } from "react";
 import {
   Button, Container, Grid, Header, Icon, Segment,
 } from 'semantic-ui-react';
@@ -13,7 +13,7 @@ function UsersPage(props: WithRouter) {
   const { setTitle } = useTitle();
   const { navigate } = props.router;
 
-  React.useEffect(() => {
+  useEffect(() => {
     setTitle(t('entity.users'));
   }, [setTitle, t]);
 

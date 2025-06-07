@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { useEffect } from "react";
 import { useTranslation } from 'react-i18next';
 import {
   Button, Container, Grid, Header, Icon, Segment,
@@ -16,9 +16,9 @@ function CompaniesPage() {
   const { setTitle } = useTitle();
   const navigate = useNavigate();
 
-  React.useEffect(() => {
+  useEffect(() => {
     setTitle(t('entity.companies'));
-  }, []);
+  }, [setTitle, t]);
 
   return (
     <AuthorizationComponent

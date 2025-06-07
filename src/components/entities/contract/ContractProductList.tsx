@@ -1,3 +1,4 @@
+import { Component } from "react";
 import { NavLink } from 'react-router-dom';
 import {
   Button, Icon, Loader, Table,
@@ -22,7 +23,7 @@ interface State {
   selected: number[];
 }
 
-class ContractProductList extends React.Component<Props, State> {
+class ContractProductList extends Component<Props, State> {
   public constructor(props: Props) {
     super(props);
 

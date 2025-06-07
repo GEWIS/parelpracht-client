@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { useEffect } from "react";
 import { useTranslation } from 'react-i18next';
 import {
   Button, Container, Grid, Header, Icon, Segment,
@@ -16,7 +16,7 @@ function ProductCategoriesPage() {
   const { setTitle } = useTitle();
   const history = useNavigate();
 
-  React.useEffect(() => {
+  useEffect(() => {
     setTitle(t('entity.categories'));
   }, [setTitle, t]);
 

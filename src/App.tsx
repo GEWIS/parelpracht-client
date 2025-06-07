@@ -1,3 +1,4 @@
+import { Component, ErrorInfo } from "react";
 import { ReduxRouter, ReduxRouterSelector } from '@lagunovsky/redux-react-router';
 import './App.scss';
 import './Form.scss';
@@ -11,7 +12,7 @@ interface State {
   hasError: boolean;
 }
 
-class App extends React.Component<object, State> {
+class App extends Component<object, State> {
   constructor(props: object) {
     super(props);
     this.state = {
@@ -24,7 +25,7 @@ class App extends React.Component<object, State> {
     return { hasError: true };
   }
 
-  public componentDidCatch(error: Error, info: React.ErrorInfo) {
+  public componentDidCatch(error: Error, info: ErrorInfo) {
     // tslint:disable-next-line:no-console
     console.error(error, error.stack, info.componentStack);
     store.dispatch(showAlert({

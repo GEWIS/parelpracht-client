@@ -1,3 +1,4 @@
+import {Component, ReactNode} from "react";
 import {
   Button, Icon, Image, Input, Modal,
 } from 'semantic-ui-react';
@@ -27,7 +28,7 @@ interface State {
   open: boolean;
 }
 
-class UserBackgroundModal extends React.Component<Props, State> {
+class UserBackgroundModal extends Component<Props, State> {
   static defaultProps = {
     loggedInUser: undefined,
   };
@@ -57,7 +58,7 @@ class UserBackgroundModal extends React.Component<Props, State> {
     this.setState({ open: false });
   };
 
-  updateImage = async (fileData: any) => {
+  updateImage = async (fileData: Blob) => {
     const client = new FilesClient();
     const {
       entityId, entity, fetchEntity,
@@ -87,7 +88,7 @@ class UserBackgroundModal extends React.Component<Props, State> {
     this.closeModal();
   };
 
-  public renderUserBackground(): JSX.Element {
+  public renderUserBackground(): ReactNode {
     const {
       entityName, entityId, fileName, adminView, t,
     } = this.props;
@@ -130,7 +131,7 @@ class UserBackgroundModal extends React.Component<Props, State> {
       <Button
         color="red"
         floated="left"
-        onClick={() => this.removeImage()}
+        onClick={() => { this.removeImage().catch(console.error); }}
       >
         <Icon name="trash" />
         {t('pages.user.background.deleteUsersBackground', { name: entityName })}
@@ -147,7 +148,7 @@ class UserBackgroundModal extends React.Component<Props, State> {
           <Input
             type="file"
             id={`form-file-${entityId}-file`}
-            onChange={(e) => this.updateImage(e.target.files![0])}
+            onChange={(e) => { this.updateImage(e.target.files![0]).catch(console.error); }}
             style={{ width: '80%' }}
           />
         </Modal.Description>

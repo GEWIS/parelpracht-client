@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { useEffect } from "react";
 import {
   Container, Grid, Header, Icon, Segment,
 } from 'semantic-ui-react';
@@ -12,9 +12,9 @@ function Insights() {
   const { t } = useTranslation();
   const { setTitle } = useTitle();
 
-  React.useEffect(() => {
+  useEffect(() => {
     setTitle(t('entity.insights'));
-  }, []);
+  }, [setTitle, t]);
 
   return (
     <>

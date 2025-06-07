@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { useEffect } from "react";
 import { useTranslation } from 'react-i18next';
 import {
   Container, Grid, Header, Icon, Segment,
@@ -13,9 +13,9 @@ function ContactsPage() {
   const { t } = useTranslation();
   const { setTitle } = useTitle();
 
-  React.useEffect(() => {
+  useEffect(() => {
     setTitle(t('entity.contacts'));
-  }, []);
+  }, [setTitle, t]);
 
   return (
     <AuthorizationComponent roles={[Roles.GENERAL, Roles.ADMIN, Roles.AUDIT]} notFound>

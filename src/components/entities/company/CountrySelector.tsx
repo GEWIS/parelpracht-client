@@ -1,4 +1,4 @@
-import React, { SyntheticEvent } from 'react';
+import { Component, SyntheticEvent } from 'react';
 import { withTranslation, WithTranslation } from 'react-i18next';
 import { Dropdown, DropdownProps, Form } from 'semantic-ui-react';
 import COUNTRY_OPTIONS from './countries.json';
@@ -17,7 +17,7 @@ interface Props extends WithTranslation {
   id: string;
 }
 
-class CountrySelector extends React.Component<Props> {
+class CountrySelector extends Component<Props> {
   private readonly countries: Country[];
 
   constructor(props: Props) {

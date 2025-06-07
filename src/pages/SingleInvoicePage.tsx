@@ -1,8 +1,8 @@
-import * as React from 'react';
+import { Component } from "react";
 import { NavLink } from 'react-router-dom';
 import {
   Breadcrumb,
-  Container, Grid, Loader, Segment, Tab,
+  Container, Grid, Loader, Segment, Tab, TabPane,
 } from 'semantic-ui-react';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
@@ -40,7 +40,7 @@ interface State {
   paneIndex: number;
 }
 
-class SingleInvoicePage extends React.Component<Props, State> {
+class SingleInvoicePage extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
     const { location, navigate } = props.router;
@@ -70,7 +70,9 @@ class SingleInvoicePage extends React.Component<Props, State> {
     const { params } = this.props.router;
 
     this.props.clearInvoice();
-    this.props.fetchInvoice(Number.parseInt(params.invoiceId, 10));
+    if (params.invoiceId) {
+      this.props.fetchInvoice(Number.parseInt(params.invoiceId, 10));
+    }
   }
 
   componentDidUpdate() {
@@ -91,13 +93,13 @@ class SingleInvoicePage extends React.Component<Props, State> {
       {
         menuItem: t('entity.products'),
         render: invoice ? () => (
-          <Tab.Pane>
+          <TabPane>
             <InvoiceProductList
               invoice={invoice}
               fetchInvoice={fetchInvoice}
             />
-          </Tab.Pane>
-        ) : () => <Tab.Pane />,
+          </TabPane>
+        ) : () => <TabPane />,
       },
     ];
 
@@ -106,7 +108,7 @@ class SingleInvoicePage extends React.Component<Props, State> {
       panes.push({
         menuItem: t('entity.files'),
         render: invoice ? () => (
-          <Tab.Pane>
+          <TabPane>
             <FilesList
               files={invoice.files}
               entityId={invoice.id}
@@ -120,21 +122,21 @@ class SingleInvoicePage extends React.Component<Props, State> {
               )}
               status={status}
             />
-          </Tab.Pane>
-        ) : () => <Tab.Pane />,
+          </TabPane>
+        ) : () => <TabPane />,
       });
       panes.push({
         menuItem: t('entity.activities'),
         render: invoice ? () => (
-          <Tab.Pane>
+          <TabPane>
             <ActivitiesList
               activities={invoice.activities as GeneralActivity[]}
               componentId={invoice.id}
               componentType={SingleEntities.Invoice}
               resourceStatus={status}
             />
-          </Tab.Pane>
-        ) : () => <Tab.Pane />,
+          </TabPane>
+        ) : () => <TabPane />,
       });
     }
 
@@ -196,7 +198,7 @@ class SingleInvoicePage extends React.Component<Props, State> {
                 <Tab
                   panes={panes}
                   menu={{ pointing: true, inverted: true }}
-                  onTabChange={(e, data) => {
+                  onTabChange={(_, data) => {
                     this.setState({ paneIndex: data.activeIndex! as number });
                     navigate(`#${data.panes![data.activeIndex! as number].menuItem.toLowerCase()}`, { replace: true });
                   }}

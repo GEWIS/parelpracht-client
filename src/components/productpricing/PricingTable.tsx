@@ -1,3 +1,4 @@
+import { Component } from "react";
 import {
   Button, Table, TextArea, Form,
 } from 'semantic-ui-react';
@@ -26,7 +27,7 @@ interface State {
   status: ResourceStatus;
 }
 
-class PricingTable extends React.Component<Props, State> {
+class PricingTable extends Component<Props, State> {
   public constructor(props: Props) {
     super(props);
     this.state = {

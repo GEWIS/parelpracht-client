@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
 import {
   Button, Container, Grid, Header, Icon, Segment,
@@ -15,7 +15,7 @@ function ProductsPage() {
   const { t } = useTranslation();
   const { setTitle } = useTitle();
 
-  React.useEffect(() => {
+  useEffect(() => {
     setTitle(t('entity.products'));
   }, [setTitle, t]);
 

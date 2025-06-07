@@ -1,7 +1,7 @@
-import * as React from 'react';
+import { Component } from "react";
 import { NavLink } from 'react-router-dom';
 import {
-  Breadcrumb, Container, Grid, Loader, Segment, Tab,
+  Breadcrumb, Container, Grid, Loader, Segment, Tab, TabPane,
 } from 'semantic-ui-react';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
@@ -43,7 +43,7 @@ interface State {
   paneIndex: number;
 }
 
-class SingleProductPage extends React.Component<Props, State> {
+class SingleProductPage extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
     const { location, navigate } = this.props.router;
@@ -72,7 +72,9 @@ class SingleProductPage extends React.Component<Props, State> {
     const { params } = this.props.router;
 
     this.props.clearProduct();
-    this.props.fetchProduct(Number.parseInt(params.productId, 10));
+    if (params.productId) {
+      this.props.fetchProduct(Number.parseInt(params.productId, 10));
+    }
   }
 
   componentDidUpdate(prevProps: Readonly<Props>) {
@@ -116,27 +118,27 @@ class SingleProductPage extends React.Component<Props, State> {
       {
         menuItem: t('entity.contracts'),
         render: product ? () => (
-          <Tab.Pane>
+          <TabPane>
             <ContractCompactTable
               product={product}
             />
-          </Tab.Pane>
-        ) : () => <Tab.Pane />,
+          </TabPane>
+        ) : () => <TabPane />,
       },
       {
         menuItem: t('entity.invoices'),
         render: product ? () => (
-          <Tab.Pane>
+          <TabPane>
             <InvoiceCompactTable
               product={product}
             />
-          </Tab.Pane>
-        ) : () => <Tab.Pane />,
+          </TabPane>
+        ) : () => <TabPane />,
       },
       {
         menuItem: t('entity.files'),
         render: product ? () => (
-          <Tab.Pane>
+          <TabPane>
             <FilesList
               files={product.files}
               entityId={product.id}
@@ -144,31 +146,31 @@ class SingleProductPage extends React.Component<Props, State> {
               fetchEntity={fetchProduct}
               status={status}
             />
-          </Tab.Pane>
-        ) : () => <Tab.Pane />,
+          </TabPane>
+        ) : () => <TabPane />,
       },
       {
         menuItem: t('entity.activities'),
         render: product ? () => (
-          <Tab.Pane>
+          <TabPane>
             <ActivitiesList
               activities={product.activities as GeneralActivity[]}
               componentId={product.id}
               componentType={SingleEntities.Product}
               resourceStatus={status}
             />
-          </Tab.Pane>
-        ) : () => <Tab.Pane />,
+          </TabPane>
+        ) : () => <TabPane />,
       },
       {
         menuItem: t('entity.insights'),
         render: product ? () => <ProductsContractedGraph product={product} />
-          : () => <Tab.Pane />,
+          : () => <TabPane />,
       },
       {
         menuItem: t('entities.product.props.customPrice'),
         render: product ? () => (
-          <Tab.Pane>
+          <TabPane>
             {!product.pricing ? (
               <>
                 <h3>
@@ -179,8 +181,8 @@ class SingleProductPage extends React.Component<Props, State> {
                 </AuthorizationComponent>
               </>
             ) : <PricingTable pricing={product.pricing} productId={product.id} /> }
-          </Tab.Pane>
-        ) : () => <Tab.Pane />,
+          </TabPane>
+        ) : () => <TabPane />,
       },
     ];
 
@@ -229,7 +231,7 @@ class SingleProductPage extends React.Component<Props, State> {
               <Tab
                 panes={panes}
                 menu={{ pointing: true, inverted: true }}
-                onTabChange={(e, data) => {
+                onTabChange={(_, data) => {
                   this.setState({ paneIndex: data.activeIndex! as number });
                   navigate(`#${data.panes![data.activeIndex! as number].menuItem.toLowerCase()}`, { replace: true });
                 }}

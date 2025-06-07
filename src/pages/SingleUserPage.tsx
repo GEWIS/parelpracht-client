@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { Component } from "react";
 import { NavLink } from 'react-router-dom';
 import {
   Breadcrumb, Container, Grid, Header, Loader, Segment,
@@ -37,12 +37,14 @@ interface Props extends WithTranslation, WithRouter {
   showTransientAlert: (alert: TransientAlert) => void;
 }
 
-class SingleUserPage extends React.Component<Props> {
+class SingleUserPage extends Component<Props> {
   componentDidMount() {
     const { params } = this.props.router;
 
     this.props.clearUser();
-    this.props.fetchUser(Number.parseInt(params.userId, 10));
+    if (params.userId) {
+      this.props.fetchUser(Number.parseInt(params.userId, 10));
+    }
   }
 
   componentDidUpdate(prevProps: Readonly<Props>) {
