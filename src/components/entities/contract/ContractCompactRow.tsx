@@ -9,9 +9,9 @@ import { formatStatus } from '../../../helpers/activity';
 import ContractLink from './ContractLink';
 
 interface Props {
-  contract: Contract,
+  contract: Contract;
 
-  status: ContractStatus,
+  status: ContractStatus;
 }
 
 function ContractCompactRow(props: Props) {
@@ -24,12 +24,8 @@ function ContractCompactRow(props: Props) {
       <Table.Cell>
         <CompanyLink id={contract.companyId} />
       </Table.Cell>
-      <Table.Cell>
-        {formatStatus(status)}
-      </Table.Cell>
-      <Table.Cell>
-        {formatLastUpdate(contract.updatedAt)}
-      </Table.Cell>
+      <Table.Cell>{formatStatus(status)}</Table.Cell>
+      <Table.Cell>{formatLastUpdate(contract.updatedAt)}</Table.Cell>
     </Table.Row>
   );
 }

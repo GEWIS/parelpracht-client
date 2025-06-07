@@ -12,11 +12,11 @@ function UserRow(props: Props) {
   const { user } = props;
 
   const permissions = {
-    roleGeneral: user.roles.find((r) => r.name as Roles === Roles.GENERAL) !== undefined,
-    roleSignee: user.roles.find((r) => r.name as Roles === Roles.SIGNEE) !== undefined,
-    roleFinancial: user.roles.find((r) => r.name as Roles === Roles.FINANCIAL) !== undefined,
-    roleAudit: user.roles.find((r) => r.name as Roles === Roles.AUDIT) !== undefined,
-    roleAdmin: user.roles.find((r) => r.name as Roles === Roles.ADMIN) !== undefined,
+    roleGeneral: user.roles.find((r) => (r.name as Roles) === Roles.GENERAL) !== undefined,
+    roleSignee: user.roles.find((r) => (r.name as Roles) === Roles.SIGNEE) !== undefined,
+    roleFinancial: user.roles.find((r) => (r.name as Roles) === Roles.FINANCIAL) !== undefined,
+    roleAudit: user.roles.find((r) => (r.name as Roles) === Roles.AUDIT) !== undefined,
+    roleAdmin: user.roles.find((r) => (r.name as Roles) === Roles.ADMIN) !== undefined,
   };
 
   return (
@@ -26,43 +26,21 @@ function UserRow(props: Props) {
           {formatContactName(user.firstName, user.lastNamePreposition, user.lastName)}
         </NavLink>
       </Table.Cell>
-      <Table.Cell>
-        {user.email}
+      <Table.Cell>{user.email}</Table.Cell>
+      <Table.Cell textAlign="center">
+        <Checkbox disabled toggle checked={permissions.roleSignee} />
       </Table.Cell>
       <Table.Cell textAlign="center">
-        <Checkbox
-          disabled
-          toggle
-          checked={permissions.roleSignee}
-        />
+        <Checkbox disabled toggle checked={permissions.roleFinancial} />
       </Table.Cell>
       <Table.Cell textAlign="center">
-        <Checkbox
-          disabled
-          toggle
-          checked={permissions.roleFinancial}
-        />
+        <Checkbox disabled toggle checked={permissions.roleGeneral} />
       </Table.Cell>
       <Table.Cell textAlign="center">
-        <Checkbox
-          disabled
-          toggle
-          checked={permissions.roleGeneral}
-        />
+        <Checkbox disabled toggle checked={permissions.roleAudit} />
       </Table.Cell>
       <Table.Cell textAlign="center">
-        <Checkbox
-          disabled
-          toggle
-          checked={permissions.roleAudit}
-        />
-      </Table.Cell>
-      <Table.Cell textAlign="center">
-        <Checkbox
-          disabled
-          toggle
-          checked={permissions.roleAdmin}
-        />
+        <Checkbox disabled toggle checked={permissions.roleAdmin} />
       </Table.Cell>
     </Table.Row>
   );

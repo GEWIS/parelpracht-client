@@ -1,20 +1,18 @@
-import {ChangeEvent, Component} from 'react';
-import {connect} from 'react-redux';
-import {Dispatch} from 'redux';
-import {
-  Form, Input,
-} from 'semantic-ui-react';
+import { ChangeEvent, Component } from 'react';
+import { connect } from 'react-redux';
+import { Dispatch } from 'redux';
+import { Form, Input } from 'semantic-ui-react';
 import validator from 'validator';
-import {WithTranslation, withTranslation} from 'react-i18next';
-import {CategoryParams, ProductCategory, Roles} from '../../../clients/server.generated';
-import {createSingle, deleteSingle, saveSingle} from '../../../stores/single/actionCreators';
+import { WithTranslation, withTranslation } from 'react-i18next';
+import { CategoryParams, ProductCategory, Roles } from '../../../clients/server.generated';
+import { createSingle, deleteSingle, saveSingle } from '../../../stores/single/actionCreators';
 import ResourceStatus from '../../../stores/resourceStatus';
-import {RootState} from '../../../stores/store';
+import { RootState } from '../../../stores/store';
 import PropsButtons from '../../PropsButtons';
-import {getSingle} from '../../../stores/single/selectors';
-import {SingleEntities} from '../../../stores/single/single';
+import { getSingle } from '../../../stores/single/selectors';
+import { SingleEntities } from '../../../stores/single/single';
 import AuthorizationComponent from '../../AuthorizationComponent';
-import {withRouter, WithRouter} from '../../../WithRouter';
+import { withRouter, WithRouter } from '../../../WithRouter';
 
 interface Props extends WithTranslation, WithRouter {
   create?: boolean;
@@ -50,15 +48,13 @@ class ProductCategoryProps extends Component<Props, State> {
   }
 
   componentDidUpdate(prevProps: Props) {
-    if (prevProps.status === ResourceStatus.SAVING
-      && this.props.status === ResourceStatus.FETCHED) {
-
-      this.setState({editing: false});
+    if (prevProps.status === ResourceStatus.SAVING && this.props.status === ResourceStatus.FETCHED) {
+      this.setState({ editing: false });
     }
   }
 
   extractState = (props: Props) => {
-    const {category} = props;
+    const { category } = props;
     return {
       name: category.name,
       // products: category.products,
@@ -72,12 +68,12 @@ class ProductCategoryProps extends Component<Props, State> {
   };
 
   edit = () => {
-    this.setState({editing: true, ...this.extractState(this.props)});
+    this.setState({ editing: true, ...this.extractState(this.props) });
   };
 
   cancel = () => {
     if (!this.props.create) {
-      this.setState({editing: false, ...this.extractState(this.props)});
+      this.setState({ editing: false, ...this.extractState(this.props) });
     } else if (this.props.onCancel) {
       this.props.onCancel();
     }
@@ -93,14 +89,14 @@ class ProductCategoryProps extends Component<Props, State> {
 
   remove = () => {
     if (!this.props.create && this.props.deleteCategory) {
-      const {navigate} = this.props.router;
+      const { navigate } = this.props.router;
       navigate('/category');
       this.props.deleteCategory(this.props.category.id);
     }
   };
 
   propsHaveErrors = (): boolean => {
-    const {name} = this.state;
+    const { name } = this.state;
     return validator.isEmpty(name);
   };
 
@@ -117,7 +113,7 @@ class ProductCategoryProps extends Component<Props, State> {
       name,
       // products,
     } = this.state;
-    const {t} = this.props;
+    const { t } = this.props;
 
     return (
       <>
@@ -140,7 +136,7 @@ class ProductCategoryProps extends Component<Props, State> {
           </AuthorizationComponent>
         </h2>
 
-        <Form style={{marginTop: '2em'}}>
+        <Form style={{ marginTop: '2em' }}>
           <Form.Group widths="equal">
             <Form.Field
               required
@@ -151,12 +147,12 @@ class ProductCategoryProps extends Component<Props, State> {
               control={Input}
               label={t('entities.category.props.name')}
               value={name}
-              onChange={(e: ChangeEvent<HTMLInputElement>) => this.setState({
-                name: e.target.value,
-              })}
-              error={
-                validator.isEmpty(name)
+              onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                this.setState({
+                  name: e.target.value,
+                })
               }
+              error={validator.isEmpty(name)}
             />
           </Form.Group>
         </Form>
@@ -172,17 +168,10 @@ const mapStateToProps = (state: RootState) => {
 };
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
-  saveCategory: (id: number, category: CategoryParams) => dispatch(
-    saveSingle(SingleEntities.ProductCategory, id, category),
-  ),
-  createCategory: (category: CategoryParams) => dispatch(
-    createSingle(SingleEntities.ProductCategory, category),
-  ),
-  deleteCategory: (id: number) => dispatch(
-    deleteSingle(SingleEntities.ProductCategory, id),
-  ),
+  saveCategory: (id: number, category: CategoryParams) =>
+    dispatch(saveSingle(SingleEntities.ProductCategory, id, category)),
+  createCategory: (category: CategoryParams) => dispatch(createSingle(SingleEntities.ProductCategory, category)),
+  deleteCategory: (id: number) => dispatch(deleteSingle(SingleEntities.ProductCategory, id)),
 });
 
-export default withTranslation()(
-  withRouter(connect(mapStateToProps, mapDispatchToProps)(ProductCategoryProps)),
-);
+export default withTranslation()(withRouter(connect(mapStateToProps, mapDispatchToProps)(ProductCategoryProps)));

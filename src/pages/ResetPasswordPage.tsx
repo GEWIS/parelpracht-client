@@ -1,10 +1,6 @@
 import { useEffect } from 'react';
-import {
-  NavLink, Navigate as Redirect, useLocation,
-} from 'react-router-dom';
-import {
-  Button, Container, Header, Icon, Segment,
-} from 'semantic-ui-react';
+import { NavLink, Navigate as Redirect, useLocation } from 'react-router-dom';
+import { Button, Container, Header, Icon, Segment } from 'semantic-ui-react';
 import * as jose from 'jose';
 import queryString from 'query-string';
 import { Dispatch } from 'redux';
@@ -42,7 +38,7 @@ function ResetPasswordPage({ status, clearStatus }: Props) {
   }
 
   const payload = jose.decodeJwt(token);
-  if (!(payload)) {
+  if (!payload) {
     return <Redirect to="/login" />;
   }
 
@@ -85,9 +81,7 @@ function ResetPasswordPage({ status, clearStatus }: Props) {
             <Header as="h1">
               {newUser ? t('pages.resetPassword.setPassword') : t('pages.resetPassword.resetPassword')}
             </Header>
-            <ResetPasswordForm
-              token={token}
-            />
+            <ResetPasswordForm token={token} />
             <Button as={NavLink} to="/login" style={{ marginTop: '1em' }} basic>
               <Icon name="arrow left" basic />
               {t('pages.forgotPassword.back')}

@@ -1,15 +1,18 @@
 import { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
-import {
-  Dimmer, Loader, Segment, Table,
-} from 'semantic-ui-react';
+import { Dimmer, Loader, Segment, Table } from 'semantic-ui-react';
 import { useTranslation } from 'react-i18next';
 import { Contract } from '../../../clients/server.generated';
 import TablePagination from '../../TablePagination';
 import { RootState } from '../../../stores/store';
 import {
-  changeSortTable, fetchTable, nextPageTable, prevPageTable, setSortTable, setTakeTable,
+  changeSortTable,
+  fetchTable,
+  nextPageTable,
+  prevPageTable,
+  setSortTable,
+  setTakeTable,
 } from '../../../stores/tables/actionCreators';
 import { countFetched, countTotal, getTable } from '../../../stores/tables/selectors';
 import { Tables } from '../../../stores/tables/tables';
@@ -27,7 +30,7 @@ interface Props {
   fetched: number;
   skip: number;
   take: number;
-  status: ResourceStatus,
+  status: ResourceStatus;
 
   fetchContracts: () => void;
   changeSort: (column: string) => void;
@@ -38,9 +41,20 @@ interface Props {
 }
 
 function ContractsTable({
-  contracts, fetchContracts, column, direction, changeSort, setSort,
-  total, fetched, skip, take, status,
-  prevPage, nextPage, setTake,
+  contracts,
+  fetchContracts,
+  column,
+  direction,
+  changeSort,
+  setSort,
+  total,
+  fetched,
+  skip,
+  take,
+  status,
+  prevPage,
+  nextPage,
+  setTake,
 }: Props) {
   useEffect(() => {
     setSort('id', 'DESC');
@@ -87,9 +101,7 @@ function ContractsTable({
               {t('entities.generalProps.status')}
               <ContractStatusFilter />
             </Table.HeaderCell>
-            <Table.HeaderCell width={2}>
-              {t('entities.generalProps.amount')}
-            </Table.HeaderCell>
+            <Table.HeaderCell width={2}>{t('entities.generalProps.amount')}</Table.HeaderCell>
             <Table.HeaderCell
               collapsing
               sorted={column === 'updatedAt' ? direction : undefined}
@@ -101,7 +113,9 @@ function ContractsTable({
           </Table.Row>
         </Table.Header>
         <Table.Body>
-          {contracts.map((x) => <ContractRow contract={x} key={x.id} />)}
+          {contracts.map((x) => (
+            <ContractRow contract={x} key={x.id} />
+          ))}
         </Table.Body>
       </Table>
       <TablePagination
@@ -142,8 +156,7 @@ const mapStateToProps = (state: RootState) => {
     take: contractTable.take,
     contracts: contractTable.data,
     column: contractTable.sortColumn,
-    direction: contractTable.sortDirection === 'ASC'
-      ? 'ascending' : 'descending' as 'ascending' | 'descending',
+    direction: contractTable.sortDirection === 'ASC' ? 'ascending' : ('descending' as 'ascending' | 'descending'),
   };
 };
 

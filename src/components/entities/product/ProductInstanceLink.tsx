@@ -1,4 +1,3 @@
-
 import { connect } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import { Icon } from 'semantic-ui-react';
@@ -16,9 +15,7 @@ interface Props {
 }
 
 function ProductInstanceLink(props: Props) {
-  const {
-    entity, entityId, productInstanceId, productName, details = '',
-  } = props;
+  const { entity, entityId, productInstanceId, productName, details = '' } = props;
   return (
     <NavLink to={`/${entity.toLowerCase()}/${entityId}/product/${productInstanceId}`}>
       <Icon name="shopping bag" />

@@ -1,9 +1,7 @@
-import { Component } from "react";
+import { Component } from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
-import {
-  Button, ButtonProps, Icon, Modal,
-} from 'semantic-ui-react';
+import { Button, ButtonProps, Icon, Modal } from 'semantic-ui-react';
 import { withTranslation, WithTranslation } from 'react-i18next';
 import { Client, Roles, TransferUserParams } from '../../../clients/server.generated';
 import { clearSingle, fetchSingle } from '../../../stores/single/actionCreators';
@@ -37,10 +35,7 @@ class UserMoveAssignmentsButton extends Component<Props, State> {
     const client = new Client();
 
     this.setState({ isLoading: true });
-    await client.transferAssignments(
-      this.props.userId,
-      new TransferUserParams({ toUserId: this.state.selectedUser! }),
-    );
+    await client.transferAssignments(this.props.userId, new TransferUserParams({ toUserId: this.state.selectedUser! }));
     this.props.clearUser();
     this.props.fetchUser(this.props.userId);
     this.setState({ isLoading: false });
@@ -51,16 +46,18 @@ class UserMoveAssignmentsButton extends Component<Props, State> {
     const { t } = this.props;
     const trigger = (
       <Button>
-        <Icon name="arrow up" />
-        {' '}
-        {t('pages.user.responsibilities.transferButton')}
+        <Icon name="arrow up" /> {t('pages.user.responsibilities.transferButton')}
       </Button>
     );
 
     return (
       <Modal
-        onClose={() => { this.setState({ open: false }); }}
-        onOpen={() => { this.setState({ open: true }); }}
+        onClose={() => {
+          this.setState({ open: false });
+        }}
+        onOpen={() => {
+          this.setState({ open: true });
+        }}
         closeIcon
         open={this.state.open}
         dimmer="blurring"
@@ -74,7 +71,9 @@ class UserMoveAssignmentsButton extends Component<Props, State> {
             positive
             disabled={this.state.selectedUser === undefined}
             loading={this.state.isLoading}
-            onClick={() => { this.moveAssignmentsUser().catch(console.error); }}
+            onClick={() => {
+              this.moveAssignmentsUser().catch(console.error);
+            }}
             floated="right"
           >
             <Icon name="arrow right" />
@@ -83,7 +82,9 @@ class UserMoveAssignmentsButton extends Component<Props, State> {
           <Button
             icon
             floated="right"
-            onClick={() => { this.setState({ open: false }); }}
+            onClick={() => {
+              this.setState({ open: false });
+            }}
           >
             {t('pages.user.responsibilities.cancel')}
           </Button>
@@ -92,9 +93,11 @@ class UserMoveAssignmentsButton extends Component<Props, State> {
           <UserSelector
             id="user-selector"
             value={this.state.selectedUser}
-            onChange={(val: number | '') => this.setState({
-              selectedUser: val === '' ? undefined : val,
-            })}
+            onChange={(val: number | '') =>
+              this.setState({
+                selectedUser: val === '' ? undefined : val,
+              })
+            }
             clearable
             role={Roles.GENERAL}
           />

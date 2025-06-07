@@ -21,12 +21,8 @@ function ProductRow(props: Props) {
           {currentLanguage === 'nl-NL' ? product.nameDutch : product.nameEnglish}
         </NavLink>
       </Table.Cell>
-      <Table.Cell>
-        {formatPriceFull(product.targetPrice)}
-      </Table.Cell>
-      <Table.Cell>
-        {formatStatus(product.status)}
-      </Table.Cell>
+      <Table.Cell>{formatPriceFull(product.targetPrice)}</Table.Cell>
+      <Table.Cell>{formatStatus(product.status)}</Table.Cell>
       <Table.Cell>
         <ProductCategoryLink id={product.categoryId} />
       </Table.Cell>

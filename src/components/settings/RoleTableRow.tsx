@@ -1,4 +1,4 @@
-import { Component } from "react";
+import { Component } from 'react';
 import { withTranslation, WithTranslation } from 'react-i18next';
 import { Button, Input, Table } from 'semantic-ui-react';
 import { Client, Partial_RoleParams_, Role } from '../../clients/server.generated';
@@ -49,9 +49,7 @@ class RoleTableRow extends Component<Props, State> {
     if (!editing) {
       return (
         <Table.Row>
-          <Table.Cell>
-            {t(`entities.user.props.roles.${role.name.toLowerCase()}`)}
-          </Table.Cell>
+          <Table.Cell>{t(`entities.user.props.roles.${role.name.toLowerCase()}`)}</Table.Cell>
           <Table.Cell>
             <span title={role.ldapGroup}>{role.ldapGroup}</span>
           </Table.Cell>
@@ -68,9 +66,7 @@ class RoleTableRow extends Component<Props, State> {
     }
     return (
       <Table.Row>
-        <Table.Cell>
-          {t(`entities.user.props.roles.${role.name.toLowerCase()}`)}
-        </Table.Cell>
+        <Table.Cell>{t(`entities.user.props.roles.${role.name.toLowerCase()}`)}</Table.Cell>
         <Table.Cell>
           <Input
             id={`form-role-${role.name}-ldap-group-name`}
@@ -82,19 +78,8 @@ class RoleTableRow extends Component<Props, State> {
           />
         </Table.Cell>
         <Table.Cell>
-          <Button
-            icon="x"
-            negative
-            onClick={this.cancel}
-            title={t('buttons.files.cancel')}
-          />
-          <Button
-            icon="save"
-            positive
-            onClick={this.save}
-            loading={saving}
-            title={t('buttons.files.save')}
-          />
+          <Button icon="x" negative onClick={this.cancel} title={t('buttons.files.cancel')} />
+          <Button icon="save" positive onClick={this.save} loading={saving} title={t('buttons.files.save')} />
         </Table.Cell>
       </Table.Row>
     );

@@ -1,8 +1,6 @@
-import { useEffect } from "react";
+import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import {
-  Button, Container, Grid, Header, Icon, Segment,
-} from 'semantic-ui-react';
+import { Button, Container, Grid, Header, Icon, Segment } from 'semantic-ui-react';
 import { useNavigate } from 'react-router-dom';
 import { Roles } from '../clients/server.generated';
 import AuthorizationComponent from '../components/AuthorizationComponent';
@@ -21,10 +19,7 @@ function CompaniesPage() {
   }, [setTitle, t]);
 
   return (
-    <AuthorizationComponent
-      roles={[Roles.GENERAL, Roles.ADMIN, Roles.AUDIT, Roles.FINANCIAL]}
-      notFound
-    >
+    <AuthorizationComponent roles={[Roles.GENERAL, Roles.ADMIN, Roles.AUDIT, Roles.FINANCIAL]} notFound>
       <Segment style={{ backgroundColor: 'rgba(237, 237, 237, 0.98)' }} vertical basic>
         <Container style={{ paddingTop: '1em' }}>
           <Grid columns={2}>
@@ -38,10 +33,7 @@ function CompaniesPage() {
               </Header>
             </Grid.Column>
             <Grid.Column>
-              <AuthorizationComponent
-                roles={[Roles.ADMIN]}
-                notFound={false}
-              >
+              <AuthorizationComponent roles={[Roles.ADMIN]} notFound={false}>
                 <Button icon labelPosition="left" primary floated="right" onClick={() => navigate('/company/new')}>
                   <Icon name="plus" />
                   {t('pages.companies.addCompany')}
@@ -51,7 +43,6 @@ function CompaniesPage() {
           </Grid>
 
           <CompanyTableControls />
-
         </Container>
       </Segment>
       <Container style={{ marginTop: '20px' }}>

@@ -1,14 +1,16 @@
 import { ChangeEvent, Component } from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
-import {
-  Checkbox, Form, Input, Label,
-} from 'semantic-ui-react';
+import { Checkbox, Form, Input, Label } from 'semantic-ui-react';
 import { withTranslation, WithTranslation } from 'react-i18next';
 import validator from 'validator';
 import {
-  Client, PaginationParams,
-  Product, ProductParams, ProductStatus, Roles,
+  Client,
+  PaginationParams,
+  Product,
+  ProductParams,
+  ProductStatus,
+  Roles,
 } from '../../../clients/server.generated';
 import ProductCategorySelector from '../productcategories/ProductCategorySelector';
 import { formatPrice } from '../../../helpers/monetary';
@@ -77,9 +79,7 @@ class ProductProps extends Component<Props, State> {
   }
 
   componentDidUpdate(prevProps: Props) {
-    if (prevProps.status === ResourceStatus.SAVING
-      && this.props.status === ResourceStatus.FETCHED) {
-
+    if (prevProps.status === ResourceStatus.SAVING && this.props.status === ResourceStatus.FETCHED) {
       this.setState({ editing: false });
     }
   }
@@ -151,28 +151,42 @@ class ProductProps extends Component<Props, State> {
 
   propsHaveErrors = (): boolean => {
     const {
-      nameDutch, nameEnglish, vatId, categoryId, targetPrice, minTarget, maxTarget,
-      contractTextDutch, contractTextEnglish,
+      nameDutch,
+      nameEnglish,
+      vatId,
+      categoryId,
+      targetPrice,
+      minTarget,
+      maxTarget,
+      contractTextDutch,
+      contractTextEnglish,
     } = this.state;
-    return (validator.isEmpty(nameDutch)
-      || validator.isEmpty(nameEnglish)
-      || vatId < 0
-      || categoryId < 0
-      || (parseFloat(targetPrice.replace(',', '.')) <= 0 || Number.isNaN(parseFloat(targetPrice.replace(',', '.'))))
-      || (minTarget !== undefined ? minTarget < 0 : false)
-      || maxTarget < (minTarget || 0)
-      || validator.isEmpty(contractTextDutch)
-      || validator.isEmpty(contractTextEnglish)
+    return (
+      validator.isEmpty(nameDutch) ||
+      validator.isEmpty(nameEnglish) ||
+      vatId < 0 ||
+      categoryId < 0 ||
+      parseFloat(targetPrice.replace(',', '.')) <= 0 ||
+      Number.isNaN(parseFloat(targetPrice.replace(',', '.'))) ||
+      (minTarget !== undefined ? minTarget < 0 : false) ||
+      maxTarget < (minTarget || 0) ||
+      validator.isEmpty(contractTextDutch) ||
+      validator.isEmpty(contractTextEnglish)
     );
   };
 
   hasInstances = async () => {
     const client = new Client();
-    const hasInstances = (await client.getProductContracts(this.props.product.id,
-      new PaginationParams({
-        skip: 0,
-        take: 1,
-      }))).list.length > 0;
+    const hasInstances =
+      (
+        await client.getProductContracts(
+          this.props.product.id,
+          new PaginationParams({
+            skip: 0,
+            take: 1,
+          }),
+        )
+      ).list.length > 0;
     this.setState({ hasInstances });
   };
 
@@ -232,12 +246,12 @@ class ProductProps extends Component<Props, State> {
               label={t('entities.product.props.nameNl')}
               placeholder={t('entities.product.props.nameNl')}
               value={nameDutch}
-              onChange={(e: ChangeEvent<HTMLInputElement>) => this.setState({
-                nameDutch: e.target.value,
-              })}
-              error={
-                validator.isEmpty(nameDutch)
+              onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                this.setState({
+                  nameDutch: e.target.value,
+                })
               }
+              error={validator.isEmpty(nameDutch)}
             />
             <Form.Field
               disabled={!editing}
@@ -248,22 +262,17 @@ class ProductProps extends Component<Props, State> {
               label={t('entities.product.props.nameEn')}
               placeholder={t('entities.product.props.nameEn')}
               value={nameEnglish}
-              onChange={(e: ChangeEvent<HTMLInputElement>) => this.setState({
-                nameEnglish: e.target.value,
-              })}
-              error={
-                validator.isEmpty(nameEnglish)
+              onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                this.setState({
+                  nameEnglish: e.target.value,
+                })
               }
+              error={validator.isEmpty(nameEnglish)}
             />
           </Form.Group>
           <Form.Group widths="equal">
-            <Form.Field
-              disabled={!editing}
-              required
-            >
-              <label htmlFor="form-input-category">
-                {t('entities.product.props.category')}
-              </label>
+            <Form.Field disabled={!editing} required>
+              <label htmlFor="form-input-category">{t('entities.product.props.category')}</label>
               <ProductCategorySelector
                 id="form-input-category"
                 value={categoryId}
@@ -274,21 +283,22 @@ class ProductProps extends Component<Props, State> {
                 }}
               />
             </Form.Field>
-            <Form.Field
-              disabled={!editing}
-            >
-              <label htmlFor="form-check-status">
-                {t('entities.product.props.status.header')}
-              </label>
+            <Form.Field disabled={!editing}>
+              <label htmlFor="form-check-status">{t('entities.product.props.status.header')}</label>
               <Checkbox
                 toggle
                 id="form-check-status"
-                label={status === ProductStatus.ACTIVE ? t('entities.product.props.status.active') : t('entities.product.props.status.inactive')}
+                label={
+                  status === ProductStatus.ACTIVE
+                    ? t('entities.product.props.status.active')
+                    : t('entities.product.props.status.inactive')
+                }
                 checked={status === ProductStatus.ACTIVE}
-                onChange={(_, data) => this.setState({
-                  status:
-                    data.checked ? ProductStatus.ACTIVE : ProductStatus.INACTIVE,
-                })}
+                onChange={(_, data) =>
+                  this.setState({
+                    status: data.checked ? ProductStatus.ACTIVE : ProductStatus.INACTIVE,
+                  })
+                }
               />
             </Form.Field>
           </Form.Group>
@@ -296,11 +306,12 @@ class ProductProps extends Component<Props, State> {
             <Form.Field
               disabled={!editing}
               required
-              error={parseFloat(targetPrice.replace(',', '.')) <= 0 || Number.isNaN(parseFloat(targetPrice.replace(',', '.')))}
+              error={
+                parseFloat(targetPrice.replace(',', '.')) <= 0 ||
+                Number.isNaN(parseFloat(targetPrice.replace(',', '.')))
+              }
             >
-              <label htmlFor="form-input-target-price">
-                {t('entities.product.props.price')}
-              </label>
+              <label htmlFor="form-input-target-price">{t('entities.product.props.price')}</label>
               <Input
                 labelPosition="left"
                 id="form-input-target-price"
@@ -312,13 +323,8 @@ class ProductProps extends Component<Props, State> {
                 <input />
               </Input>
             </Form.Field>
-            <Form.Field
-              disabled={!editing}
-              required
-            >
-              <label htmlFor="form-input-vat">
-                {t('entities.product.props.valueAddedTax')}
-              </label>
+            <Form.Field disabled={!editing} required>
+              <label htmlFor="form-input-vat">{t('entities.product.props.valueAddedTax')}</label>
               <ProductVatSelector
                 id="form-input-vat"
                 value={vatId}
@@ -331,47 +337,39 @@ class ProductProps extends Component<Props, State> {
             </Form.Field>
           </Form.Group>
           <Form.Group widths="equal">
-            <Form.Field
-              disabled={!editing}
-              error={minTarget !== undefined ? minTarget < 0 : false}
-            >
-              <label htmlFor="form-input-minimal-target">
-                {t('entities.product.props.minTarget')}
-              </label>
+            <Form.Field disabled={!editing} error={minTarget !== undefined ? minTarget < 0 : false}>
+              <label htmlFor="form-input-minimal-target">{t('entities.product.props.minTarget')}</label>
               <Input
                 id="form-input-minimal-target"
                 type="number"
                 placeholder="Minimal target"
                 value={minTarget}
                 fluid
-                onChange={(e: ChangeEvent<HTMLInputElement>) => this.setState({
-                  minTarget: Number(e.target.value),
-                })}
+                onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                  this.setState({
+                    minTarget: Number(e.target.value),
+                  })
+                }
               />
             </Form.Field>
-            <Form.Field
-              disabled={!editing}
-              error={maxTarget < (minTarget || 0)}
-            >
-              <label htmlFor="form-input-maximum-target">
-                {t('entities.product.props.maxTarget')}
-              </label>
+            <Form.Field disabled={!editing} error={maxTarget < (minTarget || 0)}>
+              <label htmlFor="form-input-maximum-target">{t('entities.product.props.maxTarget')}</label>
               <Input
                 id="form-input-maximum-target"
                 type="number"
                 placeholder="Maximum target"
                 value={maxTarget}
                 fluid
-                onChange={(e: ChangeEvent<HTMLInputElement>) => this.setState({
-                  maxTarget: Number(e.target.value),
-                })}
+                onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                  this.setState({
+                    maxTarget: Number(e.target.value),
+                  })
+                }
               />
             </Form.Field>
           </Form.Group>
           <Form.Field disabled={!editing}>
-            <label htmlFor="form-input-description">
-              {t('entities.product.props.comments')}
-            </label>
+            <label htmlFor="form-input-description">{t('entities.product.props.comments')}</label>
             <TextArea
               id="form-input-description"
               value={description}
@@ -380,54 +378,38 @@ class ProductProps extends Component<Props, State> {
             />
           </Form.Field>
           <Form.Field required error={validator.isEmpty(contractTextDutch)} disabled={!editing}>
-            <label htmlFor="form-input-contract-text-dutch">
-              {t('entities.product.props.contractTextNl')}
-            </label>
+            <label htmlFor="form-input-contract-text-dutch">{t('entities.product.props.contractTextNl')}</label>
             <TextArea
               id="form-input-contract-text-dutch"
               value={contractTextDutch}
-              onChange={
-                (e) => this.setState({ contractTextDutch: e.target.value })
-              }
+              onChange={(e) => this.setState({ contractTextDutch: e.target.value })}
               placeholder="Contract text in Dutch"
             />
           </Form.Field>
           <Form.Field required error={validator.isEmpty(contractTextEnglish)} disabled={!editing}>
-            <label htmlFor="form-input-contract-text-english">
-              {t('entities.product.props.contractTextEn')}
-            </label>
+            <label htmlFor="form-input-contract-text-english">{t('entities.product.props.contractTextEn')}</label>
             <TextArea
               id="form-input-contract-text-english"
               value={contractTextEnglish}
-              onChange={
-                (e) => this.setState({ contractTextEnglish: e.target.value })
-              }
+              onChange={(e) => this.setState({ contractTextEnglish: e.target.value })}
               placeholder="Contract text in English"
             />
           </Form.Field>
           <Form.Field disabled={!editing}>
-            <label htmlFor="form-input-delivery-spec-dutch">
-              {t('entities.product.props.specsNl')}
-            </label>
+            <label htmlFor="form-input-delivery-spec-dutch">{t('entities.product.props.specsNl')}</label>
             <TextArea
               id="form-input-delivery-spec-dutch"
               value={deliverySpecDutch}
-              onChange={
-                (e) => this.setState({ deliverySpecDutch: e.target.value })
-              }
+              onChange={(e) => this.setState({ deliverySpecDutch: e.target.value })}
               placeholder="Delivery specifications in Dutch"
             />
           </Form.Field>
           <Form.Field disabled={!editing}>
-            <label htmlFor="form-input-delivery-spec-english">
-              {t('entities.product.props.specsEn')}
-            </label>
+            <label htmlFor="form-input-delivery-spec-english">{t('entities.product.props.specsEn')}</label>
             <TextArea
               id="form-delivery-spec-english"
               value={deliverySpecEnglish}
-              onChange={
-                (e) => this.setState({ deliverySpecEnglish: e.target.value })
-              }
+              onChange={(e) => this.setState({ deliverySpecEnglish: e.target.value })}
               placeholder="Delivery specifications in English"
             />
           </Form.Field>
@@ -445,17 +427,9 @@ const mapStateToProps = (state: RootState) => {
 };
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
-  saveProduct: (id: number, product: ProductParams) => dispatch(
-    saveSingle(SingleEntities.Product, id, product),
-  ),
-  createProduct: (product: ProductParams) => dispatch(
-    createSingle(SingleEntities.Product, product),
-  ),
-  deleteProduct: (id: number) => dispatch(
-    deleteSingle(SingleEntities.Product, id),
-  ),
+  saveProduct: (id: number, product: ProductParams) => dispatch(saveSingle(SingleEntities.Product, id, product)),
+  createProduct: (product: ProductParams) => dispatch(createSingle(SingleEntities.Product, product)),
+  deleteProduct: (id: number) => dispatch(deleteSingle(SingleEntities.Product, id)),
 });
 
-export default withTranslation()(
-  withRouter(connect(mapStateToProps, mapDispatchToProps)(ProductProps)),
-);
+export default withTranslation()(withRouter(connect(mapStateToProps, mapDispatchToProps)(ProductProps)));

@@ -1,15 +1,17 @@
 import { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
-import {
-  Dimmer, Loader, Segment, Table,
-} from 'semantic-ui-react';
+import { Dimmer, Loader, Segment, Table } from 'semantic-ui-react';
 import { useTranslation } from 'react-i18next';
 import { ProductCategory } from '../../../clients/server.generated';
 import TablePagination from '../../TablePagination';
 import { RootState } from '../../../stores/store';
 import {
-  changeSortTable, fetchTable, nextPageTable, prevPageTable, setTakeTable,
+  changeSortTable,
+  fetchTable,
+  nextPageTable,
+  prevPageTable,
+  setTakeTable,
 } from '../../../stores/tables/actionCreators';
 import { countFetched, countTotal, getTable } from '../../../stores/tables/selectors';
 import { Tables } from '../../../stores/tables/tables';
@@ -34,9 +36,19 @@ interface Props {
 }
 
 function ProductCategoriesTable({
-  categories, fetchCategories, column, direction, changeSort,
-  total, fetched, skip, take, status,
-  prevPage, nextPage, setTake,
+  categories,
+  fetchCategories,
+  column,
+  direction,
+  changeSort,
+  total,
+  fetched,
+  skip,
+  take,
+  status,
+  prevPage,
+  nextPage,
+  setTake,
 }: Props) {
   useEffect(() => {
     fetchCategories();
@@ -48,16 +60,15 @@ function ProductCategoriesTable({
       <Table singleLine selectable attached sortable fixed unstackable>
         <Table.Header>
           <Table.Row>
-            <Table.HeaderCell
-              sorted={column === 'name' ? direction : undefined}
-              onClick={() => changeSort('name')}
-            >
+            <Table.HeaderCell sorted={column === 'name' ? direction : undefined} onClick={() => changeSort('name')}>
               {t('entities.category.props.name')}
             </Table.HeaderCell>
           </Table.Row>
         </Table.Header>
         <Table.Body>
-          {categories.map((x) => <ProductCategoryRow category={x} key={x.id} />)}
+          {categories.map((x) => (
+            <ProductCategoryRow category={x} key={x.id} />
+          ))}
         </Table.Body>
       </Table>
       <TablePagination
@@ -98,8 +109,7 @@ const mapStateToProps = (state: RootState) => {
     take: categoryTable.take,
     categories: categoryTable.data,
     column: categoryTable.sortColumn,
-    direction: categoryTable.sortDirection === 'ASC'
-      ? 'ascending' : 'descending' as 'ascending' | 'descending',
+    direction: categoryTable.sortDirection === 'ASC' ? 'ascending' : ('descending' as 'ascending' | 'descending'),
   };
 };
 

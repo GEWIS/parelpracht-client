@@ -1,9 +1,7 @@
 import { connect } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import { Dispatch } from 'redux';
-import {
-  Dropdown, Icon, Loader, Menu, Flag,
-} from 'semantic-ui-react';
+import { Dropdown, Icon, Loader, Menu, Flag } from 'semantic-ui-react';
 import { useTranslation } from 'react-i18next';
 import { AuthStatus, Roles, User } from '../../clients/server.generated';
 import { formatContactName } from '../../helpers/contact';
@@ -29,8 +27,12 @@ interface Props extends WithRouter {
 function AuthMenu(props: Props) {
   const { t } = useTranslation();
   const { navigate } = props.router;
-  if (props.status !== ResourceStatus.FETCHED || props.authStatus === undefined
-    || props.profileStatus !== ResourceStatus.FETCHED || props.profile === undefined) {
+  if (
+    props.status !== ResourceStatus.FETCHED ||
+    props.authStatus === undefined ||
+    props.profileStatus !== ResourceStatus.FETCHED ||
+    props.profile === undefined
+  ) {
     return (
       <Menu.Item position="right" style={{ paddingTop: '8px', paddingBottom: '8px' }}>
         <Loader inline active size="small" style={{ marginLeft: '3em', marginRight: '3em' }} />
@@ -38,24 +40,19 @@ function AuthMenu(props: Props) {
     );
   }
 
-
   const logout = () => {
     navigate('/login');
     props.logout();
   };
 
-  const name = formatContactName(
-    props.profile.firstName,
-    props.profile.lastNamePreposition,
-    props.profile.lastName,
-  );
+  const name = formatContactName(props.profile.firstName, props.profile.lastNamePreposition, props.profile.lastName);
 
   const isAdmin = props.hasRole(Roles.ADMIN);
 
   return (
     <Menu.Menu position="right">
       <Dropdown
-        trigger={(
+        trigger={
           <>
             <UserAvatar
               fileName={props.profile.avatarFilename}
@@ -66,7 +63,7 @@ function AuthMenu(props: Props) {
             />
             {name}
           </>
-        )}
+        }
         item
         className="icon"
       >
@@ -93,23 +90,13 @@ function AuthMenu(props: Props) {
           </Dropdown.Item>
         </Dropdown.Menu>
       </Dropdown>
-      <Dropdown
-        trigger={(<Icon name="globe" />)}
-        item
-        className="icon"
-      >
+      <Dropdown trigger={<Icon name="globe" />} item className="icon">
         <Dropdown.Menu>
-          <Dropdown.Item
-            className={getLanguage() === 'en-US' ? 'active' : ''}
-            onClick={() => changeLanguage('en-US')}
-          >
+          <Dropdown.Item className={getLanguage() === 'en-US' ? 'active' : ''} onClick={() => changeLanguage('en-US')}>
             <Flag name="us" />
             English
           </Dropdown.Item>
-          <Dropdown.Item
-            className={getLanguage() === 'nl-NL' ? 'active' : ''}
-            onClick={() => changeLanguage('nl-NL')}
-          >
+          <Dropdown.Item className={getLanguage() === 'nl-NL' ? 'active' : ''} onClick={() => changeLanguage('nl-NL')}>
             <Flag name="nl" />
             Nederlands
           </Dropdown.Item>

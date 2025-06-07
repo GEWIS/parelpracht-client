@@ -1,9 +1,7 @@
 import { ChangeEvent, useState } from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
-import {
-  Button, Form, Input,
-} from 'semantic-ui-react';
+import { Button, Form, Input } from 'semantic-ui-react';
 import validator from 'validator';
 import { useTranslation } from 'react-i18next';
 import { authResetPassword } from '../../stores/auth/actionCreators';
@@ -33,9 +31,7 @@ function ResetPasswordForm(props: Props) {
         icon="lock"
         iconPosition="left"
         label={t('pages.resetPassword.newPassword')}
-        error={
-          validator.isEmpty(password) || !validator.isStrongPassword(password)
-        }
+        error={validator.isEmpty(password) || !validator.isStrongPassword(password)}
         onChange={(e: ChangeEvent<HTMLInputElement>) => {
           changePassword(e.target.value);
         }}
@@ -47,16 +43,11 @@ function ResetPasswordForm(props: Props) {
         type="password"
         icon="lock"
         iconPosition="left"
-        error={
-          !passwordIsValid || !validator.equals(passwordRepeat, password)
-        }
+        error={!passwordIsValid || !validator.equals(passwordRepeat, password)}
         label={t('pages.resetPassword.repeatPassword')}
         onChange={(e: ChangeEvent<HTMLInputElement>) => changePasswordRepeat(e.target.value)}
       />
-      <PasswordStrength
-        password={password}
-        setPasswordIsValid={setPasswordIsValid}
-      />
+      <PasswordStrength password={password} setPasswordIsValid={setPasswordIsValid} />
       <Button
         fluid
         primary
@@ -77,9 +68,8 @@ const mapStateToProps = (state: RootState) => ({
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
-  resetPassword: (password: string, passwordRepeat: string, token: string) => dispatch(
-    authResetPassword(password, passwordRepeat, token),
-  ),
+  resetPassword: (password: string, passwordRepeat: string, token: string) =>
+    dispatch(authResetPassword(password, passwordRepeat, token)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ResetPasswordForm);

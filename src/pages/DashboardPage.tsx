@@ -1,7 +1,5 @@
-import { useEffect } from "react";
-import {
-  Container, Grid, Header, Icon, Segment,
-} from 'semantic-ui-react';
+import { useEffect } from 'react';
+import { Container, Grid, Header, Icon, Segment } from 'semantic-ui-react';
 import { WithTranslation, withTranslation } from 'react-i18next';
 import { connect } from 'react-redux';
 import { User } from '../clients/server.generated';
@@ -47,9 +45,7 @@ function DashboardPage(props: Props) {
                 <Icon name="hand paper" />
                 <Header.Content>
                   <Header.Subheader>Dashboard</Header.Subheader>
-                  {beerTime() ? 'Trek een bak' : t('dashboard.welcome')}
-                  {' '}
-                  {user?.firstName}
+                  {beerTime() ? 'Trek een bak' : t('dashboard.welcome')} {user?.firstName}
                 </Header.Content>
               </Header>
             </Grid.Column>
@@ -70,7 +66,7 @@ function DashboardPage(props: Props) {
           </Grid.Row>
         </Grid>
       </Container>
-    </ >
+    </>
   );
 }
 

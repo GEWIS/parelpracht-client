@@ -1,7 +1,5 @@
 import React, { ChangeEvent, useState } from 'react';
-import {
-  Button, Checkbox, Dropdown, Form, Icon, Input, Modal, Segment,
-} from 'semantic-ui-react';
+import { Button, Checkbox, Dropdown, Form, Icon, Input, Modal, Segment } from 'semantic-ui-react';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import { useTranslation } from 'react-i18next';
@@ -53,8 +51,9 @@ function GenerateContractModal(props: Props) {
   const save = async () => {
     changeLoading(true);
     const client = new FilesClient();
-    const success = await client
-      .generateContractFile(props.contract.id, new GenerateContractParams({
+    const success = await client.generateContractFile(
+      props.contract.id,
+      new GenerateContractParams({
         name,
         language,
         contentType,
@@ -64,7 +63,8 @@ function GenerateContractModal(props: Props) {
         signee1Id,
         signee2Id,
         recipientId,
-      }));
+      }),
+    );
     changeLoading(false);
 
     if (success) {
@@ -74,9 +74,10 @@ function GenerateContractModal(props: Props) {
       props.showTransientAlert({
         title: 'Error',
         message: t('files.generate.error', {
-          entity: contentType === ContractType.CONTRACT
-            ? t('files.generate.contract').toLowerCase()
-            : t('files.generate.proposal').toLowerCase(),
+          entity:
+            contentType === ContractType.CONTRACT
+              ? t('files.generate.contract').toLowerCase()
+              : t('files.generate.proposal').toLowerCase(),
         }),
         type: 'error',
       });
@@ -91,51 +92,42 @@ function GenerateContractModal(props: Props) {
       open={isOpen}
       dimmer="blurring"
       size="tiny"
-      trigger={(
-        <Button
-          icon
-          loading={loading}
-          labelPosition="left"
-          floated="right"
-          style={{ marginTop: '-0.5em' }}
-          basic
-        >
+      trigger={
+        <Button icon loading={loading} labelPosition="left" floated="right" style={{ marginTop: '-0.5em' }} basic>
           <Icon name="plus" />
           {t('files.generate.header')}
         </Button>
-      )}
+      }
     >
       <Segment attached="bottom">
         <AlertContainer />
         <h2>
           {t('files.generate.header')}
           <Button
-            onClick={() => { save().catch(console.error); }}
+            onClick={() => {
+              save().catch(console.error);
+            }}
             floated="right"
             loading={loading}
             color="green"
             icon
             labelPosition="left"
-            disabled={(signee1Id === 0 && contentType === ContractType.CONTRACT)
-              || (signee2Id === 0 && contentType === ContractType.CONTRACT)}
+            disabled={
+              (signee1Id === 0 && contentType === ContractType.CONTRACT) ||
+              (signee2Id === 0 && contentType === ContractType.CONTRACT)
+            }
           >
             <Icon name="download" />
             {t('files.generate.generateButton')}
           </Button>
-          <Button
-            icon
-            floated="right"
-            onClick={() => setOpen(false)}
-          >
+          <Button icon floated="right" onClick={() => setOpen(false)}>
             {t('buttons.cancel')}
           </Button>
         </h2>
         <Form style={{ marginTop: '2em' }}>
           <Form.Group widths="equal">
-            <Form.Field
-              required
-            >
-                            <label htmlFor="form-input-Content-Type">{t('files.generate.contentType')}</label>
+            <Form.Field required>
+              <label htmlFor="form-input-Content-Type">{t('files.generate.contentType')}</label>
               <Dropdown
                 id="form-input-Content-Type"
                 selection
@@ -150,7 +142,7 @@ function GenerateContractModal(props: Props) {
               />
             </Form.Field>
             <Form.Field required>
-                            <label htmlFor="form-contact-selector">{t('files.generate.recipient')}</label>
+              <label htmlFor="form-contact-selector">{t('files.generate.recipient')}</label>
               <ContactSelector
                 id="form-contact-selector"
                 disabled={false}
@@ -171,10 +163,8 @@ function GenerateContractModal(props: Props) {
             />
           </Form.Group>
           <Form.Group widths="equal">
-            <Form.Field
-              required
-            >
-                            <label htmlFor="form-input-File-Type">{t('files.generate.fileType')}</label>
+            <Form.Field required>
+              <label htmlFor="form-input-File-Type">{t('files.generate.fileType')}</label>
               <Dropdown
                 id="form-input-File-Type"
                 selection
@@ -188,10 +178,8 @@ function GenerateContractModal(props: Props) {
                 fluid
               />
             </Form.Field>
-            <Form.Field
-              required
-            >
-                            <label htmlFor="form-input-language">{t('language.header')}</label>
+            <Form.Field required>
+              <label htmlFor="form-input-language">{t('language.header')}</label>
               <Dropdown
                 id="form-input-language"
                 selection
@@ -236,7 +224,7 @@ function GenerateContractModal(props: Props) {
           </Form.Group>
           <Form.Group>
             <Form.Field>
-                            <label htmlFor="form-input-Discount">{t('files.generate.showDiscount')}</label>
+              <label htmlFor="form-input-Discount">{t('files.generate.showDiscount')}</label>
               <Checkbox
                 toggle
                 id="form-input-Discount"
@@ -245,7 +233,7 @@ function GenerateContractModal(props: Props) {
               />
             </Form.Field>
             <Form.Field>
-                            <label htmlFor="form-input-SaveToDisk">{t('files.generate.saveToDisk')}</label>
+              <label htmlFor="form-input-SaveToDisk">{t('files.generate.saveToDisk')}</label>
               <Checkbox
                 id="form-input-SaveToDisk"
                 toggle

@@ -17,11 +17,9 @@ const initialState: AuthState = {
   apiKeyRequest: ResourceStatus.EMPTY,
 };
 
-type AuthAction = ReturnType<typeof actionCreators[keyof typeof actionCreators]>;
+type AuthAction = ReturnType<(typeof actionCreators)[keyof typeof actionCreators]>;
 
-export default function authReducer(
-  state: AuthState = initialState, action: AuthAction,
-): AuthState {
+export default function authReducer(state: AuthState = initialState, action: AuthAction): AuthState {
   switch (action.type) {
     case AuthActionType.FetchStatus:
       return {
@@ -88,7 +86,7 @@ export default function authReducer(
     case AuthActionType.SetApiKey:
       return {
         ...state,
-        apiKey: (action).apiKey,
+        apiKey: action.apiKey,
         apiKeyRequest: ResourceStatus.FETCHED,
       };
     default:

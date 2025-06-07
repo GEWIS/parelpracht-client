@@ -1,12 +1,10 @@
 import { withTranslation, WithTranslation } from 'react-i18next';
-import {
-  Container, Grid, Header, Icon, Message, Segment,
-} from 'semantic-ui-react';
-import { useEffect } from "react";
+import { Container, Grid, Header, Icon, Message, Segment } from 'semantic-ui-react';
+import { useEffect } from 'react';
 import RoleTable from '../components/settings/RoleTable';
 import { useTitle } from '../components/TitleContext';
 
-type Props = WithTranslation
+type Props = WithTranslation;
 
 function SettingsPage(props: Props) {
   const { t } = props;
@@ -31,13 +29,10 @@ function SettingsPage(props: Props) {
               </Header>
             </Grid.Column>
           </Grid>
-
         </Container>
       </Segment>
       <Container style={{ marginTop: '2em' }}>
-        <Message error>
-          {t('pages.settings.warning')}
-        </Message>
+        <Message error>{t('pages.settings.warning')}</Message>
         <Segment>
           <RoleTable />
         </Segment>

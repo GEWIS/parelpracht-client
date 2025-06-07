@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { connect } from 'react-redux';
 import { Dropdown, DropdownProps } from 'semantic-ui-react';
@@ -14,17 +13,17 @@ interface Props {
 function ProductVATSelector(props: Props & DropdownProps) {
   const [open, changeOpen] = useState(false);
 
-  const {
-    value, onChange, options,
-  } = props;
+  const { value, onChange, options } = props;
 
-  const dropdownOptions = [...options].sort((v1, v2) => {
-    return v1.amount >= v2.amount ? 1 : -1;
-  }).map((x) => ({
-    key: x.id,
-    text: `${x.amount}%`,
-    value: x.id,
-  }));
+  const dropdownOptions = [...options]
+    .sort((v1, v2) => {
+      return v1.amount >= v2.amount ? 1 : -1;
+    })
+    .map((x) => ({
+      key: x.id,
+      text: `${x.amount}%`,
+      value: x.id,
+    }));
 
   return (
     <Dropdown

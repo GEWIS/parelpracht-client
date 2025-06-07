@@ -4,9 +4,7 @@ import { Dispatch } from 'redux';
 import { Form, Input, TextArea } from 'semantic-ui-react';
 import validator from 'validator';
 import { withTranslation, WithTranslation } from 'react-i18next';
-import {
-  ActivityType, Contract, ContractParams, Roles,
-} from '../../../clients/server.generated';
+import { ActivityType, Contract, ContractParams, Roles } from '../../../clients/server.generated';
 import { createSingle, deleteSingle, saveSingle } from '../../../stores/single/actionCreators';
 import ResourceStatus from '../../../stores/resourceStatus';
 import { RootState } from '../../../stores/store';
@@ -63,9 +61,7 @@ class ContractProps extends Component<Props, State> {
   }
 
   componentDidUpdate(prevProps: Props) {
-    if (prevProps.status === ResourceStatus.SAVING
-      && this.props.status === ResourceStatus.FETCHED) {
-
+    if (prevProps.status === ResourceStatus.SAVING && this.props.status === ResourceStatus.FETCHED) {
       this.setState({ editing: false });
       this.props.showTransientAlert({
         title: 'Success',
@@ -130,13 +126,8 @@ class ContractProps extends Component<Props, State> {
   };
 
   propsHaveErrors = (): boolean => {
-    const {
-      title, companySelection, contactSelection,
-    } = this.state;
-    return (validator.isEmpty(title)
-      || companySelection < 0
-      || contactSelection < 0
-    );
+    const { title, companySelection, contactSelection } = this.state;
+    return validator.isEmpty(title) || companySelection < 0 || contactSelection < 0;
   };
 
   deleteButtonActive = () => {
@@ -147,20 +138,16 @@ class ContractProps extends Component<Props, State> {
       return undefined;
     }
     // If we violate any preconditions, disable the button
-    return !(contract.activities.filter((a) => a.type === ActivityType.STATUS).length > 1
-      || contract.products.length > 0 || contract.files.length > 0);
+    return !(
+      contract.activities.filter((a) => a.type === ActivityType.STATUS).length > 1 ||
+      contract.products.length > 0 ||
+      contract.files.length > 0
+    );
   };
 
   render() {
     const { t } = this.props;
-    const {
-      editing,
-      title,
-      companySelection,
-      contactSelection,
-      assignedToSelection,
-      comments,
-    } = this.state;
+    const { editing, title, companySelection, contactSelection, assignedToSelection, comments } = this.state;
 
     return (
       <>
@@ -193,63 +180,59 @@ class ContractProps extends Component<Props, State> {
               control={Input}
               label={t('entities.contract.props.title')}
               value={title}
-              onChange={(e: ChangeEvent<HTMLInputElement>) => this.setState({
-                title: e.target.value,
-              })}
-              error={
-                validator.isEmpty(title)
+              onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                this.setState({
+                  title: e.target.value,
+                })
               }
+              error={validator.isEmpty(title)}
             />
-            <Form.Field
-              disabled={!editing}
-            >
-                            <label htmlFor="form-assigned-to-selector">{t('entities.generalProps.assignedTo')}</label>
+            <Form.Field disabled={!editing}>
+              <label htmlFor="form-assigned-to-selector">{t('entities.generalProps.assignedTo')}</label>
               <UserSelector
                 id="form-assigned-to-selector"
                 value={assignedToSelection}
-                onChange={(val: number | '') => this.setState({
-                  assignedToSelection: val === '' ? undefined : val,
-                })}
+                onChange={(val: number | '') =>
+                  this.setState({
+                    assignedToSelection: val === '' ? undefined : val,
+                  })
+                }
                 clearable
                 role={Roles.GENERAL}
               />
             </Form.Field>
           </Form.Group>
-          <Form.Field
-            disabled={!this.props.create}
-            required
-          >
-                        <label htmlFor="form-company-selector">{t('entity.company')}</label>
+          <Form.Field disabled={!this.props.create} required>
+            <label htmlFor="form-company-selector">{t('entity.company')}</label>
             <CompanySelector
               id="form-company-selector"
               disabled={this.props.companyPredefined}
               value={companySelection}
-              onChange={(val: number) => this.setState({
-                companySelection: val,
-              })}
+              onChange={(val: number) =>
+                this.setState({
+                  companySelection: val,
+                })
+              }
             />
           </Form.Field>
-          <Form.Field
-            disabled={!editing}
-            required
-          >
-                        <label htmlFor="form-contact-selector">{t('entity.contact')}</label>
+          <Form.Field disabled={!editing} required>
+            <label htmlFor="form-contact-selector">{t('entity.contact')}</label>
             <ContactSelector
               id="form-contact-selector"
               // disabled={editing && (companySelection === -1)}
               companyId={companySelection}
               value={contactSelection}
-              onChange={(val: number) => this.setState({
-                contactSelection: val,
-              })}
+              onChange={(val: number) =>
+                this.setState({
+                  contactSelection: val,
+                })
+              }
               clearable
               placeholder={t('entity.contact')}
             />
           </Form.Field>
           <Form.Field disabled={!editing}>
-                        <label htmlFor="form-input-comments">
-              {t('entities.generalProps.comments')}
-            </label>
+            <label htmlFor="form-input-comments">{t('entities.generalProps.comments')}</label>
             <TextArea
               id="form-input-comments"
               value={comments}
@@ -270,18 +253,10 @@ const mapStateToProps = (state: RootState) => {
 };
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
-  saveContract: (id: number,
-    contract: ContractParams) => dispatch(
-    saveSingle(SingleEntities.Contract, id, contract),
-  ),
-  createContract: (contract: ContractParams) => dispatch(
-    createSingle(SingleEntities.Contract, contract),
-  ),
-  deleteContract: (id: number) => dispatch(
-    deleteSingle(SingleEntities.Contract, id),
-  ),
+  saveContract: (id: number, contract: ContractParams) => dispatch(saveSingle(SingleEntities.Contract, id, contract)),
+  createContract: (contract: ContractParams) => dispatch(createSingle(SingleEntities.Contract, contract)),
+  deleteContract: (id: number) => dispatch(deleteSingle(SingleEntities.Contract, id)),
   showTransientAlert: (alert: TransientAlert) => dispatch(showTransientAlert(alert)),
 });
 
-export default withTranslation()(withRouter(connect(mapStateToProps,
-  mapDispatchToProps)(ContractProps)));
+export default withTranslation()(withRouter(connect(mapStateToProps, mapDispatchToProps)(ContractProps)));

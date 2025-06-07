@@ -1,15 +1,13 @@
 import { Component, ReactNode } from 'react';
 import { connect } from 'react-redux';
 import { Step } from 'semantic-ui-react';
-import {
-  formatStatus,
-} from '../../helpers/activity';
+import { formatStatus } from '../../helpers/activity';
 import { SingleEntities } from '../../stores/single/single';
 import ResourceStatus from '../../stores/resourceStatus';
 import { Roles } from '../../clients/server.generated';
 import { RootState } from '../../stores/store';
 import { authedUserHasRole } from '../../stores/auth/selectors';
-import {WithRouter, withRouter} from '../../WithRouter';
+import { WithRouter, withRouter } from '../../WithRouter';
 import { DocumentStatus } from './DocumentStatus';
 import DocumentStatusModal from './DocumentStatusModal';
 
@@ -59,9 +57,18 @@ class FinancialDocumentProgress extends Component<Props, State> {
 
   public render() {
     const {
-      documentId, documentType, status,
-      statusChecked, statusClickable, statusDescription, statusDisabled, statusIcon,
-      resourceStatus, parentId, hasRole, roles,
+      documentId,
+      documentType,
+      status,
+      statusChecked,
+      statusClickable,
+      statusDescription,
+      statusDisabled,
+      statusIcon,
+      resourceStatus,
+      parentId,
+      hasRole,
+      roles,
     } = this.props;
     const { stepModalOpen } = this.state;
 
@@ -88,9 +95,7 @@ class FinancialDocumentProgress extends Component<Props, State> {
         >
           {statusIcon}
           <Step.Content>
-            <Step.Title>
-              {formatStatus(status)}
-            </Step.Title>
+            <Step.Title>{formatStatus(status)}</Step.Title>
             <Step.Description style={{ maxWidth: '20ch', wordWrap: 'break-word' }}>
               {statusDescription}
             </Step.Description>

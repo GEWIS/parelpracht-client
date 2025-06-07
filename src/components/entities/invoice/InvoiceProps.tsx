@@ -5,13 +5,7 @@ import { Form, Input, TextArea } from 'semantic-ui-react';
 import validator from 'validator';
 import { withTranslation, WithTranslation } from 'react-i18next';
 import DatePicker from 'react-datepicker';
-import {
-  ActivityType,
-  Invoice,
-  InvoiceStatus,
-  Partial_InvoiceParams_,
-  Roles,
-} from '../../../clients/server.generated';
+import { ActivityType, Invoice, InvoiceStatus, Partial_InvoiceParams_, Roles } from '../../../clients/server.generated';
 import { getCompanyName } from '../../../stores/company/selectors';
 import ResourceStatus from '../../../stores/resourceStatus';
 import { deleteSingle, saveSingle } from '../../../stores/single/actionCreators';
@@ -69,9 +63,7 @@ class InvoiceProps extends Component<Props, State> {
   }
 
   componentDidUpdate(prevProps: Props) {
-    if (prevProps.status === ResourceStatus.SAVING
-      && this.props.status === ResourceStatus.FETCHED) {
-
+    if (prevProps.status === ResourceStatus.SAVING && this.props.status === ResourceStatus.FETCHED) {
       this.setState({ editing: false });
       this.props.showTransientAlert({
         title: 'Success',
@@ -137,14 +129,14 @@ class InvoiceProps extends Component<Props, State> {
 
   propsHaveErrors = (): boolean => {
     const { title, startDate } = this.state;
-    const statusActivities = this.props.invoice.activities
-      .filter((a) => a.type === ActivityType.STATUS);
-    return (validator.isEmpty(title)
-      || startDate.toString() === 'Invalid Date'
-      || (startDate.setHours(0, 0, 0, 0) < new Date().setHours(0, 0, 0, 0)
-      && startDate.setHours(0, 0, 0, 0)
-      < this.props.invoice.startDate.setHours(0, 0, 0, 0))
-      || statusActivities[statusActivities.length - 1].subType === InvoiceStatus.PAID);
+    const statusActivities = this.props.invoice.activities.filter((a) => a.type === ActivityType.STATUS);
+    return (
+      validator.isEmpty(title) ||
+      startDate.toString() === 'Invalid Date' ||
+      (startDate.setHours(0, 0, 0, 0) < new Date().setHours(0, 0, 0, 0) &&
+        startDate.setHours(0, 0, 0, 0) < this.props.invoice.startDate.setHours(0, 0, 0, 0)) ||
+      statusActivities[statusActivities.length - 1].subType === InvoiceStatus.PAID
+    );
   };
 
   deleteButtonActive = () => {
@@ -152,19 +144,15 @@ class InvoiceProps extends Component<Props, State> {
     if (create) {
       return undefined;
     }
-    return !(invoice.products.length > 0 || invoice.files.length > 0
-      || invoice.activities.filter((a) => a.type === ActivityType.STATUS).length > 1);
+    return !(
+      invoice.products.length > 0 ||
+      invoice.files.length > 0 ||
+      invoice.activities.filter((a) => a.type === ActivityType.STATUS).length > 1
+    );
   };
 
   render() {
-    const {
-      editing,
-      comments,
-      title,
-      poNumber,
-      startDate,
-      assignedToId,
-    } = this.state;
+    const { editing, comments, title, poNumber, startDate, assignedToId } = this.state;
     const { companyName, t } = this.props;
 
     return (
@@ -201,16 +189,16 @@ class InvoiceProps extends Component<Props, State> {
               }}
               error={validator.isEmpty(title)}
             />
-            <Form.Field
-              disabled={!editing}
-            >
-                            <label htmlFor="form-assigned-to-selector">{t('entities.generalProps.assignedTo')}</label>
+            <Form.Field disabled={!editing}>
+              <label htmlFor="form-assigned-to-selector">{t('entities.generalProps.assignedTo')}</label>
               <UserSelector
                 id="form-assigned-to-selector"
                 value={assignedToId}
-                onChange={(val: number) => this.setState({
-                  assignedToId: val,
-                })}
+                onChange={(val: number) =>
+                  this.setState({
+                    assignedToId: val,
+                  })
+                }
                 role={Roles.GENERAL}
               />
             </Form.Field>
@@ -239,27 +227,27 @@ class InvoiceProps extends Component<Props, State> {
             />
             <Form.Field
               disabled={!editing}
-              error={(startDate.setHours(0, 0, 0, 0) < new Date().setHours(0, 0, 0, 0)
-                && startDate.setHours(0, 0, 0, 0)
-                < this.props.invoice.startDate.setHours(0, 0, 0, 0)) || isInvalidDate(startDate)}
+              error={
+                (startDate.setHours(0, 0, 0, 0) < new Date().setHours(0, 0, 0, 0) &&
+                  startDate.setHours(0, 0, 0, 0) < this.props.invoice.startDate.setHours(0, 0, 0, 0)) ||
+                isInvalidDate(startDate)
+              }
             >
-                            <label htmlFor="form-input-startdate">{t('entities.invoice.props.invoiceDate')}</label>
+              <label htmlFor="form-input-startdate">{t('entities.invoice.props.invoiceDate')}</label>
               <DatePicker
                 onChange={(date) => {
                   if (date) this.setState({ startDate: date });
                 }}
                 selected={startDate}
                 minDate={new Date(new Date().setHours(0, 0, 0, 0))}
-                onChangeRaw={e => e?.preventDefault()}
+                onChangeRaw={(e) => e?.preventDefault()}
                 id="form-input-startdate"
               />
             </Form.Field>
           </Form.Group>
           <Form.Group widths="equal">
             <Form.Field disabled={!editing}>
-                            <label htmlFor="form-input-comments">
-                {t('entities.generalProps.comments')}
-              </label>
+              <label htmlFor="form-input-comments">{t('entities.generalProps.comments')}</label>
               <TextArea
                 id="form-input-comments"
                 value={comments}
@@ -282,14 +270,10 @@ const mapStateToProps = (state: RootState, props: { invoice: Invoice }) => {
 };
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
-  saveInvoice: (id: number, invoice: Partial_InvoiceParams_) => dispatch(
-    saveSingle(SingleEntities.Invoice, id, invoice),
-  ),
-  deleteInvoice: (id: number) => dispatch(
-    deleteSingle(SingleEntities.Invoice, id),
-  ),
+  saveInvoice: (id: number, invoice: Partial_InvoiceParams_) =>
+    dispatch(saveSingle(SingleEntities.Invoice, id, invoice)),
+  deleteInvoice: (id: number) => dispatch(deleteSingle(SingleEntities.Invoice, id)),
   showTransientAlert: (alert: TransientAlert) => dispatch(showTransientAlert(alert)),
 });
 
-export default withTranslation()(withRouter(connect(mapStateToProps,
-  mapDispatchToProps)(InvoiceProps)));
+export default withTranslation()(withRouter(connect(mapStateToProps, mapDispatchToProps)(InvoiceProps)));

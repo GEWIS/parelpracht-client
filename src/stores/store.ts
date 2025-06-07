@@ -26,7 +26,6 @@ import { tablesReducer } from './tables/reducer';
 import { singleEntitiesReducer } from './single/reducer';
 import { summariesReducer } from './summaries/reducer';
 
-
 // Import all watching sagas
 const watchSagas = [
   ...authSagas,
@@ -53,10 +52,11 @@ const reducers = {
   single: singleEntitiesReducer,
 };
 
-const createRootReducer = (historyObject: BrowserHistory) => combineReducers({
-  ...reducers,
-  router: createRouterReducer(historyObject),
-});
+const createRootReducer = (historyObject: BrowserHistory) =>
+  combineReducers({
+    ...reducers,
+    router: createRouterReducer(historyObject),
+  });
 
 function* rootSaga() {
   // Fetch general information
@@ -77,7 +77,8 @@ const sagaMiddleware = createSagaMiddleware();
 
 const store = configureStore({
   reducer: createRootReducer(history),
-  middleware: (getDefaultMiddleware) => getDefaultMiddleware({ serializableCheck: false }).prepend(sagaMiddleware).prepend(routerMiddleware),
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({ serializableCheck: false }).prepend(sagaMiddleware).prepend(routerMiddleware),
   // devTools: process.env.NODE_ENV === 'development',
 });
 sagaMiddleware.run(rootSaga);

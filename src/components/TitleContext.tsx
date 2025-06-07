@@ -1,4 +1,4 @@
-import {createContext, Dispatch, PropsWithChildren, useContext, useEffect, useMemo, useState} from 'react';
+import { createContext, Dispatch, PropsWithChildren, useContext, useEffect, useMemo, useState } from 'react';
 
 const TITLE_UNDEFINED = 'ParelPracht';
 const TITLE_TEMPLATE = '{} - ParelPracht';
@@ -28,16 +28,15 @@ const TitleRenderer = ({ children }: PropsWithChildren) => {
     }
   }, [title]);
 
-  const titleContext = useMemo(() => ({
-    title,
-    setTitle,
-  }), [title]);
-
-  return (
-    <TitleContext.Provider value={titleContext}>
-      {children}
-    </TitleContext.Provider>
+  const titleContext = useMemo(
+    () => ({
+      title,
+      setTitle,
+    }),
+    [title],
   );
+
+  return <TitleContext.Provider value={titleContext}>{children}</TitleContext.Provider>;
 };
 
 export default TitleRenderer;

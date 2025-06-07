@@ -1,4 +1,4 @@
-import { Component, ErrorInfo } from "react";
+import { Component, ErrorInfo } from 'react';
 import { ReduxRouter, ReduxRouterSelector } from '@lagunovsky/redux-react-router';
 import './App.scss';
 import './Form.scss';
@@ -28,29 +28,25 @@ class App extends Component<object, State> {
   public componentDidCatch(error: Error, info: ErrorInfo) {
     // tslint:disable-next-line:no-console
     console.error(error, error.stack, info.componentStack);
-    store.dispatch(showAlert({
-      message: 'An unexpected error occured!',
-      title: 'Error',
-      type: 'error',
-    }));
+    store.dispatch(
+      showAlert({
+        message: 'An unexpected error occured!',
+        title: 'Error',
+        type: 'error',
+      }),
+    );
   }
 
   private getContent() {
     if (this.state.hasError) {
-      return (
-        <AlertContainer />
-      );
+      return <AlertContainer />;
     }
-    return (
-      <Routes />
-    );
+    return <Routes />;
   }
 
   public render() {
     if (this.state.hasError) {
-      return (
-        <AlertContainer />
-      );
+      return <AlertContainer />;
     }
     const routerSelector: ReduxRouterSelector<RootState> = (state) => state.router;
     return (

@@ -1,4 +1,4 @@
-import { Component } from "react";
+import { Component } from 'react';
 import { connect } from 'react-redux';
 import { Button, Input } from 'semantic-ui-react';
 import { Dispatch } from 'redux';
@@ -40,28 +40,23 @@ class CreateCommentRow extends Component<Props, State> {
     super(props);
 
     this.state = {
-
       editing: props.create ?? false,
       comment: '',
     };
   }
 
   componentDidUpdate(prevProps: Props) {
-    if (prevProps.resourceStatus === ResourceStatus.SAVING
-      && this.props.resourceStatus === ResourceStatus.FETCHED) {
-
+    if (prevProps.resourceStatus === ResourceStatus.SAVING && this.props.resourceStatus === ResourceStatus.FETCHED) {
       this.setState({ editing: false });
     }
   }
 
   edit = () => {
-
     this.setState({ editing: true });
   };
 
   cancel = () => {
     if (!this.props.create) {
-
       this.setState({ editing: false });
     }
     this.props.close();
@@ -75,17 +70,9 @@ class CreateCommentRow extends Component<Props, State> {
 
   addComment = () => {
     if (this.props.componentType === SingleEntities.ProductInstance) {
-      this.props.createSingleInstanceComment(
-        this.props.parentId!,
-        this.props.componentId,
-        this.toComponentParams(),
-      );
+      this.props.createSingleInstanceComment(this.props.parentId!, this.props.componentId, this.toComponentParams());
     } else {
-      this.props.createSingleComment(
-        this.props.componentType,
-        this.props.componentId,
-        this.toComponentParams(),
-      );
+      this.props.createSingleComment(this.props.componentType, this.props.componentId, this.toComponentParams());
     }
     this.props.showTransientAlert({
       title: 'Success',
@@ -101,9 +88,7 @@ class CreateCommentRow extends Component<Props, State> {
     const { t } = this.props;
     return (
       <>
-        <h4>
-          {this.props.create ? t('activities.button.postComment') : t('activities.button.details')}
-        </h4>
+        <h4>{this.props.create ? t('activities.button.postComment') : t('activities.button.details')}</h4>
 
         <Button
           floated="right"
@@ -112,12 +97,7 @@ class CreateCommentRow extends Component<Props, State> {
           onClick={() => this.addComment()}
           disabled={validator.isEmpty(comment)}
         />
-        <Button
-          floated="right"
-          icon="close"
-          negative
-          onClick={() => this.cancel()}
-        />
+        <Button floated="right" icon="close" negative onClick={() => this.cancel()} />
 
         <Input
           fluid
@@ -131,12 +111,10 @@ class CreateCommentRow extends Component<Props, State> {
 }
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
-  createSingleComment: (entity: SingleEntities, id: number, comment: object) => dispatch(
-    createSingleComment(entity, id, comment),
-  ),
-  createSingleInstanceComment: (id: number, instanceId: number, comment: object) => dispatch(
-    createInstanceCommentSingle(id, instanceId, comment),
-  ),
+  createSingleComment: (entity: SingleEntities, id: number, comment: object) =>
+    dispatch(createSingleComment(entity, id, comment)),
+  createSingleInstanceComment: (id: number, instanceId: number, comment: object) =>
+    dispatch(createInstanceCommentSingle(id, instanceId, comment)),
   showTransientAlert: (alert: TransientAlert) => dispatch(showTransientAlert(alert)),
 });
 

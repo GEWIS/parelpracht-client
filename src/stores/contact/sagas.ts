@@ -1,10 +1,9 @@
-import {
-  call, put, select, throttle,
-} from 'redux-saga/effects';
+import { call, put, select, throttle } from 'redux-saga/effects';
 import {
   ApiException,
   Client,
-  Contact, ContactListResponse,
+  Contact,
+  ContactListResponse,
   ContactParams,
   ContactSummary,
   ListOrFilter,
@@ -13,9 +12,7 @@ import {
   SortDirection,
 } from '../../clients/server.generated';
 import { takeEveryWithErrorHandling } from '../errorHandling';
-import {
-  clearSingle, errorSingle, notFoundSingle, setSingle,
-} from '../single/actionCreators';
+import { clearSingle, errorSingle, notFoundSingle, setSingle } from '../single/actionCreators';
 import {
   singleActionPattern,
   SingleActionType,
@@ -25,9 +22,7 @@ import {
   SingleSaveAction,
 } from '../single/actions';
 import { SingleEntities } from '../single/single';
-import {
-  addSummary, deleteSummary, setSummaries, updateSummary,
-} from '../summaries/actionCreators';
+import { addSummary, deleteSummary, setSummaries, updateSummary } from '../summaries/actionCreators';
 import { summariesActionPattern, SummariesActionType } from '../summaries/actions';
 import { SummaryCollections } from '../summaries/summaries';
 import { fetchTable, prevPageTable, setTable } from '../tables/actionCreators';
@@ -51,11 +46,7 @@ function* fetchContacts() {
   const client = new Client();
 
   const state: TableState<Contact> = yield select(getTable, Tables.Contacts);
-  const {
-    sortColumn, sortDirection,
-    take, skip,
-    search, filters,
-  } = state;
+  const { sortColumn, sortDirection, take, skip, search, filters } = state;
 
   let { list, count } = yield call(
     [client, client.getAllContacts],
@@ -107,9 +98,7 @@ function* fetchSingleContact(action: SingleFetchAction<SingleEntities.Contact>) 
   yield put(updateSummary(SummaryCollections.Contacts, toSummary(contact)));
 }
 
-function* errorFetchSingleContact(
-  error: ApiException,
-) {
+function* errorFetchSingleContact(error: ApiException) {
   if (error.status === 404) {
     yield put(notFoundSingle(SingleEntities.Contact));
   } else {
@@ -117,9 +106,7 @@ function* errorFetchSingleContact(
   }
 }
 
-function* saveSingleContact(
-  action: SingleSaveAction<SingleEntities.Contact, ContactParams>,
-) {
+function* saveSingleContact(action: SingleSaveAction<SingleEntities.Contact, ContactParams>) {
   const client = new Client();
   yield call([client, client.updateContact], action.id, action.data);
   const contact: Contact = yield call([client, client.getContact], action.id);
@@ -140,9 +127,7 @@ function* watchSaveSingleContact() {
   );
 }
 
-function* createSingleContact(
-  action: SingleCreateAction<SingleEntities.Contact, ContactParams>,
-) {
+function* createSingleContact(action: SingleCreateAction<SingleEntities.Contact, ContactParams>) {
   const client = new Client();
   const contact: Contact = yield call([client, client.createContact], action.data);
   yield put(setSingle(SingleEntities.Contact, contact));
@@ -177,24 +162,18 @@ function* errorDeleteSingleContact() {
 function* watchDeleteSingleContact() {
   yield takeEveryWithErrorHandling(
     singleActionPattern(SingleEntities.Contact, SingleActionType.Delete),
-    deleteSingleContact, { onErrorSaga: errorDeleteSingleContact },
+    deleteSingleContact,
+    { onErrorSaga: errorDeleteSingleContact },
   );
 }
 
 export default [
   function* watchFetchContacts() {
-    yield throttle(
-      500,
-      tableActionPattern(Tables.Contacts, TableActionType.Fetch),
-      fetchContacts,
-    );
+    yield throttle(500, tableActionPattern(Tables.Contacts, TableActionType.Fetch), fetchContacts);
   },
   function* watchFetchContactSummaries() {
     yield takeEveryWithErrorHandling(
-      summariesActionPattern(
-        SummaryCollections.Contacts,
-        SummariesActionType.Fetch,
-      ),
+      summariesActionPattern(SummaryCollections.Contacts, SummariesActionType.Fetch),
       fetchContactSummaries,
     );
   },

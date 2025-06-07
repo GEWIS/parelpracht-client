@@ -1,5 +1,4 @@
 .ui.table.expired-invoices tbody tr {
-
   @media screen and (max-width: 1200px) {
     td:nth-child(1) {
       width: 43.75%;
@@ -20,7 +19,7 @@
     }
 
     td:nth-child(5) {
-      width: 62.5%
+      width: 62.5%;
     }
   }
 
@@ -42,7 +41,7 @@
     }
 
     td:nth-child(5) {
-      width: 62.5%
+      width: 62.5%;
     }
   }
 }

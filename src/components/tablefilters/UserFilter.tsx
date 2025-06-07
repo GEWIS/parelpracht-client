@@ -9,7 +9,7 @@ import { formatContactName } from '../../helpers/contact';
 
 interface Props {
   table: Tables;
-  options: UserSummary[]
+  options: UserSummary[];
 }
 
 function ProductFilter(props: Props) {
@@ -28,9 +28,7 @@ function ProductFilter(props: Props) {
 }
 
 const mapStateToProps = (state: RootState) => ({
-  options: getSummaryCollection<UserSummary>(
-    state, SummaryCollections.Users,
-  ).options,
+  options: getSummaryCollection<UserSummary>(state, SummaryCollections.Users).options,
 });
 
 export default connect(mapStateToProps)(ProductFilter);

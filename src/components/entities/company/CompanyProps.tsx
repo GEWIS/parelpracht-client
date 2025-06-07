@@ -1,24 +1,20 @@
-import {ChangeEvent, Component} from 'react';
-import {connect} from 'react-redux';
-import {Dispatch} from 'redux';
-import {
-  Checkbox, Form, Input,
-} from 'semantic-ui-react';
+import { ChangeEvent, Component } from 'react';
+import { connect } from 'react-redux';
+import { Dispatch } from 'redux';
+import { Checkbox, Form, Input } from 'semantic-ui-react';
 import validator from 'validator';
-import {withTranslation, WithTranslation} from 'react-i18next';
-import {
-  Company, CompanyParams, CompanyStatus, Roles,
-} from '../../../clients/server.generated';
-import {createSingle, deleteSingle, saveSingle} from '../../../stores/single/actionCreators';
+import { withTranslation, WithTranslation } from 'react-i18next';
+import { Company, CompanyParams, CompanyStatus, Roles } from '../../../clients/server.generated';
+import { createSingle, deleteSingle, saveSingle } from '../../../stores/single/actionCreators';
 import ResourceStatus from '../../../stores/resourceStatus';
-import {RootState} from '../../../stores/store';
+import { RootState } from '../../../stores/store';
 import PropsButtons from '../../PropsButtons';
-import {getSingle} from '../../../stores/single/selectors';
-import {SingleEntities} from '../../../stores/single/single';
+import { getSingle } from '../../../stores/single/selectors';
+import { SingleEntities } from '../../../stores/single/single';
 import AuthorizationComponent from '../../AuthorizationComponent';
 import TextArea from '../../TextArea';
-import {authedUserHasRole} from '../../../stores/auth/selectors';
-import {withRouter, WithRouter} from '../../../WithRouter';
+import { authedUserHasRole } from '../../../stores/auth/selectors';
+import { withRouter, WithRouter } from '../../../WithRouter';
 import CountrySelector from './CountrySelector';
 
 interface Props extends WithTranslation, WithRouter {
@@ -69,14 +65,13 @@ class CompanyProps extends Component<Props, State> {
   }
 
   componentDidUpdate(prevProps: Props) {
-    if (prevProps.status === ResourceStatus.SAVING
-      && this.props.status === ResourceStatus.FETCHED) {
-      this.setState({editing: false});
+    if (prevProps.status === ResourceStatus.SAVING && this.props.status === ResourceStatus.FETCHED) {
+      this.setState({ editing: false });
     }
   }
 
   extractState = (props: Props) => {
-    const {company} = props;
+    const { company } = props;
     return {
       name: company.name,
       comments: company.comments,
@@ -112,12 +107,12 @@ class CompanyProps extends Component<Props, State> {
   };
 
   edit = () => {
-    this.setState({editing: true, ...this.extractState(this.props)});
+    this.setState({ editing: true, ...this.extractState(this.props) });
   };
 
   cancel = () => {
     if (!this.props.create) {
-      this.setState({editing: false, ...this.extractState(this.props)});
+      this.setState({ editing: false, ...this.extractState(this.props) });
     } else if (this.props.onCancel) {
       this.props.onCancel();
     }
@@ -133,7 +128,7 @@ class CompanyProps extends Component<Props, State> {
 
   remove = () => {
     if (!this.props.create && this.props.deleteCompany) {
-      const {navigate} = this.props.router;
+      const { navigate } = this.props.router;
       navigate('/company');
       this.props.deleteCompany(this.props.company.id);
     }
@@ -143,20 +138,21 @@ class CompanyProps extends Component<Props, State> {
     if (this.props.create) {
       return undefined;
     }
-    return !(this.props.company.contacts.length > 0
-      || this.props.company.invoices.length > 0
-      || this.props.company.contacts.length > 0);
+    return !(
+      this.props.company.contacts.length > 0 ||
+      this.props.company.invoices.length > 0 ||
+      this.props.company.contacts.length > 0
+    );
   };
 
   propsHaveErrors = (): boolean => {
-    const {
-      name, phoneNumber, addressStreet, addressCity, addressPostalCode,
-    } = this.state;
-    return (validator.isEmpty(name)
-      || (!validator.isEmpty(phoneNumber!) && !validator.isMobilePhone(phoneNumber!))
-      || validator.isEmpty(addressStreet)
-      || validator.isEmpty(addressCity)
-      || !validator.isPostalCode(addressPostalCode, 'any')
+    const { name, phoneNumber, addressStreet, addressCity, addressPostalCode } = this.state;
+    return (
+      validator.isEmpty(name) ||
+      (!validator.isEmpty(phoneNumber!) && !validator.isMobilePhone(phoneNumber!)) ||
+      validator.isEmpty(addressStreet) ||
+      validator.isEmpty(addressCity) ||
+      !validator.isPostalCode(addressPostalCode, 'any')
     );
   };
 
@@ -176,7 +172,7 @@ class CompanyProps extends Component<Props, State> {
       invoiceAddressCity,
       invoiceAddressCountry,
     } = this.state;
-    const {t} = this.props;
+    const { t } = this.props;
 
     return (
       <>
@@ -198,7 +194,7 @@ class CompanyProps extends Component<Props, State> {
           </AuthorizationComponent>
         </h2>
 
-        <Form style={{marginTop: '2em'}}>
+        <Form style={{ marginTop: '2em' }}>
           <Form.Group widths="equal">
             <Form.Field
               required
@@ -209,12 +205,12 @@ class CompanyProps extends Component<Props, State> {
               control={Input}
               label={t('entities.company.props.name')}
               value={name}
-              onChange={(e: ChangeEvent<HTMLInputElement>) => this.setState({
-                name: e.target.value,
-              })}
-              error={
-                validator.isEmpty(name)
+              onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                this.setState({
+                  name: e.target.value,
+                })
               }
+              error={validator.isEmpty(name)}
             />
             <Form.Field
               disabled={!editing}
@@ -224,148 +220,121 @@ class CompanyProps extends Component<Props, State> {
               label={t('entities.company.props.number')}
               placeholder={t('entities.company.props.number')}
               value={phoneNumber}
-              onChange={(e: ChangeEvent<HTMLInputElement>) => this.setState({
-                phoneNumber: e.target.value,
-              })}
-              error={
-                !validator.isEmpty(phoneNumber!) && !validator.isMobilePhone(phoneNumber!)
+              onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                this.setState({
+                  phoneNumber: e.target.value,
+                })
               }
+              error={!validator.isEmpty(phoneNumber!) && !validator.isMobilePhone(phoneNumber!)}
             />
           </Form.Group>
           <Form.Group widths="equal">
             <Form.Field>
-              <label htmlFor="form-check-status">
-                {t('entities.product.props.status.header')}
-              </label>
+              <label htmlFor="form-check-status">{t('entities.product.props.status.header')}</label>
               <Checkbox
                 disabled={!editing}
                 toggle
                 id="form-check-status"
-                label={status === CompanyStatus.ACTIVE ? t('entities.product.props.status.active') : t('entities.product.props.status.inactive')}
+                label={
+                  status === CompanyStatus.ACTIVE
+                    ? t('entities.product.props.status.active')
+                    : t('entities.product.props.status.inactive')
+                }
                 checked={status === CompanyStatus.ACTIVE}
-                onChange={(_, data) => this.setState({
-                  status:
-                    data.checked ? CompanyStatus.ACTIVE : CompanyStatus.INACTIVE,
-                })}
+                onChange={(_, data) =>
+                  this.setState({
+                    status: data.checked ? CompanyStatus.ACTIVE : CompanyStatus.INACTIVE,
+                  })
+                }
               />
             </Form.Field>
           </Form.Group>
           <Form.Group widths="equal">
             <Form.Field disabled={!editing}>
-              <label htmlFor="form-input-description">
-                {t('entities.company.props.description')}
-              </label>
+              <label htmlFor="form-input-description">{t('entities.company.props.description')}</label>
               <TextArea
                 id="form-input-description"
                 value={comments}
-                onChange={(e) => this.setState({comments: e.target.value})}
+                onChange={(e) => this.setState({ comments: e.target.value })}
                 placeholder={t('entities.company.props.description')}
               />
             </Form.Field>
           </Form.Group>
-          <h2>
-            {t('entities.company.props.addressInformation')}
-          </h2>
+          <h2>{t('entities.company.props.addressInformation')}</h2>
           <Form.Group widths="equal">
-            <Form.Field
-              disabled={!editing}
-              required
-              error={
-                validator.isEmpty(addressStreet)
-              }
-            >
-              <label htmlFor="form-input-address-street">
-                {t('entities.company.props.street')}
-              </label>
+            <Form.Field disabled={!editing} required error={validator.isEmpty(addressStreet)}>
+              <label htmlFor="form-input-address-street">{t('entities.company.props.street')}</label>
               <Input
                 id="form-input-address-street"
                 value={addressStreet}
                 fluid
-                onChange={(e) => this.setState({addressStreet: e.target.value})}
+                onChange={(e) => this.setState({ addressStreet: e.target.value })}
                 placeholder={t('entities.company.props.street')}
               />
             </Form.Field>
             <Form.Field disabled={!editing} required error={validator.isEmpty(addressCity)}>
-              <label htmlFor="form-input-address-city">
-                {t('entities.company.props.city')}
-              </label>
+              <label htmlFor="form-input-address-city">{t('entities.company.props.city')}</label>
               <Input
                 id="form-input-address-city"
                 value={addressCity}
                 fluid
-                onChange={(e) => this.setState({addressCity: e.target.value})}
+                onChange={(e) => this.setState({ addressCity: e.target.value })}
                 placeholder={t('entities.company.props.city')}
               />
             </Form.Field>
           </Form.Group>
           <Form.Group widths="equal">
-            <Form.Field
-              disabled={!editing}
-              required
-              error={
-                !validator.isPostalCode(addressPostalCode, 'any')
-              }
-            >
-              <label htmlFor="form-input-address-postal-code">
-                {t('entities.company.props.postalCode')}
-              </label>
+            <Form.Field disabled={!editing} required error={!validator.isPostalCode(addressPostalCode, 'any')}>
+              <label htmlFor="form-input-address-postal-code">{t('entities.company.props.postalCode')}</label>
               <Input
                 id="form-input-address-postal-code"
                 value={addressPostalCode}
                 fluid
-                onChange={(e) => this.setState({addressPostalCode: e.target.value})}
+                onChange={(e) => this.setState({ addressPostalCode: e.target.value })}
                 placeholder={t('entities.company.props.postalCode')}
               />
             </Form.Field>
             <CountrySelector
               editing={editing}
               country={addressCountry}
-              updateValue={(_, data) => this.setState({
-                addressCountry: data.value?.toString() ?? '',
-              })}
+              updateValue={(_, data) =>
+                this.setState({
+                  addressCountry: data.value?.toString() ?? '',
+                })
+              }
               id="form-input-address-country"
             />
           </Form.Group>
-          <h2>
-            {t('entities.company.props.invoiceAddress')}
-          </h2>
+          <h2>{t('entities.company.props.invoiceAddress')}</h2>
           <Form.Group widths="equal">
             <Form.Field disabled={!editing}>
-              <label htmlFor="form-input--invoice-address-street">
-                {t('entities.company.props.street')}
-              </label>
+              <label htmlFor="form-input--invoice-address-street">{t('entities.company.props.street')}</label>
               <Input
                 id="form-input-invoice-address-street"
                 value={invoiceAddressStreet}
-                onChange={(e) => this.setState({invoiceAddressStreet: e.target.value})}
+                onChange={(e) => this.setState({ invoiceAddressStreet: e.target.value })}
                 placeholder={t('entities.company.props.street')}
                 fluid
               />
             </Form.Field>
             <Form.Field disabled={!editing}>
-              <label htmlFor="form-input-invoice-address-city">
-                {t('entities.company.props.city')}
-              </label>
+              <label htmlFor="form-input-invoice-address-city">{t('entities.company.props.city')}</label>
               <Input
                 id="form-input-invoice-address-city"
                 value={invoiceAddressCity}
-                onChange={(e) => this.setState({invoiceAddressCity: e.target.value})}
+                onChange={(e) => this.setState({ invoiceAddressCity: e.target.value })}
                 placeholder={t('entities.company.props.city')}
                 fluid
               />
             </Form.Field>
           </Form.Group>
           <Form.Group widths="equal">
-            <Form.Field
-              disabled={!editing}
-            >
-              <label htmlFor="form-input-invoice-address-postal-code">
-                {t('entities.company.props.postalCode')}
-              </label>
+            <Form.Field disabled={!editing}>
+              <label htmlFor="form-input-invoice-address-postal-code">{t('entities.company.props.postalCode')}</label>
               <Input
                 id="form-input-invoice-address-postal-code"
                 value={invoiceAddressPostalCode}
-                onChange={(e) => this.setState({invoiceAddressPostalCode: e.target.value})}
+                onChange={(e) => this.setState({ invoiceAddressPostalCode: e.target.value })}
                 placeholder={t('entities.company.props.PostalCode')}
                 fluid
               />
@@ -373,9 +342,11 @@ class CompanyProps extends Component<Props, State> {
             <CountrySelector
               editing={editing}
               country={invoiceAddressCountry}
-              updateValue={(_, data) => this.setState({
-                invoiceAddressCountry: data.value?.toString() ?? '',
-              })}
+              updateValue={(_, data) =>
+                this.setState({
+                  invoiceAddressCountry: data.value?.toString() ?? '',
+                })
+              }
               id="form-input-invoice-address-country"
             />
           </Form.Group>
@@ -393,16 +364,9 @@ const mapStateToProps = (state: RootState) => {
 };
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
-  saveCompany: (id: number, company: CompanyParams) => dispatch(
-    saveSingle(SingleEntities.Company, id, company),
-  ),
-  createCompany: (company: CompanyParams) => dispatch(
-    createSingle(SingleEntities.Company, company),
-  ),
-  deleteCompany: (id: number) => dispatch(
-    deleteSingle(SingleEntities.Company, id),
-  ),
+  saveCompany: (id: number, company: CompanyParams) => dispatch(saveSingle(SingleEntities.Company, id, company)),
+  createCompany: (company: CompanyParams) => dispatch(createSingle(SingleEntities.Company, company)),
+  deleteCompany: (id: number) => dispatch(deleteSingle(SingleEntities.Company, id)),
 });
 
-export default withTranslation()(withRouter(connect(mapStateToProps, mapDispatchToProps)(CompanyProps)),
-);
+export default withTranslation()(withRouter(connect(mapStateToProps, mapDispatchToProps)(CompanyProps)));

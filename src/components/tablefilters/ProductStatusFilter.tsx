@@ -9,7 +9,8 @@ function ProductStatusFilter() {
       table={Tables.Products}
       options={[
         { key: 0, value: 'ACTIVE', text: 'Active' },
-        { key: 1, value: 'INACTIVE', text: 'Inactive' }]}
+        { key: 1, value: 'INACTIVE', text: 'Inactive' },
+      ]}
     />
   );
 }

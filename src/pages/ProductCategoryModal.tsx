@@ -1,10 +1,5 @@
-import { Component } from "react";
-import {
-  Dimmer,
-  Header,
-  Loader,
-  Modal, Segment,
-} from 'semantic-ui-react';
+import { Component } from 'react';
+import { Dimmer, Header, Loader, Modal, Segment } from 'semantic-ui-react';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import { withTranslation, WithTranslation } from 'react-i18next';
@@ -46,9 +41,7 @@ class ProductCategoryModal extends Component<Props> {
   }
 
   componentDidUpdate(prevProps: Props) {
-    const {
-      category, status, t, create,
-    } = this.props;
+    const { category, status, t, create } = this.props;
 
     if (create) {
       document.title = t('entities.category.newCategory');
@@ -58,9 +51,7 @@ class ProductCategoryModal extends Component<Props> {
       document.title = category.name;
     }
 
-    if (status === ResourceStatus.FETCHED
-      && prevProps.status === ResourceStatus.SAVING
-    ) {
+    if (status === ResourceStatus.FETCHED && prevProps.status === ResourceStatus.SAVING) {
       this.closeWithPopupMessage();
       this.props.showTransientAlert({
         title: 'Success',
@@ -70,9 +61,7 @@ class ProductCategoryModal extends Component<Props> {
       });
     }
 
-    if (status === ResourceStatus.EMPTY
-      && prevProps.status === ResourceStatus.DELETING
-    ) {
+    if (status === ResourceStatus.EMPTY && prevProps.status === ResourceStatus.DELETING) {
       this.closeWithPopupMessage();
       showTransientAlert({
         title: 'Success',
@@ -107,14 +96,7 @@ class ProductCategoryModal extends Component<Props> {
 
     if (category === undefined) {
       return (
-        <Modal
-          onClose={this.close}
-          closeIcon
-          open
-          dimmer="blurring"
-          size="tiny"
-          closeOnDimmerClick
-        >
+        <Modal onClose={this.close} closeIcon open dimmer="blurring" size="tiny" closeOnDimmerClick>
           <Modal.Content>
             <AlertContainer />
             <Dimmer active inverted>
@@ -126,41 +108,26 @@ class ProductCategoryModal extends Component<Props> {
     }
 
     return (
-      <Modal
-        onClose={this.close}
-        open
-        closeIcon
-        dimmer="blurring"
-        size="tiny"
-      >
+      <Modal onClose={this.close} open closeIcon dimmer="blurring" size="tiny">
         <Modal.Content attached="bottom">
           <AlertContainer />
-          <ProductCategoryProps
-            category={category}
-            create={this.props.create}
-            onCancel={() => { }}
-          />
-          {
-            category.products === undefined || category.products.length === 0 ? (
-              <p>{t('entities.category.noProduct')}</p>
-            ) : (
-              <Segment>
-                <Header>
-                  {t('entity.products')}
-                  :
-                </Header>
-                <ul>
-                  {category.products.map((product) => {
-                    return (
-                      <li key={product.id}>
-                        <NavLink to={`/product/${product.id}`}>{product.nameEnglish}</NavLink>
-                      </li>
-                    );
-                  })}
-                </ul>
-              </Segment>
-            )
-          }
+          <ProductCategoryProps category={category} create={this.props.create} onCancel={() => {}} />
+          {category.products === undefined || category.products.length === 0 ? (
+            <p>{t('entities.category.noProduct')}</p>
+          ) : (
+            <Segment>
+              <Header>{t('entity.products')}:</Header>
+              <ul>
+                {category.products.map((product) => {
+                  return (
+                    <li key={product.id}>
+                      <NavLink to={`/product/${product.id}`}>{product.nameEnglish}</NavLink>
+                    </li>
+                  );
+                })}
+              </ul>
+            </Segment>
+          )}
         </Modal.Content>
       </Modal>
     );
@@ -182,6 +149,4 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
 
 ProductCategoryModal.contextType = TitleContext;
 
-export default withTranslation()(
-  withRouter(connect(mapStateToProps, mapDispatchToProps)(ProductCategoryModal)),
-);
+export default withTranslation()(withRouter(connect(mapStateToProps, mapDispatchToProps)(ProductCategoryModal)));

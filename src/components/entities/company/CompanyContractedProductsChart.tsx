@@ -25,7 +25,8 @@ class CompanyContractedProductsChart extends Component<Props, State> {
   componentDidMount() {
     const { company } = this.props;
     const client = new Client();
-    client.getCompanyStatistics(company.id)
+    client
+      .getCompanyStatistics(company.id)
       .then((data) => {
         this.setState({
           data,
@@ -45,10 +46,7 @@ class CompanyContractedProductsChart extends Component<Props, State> {
 
     return (
       <TabPane loading={loading}>
-        <CategoryLineChart
-          data={data.categories}
-          labels={data.labels || []}
-        />
+        <CategoryLineChart data={data.categories} labels={data.labels || []} />
         <p style={{ textAlign: 'center', fontStyle: 'italic', marginTop: '0.5em' }}>
           {t('entities.product.warningFinancialYear')}
         </p>

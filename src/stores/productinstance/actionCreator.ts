@@ -1,15 +1,16 @@
 import { singleActionPattern, SingleActionType } from '../single/actions';
 import { SingleEntities } from '../single/single';
 import {
-  SingleCreateInstanceAction, SingleCreateInstanceCommentAction,
+  SingleCreateInstanceAction,
+  SingleCreateInstanceCommentAction,
   SingleCreateInstanceStatusAction,
-  SingleDeleteInstanceAction, SingleDeleteInstanceActivityAction,
-  SingleSaveInstanceAction, SingleSaveInstanceActivityAction,
+  SingleDeleteInstanceAction,
+  SingleDeleteInstanceActivityAction,
+  SingleSaveInstanceAction,
+  SingleSaveInstanceActivityAction,
 } from './actions';
 
-export function createInstanceSingle<RCreate>(
-  id: number, data: RCreate,
-): SingleCreateInstanceAction<RCreate> {
+export function createInstanceSingle<RCreate>(id: number, data: RCreate): SingleCreateInstanceAction<RCreate> {
   return {
     type: singleActionPattern(SingleEntities.ProductInstance, SingleActionType.Create),
     id,
@@ -18,7 +19,9 @@ export function createInstanceSingle<RCreate>(
 }
 
 export function saveInstanceSingle<RSave>(
-  id: number, instanceId: number, data: RSave,
+  id: number,
+  instanceId: number,
+  data: RSave,
 ): SingleSaveInstanceAction<RSave> {
   return {
     type: singleActionPattern(SingleEntities.ProductInstance, SingleActionType.Save),
@@ -28,9 +31,7 @@ export function saveInstanceSingle<RSave>(
   };
 }
 
-export function deleteInstanceSingle(
-  id: number, instanceId: number,
-): SingleDeleteInstanceAction {
+export function deleteInstanceSingle(id: number, instanceId: number): SingleDeleteInstanceAction {
   return {
     type: singleActionPattern(SingleEntities.ProductInstance, SingleActionType.Delete),
     id,
@@ -39,7 +40,9 @@ export function deleteInstanceSingle(
 }
 
 export function createInstanceStatusSingle<RCreate>(
-  id: number, instanceId: number, data: RCreate,
+  id: number,
+  instanceId: number,
+  data: RCreate,
 ): SingleCreateInstanceStatusAction<RCreate> {
   return {
     type: singleActionPattern(SingleEntities.ProductInstance, SingleActionType.CreateStatus),
@@ -50,7 +53,9 @@ export function createInstanceStatusSingle<RCreate>(
 }
 
 export function createInstanceCommentSingle<RCreate>(
-  id: number, instanceId: number, data: RCreate,
+  id: number,
+  instanceId: number,
+  data: RCreate,
 ): SingleCreateInstanceCommentAction<RCreate> {
   return {
     type: singleActionPattern(SingleEntities.ProductInstance, SingleActionType.CreateComment),
@@ -61,7 +66,10 @@ export function createInstanceCommentSingle<RCreate>(
 }
 
 export function saveInstanceActivitySingle<RSave>(
-  id: number, instanceId: number, activityId: number, data: RSave,
+  id: number,
+  instanceId: number,
+  activityId: number,
+  data: RSave,
 ): SingleSaveInstanceActivityAction<RSave> {
   return {
     type: singleActionPattern(SingleEntities.ProductInstance, SingleActionType.SaveActivity),
@@ -73,7 +81,9 @@ export function saveInstanceActivitySingle<RSave>(
 }
 
 export function deleteInstanceActivitySingle(
-  id: number, instanceId: number, activityId: number,
+  id: number,
+  instanceId: number,
+  activityId: number,
 ): SingleDeleteInstanceActivityAction {
   return {
     type: singleActionPattern(SingleEntities.ProductInstance, SingleActionType.DeleteActivity),

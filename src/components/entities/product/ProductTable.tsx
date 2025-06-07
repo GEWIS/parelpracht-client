@@ -1,16 +1,19 @@
 import { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
-import {
-  Dimmer, Loader, Segment, Table,
-} from 'semantic-ui-react';
+import { Dimmer, Loader, Segment, Table } from 'semantic-ui-react';
 import { useTranslation } from 'react-i18next';
 import { Product } from '../../../clients/server.generated';
 import TablePagination from '../../TablePagination';
 import { RootState } from '../../../stores/store';
 import {
-  changeSortTable, fetchTable, nextPageTable, prevPageTable,
-  setFilterTable, setSortTable, setTakeTable,
+  changeSortTable,
+  fetchTable,
+  nextPageTable,
+  prevPageTable,
+  setFilterTable,
+  setSortTable,
+  setTakeTable,
 } from '../../../stores/tables/actionCreators';
 import { countFetched, countTotal, getTable } from '../../../stores/tables/selectors';
 import { Tables } from '../../../stores/tables/tables';
@@ -33,15 +36,27 @@ interface Props {
   changeSort: (column: string) => void;
   setSort: (column: string, direction: 'ASC' | 'DESC') => void;
   setTake: (take: number) => void;
-  setTableFilter: (filter: { column: string, values: any[] }) => void;
+  setTableFilter: (filter: { column: string; values: any[] }) => void;
   prevPage: () => void;
   nextPage: () => void;
 }
 
 function ProductsTable({
-  products, fetchProducts, column, direction, changeSort, setSort, setTableFilter,
-  total, fetched, skip, take, status,
-  prevPage, nextPage, setTake,
+  products,
+  fetchProducts,
+  column,
+  direction,
+  changeSort,
+  setSort,
+  setTableFilter,
+  total,
+  fetched,
+  skip,
+  take,
+  status,
+  prevPage,
+  nextPage,
+  setTake,
 }: Props) {
   useEffect(() => {
     setTableFilter({ column: 'status', values: ['ACTIVE'] });
@@ -67,10 +82,7 @@ function ProductsTable({
             >
               {t('entities.product.props.price')}
             </Table.HeaderCell>
-            <Table.HeaderCell
-              sorted={column === 'status' ? direction : undefined}
-              onClick={() => changeSort('status')}
-            >
+            <Table.HeaderCell sorted={column === 'status' ? direction : undefined} onClick={() => changeSort('status')}>
               {t('entities.generalProps.status')}
               <ProductStatusFilter />
             </Table.HeaderCell>
@@ -84,7 +96,9 @@ function ProductsTable({
           </Table.Row>
         </Table.Header>
         <Table.Body>
-          {products.map((x) => <ProductRow product={x} key={x.id} />)}
+          {products.map((x) => (
+            <ProductRow product={x} key={x.id} />
+          ))}
         </Table.Body>
       </Table>
       <TablePagination
@@ -125,14 +139,13 @@ const mapStateToProps = (state: RootState) => {
     take: productTable.take,
     products: productTable.data,
     column: productTable.sortColumn,
-    direction: productTable.sortDirection === 'ASC'
-      ? 'ascending' : 'descending' as 'ascending' | 'descending',
+    direction: productTable.sortDirection === 'ASC' ? 'ascending' : ('descending' as 'ascending' | 'descending'),
   };
 };
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
   fetchProducts: () => dispatch(fetchTable(Tables.Products)),
-  setTableFilter: (filter: { column: string, values: any[] }) => {
+  setTableFilter: (filter: { column: string; values: any[] }) => {
     dispatch(setFilterTable(Tables.Products, filter));
   },
   changeSort: (column: string) => {

@@ -1,7 +1,10 @@
 import { LoginMethods } from '../../clients/server.generated';
 import {
-  FetchGeneralPrivateInfo, FetchGeneralPublicInfo, GeneralActionType,
-  PrivateGeneralSetInfo, PublicGeneralSetInfo,
+  FetchGeneralPrivateInfo,
+  FetchGeneralPublicInfo,
+  GeneralActionType,
+  PrivateGeneralSetInfo,
+  PublicGeneralSetInfo,
 } from './actions';
 
 export function generalPrivateFetchInfo(): FetchGeneralPrivateInfo {

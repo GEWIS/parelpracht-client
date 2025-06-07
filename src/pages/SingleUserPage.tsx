@@ -1,8 +1,6 @@
-import { Component } from "react";
+import { Component } from 'react';
 import { NavLink } from 'react-router-dom';
-import {
-  Breadcrumb, Container, Grid, Header, Loader, Segment,
-} from 'semantic-ui-react';
+import { Breadcrumb, Container, Grid, Header, Loader, Segment } from 'semantic-ui-react';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import { withTranslation, WithTranslation } from 'react-i18next';
@@ -53,16 +51,10 @@ class SingleUserPage extends Component<Props> {
     if (user === undefined) {
       document.title = t('entity.user');
     } else {
-      document.title = formatContactName(
-        user.firstName,
-        user.lastNamePreposition,
-        user.lastName,
-      );
+      document.title = formatContactName(user.firstName, user.lastNamePreposition, user.lastName);
     }
 
-    if (status === ResourceStatus.EMPTY
-      && prevProps.status === ResourceStatus.DELETING
-    ) {
+    if (status === ResourceStatus.EMPTY && prevProps.status === ResourceStatus.DELETING) {
       navigate('/users');
       this.props.showTransientAlert({
         title: 'Success',
@@ -74,9 +66,7 @@ class SingleUserPage extends Component<Props> {
   }
 
   public render() {
-    const {
-      user, isProfilePage, status, t,
-    } = this.props;
+    const { user, isProfilePage, status, t } = this.props;
 
     if (status === ResourceStatus.NOTFOUND) {
       return <NotFound />;
@@ -100,9 +90,7 @@ class SingleUserPage extends Component<Props> {
                 { key: 'Users', content: <NavLink to="/users">Users</NavLink> },
                 {
                   key: 'User',
-                  content: user
-                    ? formatContactName(user.firstName, user.lastNamePreposition, user.lastName)
-                    : '',
+                  content: user ? formatContactName(user.firstName, user.lastNamePreposition, user.lastName) : '',
                   active: true,
                 },
               ]}
@@ -115,33 +103,23 @@ class SingleUserPage extends Component<Props> {
             <Grid.Column>
               {user ? (
                 <Segment>
-                  <UserProps
-                    user={user}
-                    canEdit={[Roles.ADMIN]}
-                  />
+                  <UserProps user={user} canEdit={[Roles.ADMIN]} />
                 </Segment>
-              ) : <Segment placeholder />}
+              ) : (
+                <Segment placeholder />
+              )}
             </Grid.Column>
             <Grid.Column>
               <Segment>
-                <h3>
-                  {t('pages.user.responsibilities.header')}
-                </h3>
-                <p>
-                  {t('pages.user.responsibilities.description')}
-                </p>
+                <h3>{t('pages.user.responsibilities.header')}</h3>
+                <p>{t('pages.user.responsibilities.description')}</p>
                 <UserMoveAssignmentsButton userId={user.id} />
               </Segment>
               {isProfilePage ? (
                 <Segment>
-                  <Header as="h3">
-                    {t('pages.user.apiKey.header')}
-                  </Header>
+                  <Header as="h3">{t('pages.user.apiKey.header')}</Header>
                   <p>
-                    {t('pages.user.apiKey.description1')}
-                    {' '}
-                    <code>Authentication</code>
-                    {' '}
+                    {t('pages.user.apiKey.description1')} <code>Authentication</code>{' '}
                     {t('pages.user.apiKey.description2')}
                     <br />
                     <b>{t('pages.user.apiKey.warning')}</b>
@@ -151,9 +129,7 @@ class SingleUserPage extends Component<Props> {
               ) : null}
               {isProfilePage ? (
                 <Segment>
-                  <Header as="h3">
-                    {t('pages.user.background.header')}
-                  </Header>
+                  <Header as="h3">{t('pages.user.background.header')}</Header>
                   <UserBackgroundModal
                     entity={SingleEntities.User}
                     entityId={user.id}
@@ -166,9 +142,7 @@ class SingleUserPage extends Component<Props> {
               ) : (
                 <AuthorizationComponent roles={[Roles.ADMIN]} notFound={false}>
                   <Segment>
-                    <Header as="h3">
-                      {t('pages.user.background.header')}
-                    </Header>
+                    <Header as="h3">{t('pages.user.background.header')}</Header>
                     <UserBackgroundModal
                       entity={SingleEntities.User}
                       entityId={user.id}
@@ -207,5 +181,4 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
 
 SingleUserPage.contextType = TitleContext;
 
-export default withTranslation()(withRouter(connect(mapStateToProps,
-  mapDispatchToProps)(SingleUserPage)));
+export default withTranslation()(withRouter(connect(mapStateToProps, mapDispatchToProps)(SingleUserPage)));

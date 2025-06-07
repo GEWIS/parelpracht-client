@@ -1,6 +1,4 @@
-import {
-  Dimmer, Loader, Modal, Segment,
-} from 'semantic-ui-react';
+import { Dimmer, Loader, Modal, Segment } from 'semantic-ui-react';
 import {
   ContractStatus,
   ContractStatusParams,
@@ -25,7 +23,15 @@ interface Props {
   parentId?: number;
 }
 
-function DocumentStatusModal({ resourceStatus, documentId, documentType, documentStatus, open, close, parentId}: Props) {
+function DocumentStatusModal({
+  resourceStatus,
+  documentId,
+  documentType,
+  documentStatus,
+  open,
+  close,
+  parentId,
+}: Props) {
   let documentStatusParams: InvoiceStatusParams | ContractStatusParams | undefined;
   if (documentType === SingleEntities.Contract) {
     documentStatusParams = {
@@ -41,13 +47,7 @@ function DocumentStatusModal({ resourceStatus, documentId, documentType, documen
 
   if (documentStatusParams === undefined) {
     return (
-      <Modal
-        onClose={() => close()}
-        closeIcon
-        open={open}
-        dimmer="blurring"
-        size="tiny"
-      >
+      <Modal onClose={() => close()} closeIcon open={open} dimmer="blurring" size="tiny">
         <Segment placeholder attached="bottom">
           <AlertContainer />
           <Dimmer active inverted>
@@ -59,13 +59,7 @@ function DocumentStatusModal({ resourceStatus, documentId, documentType, documen
   }
 
   return (
-    <Modal
-      onClose={() => close()}
-      open={open}
-      closeIcon
-      dimmer="blurring"
-      size="tiny"
-    >
+    <Modal onClose={() => close()} open={open} closeIcon dimmer="blurring" size="tiny">
       <Segment attached="bottom">
         <AlertContainer />
         <DocumentStatusProps

@@ -16,29 +16,33 @@ import { formatLastUpdate } from './timestamp';
  */
 export function formatDocumentType(entity: SingleEntities) {
   switch (entity) {
-    case SingleEntities.Contract: return i18n.t('entity.contract');
-    case SingleEntities.Invoice: return i18n.t('entity.invoice');
-    case SingleEntities.ProductInstance: return i18n.t('entity.productinstance');
-    case SingleEntities.Company: return i18n.t('entity.company');
-    case SingleEntities.Product: return i18n.t('entity.product');
-    default: throw new Error(`Unknown entity ${entity} to format`);
+    case SingleEntities.Contract:
+      return i18n.t('entity.contract');
+    case SingleEntities.Invoice:
+      return i18n.t('entity.invoice');
+    case SingleEntities.ProductInstance:
+      return i18n.t('entity.productinstance');
+    case SingleEntities.Company:
+      return i18n.t('entity.company');
+    case SingleEntities.Product:
+      return i18n.t('entity.product');
+    default:
+      throw new Error(`Unknown entity ${entity} to format`);
   }
 }
 
 /**
  * Format the status of the document.
  */
-export function formatDocumentStatusTitle(
-  lastActivity: GeneralActivity,
-  documentType: SingleEntities,
-): string {
+export function formatDocumentStatusTitle(lastActivity: GeneralActivity, documentType: SingleEntities): string {
   const entity = formatDocumentType(documentType);
   if (lastActivity == null) {
     return i18n.t('activities.status.header.general', { entity });
   }
   if (lastActivity.subType === 'CANCELLED') {
     return i18n.t('activities.status.header.cancelled', { entity });
-  } if (lastActivity.subType === 'IRRECOVERABLE') {
+  }
+  if (lastActivity.subType === 'IRRECOVERABLE') {
     return i18n.t('activities.status.header.irrecoverable', { entity });
   }
   return i18n.t('activities.status.header.general', { entity });
@@ -62,7 +66,9 @@ export function formatActivityType(
       if (subType?.toLowerCase() === 'notdelivered') {
         return i18n.t('activities.types.status.added', { entity: formatDocumentType(entity) });
       }
-      return i18n.t('activities.types.status.changed', { status: i18n.t(`entities.status.${subType?.toLowerCase()}`).toLowerCase() });
+      return i18n.t('activities.types.status.changed', {
+        status: i18n.t(`entities.status.${subType?.toLowerCase()}`).toLowerCase(),
+      });
     case ActivityType.EDIT:
       return i18n.t('activities.types.edit', { entity: formatDocumentType(entity).toLowerCase() });
     case ActivityType.REASSIGN:
@@ -122,7 +128,9 @@ export function getAllStatusActivities(activities: GeneralActivity[]): GeneralAc
       statusActivities.push(activities[i]);
     }
   }
-  statusActivities.sort((a, b) => { return a.createdAt.getTime() - b.createdAt.getTime(); });
+  statusActivities.sort((a, b) => {
+    return a.createdAt.getTime() - b.createdAt.getTime();
+  });
   return statusActivities;
 }
 
@@ -130,7 +138,9 @@ export function getAllStatusActivities(activities: GeneralActivity[]): GeneralAc
  * Get all the statuses from a list of status activities
  */
 export function getStatusesFromActivities(activities: GeneralActivity[]): DocumentStatus[] {
-  activities.sort((a, b) => { return a.createdAt.getTime() - b.createdAt.getTime(); });
+  activities.sort((a, b) => {
+    return a.createdAt.getTime() - b.createdAt.getTime();
+  });
   const statuses: DocumentStatus[] = [];
   for (let i = 0; i < activities.length; i++) {
     statuses.push(activities[i].subType as DocumentStatus);
@@ -141,24 +151,25 @@ export function getStatusesFromActivities(activities: GeneralActivity[]): Docume
 /**
  * Get all the contract statuses that applied to a certain status.
  */
-export function getAllDocumentStatuses(
-  type: SingleEntities,
-): DocumentStatus[] {
+export function getAllDocumentStatuses(type: SingleEntities): DocumentStatus[] {
   switch (type) {
     case SingleEntities.Invoice:
-      return [InvoiceStatus.CREATED,
+      return [
+        InvoiceStatus.CREATED,
         InvoiceStatus.PROPOSED,
         InvoiceStatus.SENT,
-        InvoiceStatus.PAID] as any as DocumentStatus[];
+        InvoiceStatus.PAID,
+      ] as any as DocumentStatus[];
     case SingleEntities.Contract:
-      return [ContractStatus.CREATED,
+      return [
+        ContractStatus.CREATED,
         ContractStatus.PROPOSED,
         ContractStatus.SENT,
         ContractStatus.CONFIRMED,
-        ContractStatus.FINISHED] as any as DocumentStatus[];
+        ContractStatus.FINISHED,
+      ] as any as DocumentStatus[];
     case SingleEntities.ProductInstance:
-      return [ProductInstanceStatus.NOTDELIVERED,
-        ProductInstanceStatus.DELIVERED] as any as DocumentStatus[];
+      return [ProductInstanceStatus.NOTDELIVERED, ProductInstanceStatus.DELIVERED] as any as DocumentStatus[];
     default:
       throw new Error(`Unknown document status type ${type}`);
   }
@@ -167,10 +178,7 @@ export function getAllDocumentStatuses(
 /**
  * Get all the contract statuses that applied to a certain status.
  */
-export function getCompletedDocumentStatuses(
-  status: DocumentStatus,
-  type: SingleEntities,
-): DocumentStatus[] {
+export function getCompletedDocumentStatuses(status: DocumentStatus, type: SingleEntities): DocumentStatus[] {
   if (status === undefined) {
     return [];
   }
@@ -179,22 +187,23 @@ export function getCompletedDocumentStatuses(
       case DocumentStatus.CREATED:
         return [DocumentStatus.CREATED] as any as DocumentStatus[];
       case DocumentStatus.PROPOSED:
-        return [DocumentStatus.CREATED,
-          DocumentStatus.PROPOSED] as any as DocumentStatus[];
+        return [DocumentStatus.CREATED, DocumentStatus.PROPOSED] as any as DocumentStatus[];
       case DocumentStatus.SENT:
-        return [DocumentStatus.CREATED,
-          DocumentStatus.PROPOSED,
-          DocumentStatus.SENT] as any as DocumentStatus[];
+        return [DocumentStatus.CREATED, DocumentStatus.PROPOSED, DocumentStatus.SENT] as any as DocumentStatus[];
       case DocumentStatus.PAID:
-        return [DocumentStatus.CREATED,
+        return [
+          DocumentStatus.CREATED,
           DocumentStatus.PROPOSED,
           DocumentStatus.SENT,
-          DocumentStatus.PAID] as any as DocumentStatus[];
+          DocumentStatus.PAID,
+        ] as any as DocumentStatus[];
       case DocumentStatus.IRRECOVERABLE:
-        return [DocumentStatus.CREATED,
+        return [
+          DocumentStatus.CREATED,
           DocumentStatus.PROPOSED,
           DocumentStatus.SENT,
-          DocumentStatus.IRRECOVERABLE] as any as DocumentStatus[];
+          DocumentStatus.IRRECOVERABLE,
+        ] as any as DocumentStatus[];
       case DocumentStatus.CANCELLED:
         return [DocumentStatus.CANCELLED] as any as DocumentStatus[];
       default:
@@ -206,23 +215,24 @@ export function getCompletedDocumentStatuses(
       case DocumentStatus.CREATED:
         return [DocumentStatus.CREATED] as any as DocumentStatus[];
       case DocumentStatus.PROPOSED:
-        return [DocumentStatus.CREATED,
-          DocumentStatus.PROPOSED] as any as DocumentStatus[];
+        return [DocumentStatus.CREATED, DocumentStatus.PROPOSED] as any as DocumentStatus[];
       case DocumentStatus.SENT:
-        return [DocumentStatus.CREATED,
-          DocumentStatus.PROPOSED,
-          DocumentStatus.SENT] as any as DocumentStatus[];
+        return [DocumentStatus.CREATED, DocumentStatus.PROPOSED, DocumentStatus.SENT] as any as DocumentStatus[];
       case DocumentStatus.CONFIRMED:
-        return [DocumentStatus.CREATED,
-          DocumentStatus.PROPOSED,
-          DocumentStatus.SENT,
-          DocumentStatus.CONFIRMED] as any as DocumentStatus[];
-      case DocumentStatus.FINISHED:
-        return [DocumentStatus.CREATED,
+        return [
+          DocumentStatus.CREATED,
           DocumentStatus.PROPOSED,
           DocumentStatus.SENT,
           DocumentStatus.CONFIRMED,
-          DocumentStatus.FINISHED] as any as DocumentStatus[];
+        ] as any as DocumentStatus[];
+      case DocumentStatus.FINISHED:
+        return [
+          DocumentStatus.CREATED,
+          DocumentStatus.PROPOSED,
+          DocumentStatus.SENT,
+          DocumentStatus.CONFIRMED,
+          DocumentStatus.FINISHED,
+        ] as any as DocumentStatus[];
       case DocumentStatus.CANCELLED:
         return [DocumentStatus.CANCELLED] as any as DocumentStatus[];
       default:
@@ -234,14 +244,11 @@ export function getCompletedDocumentStatuses(
       case DocumentStatus.NOTDELIVERED:
         return [DocumentStatus.NOTDELIVERED] as any as DocumentStatus[];
       case DocumentStatus.DELIVERED:
-        return [DocumentStatus.NOTDELIVERED,
-          DocumentStatus.DELIVERED] as any as DocumentStatus[];
+        return [DocumentStatus.NOTDELIVERED, DocumentStatus.DELIVERED] as any as DocumentStatus[];
       case DocumentStatus.CANCELLED:
-        return [DocumentStatus.NOTDELIVERED,
-          DocumentStatus.CANCELLED] as any as DocumentStatus[];
+        return [DocumentStatus.NOTDELIVERED, DocumentStatus.CANCELLED] as any as DocumentStatus[];
       case DocumentStatus.DEFERRED:
-        return [DocumentStatus.NOTDELIVERED,
-          DocumentStatus.DEFERRED] as any as DocumentStatus[];
+        return [DocumentStatus.NOTDELIVERED, DocumentStatus.DEFERRED] as any as DocumentStatus[];
       default:
         return [];
     }
@@ -253,10 +260,7 @@ export function getCompletedDocumentStatuses(
  * Return the activity with the status update that has been last been
  * completed last. If the variable is null, then the status has not been completed yet.
  */
-export function getStatusActivity(
-  activities: GeneralActivity[],
-  status: string,
-): GeneralActivity | undefined {
+export function getStatusActivity(activities: GeneralActivity[], status: string): GeneralActivity | undefined {
   for (let i = 0; i < activities.length; i++) {
     if (activities[activities.length - i - 1].subType === status.toUpperCase()) {
       return activities[activities.length - i - 1];
@@ -269,10 +273,7 @@ export function getStatusActivity(
  * Return the status that can be completed next in array. Note that PROPOSED
  * status can be skipped, so we have an array with PROPOSED and the status after that
  */
-export function getToDoStatus(
-  currentStatus: DocumentStatus,
-  documentType: SingleEntities,
-): DocumentStatus[] {
+export function getToDoStatus(currentStatus: DocumentStatus, documentType: SingleEntities): DocumentStatus[] {
   // fetch all possible statuses
   const allStatuses = getAllDocumentStatuses(documentType);
   const result: DocumentStatus[] = [];
@@ -321,9 +322,7 @@ export function getToDoStatus(
 /**
  * Get last status activity that is not the cancelling of the document
  */
-export function getLastStatusNotCancelled(
-  allStatuses: DocumentStatus[],
-): DocumentStatus {
+export function getLastStatusNotCancelled(allStatuses: DocumentStatus[]): DocumentStatus {
   if (allStatuses[allStatuses.length - 1] !== DocumentStatus.CANCELLED) {
     return allStatuses[allStatuses.length - 1];
   }

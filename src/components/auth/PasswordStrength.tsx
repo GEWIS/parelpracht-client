@@ -51,7 +51,13 @@ function PasswordStrength(props: PasswordStrengthProps) {
     setUpperCase(passwordHasUpperCase);
     setNumbers(passwordHasNumbers);
     setSymbols(passwordHasSymbols);
-    setPasswordIsValid(passwordHasEightCharacters && passwordHasLowerCase && passwordHasUpperCase && passwordHasNumbers && passwordHasSymbols);
+    setPasswordIsValid(
+      passwordHasEightCharacters &&
+        passwordHasLowerCase &&
+        passwordHasUpperCase &&
+        passwordHasNumbers &&
+        passwordHasSymbols,
+    );
   };
 
   useEffect(() => {
@@ -61,9 +67,7 @@ function PasswordStrength(props: PasswordStrengthProps) {
 
   return (
     <>
-      <h3>
-        {t('pages.resetPassword.requirements.header')}
-      </h3>
+      <h3>{t('pages.resetPassword.requirements.header')}</h3>
       <table
         style={{
           textAlign: 'left',
@@ -73,36 +77,26 @@ function PasswordStrength(props: PasswordStrengthProps) {
         }}
       >
         <tbody>
-        <tr>
-          <td>
-            {eightCharacters ? <Icon name="check" color="green"/> : <Icon name="close" color="red"/>}
-          </td>
-          <td>{t('pages.resetPassword.requirements.length')}</td>
-        </tr>
-        <tr>
-          <td>
-            {lowerCase ? <Icon name="check" color="green"/> : <Icon name="close" color="red"/>}
-          </td>
-          <td>{t('pages.resetPassword.requirements.lowerCase')}</td>
-        </tr>
-        <tr>
-          <td>
-            {upperCase ? <Icon name="check" color="green"/> : <Icon name="close" color="red"/>}
-          </td>
-          <td>{t('pages.resetPassword.requirements.upperCase')}</td>
-        </tr>
-        <tr>
-          <td>
-            {numbers ? <Icon name="check" color="green"/> : <Icon name="close" color="red"/>}
-          </td>
-          <td>{t('pages.resetPassword.requirements.number')}</td>
-        </tr>
-        <tr>
-          <td>
-            {symbols ? <Icon name="check" color="green"/> : <Icon name="close" color="red"/>}
-          </td>
-          <td>{t('pages.resetPassword.requirements.symbol')}</td>
-        </tr>
+          <tr>
+            <td>{eightCharacters ? <Icon name="check" color="green" /> : <Icon name="close" color="red" />}</td>
+            <td>{t('pages.resetPassword.requirements.length')}</td>
+          </tr>
+          <tr>
+            <td>{lowerCase ? <Icon name="check" color="green" /> : <Icon name="close" color="red" />}</td>
+            <td>{t('pages.resetPassword.requirements.lowerCase')}</td>
+          </tr>
+          <tr>
+            <td>{upperCase ? <Icon name="check" color="green" /> : <Icon name="close" color="red" />}</td>
+            <td>{t('pages.resetPassword.requirements.upperCase')}</td>
+          </tr>
+          <tr>
+            <td>{numbers ? <Icon name="check" color="green" /> : <Icon name="close" color="red" />}</td>
+            <td>{t('pages.resetPassword.requirements.number')}</td>
+          </tr>
+          <tr>
+            <td>{symbols ? <Icon name="check" color="green" /> : <Icon name="close" color="red" />}</td>
+            <td>{t('pages.resetPassword.requirements.symbol')}</td>
+          </tr>
         </tbody>
       </table>
     </>

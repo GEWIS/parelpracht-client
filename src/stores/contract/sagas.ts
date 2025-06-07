@@ -1,12 +1,12 @@
-import {
-  call, put, select, throttle,
-} from 'redux-saga/effects';
+import { call, put, select, throttle } from 'redux-saga/effects';
 import {
   ActivityParams,
-  ActivityType, ApiException,
+  ActivityType,
+  ApiException,
   Client,
   Contract,
-  ContractActivity, ContractListResponse,
+  ContractActivity,
+  ContractListResponse,
   ContractParams,
   ContractStatusParams,
   ContractSummary,
@@ -18,9 +18,7 @@ import {
   SortDirection,
 } from '../../clients/server.generated';
 import { takeEveryWithErrorHandling } from '../errorHandling';
-import {
-  clearSingle, errorSingle, notFoundSingle, setSingle,
-} from '../single/actionCreators';
+import { clearSingle, errorSingle, notFoundSingle, setSingle } from '../single/actionCreators';
 import {
   singleActionPattern,
   SingleActionType,
@@ -36,9 +34,7 @@ import {
   SingleSaveFileAction,
 } from '../single/actions';
 import { SingleEntities } from '../single/single';
-import {
-  addSummary, deleteSummary, setSummaries, updateSummary,
-} from '../summaries/actionCreators';
+import { addSummary, deleteSummary, setSummaries, updateSummary } from '../summaries/actionCreators';
 import { summariesActionPattern, SummariesActionType } from '../summaries/actions';
 import { SummaryCollections } from '../summaries/summaries';
 import { fetchTable, prevPageTable, setTable } from '../tables/actionCreators';
@@ -52,11 +48,9 @@ function toSummary(contract: Contract): ContractSummary {
   return new ContractSummary({
     id: contract.id,
     title: contract.title,
-    value: contract.products.reduce(
-      (r: number, p: ProductInstance) => r + p.basePrice - p.discount, 0,
-    ),
-    status: getLastStatus(contract.activities
-      .filter((a: ContractActivity) => a.type === ActivityType.STATUS))?.subType!,
+    value: contract.products.reduce((r: number, p: ProductInstance) => r + p.basePrice - p.discount, 0),
+    status: getLastStatus(contract.activities.filter((a: ContractActivity) => a.type === ActivityType.STATUS))
+      ?.subType!,
   });
 }
 
@@ -64,11 +58,7 @@ function* fetchContracts() {
   const client = new Client();
 
   const state: TableState<Contract> = yield select(getTable, Tables.Contracts);
-  const {
-    sortColumn, sortDirection,
-    take, skip,
-    search, filters,
-  } = state;
+  const { sortColumn, sortDirection, take, skip, search, filters } = state;
 
   let { list, count } = yield call(
     [client, client.getAllContracts],
@@ -120,9 +110,7 @@ function* fetchSingleContract(action: SingleFetchAction<SingleEntities.Contract>
   yield put(updateSummary(SummaryCollections.Contracts, toSummary(contract)));
 }
 
-function* errorFetchSingleContract(
-  error: ApiException,
-) {
+function* errorFetchSingleContract(error: ApiException) {
   if (error.status === 404) {
     yield put(notFoundSingle(SingleEntities.Contract));
   } else {
@@ -130,9 +118,7 @@ function* errorFetchSingleContract(
   }
 }
 
-function* saveSingleContract(
-  action: SingleSaveAction<SingleEntities.Contract, ContractParams>,
-) {
+function* saveSingleContract(action: SingleSaveAction<SingleEntities.Contract, ContractParams>) {
   const client = new Client();
   yield call([client, client.updateContract], action.id, action.data);
   const contract: Contract = yield call([client, client.getContract], action.id);
@@ -152,9 +138,7 @@ function* watchSaveSingleContract() {
   );
 }
 
-function* createSingleContract(
-  action: SingleCreateAction<SingleEntities.Contract, ContractParams>,
-) {
+function* createSingleContract(action: SingleCreateAction<SingleEntities.Contract, ContractParams>) {
   const client = new Client();
   const contract: Contract = yield call([client, client.createContract], action.data);
   yield put(setSingle(SingleEntities.Contract, contract));
@@ -181,7 +165,8 @@ function* errorDeleteSingleContract() {
 function* watchDeleteSingleContract() {
   yield takeEveryWithErrorHandling(
     singleActionPattern(SingleEntities.Contract, SingleActionType.Delete),
-    deleteSingleContract, { onErrorSaga: errorDeleteSingleContract },
+    deleteSingleContract,
+    { onErrorSaga: errorDeleteSingleContract },
   );
 }
 
@@ -193,9 +178,7 @@ function* watchCreateSingleContract() {
   );
 }
 
-function* saveSingleContractFile(
-  action: SingleSaveFileAction<SingleEntities.Contract, Partial_FileParams_>,
-) {
+function* saveSingleContractFile(action: SingleSaveFileAction<SingleEntities.Contract, Partial_FileParams_>) {
   const client = new Client();
   yield call([client, client.updateContractFile], action.id, action.fileId, action.data);
   const contract: Contract = yield call([client, client.getContract], action.id);
@@ -209,7 +192,8 @@ function* errorSaveSingleContractFile() {
 function* watchSaveSingleContractFile() {
   yield takeEveryWithErrorHandling(
     singleActionPattern(SingleEntities.Contract, SingleActionType.SaveFile),
-    saveSingleContractFile, { onErrorSaga: errorSaveSingleContractFile },
+    saveSingleContractFile,
+    { onErrorSaga: errorSaveSingleContractFile },
   );
 }
 
@@ -227,13 +211,12 @@ function* errorDeleteSingleContractFile() {
 function* watchDeleteSingleContractFile() {
   yield takeEveryWithErrorHandling(
     singleActionPattern(SingleEntities.Contract, SingleActionType.DeleteFile),
-    deleteSingleContractFile, { onErrorSaga: errorDeleteSingleContractFile },
+    deleteSingleContractFile,
+    { onErrorSaga: errorDeleteSingleContractFile },
   );
 }
 
-function* createSingleContractStatus(
-  action: SingleCreateStatusAction<SingleEntities.Contract, ContractStatusParams>,
-) {
+function* createSingleContractStatus(action: SingleCreateStatusAction<SingleEntities.Contract, ContractStatusParams>) {
   const client = new Client();
   yield call([client, client.addContractStatus], action.id, action.data);
   const contract: Contract = yield call([client, client.getContract], action.id);
@@ -248,13 +231,12 @@ function* errorCreateSingleContractStatus() {
 function* watchCreateSingleContractStatus() {
   yield takeEveryWithErrorHandling(
     singleActionPattern(SingleEntities.Contract, SingleActionType.CreateStatus),
-    createSingleContractStatus, { onErrorSaga: errorCreateSingleContractStatus },
+    createSingleContractStatus,
+    { onErrorSaga: errorCreateSingleContractStatus },
   );
 }
 
-function* createSingleContractComment(
-  action: SingleCreateCommentAction<SingleEntities.Contract, ActivityParams>,
-) {
+function* createSingleContractComment(action: SingleCreateCommentAction<SingleEntities.Contract, ActivityParams>) {
   const client = new Client();
   yield call([client, client.addContractComment], action.id, action.data);
   const contract: Contract = yield call([client, client.getContract], action.id);
@@ -268,13 +250,12 @@ function* errorCreateSingleContractComment() {
 function* watchCreateSingleContractComment() {
   yield takeEveryWithErrorHandling(
     singleActionPattern(SingleEntities.Contract, SingleActionType.CreateComment),
-    createSingleContractComment, { onErrorSaga: errorCreateSingleContractComment },
+    createSingleContractComment,
+    { onErrorSaga: errorCreateSingleContractComment },
   );
 }
 
-function* saveSingleContractActivity(
-  action: SingleSaveActivityAction<SingleEntities.Contract, ActivityParams>,
-) {
+function* saveSingleContractActivity(action: SingleSaveActivityAction<SingleEntities.Contract, ActivityParams>) {
   const client = new Client();
   yield call([client, client.updateContractActivity], action.id, action.activityId, action.data);
   const contract: Contract = yield call([client, client.getContract], action.id);
@@ -288,13 +269,12 @@ function* errorSaveSingleContractActivity() {
 function* watchSaveSingleContractActivity() {
   yield takeEveryWithErrorHandling(
     singleActionPattern(SingleEntities.Contract, SingleActionType.SaveActivity),
-    saveSingleContractActivity, { onErrorSaga: errorSaveSingleContractActivity },
+    saveSingleContractActivity,
+    { onErrorSaga: errorSaveSingleContractActivity },
   );
 }
 
-function* deleteSingleContractActivity(
-  action: SingleDeleteActivityAction<SingleEntities.Contract>,
-) {
+function* deleteSingleContractActivity(action: SingleDeleteActivityAction<SingleEntities.Contract>) {
   const client = new Client();
   yield call([client, client.deleteContractActivity], action.id, action.activityId);
   const contract: Contract = yield call([client, client.getContract], action.id);
@@ -309,24 +289,18 @@ function* errorDeleteSingleContractActivity() {
 function* watchDeleteSingleContractActivity() {
   yield takeEveryWithErrorHandling(
     singleActionPattern(SingleEntities.Contract, SingleActionType.DeleteActivity),
-    deleteSingleContractActivity, { onErrorSaga: errorDeleteSingleContractActivity },
+    deleteSingleContractActivity,
+    { onErrorSaga: errorDeleteSingleContractActivity },
   );
 }
 
 export default [
   function* watchFetchContracts() {
-    yield throttle(
-      500,
-      tableActionPattern(Tables.Contracts, TableActionType.Fetch),
-      fetchContracts,
-    );
+    yield throttle(500, tableActionPattern(Tables.Contracts, TableActionType.Fetch), fetchContracts);
   },
   function* watchFetchContractSummaries() {
     yield takeEveryWithErrorHandling(
-      summariesActionPattern(
-        SummaryCollections.Contracts,
-        SummariesActionType.Fetch,
-      ),
+      summariesActionPattern(SummaryCollections.Contracts, SummariesActionType.Fetch),
       fetchContractSummaries,
     );
   },

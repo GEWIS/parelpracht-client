@@ -1,6 +1,4 @@
-import {
-  Table,
-} from 'semantic-ui-react';
+import { Table } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import { getCompanyName } from '../../../stores/company/selectors';
 import { RootState } from '../../../stores/store';
@@ -18,27 +16,17 @@ interface Props {
 }
 
 function InvoiceComponent(props: Props) {
-  const {
-    invoice, invoiceStatus, invoiceValue,
-  } = props;
+  const { invoice, invoiceStatus, invoiceValue } = props;
 
   return (
     <Table.Row>
       <Table.Cell>
         <InvoiceLink id={invoice.id} short={false} />
       </Table.Cell>
-      <Table.Cell>
-        {formatPriceFull(invoiceValue)}
-      </Table.Cell>
-      <Table.Cell>
-        {formatStatus(invoiceStatus)}
-      </Table.Cell>
-      <Table.Cell>
-        {dateToFullFinancialYear(invoice.startDate)}
-      </Table.Cell>
-      <Table.Cell>
-        {formatLastUpdate(invoice.updatedAt)}
-      </Table.Cell>
+      <Table.Cell>{formatPriceFull(invoiceValue)}</Table.Cell>
+      <Table.Cell>{formatStatus(invoiceStatus)}</Table.Cell>
+      <Table.Cell>{dateToFullFinancialYear(invoice.startDate)}</Table.Cell>
+      <Table.Cell>{formatLastUpdate(invoice.updatedAt)}</Table.Cell>
     </Table.Row>
   );
 }

@@ -7,7 +7,7 @@ import { SummaryCollections } from '../../stores/summaries/summaries';
 import { Tables } from '../../stores/tables/tables';
 
 interface Props {
-  options: CategorySummary[]
+  options: CategorySummary[];
 }
 
 function ProductCategoryFilter(props: Props) {
@@ -22,9 +22,7 @@ function ProductCategoryFilter(props: Props) {
 }
 
 const mapStateToProps = (state: RootState) => ({
-  options: getSummaryCollection<CategorySummary>(
-    state, SummaryCollections.ProductCategories,
-  ).options,
+  options: getSummaryCollection<CategorySummary>(state, SummaryCollections.ProductCategories).options,
 });
 
 export default connect(mapStateToProps)(ProductCategoryFilter);

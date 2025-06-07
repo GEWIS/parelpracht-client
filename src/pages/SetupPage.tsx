@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Navigate as Redirect } from 'react-router-dom';
 import { Container, Image, Segment } from 'semantic-ui-react';
@@ -21,15 +21,19 @@ function SetupPage({ setupDone }: Props) {
   }, [setTitle, t]);
 
   if (setupDone) {
-    return <><Redirect to={'/login'}/></>;
+    return (
+      <>
+        <Redirect to={'/login'} />
+      </>
+    );
   }
 
   return (
     <>
-      <div className="bg"/>
-      <div className="bg bg2"/>
-      <div className="bg bg3"/>
-      <AlertContainer internal/>
+      <div className="bg" />
+      <div className="bg bg2" />
+      <div className="bg bg3" />
+      <AlertContainer internal />
       <Container>
         <CenterInPage>
           <Segment>
@@ -41,8 +45,6 @@ function SetupPage({ setupDone }: Props) {
       </Container>
     </>
   );
-
-
 }
 
 export default SetupPage;

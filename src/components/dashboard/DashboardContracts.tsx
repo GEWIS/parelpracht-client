@@ -5,10 +5,10 @@ import { NavLink } from 'react-router-dom';
 import { Client, RecentContract } from '../../clients/server.generated';
 import DashboardContractsRow from './DashboardContractsRow';
 
-type Props = WithTranslation
+type Props = WithTranslation;
 
 interface State {
-  contracts: RecentContract[]
+  contracts: RecentContract[];
   loading: boolean;
 }
 
@@ -24,7 +24,8 @@ class DashboardContracts extends Component<Props, State> {
   componentDidMount() {
     const client = new Client();
     this.setState({ loading: true });
-    client.getRecentContracts()
+    client
+      .getRecentContracts()
       .then((contracts) => {
         this.setState({
           contracts,
@@ -40,11 +41,11 @@ class DashboardContracts extends Component<Props, State> {
     return (
       <Segment loading={loading}>
         <h3>{t('dashboard.recentContracts.header')}</h3>
-        {contracts.map((c) => <DashboardContractsRow contract={c} key={c.id} />)}
+        {contracts.map((c) => (
+          <DashboardContractsRow contract={c} key={c.id} />
+        ))}
         <div style={{ marginTop: '1em' }}>
-          <NavLink to="/contract/">
-            {t('dashboard.recentContracts.allContracts')}
-          </NavLink>
+          <NavLink to="/contract/">{t('dashboard.recentContracts.allContracts')}</NavLink>
         </div>
       </Segment>
     );

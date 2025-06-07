@@ -1,7 +1,5 @@
-import { Component } from "react";
-import {
-  Button, Table, TextArea, Form,
-} from 'semantic-ui-react';
+import { Component } from 'react';
+import { Button, Table, TextArea, Form } from 'semantic-ui-react';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import { withTranslation, WithTranslation } from 'react-i18next';
@@ -108,9 +106,7 @@ class PricingTable extends Component<Props, State> {
   };
 
   render() {
-    const {
-      pricingData, editing, status, description,
-    } = this.state;
+    const { pricingData, editing, status, description } = this.state;
     const { t } = this.props;
 
     return (
@@ -119,15 +115,12 @@ class PricingTable extends Component<Props, State> {
           {t('entities.product.insights.header')}
           {editing ? (
             <>
-              <Button
-                primary
-                floated="right"
-                onClick={this.addRow}
-                style={{ marginTop: '-0.5em' }}
-              >
+              <Button primary floated="right" onClick={this.addRow} style={{ marginTop: '-0.5em' }}>
                 {t('entities.product.insights.addRow')}
               </Button>
-              <Button primary floated="right" onClick={this.addColumn} style={{ marginTop: '-0.5em' }}>{t('entities.product.insights.addColumn')}</Button>
+              <Button primary floated="right" onClick={this.addColumn} style={{ marginTop: '-0.5em' }}>
+                {t('entities.product.insights.addColumn')}
+              </Button>
             </>
           ) : null}
           <PropsButtons
@@ -152,7 +145,9 @@ class PricingTable extends Component<Props, State> {
               onChange={(e) => this.setState({ description: e.target.value })}
             />
           </Form>
-        ) : <p>{description}</p>}
+        ) : (
+          <p>{description}</p>
+        )}
         <Table compact>
           <Table.Header>
             {pricingData.length > 0 ? (
@@ -188,12 +183,7 @@ class PricingTable extends Component<Props, State> {
               <Table.Row>
                 {pricingData[0].map((p, i) => (
                   <Table.HeaderCell key={p} style={{ textAlign: 'center' }}>
-                    <Button
-                      negative
-                      onClick={() => this.removeColumn(i)}
-                      icon="trash"
-                      size="tiny"
-                    />
+                    <Button negative onClick={() => this.removeColumn(i)} icon="trash" size="tiny" />
                   </Table.HeaderCell>
                 ))}
                 <Table.HeaderCell />

@@ -12,7 +12,7 @@ import { RootState } from '../../../stores/store';
 import LogoAvatarModal from '../../files/LogoAvatarModal';
 import { fetchSingle } from '../../../stores/single/actionCreators';
 import { EntitySummary } from '../EntitySummary';
-import {WithRouter, withRouter} from '../../../WithRouter';
+import { WithRouter, withRouter } from '../../../WithRouter';
 
 interface Props extends WithRouter {
   user: User | undefined;
@@ -33,26 +33,18 @@ function UserSummary(props: Props) {
   const prevStatus = usePrevious(props.status);
 
   // Check if user was deleted
-  if (prevStatus === ResourceStatus.DELETING
-    && props.status === ResourceStatus.EMPTY) {
-    return (<Redirect to="/users" />);
+  if (prevStatus === ResourceStatus.DELETING && props.status === ResourceStatus.EMPTY) {
+    return <Redirect to="/users" />;
   }
 
   const { user, status, fetchUser } = props;
 
   if (user === undefined) {
-    return (
-      <EntitySummary
-        loading
-        entity={SingleEntities.User}
-        icon="user"
-      />
-    );
+    return <EntitySummary loading entity={SingleEntities.User} icon="user" />;
   }
 
-  const loading = (status !== ResourceStatus.FETCHED
-    && status !== ResourceStatus.SAVING
-    && status !== ResourceStatus.ERROR);
+  const loading =
+    status !== ResourceStatus.FETCHED && status !== ResourceStatus.SAVING && status !== ResourceStatus.ERROR;
 
   const avatar = (
     <LogoAvatarModal

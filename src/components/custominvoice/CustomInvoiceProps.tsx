@@ -1,11 +1,9 @@
 import { ChangeEvent } from 'react';
-import {
-  Dropdown, Form, Input, Segment,
-} from 'semantic-ui-react';
+import { Dropdown, Form, Input, Segment } from 'semantic-ui-react';
 import validator from 'validator';
 import { useTranslation } from 'react-i18next';
 import DatePicker from 'react-datepicker';
-import {ICustomInvoiceGenSettings, Language, ReturnFileType} from '../../clients/server.generated';
+import { ICustomInvoiceGenSettings, Language, ReturnFileType } from '../../clients/server.generated';
 import { isInvalidDate } from '../../helpers/timestamp';
 import 'react-datepicker/dist/react-datepicker.css';
 
@@ -29,17 +27,13 @@ function CustomInvoiceProps({ customInvoice, setAttribute }: Props) {
             control={Input}
             label={t('files.generate.custom.subject')}
             value={customInvoice.subject}
-            onChange={(e: ChangeEvent<HTMLInputElement>) => setAttribute(
-              'subject', e.target.value,
-            )}
+            onChange={(e: ChangeEvent<HTMLInputElement>) => setAttribute('subject', e.target.value)}
             error={validator.isEmpty(customInvoice.subject)}
           />
         </Form.Group>
         <Form.Group widths="equal">
-          <Form.Field
-            required
-          >
-                        <label htmlFor="form-invoice-File-Type">{t('files.generate.fileType')}</label>
+          <Form.Field required>
+            <label htmlFor="form-invoice-File-Type">{t('files.generate.fileType')}</label>
             <Dropdown
               id="form-invoice-File-Type"
               selection
@@ -53,10 +47,8 @@ function CustomInvoiceProps({ customInvoice, setAttribute }: Props) {
               fluid
             />
           </Form.Field>
-          <Form.Field
-            required
-          >
-                        <label htmlFor="form-invoice-language">{t('language.header')}</label>
+          <Form.Field required>
+            <label htmlFor="form-invoice-language">{t('language.header')}</label>
             <Dropdown
               id="form-invoice-language"
               selection
@@ -79,9 +71,7 @@ function CustomInvoiceProps({ customInvoice, setAttribute }: Props) {
             control={Input}
             label={t('files.generate.custom.ourReference')}
             value={customInvoice.ourReference}
-            onChange={(e: ChangeEvent<HTMLInputElement>) => setAttribute(
-              'ourReference', e.target.value,
-            )}
+            onChange={(e: ChangeEvent<HTMLInputElement>) => setAttribute('ourReference', e.target.value)}
             error={validator.isEmpty(customInvoice.ourReference)}
           />
           <Form.Field
@@ -90,9 +80,7 @@ function CustomInvoiceProps({ customInvoice, setAttribute }: Props) {
             control={Input}
             label={t('files.generate.custom.theirReference')}
             value={customInvoice.theirReference}
-            onChange={(e: ChangeEvent<HTMLInputElement>) => setAttribute(
-              'theirReference', e.target.value,
-            )}
+            onChange={(e: ChangeEvent<HTMLInputElement>) => setAttribute('theirReference', e.target.value)}
           />
         </Form.Group>
         <Form.Group widths="equal">
@@ -103,7 +91,7 @@ function CustomInvoiceProps({ customInvoice, setAttribute }: Props) {
                 if (date) setAttribute('date', date);
               }}
               selected={customInvoice.date}
-              onChangeRaw={e => e?.preventDefault()}
+              onChangeRaw={(e) => e?.preventDefault()}
               id="form-input-date"
             />
           </Form.Field>

@@ -26,11 +26,11 @@ Chart.register(...registerables);
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 root.render(
-    <I18nextProvider i18n={i18n}>
-      <TitleRenderer>
-        <Provider store={store}>
-          <App />
-        </Provider>
-      </TitleRenderer>
-    </I18nextProvider>,
+  <I18nextProvider i18n={i18n}>
+    <TitleRenderer>
+      <Provider store={store}>
+        <App />
+      </Provider>
+    </TitleRenderer>
+  </I18nextProvider>,
 );

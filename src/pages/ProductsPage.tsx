@@ -1,8 +1,6 @@
-import { useEffect } from "react";
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import {
-  Button, Container, Grid, Header, Icon, Segment,
-} from 'semantic-ui-react';
+import { Button, Container, Grid, Header, Icon, Segment } from 'semantic-ui-react';
 import { useTranslation, withTranslation } from 'react-i18next';
 import { Roles } from '../clients/server.generated';
 import AuthorizationComponent from '../components/AuthorizationComponent';
@@ -30,9 +28,7 @@ function ProductsPage() {
               <Header as="h1">
                 <Icon name="shopping bag" />
                 <Header.Content>
-                  <Header.Subheader>
-                    {t('pages.products.header')}
-                  </Header.Subheader>
+                  <Header.Subheader>{t('pages.products.header')}</Header.Subheader>
                   {t('pages.products.subheader')}
                 </Header.Content>
               </Header>
@@ -48,7 +44,6 @@ function ProductsPage() {
           </Grid>
 
           <ProductTableControls />
-
         </Container>
       </Segment>
       <Container style={{ marginTop: '20px' }}>

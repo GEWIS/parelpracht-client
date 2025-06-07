@@ -1,9 +1,7 @@
 import { MouseEvent, useState } from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
-import {
-  Button, Dropdown, DropdownItemProps, Modal,
-} from 'semantic-ui-react';
+import { Button, Dropdown, DropdownItemProps, Modal } from 'semantic-ui-react';
 import { RootState } from '../stores/store';
 import { fetchTable, setFilterTable } from '../stores/tables/actionCreators';
 import { getFilter, isFilterOn } from '../stores/tables/selectors';
@@ -31,8 +29,14 @@ interface Props extends SelfProps {
 }
 
 function ColumnFilter({
-  options, columnName,
-  multiple = true, filter, filterOn, setFilter, clearFilter, refresh,
+  options,
+  columnName,
+  multiple = true,
+  filter,
+  filterOn,
+  setFilter,
+  clearFilter,
+  refresh,
 }: Props) {
   const [open, changeOpen] = useState(false);
   const trigger = (
@@ -86,8 +90,17 @@ function ColumnFilter({
         />
       </Modal.Content>
       <Modal.Actions>
-        <Button onClick={() => { clearFilter(); close(); }}>Clear</Button>
-        <Button primary onClick={close}>Confirm</Button>
+        <Button
+          onClick={() => {
+            clearFilter();
+            close();
+          }}
+        >
+          Clear
+        </Button>
+        <Button primary onClick={close}>
+          Confirm
+        </Button>
       </Modal.Actions>
     </Modal>
   );
@@ -99,14 +112,8 @@ const mapStateToProps = (state: RootState, props: SelfProps) => ({
 });
 
 const mapDispatchToProps = (dispatch: Dispatch, props: SelfProps) => ({
-  setFilter: (values: string[]) => dispatch(setFilterTable(
-    props.table,
-    { column: props.column, values },
-  )),
-  clearFilter: () => dispatch(setFilterTable(
-    props.table,
-    { column: props.column, values: [] },
-  )),
+  setFilter: (values: string[]) => dispatch(setFilterTable(props.table, { column: props.column, values })),
+  clearFilter: () => dispatch(setFilterTable(props.table, { column: props.column, values: [] })),
   refresh: () => dispatch(fetchTable(props.table)),
 });
 

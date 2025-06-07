@@ -4,10 +4,10 @@ import { Dropdown, DropdownProps, Form } from 'semantic-ui-react';
 import COUNTRY_OPTIONS from './countries.json';
 
 interface Country {
-  key: string,
-  value: string,
-  flag: string,
-  text: string,
+  key: string;
+  value: string;
+  flag: string;
+  text: string;
 }
 
 interface Props extends WithTranslation {
@@ -28,12 +28,8 @@ class CountrySelector extends Component<Props> {
   render() {
     const { t } = this.props;
     return (
-      <Form.Field
-        disabled={!this.props.editing}
-      >
-                <label htmlFor={this.props.id}>
-          {t('entities.company.props.country')}
-        </label>
+      <Form.Field disabled={!this.props.editing}>
+        <label htmlFor={this.props.id}>{t('entities.company.props.country')}</label>
         <Dropdown
           id={this.props.id}
           placeholder={t('entities.company.props.country')}

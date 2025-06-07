@@ -5,7 +5,7 @@ import { Client, ExpiredInvoice } from '../../clients/server.generated';
 import DashboardInvoicesRow from './DashboardInvoicesRow';
 import './DashboardInvoices.scss';
 
-type Props = WithTranslation
+type Props = WithTranslation;
 
 interface State {
   invoices: ExpiredInvoice[];
@@ -24,7 +24,8 @@ class DashboardInvoices extends Component<Props, State> {
   componentDidMount() {
     const client = new Client();
     this.setState({ loading: true });
-    client.getExpiredInvoices()
+    client
+      .getExpiredInvoices()
       .then((invoices) => {
         this.setState({
           invoices,
@@ -43,7 +44,9 @@ class DashboardInvoices extends Component<Props, State> {
         <h3>{t('dashboard.expiredInvoices.header')}</h3>
         <Table striped compact fixed singleLine className="expired-invoices" unstackable>
           <Table.Body>
-            {invoices.map((i) => <DashboardInvoicesRow invoice={i} key={i.id} />)}
+            {invoices.map((i) => (
+              <DashboardInvoicesRow invoice={i} key={i.id} />
+            ))}
           </Table.Body>
         </Table>
       </Segment>

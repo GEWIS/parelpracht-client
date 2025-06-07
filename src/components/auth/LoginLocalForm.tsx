@@ -1,16 +1,12 @@
-import {
-  ChangeEvent, useEffect, useRef, useState,
-} from 'react';
+import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
-import {
-  Button, Checkbox, Form, Input,
-} from 'semantic-ui-react';
+import { Button, Checkbox, Form, Input } from 'semantic-ui-react';
 import { useTranslation } from 'react-i18next';
 import { authLoginLocal } from '../../stores/auth/actionCreators';
 
 interface Props {
-  login: (email: string, password: string, rememberMe: boolean) => void,
+  login: (email: string, password: string, rememberMe: boolean) => void;
 }
 
 function LoginLocalForm(props: Props) {
@@ -27,7 +23,7 @@ function LoginLocalForm(props: Props) {
   return (
     <Form size="large">
       <Form.Field>
-                <label htmlFor="form-input-email">{t('pages.login.email')}</label>
+        <label htmlFor="form-input-email">{t('pages.login.email')}</label>
         <Input
           id="form-input-email"
           icon="user"
@@ -56,27 +52,18 @@ function LoginLocalForm(props: Props) {
           label={t('pages.login.rememberMe')}
         />
       </Form.Field>
-      <Button
-        fluid
-        primary
-        size="large"
-        type="submit"
-        onClick={() => props.login(email, password, rememberMe)}
-      >
+      <Button fluid primary size="large" type="submit" onClick={() => props.login(email, password, rememberMe)}>
         {t('pages.login.loginButton')}
       </Button>
     </Form>
   );
 }
 
-const mapStateToProps = () => ({
-
-});
+const mapStateToProps = () => ({});
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
-  login: (email: string, password: string, rememberMe: boolean) => dispatch(
-    authLoginLocal(email, password, rememberMe),
-  ),
+  login: (email: string, password: string, rememberMe: boolean) =>
+    dispatch(authLoginLocal(email, password, rememberMe)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(LoginLocalForm);

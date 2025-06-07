@@ -1,10 +1,8 @@
 import { Table } from 'semantic-ui-react';
 import { withTranslation, WithTranslation } from 'react-i18next';
-import {
-  Client, Invoice, InvoiceStatus, VAT,
-} from '../../../clients/server.generated';
+import { Client, Invoice, InvoiceStatus, VAT } from '../../../clients/server.generated';
 import { formatPriceFull } from '../../../helpers/monetary';
-import {WithRouter, withRouter} from '../../../WithRouter';
+import { WithRouter, withRouter } from '../../../WithRouter';
 import InvoiceProductRow from './InvoiceProductRow';
 
 interface Props extends WithTranslation, WithRouter {
@@ -22,11 +20,13 @@ function InvoiceProductList({ invoice, fetchInvoice, t }: Props) {
 
   const deleteButtonActive = () => {
     const { activities } = invoice;
-    return !(activities.find((a) => a.subType === InvoiceStatus.SENT) !== undefined
-      || activities.find((a) => a.subType === InvoiceStatus.PAID) !== undefined
-      || activities.find((a) => a.subType === InvoiceStatus.IRRECOVERABLE) !== undefined
-      || activities.find((a) => a.subType === InvoiceStatus.CANCELLED) !== undefined);
-  }
+    return !(
+      activities.find((a) => a.subType === InvoiceStatus.SENT) !== undefined ||
+      activities.find((a) => a.subType === InvoiceStatus.PAID) !== undefined ||
+      activities.find((a) => a.subType === InvoiceStatus.IRRECOVERABLE) !== undefined ||
+      activities.find((a) => a.subType === InvoiceStatus.CANCELLED) !== undefined
+    );
+  };
 
   const { products } = invoice;
   let totalPriceNoVat = 0;
@@ -52,9 +52,7 @@ function InvoiceProductList({ invoice, fetchInvoice, t }: Props) {
 
   return (
     <>
-      <h3>
-        {t('entity.productinstances')}
-      </h3>
+      <h3>{t('entity.productinstances')}</h3>
       <Table compact unstackable>
         <Table.Header>
           <Table.Row>
@@ -64,14 +62,15 @@ function InvoiceProductList({ invoice, fetchInvoice, t }: Props) {
             <Table.HeaderCell collapsing>{t('entity.contract')}</Table.HeaderCell>
             <Table.HeaderCell />
           </Table.Row>
-
         </Table.Header>
         <Table.Body>
           {products.map((product) => (
             <InvoiceProductRow
               key={product.id}
               productInstance={product}
-              removeProduct={() => { removeProduct(product.id).catch(console.error); }}
+              removeProduct={() => {
+                removeProduct(product.id).catch(console.error);
+              }}
               canDelete={deleteButtonActive()}
             />
           ))}
@@ -106,9 +105,7 @@ function InvoiceProductList({ invoice, fetchInvoice, t }: Props) {
               <b>{t('entities.productInstance.props.realPriceWithVat')}</b>
             </Table.HeaderCell>
             <Table.HeaderCell />
-            <Table.HeaderCell collapsing>
-              {formatPriceFull(totalPriceWithVat)}
-            </Table.HeaderCell>
+            <Table.HeaderCell collapsing>{formatPriceFull(totalPriceWithVat)}</Table.HeaderCell>
             <Table.HeaderCell />
             <Table.HeaderCell />
           </Table.Row>

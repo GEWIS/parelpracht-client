@@ -1,11 +1,8 @@
 import { ReactNode } from 'react';
-import {
-  Header, Icon, Loader, Placeholder, Segment, SemanticICONS,
-} from 'semantic-ui-react';
+import { Header, Icon, Loader, Placeholder, Segment, SemanticICONS } from 'semantic-ui-react';
 import { useTranslation } from 'react-i18next';
 import { SingleEntities } from '../../stores/single/single';
 import './EntitySummary.scss';
-
 
 interface Props {
   loading: boolean;
@@ -32,7 +29,9 @@ export function EntitySummary({ loading, icon, entity, title = '', rightHeader, 
           </Header.Content>
         </Header>
         <Segment attached="bottom" style={{ backgroundColor: 'rgba(255, 255, 255, 0.95)' }}>
-          <Placeholder><Placeholder.Line length="long" /></Placeholder>
+          <Placeholder>
+            <Placeholder.Line length="long" />
+          </Placeholder>
         </Segment>
       </>
     );
@@ -51,12 +50,7 @@ export function EntitySummary({ loading, icon, entity, title = '', rightHeader, 
               {title}
             </Header.Content>
           </div>
-          { rightHeader ? (
-            <div className="logo">
-              {rightHeader}
-            </div>
-          ) : undefined }
-
+          {rightHeader ? <div className="logo">{rightHeader}</div> : undefined}
         </div>
         {/* <Grid> */}
         {/*  <Grid.Row columns="2"> */}
@@ -82,9 +76,7 @@ export function EntitySummary({ loading, icon, entity, title = '', rightHeader, 
         {/* </Grid> */}
       </Header>
       <Segment attached="bottom" style={{ backgroundColor: 'rgba(255, 255, 255, 0.95)' }}>
-        <div className="summary-container">
-          {children}
-        </div>
+        <div className="summary-container">{children}</div>
       </Segment>
     </>
   );

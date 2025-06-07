@@ -22,31 +22,31 @@ export enum SingleActionType {
 type SingleAction<A, S> = Action<string>;
 
 export type SingleFetchAction<S> = SingleAction<SingleActionType.Fetch, S> & {
-  id: number,
+  id: number;
 };
 
 export type SingleSetAction<S, R> = SingleAction<SingleActionType.Set, S> & {
-  data: R,
+  data: R;
 };
 
 export type SingleSaveAction<S, RSave> = SingleAction<SingleActionType.Save, S> & {
-  id: number,
-  data: RSave,
+  id: number;
+  data: RSave;
 };
 
 export type SingleSaveFileAction<S, RSave> = SingleAction<SingleActionType.SaveFile, S> & {
-  id: number,
-  fileId: number,
-  data: RSave,
+  id: number;
+  fileId: number;
+  data: RSave;
 };
 
 export type SingleDeleteAction<S> = SingleAction<SingleActionType.Delete, S> & {
-  id: number,
+  id: number;
 };
 
 export type SingleDeleteFileAction<S> = SingleAction<SingleActionType.DeleteFile, S> & {
-  id: number,
-  fileId: number,
+  id: number;
+  fileId: number;
 };
 
 export type SingleErrorAction<S> = SingleAction<SingleActionType.Error, S>;
@@ -54,46 +54,48 @@ export type SingleErrorAction<S> = SingleAction<SingleActionType.Error, S>;
 export type SingleNotFoundAction<S> = SingleAction<SingleActionType.NotFound, S>;
 
 export type SingleCreateAction<S, RCreate> = SingleAction<SingleActionType.Create, S> & {
-  data: RCreate,
+  data: RCreate;
 };
 
 export type SingleClearAction<S> = SingleAction<SingleActionType.Clear, S>;
 
-export type SingleCreateStatusAction<S, RCreate> =
-  SingleAction<SingleActionType.CreateStatus, S> & {
-    id: number,
-    data: RCreate,
-  };
+export type SingleCreateStatusAction<S, RCreate> = SingleAction<SingleActionType.CreateStatus, S> & {
+  id: number;
+  data: RCreate;
+};
 
-export type SingleCreateCommentAction<S, RCreate> =
-  SingleAction<SingleActionType.CreateComment, S> & {
-    id: number,
-    data: RCreate,
-  };
+export type SingleCreateCommentAction<S, RCreate> = SingleAction<SingleActionType.CreateComment, S> & {
+  id: number;
+  data: RCreate;
+};
 
 export type SingleSaveActivityAction<S, RSave> = SingleAction<SingleActionType.SaveActivity, S> & {
-  id: number,
-  activityId: number,
-  data: RSave,
+  id: number;
+  activityId: number;
+  data: RSave;
 };
 
 export type SingleDeleteActivityAction<S> = SingleAction<SingleActionType.DeleteActivity, S> & {
-  id: number,
-  activityId: number,
+  id: number;
+  activityId: number;
 };
 
 export type SingleActions<S extends SingleEntities, R, RSave, RCreate> =
-  SingleFetchAction<S> | SingleSetAction<S, R> | SingleClearAction<S>
-    | SingleSaveAction<S, RSave> | SingleCreateAction<S, RCreate>;
+  | SingleFetchAction<S>
+  | SingleSetAction<S, R>
+  | SingleClearAction<S>
+  | SingleSaveAction<S, RSave>
+  | SingleCreateAction<S, RCreate>;
 
-export const singleActionPattern = <S extends SingleEntities>(
-  singleEntity: S, action: SingleActionType,
-): string => {
+export const singleActionPattern = <S extends SingleEntities>(singleEntity: S, action: SingleActionType): string => {
   return `${action}::${singleEntity}`;
 };
 
-export const singleExtractAction = (joined: string): {
-  type: SingleActionType, singleEntity: SingleEntities
+export const singleExtractAction = (
+  joined: string,
+): {
+  type: SingleActionType;
+  singleEntity: SingleEntities;
 } => {
   const [type, singleEntity] = joined.split('::');
   return {

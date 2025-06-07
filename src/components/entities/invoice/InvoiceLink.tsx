@@ -15,9 +15,7 @@ function InvoiceLink(props: Props) {
   const { id, invoiceTitle, short } = props;
   return (
     <NavLink to={`/invoice/${id}`}>
-      <Icon name="money bill alternate" />
-      F
-      {id}
+      <Icon name="money bill alternate" />F{id}
       {short ? '' : ` ${invoiceTitle}`}
     </NavLink>
   );

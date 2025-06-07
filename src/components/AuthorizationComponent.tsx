@@ -13,9 +13,7 @@ interface Props extends PropsWithChildren {
 
 class AuthorizationComponent extends Component<Props> {
   render() {
-    const {
-      roles, notFound, hasRole, children,
-    } = this.props;
+    const { roles, notFound, hasRole, children } = this.props;
 
     if (roles.some(hasRole)) {
       return children;

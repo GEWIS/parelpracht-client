@@ -1,8 +1,6 @@
-import { Component } from "react";
+import { Component } from 'react';
 import { NavLink } from 'react-router-dom';
-import {
-  Breadcrumb, Container, Grid, Loader, Segment, Tab, TabPane,
-} from 'semantic-ui-react';
+import { Breadcrumb, Container, Grid, Loader, Segment, Tab, TabPane } from 'semantic-ui-react';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import { WithTranslation, withTranslation } from 'react-i18next';
@@ -89,9 +87,7 @@ class SingleProductPage extends Component<Props, State> {
       document.title = product.nameEnglish;
     }
 
-    if (status === ResourceStatus.EMPTY
-      && prevProps.status === ResourceStatus.DELETING
-    ) {
+    if (status === ResourceStatus.EMPTY && prevProps.status === ResourceStatus.DELETING) {
       navigate('/product');
       this.props.showTransientAlert({
         title: 'Success',
@@ -99,8 +95,7 @@ class SingleProductPage extends Component<Props, State> {
         type: 'success',
         displayTimeInMs: 3000,
       });
-    } else if (prevProps.status === ResourceStatus.SAVING
-      && this.props.status === ResourceStatus.FETCHED) {
+    } else if (prevProps.status === ResourceStatus.SAVING && this.props.status === ResourceStatus.FETCHED) {
       this.props.showTransientAlert({
         title: 'Success',
         message: `Properties of ${this.props.product?.nameEnglish} successfully updated.`,
@@ -111,78 +106,81 @@ class SingleProductPage extends Component<Props, State> {
   }
 
   getPanes = () => {
-    const {
-      t, product, fetchProduct, status,
-    } = this.props;
+    const { t, product, fetchProduct, status } = this.props;
     const panes = [
       {
         menuItem: t('entity.contracts'),
-        render: product ? () => (
-          <TabPane>
-            <ContractCompactTable
-              product={product}
-            />
-          </TabPane>
-        ) : () => <TabPane />,
-      },
-      {
-        menuItem: t('entity.invoices'),
-        render: product ? () => (
-          <TabPane>
-            <InvoiceCompactTable
-              product={product}
-            />
-          </TabPane>
-        ) : () => <TabPane />,
-      },
-      {
-        menuItem: t('entity.files'),
-        render: product ? () => (
-          <TabPane>
-            <FilesList
-              files={product.files}
-              entityId={product.id}
-              entity={SingleEntities.Product}
-              fetchEntity={fetchProduct}
-              status={status}
-            />
-          </TabPane>
-        ) : () => <TabPane />,
-      },
-      {
-        menuItem: t('entity.activities'),
-        render: product ? () => (
-          <TabPane>
-            <ActivitiesList
-              activities={product.activities as GeneralActivity[]}
-              componentId={product.id}
-              componentType={SingleEntities.Product}
-              resourceStatus={status}
-            />
-          </TabPane>
-        ) : () => <TabPane />,
-      },
-      {
-        menuItem: t('entity.insights'),
-        render: product ? () => <ProductsContractedGraph product={product} />
+        render: product
+          ? () => (
+              <TabPane>
+                <ContractCompactTable product={product} />
+              </TabPane>
+            )
           : () => <TabPane />,
       },
       {
+        menuItem: t('entity.invoices'),
+        render: product
+          ? () => (
+              <TabPane>
+                <InvoiceCompactTable product={product} />
+              </TabPane>
+            )
+          : () => <TabPane />,
+      },
+      {
+        menuItem: t('entity.files'),
+        render: product
+          ? () => (
+              <TabPane>
+                <FilesList
+                  files={product.files}
+                  entityId={product.id}
+                  entity={SingleEntities.Product}
+                  fetchEntity={fetchProduct}
+                  status={status}
+                />
+              </TabPane>
+            )
+          : () => <TabPane />,
+      },
+      {
+        menuItem: t('entity.activities'),
+        render: product
+          ? () => (
+              <TabPane>
+                <ActivitiesList
+                  activities={product.activities as GeneralActivity[]}
+                  componentId={product.id}
+                  componentType={SingleEntities.Product}
+                  resourceStatus={status}
+                />
+              </TabPane>
+            )
+          : () => <TabPane />,
+      },
+      {
+        menuItem: t('entity.insights'),
+        render: product ? () => <ProductsContractedGraph product={product} /> : () => <TabPane />,
+      },
+      {
         menuItem: t('entities.product.props.customPrice'),
-        render: product ? () => (
-          <TabPane>
-            {!product.pricing ? (
-              <>
-                <h3>
-                  {t('entities.product.insights.header')}
-                </h3>
-                <AuthorizationComponent roles={[Roles.ADMIN]} notFound={false}>
-                                    <CreatePricing productId={product.id} />
-                </AuthorizationComponent>
-              </>
-            ) : <PricingTable pricing={product.pricing} productId={product.id} /> }
-          </TabPane>
-        ) : () => <TabPane />,
+        render: product
+          ? () => (
+              <TabPane>
+                {!product.pricing ? (
+                  <>
+                    <h3>{t('entities.product.insights.header')}</h3>
+                    <AuthorizationComponent roles={[Roles.ADMIN]} notFound={false}>
+                      <CreatePricing productId={product.id} />
+                    </AuthorizationComponent>
+                  </>
+                ) : (
+                  <PricingTable pricing={product.pricing} productId={product.id} />
+                )}
+              </TabPane>
+            )
+          : () => <TabPane />,
       },
     ];
 
@@ -240,11 +238,7 @@ class SingleProductPage extends Component<Props, State> {
             </Grid.Column>
             <Grid.Column width={6}>
               <Segment secondary style={{ backgroundColor: 'rgba(243, 244, 245, 0.98)' }}>
-                <ProductProps
-                  product={product}
-                  canEdit={[Roles.ADMIN]}
-                  canDelete={[Roles.ADMIN]}
-                />
+                <ProductProps product={product} canEdit={[Roles.ADMIN]} canDelete={[Roles.ADMIN]} />
               </Segment>
             </Grid.Column>
           </Grid>
@@ -269,6 +263,4 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
 
 SingleProductPage.contextType = TitleContext;
 
-export default withTranslation()(
-  withRouter(connect(mapStateToProps, mapDispatchToProps)(SingleProductPage)),
-);
+export default withTranslation()(withRouter(connect(mapStateToProps, mapDispatchToProps)(SingleProductPage)));

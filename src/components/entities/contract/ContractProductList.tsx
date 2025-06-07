@@ -1,13 +1,9 @@
-import { Component } from "react";
+import { Component } from 'react';
 import { NavLink } from 'react-router-dom';
-import {
-  Button, Icon, Loader, Table,
-} from 'semantic-ui-react';
+import { Button, Icon, Loader, Table } from 'semantic-ui-react';
 import _ from 'lodash';
 import { withTranslation, WithTranslation } from 'react-i18next';
-import {
-  ActivityType, Contract, ContractStatus, Roles, VAT,
-} from '../../../clients/server.generated';
+import { ActivityType, Contract, ContractStatus, Roles, VAT } from '../../../clients/server.generated';
 import { formatPriceFull } from '../../../helpers/monetary';
 import ContractInvoiceModal from '../../../pages/ContractInvoiceModal';
 import AuthorizationComponent from '../../AuthorizationComponent';
@@ -57,13 +53,10 @@ class ContractProductList extends Component<Props, State> {
     const { location } = this.props.router;
 
     if (contract === undefined) {
-      return (
-        <Loader content="Loading" active />
-      );
+      return <Loader content="Loading" active />;
     }
 
-    const contractStatus = getLastStatus(contract.activities
-      .filter((a) => a.type === ActivityType.STATUS))?.subType;
+    const contractStatus = getLastStatus(contract.activities.filter((a) => a.type === ActivityType.STATUS))?.subType;
 
     const { products } = contract;
     let totalPriceNoVat = 0;
@@ -87,9 +80,10 @@ class ContractProductList extends Component<Props, State> {
       }
     });
 
-    const canChangeProducts = contractStatus === ContractStatus.CREATED
-      || contractStatus === ContractStatus.PROPOSED
-      || contractStatus === ContractStatus.SENT;
+    const canChangeProducts =
+      contractStatus === ContractStatus.CREATED ||
+      contractStatus === ContractStatus.PROPOSED ||
+      contractStatus === ContractStatus.SENT;
 
     return (
       <>
@@ -115,7 +109,6 @@ class ContractProductList extends Component<Props, State> {
               clearSelection={this.clearSelection}
             />
           </AuthorizationComponent>
-
         </h3>
         <Table compact unstackable>
           <Table.Header>
@@ -127,17 +120,18 @@ class ContractProductList extends Component<Props, State> {
               <Table.HeaderCell collapsing>{t('entities.generalProps.status')}</Table.HeaderCell>
               <Table.HeaderCell collapsing>{t('entity.invoice')}</Table.HeaderCell>
             </Table.Row>
-
           </Table.Header>
           <Table.Body>
-            {[...products].sort((a, b) => a.id - b.id).map((product) => (
-              <ContractProductRow
-                key={product.id}
-                productInstance={product}
-                selectFunction={this.selectProduct}
-                selected={selected.includes(product.id)}
-              />
-            ))}
+            {[...products]
+              .sort((a, b) => a.id - b.id)
+              .map((product) => (
+                <ContractProductRow
+                  key={product.id}
+                  productInstance={product}
+                  selectFunction={this.selectProduct}
+                  selected={selected.includes(product.id)}
+                />
+              ))}
           </Table.Body>
           <Table.Footer>
             <Table.Row>
@@ -171,9 +165,7 @@ class ContractProductList extends Component<Props, State> {
                 <b>{t('entities.productInstance.props.realPriceWithVat')}</b>
               </Table.HeaderCell>
               <Table.HeaderCell />
-              <Table.HeaderCell collapsing>
-                {formatPriceFull(totalPriceWithVat)}
-              </Table.HeaderCell>
+              <Table.HeaderCell collapsing>{formatPriceFull(totalPriceWithVat)}</Table.HeaderCell>
               <Table.HeaderCell />
               <Table.HeaderCell />
             </Table.Row>

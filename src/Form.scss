@@ -6,12 +6,16 @@ form.ui.form {
   .field.disabled {
     opacity: 1;
 
-    label, .input, input {
+    label,
+    .input,
+    input {
       opacity: 1;
     }
 
-    input, .basic.label, textarea {
-      border: 1px solid rgba(34,36,38, 0);
+    input,
+    .basic.label,
+    textarea {
+      border: 1px solid rgba(34, 36, 38, 0);
     }
 
     textarea {

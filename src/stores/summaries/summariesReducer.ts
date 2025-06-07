@@ -2,7 +2,8 @@ import ResourceStatus from '../resourceStatus';
 import {
   SummariesActions,
   SummariesActionType,
-  SummariesAddAction, SummariesDeleteAction,
+  SummariesAddAction,
+  SummariesDeleteAction,
   summariesExtractAction,
   SummariesSetAction,
   SummariesUpdateAction,
@@ -43,7 +44,9 @@ const createSummariesReducer = <S extends SummaryCollections, R extends SummaryB
         const lookup: { [key: number]: R } = {};
         // To prevent state mutation during render
         const aData = [...a.data];
-        aData.forEach((x) => { lookup[x.id] = x; });
+        aData.forEach((x) => {
+          lookup[x.id] = x;
+        });
         return {
           ...state,
           options: aData,
@@ -102,7 +105,8 @@ const createSummariesReducer = <S extends SummaryCollections, R extends SummaryB
           lastUpdated: new Date(),
         };
       }
-      default: return state;
+      default:
+        return state;
     }
   };
 };

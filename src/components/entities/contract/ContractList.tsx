@@ -1,8 +1,6 @@
 import { connect } from 'react-redux';
 import { NavLink } from 'react-router-dom';
-import {
-  Button, Icon, Loader, Table,
-} from 'semantic-ui-react';
+import { Button, Icon, Loader, Table } from 'semantic-ui-react';
 import { WithTranslation, withTranslation } from 'react-i18next';
 import { Company, Roles } from '../../../clients/server.generated';
 import { getSingle } from '../../../stores/single/selectors';
@@ -16,13 +14,11 @@ interface Props extends WithTranslation, WithRouter {
   company: Company | undefined;
 }
 
-function ContractList({company, t, router}: Props) {
+function ContractList({ company, t, router }: Props) {
   const { location } = router;
 
   if (company === undefined) {
-    return (
-      <Loader content="Loading" active />
-    );
+    return <Loader content="Loading" active />;
   }
 
   const { contracts } = company;
@@ -45,9 +41,7 @@ function ContractList({company, t, router}: Props) {
             {t('pages.contracts.addContract')}
           </Button>
         </h3>
-        <h4>
-          {t('entities.product.noContract')}
-        </h4>
+        <h4>{t('entities.product.noContract')}</h4>
       </>
     );
   }
@@ -75,23 +69,16 @@ function ContractList({company, t, router}: Props) {
       <Table compact>
         <Table.Header>
           <Table.Row>
-            <Table.HeaderCell>
-              {t('entities.contract.props.title')}
-            </Table.HeaderCell>
-            <Table.HeaderCell>
-              {t('entity.contact')}
-            </Table.HeaderCell>
-            <Table.HeaderCell>
-              {t('entities.generalProps.status')}
-            </Table.HeaderCell>
-            <Table.HeaderCell>
-              {t('entities.generalProps.lastUpdate')}
-            </Table.HeaderCell>
+            <Table.HeaderCell>{t('entities.contract.props.title')}</Table.HeaderCell>
+            <Table.HeaderCell>{t('entity.contact')}</Table.HeaderCell>
+            <Table.HeaderCell>{t('entities.generalProps.status')}</Table.HeaderCell>
+            <Table.HeaderCell>{t('entities.generalProps.lastUpdate')}</Table.HeaderCell>
           </Table.Row>
         </Table.Header>
         <Table.Body>
           {contracts.map((x) => (
-            <ContractComponent contract={x} key={x.id} />))}
+            <ContractComponent contract={x} key={x.id} />
+          ))}
         </Table.Body>
       </Table>
     </>
@@ -105,9 +92,6 @@ const mapStateToProps = (state: RootState) => {
   };
 };
 
-const mapDispatchToProps = () => ({
-});
+const mapDispatchToProps = () => ({});
 
-export default withTranslation()(
-  withRouter(connect(mapStateToProps, mapDispatchToProps)(ContractList)),
-);
+export default withTranslation()(withRouter(connect(mapStateToProps, mapDispatchToProps)(ContractList)));

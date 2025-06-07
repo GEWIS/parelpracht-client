@@ -1,15 +1,14 @@
-import {Component, ReactNode} from "react";
+import { Component, ReactNode } from 'react';
 import { Button, Icon, Table } from 'semantic-ui-react';
 import { withTranslation, WithTranslation } from 'react-i18next';
 import { SingleEntities } from '../../stores/single/single';
 import { ContractFile, Roles } from '../../clients/server.generated';
 import ResourceStatus from '../../stores/resourceStatus';
 import AuthorizationComponent from '../AuthorizationComponent';
-import {WithRouter, withRouter} from '../../WithRouter';
+import { WithRouter, withRouter } from '../../WithRouter';
 import { GeneralFile } from './GeneralFile';
 import SingleFile from './SingleFile';
 import './FilesList.scss';
-
 
 interface Props extends WithTranslation, WithRouter {
   files: GeneralFile[];
@@ -22,7 +21,7 @@ interface Props extends WithTranslation, WithRouter {
 }
 
 interface State {
-  creating: boolean
+  creating: boolean;
 }
 
 class FilesList extends Component<Props, State> {
@@ -45,9 +44,7 @@ class FilesList extends Component<Props, State> {
   };
 
   render() {
-    const {
-      files, entityId, entity, generateModal, status, t,
-    } = this.props;
+    const { files, entityId, entity, generateModal, status, t } = this.props;
     const { creating } = this.state;
 
     let createRow;
@@ -75,17 +72,15 @@ class FilesList extends Component<Props, State> {
       );
     }
 
-    const noFilesHeader = (
-      <h4>
-        {t('entities.product.noFiles')}
-      </h4>
-    );
+    const noFilesHeader = <h4>{t('entities.product.noFiles')}</h4>;
     const filesList = (
       <Table compact fixed singleLine unstackable className="files">
         <Table.Body>
           {createRow}
           {[...files]
-            .sort((a, b) => { return b.createdAt.getTime() - a.createdAt.getTime(); })
+            .sort((a, b) => {
+              return b.createdAt.getTime() - a.createdAt.getTime();
+            })
             .map((file) => (
               <SingleFile
                 key={file.id}
@@ -104,10 +99,7 @@ class FilesList extends Component<Props, State> {
       <AuthorizationComponent roles={[Roles.GENERAL, Roles.ADMIN, Roles.AUDIT, Roles.FINANCIAL]} notFound={false}>
         <h3>
           {t('entity.files')}
-          <AuthorizationComponent
-            roles={[Roles.GENERAL, Roles.ADMIN]}
-            notFound={false}
-          >
+          <AuthorizationComponent roles={[Roles.GENERAL, Roles.ADMIN]} notFound={false}>
             <Button
               icon
               labelPosition="left"

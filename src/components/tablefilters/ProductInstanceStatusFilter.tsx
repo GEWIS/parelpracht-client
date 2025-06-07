@@ -6,9 +6,7 @@ interface Props {
   columnName?: string;
 }
 
-function ProductInstanceStatusFilter({
-  columnName = 'Status',
-}: Props) {
+function ProductInstanceStatusFilter({ columnName = 'Status' }: Props) {
   return (
     <ColumnFilter
       column="status"

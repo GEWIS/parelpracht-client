@@ -1,11 +1,23 @@
 import { AuthStatus, Gender, User } from '../../clients/server.generated';
 import {
-  AuthActionType, AuthFetchProfile, AuthFetchStatus,
+  AuthActionType,
+  AuthFetchProfile,
+  AuthFetchStatus,
   AuthForgotPassword,
   AuthGenerateApiKey,
-  AuthGetApiKey, AuthLoginLDAP,
-  AuthLoginLocal, AuthLogout, AuthRequestClear, AuthRequestError, AuthRequestSuccess,
-  AuthResetPassword, AuthRevokeApiKey, AuthSetApiKey, AuthSetProfile, AuthSetStatus, AuthSetup,
+  AuthGetApiKey,
+  AuthLoginLDAP,
+  AuthLoginLocal,
+  AuthLogout,
+  AuthRequestClear,
+  AuthRequestError,
+  AuthRequestSuccess,
+  AuthResetPassword,
+  AuthRevokeApiKey,
+  AuthSetApiKey,
+  AuthSetProfile,
+  AuthSetStatus,
+  AuthSetup,
 } from './actions';
 
 export function authFetchStatus(): AuthFetchStatus {
@@ -24,19 +36,21 @@ export function authSetProfile(profile: User): AuthSetProfile {
   return { type: AuthActionType.SetProfile, profile };
 }
 
-export function authLoginLocal(
-  email: string, password: string, rememberMe: boolean,
-): AuthLoginLocal {
+export function authLoginLocal(email: string, password: string, rememberMe: boolean): AuthLoginLocal {
   return {
-    type: AuthActionType.LoginLocal, email, password, rememberMe,
+    type: AuthActionType.LoginLocal,
+    email,
+    password,
+    rememberMe,
   };
 }
 
-export function authLoginLDAP(
-  username: string, password: string, rememberMe: boolean,
-): AuthLoginLDAP {
+export function authLoginLDAP(username: string, password: string, rememberMe: boolean): AuthLoginLDAP {
   return {
-    type: AuthActionType.LoginLDAP, username, password, rememberMe,
+    type: AuthActionType.LoginLDAP,
+    username,
+    password,
+    rememberMe,
   };
 }
 
@@ -48,11 +62,12 @@ export function authForgotPassword(email: string): AuthForgotPassword {
   return { type: AuthActionType.ForgotPassword, email };
 }
 
-export function authResetPassword(
-  password: string, passwordRepeat: string, token: string,
-): AuthResetPassword {
+export function authResetPassword(password: string, passwordRepeat: string, token: string): AuthResetPassword {
   return {
-    type: AuthActionType.ResetPassword, password, passwordRepeat, token,
+    type: AuthActionType.ResetPassword,
+    password,
+    passwordRepeat,
+    token,
   };
 }
 
@@ -91,8 +106,16 @@ export function authSetup(
   lastname: string,
   gender: Gender,
   password: string,
-  rememberMe: boolean): AuthSetup {
+  rememberMe: boolean,
+): AuthSetup {
   return {
-    type: AuthActionType.Setup, email, firstname, preposition, lastname, gender, password, rememberMe,
+    type: AuthActionType.Setup,
+    email,
+    firstname,
+    preposition,
+    lastname,
+    gender,
+    password,
+    rememberMe,
   };
 }

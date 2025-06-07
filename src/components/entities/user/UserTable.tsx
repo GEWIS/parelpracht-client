@@ -1,15 +1,17 @@
 import { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
-import {
-  Dimmer, Loader, Segment, Table,
-} from 'semantic-ui-react';
+import { Dimmer, Loader, Segment, Table } from 'semantic-ui-react';
 import { useTranslation } from 'react-i18next';
 import { User } from '../../../clients/server.generated';
 import TablePagination from '../../TablePagination';
 import { RootState } from '../../../stores/store';
 import {
-  changeSortTable, fetchTable, nextPageTable, prevPageTable, setTakeTable,
+  changeSortTable,
+  fetchTable,
+  nextPageTable,
+  prevPageTable,
+  setTakeTable,
 } from '../../../stores/tables/actionCreators';
 import { countFetched, countTotal, getTable } from '../../../stores/tables/selectors';
 import { Tables } from '../../../stores/tables/tables';
@@ -34,9 +36,19 @@ interface Props {
 }
 
 function UsersTable({
-  users, fetchUsers, column, direction, changeSort,
-  total, fetched, skip, take, status,
-  prevPage, nextPage, setTake,
+  users,
+  fetchUsers,
+  column,
+  direction,
+  changeSort,
+  total,
+  fetched,
+  skip,
+  take,
+  status,
+  prevPage,
+  nextPage,
+  setTake,
 }: Props) {
   useEffect(() => {
     fetchUsers();
@@ -54,31 +66,20 @@ function UsersTable({
             >
               {t('entities.user.props.name')}
             </Table.HeaderCell>
-            <Table.HeaderCell
-              sorted={column === 'email' ? direction : undefined}
-              onClick={() => changeSort('email')}
-            >
+            <Table.HeaderCell sorted={column === 'email' ? direction : undefined} onClick={() => changeSort('email')}>
               {t('entities.user.props.personalEmail')}
             </Table.HeaderCell>
-            <Table.HeaderCell width={2}>
-              {t('entities.user.props.roles.signee')}
-            </Table.HeaderCell>
-            <Table.HeaderCell width={2}>
-              {t('entities.user.props.roles.financial')}
-            </Table.HeaderCell>
-            <Table.HeaderCell width={2}>
-              {t('entities.user.props.roles.general')}
-            </Table.HeaderCell>
-            <Table.HeaderCell width={2}>
-              {t('entities.user.props.roles.audit')}
-            </Table.HeaderCell>
-            <Table.HeaderCell width={2}>
-              {t('entities.user.props.roles.admin')}
-            </Table.HeaderCell>
+            <Table.HeaderCell width={2}>{t('entities.user.props.roles.signee')}</Table.HeaderCell>
+            <Table.HeaderCell width={2}>{t('entities.user.props.roles.financial')}</Table.HeaderCell>
+            <Table.HeaderCell width={2}>{t('entities.user.props.roles.general')}</Table.HeaderCell>
+            <Table.HeaderCell width={2}>{t('entities.user.props.roles.audit')}</Table.HeaderCell>
+            <Table.HeaderCell width={2}>{t('entities.user.props.roles.admin')}</Table.HeaderCell>
           </Table.Row>
         </Table.Header>
         <Table.Body>
-          {users.map((x) => <UserRow user={x} key={x.id} />)}
+          {users.map((x) => (
+            <UserRow user={x} key={x.id} />
+          ))}
         </Table.Body>
       </Table>
       <TablePagination
@@ -119,8 +120,7 @@ const mapStateToProps = (state: RootState) => {
     take: userTable.take,
     users: userTable.data,
     column: userTable.sortColumn,
-    direction: userTable.sortDirection === 'ASC'
-      ? 'ascending' : 'descending' as 'ascending' | 'descending',
+    direction: userTable.sortDirection === 'ASC' ? 'ascending' : ('descending' as 'ascending' | 'descending'),
   };
 };
 

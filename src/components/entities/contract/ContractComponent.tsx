@@ -1,6 +1,4 @@
-import {
-  Table,
-} from 'semantic-ui-react';
+import { Table } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import { Contract, ContractStatus } from '../../../clients/server.generated';
 import { getCompanyName } from '../../../stores/company/selectors';
@@ -27,15 +25,9 @@ function ContractComponent(props: Props) {
         <Table.Cell>
           <ContractLink id={contract.id} showId showName />
         </Table.Cell>
-        <Table.Cell>
-          {contactName}
-        </Table.Cell>
-        <Table.Cell>
-          {formatStatus(status)}
-        </Table.Cell>
-        <Table.Cell>
-          {formatLastUpdate(contract.updatedAt)}
-        </Table.Cell>
+        <Table.Cell>{contactName}</Table.Cell>
+        <Table.Cell>{formatStatus(status)}</Table.Cell>
+        <Table.Cell>{formatLastUpdate(contract.updatedAt)}</Table.Cell>
       </Table.Row>
     </>
   );

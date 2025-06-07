@@ -4,7 +4,7 @@ import { withTranslation, WithTranslation } from 'react-i18next';
 import { Client, Role } from '../../clients/server.generated';
 import RoleTableRow from './RoleTableRow';
 
-type Props = WithTranslation
+type Props = WithTranslation;
 
 interface State {
   roles: Role[];
@@ -23,7 +23,8 @@ class RoleTable extends Component<Props, State> {
 
   componentDidMount() {
     const client = new Client();
-    client.getAllRoles()
+    client
+      .getAllRoles()
       .then((roles) => {
         this.setState({
           roles,
@@ -49,17 +50,15 @@ class RoleTable extends Component<Props, State> {
       <Table compact>
         <Table.Header>
           <Table.Row>
-            <Table.HeaderCell style={{ width: '150px' }}>
-              {t('pages.settings.roles.header.roleName')}
-            </Table.HeaderCell>
-            <Table.HeaderCell>
-              {t('pages.settings.roles.header.ldapGroup')}
-            </Table.HeaderCell>
+            <Table.HeaderCell style={{ width: '150px' }}>{t('pages.settings.roles.header.roleName')}</Table.HeaderCell>
+            <Table.HeaderCell>{t('pages.settings.roles.header.ldapGroup')}</Table.HeaderCell>
             <Table.HeaderCell style={{ width: '110px' }} />
           </Table.Row>
         </Table.Header>
         <Table.Body>
-          {roles.map((r) => (<RoleTableRow role={r} updateTable={this.updateTable} key={`${r.name}`} />))}
+          {roles.map((r) => (
+            <RoleTableRow role={r} updateTable={this.updateTable} key={`${r.name}`} />
+          ))}
         </Table.Body>
       </Table>
     );

@@ -1,14 +1,26 @@
 import i18n, { getLanguage } from '../localization';
 
-const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
-  'July', 'August', 'September', 'October', 'November', 'December'];
+const monthNames = [
+  'January',
+  'February',
+  'March',
+  'April',
+  'May',
+  'June',
+  'July',
+  'August',
+  'September',
+  'October',
+  'November',
+  'December',
+];
 
 interface SplitDate {
-  month: string,
-  day: string,
-  year: string,
-  hour: string,
-  minutes: string,
+  month: string;
+  day: string;
+  year: string;
+  hour: string;
+  minutes: string;
 }
 
 function parseDateToSplitDateObj(date: Date): SplitDate {
@@ -34,9 +46,12 @@ function parseDateToSplitDateObj(date: Date): SplitDate {
 
 export function formatLastUpdate(date: Date): string {
   return `${date.toLocaleString(getLanguage(), {
-    year: 'numeric', month: 'long', day: 'numeric',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
   })} ${i18n.t('other.dateTime.at')} ${date.toLocaleString(getLanguage(), {
-    hour: '2-digit', minute: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
   })}`;
 }
 
@@ -71,8 +86,12 @@ export function formatDateToString(date: Date) {
   let month = (date.getMonth() + 1).toString();
   const year = date.getFullYear().toString();
 
-  if (Number(day) < 10) { day = `0${day}`; }
-  if (Number(month) < 10) { month = `0${month}`; }
+  if (Number(day) < 10) {
+    day = `0${day}`;
+  }
+  if (Number(month) < 10) {
+    month = `0${month}`;
+  }
 
   return `${year}-${month}-${day}`;
 }

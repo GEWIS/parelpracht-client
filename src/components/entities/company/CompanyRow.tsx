@@ -15,12 +15,8 @@ export function CompanyRow(props: Props) {
       <Table.Cell>
         <CompanyLink id={company.id} />
       </Table.Cell>
-      <Table.Cell>
-        {formatStatus(company.status)}
-      </Table.Cell>
-      <Table.Cell>
-        {formatLastUpdate(company.updatedAt)}
-      </Table.Cell>
+      <Table.Cell>{formatStatus(company.status)}</Table.Cell>
+      <Table.Cell>{formatLastUpdate(company.updatedAt)}</Table.Cell>
     </Table.Row>
   );
 }

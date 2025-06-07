@@ -1,9 +1,6 @@
-import { Component } from "react";
+import { Component } from 'react';
 import { NavLink } from 'react-router-dom';
-import {
-  Breadcrumb,
-  Container, Grid, Loader, Segment, Tab, TabPane,
-} from 'semantic-ui-react';
+import { Breadcrumb, Container, Grid, Loader, Segment, Tab, TabPane } from 'semantic-ui-react';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import { withTranslation, WithTranslation } from 'react-i18next';
@@ -85,58 +82,53 @@ class SingleInvoicePage extends Component<Props, State> {
   }
 
   getPanes = () => {
-    const {
-      invoice, fetchInvoice, status, hasRole, t,
-    } = this.props;
+    const { invoice, fetchInvoice, status, hasRole, t } = this.props;
 
     const panes = [
       {
         menuItem: t('entity.products'),
-        render: invoice ? () => (
-          <TabPane>
-            <InvoiceProductList
-              invoice={invoice}
-              fetchInvoice={fetchInvoice}
-            />
-          </TabPane>
-        ) : () => <TabPane />,
+        render: invoice
+          ? () => (
+              <TabPane>
+                <InvoiceProductList invoice={invoice} fetchInvoice={fetchInvoice} />
+              </TabPane>
+            )
+          : () => <TabPane />,
       },
     ];
 
-    if (hasRole(Roles.GENERAL)
-      || hasRole(Roles.ADMIN) || hasRole(Roles.AUDIT) || hasRole(Roles.FINANCIAL)) {
+    if (hasRole(Roles.GENERAL) || hasRole(Roles.ADMIN) || hasRole(Roles.AUDIT) || hasRole(Roles.FINANCIAL)) {
       panes.push({
         menuItem: t('entity.files'),
-        render: invoice ? () => (
-          <TabPane>
-            <FilesList
-              files={invoice.files}
-              entityId={invoice.id}
-              entity={SingleEntities.Invoice}
-              fetchEntity={fetchInvoice}
-              generateModal={(
-                <GenerateInvoiceModal
-                  invoice={invoice}
-                  fetchInvoice={fetchInvoice}
+        render: invoice
+          ? () => (
+              <TabPane>
+                <FilesList
+                  files={invoice.files}
+                  entityId={invoice.id}
+                  entity={SingleEntities.Invoice}
+                  fetchEntity={fetchInvoice}
+                  generateModal={<GenerateInvoiceModal invoice={invoice} fetchInvoice={fetchInvoice} />}
+                  status={status}
                 />
-              )}
-              status={status}
-            />
-          </TabPane>
-        ) : () => <TabPane />,
+              </TabPane>
+            )
+          : () => <TabPane />,
       });
       panes.push({
         menuItem: t('entity.activities'),
-        render: invoice ? () => (
-          <TabPane>
-            <ActivitiesList
-              activities={invoice.activities as GeneralActivity[]}
-              componentId={invoice.id}
-              componentType={SingleEntities.Invoice}
-              resourceStatus={status}
-            />
-          </TabPane>
-        ) : () => <TabPane />,
+        render: invoice
+          ? () => (
+              <TabPane>
+                <ActivitiesList
+                  activities={invoice.activities as GeneralActivity[]}
+                  componentId={invoice.id}
+                  componentType={SingleEntities.Invoice}
+                  resourceStatus={status}
+                />
+              </TabPane>
+            )
+          : () => <TabPane />,
       });
     }
 
@@ -163,10 +155,7 @@ class SingleInvoicePage extends Component<Props, State> {
     const panes = this.getPanes();
 
     return (
-      <AuthorizationComponent
-        roles={[Roles.GENERAL, Roles.FINANCIAL, Roles.AUDIT, Roles.ADMIN]}
-        notFound
-      >
+      <AuthorizationComponent roles={[Roles.GENERAL, Roles.FINANCIAL, Roles.AUDIT, Roles.ADMIN]} notFound>
         <Segment style={{ backgroundColor: 'rgba(255, 255, 255, 0.95)' }} vertical basic>
           <Container>
             <Breadcrumb
@@ -207,9 +196,7 @@ class SingleInvoicePage extends Component<Props, State> {
               </Grid.Column>
               <Grid.Column width={6}>
                 <Segment secondary style={{ backgroundColor: 'rgba(243, 244, 245, 0.98)' }}>
-                  <InvoiceProps
-                    invoice={invoice}
-                  />
+                  <InvoiceProps invoice={invoice} />
                 </Segment>
               </Grid.Column>
             </Grid.Row>
@@ -235,5 +222,4 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
 
 SingleInvoicePage.contextType = TitleContext;
 
-export default withTranslation()(withRouter(connect(mapStateToProps,
-  mapDispatchToProps)(SingleInvoicePage)));
+export default withTranslation()(withRouter(connect(mapStateToProps, mapDispatchToProps)(SingleInvoicePage)));

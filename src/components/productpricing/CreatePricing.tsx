@@ -20,10 +20,7 @@ function CreatePricing(props: Props) {
   const { t } = props;
 
   return (
-    <Button
-      primary
-      onClick={() => createPricing()}
-    >
+    <Button primary onClick={() => createPricing()}>
       {t('entities.product.props.customPriceButton')}
     </Button>
   );

@@ -9,9 +9,9 @@ import CompanyLink from '../company/CompanyLink';
 import InvoiceLink from './InvoiceLink';
 
 interface Props {
-  invoice?: Invoice,
+  invoice?: Invoice;
 
-  status: InvoiceStatus,
+  status: InvoiceStatus;
 }
 
 function InvoiceCompactRow(props: Props): JSX.Element {
@@ -25,15 +25,9 @@ function InvoiceCompactRow(props: Props): JSX.Element {
       <Table.Cell>
         <CompanyLink id={invoice.companyId} />
       </Table.Cell>
-      <Table.Cell>
-        {formatStatus(status)}
-      </Table.Cell>
-      <Table.Cell>
-        {dateToFullFinancialYear(invoice.startDate)}
-      </Table.Cell>
-      <Table.Cell>
-        {formatLastUpdate(invoice.updatedAt)}
-      </Table.Cell>
+      <Table.Cell>{formatStatus(status)}</Table.Cell>
+      <Table.Cell>{dateToFullFinancialYear(invoice.startDate)}</Table.Cell>
+      <Table.Cell>{formatLastUpdate(invoice.updatedAt)}</Table.Cell>
     </Table.Row>
   );
 }

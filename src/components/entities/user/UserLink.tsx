@@ -17,14 +17,16 @@ function UserLink(props: Props) {
   // the avatarUrl is an empty string if the user does not have an avatar
   return (
     <NavLink to={`/user/${id}`}>
-      {((avatarUrl === '') ? <Icon name="user" /> : (
+      {avatarUrl === '' ? (
+        <Icon name="user" />
+      ) : (
         <UserAvatar
           size="1.5em"
           fileName={avatarUrl}
           clickable={false}
           imageCss={{ float: 'left', marginRight: '0.3em' }}
         />
-      ))}
+      )}
       {userName}
     </NavLink>
   );

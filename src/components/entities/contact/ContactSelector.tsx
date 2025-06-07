@@ -17,9 +17,7 @@ interface Props {
 function ContactSelector(props: Props & DropdownProps) {
   const [open, changeOpen] = useState(false);
 
-  const {
-    value, onChange, options, disabled = false, companyId, placeholder,
-  } = props;
+  const { value, onChange, options, disabled = false, companyId, placeholder } = props;
 
   const dropdownOptions = sortContactsByFunction([...options], true)
     .filter((c) => c.companyId === companyId && c.function !== ContactFunction.OLD)
@@ -36,7 +34,7 @@ function ContactSelector(props: Props & DropdownProps) {
       disabled={disabled}
       search
       selection
-      error={(value <= 0) && !open}
+      error={value <= 0 && !open}
       options={dropdownOptions}
       value={value < 0 ? '' : value}
       onChange={(_, data) => onChange(data.value as number | number[])}

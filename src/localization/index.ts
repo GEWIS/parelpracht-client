@@ -10,7 +10,6 @@ import nl_NL from './locales/nl_NL/translations.json';
 TimeAgo.addLocale(en);
 TimeAgo.addLocale(nl);
 
-
 type locales = 'en-US' | 'nl-NL';
 
 const resources = {
@@ -37,8 +36,7 @@ i18n
 
 export const changeLanguage = (language: locales) => {
   // eslint-disable-next-line import/no-named-as-default-member
-  i18n.changeLanguage(language)
-    .catch(console.error);
+  i18n.changeLanguage(language).catch(console.error);
 };
 
 export const getLanguage = (): locales => {

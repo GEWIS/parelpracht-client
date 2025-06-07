@@ -18,13 +18,12 @@ interface Props {
 }
 
 function ContractLink(props: Props) {
-  const {
-    id, showId, showName, contractTitle, status,
-  } = props;
+  const { id, showId, showName, contractTitle, status } = props;
 
   let statusCircle;
   switch (status) {
-    case undefined: break;
+    case undefined:
+      break;
     case ContractStatus.CREATED:
       statusCircle = <PartialCircle endAngle={72} startAngle={0} />;
       break;
@@ -56,7 +55,7 @@ function ContractLink(props: Props) {
       <Icon name="file alternate" />
       {showId ? `C${id} ` : ''}
       {showName ? contractTitle : ''}
-      { statusCircle }
+      {statusCircle}
     </NavLink>
   );
 }

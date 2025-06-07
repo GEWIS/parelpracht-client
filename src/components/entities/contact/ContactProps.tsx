@@ -21,7 +21,6 @@ interface Props {
   contact: Contact;
   onCompanyPage: boolean;
   onCancel?: () => void;
-
 }
 
 const ContactProps = (props: Props) => {
@@ -36,10 +35,13 @@ const ContactProps = (props: Props) => {
   const prevStatusRef = useRef(status);
 
   const updateFormState = (updatedValues: Partial<ContactParams>) => {
-    setFormState((prevState) => ({
-      ...prevState,
-      ...updatedValues,
-    } as ContactParams));
+    setFormState(
+      (prevState) =>
+        ({
+          ...prevState,
+          ...updatedValues,
+        }) as ContactParams,
+    );
   };
 
   const dispatch = useDispatch();
@@ -61,9 +63,7 @@ const ContactProps = (props: Props) => {
   };
 
   useEffect(() => {
-    if (prevStatusRef.current === ResourceStatus.SAVING
-      && status === ResourceStatus.FETCHED) {
-
+    if (prevStatusRef.current === ResourceStatus.SAVING && status === ResourceStatus.FETCHED) {
       setEditing(false);
       if (props.create) {
         showAlert({
@@ -99,7 +99,6 @@ const ContactProps = (props: Props) => {
       function: formState.function,
       comments: formState.comments,
       companyId: props.contact.companyId,
-
     });
   };
 
@@ -137,11 +136,11 @@ const ContactProps = (props: Props) => {
   };
 
   const emailIsValid = (): boolean => {
-    if ([
-      ContactFunction.SIGNATORY_AUTHORIZED,
-      ContactFunction.ASSISTING,
-      ContactFunction.OLD,
-    ].includes(formState.function)) {
+    if (
+      [ContactFunction.SIGNATORY_AUTHORIZED, ContactFunction.ASSISTING, ContactFunction.OLD].includes(
+        formState.function,
+      )
+    ) {
       return validator.isEmpty(formState.email) || validator.isEmail(formState.email);
     } else {
       return validator.isEmail(formState.email);
@@ -149,9 +148,10 @@ const ContactProps = (props: Props) => {
   };
 
   const propsHaveErrors = () => {
-    return (validator.isEmpty(formState.lastName)
-      || (!validator.isEmpty(formState.telephone!) && !validator.isMobilePhone(formState.telephone!))
-      || !emailIsValid()
+    return (
+      validator.isEmpty(formState.lastName) ||
+      (!validator.isEmpty(formState.telephone!) && !validator.isMobilePhone(formState.telephone!)) ||
+      !emailIsValid()
     );
   };
 
@@ -193,9 +193,11 @@ const ContactProps = (props: Props) => {
             label={t('entities.contact.props.firstName')}
             placeholder={t('entities.contact.props.firstName')}
             value={formState.firstName}
-            onChange={(e: ChangeEvent<HTMLInputElement>) => updateFormState({
-              firstName: e.target.value,
-            })}
+            onChange={(e: ChangeEvent<HTMLInputElement>) =>
+              updateFormState({
+                firstName: e.target.value,
+              })
+            }
             width={6}
           />
           <Form.Field
@@ -206,9 +208,11 @@ const ContactProps = (props: Props) => {
             label={t('entities.contact.props.middleName')}
             placeholder={t('entities.contact.props.middleName')}
             value={formState.lastNamePreposition}
-            onChange={(e: ChangeEvent<HTMLInputElement>) => updateFormState({
-              lastNamePreposition: e.target.value,
-            })}
+            onChange={(e: ChangeEvent<HTMLInputElement>) =>
+              updateFormState({
+                lastNamePreposition: e.target.value,
+              })
+            }
             width={4}
           />
           <Form.Field
@@ -220,18 +224,18 @@ const ContactProps = (props: Props) => {
             label={t('entities.contact.props.lastName')}
             placeholder={t('entities.contact.props.lastName')}
             value={formState.lastName}
-            onChange={(e: ChangeEvent<HTMLInputElement>) => updateFormState({
-              lastName: e.target.value,
-            })}
-            width={6}
-            error={
-              validator.isEmpty(formState.lastName)
+            onChange={(e: ChangeEvent<HTMLInputElement>) =>
+              updateFormState({
+                lastName: e.target.value,
+              })
             }
+            width={6}
+            error={validator.isEmpty(formState.lastName)}
           />
         </Form.Group>
         <Form.Group widths="equal">
           <Form.Field required disabled={!editing}>
-                        <label htmlFor="form-input-gender">{t('entities.contact.props.gender.gender')}</label>
+            <label htmlFor="form-input-gender">{t('entities.contact.props.gender.gender')}</label>
             <Dropdown
               id="form-input-gender"
               selection
@@ -242,25 +246,31 @@ const ContactProps = (props: Props) => {
                 { key: 1, text: t('entities.contact.props.gender.female'), value: Gender.FEMALE },
                 { key: 2, text: t('entities.contact.props.gender.unknown'), value: Gender.UNKNOWN },
               ]}
-              onChange={(e, data) => updateFormState({
-                gender: data.value as Gender,
-              })}
+              onChange={(e, data) =>
+                updateFormState({
+                  gender: data.value as Gender,
+                })
+              }
               fluid
             />
           </Form.Field>
           <Form.Field required disabled={!editing}>
-                        <label htmlFor="form-input-function">{t('entities.contact.props.function.header')}</label>
+            <label htmlFor="form-input-function">{t('entities.contact.props.function.header')}</label>
             <Dropdown
               id="form-input-function"
               selection
               placeholder={t('entities.contact.props.function.header')}
               value={formState.function}
               options={Object.values(ContactFunction).map((x, i) => ({
-                key: i, value: x, text: formatFunction(x),
+                key: i,
+                value: x,
+                text: formatFunction(x),
               }))}
-              onChange={(e, data) => updateFormState({
-                function: data.value as ContactFunction,
-              })}
+              onChange={(e, data) =>
+                updateFormState({
+                  function: data.value as ContactFunction,
+                })
+              }
               fluid
             />
           </Form.Field>
@@ -274,12 +284,12 @@ const ContactProps = (props: Props) => {
             label={t('entities.contact.props.email')}
             placeholder={t('entities.contact.props.email')}
             value={formState.email}
-            onChange={(e: ChangeEvent<HTMLInputElement>) => updateFormState({
-              email: e.target.value,
-            })}
-            error={
-              !emailIsValid()
+            onChange={(e: ChangeEvent<HTMLInputElement>) =>
+              updateFormState({
+                email: e.target.value,
+              })
             }
+            error={!emailIsValid()}
           />
           <Form.Field
             disabled={!editing}
@@ -289,29 +299,24 @@ const ContactProps = (props: Props) => {
             control={Input}
             label={t('entities.company.props.number')}
             value={formState.telephone}
-            onChange={(e: ChangeEvent<HTMLInputElement>) => updateFormState({
-              telephone: e.target.value,
-            })}
-            error={
-              !validator.isEmpty(formState.telephone!) && !validator.isMobilePhone(formState.telephone!)
+            onChange={(e: ChangeEvent<HTMLInputElement>) =>
+              updateFormState({
+                telephone: e.target.value,
+              })
             }
+            error={!validator.isEmpty(formState.telephone!) && !validator.isMobilePhone(formState.telephone!)}
           />
         </Form.Group>
         <Form.Field>
-                    <label htmlFor="form-input-comments">
-            {t('entities.contact.props.comments')}
-          </label>
+          <label htmlFor="form-input-comments">{t('entities.contact.props.comments')}</label>
           <TextArea
             id="form-delivery-spec-english"
             value={formState.comments}
-            onChange={
-              (e) => updateFormState({ comments: e.target.value })
-            }
+            onChange={(e) => updateFormState({ comments: e.target.value })}
             placeholder={t('entities.contact.props.comments')}
           />
         </Form.Field>
       </Form>
-
     </>
   );
 };

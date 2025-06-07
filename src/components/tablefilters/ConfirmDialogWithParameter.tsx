@@ -1,7 +1,5 @@
-import { Component } from "react";
-import {
-  Button, Icon, Input, Modal,
-} from 'semantic-ui-react';
+import { Component } from 'react';
+import { Button, Icon, Input, Modal } from 'semantic-ui-react';
 import { withTranslation, WithTranslation } from 'react-i18next';
 
 interface Props extends WithTranslation {
@@ -53,17 +51,15 @@ class ConfirmationDialogWithParameter extends Component<Props, State> {
   };
 
   render() {
-    const {
-      header, description, button, t, disabled, inputField,
-    } = this.props;
+    const { header, description, button, t, disabled, inputField } = this.props;
     const { open, loading, input } = this.state;
     return (
       <Modal
-        trigger={(
+        trigger={
           <Button disabled={disabled} style={{ marginBottom: '0.25rem' }}>
             {button}
           </Button>
-        )}
+        }
         closeIcon
         open={open}
         size="tiny"
@@ -89,9 +85,7 @@ class ConfirmationDialogWithParameter extends Component<Props, State> {
         </Modal.Content>
         <Modal.Actions>
           <Button color="red" onClick={this.onClose}>
-            <Icon name="remove" />
-            {' '}
-            {t('buttons.cancel')}
+            <Icon name="remove" /> {t('buttons.cancel')}
           </Button>
           <Button
             color="green"
@@ -99,9 +93,7 @@ class ConfirmationDialogWithParameter extends Component<Props, State> {
             loading={loading}
             disabled={inputField !== undefined && input === ''}
           >
-            <Icon name="checkmark" />
-            {' '}
-            {t('buttons.ok')}
+            <Icon name="checkmark" /> {t('buttons.ok')}
           </Button>
         </Modal.Actions>
       </Modal>

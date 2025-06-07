@@ -1,5 +1,5 @@
 import { Component } from 'react';
-import {Dropdown, Grid, TabPane} from 'semantic-ui-react';
+import { Dropdown, Grid, TabPane } from 'semantic-ui-react';
 import { withTranslation, WithTranslation } from 'react-i18next';
 import { Bar } from 'react-chartjs-2';
 import 'chartjs-plugin-annotation';
@@ -31,7 +31,8 @@ class ProductsContractedGraph extends Component<Props, State> {
   componentDidMount() {
     const { product } = this.props;
     const client = new Client();
-    client.getProductStatistics(product.id)
+    client
+      .getProductStatistics(product.id)
       .then((data) => {
         this.setState({
           data,
@@ -57,28 +58,32 @@ class ProductsContractedGraph extends Component<Props, State> {
 
     switch (dataSetSelection) {
       case DataSet.VALUES:
-        result.datasets = [{
-          // TODO CHECK
-          label: t('entities.graph.label.value'),
-          backgroundColor: 'rgba(41, 48, 101, 0.8)',
-          borderColor: 'rgba(41, 48, 101, 1)',
-          borderWidth: 1,
-          hoverBackgroundColor: 'rgba(255, 148, 128, 0.8)',
-          hoverBorderColor: 'rgba(41, 48, 101, 1)',
-          data: data.map((x) => x.amount),
-        }];
+        result.datasets = [
+          {
+            // TODO CHECK
+            label: t('entities.graph.label.value'),
+            backgroundColor: 'rgba(41, 48, 101, 0.8)',
+            borderColor: 'rgba(41, 48, 101, 1)',
+            borderWidth: 1,
+            hoverBackgroundColor: 'rgba(255, 148, 128, 0.8)',
+            hoverBorderColor: 'rgba(41, 48, 101, 1)',
+            data: data.map((x) => x.amount),
+          },
+        ];
         break;
       case DataSet.AMOUNTS:
-        result.datasets = [{
-          // TODO CHECK
-          label: t('entities.graph.label.amount'),
-          backgroundColor: 'rgba(41, 48, 101, 0.8)',
-          borderColor: 'rgba(41, 48, 101, 1)',
-          borderWidth: 1,
-          hoverBackgroundColor: 'rgba(255, 148, 128, 0.8)',
-          hoverBorderColor: 'rgba(41, 48, 101, 1)',
-          data: data.map((x) => x.nrOfProducts),
-        }];
+        result.datasets = [
+          {
+            // TODO CHECK
+            label: t('entities.graph.label.amount'),
+            backgroundColor: 'rgba(41, 48, 101, 0.8)',
+            borderColor: 'rgba(41, 48, 101, 1)',
+            borderWidth: 1,
+            hoverBackgroundColor: 'rgba(255, 148, 128, 0.8)',
+            hoverBorderColor: 'rgba(41, 48, 101, 1)',
+            data: data.map((x) => x.nrOfProducts),
+          },
+        ];
         break;
       default:
     }
@@ -94,7 +99,6 @@ class ProductsContractedGraph extends Component<Props, State> {
       case DataSet.VALUES:
         if (product.minTarget === 0) {
           options = {
-
             scales: {
               x: {
                 stacked: true,
@@ -261,7 +265,7 @@ class ProductsContractedGraph extends Component<Props, State> {
                 stacked: true,
                 beginAtZero: true,
                 ticks: {
-                  callback(value: number | string ) {
+                  callback(value: number | string) {
                     return value;
                   },
                 },
@@ -353,11 +357,7 @@ class ProductsContractedGraph extends Component<Props, State> {
           </Grid.Row>
         </Grid>
         <div>
-          <Bar
-            data={chartData}
-            options={chartOptions}
-            redraw
-          />
+          <Bar data={chartData} options={chartOptions} redraw />
         </div>
         <p style={{ textAlign: 'center', fontStyle: 'italic', marginTop: '0.5em' }}>
           {t('entities.product.warningFinancialYear')}

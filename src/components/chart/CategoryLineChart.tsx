@@ -1,4 +1,4 @@
-import { createRef, Component, ReactNode, RefObject } from "react";
+import { createRef, Component, ReactNode, RefObject } from 'react';
 import { Dropdown, Grid } from 'semantic-ui-react';
 import { withTranslation, WithTranslation } from 'react-i18next';
 import { Line } from 'react-chartjs-2';
@@ -47,16 +47,19 @@ class CategoryLineChart extends Component<Props, State> {
   };
 
   createLineChartDataObject(): ChartData<'line'> {
-    const {
-      data, labels, getCatName,
-    } = this.props;
+    const { data, labels, getCatName } = this.props;
     const { dataSetSelection } = this.state;
 
     let valueArray: 'amount' | 'nrOfProducts';
     switch (dataSetSelection) {
-      case DataSet.VALUES: valueArray = 'amount'; break;
-      case DataSet.AMOUNTS: valueArray = 'nrOfProducts'; break;
-      default: throw new Error();
+      case DataSet.VALUES:
+        valueArray = 'amount';
+        break;
+      case DataSet.AMOUNTS:
+        valueArray = 'nrOfProducts';
+        break;
+      default:
+        throw new Error();
     }
 
     const result: ChartData<'line'> = {
@@ -122,7 +125,7 @@ class CategoryLineChart extends Component<Props, State> {
             y: {
               beginAtZero: true,
               ticks: {
-                callback(value: number | string ) {
+                callback(value: number | string) {
                   return value;
                 },
                 precision: 0,
@@ -172,12 +175,7 @@ class CategoryLineChart extends Component<Props, State> {
           </Grid.Row>
         </Grid>
         <div>
-          <Line
-            ref={this.chartReference}
-            data={chartData}
-            options={options}
-            redraw
-          />
+          <Line ref={this.chartReference} data={chartData} options={options} redraw />
         </div>
       </>
     );

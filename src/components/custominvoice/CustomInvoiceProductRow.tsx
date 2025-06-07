@@ -1,7 +1,5 @@
 import { ChangeEvent, useState } from 'react';
-import {
-  Button, Input, Table, Dropdown,
-} from 'semantic-ui-react';
+import { Button, Input, Table, Dropdown } from 'semantic-ui-react';
 import validator from 'validator';
 import { useTranslation } from 'react-i18next';
 import { CustomProduct, VAT } from '../../clients/server.generated';
@@ -11,7 +9,11 @@ interface Props {
   product: CustomProduct;
   id: number;
 
-  updateProduct: <T extends keyof CustomProduct = keyof CustomProduct>(id: number, attribute: T, value: CustomProduct[T]) => void;
+  updateProduct: <T extends keyof CustomProduct = keyof CustomProduct>(
+    id: number,
+    attribute: T,
+    value: CustomProduct[T],
+  ) => void;
 
   removeProduct: (id: number) => void;
 }
@@ -75,9 +77,7 @@ function CustomInvoiceProductRow(props: Props) {
           fluid
         />
       </Table.Cell>
-      <Table.Cell width="2">
-        {formatPriceFull(props.product.amount * props.product.pricePerOne)}
-      </Table.Cell>
+      <Table.Cell width="2">{formatPriceFull(props.product.amount * props.product.pricePerOne)}</Table.Cell>
       <Table.Cell collapsing>
         <Button
           color="red"

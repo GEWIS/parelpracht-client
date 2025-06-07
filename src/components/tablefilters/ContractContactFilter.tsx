@@ -8,7 +8,7 @@ import ColumnFilter from '../ColumnFilter';
 import { formatContactName } from '../../helpers/contact';
 
 interface Props {
-  options: ContactSummary[],
+  options: ContactSummary[];
 }
 
 function ContractContactFilter(props: Props) {
@@ -20,20 +20,14 @@ function ContractContactFilter(props: Props) {
       options={props.options.map((o) => ({
         value: o.id,
         key: o.id,
-        text: formatContactName(
-          o.firstName,
-          o.lastNamePreposition,
-          o.lastName,
-        ),
+        text: formatContactName(o.firstName, o.lastNamePreposition, o.lastName),
       }))}
     />
   );
 }
 
 const mapStateToProps = (state: RootState) => ({
-  options: getSummaryCollection<ContactSummary>(
-    state, SummaryCollections.Contacts,
-  ).options,
+  options: getSummaryCollection<ContactSummary>(state, SummaryCollections.Contacts).options,
 });
 
 export default connect(mapStateToProps)(ContractContactFilter);

@@ -7,7 +7,7 @@ import { SummaryCollections } from '../../stores/summaries/summaries';
 import { Tables } from '../../stores/tables/tables';
 
 interface Props {
-  options: ProductSummary[]
+  options: ProductSummary[];
 }
 
 function ProductFilter(props: Props) {
@@ -22,9 +22,7 @@ function ProductFilter(props: Props) {
 }
 
 const mapStateToProps = (state: RootState) => ({
-  options: getSummaryCollection<ProductSummary>(
-    state, SummaryCollections.Products,
-  ).options,
+  options: getSummaryCollection<ProductSummary>(state, SummaryCollections.Products).options,
 });
 
 export default connect(mapStateToProps)(ProductFilter);

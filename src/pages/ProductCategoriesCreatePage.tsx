@@ -1,4 +1,4 @@
-import { Component } from "react";
+import { Component } from 'react';
 import { Modal } from 'semantic-ui-react';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
@@ -27,8 +27,7 @@ class ProductCategoriesCreatePage extends Component<Props> {
   }
 
   componentDidUpdate(prevProps: Props) {
-    if (prevProps.status === ResourceStatus.SAVING
-      && this.props.status === ResourceStatus.FETCHED) {
+    if (prevProps.status === ResourceStatus.SAVING && this.props.status === ResourceStatus.FETCHED) {
       this.closeWithPopupMessage();
       this.props.showTransientAlert({
         title: 'Success',
@@ -57,14 +56,7 @@ class ProductCategoriesCreatePage extends Component<Props> {
     } as unknown as ProductCategory;
 
     return (
-      <Modal
-        size="tiny"
-        onClose={this.close}
-        open
-        closeIcon
-        dimmer="blurring"
-        closeOnDimmerClick={false}
-      >
+      <Modal size="tiny" onClose={this.close} open closeIcon dimmer="blurring" closeOnDimmerClick={false}>
         <Modal.Content>
           <AlertContainer />
           <ProductCategoryProps category={category} create onCancel={this.close} />
@@ -84,6 +76,5 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   clearCategory: () => dispatch(clearSingle(SingleEntities.ProductCategory)),
   showTransientAlert: (alert: TransientAlert) => dispatch(showTransientAlert(alert)),
 });
-
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ProductCategoriesCreatePage));

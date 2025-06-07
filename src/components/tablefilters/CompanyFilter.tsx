@@ -7,8 +7,8 @@ import { Tables } from '../../stores/tables/tables';
 import ColumnFilter from '../ColumnFilter';
 
 interface Props {
-  options: CompanySummary[],
-  table: Tables,
+  options: CompanySummary[];
+  table: Tables;
 }
 
 function CompanyFilter(props: Props) {
@@ -23,9 +23,7 @@ function CompanyFilter(props: Props) {
 }
 
 const mapStateToProps = (state: RootState) => ({
-  options: getSummaryCollection<CompanySummary>(
-    state, SummaryCollections.Companies,
-  ).options,
+  options: getSummaryCollection<CompanySummary>(state, SummaryCollections.Companies).options,
 });
 
 export default connect(mapStateToProps)(CompanyFilter);

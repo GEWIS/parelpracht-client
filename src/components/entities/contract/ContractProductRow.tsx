@@ -1,4 +1,4 @@
-import { Component } from "react";
+import { Component } from 'react';
 import { Checkbox, Table } from 'semantic-ui-react';
 import { ActivityType, ProductInstance, ProductInstanceStatus } from '../../../clients/server.generated';
 import './ContractComponent.scss';
@@ -7,7 +7,7 @@ import ProductInstanceLink from '../product/ProductInstanceLink';
 import { SingleEntities } from '../../../stores/single/single';
 import { formatStatus, getLastStatus } from '../../../helpers/activity';
 import InvoiceLink from '../invoice/InvoiceLink';
-import {WithRouter, withRouter} from '../../../WithRouter';
+import { WithRouter, withRouter } from '../../../WithRouter';
 
 interface Props extends WithRouter {
   productInstance: ProductInstance;
@@ -22,16 +22,14 @@ function showRecentStatus(productInstance: ProductInstance): string {
     return null;
   });
 
-  const sortedArray = [...statusArray].sort((a, b) => (b.createdAt.getTime() - a.createdAt.getTime()));
+  const sortedArray = [...statusArray].sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
   if (sortedArray.length === 0) return '';
   return sortedArray[0].subType!;
 }
 
 class ContractProductRow extends Component<Props> {
   public render() {
-    const {
-      productInstance, selectFunction, selected,
-    } = this.props;
+    const { productInstance, selectFunction, selected } = this.props;
 
     let invoice;
     if (productInstance.invoiceId) {
@@ -45,9 +43,10 @@ class ContractProductRow extends Component<Props> {
             onChange={() => {
               selectFunction(productInstance.id);
             }}
-            disabled={productInstance.invoiceId !== null
-              || getLastStatus(productInstance.activities)?.subType
-                   === ProductInstanceStatus.CANCELLED}
+            disabled={
+              productInstance.invoiceId !== null ||
+              getLastStatus(productInstance.activities)?.subType === ProductInstanceStatus.CANCELLED
+            }
             checked={selected}
           />
         </Table.Cell>
@@ -60,18 +59,10 @@ class ContractProductRow extends Component<Props> {
             details={productInstance.details}
           />
         </Table.Cell>
-        <Table.Cell collapsing>
-          {formatPriceDiscount(productInstance.discount)}
-        </Table.Cell>
-        <Table.Cell collapsing>
-          {formatPriceFull(productInstance.basePrice - productInstance.discount)}
-        </Table.Cell>
-        <Table.Cell collapsing>
-          {formatStatus(showRecentStatus(productInstance))}
-        </Table.Cell>
-        <Table.Cell collapsing>
-          {invoice}
-        </Table.Cell>
+        <Table.Cell collapsing>{formatPriceDiscount(productInstance.discount)}</Table.Cell>
+        <Table.Cell collapsing>{formatPriceFull(productInstance.basePrice - productInstance.discount)}</Table.Cell>
+        <Table.Cell collapsing>{formatStatus(showRecentStatus(productInstance))}</Table.Cell>
+        <Table.Cell collapsing>{invoice}</Table.Cell>
       </Table.Row>
     );
   }

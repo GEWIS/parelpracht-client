@@ -5,8 +5,7 @@ import { ActionTypeNames, ShowTransientAlertAction } from './actions';
 function* showTransientAlert(action: ShowTransientAlertAction) {
   const showAlertAction = showAlert(action.alert);
   yield put(showAlertAction);
-  const delayTime = typeof action.alert.displayTimeInMs !== 'undefined'
-    ? action.alert.displayTimeInMs : 10000;
+  const delayTime = typeof action.alert.displayTimeInMs !== 'undefined' ? action.alert.displayTimeInMs : 10000;
   yield delay(delayTime);
   yield put(hideAlert(showAlertAction.alert.id));
 }

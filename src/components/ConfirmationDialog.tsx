@@ -12,12 +12,7 @@ interface Props {
 }
 
 const ConfirmationDialog = (props: Props) => {
-  return (
-    <ConfirmationDialogWithParameter
-
-      {...props}
-    />
-  );
+  return <ConfirmationDialogWithParameter {...props} />;
 };
 
 export default ConfirmationDialog;

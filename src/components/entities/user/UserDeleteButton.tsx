@@ -1,4 +1,3 @@
-
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import { Button, ButtonProps } from 'semantic-ui-react';
@@ -16,28 +15,12 @@ interface Props extends ButtonProps {
 }
 
 function UserDeleteButton(props: Props) {
-  const {
-    userId, deleteUser, status, ...rest
-  } = props;
+  const { userId, deleteUser, status, ...rest } = props;
 
   if (status === ResourceStatus.DELETING) {
-    return (
-      <Button
-        negative
-        icon="trash"
-        {...rest}
-        loading
-      />
-    );
+    return <Button negative icon="trash" {...rest} loading />;
   }
-  return (
-    <Button
-      negative
-      icon="trash"
-      {...rest}
-      onClick={() => deleteUser(userId)}
-    />
-  );
+  return <Button negative icon="trash" {...rest} onClick={() => deleteUser(userId)} />;
 }
 
 const mapStateToProps = (state: RootState) => {
@@ -47,9 +30,7 @@ const mapStateToProps = (state: RootState) => {
 };
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
-  deleteUser: (id: number) => dispatch(
-    deleteSingle(SingleEntities.User, id),
-  ),
+  deleteUser: (id: number) => dispatch(deleteSingle(SingleEntities.User, id)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(UserDeleteButton);

@@ -1,6 +1,4 @@
-import {
-  call, put, select, throttle,
-} from 'redux-saga/effects';
+import { call, put, select, throttle } from 'redux-saga/effects';
 import {
   ApiException,
   CategoryParams,
@@ -8,22 +6,16 @@ import {
   ListOrFilter,
   ListParams,
   ListSorting,
-  SortDirection, ValueAddedTax, VATListResponse, VATSummary,
+  SortDirection,
+  ValueAddedTax,
+  VATListResponse,
+  VATSummary,
 } from '../../clients/server.generated';
 import { takeEveryWithErrorHandling } from '../errorHandling';
-import {
-  errorSingle, notFoundSingle, setSingle,
-} from '../single/actionCreators';
-import {
-  singleActionPattern,
-  SingleActionType,
-  SingleFetchAction,
-  SingleSaveAction,
-} from '../single/actions';
+import { errorSingle, notFoundSingle, setSingle } from '../single/actionCreators';
+import { singleActionPattern, SingleActionType, SingleFetchAction, SingleSaveAction } from '../single/actions';
 import { SingleEntities } from '../single/single';
-import {
-  setSummaries, updateSummary,
-} from '../summaries/actionCreators';
+import { setSummaries, updateSummary } from '../summaries/actionCreators';
 import { summariesActionPattern, SummariesActionType } from '../summaries/actions';
 import { SummaryCollections } from '../summaries/summaries';
 import { fetchTable, prevPageTable, setTable } from '../tables/actionCreators';
@@ -43,11 +35,7 @@ function* fetchValueAddedTax() {
   const client = new Client();
 
   const state: TableState<ValueAddedTax> = yield select(getTable, Tables.ValueAddedTax);
-  const {
-    sortColumn, sortDirection,
-    take, skip,
-    search, filters,
-  } = state;
+  const { sortColumn, sortDirection, take, skip, search, filters } = state;
 
   let { list, count } = yield call(
     [client, client.getAllCategories],
@@ -99,9 +87,7 @@ function* fetchSingleValueAddedTax(action: SingleFetchAction<SingleEntities.Valu
   yield put(updateSummary(SummaryCollections.ValueAddedTax, toSummary(valueAddedTax)));
 }
 
-function* errorFetchSingleValueAddedTax(
-  error: ApiException,
-) {
+function* errorFetchSingleValueAddedTax(error: ApiException) {
   if (error.status === 404) {
     yield put(notFoundSingle(SingleEntities.ValueAddedTax));
   } else {
@@ -109,9 +95,7 @@ function* errorFetchSingleValueAddedTax(
   }
 }
 
-function* saveSingleValueAddedTax(
-  action: SingleSaveAction<SingleEntities.ValueAddedTax, CategoryParams>,
-) {
+function* saveSingleValueAddedTax(action: SingleSaveAction<SingleEntities.ValueAddedTax, CategoryParams>) {
   const client = new Client();
   yield call([client, client.updateVAT], action.id, action.data);
   const valueAddedTax: ValueAddedTax = yield call([client, client.getVAT], action.id);
@@ -136,7 +120,7 @@ function* watchSaveSingleValueAddedTax() {
 //   action: SingleCreateAction<SingleEntities.ProductCategory, CategoryParams>,
 // ) {
 //   const client = new Client();
- 
+
 //   const productCategory: ProductCategory = yield call([client, client.createCategory], action.data);
 //   yield put(setSingle(SingleEntities.ProductCategory, productCategory));
 //   yield put(fetchTable(Tables.ProductCategories));
@@ -155,7 +139,7 @@ function* watchSaveSingleValueAddedTax() {
 //   );
 // }
 //
- 
+
 // function* deleteSingleProductCategory(action: SingleDeleteAction<SingleEntities.ProductCategory>) {
 //   const client = new Client();
 //   yield call([client, client.deleteCategory], action.id);
@@ -177,18 +161,11 @@ function* watchSaveSingleValueAddedTax() {
 
 export default [
   function* watchFetchProductCategories() {
-    yield throttle(
-      500,
-      tableActionPattern(Tables.ProductCategories, TableActionType.Fetch),
-      fetchValueAddedTax,
-    );
+    yield throttle(500, tableActionPattern(Tables.ProductCategories, TableActionType.Fetch), fetchValueAddedTax);
   },
   function* watchFetchValueAddedTaxSummaries() {
     yield takeEveryWithErrorHandling(
-      summariesActionPattern(
-        SummaryCollections.ValueAddedTax,
-        SummariesActionType.Fetch,
-      ),
+      summariesActionPattern(SummaryCollections.ValueAddedTax, SummariesActionType.Fetch),
       fetchValueAddedTaxSummaries,
     );
   },

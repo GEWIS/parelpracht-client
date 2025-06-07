@@ -1,17 +1,10 @@
-import { Component } from "react";
-import {
-  Dimmer,
-  Header,
-  Loader,
-  Modal, Segment, Table,
-} from 'semantic-ui-react';
+import { Component } from 'react';
+import { Dimmer, Header, Loader, Modal, Segment, Table } from 'semantic-ui-react';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import { withTranslation, WithTranslation } from 'react-i18next';
-import {
-  Contact, ContactFunction, ContractStatus, Gender,
-} from '../clients/server.generated';
+import { Contact, ContactFunction, ContractStatus, Gender } from '../clients/server.generated';
 import { clearSingle, fetchSingle } from '../stores/single/actionCreators';
 import { RootState } from '../stores/store';
 import ResourceStatus from '../stores/resourceStatus';
@@ -55,15 +48,11 @@ class ContactModal extends Component<Props> {
   }
 
   componentDidUpdate(prevProps: Props) {
-    if (this.props.status === ResourceStatus.FETCHED
-      && prevProps.status === ResourceStatus.SAVING
-    ) {
+    if (this.props.status === ResourceStatus.FETCHED && prevProps.status === ResourceStatus.SAVING) {
       this.closeWithPopupMessage();
     }
 
-    if (this.props.status === ResourceStatus.EMPTY
-      && prevProps.status === ResourceStatus.DELETING
-    ) {
+    if (this.props.status === ResourceStatus.EMPTY && prevProps.status === ResourceStatus.DELETING) {
       this.closeWithPopupMessage();
 
       this.props.showTransientAlert({
@@ -129,17 +118,11 @@ class ContactModal extends Component<Props> {
     if (contact === undefined) {
       document.title = t('entity.contact');
       return (
-        <Modal
-          onClose={this.close}
-          closeIcon
-          open
-          dimmer="blurring"
-          size="tiny"
-        >
+        <Modal onClose={this.close} closeIcon open dimmer="blurring" size="tiny">
           <Segment placeholder attached="bottom">
-            <AlertContainer/>
+            <AlertContainer />
             <Dimmer active inverted>
-              <Loader/>
+              <Loader />
             </Dimmer>
           </Segment>
         </Modal>
@@ -161,15 +144,9 @@ class ContactModal extends Component<Props> {
           <Table>
             <Table.Header>
               <Table.Row>
-                <Table.HeaderCell>
-                  {t('entities.contract.props.title')}
-                </Table.HeaderCell>
-                <Table.HeaderCell>
-                  {t('entity.company')}
-                </Table.HeaderCell>
-                <Table.HeaderCell>
-                  {t('entities.generalProps.status')}
-                </Table.HeaderCell>
+                <Table.HeaderCell>{t('entities.contract.props.title')}</Table.HeaderCell>
+                <Table.HeaderCell>{t('entity.company')}</Table.HeaderCell>
+                <Table.HeaderCell>{t('entities.generalProps.status')}</Table.HeaderCell>
               </Table.Row>
             </Table.Header>
             <Table.Body>
@@ -180,11 +157,9 @@ class ContactModal extends Component<Props> {
                       <NavLink to={`/contract/${contract.id}`}>{contract.title}</NavLink>
                     </Table.Cell>
                     <Table.Cell>
-                      <CompanyLink id={contract.companyId}/>
+                      <CompanyLink id={contract.companyId} />
                     </Table.Cell>
-                    <Table.Cell>
-                      {formatStatus(this.props.getContractStatus(contract.id))}
-                    </Table.Cell>
+                    <Table.Cell>{formatStatus(this.props.getContractStatus(contract.id))}</Table.Cell>
                   </Table.Row>
                 );
               })}
@@ -195,20 +170,16 @@ class ContactModal extends Component<Props> {
     }
 
     return (
-      <Modal
-        onClose={this.close}
-        open
-        closeIcon
-        dimmer="blurring"
-        size="tiny"
-      >
+      <Modal onClose={this.close} open closeIcon dimmer="blurring" size="tiny">
         <Segment attached="bottom">
           <AlertContainer />
           <ContactProps
             create={this.props.create}
             contact={contact}
             onCompanyPage={this.props.onCompanyPage}
-            onCancel={() => { this.close(); }}
+            onCancel={() => {
+              this.close();
+            }}
           />
           {contractOverview}
         </Segment>
@@ -234,5 +205,4 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
 
 ContactModal.contextType = TitleContext;
 
-export default withTranslation()(withRouter(connect(mapStateToProps,
-  mapDispatchToProps)(ContactModal)));
+export default withTranslation()(withRouter(connect(mapStateToProps, mapDispatchToProps)(ContactModal)));

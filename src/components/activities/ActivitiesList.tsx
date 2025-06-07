@@ -1,13 +1,11 @@
-import { Component } from "react";
-import {
-  Button, Feed, Icon, Loader,
-} from 'semantic-ui-react';
+import { Component } from 'react';
+import { Button, Feed, Icon, Loader } from 'semantic-ui-react';
 import { WithTranslation, withTranslation } from 'react-i18next';
 import { SingleEntities } from '../../stores/single/single';
 import ResourceStatus from '../../stores/resourceStatus';
 import AuthorizationComponent from '../AuthorizationComponent';
 import { Roles } from '../../clients/server.generated';
-import {WithRouter, withRouter} from '../../WithRouter';
+import { WithRouter, withRouter } from '../../WithRouter';
 import CreateCommentRow from './CreateCommentRow';
 import { GeneralActivity } from './GeneralActivity';
 import ActivityComponent from './ActivityComponent';
@@ -43,29 +41,23 @@ class ActivitiesList extends Component<Props, State> {
   };
 
   public render() {
-    const {
-      activities, componentId, componentType, resourceStatus, parentId, t,
-    } = this.props;
+    const { activities, componentId, componentType, resourceStatus, parentId, t } = this.props;
     const { creating } = this.state;
 
     if (activities === undefined) {
-      return (
-        <Loader content="Loading" active />
-      );
+      return <Loader content="Loading" active />;
     }
 
     let activitiesComponent;
     if (activities.length === 0) {
-      activitiesComponent = (
-        <h4>
-          {t('entities.product.noActivities')}
-        </h4>
-      );
+      activitiesComponent = <h4>{t('entities.product.noActivities')}</h4>;
     } else {
       activitiesComponent = (
         <Feed>
           {[...activities]
-            .sort((a, b) => { return b.createdAt.getTime() - a.createdAt.getTime(); })
+            .sort((a, b) => {
+              return b.createdAt.getTime() - a.createdAt.getTime();
+            })
             .map((activity) => (
               <ActivityComponent
                 key={activity.id}
@@ -101,10 +93,7 @@ class ActivitiesList extends Component<Props, State> {
       <>
         <h3>
           {t('entity.activities')}
-          <AuthorizationComponent
-            roles={[Roles.GENERAL, Roles.ADMIN, Roles.FINANCIAL]}
-            notFound={false}
-          >
+          <AuthorizationComponent roles={[Roles.GENERAL, Roles.ADMIN, Roles.FINANCIAL]} notFound={false}>
             <Button
               icon
               labelPosition="left"

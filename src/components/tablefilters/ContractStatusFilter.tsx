@@ -18,14 +18,7 @@ function ContractStatusFilter({
     return { key: i, value: s, text: formatStatus(s) };
   });
 
-  return (
-    <ColumnFilter
-      column={column}
-      columnName={columnName}
-      table={table}
-      options={options}
-    />
-  );
+  return <ColumnFilter column={column} columnName={columnName} table={table} options={options} />;
 }
 
 export default ContractStatusFilter;

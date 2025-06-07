@@ -1,8 +1,6 @@
-import { Component } from "react";
+import { Component } from 'react';
 import { NavLink } from 'react-router-dom';
-import {
-  Breadcrumb, Container, Grid, Loader, Segment, Tab, TabPane, TabProps,
-} from 'semantic-ui-react';
+import { Breadcrumb, Container, Grid, Loader, Segment, Tab, TabPane, TabProps } from 'semantic-ui-react';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import { withTranslation, WithTranslation } from 'react-i18next';
@@ -85,9 +83,7 @@ class SingleContractPage extends Component<Props, State> {
       document.title = `C${contract.id} ${contract.title}`;
     }
 
-    if (status === ResourceStatus.EMPTY
-      && prevProps.status === ResourceStatus.DELETING
-    ) {
+    if (status === ResourceStatus.EMPTY && prevProps.status === ResourceStatus.DELETING) {
       navigate('/contract');
       this.props.showTransientAlert({
         title: 'Success',
@@ -99,57 +95,54 @@ class SingleContractPage extends Component<Props, State> {
   }
 
   getPanes = () => {
-    const {
-      contract, fetchContract, status, hasRole, t,
-    } = this.props;
+    const { contract, fetchContract, status, hasRole, t } = this.props;
 
     const panes = [
       {
         menuItem: t('entity.productinstances'),
-        render: contract ? () => (
-          <TabPane>
-            <ContractProductList
-              contract={contract}
-            />
-          </TabPane>
-        ) : () => <TabPane />,
+        render: contract
+          ? () => (
+              <TabPane>
+                <ContractProductList contract={contract} />
+              </TabPane>
+            )
+          : () => <TabPane />,
       },
     ];
 
     if (hasRole(Roles.ADMIN) || hasRole(Roles.GENERAL) || hasRole(Roles.AUDIT)) {
       panes.push({
         menuItem: t('entity.files'),
-        render: contract ? () => (
-          <TabPane>
-            <FilesList
-              files={contract.files}
-              entityId={contract.id}
-              entity={SingleEntities.Contract}
-              fetchEntity={fetchContract}
-              generateModal={(
-                <GenerateContractModal
-                  contract={contract}
-                  fetchContract={fetchContract}
+        render: contract
+          ? () => (
+              <TabPane>
+                <FilesList
+                  files={contract.files}
+                  entityId={contract.id}
+                  entity={SingleEntities.Contract}
+                  fetchEntity={fetchContract}
+                  generateModal={<GenerateContractModal contract={contract} fetchContract={fetchContract} />}
+                  status={status}
                 />
-              )}
-              status={status}
-            />
-          </TabPane>
-        ) : () => <TabPane />,
+              </TabPane>
+            )
+          : () => <TabPane />,
       });
 
       panes.push({
         menuItem: t('entity.activities'),
-        render: contract ? () => (
-          <TabPane>
-            <ActivitiesList
-              activities={contract.activities as GeneralActivity[]}
-              componentId={contract.id}
-              componentType={SingleEntities.Contract}
-              resourceStatus={status}
-            />
-          </TabPane>
-        ) : () => <TabPane />,
+        render: contract
+          ? () => (
+              <TabPane>
+                <ActivitiesList
+                  activities={contract.activities as GeneralActivity[]}
+                  componentId={contract.id}
+                  componentType={SingleEntities.Contract}
+                  resourceStatus={status}
+                />
+              </TabPane>
+            )
+          : () => <TabPane />,
       });
     }
 
@@ -199,9 +192,9 @@ class SingleContractPage extends Component<Props, State> {
                   documentType={SingleEntities.Contract}
                   resourceStatus={status}
                   roles={[Roles.ADMIN, Roles.GENERAL]}
-                  canCancel={contract.products
-                    .every((p) => p.activities
-                      .find((a) => a.subType === ProductInstanceStatus.CANCELLED) !== undefined)}
+                  canCancel={contract.products.every(
+                    (p) => p.activities.find((a) => a.subType === ProductInstanceStatus.CANCELLED) !== undefined,
+                  )}
                   cancelReason={t('pages.contract.cancelError')}
                 />
               </Segment>
@@ -220,9 +213,7 @@ class SingleContractPage extends Component<Props, State> {
               </Grid.Column>
               <Grid.Column width={6}>
                 <Segment secondary style={{ backgroundColor: 'rgba(243, 244, 245, 0.98)' }}>
-                  <ContractProps
-                    contract={contract}
-                  />
+                  <ContractProps contract={contract} />
                 </Segment>
               </Grid.Column>
             </Grid.Row>
@@ -249,5 +240,4 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
 
 SingleContractPage.contextType = TitleContext;
 
-export default withTranslation()(withRouter(connect(mapStateToProps,
-  mapDispatchToProps)(SingleContractPage)));
+export default withTranslation()(withRouter(connect(mapStateToProps, mapDispatchToProps)(SingleContractPage)));

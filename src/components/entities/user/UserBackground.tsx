@@ -1,4 +1,3 @@
-
 interface Props {
   fileName: string;
   clickable: boolean;

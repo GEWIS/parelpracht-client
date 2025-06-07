@@ -1,7 +1,5 @@
 import { connect } from 'react-redux';
-import {
-  Image,
-} from 'semantic-ui-react';
+import { Image } from 'semantic-ui-react';
 import { useTranslation } from 'react-i18next';
 import { Invoice } from '../../../clients/server.generated';
 import ResourceStatus from '../../../stores/resourceStatus';
@@ -24,33 +22,25 @@ function InvoiceSummary(props: Props) {
   const { t } = useTranslation();
   const { invoice, status, logoFilename } = props;
   if (invoice === undefined) {
-    return (
-      <EntitySummary
-        loading
-        entity={SingleEntities.Invoice}
-        icon="money bill alternate outline"
-      />
-    );
+    return <EntitySummary loading entity={SingleEntities.Invoice} icon="money bill alternate outline" />;
   }
 
-  const loading = (status !== ResourceStatus.FETCHED
-    && status !== ResourceStatus.SAVING
-    && status !== ResourceStatus.ERROR);
+  const loading =
+    status !== ResourceStatus.FETCHED && status !== ResourceStatus.SAVING && status !== ResourceStatus.ERROR;
 
-  const totalPriceNoVat = invoice.products
-    .reduce((a, b) => a + (b.basePrice - b.discount), 0);
+  const totalPriceNoVat = invoice.products.reduce((a, b) => a + (b.basePrice - b.discount), 0);
 
-  const totalPriceWithVat = invoice.products
-    .reduce((a, b) => a + (b.basePrice - b.discount)
-      * (b.product.valueAddedTax.amount / 100 + 1), 0);
+  const totalPriceWithVat = invoice.products.reduce(
+    (a, b) => a + (b.basePrice - b.discount) * (b.product.valueAddedTax.amount / 100 + 1),
+    0,
+  );
 
-  const logo = logoFilename !== '' ? (
-    <Image
-      floated="right"
-      src={`/static/logos/${logoFilename}`}
-      style={{ maxHeight: '4rem', width: 'auto' }}
-    />
-  ) : <div />;
+  const logo =
+    logoFilename !== '' ? (
+      <Image floated="right" src={`/static/logos/${logoFilename}`} style={{ maxHeight: '4rem', width: 'auto' }} />
+    ) : (
+      <div />
+    );
 
   return (
     <EntitySummary

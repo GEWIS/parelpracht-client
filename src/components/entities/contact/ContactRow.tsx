@@ -20,12 +20,8 @@ function ContactRow(props: Props) {
       <Table.Cell>
         <CompanyLink id={contact.companyId} />
       </Table.Cell>
-      <Table.Cell>
-        {contact.email}
-      </Table.Cell>
-      <Table.Cell>
-        {formatFunction(contact.function)}
-      </Table.Cell>
+      <Table.Cell>{contact.email}</Table.Cell>
+      <Table.Cell>{formatFunction(contact.function)}</Table.Cell>
     </Table.Row>
   );
 }

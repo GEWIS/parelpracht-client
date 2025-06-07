@@ -16,13 +16,7 @@ function ProductInstanceInvoicedFilter(props: Props) {
   });
 
   return (
-    <ColumnFilter
-      column="invoiced"
-      columnName="invoice year"
-      multiple
-      table={Tables.ETCompanies}
-      options={options}
-    />
+    <ColumnFilter column="invoiced" columnName="invoice year" multiple table={Tables.ETCompanies} options={options} />
   );
 }
 

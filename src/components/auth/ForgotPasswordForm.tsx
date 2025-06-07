@@ -1,17 +1,15 @@
 import { ChangeEvent, useState } from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
-import {
-  Button, Form, Header, Input,
-} from 'semantic-ui-react';
+import { Button, Form, Header, Input } from 'semantic-ui-react';
 import { useTranslation } from 'react-i18next';
 import { authForgotPassword } from '../../stores/auth/actionCreators';
 import ResourceStatus from '../../stores/resourceStatus';
 import { RootState } from '../../stores/store';
 
 interface Props {
-  status: ResourceStatus,
-  forgotPassword: (email: string) => void,
+  status: ResourceStatus;
+  forgotPassword: (email: string) => void;
 }
 
 function ForgotPasswordForm(props: Props) {
@@ -21,9 +19,7 @@ function ForgotPasswordForm(props: Props) {
   return (
     <Form size="large">
       <Header as="h1">
-        <Header.Subheader>
-          {t('pages.forgotPassword.enterEmail')}
-        </Header.Subheader>
+        <Header.Subheader>{t('pages.forgotPassword.enterEmail')}</Header.Subheader>
       </Header>
       <Form.Field
         id="form-input-email"
@@ -51,9 +47,7 @@ const mapStateToProps = (state: RootState) => ({
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
-  forgotPassword: (email: string) => dispatch(
-    authForgotPassword(email),
-  ),
+  forgotPassword: (email: string) => dispatch(authForgotPassword(email)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ForgotPasswordForm);

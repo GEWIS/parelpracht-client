@@ -25,8 +25,7 @@ function AlertItem(props: Props) {
   );
 }
 
-const mapStateToProps = () => ({
-});
+const mapStateToProps = () => ({});
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
   onHide: (id: string) => {

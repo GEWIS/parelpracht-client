@@ -1,16 +1,16 @@
-import { Component } from "react";
-import {
-  Button, Container, Grid, Header, Icon, Segment,
-} from 'semantic-ui-react';
+import { Component } from 'react';
+import { Button, Container, Grid, Header, Icon, Segment } from 'semantic-ui-react';
 import { withTranslation, WithTranslation } from 'react-i18next';
 import validator from 'validator';
 import {
   CustomInvoiceGenSettings,
   CustomProduct,
-  CustomRecipient, ICustomInvoiceGenSettings,
+  CustomRecipient,
+  ICustomInvoiceGenSettings,
   Language,
   ReturnFileType,
-  Roles, VAT,
+  Roles,
+  VAT,
 } from '../clients/server.generated';
 import CustomInvoiceProducts from '../components/custominvoice/CustomInvoiceProducts';
 import CustomInvoiceProps from '../components/custominvoice/CustomInvoiceProps';
@@ -49,12 +49,14 @@ class CustomInvoicePage extends Component<Props, State> {
           city: '',
           country: '',
         }),
-        products: [new CustomProduct({
-          name: '',
-          amount: 0,
-          pricePerOne: 0,
-          valueAddedTax: VAT.HIGH,
-        })],
+        products: [
+          new CustomProduct({
+            name: '',
+            amount: 0,
+            pricePerOne: 0,
+            valueAddedTax: VAT.HIGH,
+          }),
+        ],
       },
       loading: false,
     };
@@ -65,11 +67,16 @@ class CustomInvoicePage extends Component<Props, State> {
     document.title = t('pages.customInvoice.title');
   }
 
-  setAttribute = <T extends keyof ICustomInvoiceGenSettings = keyof ICustomInvoiceGenSettings>(attribute: T, value: ICustomInvoiceGenSettings[T]) => {
-    this.setState({ customInvoice: {
-      ...this.state.customInvoice,
-      [attribute]: value,
-    } });
+  setAttribute = <T extends keyof ICustomInvoiceGenSettings = keyof ICustomInvoiceGenSettings>(
+    attribute: T,
+    value: ICustomInvoiceGenSettings[T],
+  ) => {
+    this.setState({
+      customInvoice: {
+        ...this.state.customInvoice,
+        [attribute]: value,
+      },
+    });
   };
 
   addProduct = () => {
@@ -84,7 +91,11 @@ class CustomInvoicePage extends Component<Props, State> {
     this.setAttribute('products', products);
   };
 
-  updateProduct = <T extends keyof CustomProduct = keyof CustomProduct>(id: number, attribute: T, value: CustomProduct[T])  => {
+  updateProduct = <T extends keyof CustomProduct = keyof CustomProduct>(
+    id: number,
+    attribute: T,
+    value: CustomProduct[T],
+  ) => {
     const { products } = this.state.customInvoice;
     products[id][attribute] = value;
     this.setAttribute('products', products);
@@ -96,7 +107,10 @@ class CustomInvoicePage extends Component<Props, State> {
     this.setAttribute('products', products);
   };
 
-  updateRecipientAttribute = <T extends keyof CustomRecipient = keyof CustomRecipient>(attribute: T, value: CustomRecipient[T]) => {
+  updateRecipientAttribute = <T extends keyof CustomRecipient = keyof CustomRecipient>(
+    attribute: T,
+    value: CustomRecipient[T],
+  ) => {
     const { recipient } = this.state.customInvoice;
     recipient[attribute] = value;
     this.setAttribute('recipient', recipient);
@@ -112,9 +126,7 @@ class CustomInvoicePage extends Component<Props, State> {
 
   render() {
     const { t } = this.props;
-    const {
-      subject, ourReference, recipient, products, date,
-    } = this.state.customInvoice;
+    const { subject, ourReference, recipient, products, date } = this.state.customInvoice;
 
     return (
       <AuthorizationComponent roles={[Roles.FINANCIAL, Roles.ADMIN]} notFound>
@@ -125,9 +137,7 @@ class CustomInvoicePage extends Component<Props, State> {
                 <Header as="h1">
                   <Icon name="credit card" />
                   <Header.Content>
-                    <Header.Subheader>
-                      {t('pages.customInvoice.subheader')}
-                    </Header.Subheader>
+                    <Header.Subheader>{t('pages.customInvoice.subheader')}</Header.Subheader>
                     {t('pages.customInvoice.header')}
                   </Header.Content>
                 </Header>
@@ -138,27 +148,29 @@ class CustomInvoicePage extends Component<Props, State> {
                   labelPosition="left"
                   primary
                   floated="right"
-                  onClick={() => { this.generate().catch(console.error) }}
+                  onClick={() => {
+                    this.generate().catch(console.error);
+                  }}
                   loading={this.state.loading}
-                  disabled={(isInvalidDate(date) || validator.isEmpty(subject)
-                    || validator.isEmpty(ourReference) || validator.isEmpty(recipient.name))}
+                  disabled={
+                    isInvalidDate(date) ||
+                    validator.isEmpty(subject) ||
+                    validator.isEmpty(ourReference) ||
+                    validator.isEmpty(recipient.name)
+                  }
                 >
                   <Icon name="download" />
                   {t('pages.customInvoice.generateButton')}
                 </Button>
               </Grid.Column>
             </Grid>
-
           </Container>
         </Segment>
         <Container style={{ marginTop: '2em' }}>
           <Grid>
             <Grid.Row columns={2}>
               <Grid.Column>
-                <CustomInvoiceProps
-                  customInvoice={this.state.customInvoice}
-                  setAttribute={this.setAttribute}
-                />
+                <CustomInvoiceProps customInvoice={this.state.customInvoice} setAttribute={this.setAttribute} />
               </Grid.Column>
               <Grid.Column>
                 <CustomInvoiceRecipient

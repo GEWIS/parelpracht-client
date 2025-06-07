@@ -1,8 +1,6 @@
-import { useEffect } from "react";
+import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import {
-  Button, Container, Grid, Header, Icon, Segment,
-} from 'semantic-ui-react';
+import { Button, Container, Grid, Header, Icon, Segment } from 'semantic-ui-react';
 import { useNavigate } from 'react-router-dom';
 import { Roles } from '../clients/server.generated';
 import AuthorizationComponent from '../components/AuthorizationComponent';
@@ -45,7 +43,6 @@ function ProductCategoriesPage() {
           </Grid>
 
           <ProductCategoriesTableControls />
-
         </Container>
       </Segment>
       <Container style={{ marginTop: '20px' }}>
