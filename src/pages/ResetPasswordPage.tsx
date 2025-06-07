@@ -1,10 +1,6 @@
-import React, { useEffect } from 'react';
-import {
-  NavLink, Navigate as Redirect, useLocation,
-} from 'react-router-dom';
-import {
-  Button, Container, Header, Icon, Segment,
-} from 'semantic-ui-react';
+import { useEffect } from 'react';
+import { NavLink, Navigate as Redirect, useLocation } from 'react-router-dom';
+import { Button, Container, Header, Icon, Segment } from 'semantic-ui-react';
 import * as jose from 'jose';
 import queryString from 'query-string';
 import { Dispatch } from 'redux';
@@ -26,29 +22,29 @@ interface Props {
   clearStatus: () => void;
 }
 
-function ResetPasswordPage(props: Props) {
+function ResetPasswordPage({ status, clearStatus }: Props) {
   const location = useLocation();
   const { token } = queryString.parse(location.search);
   const { t } = useTranslation();
   const { setTitle } = useTitle();
 
   useEffect(() => {
-    props.clearStatus();
+    clearStatus();
     setTitle(t('pages.resetPassword.title'));
-  }, []);
+  }, [clearStatus, setTitle, t]);
 
   if (typeof token !== 'string') {
     return <Redirect to="/login" />;
   }
 
   const payload = jose.decodeJwt(token);
-  if (!(payload)) {
+  if (!payload) {
     return <Redirect to="/login" />;
   }
 
   const newUser = payload.type === 'PASSWORD_SET';
 
-  if (props.status === ResourceStatus.FETCHED) {
+  if (status === ResourceStatus.FETCHED) {
     return (
       <>
         <div className="bg" />
@@ -85,9 +81,7 @@ function ResetPasswordPage(props: Props) {
             <Header as="h1">
               {newUser ? t('pages.resetPassword.setPassword') : t('pages.resetPassword.resetPassword')}
             </Header>
-            <ResetPasswordForm
-              token={token}
-            />
+            <ResetPasswordForm token={token} />
             <Button as={NavLink} to="/login" style={{ marginTop: '1em' }} basic>
               <Icon name="arrow left" basic />
               {t('pages.forgotPassword.back')}

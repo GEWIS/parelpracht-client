@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { Component } from 'react';
 import { Modal } from 'semantic-ui-react';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
@@ -21,14 +21,13 @@ interface Props extends WithRouter {
   showTransientAlert: (alert: TransientAlert) => void;
 }
 
-class ProductCategoriesCreatePage extends React.Component<Props> {
+class ProductCategoriesCreatePage extends Component<Props> {
   componentDidMount() {
     this.props.clearCategory();
   }
 
   componentDidUpdate(prevProps: Props) {
-    if (prevProps.status === ResourceStatus.SAVING
-      && this.props.status === ResourceStatus.FETCHED) {
+    if (prevProps.status === ResourceStatus.SAVING && this.props.status === ResourceStatus.FETCHED) {
       this.closeWithPopupMessage();
       this.props.showTransientAlert({
         title: 'Success',
@@ -54,20 +53,13 @@ class ProductCategoriesCreatePage extends React.Component<Props> {
       id: 0,
       name: '',
       products: [],
-    } as any as ProductCategory;
+    } as unknown as ProductCategory;
 
     return (
-      <Modal
-        size="tiny"
-        onClose={this.close}
-        open
-        closeIcon
-        dimmer="blurring"
-        closeOnDimmerClick={false}
-      >
+      <Modal size="tiny" onClose={this.close} open closeIcon dimmer="blurring" closeOnDimmerClick={false}>
         <Modal.Content>
           <AlertContainer />
-          <ProductCategoryProps category={category} create onCancel={this.close} router={this.props.router} />
+          <ProductCategoryProps category={category} create onCancel={this.close} />
         </Modal.Content>
       </Modal>
     );
@@ -85,5 +77,4 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   showTransientAlert: (alert: TransientAlert) => dispatch(showTransientAlert(alert)),
 });
 
-// eslint-disable-next-line max-len
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ProductCategoriesCreatePage));

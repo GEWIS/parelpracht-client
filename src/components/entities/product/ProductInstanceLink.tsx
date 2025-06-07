@@ -1,5 +1,3 @@
-/* eslint-disable react/jsx-props-no-spreading */
-import React from 'react';
 import { connect } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import { Icon } from 'semantic-ui-react';
@@ -17,9 +15,7 @@ interface Props {
 }
 
 function ProductInstanceLink(props: Props) {
-  const {
-    entity, entityId, productInstanceId, productName, details,
-  } = props;
+  const { entity, entityId, productInstanceId, productName, details = '' } = props;
   return (
     <NavLink to={`/${entity.toLowerCase()}/${entityId}/product/${productInstanceId}`}>
       <Icon name="shopping bag" />
@@ -28,10 +24,6 @@ function ProductInstanceLink(props: Props) {
     </NavLink>
   );
 }
-
-ProductInstanceLink.defaultProps = {
-  details: '',
-};
 
 const mapStateToProps = (state: RootState, props: { productId: number }) => {
   return {

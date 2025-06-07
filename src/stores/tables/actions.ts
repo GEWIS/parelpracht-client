@@ -20,10 +20,10 @@ type TableAction<A, T> = Action<string>;
 export type TableFetchAction<T> = TableAction<TableActionType.Fetch, T>;
 
 export type TableSetAction<T, R> = TableAction<TableActionType.Set, T> & {
-  data: R[],
-  count: number,
-  extra: object,
-  lastSeen?: Date,
+  data: R[];
+  count: number;
+  extra: object;
+  lastSeen?: Date;
 };
 
 export type TableClearAction<T> = TableAction<TableActionType.Clear, T>;
@@ -54,17 +54,18 @@ export type TableSetFilterAction<T> = TableAction<TableActionType.SetFilter, T> 
 };
 
 export type TableActions<T extends Tables, R> =
-  TableFetchAction<T> | TableSetAction<T, R> | TableClearAction<T>
-  | TableChangeSortAction<T> | TableSetTakeAction<T> | TableSearchAction<T>
-  | TableNextPageAction<T> | TablePrevPageAction<T> | TableSetFilterAction<T>;
+  | TableFetchAction<T>
+  | TableSetAction<T, R>
+  | TableChangeSortAction<T>
+  | TableSetTakeAction<T>
+  | TableSearchAction<T>
+  | TableSetFilterAction<T>;
 
-export const tableActionPattern = <T extends Tables>(
-  table: T, action: TableActionType,
-): string => {
+export const tableActionPattern = <T extends Tables>(table: T, action: TableActionType): string => {
   return `${action}::${table}`;
 };
 
-export const tableExtractAction = (joined: string): { type: TableActionType, table: Tables } => {
+export const tableExtractAction = (joined: string): { type: TableActionType; table: Tables } => {
   const [type, table] = joined.split('::');
   return {
     type: type as TableActionType,

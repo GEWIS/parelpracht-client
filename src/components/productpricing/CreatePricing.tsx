@@ -1,4 +1,3 @@
-import React from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import { Button } from 'semantic-ui-react';
@@ -21,10 +20,7 @@ function CreatePricing(props: Props) {
   const { t } = props;
 
   return (
-    <Button
-      primary
-      onClick={() => createPricing()}
-    >
+    <Button primary onClick={() => createPricing()}>
       {t('entities.product.props.customPriceButton')}
     </Button>
   );

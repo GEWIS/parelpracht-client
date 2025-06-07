@@ -1,9 +1,7 @@
 import { Action } from 'redux';
-import {
-  ActionPattern, put, takeEvery,
-} from 'redux-saga/effects';
-import { showTransientAlert } from './alerts/actionCreators';
+import { ActionPattern, put, takeEvery } from 'redux-saga/effects';
 import { ApiError, ApiException } from '../clients/server.generated';
+import { showTransientAlert } from './alerts/actionCreators';
 
 function errorToString(err?: ApiError) {
   if (err && err.statusCode && err.message) return `${err.statusCode}: ${err.message}`;
@@ -14,8 +12,8 @@ export function takeEveryWithErrorHandling<A extends Action>(
   pattern: ActionPattern<A>,
   saga: (action: A) => any,
   options?: {
-    silent?: boolean,
-    onErrorSaga?: (error: ApiException, action: A) => any
+    silent?: boolean;
+    onErrorSaga?: (error: ApiException, action: A) => any;
   },
 ) {
   return takeEvery(pattern, function* errorSaga(action: A) {

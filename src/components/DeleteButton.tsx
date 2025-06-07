@@ -1,5 +1,4 @@
 import { Button, Popup, SemanticCOLORS } from 'semantic-ui-react';
-import React from 'react';
 import { SemanticSIZES } from 'semantic-ui-react/dist/commonjs/generic';
 import { useTranslation } from 'react-i18next';
 import ResourceStatus from '../stores/resourceStatus';
@@ -16,15 +15,13 @@ interface DeleteProps {
 }
 
 function DeleteButton(props: DeleteProps) {
-  const {
-    canDelete, entity, remove, status, size, color, style,
-  } = props;
+  const { canDelete, entity, remove, status, size = 'medium', color, style = {} } = props;
   const { t } = useTranslation();
 
   if (canDelete === true) {
     return (
       <Popup
-        trigger={(
+        trigger={
           <Button
             icon="trash"
             loading={status === ResourceStatus.DELETING}
@@ -33,10 +30,10 @@ function DeleteButton(props: DeleteProps) {
             color={color}
             style={style}
           />
-        )}
+        }
         on="click"
         hideOnScroll
-        content={(
+        content={
           <Button
             color="red"
             onClick={remove}
@@ -44,9 +41,16 @@ function DeleteButton(props: DeleteProps) {
             style={{ marginTop: '0.5em' }}
             title={t('buttons.delete.short')}
           >
-            {t('buttons.delete.header', { entity: t(`entity.${entity.replace(/([a-z])([A-Z])/g, '$1$2').trim().toLowerCase()}`) })}
+            {t('buttons.delete.header', {
+              entity: t(
+                `entity.${entity
+                  .replace(/([a-z])([A-Z])/g, '$1$2')
+                  .trim()
+                  .toLowerCase()}`,
+              ),
+            })}
           </Button>
-        )}
+        }
         header={t('buttons.delete.confirm')}
       />
     );
@@ -87,17 +91,11 @@ function DeleteButton(props: DeleteProps) {
 
     return (
       <Popup
-        trigger={(
+        trigger={
           <Button.Group floated="right" size={size}>
-            <Button
-              disabled
-              icon="trash"
-              loading={status === ResourceStatus.DELETING}
-              color={color}
-              style={style}
-            />
+            <Button disabled icon="trash" loading={status === ResourceStatus.DELETING} color={color} style={style} />
           </Button.Group>
-        )}
+        }
         on="hover"
         mouseEnterDelay={500}
         content={deleteError}
@@ -106,11 +104,5 @@ function DeleteButton(props: DeleteProps) {
   }
   return null;
 }
-
-DeleteButton.defaultProps = {
-  size: 'medium',
-  color: undefined,
-  style: {},
-};
 
 export default DeleteButton;

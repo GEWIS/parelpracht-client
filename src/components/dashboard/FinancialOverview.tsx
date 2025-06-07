@@ -1,20 +1,18 @@
-import React, { useEffect, useState } from 'react';
-import {
-  Dropdown, Grid, Popup, Segment, Table,
-} from 'semantic-ui-react';
+import { useEffect, useState, useRef } from 'react';
+import { Dropdown, Grid, Popup, Segment, Table } from 'semantic-ui-react';
 import { useTranslation } from 'react-i18next';
 import { Bar } from 'react-chartjs-2';
+import { ChartJSOrUndefined } from 'react-chartjs-2/dist/types';
+import { ChartData } from 'chart.js';
+import { useNavigate } from 'react-router-dom';
 import { Client, DashboardProductInstanceStats } from '../../clients/server.generated';
 import { dateToFinancialYear } from '../../helpers/timestamp';
 import { formatPriceFull } from '../../helpers/monetary';
 import './FinancialOverview.scss';
 import { FinancialOverviewField } from './FinancialOverviewField';
-import { ChartData } from 'chart.js';
-import { ChartJSOrUndefined } from 'react-chartjs-2/dist/types';
-import { useNavigate } from 'react-router-dom';
 
 function FinancialOverview() {
-  const chart = React.createRef<ChartJSOrUndefined<'bar'>>();
+  const chart = useRef<ChartJSOrUndefined<'bar'> | null>(null);
   const navigate = useNavigate();
   const { t } = useTranslation();
 
@@ -41,7 +39,8 @@ function FinancialOverview() {
         t('dashboard.financialOverview.contractedShort'),
         t('dashboard.financialOverview.delivered'),
         t('dashboard.financialOverview.invoiced'),
-        t('dashboard.financialOverview.paid')],
+        t('dashboard.financialOverview.paid'),
+      ],
       datasets: [
         {
           label: t('entities.graph.label.amount'),
@@ -50,8 +49,15 @@ function FinancialOverview() {
           borderWidth: 1,
           hoverBackgroundColor: 'rgba(255, 148, 128, 0.8)',
           hoverBorderColor: 'rgba(41, 48, 101, 1)',
-          data: data ? [data?.suggested.amount, data?.contracted.amount, data?.delivered.amount,
-            data?.invoiced.delivered.amount, data?.paid.amount] : [],
+          data: data
+            ? [
+                data?.suggested.amount,
+                data?.contracted.amount,
+                data?.delivered.amount,
+                data?.invoiced.delivered.amount,
+                data?.paid.amount,
+              ]
+            : [],
         },
         {
           label: t('dashboard.financialOverview.delivered'),
@@ -71,14 +77,16 @@ function FinancialOverview() {
     const result: object[] = [];
     financialYears.forEach((y: number) => {
       result.push({
-        key: y, value: y, text: `${(y - 1).toString()} - ${y.toString()}`,
+        key: y,
+        value: y,
+        text: `${(y - 1).toString()} - ${y.toString()}`,
       });
     });
     return result;
   };
 
   useEffect(() => {
-    updateGraph(financialYear);
+    updateGraph(financialYear).catch(console.error);
   }, [financialYear]);
 
   return (
@@ -108,7 +116,7 @@ function FinancialOverview() {
               x: {
                 stacked: true,
               },
-              y : {
+              y: {
                 stacked: true,
                 beginAtZero: true,
                 ticks: {
@@ -125,8 +133,8 @@ function FinancialOverview() {
               },
               tooltip: {
                 callbacks: {
-                  label(tooltipItem: any) {
-                    return formatPriceFull(tooltipItem.raw);
+                  label(tooltipItem) {
+                    return formatPriceFull(tooltipItem.raw as number);
                   },
                 },
               },
@@ -140,55 +148,35 @@ function FinancialOverview() {
             <Table.HeaderCell />
             <Table.HeaderCell>
               <Popup
-                trigger={(
-                  <span>
-                      {t('dashboard.financialOverview.suggested')}
-                    </span>
-                )}
+                trigger={<span>{t('dashboard.financialOverview.suggested')}</span>}
                 header={t('dashboard.financialOverview.suggested')}
                 content={t('dashboard.financialOverview.description.suggested')}
               />
             </Table.HeaderCell>
             <Table.HeaderCell>
               <Popup
-                trigger={(
-                  <span>
-                      {t('dashboard.financialOverview.contracted')}
-                    </span>
-                )}
+                trigger={<span>{t('dashboard.financialOverview.contracted')}</span>}
                 header={t('dashboard.financialOverview.contracted')}
                 content={t('dashboard.financialOverview.description.contracted')}
               />
             </Table.HeaderCell>
             <Table.HeaderCell>
               <Popup
-                trigger={(
-                  <span>
-                      {t('dashboard.financialOverview.delivered')}
-                    </span>
-                )}
+                trigger={<span>{t('dashboard.financialOverview.delivered')}</span>}
                 header={t('dashboard.financialOverview.delivered')}
                 content={t('dashboard.financialOverview.description.delivered')}
               />
             </Table.HeaderCell>
             <Table.HeaderCell>
               <Popup
-                trigger={(
-                  <span>
-                      {t('dashboard.financialOverview.invoiced')}
-                    </span>
-                )}
+                trigger={<span>{t('dashboard.financialOverview.invoiced')}</span>}
                 header={t('dashboard.financialOverview.invoiced')}
                 content={t('dashboard.financialOverview.description.invoiced')}
               />
             </Table.HeaderCell>
             <Table.HeaderCell>
               <Popup
-                trigger={(
-                  <span>
-                      {t('dashboard.financialOverview.paid')}
-                    </span>
-                )}
+                trigger={<span>{t('dashboard.financialOverview.paid')}</span>}
                 header={t('dashboard.financialOverview.paid')}
                 content={t('dashboard.financialOverview.description.paid')}
               />
@@ -222,8 +210,7 @@ function FinancialOverview() {
             <Table.Cell onClick={() => goToInsightsTable('invoiced')}>
               <FinancialOverviewField
                 fields={[t('dashboard.financialOverview.delivered'), t('dashboard.financialOverview.notDelivered')]}
-                values={[
-                  data?.invoiced.delivered.amount || 0, data?.invoiced.notDelivered.amount || 0]}
+                values={[data?.invoiced.delivered.amount || 0, data?.invoiced.notDelivered.amount || 0]}
                 type="value"
                 header={t('dashboard.financialOverview.invoiced')}
               />
@@ -262,9 +249,7 @@ function FinancialOverview() {
             <Table.Cell onClick={() => goToInsightsTable('delivered')}>
               <FinancialOverviewField
                 fields={[t('dashboard.financialOverview.delivered'), t('dashboard.financialOverview.notDelivered')]}
-                values={[
-                  data?.invoiced.delivered.nrOfProducts || 0,
-                  data?.invoiced.notDelivered.nrOfProducts || 0]}
+                values={[data?.invoiced.delivered.nrOfProducts || 0, data?.invoiced.notDelivered.nrOfProducts || 0]}
                 type="amount"
                 header={t('dashboard.financialOverview.invoiced')}
               />
@@ -279,7 +264,6 @@ function FinancialOverview() {
           </Table.Row>
         </Table.Body>
       </Table>
-
     </Segment>
   );
 }

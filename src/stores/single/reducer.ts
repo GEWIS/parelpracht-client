@@ -7,7 +7,8 @@ import {
   Product,
   ProductCategory,
   ProductInstance,
-  User, ValueAddedTax,
+  User,
+  ValueAddedTax,
 } from '../../clients/server.generated';
 import createSingleReducer from './singleReducer';
 import { SingleEntities } from './single';

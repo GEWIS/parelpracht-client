@@ -1,18 +1,34 @@
 import { call, put } from 'redux-saga/effects';
 import {
-  AuthStatus, Client, LDAPLoginParams, LoginParams, ResetPasswordRequest, SetupParams, UserParams,
+  AuthStatus,
+  Client,
+  LDAPLoginParams,
+  LoginParams,
+  ResetPasswordRequest,
+  SetupParams,
+  UserParams,
 } from '../../clients/server.generated';
 import { takeEveryWithErrorHandling } from '../errorHandling';
 import { fetchSummaries } from '../summaries/actionCreators';
 import { SummaryCollections } from '../summaries/summaries';
+import { generalPrivateFetchInfo, generalPublicFetchInfo } from '../general/actionCreators';
 import {
-  authFetchProfile, authFetchStatus, authRequestError,
-  authRequestSuccess, authSetApiKey, authSetProfile, authSetStatus,
+  authFetchProfile,
+  authFetchStatus,
+  authRequestError,
+  authRequestSuccess,
+  authSetApiKey,
+  authSetProfile,
+  authSetStatus,
 } from './actionCreators';
 import {
-  AuthActionType, AuthForgotPassword, AuthLoginLDAP, AuthLoginLocal, AuthResetPassword, AuthSetup,
+  AuthActionType,
+  AuthForgotPassword,
+  AuthLoginLDAP,
+  AuthLoginLocal,
+  AuthResetPassword,
+  AuthSetup,
 } from './actions';
-import { generalPrivateFetchInfo, generalPublicFetchInfo } from '../general/actionCreators';
 
 export function* fetchAuthStatus() {
   const client = new Client();
@@ -46,12 +62,14 @@ function* fetchProfile() {
 function* loginLocal(action: AuthLoginLocal) {
   const client = new Client();
 
-  yield call([client, client.login],
+  yield call(
+    [client, client.login],
     new LoginParams({
       email: action.email,
       password: action.password,
       rememberMe: action.rememberMe,
-    }));
+    }),
+  );
 
   yield put(authFetchStatus());
 }
@@ -59,12 +77,14 @@ function* loginLocal(action: AuthLoginLocal) {
 function* loginLDAP(action: AuthLoginLDAP) {
   const client = new Client();
 
-  yield call([client, client.loginLDAP],
+  yield call(
+    [client, client.loginLDAP],
     new LDAPLoginParams({
       username: action.username,
       password: action.password,
       rememberMe: action.rememberMe,
-    }));
+    }),
+  );
 
   yield put(authFetchStatus());
 }
@@ -80,9 +100,14 @@ function* forgotPassword(action: AuthForgotPassword) {
 function* resetPassword(action: AuthResetPassword) {
   const client = new Client();
 
-  yield call([client, client.resetPassword], new ResetPasswordRequest({
-    password: action.password, repeatPassword: action.passwordRepeat, token: action.token,
-  }));
+  yield call(
+    [client, client.resetPassword],
+    new ResetPasswordRequest({
+      password: action.password,
+      repeatPassword: action.passwordRepeat,
+      token: action.token,
+    }),
+  );
 
   yield put(authRequestSuccess());
 }
@@ -129,20 +154,21 @@ function* revokeApiKey() {
 function* setup(action: AuthSetup) {
   const client = new Client();
 
-  yield call([client, client.postSetup],
-    new SetupParams(
-      {
-        admin: new UserParams({
-          email: action.email,
-          firstName: action.firstname,
-          lastNamePreposition: action.preposition,
-          lastName: action.lastname,
-          gender: action.gender,
-          password: action.password,
-          rememberMe: action.rememberMe,
-          function: '',
-        }),
-      }));
+  yield call(
+    [client, client.postSetup],
+    new SetupParams({
+      admin: new UserParams({
+        email: action.email,
+        firstName: action.firstname,
+        lastNamePreposition: action.preposition,
+        lastName: action.lastname,
+        gender: action.gender,
+        password: action.password,
+        rememberMe: action.rememberMe,
+        function: '',
+      }),
+    }),
+  );
   yield put(generalPublicFetchInfo());
   yield put(authFetchStatus());
 }
@@ -168,10 +194,7 @@ export default [
     yield takeEveryWithErrorHandling(AuthActionType.ForgotPassword, forgotPassword);
   },
   function* watchResetPassword() {
-    yield takeEveryWithErrorHandling(
-      AuthActionType.ResetPassword, resetPassword,
-      { onErrorSaga: errorResetPassword },
-    );
+    yield takeEveryWithErrorHandling(AuthActionType.ResetPassword, resetPassword, { onErrorSaga: errorResetPassword });
   },
 
   function* watchGenerateApiKey() {

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { connect } from 'react-redux';
 import { Dropdown, DropdownProps } from 'semantic-ui-react';
 import { ContactFunction, ContactSummary } from '../../../clients/server.generated';
@@ -17,9 +17,7 @@ interface Props {
 function ContactSelector(props: Props & DropdownProps) {
   const [open, changeOpen] = useState(false);
 
-  const {
-    value, onChange, options, disabled, companyId, placeholder,
-  } = props;
+  const { value, onChange, options, disabled = false, companyId, placeholder } = props;
 
   const dropdownOptions = sortContactsByFunction([...options], true)
     .filter((c) => c.companyId === companyId && c.function !== ContactFunction.OLD)
@@ -36,10 +34,10 @@ function ContactSelector(props: Props & DropdownProps) {
       disabled={disabled}
       search
       selection
-      error={(value <= 0) && !open}
+      error={value <= 0 && !open}
       options={dropdownOptions}
       value={value < 0 ? '' : value}
-      onChange={(e, data) => onChange(data.value as any)}
+      onChange={(_, data) => onChange(data.value as number | number[])}
       // Because the text is also red when error=true, we need to
       // keep a state whether the dropdown is open
       onOpen={() => changeOpen(true)}
@@ -48,10 +46,6 @@ function ContactSelector(props: Props & DropdownProps) {
     />
   );
 }
-
-ContactSelector.defaultProps = {
-  disabled: false,
-};
 
 const mapStateToProps = (state: RootState) => ({
   options: state.summaries.Contacts.options,

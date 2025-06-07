@@ -1,15 +1,11 @@
-import React, { ChangeEvent } from 'react';
+import { ChangeEvent, Component } from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
-import {
-  Checkbox, Dropdown, Form, Icon, Input, Popup, Segment,
-} from 'semantic-ui-react';
+import { Checkbox, Dropdown, Form, Icon, Input, Popup, Segment } from 'semantic-ui-react';
 import validator from 'validator';
 import _ from 'lodash';
 import { withTranslation, WithTranslation } from 'react-i18next';
-import {
-  Gender, LoginMethods, Roles, User, UserParams,
-} from '../../../clients/server.generated';
+import { Gender, LoginMethods, Partial_UserParams_, Roles, User, UserParams } from '../../../clients/server.generated';
 import { createSingle, deleteSingle, saveSingle } from '../../../stores/single/actionCreators';
 import ResourceStatus from '../../../stores/resourceStatus';
 import { RootState } from '../../../stores/store';
@@ -31,7 +27,7 @@ interface Props extends WithTranslation, WithRouter {
   hasRole: (role: Roles) => boolean;
   canEdit: Roles[];
 
-  saveUser: (id: number, user: UserParams) => void;
+  saveUser: (id: number, user: Partial_UserParams_) => void;
   createUser: (user: UserParams) => void;
   deleteUser: (id: number) => void;
 }
@@ -58,7 +54,7 @@ interface State {
   ldapOverrideEmail?: boolean;
 }
 
-class UserProps extends React.Component<Props, State> {
+class UserProps extends Component<Props, State> {
   static defaultProps = {
     create: undefined,
     onCancel: undefined,
@@ -74,21 +70,18 @@ class UserProps extends React.Component<Props, State> {
   }
 
   componentDidUpdate(prevProps: Props) {
-    if (prevProps.status === ResourceStatus.SAVING
-      && this.props.status === ResourceStatus.FETCHED) {
-      // eslint-disable-next-line react/no-did-update-set-state
+    if (prevProps.status === ResourceStatus.SAVING && this.props.status === ResourceStatus.FETCHED) {
       this.setState({ editing: false });
     }
   }
 
   ldapEnabled = (): boolean => {
-    return this.props.loginMethod === LoginMethods.Ldap
-      && this.props.user.identityLdap !== undefined;
+    return this.props.loginMethod === LoginMethods.Ldap && this.props.user.identityLdap !== undefined;
   };
 
-  extractState = (props: Props) => {
+  extractState = (props: Props): Omit<State, 'editing'> => {
     const { user } = props;
-    const result: any = {
+    const result: Omit<State, 'editing'> = {
       firstName: user.firstName,
       lastNamePreposition: user.lastNamePreposition,
       lastName: user.lastName,
@@ -100,19 +93,17 @@ class UserProps extends React.Component<Props, State> {
 
       receiveEmails: user.receiveEmails,
       sendEmailsToReplyToEmail: user.sendEmailsToReplyToEmail,
-      roleGeneral: user.roles.find((r) => r.name === Roles.GENERAL) !== undefined,
-      roleSignee: user.roles.find((r) => r.name === Roles.SIGNEE) !== undefined,
-      roleFinancial: user.roles.find((r) => r.name === Roles.FINANCIAL) !== undefined,
-      roleAudit: user.roles.find((r) => r.name === Roles.AUDIT) !== undefined,
-      roleAdmin: user.roles.find((r) => r.name === Roles.ADMIN) !== undefined,
+      roleGeneral: user.roles.find((r) => (r.name as Roles) === Roles.GENERAL) !== undefined,
+      roleSignee: user.roles.find((r) => (r.name as Roles) === Roles.SIGNEE) !== undefined,
+      roleFinancial: user.roles.find((r) => (r.name as Roles) === Roles.FINANCIAL) !== undefined,
+      roleAudit: user.roles.find((r) => (r.name as Roles) === Roles.AUDIT) !== undefined,
+      roleAdmin: user.roles.find((r) => (r.name as Roles) === Roles.ADMIN) !== undefined,
     };
 
     if (this.ldapEnabled()) {
       if (user.identityLdap) {
-        result.ldapUsername = user.identityLdap.username ? user.identityLdap.username : '';
         result.ldapOverrideEmail = user.identityLdap.overrideEmail;
       } else {
-        result.ldapUsername = '';
         result.ldapOverrideEmail = false;
       }
     }
@@ -120,8 +111,40 @@ class UserProps extends React.Component<Props, State> {
     return result;
   };
 
+  // TODO: Change backend interface so password and rememberMe are not included in IUserParams
   toParams = (): UserParams => {
     const result = new UserParams({
+      firstName: this.state.firstName,
+      lastNamePreposition: this.state.lastNamePreposition,
+      lastName: this.state.lastName,
+      gender: this.state.gender,
+      email: this.state.email,
+      comment: this.state.comment,
+      function: this.state.functionName,
+      receiveEmails: this.state.receiveEmails,
+      replyToEmail: this.state.replyToEmail,
+      sendEmailsToReplyToEmail: this.state.sendEmailsToReplyToEmail,
+      password: '',
+      rememberMe: false,
+
+      roles: _.compact([
+        this.state.roleGeneral ? Roles.GENERAL : undefined,
+        this.state.roleSignee ? Roles.SIGNEE : undefined,
+        this.state.roleFinancial ? Roles.FINANCIAL : undefined,
+        this.state.roleAudit ? Roles.AUDIT : undefined,
+        this.state.roleAdmin ? Roles.ADMIN : undefined,
+      ]),
+    });
+
+    if (this.ldapEnabled()) {
+      result.ldapOverrideEmail = this.state.ldapOverrideEmail;
+    }
+
+    return result;
+  };
+
+  toPartialParams = (): Partial_UserParams_ => {
+    const result = new Partial_UserParams_({
       firstName: this.state.firstName,
       lastNamePreposition: this.state.lastNamePreposition,
       lastName: this.state.lastName,
@@ -165,7 +188,7 @@ class UserProps extends React.Component<Props, State> {
     if (this.props.create) {
       this.props.createUser(this.toParams());
     } else {
-      this.props.saveUser(this.props.user.id, this.toParams());
+      this.props.saveUser(this.props.user.id, this.toPartialParams());
     }
   };
 
@@ -178,13 +201,12 @@ class UserProps extends React.Component<Props, State> {
   };
 
   propsHaveErrors = (): boolean => {
-    const {
-      firstName, lastName, functionName, email,
-    } = this.state;
-    return (validator.isEmpty(firstName)
-      || validator.isEmpty(lastName)
-      || validator.isEmpty(functionName)
-      || !validator.isEmail(email)
+    const { firstName, lastName, functionName, email } = this.state;
+    return (
+      validator.isEmpty(firstName) ||
+      validator.isEmpty(lastName) ||
+      validator.isEmpty(functionName) ||
+      !validator.isEmail(email)
     );
   };
 
@@ -210,7 +232,11 @@ class UserProps extends React.Component<Props, State> {
       receiveEmails,
       sendEmailsToReplyToEmail,
 
-      roleGeneral, roleSignee, roleAdmin, roleAudit, roleFinancial,
+      roleGeneral,
+      roleSignee,
+      roleAdmin,
+      roleAudit,
+      roleFinancial,
 
       ldapOverrideEmail,
     } = this.state;
@@ -222,30 +248,37 @@ class UserProps extends React.Component<Props, State> {
           disabled={!editing}
           id="form-override-ldap-email"
           checked={ldapOverrideEmail}
-          onChange={(e, data) => this.setState({
-            ldapOverrideEmail: data.checked!,
-          })}
+          onChange={(_, data) =>
+            this.setState({
+              ldapOverrideEmail: data.checked!,
+            })
+          }
         />
       </Form.Field>
-    ) : (' ');
-
-    const receiveEmailsCheckbox = roleAudit || roleFinancial ? (
-      <>
-        <Form.Field>
-          <Checkbox
-            label={t('entities.user.props.mailOnInvoice')}
-            disabled={!editing}
-            id="form-receive-emails"
-            checked={receiveEmails}
-            onChange={(e, data) => this.setState({
-              receiveEmails: data.checked!,
-            })}
-          />
-        </Form.Field>
-      </>
     ) : (
       ' '
     );
+
+    const receiveEmailsCheckbox =
+      roleAudit || roleFinancial ? (
+        <>
+          <Form.Field>
+            <Checkbox
+              label={t('entities.user.props.mailOnInvoice')}
+              disabled={!editing}
+              id="form-receive-emails"
+              checked={receiveEmails}
+              onChange={(_, data) =>
+                this.setState({
+                  receiveEmails: data.checked!,
+                })
+              }
+            />
+          </Form.Field>
+        </>
+      ) : (
+        ' '
+      );
 
     return (
       <>
@@ -276,13 +309,13 @@ class UserProps extends React.Component<Props, State> {
               control={Input}
               label={t('entities.user.props.firstName')}
               value={firstName}
-              onChange={(e: ChangeEvent<HTMLInputElement>) => this.setState({
-                firstName: e.target.value,
-              })}
-              width={6}
-              error={
-                validator.isEmpty(firstName)
+              onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                this.setState({
+                  firstName: e.target.value,
+                })
               }
+              width={6}
+              error={validator.isEmpty(firstName)}
             />
             <Form.Field
               disabled={!editing}
@@ -291,9 +324,11 @@ class UserProps extends React.Component<Props, State> {
               control={Input}
               label={t('entities.user.props.preposition')}
               value={lastNamePreposition}
-              onChange={(e: ChangeEvent<HTMLInputElement>) => this.setState({
-                lastNamePreposition: e.target.value,
-              })}
+              onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                this.setState({
+                  lastNamePreposition: e.target.value,
+                })
+              }
               width={4}
             />
             <Form.Field
@@ -304,18 +339,17 @@ class UserProps extends React.Component<Props, State> {
               control={Input}
               label={t('entities.user.props.lastName')}
               value={lastName}
-              onChange={(e: ChangeEvent<HTMLInputElement>) => this.setState({
-                lastName: e.target.value,
-              })}
-              width={6}
-              error={
-                validator.isEmpty(lastName)
+              onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                this.setState({
+                  lastName: e.target.value,
+                })
               }
+              width={6}
+              error={validator.isEmpty(lastName)}
             />
           </Form.Group>
           <Form.Group widths="equal">
             <Form.Field required disabled={!editing} width={3}>
-              {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
               <label htmlFor="form-input-gender">Gender</label>
               <Dropdown
                 id="form-input-gender"
@@ -327,9 +361,11 @@ class UserProps extends React.Component<Props, State> {
                   { key: 1, text: t('entities.user.props.gender.female'), value: Gender.FEMALE },
                   { key: 2, text: t('entities.user.props.gender.unknown'), value: Gender.UNKNOWN },
                 ]}
-                onChange={(e, data) => this.setState({
-                  gender: data.value as Gender,
-                })}
+                onChange={(_, data) =>
+                  this.setState({
+                    gender: data.value as Gender,
+                  })
+                }
                 fluid
                 width={4}
               />
@@ -344,12 +380,12 @@ class UserProps extends React.Component<Props, State> {
               label={t('entities.user.props.function')}
               placeholder={t('entities.user.props.functionDescription')}
               value={functionName}
-              onChange={(e: ChangeEvent<HTMLInputElement>) => this.setState({
-                functionName: e.target.value,
-              })}
-              error={
-                validator.isEmpty(functionName)
+              onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                this.setState({
+                  functionName: e.target.value,
+                })
               }
+              error={validator.isEmpty(functionName)}
             />
           </Form.Group>
           <Form.Group widths="equal">
@@ -361,12 +397,12 @@ class UserProps extends React.Component<Props, State> {
               control={Input}
               label={t('entities.user.props.personalEmail')}
               value={email}
-              onChange={(e: ChangeEvent<HTMLInputElement>) => this.setState({
-                email: e.target.value,
-              })}
-              error={
-                !validator.isEmail(email)
+              onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                this.setState({
+                  email: e.target.value,
+                })
               }
+              error={!validator.isEmail(email)}
             />
             <Form.Field
               disabled={!editing}
@@ -375,9 +411,11 @@ class UserProps extends React.Component<Props, State> {
               control={Input}
               label={t('entities.user.props.replyToEmail')}
               value={replyToEmail}
-              onChange={(e: ChangeEvent<HTMLInputElement>) => this.setState({
-                replyToEmail: e.target.value,
-              })}
+              onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                this.setState({
+                  replyToEmail: e.target.value,
+                })
+              }
             />
           </Form.Group>
           {ldapOverrideEmailCheckbox}
@@ -387,9 +425,11 @@ class UserProps extends React.Component<Props, State> {
               disabled={!editing}
               id="form-send-emails-to-reply-to"
               checked={sendEmailsToReplyToEmail}
-              onChange={(e, data) => this.setState({
-                sendEmailsToReplyToEmail: data.checked!,
-              })}
+              onChange={(_, data) =>
+                this.setState({
+                  sendEmailsToReplyToEmail: data.checked!,
+                })
+              }
             />
           </Form.Field>
           {receiveEmailsCheckbox}
@@ -406,93 +446,83 @@ class UserProps extends React.Component<Props, State> {
             </h3>
             <Form.Group widths="equal">
               <Form.Field>
-                {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-                <label htmlFor="form-check-role-signee">
-                  {t('entities.user.props.roles.signee')}
-                </label>
+                <label htmlFor="form-check-role-signee">{t('entities.user.props.roles.signee')}</label>
                 <Checkbox
                   disabled={!editing || this.ldapEnabled()}
                   toggle
                   id="form-check-role-signee"
                   checked={roleSignee}
-                  onChange={(e, data) => this.setState({
-                    roleSignee: data.checked!,
-                  })}
+                  onChange={(_, data) =>
+                    this.setState({
+                      roleSignee: data.checked!,
+                    })
+                  }
                 />
               </Form.Field>
               <Form.Field>
-                {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-                <label htmlFor="form-check-role-financial">
-                  {t('entities.user.props.roles.financial')}
-                </label>
+                <label htmlFor="form-check-role-financial">{t('entities.user.props.roles.financial')}</label>
                 <Checkbox
                   disabled={!editing || this.ldapEnabled()}
                   toggle
                   id="form-check-role-financial"
                   checked={roleFinancial}
-                  onChange={(e, data) => this.setState({
-                    roleFinancial: data.checked!,
-                  })}
+                  onChange={(_, data) =>
+                    this.setState({
+                      roleFinancial: data.checked!,
+                    })
+                  }
                 />
               </Form.Field>
               <Form.Field>
-                {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-                <label htmlFor="form-check-role-general">
-                  {t('entities.user.props.roles.general')}
-                </label>
+                <label htmlFor="form-check-role-general">{t('entities.user.props.roles.general')}</label>
                 <Checkbox
                   disabled={!editing || this.ldapEnabled()}
                   toggle
                   id="form-check-role-general"
                   checked={roleGeneral}
-                  onChange={(e, data) => this.setState({
-                    roleGeneral: data.checked!,
-                  })}
+                  onChange={(_, data) =>
+                    this.setState({
+                      roleGeneral: data.checked!,
+                    })
+                  }
                 />
               </Form.Field>
               <Form.Field>
-                {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-                <label htmlFor="form-check-role-audit">
-                  {t('entities.user.props.roles.audit')}
-                </label>
+                <label htmlFor="form-check-role-audit">{t('entities.user.props.roles.audit')}</label>
                 <Checkbox
                   disabled={!editing || this.ldapEnabled()}
                   toggle
                   id="form-check-role-audit"
                   checked={roleAudit}
-                  onChange={(e, data) => this.setState({
-                    roleAudit: data.checked!,
-                  })}
+                  onChange={(_, data) =>
+                    this.setState({
+                      roleAudit: data.checked!,
+                    })
+                  }
                 />
               </Form.Field>
               <Form.Field>
-                {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-                <label htmlFor="form-check-role-admin">
-                  {t('entities.user.props.roles.admin')}
-                </label>
+                <label htmlFor="form-check-role-admin">{t('entities.user.props.roles.admin')}</label>
                 <Checkbox
                   disabled={!editing || this.ldapEnabled()}
                   toggle
                   id="form-check-role-admin"
                   checked={roleAdmin}
-                  onChange={(e, data) => this.setState({
-                    roleAdmin: data.checked!,
-                  })}
+                  onChange={(_, data) =>
+                    this.setState({
+                      roleAdmin: data.checked!,
+                    })
+                  }
                 />
               </Form.Field>
             </Form.Group>
           </Segment>
           <Form.Field disabled={!editing}>
-            {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-            <label htmlFor="form-input-comment">
-              {t('entities.user.props.comments')}
-            </label>
+            <label htmlFor="form-input-comment">{t('entities.user.props.comments')}</label>
             <TextArea
               id="form-delivery-spec-english"
               value={comment}
-              onChange={
-                (e) => this.setState({ comment: e.target.value })
-              }
+              onChange={(e) => this.setState({ comment: e.target.value })}
               placeholder={t('entities.user.props.comments')}
             />
           </Form.Field>
@@ -510,16 +540,9 @@ const mapStateToProps = (state: RootState) => ({
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
-  saveUser: (id: number, user: UserParams) => dispatch(
-    saveSingle(SingleEntities.User, id, user),
-  ),
-  createUser: (user: UserParams) => dispatch(
-    createSingle(SingleEntities.User, user),
-  ),
-  deleteUser: (id: number) => dispatch(
-    deleteSingle(SingleEntities.User, id),
-  ),
+  saveUser: (id: number, user: Partial_UserParams_) => dispatch(saveSingle(SingleEntities.User, id, user)),
+  createUser: (user: UserParams) => dispatch(createSingle(SingleEntities.User, user)),
+  deleteUser: (id: number) => dispatch(deleteSingle(SingleEntities.User, id)),
 });
 
-export default withTranslation()(withRouter(connect(mapStateToProps,
-  mapDispatchToProps)(UserProps)));
+export default withTranslation()(withRouter(connect(mapStateToProps, mapDispatchToProps)(UserProps)));

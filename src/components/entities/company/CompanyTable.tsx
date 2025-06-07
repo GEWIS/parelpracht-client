@@ -1,22 +1,25 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
-import {
-  Dimmer, Loader, Segment, Table,
-} from 'semantic-ui-react';
+import { Dimmer, Loader, Segment, Table } from 'semantic-ui-react';
 import { useTranslation } from 'react-i18next';
 import { Company } from '../../../clients/server.generated';
 import TablePagination from '../../TablePagination';
 import { RootState } from '../../../stores/store';
 import {
-  changeSortTable, fetchTable, nextPageTable, prevPageTable, setFilterTable, setSortTable,
+  changeSortTable,
+  fetchTable,
+  nextPageTable,
+  prevPageTable,
+  setFilterTable,
+  setSortTable,
   setTakeTable,
 } from '../../../stores/tables/actionCreators';
 import { countFetched, countTotal, getTable } from '../../../stores/tables/selectors';
 import { Tables } from '../../../stores/tables/tables';
-import { CompanyRow } from './CompanyRow';
 import CompanyStatusFilter from '../../tablefilters/CompanyStatusFilter';
 import ResourceStatus from '../../../stores/resourceStatus';
+import { CompanyRow } from './CompanyRow';
 
 interface Props {
   companies: Company[];
@@ -29,7 +32,7 @@ interface Props {
   status: ResourceStatus;
 
   fetchCompanies: () => void;
-  setTableFilter: (filter: { column: string, values: any[] }) => void;
+  setTableFilter: (filter: { column: string; values: any[] }) => void;
   changeSort: (column: string) => void;
   setSort: (column: string, direction: 'ASC' | 'DESC') => void;
   setTake: (take: number) => void;
@@ -38,15 +41,27 @@ interface Props {
 }
 
 function CompaniesTable({
-  companies, fetchCompanies, column, direction, changeSort, setSort, setTableFilter,
-  total, fetched, skip, take, status,
-  prevPage, nextPage, setTake,
+  companies,
+  fetchCompanies,
+  column,
+  direction,
+  changeSort,
+  setSort,
+  setTableFilter,
+  total,
+  fetched,
+  skip,
+  take,
+  status,
+  prevPage,
+  nextPage,
+  setTake,
 }: Props) {
   useEffect(() => {
     setSort('name', 'ASC');
     setTableFilter({ column: 'status', values: ['ACTIVE'] });
     fetchCompanies();
-  }, []);
+  }, [setSort, setTableFilter, fetchCompanies]);
   const { t } = useTranslation();
 
   const table = (
@@ -54,16 +69,10 @@ function CompaniesTable({
       <Table singleLine selectable attached sortable fixed unstackable>
         <Table.Header>
           <Table.Row>
-            <Table.HeaderCell
-              sorted={column === 'name' ? direction : undefined}
-              onClick={() => changeSort('name')}
-            >
+            <Table.HeaderCell sorted={column === 'name' ? direction : undefined} onClick={() => changeSort('name')}>
               {t('entities.company.props.name')}
             </Table.HeaderCell>
-            <Table.HeaderCell
-              sorted={column === 'status' ? direction : undefined}
-              onClick={() => changeSort('status')}
-            >
+            <Table.HeaderCell sorted={column === 'status' ? direction : undefined} onClick={() => changeSort('status')}>
               {t('entities.generalProps.status')}
               <CompanyStatusFilter />
             </Table.HeaderCell>
@@ -76,7 +85,9 @@ function CompaniesTable({
           </Table.Row>
         </Table.Header>
         <Table.Body>
-          {companies.map((x) => <CompanyRow company={x} key={x.id} />)}
+          {companies.map((x) => (
+            <CompanyRow company={x} key={x.id} />
+          ))}
         </Table.Body>
       </Table>
       <TablePagination
@@ -117,14 +128,13 @@ const mapStateToProps = (state: RootState) => {
     take: companyTable.take,
     companies: companyTable.data,
     column: companyTable.sortColumn,
-    direction: companyTable.sortDirection === 'ASC'
-      ? 'ascending' : 'descending' as 'ascending' | 'descending',
+    direction: companyTable.sortDirection === 'ASC' ? 'ascending' : ('descending' as 'ascending' | 'descending'),
   };
 };
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
   fetchCompanies: () => dispatch(fetchTable(Tables.Companies)),
-  setTableFilter: (filter: { column: string, values: any[] }) => {
+  setTableFilter: (filter: { column: string; values: any[] }) => {
     dispatch(setFilterTable(Tables.Companies, filter));
   },
   changeSort: (column: string) => {

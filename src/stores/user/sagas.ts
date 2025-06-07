@@ -1,6 +1,4 @@
-import {
-  call, put, select, throttle,
-} from 'redux-saga/effects';
+import { call, put, select, throttle } from 'redux-saga/effects';
 import {
   ApiException,
   Client,
@@ -9,14 +7,13 @@ import {
   ListSorting,
   Roles,
   SortDirection,
-  User, UserListResponse,
+  User,
+  UserListResponse,
   UserParams,
   UserSummary,
 } from '../../clients/server.generated';
 import { takeEveryWithErrorHandling } from '../errorHandling';
-import {
-  clearSingle, errorSingle, notFoundSingle, setSingle,
-} from '../single/actionCreators';
+import { clearSingle, errorSingle, notFoundSingle, setSingle } from '../single/actionCreators';
 import {
   singleActionPattern,
   SingleActionType,
@@ -27,9 +24,7 @@ import {
 } from '../single/actions';
 import { getSingle } from '../single/selectors';
 import { SingleEntities } from '../single/single';
-import {
-  addSummary, deleteSummary, setSummaries, updateSummary,
-} from '../summaries/actionCreators';
+import { addSummary, deleteSummary, setSummaries, updateSummary } from '../summaries/actionCreators';
 import { summariesActionPattern, SummariesActionType } from '../summaries/actions';
 import { SummaryCollections } from '../summaries/summaries';
 import { fetchTable, prevPageTable, setTable } from '../tables/actionCreators';
@@ -55,11 +50,7 @@ function* fetchUsers() {
   const client = new Client();
 
   const state: TableState<User> = yield select(getTable, Tables.Users);
-  const {
-    sortColumn, sortDirection,
-    take, skip,
-    search, filters,
-  } = state;
+  const { sortColumn, sortDirection, take, skip, search, filters } = state;
 
   let { list, count } = yield call(
     [client, client.getAllUsers],
@@ -111,9 +102,7 @@ function* fetchSingleUser(action: SingleFetchAction<SingleEntities.User>) {
   yield put(updateSummary(SummaryCollections.Users, toSummary(user)));
 }
 
-function* errorFetchSingleUser(
-  error: ApiException,
-) {
+function* errorFetchSingleUser(error: ApiException) {
   if (error.status === 404) {
     yield put(notFoundSingle(SingleEntities.User));
   } else {
@@ -134,9 +123,7 @@ function* errorDeleteSingleUser() {
   yield put(setSingle(SingleEntities.User, user.data));
 }
 
-function* saveSingleUser(
-  action: SingleSaveAction<SingleEntities.User, UserParams>,
-) {
+function* saveSingleUser(action: SingleSaveAction<SingleEntities.User, UserParams>) {
   const client = new Client();
   yield call([client, client.updateUser], action.id, action.data);
   const user: User = yield call([client, client.getUser], action.id);
@@ -149,16 +136,12 @@ function* errorSaveSingleUser() {
 }
 
 function* watchSaveSingleUser() {
-  yield takeEveryWithErrorHandling(
-    singleActionPattern(SingleEntities.User, SingleActionType.Save),
-    saveSingleUser,
-    { onErrorSaga: errorSaveSingleUser },
-  );
+  yield takeEveryWithErrorHandling(singleActionPattern(SingleEntities.User, SingleActionType.Save), saveSingleUser, {
+    onErrorSaga: errorSaveSingleUser,
+  });
 }
 
-function* createSingleUser(
-  action: SingleCreateAction<SingleEntities.User, UserParams>,
-) {
+function* createSingleUser(action: SingleCreateAction<SingleEntities.User, UserParams>) {
   const client = new Client();
   const user: User = yield call([client, client.createUser], action.data);
   yield put(setSingle(SingleEntities.User, user));
@@ -180,18 +163,11 @@ function* watchCreateSingleUser() {
 
 export default [
   function* watchFetchUsers() {
-    yield throttle(
-      500,
-      tableActionPattern(Tables.Users, TableActionType.Fetch),
-      fetchUsers,
-    );
+    yield throttle(500, tableActionPattern(Tables.Users, TableActionType.Fetch), fetchUsers);
   },
   function* watchFetchUserSummaries() {
     yield takeEveryWithErrorHandling(
-      summariesActionPattern(
-        SummaryCollections.Users,
-        SummariesActionType.Fetch,
-      ),
+      summariesActionPattern(SummaryCollections.Users, SummariesActionType.Fetch),
       fetchUserSummaries,
     );
   },

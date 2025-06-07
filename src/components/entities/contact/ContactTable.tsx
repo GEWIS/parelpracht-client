@@ -1,22 +1,24 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
-import {
-  Dimmer, Loader, Segment, Table,
-} from 'semantic-ui-react';
+import { Dimmer, Loader, Segment, Table } from 'semantic-ui-react';
 import { useTranslation, withTranslation, WithTranslation } from 'react-i18next';
 import { Contact } from '../../../clients/server.generated';
 import TablePagination from '../../TablePagination';
 import { RootState } from '../../../stores/store';
 import {
-  changeSortTable, fetchTable, nextPageTable, prevPageTable, setTakeTable,
+  changeSortTable,
+  fetchTable,
+  nextPageTable,
+  prevPageTable,
+  setTakeTable,
 } from '../../../stores/tables/actionCreators';
 import { countFetched, countTotal, getTable } from '../../../stores/tables/selectors';
 import { Tables } from '../../../stores/tables/tables';
-import ContactRow from './ContactRow';
 import ContactCompanyFilter from '../../tablefilters/CompanyFilter';
 import ResourceStatus from '../../../stores/resourceStatus';
 import ContactFunctionFilter from '../../tablefilters/ContactFunctionFilter';
+import ContactRow from './ContactRow';
 
 interface Props extends WithTranslation {
   contacts: Contact[];
@@ -36,13 +38,23 @@ interface Props extends WithTranslation {
 }
 
 function ContactsTable({
-  contacts, fetchContacts, column, direction, changeSort,
-  total, fetched, skip, take, status,
-  prevPage, nextPage, setTake,
+  contacts,
+  fetchContacts,
+  column,
+  direction,
+  changeSort,
+  total,
+  fetched,
+  skip,
+  take,
+  status,
+  prevPage,
+  nextPage,
+  setTake,
 }: Props) {
   useEffect(() => {
     fetchContacts();
-  }, []);
+  }, [fetchContacts]);
   const { t } = useTranslation();
 
   const table = (
@@ -63,10 +75,7 @@ function ContactsTable({
               {t('entity.company')}
               <ContactCompanyFilter table={Tables.Contacts} />
             </Table.HeaderCell>
-            <Table.HeaderCell
-              sorted={column === 'email' ? direction : undefined}
-              onClick={() => changeSort('email')}
-            >
+            <Table.HeaderCell sorted={column === 'email' ? direction : undefined} onClick={() => changeSort('email')}>
               {t('entities.contact.props.email')}
             </Table.HeaderCell>
             <Table.HeaderCell
@@ -79,7 +88,9 @@ function ContactsTable({
           </Table.Row>
         </Table.Header>
         <Table.Body>
-          {contacts.map((x) => <ContactRow contact={x} key={x.id} />)}
+          {contacts.map((x) => (
+            <ContactRow contact={x} key={x.id} />
+          ))}
         </Table.Body>
       </Table>
       <TablePagination
@@ -92,7 +103,6 @@ function ContactsTable({
         setTake={setTake}
       />
     </>
-
   );
 
   if (status === ResourceStatus.FETCHING || status === ResourceStatus.SAVING) {
@@ -121,8 +131,7 @@ const mapStateToProps = (state: RootState) => {
     take: contactTable.take,
     contacts: contactTable.data,
     column: contactTable.sortColumn,
-    direction: contactTable.sortDirection === 'ASC'
-      ? 'ascending' : 'descending' as 'ascending' | 'descending',
+    direction: contactTable.sortDirection === 'ASC' ? 'ascending' : ('descending' as 'ascending' | 'descending'),
   };
 };
 
@@ -146,6 +155,4 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   },
 });
 
-export default withTranslation()(
-  connect(mapStateToProps, mapDispatchToProps)(ContactsTable),
-);
+export default withTranslation()(connect(mapStateToProps, mapDispatchToProps)(ContactsTable));

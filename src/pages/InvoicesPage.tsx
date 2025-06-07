@@ -1,8 +1,5 @@
-import * as React from 'react';
-import {
-  Button,
-  Container, Grid, Header, Icon, Popup, Segment,
-} from 'semantic-ui-react';
+import { Component } from 'react';
+import { Button, Container, Grid, Header, Icon, Popup, Segment } from 'semantic-ui-react';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import { WithTranslation, withTranslation } from 'react-i18next';
@@ -13,13 +10,13 @@ import { fetchTable } from '../stores/tables/actionCreators';
 import { Tables } from '../stores/tables/tables';
 import AuthorizationComponent from '../components/AuthorizationComponent';
 import { TitleContext } from '../components/TitleContext';
-import { withRouter } from '../WithRouter';
+import { WithRouter, withRouter } from '../WithRouter';
 
-interface Props extends WithTranslation {
+interface Props extends WithTranslation, WithRouter {
   refresh: () => void;
 }
 
-class InvoicesPage extends React.Component<Props> {
+class InvoicesPage extends Component<Props> {
   componentDidMount() {
     const { t } = this.props;
     document.title = t('entity.invoices');
@@ -29,17 +26,14 @@ class InvoicesPage extends React.Component<Props> {
     const { refresh } = this.props;
     const client = new Client();
     await client.updateLastSeenByTreasurer();
-    await refresh();
+    refresh();
   };
 
   render() {
     const { t } = this.props;
 
     return (
-      <AuthorizationComponent
-        roles={[Roles.FINANCIAL, Roles.GENERAL, Roles.ADMIN, Roles.AUDIT]}
-        notFound
-      >
+      <AuthorizationComponent roles={[Roles.FINANCIAL, Roles.GENERAL, Roles.ADMIN, Roles.AUDIT]} notFound>
         <Segment style={{ backgroundColor: 'rgba(237, 237, 237, 0.98)' }} vertical basic>
           <Container style={{ paddingTop: '1em' }}>
             <Grid columns={2}>
@@ -55,12 +49,20 @@ class InvoicesPage extends React.Component<Props> {
               <Grid.Column>
                 <AuthorizationComponent roles={[Roles.FINANCIAL]} notFound={false}>
                   <Popup
-                    trigger={(
-                      <Button icon labelPosition="left" primary floated="right" onClick={() => this.updateTreasurerLastSeen()}>
+                    trigger={
+                      <Button
+                        icon
+                        labelPosition="left"
+                        primary
+                        floated="right"
+                        onClick={(): void => {
+                          this.updateTreasurerLastSeen().catch(console.error);
+                        }}
+                      >
                         <Icon name="eye" />
                         {t('pages.tables.invoices.updateLastSeen')}
                       </Button>
-                    )}
+                    }
                     mouseEnterDelay={500}
                     header={t('pages.tables.invoices.updateLastSeen')}
                     content={t('pages.tables.invoices.updateLastSeenDescription')}
@@ -70,7 +72,6 @@ class InvoicesPage extends React.Component<Props> {
             </Grid>
 
             <InvoiceTableControls />
-
           </Container>
         </Segment>
         <Container style={{ marginTop: '20px' }}>

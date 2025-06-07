@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { Component } from 'react';
 import { Modal } from 'semantic-ui-react';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
@@ -23,7 +23,7 @@ interface Props extends WithTranslation, WithRouter {
   showTransientAlert: (alert: TransientAlert) => void;
 }
 
-class ProductCreatePage extends React.Component<Props> {
+class ProductCreatePage extends Component<Props> {
   componentDidMount() {
     const { clearProduct, t } = this.props;
     clearProduct();
@@ -32,8 +32,7 @@ class ProductCreatePage extends React.Component<Props> {
 
   componentDidUpdate(prevProps: Props) {
     const { navigate } = this.props.router;
-    if (prevProps.status === ResourceStatus.SAVING
-      && this.props.status === ResourceStatus.FETCHED) {
+    if (prevProps.status === ResourceStatus.SAVING && this.props.status === ResourceStatus.FETCHED) {
       navigate('/product');
       this.props.showTransientAlert({
         title: 'Success',
@@ -67,13 +66,7 @@ class ProductCreatePage extends React.Component<Props> {
     } as Product;
 
     return (
-      <Modal
-        onClose={this.close}
-        open
-        closeIcon
-        dimmer="blurring"
-        closeOnDimmerClick={false}
-      >
+      <Modal onClose={this.close} open closeIcon dimmer="blurring" closeOnDimmerClick={false}>
         <Modal.Content>
           <AlertContainer />
           <ProductProps
@@ -102,5 +95,4 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
 
 ProductCreatePage.contextType = TitleContext;
 
-export default withTranslation()(withRouter(connect(mapStateToProps,
-  mapDispatchToProps)(ProductCreatePage)));
+export default withTranslation()(withRouter(connect(mapStateToProps, mapDispatchToProps)(ProductCreatePage)));

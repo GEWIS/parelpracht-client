@@ -1,4 +1,3 @@
-import React from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import { sortColumnMegaTable } from '../../stores/company/selectors';

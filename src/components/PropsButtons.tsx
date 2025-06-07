@@ -1,9 +1,8 @@
-import React from 'react';
 import { Button, Icon } from 'semantic-ui-react';
 import { useTranslation } from 'react-i18next';
 import ResourceStatus from '../stores/resourceStatus';
-import DeleteButton from './DeleteButton';
 import { SingleEntities } from '../stores/single/single';
+import DeleteButton from './DeleteButton';
 
 interface Props {
   editing: boolean;
@@ -21,9 +20,7 @@ interface Props {
 }
 
 function PropsButtons(props: Props) {
-  const {
-    editing, canEdit, canDelete, canSave, entity, status, cancel, edit, save, remove, style,
-  } = props;
+  const { editing, canEdit, canDelete, canSave, entity, status, cancel, edit, save, remove, style = {} } = props;
   const { t } = useTranslation();
 
   switch (status) {
@@ -47,13 +44,7 @@ function PropsButtons(props: Props) {
             <Button icon floated="right" onClick={cancel} style={style}>
               {t('buttons.cancel')}
             </Button>
-            <DeleteButton
-              entity={entity}
-              canDelete={canDelete}
-              status={status}
-              remove={remove}
-              style={style}
-            />
+            <DeleteButton entity={entity} canDelete={canDelete} status={status} remove={remove} style={style} />
           </>
         );
       }
@@ -63,26 +54,13 @@ function PropsButtons(props: Props) {
             <Icon name="pencil" />
             {t('buttons.edit')}
           </Button>
-          <DeleteButton
-            entity={entity}
-            canDelete={canDelete}
-            status={status}
-            remove={remove}
-            style={style}
-          />
+          <DeleteButton entity={entity} canDelete={canDelete} status={status} remove={remove} style={style} />
         </>
       );
     case ResourceStatus.SAVING:
       return (
         <>
-          <Button
-            icon
-            labelPosition="left"
-            color="green"
-            floated="right"
-            loading
-            style={style}
-          >
+          <Button icon labelPosition="left" color="green" floated="right" loading style={style}>
             <Icon name="save" />
             {t('buttons.save')}
           </Button>
@@ -100,9 +78,5 @@ function PropsButtons(props: Props) {
       );
   }
 }
-
-PropsButtons.defaultProps = {
-  style: {},
-};
 
 export default PropsButtons;

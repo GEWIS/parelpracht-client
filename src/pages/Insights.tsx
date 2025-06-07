@@ -1,7 +1,5 @@
-import * as React from 'react';
-import {
-  Container, Grid, Header, Icon, Segment,
-} from 'semantic-ui-react';
+import { useEffect } from 'react';
+import { Container, Grid, Header, Icon, Segment } from 'semantic-ui-react';
 import { useTranslation } from 'react-i18next';
 import ContractTableExtensive from '../components/megatable/MegaTable';
 import ContractTableExtensiveControls from '../components/megatable/MegaTableControls';
@@ -12,9 +10,9 @@ function Insights() {
   const { t } = useTranslation();
   const { setTitle } = useTitle();
 
-  React.useEffect(() => {
+  useEffect(() => {
     setTitle(t('entity.insights'));
-  }, []);
+  }, [setTitle, t]);
 
   return (
     <>
@@ -34,11 +32,10 @@ function Insights() {
           </Grid>
 
           <ContractTableExtensiveControls />
-
         </Container>
       </Segment>
       <Container style={{ marginTop: '20px' }}>
-        <ContractTableExtensive/>
+        <ContractTableExtensive />
       </Container>
     </>
   );

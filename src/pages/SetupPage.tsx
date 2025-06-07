@@ -1,10 +1,10 @@
+import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Navigate as Redirect } from 'react-router-dom';
-import AlertContainer from '../components/alerts/AlertContainer';
 import { Container, Image, Segment } from 'semantic-ui-react';
+import AlertContainer from '../components/alerts/AlertContainer';
 import CenterInPage from '../components/CenterInPage';
 import ParelPrachtFullLogo from '../components/ParelPrachtFullLogo';
-import React from 'react';
 import SetupForm from '../components/auth/SetupForm';
 import { useTitle } from '../components/TitleContext';
 
@@ -16,20 +16,24 @@ function SetupPage({ setupDone }: Props) {
   const { t } = useTranslation();
   const { setTitle } = useTitle();
 
-  React.useEffect(() => {
+  useEffect(() => {
     setTitle(t('pages.setup'));
-  });
+  }, [setTitle, t]);
 
   if (setupDone) {
-    return <><Redirect to={'/login'}/></>;
+    return (
+      <>
+        <Redirect to={'/login'} />
+      </>
+    );
   }
 
   return (
     <>
-      <div className="bg"/>
-      <div className="bg bg2"/>
-      <div className="bg bg3"/>
-      <AlertContainer internal/>
+      <div className="bg" />
+      <div className="bg bg2" />
+      <div className="bg bg3" />
+      <AlertContainer internal />
       <Container>
         <CenterInPage>
           <Segment>
@@ -41,8 +45,6 @@ function SetupPage({ setupDone }: Props) {
       </Container>
     </>
   );
-
-
 }
 
 export default SetupPage;

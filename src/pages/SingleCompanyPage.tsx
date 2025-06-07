@@ -1,6 +1,6 @@
-import * as React from 'react';
+import { Component } from 'react';
 import { NavLink } from 'react-router-dom';
-import { Breadcrumb, Container, Grid, Loader, Segment, Tab } from 'semantic-ui-react';
+import { Breadcrumb, Container, Grid, Loader, Segment, Tab, TabPane } from 'semantic-ui-react';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import { WithTranslation, withTranslation } from 'react-i18next';
@@ -23,9 +23,9 @@ import CompanyContractedProductsChart from '../components/entities/company/Compa
 import FilesList from '../components/files/FilesList';
 import { authedUserHasRole } from '../stores/auth/selectors';
 import AuthorizationComponent from '../components/AuthorizationComponent';
-import NotFound from './NotFound';
 import { TitleContext } from '../components/TitleContext';
 import { WithRouter, withRouter } from '../WithRouter';
+import NotFound from './NotFound';
 
 interface Props extends WithTranslation, WithRouter {
   company: Company | undefined;
@@ -41,7 +41,7 @@ interface State {
   paneIndex: number;
 }
 
-class SingleCompanyPage extends React.Component<Props, State> {
+class SingleCompanyPage extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
     const { location, navigate } = this.props.router;
@@ -83,9 +83,7 @@ class SingleCompanyPage extends React.Component<Props, State> {
       document.title = company.name;
     }
 
-    if (status === ResourceStatus.EMPTY
-      && prevProps.status === ResourceStatus.DELETING
-    ) {
+    if (status === ResourceStatus.EMPTY && prevProps.status === ResourceStatus.DELETING) {
       navigate('/company');
       this.props.showTransientAlert({
         title: 'Success',
@@ -94,8 +92,7 @@ class SingleCompanyPage extends React.Component<Props, State> {
         displayTimeInMs: 3000,
       });
     }
-    if (status === ResourceStatus.FETCHED
-    && prevProps.status === ResourceStatus.SAVING) {
+    if (status === ResourceStatus.FETCHED && prevProps.status === ResourceStatus.SAVING) {
       this.props.showTransientAlert({
         title: 'Success',
         message: `Properties of ${this.props.company?.name} successfully updated.`,
@@ -106,33 +103,31 @@ class SingleCompanyPage extends React.Component<Props, State> {
   }
 
   getPanes = () => {
-    const {
-      company, fetchCompany, status, hasRole, t,
-    } = this.props;
+    const { company, fetchCompany, status, hasRole, t } = this.props;
 
     const panes = [
       {
         menuItem: t('entity.contacts'),
         render: () => (
-          <Tab.Pane>
+          <TabPane>
             <CompanyContactList />
-          </Tab.Pane>
+          </TabPane>
         ),
       },
       {
         menuItem: t('entity.contracts'),
         render: () => (
-          <Tab.Pane>
+          <TabPane>
             <ContractList />
-          </Tab.Pane>
+          </TabPane>
         ),
       },
       {
         menuItem: t('entity.invoices'),
         render: () => (
-          <Tab.Pane>
+          <TabPane>
             <InvoiceList />
-          </Tab.Pane>
+          </TabPane>
         ),
       },
     ];
@@ -140,42 +135,48 @@ class SingleCompanyPage extends React.Component<Props, State> {
     if (hasRole(Roles.ADMIN) || hasRole(Roles.GENERAL) || hasRole(Roles.AUDIT)) {
       panes.push({
         menuItem: t('entity.files'),
-        render: company ? () => (
-          <Tab.Pane>
-            <FilesList
-              files={company.files}
-              entityId={company.id}
-              entity={SingleEntities.Company}
-              fetchEntity={fetchCompany}
-              status={status}
-            />
-          </Tab.Pane>
-        ) : () => <Tab.Pane />,
+        render: company
+          ? () => (
+              <TabPane>
+                <FilesList
+                  files={company.files}
+                  entityId={company.id}
+                  entity={SingleEntities.Company}
+                  fetchEntity={fetchCompany}
+                  status={status}
+                />
+              </TabPane>
+            )
+          : () => <TabPane />,
       });
 
       panes.push({
         menuItem: t('entity.activities'),
-        render: company ? () => (
-          <Tab.Pane>
-            <ActivitiesList
-              activities={company.activities as GeneralActivity[]}
-              componentId={company.id}
-              componentType={SingleEntities.Company}
-              resourceStatus={status}
-            />
-          </Tab.Pane>
-        ) : () => <Tab.Pane />,
+        render: company
+          ? () => (
+              <TabPane>
+                <ActivitiesList
+                  activities={company.activities as GeneralActivity[]}
+                  componentId={company.id}
+                  componentType={SingleEntities.Company}
+                  resourceStatus={status}
+                />
+              </TabPane>
+            )
+          : () => <TabPane />,
       });
     }
 
     if (hasRole(Roles.ADMIN) || hasRole(Roles.GENERAL)) {
       panes.push({
         menuItem: t('entity.insights'),
-        render: company ? () => (
-          // <Tab.Pane> is set in this tab, because it needs to fetch data and
-          /// therefore needs to show a loading animation
-          <CompanyContractedProductsChart company={company} />
-        ) : () => <Tab.Pane />,
+        render: company
+          ? () => (
+              // <TabPane> is set in this tab, because it needs to fetch data and
+              /// therefore needs to show a loading animation
+              <CompanyContractedProductsChart company={company} />
+            )
+          : () => <TabPane />,
       });
     }
 
@@ -194,10 +195,7 @@ class SingleCompanyPage extends React.Component<Props, State> {
     if (company === undefined) {
       document.title = t('entity.company');
       return (
-        <AuthorizationComponent
-          roles={[Roles.GENERAL, Roles.ADMIN, Roles.AUDIT, Roles.FINANCIAL]}
-          notFound
-        >
+        <AuthorizationComponent roles={[Roles.GENERAL, Roles.ADMIN, Roles.AUDIT, Roles.FINANCIAL]} notFound>
           <Container style={{ paddingTop: '1em' }}>
             <Loader content="Loading" active />
           </Container>
@@ -209,10 +207,7 @@ class SingleCompanyPage extends React.Component<Props, State> {
     document.title = company.name;
 
     return (
-      <AuthorizationComponent
-        roles={[Roles.GENERAL, Roles.ADMIN, Roles.AUDIT, Roles.FINANCIAL]}
-        notFound
-      >
+      <AuthorizationComponent roles={[Roles.GENERAL, Roles.ADMIN, Roles.AUDIT, Roles.FINANCIAL]} notFound>
         <Segment style={{ backgroundColor: 'rgba(255, 255, 255, 0.95)' }} vertical basic>
           <Container>
             <Breadcrumb
@@ -240,11 +235,7 @@ class SingleCompanyPage extends React.Component<Props, State> {
             </Grid.Column>
             <Grid.Column width={6}>
               <Segment secondary style={{ backgroundColor: 'rgba(243, 244, 245, 0.98)' }}>
-                <CompanyProps
-                  company={company}
-                  canEdit={[Roles.ADMIN, Roles.GENERAL]}
-                  canDelete={[Roles.ADMIN]}
-                />
+                <CompanyProps company={company} canEdit={[Roles.ADMIN, Roles.GENERAL]} canDelete={[Roles.ADMIN]} />
               </Segment>
             </Grid.Column>
           </Grid>
@@ -270,6 +261,4 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
 
 SingleCompanyPage.contextType = TitleContext;
 
-export default withTranslation()(
-  withRouter(connect(mapStateToProps, mapDispatchToProps)(SingleCompanyPage)),
-);
+export default withTranslation()(withRouter(connect(mapStateToProps, mapDispatchToProps)(SingleCompanyPage)));

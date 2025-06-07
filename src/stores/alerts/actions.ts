@@ -22,5 +22,4 @@ export interface TransientAlert extends Alert {
 
 export type ShowAlertAction = Action<ActionTypeNames.ShowAlert> & { alert: Alert & Id };
 export type HideAlertAction = Action<ActionTypeNames.HideAlert> & Id;
-export type ShowTransientAlertAction =
-  Action<ActionTypeNames.ShowTransientAlert> & { alert: TransientAlert & Id };
+export type ShowTransientAlertAction = Action<ActionTypeNames.ShowTransientAlert> & { alert: TransientAlert & Id };

@@ -57,18 +57,12 @@ function TableControls(props: Props) {
           iconPosition="left"
           placeholder={t('pages.tables.header.search')}
           value={props.search}
-          action={
-            <Button icon="close" onClick={() => props.setSearch('')} title={t('pages.tables.header.clear')} />
-          }
+          action={<Button icon="close" onClick={() => props.setSearch('')} title={t('pages.tables.header.clear')} />}
           onChange={(e) => props.setSearch(e.target.value)}
         />
       </Grid.Column>
     </Grid>
   );
 }
-
-TableControls.defaultProps = {
-  bottomLine: undefined,
-};
 
 export default TableControls;

@@ -1,14 +1,14 @@
-import {
-  call, put, select, throttle,
-} from 'redux-saga/effects';
+import { call, put, select, throttle } from 'redux-saga/effects';
 import {
   ActivityParams,
-  ActivityType, ApiException,
+  ActivityType,
+  ApiException,
   Client,
   Contract,
   Invoice,
   InvoiceActivity,
-  InvoiceCreateParams, InvoiceListResponse,
+  InvoiceCreateParams,
+  InvoiceListResponse,
   InvoiceStatusParams,
   InvoiceSummary,
   ListOrFilter,
@@ -20,9 +20,7 @@ import {
   SortDirection,
 } from '../../clients/server.generated';
 import { takeEveryWithErrorHandling } from '../errorHandling';
-import {
-  clearSingle, errorSingle, fetchSingle, notFoundSingle, setSingle,
-} from '../single/actionCreators';
+import { clearSingle, errorSingle, fetchSingle, notFoundSingle, setSingle } from '../single/actionCreators';
 import {
   singleActionPattern,
   SingleActionType,
@@ -37,9 +35,7 @@ import {
   SingleSaveFileAction,
 } from '../single/actions';
 import { SingleEntities } from '../single/single';
-import {
-  addSummary, deleteSummary, setSummaries, updateSummary,
-} from '../summaries/actionCreators';
+import { addSummary, deleteSummary, setSummaries, updateSummary } from '../summaries/actionCreators';
 import { summariesActionPattern, SummariesActionType } from '../summaries/actions';
 import { SummaryCollections } from '../summaries/summaries';
 import { prevPageTable, setTable } from '../tables/actionCreators';
@@ -56,11 +52,8 @@ function toSummary(invoice: Invoice): InvoiceSummary {
     id: invoice.id,
     title: invoice.title,
     companyId: invoice.companyId,
-    value: invoice.products.reduce(
-      (r: number, p: ProductInstance) => r + p.basePrice - p.discount, 0,
-    ),
-    status: getLastStatus(invoice.activities
-      .filter((a: InvoiceActivity) => a.type === ActivityType.STATUS))?.subType!,
+    value: invoice.products.reduce((r: number, p: ProductInstance) => r + p.basePrice - p.discount, 0),
+    status: getLastStatus(invoice.activities.filter((a: InvoiceActivity) => a.type === ActivityType.STATUS))?.subType!,
   });
 }
 
@@ -68,11 +61,7 @@ function* fetchInvoices() {
   const client = new Client();
 
   const state: TableState<Invoice> = yield select(getTable, Tables.Invoices);
-  const {
-    sortColumn, sortDirection,
-    take, skip,
-    search, filters,
-  } = state;
+  const { sortColumn, sortDirection, take, skip, search, filters } = state;
 
   let { list, count, lastSeen } = yield call(
     [client, client.getAllInvoices],
@@ -126,9 +115,7 @@ function* fetchSingleInvoice(action: SingleFetchAction<SingleEntities.Invoice>) 
   yield put(updateSummary(SummaryCollections.Invoices, toSummary(invoice)));
 }
 
-function* errorFetchSingleInvoice(
-  error: ApiException,
-) {
+function* errorFetchSingleInvoice(error: ApiException) {
   if (error.status === 404) {
     yield put(notFoundSingle(SingleEntities.Invoice));
   } else {
@@ -136,9 +123,7 @@ function* errorFetchSingleInvoice(
   }
 }
 
-function* saveSingleInvoice(
-  action: SingleSaveAction<SingleEntities.Invoice, Partial_InvoiceParams_>,
-) {
+function* saveSingleInvoice(action: SingleSaveAction<SingleEntities.Invoice, Partial_InvoiceParams_>) {
   const client = new Client();
   yield call([client, client.updateInvoice], action.id, action.data);
   const invoice: Invoice = yield call([client, client.getInvoice], action.id);
@@ -158,16 +143,13 @@ function* watchSaveSingleInvoice() {
   );
 }
 
-function* createSingleInvoice(
-  action: SingleCreateAction<SingleEntities.Invoice, InvoiceCreateParams>,
-) {
+function* createSingleInvoice(action: SingleCreateAction<SingleEntities.Invoice, InvoiceCreateParams>) {
   const client = new Client();
   const invoice: Invoice = yield call([client, client.createInvoice], action.data);
   yield put(setSingle(SingleEntities.Invoice, invoice));
   yield put(addSummary(SummaryCollections.Invoices, toSummary(invoice)));
 
-  const contractState: SingleEntityState<Contract> = yield select(getSingle,
-    SingleEntities.Contract);
+  const contractState: SingleEntityState<Contract> = yield select(getSingle, SingleEntities.Contract);
   if (contractState.data) {
     yield put(fetchSingle(SingleEntities.Contract, contractState.data.id));
   }
@@ -199,13 +181,12 @@ function* errorDeleteSingleInvoice() {
 function* watchDeleteSingleInvoice() {
   yield takeEveryWithErrorHandling(
     singleActionPattern(SingleEntities.Invoice, SingleActionType.Delete),
-    deleteSingleInvoice, { onErrorSaga: errorDeleteSingleInvoice },
+    deleteSingleInvoice,
+    { onErrorSaga: errorDeleteSingleInvoice },
   );
 }
 
-function* saveSingleInvoiceFile(
-  action: SingleSaveFileAction<SingleEntities.Invoice, Partial_FileParams_>,
-) {
+function* saveSingleInvoiceFile(action: SingleSaveFileAction<SingleEntities.Invoice, Partial_FileParams_>) {
   const client = new Client();
   yield call([client, client.updateInvoiceFile], action.id, action.fileId, action.data);
   const invoice: Invoice = yield call([client, client.getInvoice], action.id);
@@ -219,7 +200,8 @@ function* errorSaveSingleInvoiceFile() {
 function* watchSaveSingleInvoiceFile() {
   yield takeEveryWithErrorHandling(
     singleActionPattern(SingleEntities.Invoice, SingleActionType.SaveFile),
-    saveSingleInvoiceFile, { onErrorSaga: errorSaveSingleInvoiceFile },
+    saveSingleInvoiceFile,
+    { onErrorSaga: errorSaveSingleInvoiceFile },
   );
 }
 
@@ -237,13 +219,12 @@ function* errorDeleteSingleInvoiceFile() {
 function* watchDeleteSingleInvoiceFile() {
   yield takeEveryWithErrorHandling(
     singleActionPattern(SingleEntities.Invoice, SingleActionType.DeleteFile),
-    deleteSingleInvoiceFile, { onErrorSaga: errorDeleteSingleInvoiceFile },
+    deleteSingleInvoiceFile,
+    { onErrorSaga: errorDeleteSingleInvoiceFile },
   );
 }
 
-function* createSingleInvoiceStatus(
-  action: SingleCreateStatusAction<SingleEntities.Invoice, InvoiceStatusParams>,
-) {
+function* createSingleInvoiceStatus(action: SingleCreateStatusAction<SingleEntities.Invoice, InvoiceStatusParams>) {
   const client = new Client();
   yield call([client, client.addInvoiceStatus], action.id, action.data);
   const invoice: Invoice = yield call([client, client.getInvoice], action.id);
@@ -258,13 +239,12 @@ function* errorCreateSingleInvoiceStatus() {
 function* watchCreateSingleInvoiceStatus() {
   yield takeEveryWithErrorHandling(
     singleActionPattern(SingleEntities.Invoice, SingleActionType.CreateStatus),
-    createSingleInvoiceStatus, { onErrorSaga: errorCreateSingleInvoiceStatus },
+    createSingleInvoiceStatus,
+    { onErrorSaga: errorCreateSingleInvoiceStatus },
   );
 }
 
-function* createSingleInvoiceComment(
-  action: SingleCreateCommentAction<SingleEntities.Invoice, ActivityParams>,
-) {
+function* createSingleInvoiceComment(action: SingleCreateCommentAction<SingleEntities.Invoice, ActivityParams>) {
   const client = new Client();
   yield call([client, client.addInvoiceComment], action.id, action.data);
   const invoice: Invoice = yield call([client, client.getInvoice], action.id);
@@ -278,13 +258,12 @@ function* errorCreateSingleInvoiceComment() {
 function* watchCreateSingleInvoiceComment() {
   yield takeEveryWithErrorHandling(
     singleActionPattern(SingleEntities.Invoice, SingleActionType.CreateComment),
-    createSingleInvoiceComment, { onErrorSaga: errorCreateSingleInvoiceComment },
+    createSingleInvoiceComment,
+    { onErrorSaga: errorCreateSingleInvoiceComment },
   );
 }
 
-function* saveSingleInvoiceActivity(
-  action: SingleSaveActivityAction<SingleEntities.Invoice, ActivityParams>,
-) {
+function* saveSingleInvoiceActivity(action: SingleSaveActivityAction<SingleEntities.Invoice, ActivityParams>) {
   const client = new Client();
   yield call([client, client.updateInvoiceActivity], action.id, action.activityId, action.data);
   const invoice: Invoice = yield call([client, client.getInvoice], action.id);
@@ -298,24 +277,18 @@ function* errorSaveSingleInvoiceActivity() {
 function* watchSaveSingleInvoiceActivity() {
   yield takeEveryWithErrorHandling(
     singleActionPattern(SingleEntities.Invoice, SingleActionType.SaveActivity),
-    saveSingleInvoiceActivity, { onErrorSaga: errorSaveSingleInvoiceActivity },
+    saveSingleInvoiceActivity,
+    { onErrorSaga: errorSaveSingleInvoiceActivity },
   );
 }
 
 export default [
   function* watchFetchInvoices() {
-    yield throttle(
-      500,
-      tableActionPattern(Tables.Invoices, TableActionType.Fetch),
-      fetchInvoices,
-    );
+    yield throttle(500, tableActionPattern(Tables.Invoices, TableActionType.Fetch), fetchInvoices);
   },
   function* watchFetchInvoiceSummaries() {
     yield takeEveryWithErrorHandling(
-      summariesActionPattern(
-        SummaryCollections.Invoices,
-        SummariesActionType.Fetch,
-      ),
+      summariesActionPattern(SummaryCollections.Invoices, SummariesActionType.Fetch),
       fetchInvoiceSummaries,
     );
   },

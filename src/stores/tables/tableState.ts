@@ -12,13 +12,13 @@ export interface TableState<R> {
   take: number;
   search: string;
 
-  filters: ListFilter[],
+  filters: ListFilter[];
 
-  extra: object,
+  extra: Record<string, number>;
 
   // Only used for the invoices table. This attribute contains the last time at which the treasurer
   // has updated the table.
-  lastSeen?: Date,
+  lastSeen?: Date;
 }
 
 export interface ListFilter {

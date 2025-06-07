@@ -1,4 +1,3 @@
-import React from 'react';
 import ColumnFilter from '../ColumnFilter';
 import { Tables } from '../../stores/tables/tables';
 import { ProductInstanceStatus } from '../../clients/server.generated';
@@ -7,11 +6,11 @@ interface Props {
   columnName?: string;
 }
 
-function ProductInstanceStatusFilter(props: Props) {
+function ProductInstanceStatusFilter({ columnName = 'Status' }: Props) {
   return (
     <ColumnFilter
       column="status"
-      columnName={props.columnName!}
+      columnName={columnName}
       table={Tables.ETCompanies}
       options={[
         { key: 0, value: ProductInstanceStatus.NOTDELIVERED, text: 'Not delivered' },
@@ -22,9 +21,5 @@ function ProductInstanceStatusFilter(props: Props) {
     />
   );
 }
-
-ProductInstanceStatusFilter.defaultProps = {
-  columnName: 'Status',
-};
 
 export default ProductInstanceStatusFilter;

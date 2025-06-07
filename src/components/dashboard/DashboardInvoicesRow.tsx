@@ -1,4 +1,3 @@
-import React from 'react';
 import { Table } from 'semantic-ui-react';
 import { NavLink } from 'react-router-dom';
 import { connect } from 'react-redux';
@@ -17,18 +16,13 @@ interface Props {
 }
 
 function DashboardInvoicesRow(props: Props) {
-  const {
-    invoice, company, currentUserId, assignedTo,
-  } = props;
+  const { invoice, company, currentUserId, assignedTo } = props;
 
   return (
-    <Table.Row
-      error={invoice.assignedToId === currentUserId}
-    >
+    <Table.Row error={invoice.assignedToId === currentUserId}>
       <Table.Cell>
         <NavLink to={`/invoice/${invoice.id}`} title={`F${invoice.id} (${company})`}>
-          F
-          {invoice.id}
+          F{invoice.id}
         </NavLink>
       </Table.Cell>
       <Table.Cell>
@@ -37,13 +31,9 @@ function DashboardInvoicesRow(props: Props) {
         </NavLink>
       </Table.Cell>
       <Table.Cell>
-        <span title={formatTimestampToDate(invoice.startDate)}>
-          {formatTimestampToDateShort(invoice.startDate)}
-        </span>
+        <span title={formatTimestampToDate(invoice.startDate)}>{formatTimestampToDateShort(invoice.startDate)}</span>
       </Table.Cell>
-      <Table.Cell>
-        {formatPriceFull(invoice.value)}
-      </Table.Cell>
+      <Table.Cell>{formatPriceFull(invoice.value)}</Table.Cell>
       <Table.Cell>
         <span title={assignedTo}>{assignedTo}</span>
       </Table.Cell>

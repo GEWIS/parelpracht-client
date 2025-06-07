@@ -1,5 +1,3 @@
-/* eslint-disable react/jsx-props-no-spreading */
-import React from 'react';
 import { connect } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import { getUserName } from '../../../stores/user/selectors';
@@ -13,11 +11,7 @@ interface Props {
 
 function UserLinkWithoutImage(props: Props) {
   const { id, userName } = props;
-  return (
-    <NavLink to={`/user/${id}`}>
-      {userName}
-    </NavLink>
-  );
+  return <NavLink to={`/user/${id}`}>{userName}</NavLink>;
 }
 
 const mapStateToProps = (state: RootState, props: { id: number }) => {

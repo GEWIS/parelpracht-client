@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { Component } from 'react';
 import { withTranslation, WithTranslation } from 'react-i18next';
 import { Button, Input, Table } from 'semantic-ui-react';
 
@@ -13,29 +13,26 @@ interface Props extends WithTranslation {
 }
 
 interface State {
-  fields: string[]
+  fields: string[];
 }
 
-class PricingRow extends React.Component<Props, State> {
+class PricingRow extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
-      // eslint-disable-next-line react/no-unused-state
       fields: props.pricing,
     };
   }
 
   render() {
-    const {
-      pricing, header, editing, row, updateField, removeRow, t,
-    } = this.props;
+    const { pricing, header, editing, row, updateField, removeRow, t } = this.props;
 
     if (!editing) {
       return (
         <Table.Row>
-          {pricing.map((p) => (header
-            ? <Table.HeaderCell key={p}>{p}</Table.HeaderCell>
-            : <Table.Cell key={p}>{p}</Table.Cell>))}
+          {pricing.map((p) =>
+            header ? <Table.HeaderCell key={p}>{p}</Table.HeaderCell> : <Table.Cell key={p}>{p}</Table.Cell>,
+          )}
         </Table.Row>
       );
     }
@@ -68,12 +65,7 @@ class PricingRow extends React.Component<Props, State> {
         })}
         {editing ? (
           <Table.HeaderCell collapsing>
-            <Button
-              negative
-              onClick={() => removeRow(row)}
-              icon="trash"
-              size="tiny"
-            />
+            <Button negative onClick={() => removeRow(row)} icon="trash" size="tiny" />
           </Table.HeaderCell>
         ) : null}
       </Table.Row>

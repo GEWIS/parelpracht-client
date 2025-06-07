@@ -1,18 +1,17 @@
-import React from 'react';
 import { Table } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import { Invoice, InvoiceStatus } from '../../../clients/server.generated';
 import { dateToFullFinancialYear, formatLastUpdate } from '../../../helpers/timestamp';
 import { RootState } from '../../../stores/store';
 import { formatStatus } from '../../../helpers/activity';
-import InvoiceLink from './InvoiceLink';
 import { getInvoiceStatus } from '../../../stores/invoice/selectors';
 import CompanyLink from '../company/CompanyLink';
+import InvoiceLink from './InvoiceLink';
 
 interface Props {
-  invoice?: Invoice,
+  invoice?: Invoice;
 
-  status: InvoiceStatus,
+  status: InvoiceStatus;
 }
 
 function InvoiceCompactRow(props: Props): JSX.Element {
@@ -26,22 +25,12 @@ function InvoiceCompactRow(props: Props): JSX.Element {
       <Table.Cell>
         <CompanyLink id={invoice.companyId} />
       </Table.Cell>
-      <Table.Cell>
-        {formatStatus(status)}
-      </Table.Cell>
-      <Table.Cell>
-        {dateToFullFinancialYear(invoice.startDate)}
-      </Table.Cell>
-      <Table.Cell>
-        {formatLastUpdate(invoice.updatedAt)}
-      </Table.Cell>
+      <Table.Cell>{formatStatus(status)}</Table.Cell>
+      <Table.Cell>{dateToFullFinancialYear(invoice.startDate)}</Table.Cell>
+      <Table.Cell>{formatLastUpdate(invoice.updatedAt)}</Table.Cell>
     </Table.Row>
   );
 }
-
-InvoiceCompactRow.defaultProps = {
-  invoice: undefined,
-};
 
 const mapStateToProps = (state: RootState, props: { invoice: Invoice }) => {
   if (props.invoice === undefined) {

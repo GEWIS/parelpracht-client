@@ -1,5 +1,3 @@
-import React from 'react';
-
 interface Props {
   startAngle: number;
   endAngle: number;
@@ -7,12 +5,11 @@ interface Props {
 }
 
 function polarToCartesian(centerX: number, centerY: number, radius: number, angleInDegr: number) {
-  // eslint-disable-next-line no-mixed-operators
-  const angleInRadians = (angleInDegr - 90) * Math.PI / 180.0;
+  const angleInRadians = ((angleInDegr - 90) * Math.PI) / 180.0;
 
   return {
-    x: centerX + (radius * Math.cos(angleInRadians)),
-    y: centerY + (radius * Math.sin(angleInRadians)),
+    x: centerX + radius * Math.cos(angleInRadians),
+    y: centerY + radius * Math.sin(angleInRadians),
   };
 }
 
@@ -22,16 +19,13 @@ function describeArc(x: number, y: number, radius: number, startAngle: number, e
 
   const largeArcFlag = endAngle - startAngle <= 180 ? '0' : '1';
 
-  const d = [
-    'M', start.x, start.y,
-    'A', radius, radius, 0, largeArcFlag, 0, end.x, end.y,
-  ].join(' ');
+  const d = ['M', start.x, start.y, 'A', radius, radius, 0, largeArcFlag, 0, end.x, end.y].join(' ');
 
   return d;
 }
 
 function PartialCircle(props: Props) {
-  const { startAngle, endAngle, fillColor } = props;
+  const { startAngle, endAngle, fillColor = 'none' } = props;
 
   if (startAngle < 0 || startAngle >= 360) {
     throw new TypeError(`Start angle should be in the range "0 <= startAngle < 360. Actual value: ${startAngle}`);
@@ -42,18 +36,9 @@ function PartialCircle(props: Props) {
 
   return (
     <svg>
-      <path
-        fill={fillColor!}
-        stroke="#446688"
-        strokeWidth="2"
-        d={describeArc(7, 7, 6, startAngle, endAngle)}
-      />
+      <path fill={fillColor} stroke="#446688" strokeWidth="2" d={describeArc(7, 7, 6, startAngle, endAngle)} />
     </svg>
   );
 }
-
-PartialCircle.defaultProps = {
-  fillColor: 'none',
-};
 
 export default PartialCircle;

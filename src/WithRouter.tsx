@@ -1,39 +1,22 @@
-import * as React from 'react';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { NavigateFunction, useLocation, useNavigate, useParams } from 'react-router-dom';
 import { Location as HLocation } from 'history';
-import { NavigateFunction } from 'react-router/dist/lib/hooks';
+import { ComponentType, FC } from 'react';
+import { Params } from 'react-router';
 
 export interface WithRouter {
   router: {
-    location: HLocation,
-    navigate: NavigateFunction,
-    params: Readonly<any>,
-  }
+    location: HLocation;
+    navigate: NavigateFunction;
+    params: Readonly<Params<string>>;
+  };
 }
 
-// export function withRouter<ComponentProps>(Component: React.ComponentType<ComponentProps>) {
-//   function ComponentWithRouterProp(props: ComponentProps) {
-//     const location = useLocation();
-//     const navigate = useNavigate();
-//     const params = useParams();
-//
-//     return <Component {...props} router={{ location, navigate, params }} />;
-//   }
-//
-//   return ComponentWithRouterProp;
-// }
-
-export function withRouter(Component) {
-  function ComponentWithRouterProp(props) {
-    let location = useLocation();
-    let navigate = useNavigate();
-    let params = useParams();
-    return (
-        <Component
-            {...props}
-            router={{ location, navigate, params }}
-        />
-    );
+export function withRouter<T extends WithRouter>(C: ComponentType<T>): FC<Omit<T, keyof WithRouter>> {
+  function ComponentWithRouterProp(props: object) {
+    const location = useLocation();
+    const navigate = useNavigate();
+    const params = useParams();
+    return <C {...(props as T)} router={{ location, navigate, params }} />;
   }
 
   return ComponentWithRouterProp;

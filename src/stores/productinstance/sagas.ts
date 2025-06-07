@@ -2,10 +2,14 @@ import { call, put } from 'redux-saga/effects';
 import { SingleEntities } from '../single/single';
 import {
   ActivityParams,
-  Client, ProductInstance,
+  Client,
+  ProductInstance,
   ProductInstanceParams,
   ProductInstanceStatusParams,
 } from '../../clients/server.generated';
+import { errorSingle, fetchSingle } from '../single/actionCreators';
+import { takeEveryWithErrorHandling } from '../errorHandling';
+import { singleActionPattern, SingleActionType } from '../single/actions';
 import {
   SingleCreateInstanceAction,
   SingleCreateInstanceCommentAction,
@@ -15,20 +19,14 @@ import {
   SingleSaveInstanceAction,
   SingleSaveInstanceActivityAction,
 } from './actions';
-import { errorSingle, fetchSingle } from '../single/actionCreators';
-import { takeEveryWithErrorHandling } from '../errorHandling';
-import { singleActionPattern, SingleActionType } from '../single/actions';
 
 function* errorProductInstance() {
   yield put(errorSingle(SingleEntities.ProductInstance));
 }
 
-function* saveSingleProductInstance(
-  action: SingleSaveInstanceAction<ProductInstanceParams>,
-) {
+function* saveSingleProductInstance(action: SingleSaveInstanceAction<ProductInstanceParams>) {
   const client = new Client();
-  yield call([client, client.updateProductInstanceOnContract], action.id,
-    action.instanceId, action.data);
+  yield call([client, client.updateProductInstanceOnContract], action.id, action.instanceId, action.data);
   yield put(fetchSingle(SingleEntities.Contract, action.id));
 }
 
@@ -40,12 +38,9 @@ function* watchSaveSingleProductInstance() {
   );
 }
 
-function* createSingleProductInstance(
-  action: SingleCreateInstanceAction<ProductInstanceParams>,
-) {
+function* createSingleProductInstance(action: SingleCreateInstanceAction<ProductInstanceParams>) {
   const client = new Client();
-  const instance: ProductInstance = yield call([client, client.addProductInstanceToContract],
-    action.id, action.data);
+  const instance: ProductInstance = yield call([client, client.addProductInstanceToContract], action.id, action.data);
   yield put(fetchSingle(SingleEntities.Contract, instance.contractId));
 }
 
@@ -57,9 +52,7 @@ function* watchCreateSingleProductInstance() {
   );
 }
 
-function* deleteSingleProductInstance(
-  action: SingleDeleteInstanceAction,
-) {
+function* deleteSingleProductInstance(action: SingleDeleteInstanceAction) {
   const client = new Client();
   yield call([client, client.deleteProductInstance], action.id, action.instanceId);
   yield put(fetchSingle(SingleEntities.Contract, action.id));
@@ -73,12 +66,9 @@ function* watchDeleteSingleProductInstance() {
   );
 }
 
-function* createSingleProductInstanceStatus(
-  action: SingleCreateInstanceStatusAction<ProductInstanceStatusParams>,
-) {
+function* createSingleProductInstanceStatus(action: SingleCreateInstanceStatusAction<ProductInstanceStatusParams>) {
   const client = new Client();
-  yield call([client, client.addProductInstanceStatusToContract], action.id,
-    action.instanceId, action.data);
+  yield call([client, client.addProductInstanceStatusToContract], action.id, action.instanceId, action.data);
   yield put(fetchSingle(SingleEntities.Contract, action.id));
 }
 
@@ -90,12 +80,9 @@ function* watchCreateSingleProductInstanceStatus() {
   );
 }
 
-function* createSingleProductInstanceComment(
-  action: SingleCreateInstanceCommentAction<ActivityParams>,
-) {
+function* createSingleProductInstanceComment(action: SingleCreateInstanceCommentAction<ActivityParams>) {
   const client = new Client();
-  yield call([client, client.addProductInstanceCommentToContract], action.id,
-    action.instanceId, action.data);
+  yield call([client, client.addProductInstanceCommentToContract], action.id, action.instanceId, action.data);
   yield put(fetchSingle(SingleEntities.Contract, action.id));
 }
 
@@ -107,12 +94,15 @@ function* watchCreateSingleProductInstanceComment() {
   );
 }
 
-function* saveSingleProductInstanceActivity(
-  action: SingleSaveInstanceActivityAction<ActivityParams>,
-) {
+function* saveSingleProductInstanceActivity(action: SingleSaveInstanceActivityAction<ActivityParams>) {
   const client = new Client();
-  yield call([client, client.updateProductInstanceActivityOnContract],
-    action.id, action.instanceId, action.activityId, action.data);
+  yield call(
+    [client, client.updateProductInstanceActivityOnContract],
+    action.id,
+    action.instanceId,
+    action.activityId,
+    action.data,
+  );
   yield put(fetchSingle(SingleEntities.Contract, action.id));
 }
 
@@ -124,12 +114,14 @@ function* watchSaveSingleProductInstanceActivity() {
   );
 }
 
-function* deleteSingleProductInstanceActivity(
-  action: SingleDeleteInstanceActivityAction,
-) {
+function* deleteSingleProductInstanceActivity(action: SingleDeleteInstanceActivityAction) {
   const client = new Client();
-  yield call([client, client.deleteProductInstanceActivityFromContract],
-    action.id, action.instanceId, action.activityId);
+  yield call(
+    [client, client.deleteProductInstanceActivityFromContract],
+    action.id,
+    action.instanceId,
+    action.activityId,
+  );
   yield put(fetchSingle(SingleEntities.Contract, action.id));
 }
 

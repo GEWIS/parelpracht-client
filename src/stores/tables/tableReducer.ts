@@ -7,7 +7,8 @@ import {
   tableExtractAction,
   TableSearchAction,
   TableSetAction,
-  TableSetFilterAction, TableSetSortAction,
+  TableSetFilterAction,
+  TableSetSortAction,
   TableSetTakeAction,
 } from './actions';
 import { Tables } from './tables';
@@ -29,10 +30,7 @@ const initialState = {
 };
 
 const createTableReducer = <T extends Tables, R>(t: Tables) => {
-  return (
-    state: TableState<R> = initialState,
-    action: TableActions<T, R>,
-  ): TableState<R> => {
+  return (state: TableState<R> = initialState, action: TableActions<T, R>): TableState<R> => {
     // Check if action is table action
     if (action.type.split('/')[0] !== 'Table') {
       return state;

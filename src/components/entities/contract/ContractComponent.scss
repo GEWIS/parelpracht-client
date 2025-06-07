@@ -4,7 +4,8 @@
     display: inline-block;
   }
 
-  .attached.button, .attached.right.button {
+  .attached.button,
+  .attached.right.button {
     box-shadow: 0 0 0 1px transparent inset !important;
     padding: 1.5em;
 
@@ -15,8 +16,7 @@
 }
 
 .ui.contract-component:hover {
-  .attached.button > i{
+  .attached.button > i {
     color: inherit;
   }
 }
-

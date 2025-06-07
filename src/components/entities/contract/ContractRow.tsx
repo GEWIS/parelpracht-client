@@ -1,4 +1,3 @@
-import React from 'react';
 import { connect } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import { Table } from 'semantic-ui-react';
@@ -11,9 +10,9 @@ import { getContractStatus, getContractValue } from '../../../stores/contract/se
 import { formatStatus } from '../../../helpers/activity';
 import CompanyLink from '../company/CompanyLink';
 import { formatPriceFull } from '../../../helpers/monetary';
-import { withRouter } from '../../../WithRouter';
+import { WithRouter, withRouter } from '../../../WithRouter';
 
-interface Props {
+interface Props extends WithRouter {
   contract: Contract;
   contactName: string;
   contractStatus: ContractStatus;
@@ -21,37 +20,23 @@ interface Props {
 }
 
 function ContractRow(props: Props) {
-  const {
-    contract, value, contactName, contractStatus,
-  } = props;
+  const { contract, value, contactName, contractStatus } = props;
 
   return (
     <Table.Row>
       <Table.Cell>
-        <NavLink to={`/contract/${contract.id}`}>
-          {`C${contract.id}`}
-        </NavLink>
+        <NavLink to={`/contract/${contract.id}`}>{`C${contract.id}`}</NavLink>
       </Table.Cell>
       <Table.Cell>
-        <NavLink to={`/contract/${contract.id}`}>
-          {contract.title}
-        </NavLink>
+        <NavLink to={`/contract/${contract.id}`}>{contract.title}</NavLink>
       </Table.Cell>
       <Table.Cell>
         <CompanyLink id={contract.companyId} />
       </Table.Cell>
-      <Table.Cell>
-        {contactName}
-      </Table.Cell>
-      <Table.Cell>
-        {formatStatus(contractStatus)}
-      </Table.Cell>
-      <Table.Cell>
-        {formatPriceFull(value)}
-      </Table.Cell>
-      <Table.Cell>
-        {formatLastUpdate(contract.updatedAt)}
-      </Table.Cell>
+      <Table.Cell>{contactName}</Table.Cell>
+      <Table.Cell>{formatStatus(contractStatus)}</Table.Cell>
+      <Table.Cell>{formatPriceFull(value)}</Table.Cell>
+      <Table.Cell>{formatLastUpdate(contract.updatedAt)}</Table.Cell>
     </Table.Row>
   );
 }

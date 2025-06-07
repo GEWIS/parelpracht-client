@@ -1,8 +1,6 @@
-import * as React from 'react';
+import { Component } from 'react';
 import { NavLink } from 'react-router-dom';
-import {
-  Breadcrumb, Container, Grid, Loader, Segment, Tab,
-} from 'semantic-ui-react';
+import { Breadcrumb, Container, Grid, Loader, Segment, Tab, TabPane } from 'semantic-ui-react';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import { WithTranslation, withTranslation } from 'react-i18next';
@@ -24,11 +22,11 @@ import InvoiceCompactTable from '../components/entities/invoice/InvoiceCompactTa
 import ProductsContractedGraph from '../components/entities/product/ProductsContractedGraph';
 import PricingTable from '../components/productpricing/PricingTable';
 import AuthorizationComponent from '../components/AuthorizationComponent';
-import NotFound from './NotFound';
 import { getLanguage } from '../localization';
 import { TitleContext } from '../components/TitleContext';
 import CreatePricing from '../components/productpricing/CreatePricing';
 import { WithRouter, withRouter } from '../WithRouter';
+import NotFound from './NotFound';
 
 interface Props extends WithTranslation, WithRouter {
   product: Product | undefined;
@@ -43,7 +41,7 @@ interface State {
   paneIndex: number;
 }
 
-class SingleProductPage extends React.Component<Props, State> {
+class SingleProductPage extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
     const { location, navigate } = this.props.router;
@@ -72,7 +70,9 @@ class SingleProductPage extends React.Component<Props, State> {
     const { params } = this.props.router;
 
     this.props.clearProduct();
-    this.props.fetchProduct(Number.parseInt(params.productId, 10));
+    if (params.productId) {
+      this.props.fetchProduct(Number.parseInt(params.productId, 10));
+    }
   }
 
   componentDidUpdate(prevProps: Readonly<Props>) {
@@ -87,9 +87,7 @@ class SingleProductPage extends React.Component<Props, State> {
       document.title = product.nameEnglish;
     }
 
-    if (status === ResourceStatus.EMPTY
-      && prevProps.status === ResourceStatus.DELETING
-    ) {
+    if (status === ResourceStatus.EMPTY && prevProps.status === ResourceStatus.DELETING) {
       navigate('/product');
       this.props.showTransientAlert({
         title: 'Success',
@@ -97,8 +95,7 @@ class SingleProductPage extends React.Component<Props, State> {
         type: 'success',
         displayTimeInMs: 3000,
       });
-    } else if (prevProps.status === ResourceStatus.SAVING
-      && this.props.status === ResourceStatus.FETCHED) {
+    } else if (prevProps.status === ResourceStatus.SAVING && this.props.status === ResourceStatus.FETCHED) {
       this.props.showTransientAlert({
         title: 'Success',
         message: `Properties of ${this.props.product?.nameEnglish} successfully updated.`,
@@ -109,79 +106,81 @@ class SingleProductPage extends React.Component<Props, State> {
   }
 
   getPanes = () => {
-    const {
-      t, product, fetchProduct, status,
-    } = this.props;
+    const { t, product, fetchProduct, status } = this.props;
     const panes = [
       {
         menuItem: t('entity.contracts'),
-        render: product ? () => (
-          <Tab.Pane>
-            <ContractCompactTable
-              product={product}
-            />
-          </Tab.Pane>
-        ) : () => <Tab.Pane />,
+        render: product
+          ? () => (
+              <TabPane>
+                <ContractCompactTable product={product} />
+              </TabPane>
+            )
+          : () => <TabPane />,
       },
       {
         menuItem: t('entity.invoices'),
-        render: product ? () => (
-          <Tab.Pane>
-            <InvoiceCompactTable
-              product={product}
-            />
-          </Tab.Pane>
-        ) : () => <Tab.Pane />,
+        render: product
+          ? () => (
+              <TabPane>
+                <InvoiceCompactTable product={product} />
+              </TabPane>
+            )
+          : () => <TabPane />,
       },
       {
         menuItem: t('entity.files'),
-        render: product ? () => (
-          <Tab.Pane>
-            <FilesList
-              files={product.files}
-              entityId={product.id}
-              entity={SingleEntities.Product}
-              fetchEntity={fetchProduct}
-              status={status}
-            />
-          </Tab.Pane>
-        ) : () => <Tab.Pane />,
+        render: product
+          ? () => (
+              <TabPane>
+                <FilesList
+                  files={product.files}
+                  entityId={product.id}
+                  entity={SingleEntities.Product}
+                  fetchEntity={fetchProduct}
+                  status={status}
+                />
+              </TabPane>
+            )
+          : () => <TabPane />,
       },
       {
         menuItem: t('entity.activities'),
-        render: product ? () => (
-          <Tab.Pane>
-            <ActivitiesList
-              activities={product.activities as GeneralActivity[]}
-              componentId={product.id}
-              componentType={SingleEntities.Product}
-              resourceStatus={status}
-            />
-          </Tab.Pane>
-        ) : () => <Tab.Pane />,
+        render: product
+          ? () => (
+              <TabPane>
+                <ActivitiesList
+                  activities={product.activities as GeneralActivity[]}
+                  componentId={product.id}
+                  componentType={SingleEntities.Product}
+                  resourceStatus={status}
+                />
+              </TabPane>
+            )
+          : () => <TabPane />,
       },
       {
         menuItem: t('entity.insights'),
-        render: product ? () => <ProductsContractedGraph product={product} />
-          : () => <Tab.Pane />,
+        render: product ? () => <ProductsContractedGraph product={product} /> : () => <TabPane />,
       },
       {
         menuItem: t('entities.product.props.customPrice'),
-        render: product ? () => (
-          <Tab.Pane>
-            {!product.pricing ? (
-              <>
-                <h3>
-                  {t('entities.product.insights.header')}
-                </h3>
-                <AuthorizationComponent roles={[Roles.ADMIN]} notFound={false}>
-                  {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-                  <CreatePricing productId={product.id} />
-                </AuthorizationComponent>
-              </>
-            ) : <PricingTable pricing={product.pricing!} productId={product.id} /> }
-          </Tab.Pane>
-        ) : () => <Tab.Pane />,
+        render: product
+          ? () => (
+              <TabPane>
+                {!product.pricing ? (
+                  <>
+                    <h3>{t('entities.product.insights.header')}</h3>
+                    <AuthorizationComponent roles={[Roles.ADMIN]} notFound={false}>
+                      <CreatePricing productId={product.id} />
+                    </AuthorizationComponent>
+                  </>
+                ) : (
+                  <PricingTable pricing={product.pricing} productId={product.id} />
+                )}
+              </TabPane>
+            )
+          : () => <TabPane />,
       },
     ];
 
@@ -230,7 +229,7 @@ class SingleProductPage extends React.Component<Props, State> {
               <Tab
                 panes={panes}
                 menu={{ pointing: true, inverted: true }}
-                onTabChange={(e, data) => {
+                onTabChange={(_, data) => {
                   this.setState({ paneIndex: data.activeIndex! as number });
                   navigate(`#${data.panes![data.activeIndex! as number].menuItem.toLowerCase()}`, { replace: true });
                 }}
@@ -239,11 +238,7 @@ class SingleProductPage extends React.Component<Props, State> {
             </Grid.Column>
             <Grid.Column width={6}>
               <Segment secondary style={{ backgroundColor: 'rgba(243, 244, 245, 0.98)' }}>
-                <ProductProps
-                  product={product}
-                  canEdit={[Roles.ADMIN]}
-                  canDelete={[Roles.ADMIN]}
-                />
+                <ProductProps product={product} canEdit={[Roles.ADMIN]} canDelete={[Roles.ADMIN]} />
               </Segment>
             </Grid.Column>
           </Grid>
@@ -268,6 +263,4 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
 
 SingleProductPage.contextType = TitleContext;
 
-export default withTranslation()(
-  withRouter(connect(mapStateToProps, mapDispatchToProps)(SingleProductPage)),
-);
+export default withTranslation()(withRouter(connect(mapStateToProps, mapDispatchToProps)(SingleProductPage)));

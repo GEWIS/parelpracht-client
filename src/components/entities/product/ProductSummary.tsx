@@ -1,4 +1,3 @@
-import React from 'react';
 import { connect } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { Product } from '../../../clients/server.generated';
@@ -22,20 +21,13 @@ function ProductSummary(props: Props) {
   const { t } = useTranslation();
 
   if (product === undefined) {
-    return (
-      <EntitySummary
-        loading
-        entity={SingleEntities.Product}
-        icon="shopping bag"
-      />
-    );
+    return <EntitySummary loading entity={SingleEntities.Product} icon="shopping bag" />;
   }
 
   const useDutch = getLanguage() === 'nl-NL';
 
-  const loading = (status !== ResourceStatus.FETCHED
-    && status !== ResourceStatus.SAVING
-    && status !== ResourceStatus.ERROR);
+  const loading =
+    status !== ResourceStatus.FETCHED && status !== ResourceStatus.SAVING && status !== ResourceStatus.ERROR;
 
   return (
     <EntitySummary
@@ -44,7 +36,7 @@ function ProductSummary(props: Props) {
       icon="shopping bag"
       title={useDutch ? product.nameDutch : product.nameEnglish}
     >
-      { useDutch ? (
+      {useDutch ? (
         <div>
           <h5>{t('entities.product.props.nameEn')}</h5>
           <p>{product.nameEnglish}</p>

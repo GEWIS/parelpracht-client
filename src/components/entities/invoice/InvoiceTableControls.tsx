@@ -1,4 +1,3 @@
-import React from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import TimeAgo from 'javascript-time-ago';
@@ -72,9 +71,5 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
     dispatch(fetchTable(Tables.Invoices));
   },
 });
-
-InvoiceTableControls.defaultProps = {
-  lastSeenDate: undefined,
-};
 
 export default connect(mapStateToProps, mapDispatchToProps)(InvoiceTableControls);

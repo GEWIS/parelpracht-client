@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component, ErrorInfo } from 'react';
 import { ReduxRouter, ReduxRouterSelector } from '@lagunovsky/redux-react-router';
 import './App.scss';
 import './Form.scss';
@@ -12,8 +12,8 @@ interface State {
   hasError: boolean;
 }
 
-class App extends React.Component<{}, State> {
-  constructor(props: {}) {
+class App extends Component<object, State> {
+  constructor(props: object) {
     super(props);
     this.state = {
       hasError: false,
@@ -25,32 +25,28 @@ class App extends React.Component<{}, State> {
     return { hasError: true };
   }
 
-  public componentDidCatch(error: Error, info: React.ErrorInfo) {
+  public componentDidCatch(error: Error, info: ErrorInfo) {
     // tslint:disable-next-line:no-console
     console.error(error, error.stack, info.componentStack);
-    store.dispatch(showAlert({
-      message: 'An unexpected error occured!',
-      title: 'Error',
-      type: 'error',
-    }));
+    store.dispatch(
+      showAlert({
+        message: 'An unexpected error occured!',
+        title: 'Error',
+        type: 'error',
+      }),
+    );
   }
 
   private getContent() {
     if (this.state.hasError) {
-      return (
-        <AlertContainer />
-      );
+      return <AlertContainer />;
     }
-    return (
-      <Routes />
-    );
+    return <Routes />;
   }
 
   public render() {
     if (this.state.hasError) {
-      return (
-        <AlertContainer />
-      );
+      return <AlertContainer />;
     }
     const routerSelector: ReduxRouterSelector<RootState> = (state) => state.router;
     return (

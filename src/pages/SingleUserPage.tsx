@@ -1,8 +1,6 @@
-import * as React from 'react';
+import { Component } from 'react';
 import { NavLink } from 'react-router-dom';
-import {
-  Breadcrumb, Container, Grid, Header, Loader, Segment,
-} from 'semantic-ui-react';
+import { Breadcrumb, Container, Grid, Header, Loader, Segment } from 'semantic-ui-react';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import { withTranslation, WithTranslation } from 'react-i18next';
@@ -22,10 +20,10 @@ import { isProfile } from '../stores/user/selectors';
 import UserApiKey from '../components/entities/user/UserApiKey';
 import UserBackgroundModal from '../components/files/UserBackgroundModal';
 import AuthorizationComponent from '../components/AuthorizationComponent';
-import NotFound from './NotFound';
 import UserAuthSettings from '../components/entities/user/UserAuthSettings';
 import { TitleContext } from '../components/TitleContext';
 import { withRouter, WithRouter } from '../WithRouter';
+import NotFound from './NotFound';
 
 interface Props extends WithTranslation, WithRouter {
   user: User | undefined;
@@ -37,12 +35,14 @@ interface Props extends WithTranslation, WithRouter {
   showTransientAlert: (alert: TransientAlert) => void;
 }
 
-class SingleUserPage extends React.Component<Props> {
+class SingleUserPage extends Component<Props> {
   componentDidMount() {
     const { params } = this.props.router;
 
     this.props.clearUser();
-    this.props.fetchUser(Number.parseInt(params.userId, 10));
+    if (params.userId) {
+      this.props.fetchUser(Number.parseInt(params.userId, 10));
+    }
   }
 
   componentDidUpdate(prevProps: Readonly<Props>) {
@@ -51,16 +51,10 @@ class SingleUserPage extends React.Component<Props> {
     if (user === undefined) {
       document.title = t('entity.user');
     } else {
-      document.title = formatContactName(
-        user.firstName,
-        user.lastNamePreposition,
-        user.lastName,
-      );
+      document.title = formatContactName(user.firstName, user.lastNamePreposition, user.lastName);
     }
 
-    if (status === ResourceStatus.EMPTY
-      && prevProps.status === ResourceStatus.DELETING
-    ) {
+    if (status === ResourceStatus.EMPTY && prevProps.status === ResourceStatus.DELETING) {
       navigate('/users');
       this.props.showTransientAlert({
         title: 'Success',
@@ -72,9 +66,7 @@ class SingleUserPage extends React.Component<Props> {
   }
 
   public render() {
-    const {
-      user, isProfilePage, status, t,
-    } = this.props;
+    const { user, isProfilePage, status, t } = this.props;
 
     if (status === ResourceStatus.NOTFOUND) {
       return <NotFound />;
@@ -98,9 +90,7 @@ class SingleUserPage extends React.Component<Props> {
                 { key: 'Users', content: <NavLink to="/users">Users</NavLink> },
                 {
                   key: 'User',
-                  content: user
-                    ? formatContactName(user.firstName, user.lastNamePreposition, user.lastName)
-                    : '',
+                  content: user ? formatContactName(user.firstName, user.lastNamePreposition, user.lastName) : '',
                   active: true,
                 },
               ]}
@@ -113,33 +103,23 @@ class SingleUserPage extends React.Component<Props> {
             <Grid.Column>
               {user ? (
                 <Segment>
-                  <UserProps
-                    user={user}
-                    canEdit={[Roles.ADMIN]}
-                  />
+                  <UserProps user={user} canEdit={[Roles.ADMIN]} />
                 </Segment>
-              ) : <Segment placeholder />}
+              ) : (
+                <Segment placeholder />
+              )}
             </Grid.Column>
             <Grid.Column>
               <Segment>
-                <h3>
-                  {t('pages.user.responsibilities.header')}
-                </h3>
-                <p>
-                  {t('pages.user.responsibilities.description')}
-                </p>
+                <h3>{t('pages.user.responsibilities.header')}</h3>
+                <p>{t('pages.user.responsibilities.description')}</p>
                 <UserMoveAssignmentsButton userId={user.id} />
               </Segment>
               {isProfilePage ? (
                 <Segment>
-                  <Header as="h3">
-                    {t('pages.user.apiKey.header')}
-                  </Header>
+                  <Header as="h3">{t('pages.user.apiKey.header')}</Header>
                   <p>
-                    {t('pages.user.apiKey.description1')}
-                    {' '}
-                    <code>Authentication</code>
-                    {' '}
+                    {t('pages.user.apiKey.description1')} <code>Authentication</code>{' '}
                     {t('pages.user.apiKey.description2')}
                     <br />
                     <b>{t('pages.user.apiKey.warning')}</b>
@@ -149,9 +129,7 @@ class SingleUserPage extends React.Component<Props> {
               ) : null}
               {isProfilePage ? (
                 <Segment>
-                  <Header as="h3">
-                    {t('pages.user.background.header')}
-                  </Header>
+                  <Header as="h3">{t('pages.user.background.header')}</Header>
                   <UserBackgroundModal
                     entity={SingleEntities.User}
                     entityId={user.id}
@@ -164,9 +142,7 @@ class SingleUserPage extends React.Component<Props> {
               ) : (
                 <AuthorizationComponent roles={[Roles.ADMIN]} notFound={false}>
                   <Segment>
-                    <Header as="h3">
-                      {t('pages.user.background.header')}
-                    </Header>
+                    <Header as="h3">{t('pages.user.background.header')}</Header>
                     <UserBackgroundModal
                       entity={SingleEntities.User}
                       entityId={user.id}
@@ -205,5 +181,4 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
 
 SingleUserPage.contextType = TitleContext;
 
-export default withTranslation()(withRouter(connect(mapStateToProps,
-  mapDispatchToProps)(SingleUserPage)));
+export default withTranslation()(withRouter(connect(mapStateToProps, mapDispatchToProps)(SingleUserPage)));

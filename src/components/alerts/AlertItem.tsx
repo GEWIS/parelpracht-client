@@ -1,4 +1,3 @@
-import React from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import { Message } from 'semantic-ui-react';
@@ -26,8 +25,7 @@ function AlertItem(props: Props) {
   );
 }
 
-const mapStateToProps = () => ({
-});
+const mapStateToProps = () => ({});
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
   onHide: (id: string) => {

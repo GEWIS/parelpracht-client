@@ -28,10 +28,8 @@ export const summariesReducer = combineReducers<SummariesState>({
   [SummaryCollections.Products]: createSummariesReducer(SummaryCollections.Products),
   [SummaryCollections.Contacts]: createSummariesReducer(SummaryCollections.Contacts),
   [SummaryCollections.Companies]: createSummariesReducer(SummaryCollections.Companies),
-  [SummaryCollections.ProductCategories]:
-    createSummariesReducer(SummaryCollections.ProductCategories),
-  [SummaryCollections.ValueAddedTax]:
-    createSummariesReducer(SummaryCollections.ValueAddedTax),
+  [SummaryCollections.ProductCategories]: createSummariesReducer(SummaryCollections.ProductCategories),
+  [SummaryCollections.ValueAddedTax]: createSummariesReducer(SummaryCollections.ValueAddedTax),
   [SummaryCollections.Contracts]: createSummariesReducer(SummaryCollections.Contracts),
   [SummaryCollections.Invoices]: createSummariesReducer(SummaryCollections.Invoices),
   [SummaryCollections.Users]: createSummariesReducer(SummaryCollections.Users),

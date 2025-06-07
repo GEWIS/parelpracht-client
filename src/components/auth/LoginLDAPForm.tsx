@@ -1,16 +1,12 @@
-import React, {
-  ChangeEvent, useEffect, useRef, useState,
-} from 'react';
+import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
-import {
-  Button, Checkbox, Form, Input,
-} from 'semantic-ui-react';
+import { Button, Checkbox, Form, Input } from 'semantic-ui-react';
 import { useTranslation } from 'react-i18next';
 import { authLoginLDAP } from '../../stores/auth/actionCreators';
 
 interface Props {
-  login: (username: string, password: string, rememberMe: boolean) => void,
+  login: (username: string, password: string, rememberMe: boolean) => void;
 }
 
 function LoginLDAPForm(props: Props) {
@@ -19,7 +15,7 @@ function LoginLDAPForm(props: Props) {
   const [password, changePassword] = useState('');
   const [rememberMe, changeRememberMe] = useState(false);
 
-  const inputRef = useRef<Input>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
   useEffect(() => {
     inputRef.current!.focus();
   }, []);
@@ -27,7 +23,6 @@ function LoginLDAPForm(props: Props) {
   return (
     <Form size="large">
       <Form.Field>
-        {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
         <label htmlFor="form-input-username">{t('pages.login.username')}</label>
         <Input
           id="form-input-username"
@@ -53,31 +48,22 @@ function LoginLDAPForm(props: Props) {
           toggle
           id="form-input-remember-me"
           checked={rememberMe}
-          onChange={(e, data) => changeRememberMe(data.checked as boolean)}
+          onChange={(_, data) => changeRememberMe(data.checked as boolean)}
           label={t('pages.login.rememberMe')}
         />
       </Form.Field>
-      <Button
-        fluid
-        primary
-        size="large"
-        type="submit"
-        onClick={() => props.login(username, password, rememberMe)}
-      >
+      <Button fluid primary size="large" type="submit" onClick={() => props.login(username, password, rememberMe)}>
         {t('pages.login.loginLDAPButton')}
       </Button>
     </Form>
   );
 }
 
-const mapStateToProps = () => ({
-
-});
+const mapStateToProps = () => ({});
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
-  login: (username: string, password: string, rememberMe: boolean) => dispatch(
-    authLoginLDAP(username, password, rememberMe),
-  ),
+  login: (username: string, password: string, rememberMe: boolean) =>
+    dispatch(authLoginLDAP(username, password, rememberMe)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(LoginLDAPForm);

@@ -1,15 +1,14 @@
-import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { I18nextProvider } from 'react-i18next';
+import { Provider } from 'react-redux';
+import { Chart, registerables } from 'chart.js';
 import i18n from './localization';
 import './index.scss';
 import App from './App';
 import TitleRenderer from './components/TitleContext';
-import { Chart, registerables } from 'chart.js';
-Chart.register(...registerables);
 import 'semantic-ui-less/semantic.less';
 import store from './stores/store';
-import { Provider } from 'react-redux';
+Chart.register(...registerables);
 
 // We have to disable the following "errors", because they are actually warnings.
 // The components that throw them work fine, so to keep the console clean from errors,
@@ -27,11 +26,11 @@ import { Provider } from 'react-redux';
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 root.render(
-    <I18nextProvider i18n={i18n}>
-      <TitleRenderer>
-        <Provider store={store}>
-          <App />
-        </Provider>
-      </TitleRenderer>
-    </I18nextProvider>,
+  <I18nextProvider i18n={i18n}>
+    <TitleRenderer>
+      <Provider store={store}>
+        <App />
+      </Provider>
+    </TitleRenderer>
+  </I18nextProvider>,
 );

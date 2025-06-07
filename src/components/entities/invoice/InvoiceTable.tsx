@@ -1,9 +1,7 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
-import {
-  Dimmer, Loader, Segment, Table,
-} from 'semantic-ui-react';
+import { Dimmer, Loader, Segment, Table } from 'semantic-ui-react';
 import { useTranslation } from 'react-i18next';
 import { Invoice, Roles } from '../../../clients/server.generated';
 import TablePagination from '../../TablePagination';
@@ -19,11 +17,11 @@ import {
 } from '../../../stores/tables/actionCreators';
 import { countFetched, countTotal, getTable } from '../../../stores/tables/selectors';
 import { Tables } from '../../../stores/tables/tables';
-import InvoiceRow from './InvoiceRow';
 import CompanyFilter from '../../tablefilters/CompanyFilter';
 import InvoiceStatusFilter from '../../tablefilters/InvoiceStatusFilter';
 import ResourceStatus from '../../../stores/resourceStatus';
 import { authedUserHasRole } from '../../../stores/auth/selectors';
+import InvoiceRow from './InvoiceRow';
 
 interface Props {
   invoices: Invoice[];
@@ -36,7 +34,7 @@ interface Props {
   status: ResourceStatus;
 
   fetchInvoices: () => void;
-  setTableFilter: (filter: { column: string, values: any[] }) => void;
+  setTableFilter: (filter: { column: string; values: any[] }) => void;
   changeSort: (column: string) => void;
   setSort: (column: string, direction: 'ASC' | 'DESC') => void;
   setTake: (take: number) => void;
@@ -46,15 +44,29 @@ interface Props {
 }
 
 function InvoicesTable({
-  invoices, fetchInvoices, column, direction, changeSort, setSort, setTableFilter,
-  total, fetched, skip, take, status,
-  prevPage, nextPage, setTake, hasRole,
+  invoices,
+  fetchInvoices,
+  column,
+  direction,
+  changeSort,
+  setSort,
+  setTableFilter,
+  total,
+  fetched,
+  skip,
+  take,
+  status,
+  prevPage,
+  nextPage,
+  setTake,
+  hasRole,
 }: Props) {
   const { t } = useTranslation();
 
   useEffect(() => {
     setSort('id', 'DESC');
-    if (([Roles.FINANCIAL].some(hasRole) && ![Roles.ADMIN].some(hasRole))) setTableFilter({ column: 'activityStatus', values: ['SENT'] });
+    if ([Roles.FINANCIAL].some(hasRole) && ![Roles.ADMIN].some(hasRole))
+      setTableFilter({ column: 'activityStatus', values: ['SENT'] });
     fetchInvoices();
   }, []);
 
@@ -89,9 +101,7 @@ function InvoicesTable({
               {t('entities.generalProps.status')}
               <InvoiceStatusFilter />
             </Table.HeaderCell>
-            <Table.HeaderCell width={2}>
-              {t('entities.generalProps.amount')}
-            </Table.HeaderCell>
+            <Table.HeaderCell width={2}>{t('entities.generalProps.amount')}</Table.HeaderCell>
             <Table.HeaderCell
               width={2}
               sorted={column === 'startDate' ? direction : undefined}
@@ -109,7 +119,9 @@ function InvoicesTable({
           </Table.Row>
         </Table.Header>
         <Table.Body>
-          {invoices.map((x) => <InvoiceRow invoice={x} key={x.id} />)}
+          {invoices.map((x) => (
+            <InvoiceRow invoice={x} key={x.id} />
+          ))}
         </Table.Body>
       </Table>
       <TablePagination
@@ -150,15 +162,14 @@ const mapStateToProps = (state: RootState) => {
     take: invoiceTable.take,
     invoices: invoiceTable.data,
     column: invoiceTable.sortColumn,
-    direction: invoiceTable.sortDirection === 'ASC'
-      ? 'ascending' : 'descending' as 'ascending' | 'descending',
+    direction: invoiceTable.sortDirection === 'ASC' ? 'ascending' : ('descending' as 'ascending' | 'descending'),
     hasRole: (role: Roles): boolean => authedUserHasRole(state, role),
   };
 };
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
   fetchInvoices: () => dispatch(fetchTable(Tables.Invoices)),
-  setTableFilter: (filter: { column: string, values: any[] }) => {
+  setTableFilter: (filter: { column: string; values: any[] }) => {
     dispatch(setFilterTable(Tables.Invoices, filter));
   },
   changeSort: (column: string) => {

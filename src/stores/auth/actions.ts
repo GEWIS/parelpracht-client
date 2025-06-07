@@ -69,11 +69,11 @@ export type AuthSetApiKey = Action<AuthActionType.SetApiKey> & {
 export type AuthRevokeApiKey = Action<AuthActionType.RevokeApiKey>;
 
 export type AuthSetup = Action<AuthActionType.Setup> & {
-  email: string,
-  firstname: string,
-  preposition: string
-  lastname: string,
-  gender: Gender,
-  password: string,
-  rememberMe: boolean,
+  email: string;
+  firstname: string;
+  preposition: string;
+  lastname: string;
+  gender: Gender;
+  password: string;
+  rememberMe: boolean;
 };

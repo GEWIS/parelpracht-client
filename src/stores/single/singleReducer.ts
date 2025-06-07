@@ -1,7 +1,5 @@
 import ResourceStatus from '../resourceStatus';
-import {
-  SingleActions, SingleActionType, singleExtractAction, SingleSetAction,
-} from './actions';
+import { SingleActions, SingleActionType, singleExtractAction, SingleSetAction } from './actions';
 import { SingleEntities } from './single';
 import { SingleEntityState } from './singleState';
 
@@ -10,9 +8,7 @@ const initialState = {
   status: ResourceStatus.EMPTY,
 };
 
-const createSingleReducer = <S extends SingleEntities, R, RSave, RCreate>(
-  s: SingleEntities,
-) => {
+const createSingleReducer = <S extends SingleEntities, R, RSave, RCreate>(s: SingleEntities) => {
   return (
     state: SingleEntityState<R> = initialState,
     action: SingleActions<S, R, RSave, RCreate>,

@@ -1,4 +1,3 @@
-import React from 'react';
 import { Container, Grid, Segment } from 'semantic-ui-react';
 import { useTranslation } from 'react-i18next';
 import Version from '../Version';

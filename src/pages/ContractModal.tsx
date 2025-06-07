@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { Component } from 'react';
 import { Modal } from 'semantic-ui-react';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
@@ -21,7 +21,7 @@ interface Props extends WithTranslation, WithRouter {
   fetchCompany: (id: number) => void;
 }
 
-class ContractModal extends React.Component<Props> {
+class ContractModal extends Component<Props> {
   componentDidMount() {
     this.props.clearContract();
   }
@@ -30,8 +30,7 @@ class ContractModal extends React.Component<Props> {
     const { t } = this.props;
     document.title = t('pages.contract.newContract');
 
-    if (prevProps.status === ResourceStatus.SAVING
-      && this.props.status === ResourceStatus.FETCHED) {
+    if (prevProps.status === ResourceStatus.SAVING && this.props.status === ResourceStatus.FETCHED) {
       this.close();
     }
   }
@@ -62,21 +61,10 @@ class ContractModal extends React.Component<Props> {
     } as Contract;
 
     return (
-      <Modal
-        onClose={this.close}
-        closeIcon
-        open
-        dimmer="blurring"
-        closeOnDimmerClick={false}
-      >
+      <Modal onClose={this.close} closeIcon open dimmer="blurring" closeOnDimmerClick={false}>
         <Modal.Content>
           <AlertContainer />
-          <ContractProps
-            contract={contract}
-            create
-            companyPredefined={companyPredefined}
-            onCancel={this.close}
-          />
+          <ContractProps contract={contract} create companyPredefined={companyPredefined} onCancel={this.close} />
         </Modal.Content>
       </Modal>
     );
@@ -97,5 +85,4 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
 
 ContractModal.contextType = TitleContext;
 
-export default withTranslation()(withRouter(connect(mapStateToProps,
-  mapDispatchToProps)(ContractModal)));
+export default withTranslation()(withRouter(connect(mapStateToProps, mapDispatchToProps)(ContractModal)));

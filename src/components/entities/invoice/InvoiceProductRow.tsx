@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import { Icon, Table } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
@@ -12,9 +12,9 @@ import ResourceStatus from '../../../stores/resourceStatus';
 import { TransientAlert } from '../../../stores/alerts/actions';
 import { showTransientAlert } from '../../../stores/alerts/actionCreators';
 import AuthorizationComponent from '../../AuthorizationComponent';
-import { withRouter } from '../../../WithRouter';
+import { WithRouter, withRouter } from '../../../WithRouter';
 
-interface Props {
+interface Props extends WithRouter {
   productInstance: ProductInstance;
   removeProduct: (id: number) => void;
   canDelete: boolean;
@@ -27,7 +27,7 @@ interface State {
   status: ResourceStatus;
 }
 
-class InvoiceProductRow extends React.Component<Props, State> {
+class InvoiceProductRow extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
@@ -35,11 +35,10 @@ class InvoiceProductRow extends React.Component<Props, State> {
     };
   }
 
-  removeProduct = async () => {
-    const { removeProduct } = this.props;
+  removeProduct = () => {
     this.setState({ status: ResourceStatus.DELETING });
     try {
-      await removeProduct(this.props.productInstance.id);
+      this.props.removeProduct(this.props.productInstance.id);
       this.props.showTransientAlert({
         title: 'Success',
         message: 'Deleted product from invoice successfully.',
@@ -58,30 +57,29 @@ class InvoiceProductRow extends React.Component<Props, State> {
   };
 
   public render() {
-    const {
-      productInstance, productName, canDelete,
-    } = this.props;
+    const { productInstance, productName, canDelete } = this.props;
     const { status } = this.state;
     return (
       <Table.Row>
         <Table.Cell>
-          <Icon name="shopping bag" />
-          {' '}
-          {productName}
+          <Icon name="shopping bag" /> {productName}
           {productInstance.details !== '' ? ` (${productInstance.details})` : ''}
         </Table.Cell>
-        <Table.Cell collapsing>
-          {formatPriceDiscount(productInstance.discount)}
-        </Table.Cell>
-        <Table.Cell collapsing>
-          {formatPriceFull(productInstance.basePrice - productInstance.discount)}
-        </Table.Cell>
+        <Table.Cell collapsing>{formatPriceDiscount(productInstance.discount)}</Table.Cell>
+        <Table.Cell collapsing>{formatPriceFull(productInstance.basePrice - productInstance.discount)}</Table.Cell>
         <Table.Cell collapsing>
           <ContractLink id={productInstance.contractId} showId showName={false} />
         </Table.Cell>
         <Table.Cell collapsing>
           <AuthorizationComponent roles={[Roles.GENERAL, Roles.ADMIN]} notFound={false}>
-            <DeleteButton remove={this.removeProduct} entity="InvoiceProduct" status={status} canDelete={canDelete} size="mini" color="red" />
+            <DeleteButton
+              remove={this.removeProduct}
+              entity="InvoiceProduct"
+              status={status}
+              canDelete={canDelete}
+              size="mini"
+              color="red"
+            />
           </AuthorizationComponent>
         </Table.Cell>
       </Table.Row>

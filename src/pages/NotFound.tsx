@@ -1,7 +1,5 @@
-import React from 'react';
-import {
-  Container, Grid, Header, Icon, Segment, Image,
-} from 'semantic-ui-react';
+import { useEffect } from 'react';
+import { Container, Grid, Header, Icon, Segment, Image } from 'semantic-ui-react';
 import { useTranslation } from 'react-i18next';
 import { useTitle } from '../components/TitleContext';
 
@@ -9,9 +7,9 @@ function NotFound() {
   const { t } = useTranslation();
   const { setTitle } = useTitle();
 
-  React.useEffect(() => {
+  useEffect(() => {
     setTitle(t('pages.notFound.title'));
-  }, []);
+  }, [setTitle, t]);
 
   return (
     <>
@@ -22,9 +20,7 @@ function NotFound() {
               <Header as="h1">
                 <Icon name="hand paper" />
                 <Header.Content>
-                  <h1>
-                    {t('pages.notFound.404')}
-                  </h1>
+                  <h1>{t('pages.notFound.404')}</h1>
                 </Header.Content>
               </Header>
             </Grid.Column>

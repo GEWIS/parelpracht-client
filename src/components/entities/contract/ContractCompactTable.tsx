@@ -1,9 +1,7 @@
-import React from 'react';
+import { Component } from 'react';
 import { withTranslation, WithTranslation } from 'react-i18next';
 import { Loader, Table } from 'semantic-ui-react';
-import {
-  Client, PaginationParams, Product, ProductInstance,
-} from '../../../clients/server.generated';
+import { Client, PaginationParams, Product, ProductInstance } from '../../../clients/server.generated';
 import TablePagination from '../../TablePagination';
 import ContractCompactRow from './ContractCompactRow';
 
@@ -20,7 +18,7 @@ interface State {
   take: number;
 }
 
-class ContractCompactTable extends React.Component<Props, State> {
+class ContractCompactTable extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
@@ -32,8 +30,8 @@ class ContractCompactTable extends React.Component<Props, State> {
     };
   }
 
-  async componentDidMount() {
-    await this.getProductAttributes();
+  componentDidMount() {
+    this.getProductAttributes().catch(console.error);
   }
 
   async getProductAttributes() {
@@ -58,61 +56,54 @@ class ContractCompactTable extends React.Component<Props, State> {
   nextPage = async () => {
     const { skip, take, countTotal } = this.state;
     if (skip + take <= countTotal) {
-      this.setState({ skip: skip + take }, () => this.getProductAttributes());
+      this.setState({ skip: skip + take });
     }
+    await this.getProductAttributes();
   };
 
   prevPage = async () => {
     const { skip, take } = this.state;
     if (skip - take >= 0) {
-      this.setState({ skip: skip - take }, () => this.getProductAttributes());
+      this.setState({ skip: skip - take });
     }
+    await this.getProductAttributes();
   };
 
   setTake = async (take: number) => {
     this.setState({
       take,
       skip: 0,
-    }, () => this.getProductAttributes());
+    });
+    await this.getProductAttributes();
   };
 
   render() {
-    const {
-      productInstances, countTotal, skip, take, loading,
-    } = this.state;
+    const { productInstances, countTotal, skip, take, loading } = this.state;
     const { t } = this.props;
 
     let contractList;
     if (productInstances.length === 0) {
-      contractList = (
-        <h4>
-          {t('entities.product.noContract')}
-        </h4>
-      );
+      contractList = <h4>{t('entities.product.noContract')}</h4>;
     } else {
       contractList = (
         <>
           <Table striped compact unstackable>
             <Table.Header>
               <Table.Row>
-                <Table.HeaderCell>
-                  {t('entities.contract.props.title')}
-                </Table.HeaderCell>
-                <Table.HeaderCell>
-                  {t('entity.company')}
-                </Table.HeaderCell>
-                <Table.HeaderCell>
-                  {t('entities.generalProps.status')}
-                </Table.HeaderCell>
-                <Table.HeaderCell>
-                  {t('entities.generalProps.lastUpdate')}
-                </Table.HeaderCell>
+                <Table.HeaderCell>{t('entities.contract.props.title')}</Table.HeaderCell>
+                <Table.HeaderCell>{t('entity.company')}</Table.HeaderCell>
+                <Table.HeaderCell>{t('entities.generalProps.status')}</Table.HeaderCell>
+                <Table.HeaderCell>{t('entities.generalProps.lastUpdate')}</Table.HeaderCell>
               </Table.Row>
             </Table.Header>
             <Table.Body>
               {[...productInstances]
-                .sort((a, b) => { return b.updatedAt.getTime() - a.updatedAt.getTime(); })
-                .map((p) => <ContractCompactRow key={p.id} contract={p.contract} />)}
+                .sort((a, b) => {
+                  return b.updatedAt.getTime() - a.updatedAt.getTime();
+                })
+                .map((p) => (
+                  <ContractCompactRow key={p.id} contract={p.contract} />
+                ))}
             </Table.Body>
           </Table>
           <TablePagination

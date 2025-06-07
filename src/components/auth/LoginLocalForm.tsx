@@ -1,16 +1,12 @@
-import React, {
-  ChangeEvent, useEffect, useRef, useState,
-} from 'react';
+import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
-import {
-  Button, Checkbox, Form, Input,
-} from 'semantic-ui-react';
+import { Button, Checkbox, Form, Input } from 'semantic-ui-react';
 import { useTranslation } from 'react-i18next';
 import { authLoginLocal } from '../../stores/auth/actionCreators';
 
 interface Props {
-  login: (email: string, password: string, rememberMe: boolean) => void,
+  login: (email: string, password: string, rememberMe: boolean) => void;
 }
 
 function LoginLocalForm(props: Props) {
@@ -19,7 +15,7 @@ function LoginLocalForm(props: Props) {
   const [password, changePassword] = useState('');
   const [rememberMe, changeRememberMe] = useState(false);
 
-  const inputRef = useRef<Input>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
   useEffect(() => {
     inputRef.current!.focus();
   }, []);
@@ -27,7 +23,6 @@ function LoginLocalForm(props: Props) {
   return (
     <Form size="large">
       <Form.Field>
-        {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
         <label htmlFor="form-input-email">{t('pages.login.email')}</label>
         <Input
           id="form-input-email"
@@ -53,31 +48,22 @@ function LoginLocalForm(props: Props) {
           toggle
           id="form-input-remember-me"
           checked={rememberMe}
-          onChange={(e, data) => changeRememberMe(data.checked as boolean)}
+          onChange={(_, data) => changeRememberMe(data.checked as boolean)}
           label={t('pages.login.rememberMe')}
         />
       </Form.Field>
-      <Button
-        fluid
-        primary
-        size="large"
-        type="submit"
-        onClick={() => props.login(email, password, rememberMe)}
-      >
+      <Button fluid primary size="large" type="submit" onClick={() => props.login(email, password, rememberMe)}>
         {t('pages.login.loginButton')}
       </Button>
     </Form>
   );
 }
 
-const mapStateToProps = () => ({
-
-});
+const mapStateToProps = () => ({});
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
-  login: (email: string, password: string, rememberMe: boolean) => dispatch(
-    authLoginLocal(email, password, rememberMe),
-  ),
+  login: (email: string, password: string, rememberMe: boolean) =>
+    dispatch(authLoginLocal(email, password, rememberMe)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(LoginLocalForm);

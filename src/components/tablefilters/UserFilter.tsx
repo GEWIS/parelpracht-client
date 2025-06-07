@@ -1,5 +1,4 @@
 import { connect } from 'react-redux';
-import React from 'react';
 import { UserSummary } from '../../clients/server.generated';
 import ColumnFilter from '../ColumnFilter';
 import { RootState } from '../../stores/store';
@@ -10,7 +9,7 @@ import { formatContactName } from '../../helpers/contact';
 
 interface Props {
   table: Tables;
-  options: UserSummary[]
+  options: UserSummary[];
 }
 
 function ProductFilter(props: Props) {
@@ -29,9 +28,7 @@ function ProductFilter(props: Props) {
 }
 
 const mapStateToProps = (state: RootState) => ({
-  options: getSummaryCollection<UserSummary>(
-    state, SummaryCollections.Users,
-  ).options,
+  options: getSummaryCollection<UserSummary>(state, SummaryCollections.Users).options,
 });
 
 export default connect(mapStateToProps)(ProductFilter);

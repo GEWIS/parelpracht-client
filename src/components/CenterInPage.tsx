@@ -1,8 +1,6 @@
-import React from 'react';
+import { PropsWithChildren } from 'react';
 
-interface Props {
-  children: any;
-}
+type Props = PropsWithChildren;
 
 function CenterInPage(props: Props) {
   return (
@@ -15,9 +13,7 @@ function CenterInPage(props: Props) {
         textAlign: 'center',
       }}
     >
-      <div style={{ width: '350px' }}>
-        {props.children}
-      </div>
+      <div style={{ width: '350px' }}>{props.children}</div>
     </div>
   );
 }

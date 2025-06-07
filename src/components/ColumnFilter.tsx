@@ -1,9 +1,7 @@
-import React, { useState } from 'react';
+import { MouseEvent, useState } from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
-import {
-  Button, Dropdown, DropdownItemProps, Modal,
-} from 'semantic-ui-react';
+import { Button, Dropdown, DropdownItemProps, Modal } from 'semantic-ui-react';
 import { RootState } from '../stores/store';
 import { fetchTable, setFilterTable } from '../stores/tables/actionCreators';
 import { getFilter, isFilterOn } from '../stores/tables/selectors';
@@ -12,10 +10,10 @@ import { ListFilter } from '../stores/tables/tableState';
 
 interface SelfProps {
   options: DropdownItemProps[];
-  // eslint-disable-next-line react/no-unused-prop-types
+
   column: string;
   columnName: string;
-  // eslint-disable-next-line react/no-unused-prop-types
+
   table: Tables;
 }
 
@@ -30,7 +28,16 @@ interface Props extends SelfProps {
   refresh: () => void;
 }
 
-function ColumnFilter(props: Props) {
+function ColumnFilter({
+  options,
+  columnName,
+  multiple = true,
+  filter,
+  filterOn,
+  setFilter,
+  clearFilter,
+  refresh,
+}: Props) {
   const [open, changeOpen] = useState(false);
   const trigger = (
     <Button
@@ -42,14 +49,14 @@ function ColumnFilter(props: Props) {
         float: 'right',
         padding: '11px',
       }}
-      color={props.filterOn ? 'blue' : undefined}
-      onClick={(e: any) => e.stopPropagation()}
+      color={filterOn ? 'blue' : undefined}
+      onClick={(e) => e.stopPropagation()}
     />
   );
 
   const close = () => {
     changeOpen(false);
-    props.refresh();
+    refresh();
   };
 
   return (
@@ -59,32 +66,41 @@ function ColumnFilter(props: Props) {
       onClose={close}
       trigger={trigger}
       size="tiny"
-      onClick={(e: any) => e.stopPropagation()}
+      onClick={(e: MouseEvent<HTMLButtonElement>) => e.stopPropagation()}
     >
-      <Modal.Header>{`Filter: ${props.columnName}`}</Modal.Header>
+      <Modal.Header>{`Filter: ${columnName}`}</Modal.Header>
       <Modal.Content>
         <Dropdown
-          placeholder={`Select ${props.columnName}...`}
+          placeholder={`Select ${columnName}...`}
           selection
-          multiple={props.multiple}
+          multiple={multiple}
           search
           button
           clearable
           fluid
-          value={props.multiple ? props.filter.values : props.filter.values[0]}
-          onChange={(e, data) => {
-            if (props.multiple) {
-              props.setFilter(data.value as string[]);
+          value={multiple ? filter.values : filter.values[0]}
+          onChange={(_, data) => {
+            if (multiple) {
+              setFilter(data.value as string[]);
             } else {
-              props.setFilter([data.value as string]);
+              setFilter([data.value as string]);
             }
           }}
-          options={props.options}
+          options={options}
         />
       </Modal.Content>
       <Modal.Actions>
-        <Button onClick={() => { props.clearFilter(); close(); }}>Clear</Button>
-        <Button primary onClick={close}>Confirm</Button>
+        <Button
+          onClick={() => {
+            clearFilter();
+            close();
+          }}
+        >
+          Clear
+        </Button>
+        <Button primary onClick={close}>
+          Confirm
+        </Button>
       </Modal.Actions>
     </Modal>
   );
@@ -96,19 +112,9 @@ const mapStateToProps = (state: RootState, props: SelfProps) => ({
 });
 
 const mapDispatchToProps = (dispatch: Dispatch, props: SelfProps) => ({
-  setFilter: (values: string[]) => dispatch(setFilterTable(
-    props.table,
-    { column: props.column, values },
-  )),
-  clearFilter: () => dispatch(setFilterTable(
-    props.table,
-    { column: props.column, values: [] },
-  )),
+  setFilter: (values: string[]) => dispatch(setFilterTable(props.table, { column: props.column, values })),
+  clearFilter: () => dispatch(setFilterTable(props.table, { column: props.column, values: [] })),
   refresh: () => dispatch(fetchTable(props.table)),
 });
-
-ColumnFilter.defaultProps = {
-  multiple: true,
-};
 
 export default connect(mapStateToProps, mapDispatchToProps)(ColumnFilter);

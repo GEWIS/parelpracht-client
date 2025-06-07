@@ -1,4 +1,3 @@
-import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { Table } from 'semantic-ui-react';
 import { Contact } from '../../../clients/server.generated';
@@ -21,12 +20,8 @@ function ContactRow(props: Props) {
       <Table.Cell>
         <CompanyLink id={contact.companyId} />
       </Table.Cell>
-      <Table.Cell>
-        {contact.email}
-      </Table.Cell>
-      <Table.Cell>
-        {formatFunction(contact.function)}
-      </Table.Cell>
+      <Table.Cell>{contact.email}</Table.Cell>
+      <Table.Cell>{formatFunction(contact.function)}</Table.Cell>
     </Table.Row>
   );
 }

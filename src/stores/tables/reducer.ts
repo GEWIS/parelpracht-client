@@ -1,6 +1,14 @@
 import { combineReducers } from 'redux';
 import {
-  Company, Product, Contract, Contact, Invoice, User, ProductCategory, ETCompany, ValueAddedTax,
+  Company,
+  Product,
+  Contract,
+  Contact,
+  Invoice,
+  User,
+  ProductCategory,
+  ETCompany,
+  ValueAddedTax,
 } from '../../clients/server.generated';
 import createTableReducer from './tableReducer';
 import { Tables } from './tables';
@@ -8,8 +16,8 @@ import { TableState } from './tableState';
 
 export interface TablesState {
   [Tables.Products]: TableState<Product>;
-  [Tables.ProductCategories]: TableState<ProductCategory>
-  [Tables.ValueAddedTax]: TableState<ValueAddedTax>
+  [Tables.ProductCategories]: TableState<ProductCategory>;
+  [Tables.ValueAddedTax]: TableState<ValueAddedTax>;
   [Tables.Contacts]: TableState<Contact>;
   [Tables.Companies]: TableState<Company>;
   [Tables.Contracts]: TableState<Contract>;

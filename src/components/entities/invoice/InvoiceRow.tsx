@@ -1,5 +1,4 @@
 import { connect } from 'react-redux';
-import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { Table } from 'semantic-ui-react';
 import { Invoice, InvoiceStatus } from '../../../clients/server.generated';
@@ -17,9 +16,7 @@ interface Props {
 }
 
 function InvoiceRow(props: Props) {
-  const {
-    invoice, value, invoiceStatus,
-  } = props;
+  const { invoice, value, invoiceStatus } = props;
 
   const status = formatStatus(invoiceStatus);
   const amount = formatPriceFull(value);
@@ -29,30 +26,18 @@ function InvoiceRow(props: Props) {
   return (
     <Table.Row>
       <Table.Cell>
-        <NavLink to={`/invoice/${invoice.id}`}>
-          {`F${invoice.id}`}
-        </NavLink>
+        <NavLink to={`/invoice/${invoice.id}`}>{`F${invoice.id}`}</NavLink>
       </Table.Cell>
       <Table.Cell>
-        <NavLink to={`/invoice/${invoice.id}`}>
-          {invoice.title}
-        </NavLink>
+        <NavLink to={`/invoice/${invoice.id}`}>{invoice.title}</NavLink>
       </Table.Cell>
       <Table.Cell>
         <CompanyLink id={invoice.companyId} />
       </Table.Cell>
-      <Table.Cell title={status}>
-        {status}
-      </Table.Cell>
-      <Table.Cell title={amount}>
-        {amount}
-      </Table.Cell>
-      <Table.Cell title={financialYear}>
-        {financialYear}
-      </Table.Cell>
-      <Table.Cell title={lastUpdate}>
-        {lastUpdate}
-      </Table.Cell>
+      <Table.Cell title={status}>{status}</Table.Cell>
+      <Table.Cell title={amount}>{amount}</Table.Cell>
+      <Table.Cell title={financialYear}>{financialYear}</Table.Cell>
+      <Table.Cell title={lastUpdate}>{lastUpdate}</Table.Cell>
     </Table.Row>
   );
 }

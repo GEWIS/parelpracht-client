@@ -1,8 +1,6 @@
-import * as React from 'react';
+import { Component } from 'react';
 import { NavLink } from 'react-router-dom';
-import {
-  Breadcrumb, Container, Grid, Loader, Segment, Tab,
-} from 'semantic-ui-react';
+import { Breadcrumb, Container, Grid, Loader, Segment, Tab, TabPane, TabProps } from 'semantic-ui-react';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import { withTranslation, WithTranslation } from 'react-i18next';
@@ -23,9 +21,9 @@ import { TransientAlert } from '../stores/alerts/actions';
 import FilesList from '../components/files/FilesList';
 import GenerateContractModal from '../components/files/GenerateContractModal';
 import { authedUserHasRole } from '../stores/auth/selectors';
-import NotFound from './NotFound';
 import { TitleContext } from '../components/TitleContext';
 import { withRouter, WithRouter } from '../WithRouter';
+import NotFound from './NotFound';
 
 interface Props extends WithTranslation, WithRouter {
   contract: Contract | undefined;
@@ -41,7 +39,7 @@ interface State {
   paneIndex: number;
 }
 
-class SingleContractPage extends React.Component<Props, State> {
+class SingleContractPage extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
     const { location, navigate } = this.props.router;
@@ -70,7 +68,9 @@ class SingleContractPage extends React.Component<Props, State> {
     const { params } = this.props.router;
 
     this.props.clearContract();
-    this.props.fetchContract(Number.parseInt(params.contractId, 10));
+    if (params.contractId) {
+      this.props.fetchContract(Number.parseInt(params.contractId, 10));
+    }
   }
 
   public componentDidUpdate(prevProps: Readonly<Props>) {
@@ -83,9 +83,7 @@ class SingleContractPage extends React.Component<Props, State> {
       document.title = `C${contract.id} ${contract.title}`;
     }
 
-    if (status === ResourceStatus.EMPTY
-      && prevProps.status === ResourceStatus.DELETING
-    ) {
+    if (status === ResourceStatus.EMPTY && prevProps.status === ResourceStatus.DELETING) {
       navigate('/contract');
       this.props.showTransientAlert({
         title: 'Success',
@@ -97,57 +95,54 @@ class SingleContractPage extends React.Component<Props, State> {
   }
 
   getPanes = () => {
-    const {
-      contract, fetchContract, status, hasRole, t,
-    } = this.props;
+    const { contract, fetchContract, status, hasRole, t } = this.props;
 
     const panes = [
       {
         menuItem: t('entity.productinstances'),
-        render: contract ? () => (
-          <Tab.Pane>
-            <ContractProductList
-              contract={contract}
-            />
-          </Tab.Pane>
-        ) : () => <Tab.Pane />,
+        render: contract
+          ? () => (
+              <TabPane>
+                <ContractProductList contract={contract} />
+              </TabPane>
+            )
+          : () => <TabPane />,
       },
     ];
 
     if (hasRole(Roles.ADMIN) || hasRole(Roles.GENERAL) || hasRole(Roles.AUDIT)) {
       panes.push({
         menuItem: t('entity.files'),
-        render: contract ? () => (
-          <Tab.Pane>
-            <FilesList
-              files={contract.files}
-              entityId={contract.id}
-              entity={SingleEntities.Contract}
-              fetchEntity={fetchContract}
-              generateModal={(
-                <GenerateContractModal
-                  contract={contract}
-                  fetchContract={fetchContract}
+        render: contract
+          ? () => (
+              <TabPane>
+                <FilesList
+                  files={contract.files}
+                  entityId={contract.id}
+                  entity={SingleEntities.Contract}
+                  fetchEntity={fetchContract}
+                  generateModal={<GenerateContractModal contract={contract} fetchContract={fetchContract} />}
+                  status={status}
                 />
-              )}
-              status={status}
-            />
-          </Tab.Pane>
-        ) : () => <Tab.Pane />,
+              </TabPane>
+            )
+          : () => <TabPane />,
       });
 
       panes.push({
         menuItem: t('entity.activities'),
-        render: contract ? () => (
-          <Tab.Pane>
-            <ActivitiesList
-              activities={contract.activities as GeneralActivity[]}
-              componentId={contract.id}
-              componentType={SingleEntities.Contract}
-              resourceStatus={status}
-            />
-          </Tab.Pane>
-        ) : () => <Tab.Pane />,
+        render: contract
+          ? () => (
+              <TabPane>
+                <ActivitiesList
+                  activities={contract.activities as GeneralActivity[]}
+                  componentId={contract.id}
+                  componentType={SingleEntities.Contract}
+                  resourceStatus={status}
+                />
+              </TabPane>
+            )
+          : () => <TabPane />,
       });
     }
 
@@ -197,9 +192,9 @@ class SingleContractPage extends React.Component<Props, State> {
                   documentType={SingleEntities.Contract}
                   resourceStatus={status}
                   roles={[Roles.ADMIN, Roles.GENERAL]}
-                  canCancel={contract.products
-                    .every((p) => p.activities
-                      .find((a) => a.subType === ProductInstanceStatus.CANCELLED) !== undefined)}
+                  canCancel={contract.products.every(
+                    (p) => p.activities.find((a) => a.subType === ProductInstanceStatus.CANCELLED) !== undefined,
+                  )}
                   cancelReason={t('pages.contract.cancelError')}
                 />
               </Segment>
@@ -209,7 +204,7 @@ class SingleContractPage extends React.Component<Props, State> {
                 <Tab
                   panes={panes}
                   menu={{ pointing: true, inverted: true }}
-                  onTabChange={(e, data) => {
+                  onTabChange={(_, data) => {
                     this.setState({ paneIndex: data.activeIndex! as number });
                     navigate(`#${data.panes![data.activeIndex! as number].menuItem.toLowerCase()}`, { replace: true });
                   }}
@@ -218,9 +213,7 @@ class SingleContractPage extends React.Component<Props, State> {
               </Grid.Column>
               <Grid.Column width={6}>
                 <Segment secondary style={{ backgroundColor: 'rgba(243, 244, 245, 0.98)' }}>
-                  <ContractProps
-                    contract={contract}
-                  />
+                  <ContractProps contract={contract} />
                 </Segment>
               </Grid.Column>
             </Grid.Row>
@@ -247,5 +240,4 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
 
 SingleContractPage.contextType = TitleContext;
 
-export default withTranslation()(withRouter(connect(mapStateToProps,
-  mapDispatchToProps)(SingleContractPage)));
+export default withTranslation()(withRouter(connect(mapStateToProps, mapDispatchToProps)(SingleContractPage)));

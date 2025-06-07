@@ -1,7 +1,5 @@
-import * as React from 'react';
-import {
-  Modal,
-} from 'semantic-ui-react';
+import { Component } from 'react';
+import { Modal } from 'semantic-ui-react';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import { withTranslation, WithTranslation } from 'react-i18next';
@@ -25,7 +23,7 @@ interface Props extends WithTranslation, WithRouter {
   showTransientAlert: (alert: TransientAlert) => void;
 }
 
-class CompaniesCreatePage extends React.Component<Props> {
+class CompaniesCreatePage extends Component<Props> {
   componentDidMount() {
     const { clearCompany, t } = this.props;
     clearCompany();
@@ -33,8 +31,7 @@ class CompaniesCreatePage extends React.Component<Props> {
   }
 
   componentDidUpdate(prevProps: Props) {
-    if (prevProps.status === ResourceStatus.SAVING
-      && this.props.status === ResourceStatus.FETCHED) {
+    if (prevProps.status === ResourceStatus.SAVING && this.props.status === ResourceStatus.FETCHED) {
       const { navigate } = this.props.router;
       navigate('/company');
       this.props.showTransientAlert({
@@ -52,6 +49,7 @@ class CompaniesCreatePage extends React.Component<Props> {
   };
 
   public render() {
+    // TODO: Fix partial type in server so we do not need to override here
     const company = {
       id: 0,
       name: '',
@@ -63,16 +61,10 @@ class CompaniesCreatePage extends React.Component<Props> {
       addressCity: '',
       addressPostalCode: '',
       addressCountry: '',
-    } as any as Company;
+    } as unknown as Company;
 
     return (
-      <Modal
-        onClose={this.close}
-        open
-        closeIcon
-        dimmer="blurring"
-        closeOnDimmerClick={false}
-      >
+      <Modal onClose={this.close} open closeIcon dimmer="blurring" closeOnDimmerClick={false}>
         <Modal.Content>
           <AlertContainer />
           <Modal.Description>

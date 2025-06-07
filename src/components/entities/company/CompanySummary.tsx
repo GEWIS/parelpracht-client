@@ -1,4 +1,3 @@
-import React from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import { Company } from '../../../clients/server.generated';
@@ -21,18 +20,11 @@ function CompanySummary(props: Props) {
   const { company, status, fetchCompany } = props;
 
   if (company === undefined) {
-    return (
-      <EntitySummary
-        loading
-        entity={SingleEntities.Company}
-        icon="building"
-      />
-    );
+    return <EntitySummary loading entity={SingleEntities.Company} icon="building" />;
   }
 
-  const loading = (status !== ResourceStatus.FETCHED
-    && status !== ResourceStatus.SAVING
-    && status !== ResourceStatus.ERROR);
+  const loading =
+    status !== ResourceStatus.FETCHED && status !== ResourceStatus.SAVING && status !== ResourceStatus.ERROR;
 
   const logo = (
     <LogoAvatarModal

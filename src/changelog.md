@@ -1,67 +1,92 @@
 # Change log
+
 The current version of ParelPracht is **v1.5.0**, released on February 17th, 2025.
 You can find the release notes below.
-----------------------
+
+---
+
 ## v1.5.0 (17-02-2025)
+
 ### Added
+
 - New contact types for which the email property is not required.
 
 ## v1.4.0 (12-01-2025)
+
 ### Added
+
 - Interface for the /setup endpoint
 
 ### Bugfixes
+
 - Fix links from dashboard page to insights page
 - Fix table filters on contract and invoice page
 
 ## v1.3.4 (05-03-2024)
+
 ### Changes
+
 - Hide broken contract and invoice filter buttons
 - Update dependencies.
 
 ### Bugfixes
+
 - Fix not being to open individual or custom invoice pages.
 
 ## v1.3.3 (04-03-2024)
+
 ### Changes
+
 - Allow removing products from proposed contracts.
 - Update dependencies.
 
 ### Bugfixes
+
 - Fix static (binary) files not being included correctly in Docker images.
 - Fix treasurer not being able to see invoices.
 - Fix treasurer and signees getting errors when opening ParelPracht.
 - Fix everyone being able to mark invoices as paid.
 
 ## v1.3.2 (15-05-2023)
+
 ### Bugfixes
+
 - Fixed corrupt images in Docker production images.
 - Fix not being able to remove products from invoices.
 
 ## v1.3.1 (31-03-2023)
+
 ### Changes
+
 - Updated backend dependencies.
 
 ### Bugfixes
+
 - Fixed not being able to remove products from invoices.
 - Fixed some translation errors.
 
 ## v1.3.0 (20-12-2022)
+
 ### Added
+
 - Added VAT.
   - Products now have a VAT percentage.
   - VAT overviews are added to the products list of contracts & invoices.
   - VAT is added to generated PDF files.
 
 ### Changes
+
 - Updated templates for contracts, proposals and invoices.
 - Moved "Add custom pricing" button to the Custom pricing tab, instead of the product details.
 
 ### Bugfixes
+
 - Fixed special characters not compiling correctly in PDF files.
 
 ## v1.2.0 (15-04-2022)
+
 ### Added
+
 - Added logging in with LDAP.
   - User roles are based on LDAP groups.
   - Roles and other user information is updated every login and every night.
@@ -73,27 +98,35 @@ You can find the release notes below.
 - Updated Node packages in the backend.
 
 ### Changes
+
 - On generated documents, countries are now fully written out instead of only their abbreviation.
 - Searching on names in tables now also works for relational fields (like company names in the contracts table).
 
 ### Bugfixes
+
 - Fixed the contract summary on the dashboard not being consistent with the Insights table.
 - Fixed the "Users" menu button being highlighted when viewing your own profile.
 - Fixed download button for files being one pixel too small in Chrome.
 - Fixed some small translation errors.
 
 ## v1.1.4 (12-09-2021)
+
 ### Bugfixes
+
 - Fixed validated entities not showing their correct status.
 
 ## v1.1.3 (06-09-2021)
+
 ### Added
+
 - Added "Invoice date" field to custom invoices.
 
 ### Changes
+
 - The files tab is now consistently before the activity tab on all entity pages.
 
 ### Bugfixes
+
 - Fixed month in list of expired invoices being wrong (namely the day number of tomorrow instead of the actual month).
 - Fixed being able to mark paid/cancelled invoices as irrecoverable.
 - Fixed templates not being updated when the Docker image is updated.
@@ -101,18 +134,25 @@ You can find the release notes below.
 - Fixed browser caching issues, causing ParelPracht not to be updated in the browser.
 
 ## v1.1.2 (31-08-2021)
+
 ### Bugfixes
+
 - Fixed not being able to upload files larger than 1MB. The new limit is 50MB.
 
 ## v1.1.1 (31-08-2021)
+
 ### Changes
+
 - Files are now sorted on their creation date instead of their last update.
 
 ### Bugfixes
+
 - Fixed a bug that caused an API key not to work in certain situations.
 
 ## v1.1.0 (29-08-2021)
+
 ### Added
+
 - Added a database validator command to the backend to validate the database and fix any issues.
 - Added column "Function" to the Contacts table with sorting and filtering by this column.
 - Added column "Updated at" to all tables.
@@ -124,6 +164,7 @@ You can find the release notes below.
 - Added links to the Insights table with predefined filters to the Financial Overview dashboard table.
 
 ### Changes
+
 - Selectors no longer have a unnecessary description.
   - The only exception is the Contact selector: company is replaced by the contact's function as a contact.
 - The name of a generated file now also includes the company.
@@ -147,6 +188,7 @@ You can find the release notes below.
 - Changed pagination size to 25, 50, 100 (default), 250, 500 and All.
 
 ### Bugfixes
+
 - Fixed "Treasurer Last Seen" not being shown properly.
 - Fixed compiling errors when generating a PDF of an empty contract or invoice.
 - Fixed all sent invoices showing as expired invoices, not only the actually expired ones.
@@ -169,16 +211,21 @@ You can find the release notes below.
 - Fixed weird formatting of currencies starting 1000 euros.
 
 ## v1.0.1 (23-04-2021)
+
 ### Added
+
 - Added support for 'mysql_clear_password' authentication method.
 
 ### Changes
+
 - Updated the node packages.
 
 ### Bugfixes
+
 - Fixed the backend docker container failing to build.
 
 ## v1.0.0 (20-04-2021)
+
 After 127 days, 926 commits and many, many hours of work, the first production-ready release of ParelPracht is finally
 finished. Of course, some minor bugs and issues probably remain. However, we as the board worked very hard on this
 project and are really proud of the work, goals and knowledge that we have achieved. We hope you will enjoy the result
@@ -187,6 +234,7 @@ just as much as we had building it!
 ~Roy, Treasurer and "Beunhaas" of the 39th board.
 
 ### Added
+
 - Added the ParelPracht logo to the login page, loading page and main menu.
 - Added front-end authorization. Certain elements are now only visible to people that can access them in the back-end as well.
 - Added a pricing table for products.
@@ -214,6 +262,7 @@ just as much as we had building it!
 - Added optimizations regarding the requests to the backend when creating, deleting or updating entities.
 
 ### Changes
+
 - Made the footer smaller and removed the 1px white line in Chrome
 - After changing your email address, you can log in with your new email address instead of your old one.
 - When selecting a signee for generating a contract, only users with the role "Signee" can be selected.
@@ -248,6 +297,7 @@ just as much as we had building it!
 - Refactored the entity status components to make them better maintainable in the future.
 
 ### Bugfixes
+
 - Fixed page numbers showing "???" in generated PDF files.
 - Fixed diamond underneath tabs being black on hover.
 - Fixed long company, contract or invoice names causing visual issues with the company's logo.
@@ -273,11 +323,14 @@ just as much as we had building it!
 ## v0.2.1-beta2 (07-03-2021)
 
 ### Bugfixes
+
 - Fixed being unable to log in when using the Docker version of ParelPracht
 - Fixed a bug when the front-end crashed when trying to create a new user.
 
 ## v0.2-beta2 (02-03-2021)
+
 ### Added
+
 - Added custom invoices with custom values.
   - Added support for a custom list of products (With amounts).
   - Added support for a custom recipient.
@@ -308,6 +361,7 @@ just as much as we had building it!
 - Added a GEWIS logo to the login page of ParelPracht.
 
 ### Changes
+
 - The list of recent contracts on the dashboard now only shows your own assigned contracts, except for admins.
 - Cancel and Defer buttons for entity statuses are now disabled when the entity is "finished" (so no more statuses are possible).
 - Selecting signees when creating a contract proposal is disabled and thus no longer necessary.
@@ -318,6 +372,7 @@ just as much as we had building it!
 - The "Save" button is disabled when a form has errors.
 
 ### Bugfixes
+
 - Fixed not being able to select a recipient when generating an invoice file.
 - Fixed the "Invoiced" bar on the dashboard always being zero.
 - Fixed the generate modal being closed when generating a document fails.
@@ -334,9 +389,12 @@ just as much as we had building it!
 - Fixed more browser errors.
 
 ## v0.1-beta1 (01-02-2021)
+
 ### Added
+
 The first version! It is hard to write changes here, because basically everything is a change compared to nothing.
 But maybe a short list of items is always handy (especially in the future):
+
 - Added products with both Dutch and English attributes.
   - Added files and activities to products.
   - Added relational tables 'contracts' and 'invoices'.
@@ -357,7 +415,7 @@ But maybe a short list of items is always handy (especially in the future):
   - Added the option to save them in ParelPracht.
 - Added the option to always return to the initial state of ParelPracht by removing invoices, contracts, companies and products.
 - Added sorting, filtering and searching to all tables.
-- Added a large *Insights* table, which contains a list of all instanced products and some information about them.
+- Added a large _Insights_ table, which contains a list of all instanced products and some information about them.
 - Added a dashboard, which gives a quick overview on the current contracts and invoices.
 
 And much, much more!

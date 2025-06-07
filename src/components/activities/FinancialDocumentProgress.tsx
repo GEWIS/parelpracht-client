@@ -1,11 +1,7 @@
-import React from 'react';
+import { Component, ReactNode } from 'react';
 import { connect } from 'react-redux';
-import {
-  Button, Grid, Icon, Popup, Step,
-} from 'semantic-ui-react';
+import { Button, Grid, Icon, Popup, Step } from 'semantic-ui-react';
 import { withTranslation, WithTranslation } from 'react-i18next';
-import { GeneralActivity } from './GeneralActivity';
-import FinancialDocumentStep from './FinancialDocumentStep';
 import {
   formatDocumentStatusTitle,
   formatDocumentType,
@@ -16,16 +12,18 @@ import {
   getStatusesFromActivities,
   getToDoStatus,
 } from '../../helpers/activity';
-import DocumentStatusModal from './DocumentStatusModal';
 import { SingleEntities } from '../../stores/single/single';
-import { DocumentStatus } from './DocumentStatus';
 import ResourceStatus from '../../stores/resourceStatus';
 import { Roles } from '../../clients/server.generated';
 import AuthorizationComponent from '../AuthorizationComponent';
 import { getLanguage } from '../../localization';
-import { withRouter } from '../../WithRouter';
+import { WithRouter, withRouter } from '../../WithRouter';
+import { DocumentStatus } from './DocumentStatus';
+import DocumentStatusModal from './DocumentStatusModal';
+import FinancialDocumentStep from './FinancialDocumentStep';
+import { GeneralActivity } from './GeneralActivity';
 
-interface Props extends WithTranslation {
+interface Props extends WithTranslation, WithRouter {
   documentId: number;
   // If the document is a ProductInstance, the parentId is the contract ID
   parentId?: number;
@@ -45,7 +43,7 @@ interface State {
   irrecoverableModalOpen: boolean;
 }
 
-class FinancialDocumentProgress extends React.Component<Props, State> {
+class FinancialDocumentProgress extends Component<Props, State> {
   static defaultProps = {
     parentId: undefined,
     cancelReason: undefined,
@@ -79,10 +77,8 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
   };
 
   public render() {
-    const {
-      activities, documentType, documentId, resourceStatus, parentId, roles,
-      canCancel, cancelReason, t,
-    } = this.props;
+    const { activities, documentType, documentId, resourceStatus, parentId, roles, canCancel, cancelReason, t } =
+      this.props;
     const language = getLanguage();
 
     const { cancelModalOpen, deferModalOpen, irrecoverableModalOpen } = this.state;
@@ -96,16 +92,15 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
     let leftButton;
     if (documentType === SingleEntities.ProductInstance) {
       leftButton = (
-        <AuthorizationComponent
-          roles={[Roles.GENERAL, Roles.ADMIN, Roles.FINANCIAL]}
-          notFound={false}
-        >
+        <AuthorizationComponent roles={[Roles.GENERAL, Roles.ADMIN, Roles.FINANCIAL]} notFound={false}>
           <Popup
             header={t('activities.status.defer', { entity: formatDocumentType(documentType).toLowerCase() })}
-            content={t('activities.status.deferDescription', { entity: formatDocumentType(documentType).toLowerCase() })}
+            content={t('activities.status.deferDescription', {
+              entity: formatDocumentType(documentType).toLowerCase(),
+            })}
             mouseEnterDelay={500}
             wide
-            trigger={(
+            trigger={
               <Button
                 floated="left"
                 labelPosition="left"
@@ -117,25 +112,21 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
                   });
                 }}
                 content={t('activities.status.defer', { entity: formatDocumentType(documentType).toLowerCase() })}
-                disabled={allCompletedStatuses[allCompletedStatuses.length - 1]
-                !== DocumentStatus.NOTDELIVERED}
+                disabled={allCompletedStatuses[allCompletedStatuses.length - 1] !== DocumentStatus.NOTDELIVERED}
               />
-          )}
+            }
           />
         </AuthorizationComponent>
       );
     } else if (documentType === SingleEntities.Invoice) {
       leftButton = (
-        <AuthorizationComponent
-          roles={[Roles.ADMIN, Roles.FINANCIAL]}
-          notFound={false}
-        >
+        <AuthorizationComponent roles={[Roles.ADMIN, Roles.FINANCIAL]} notFound={false}>
           <Popup
             header={t('activities.status.irrecoverable')}
             content={t('activities.status.irrecoverableDescription')}
             mouseEnterDelay={500}
             wide
-            trigger={(
+            trigger={
               <Button
                 floated="left"
                 labelPosition="left"
@@ -145,10 +136,11 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
                   this.setState({ irrecoverableModalOpen: true });
                 }}
                 content={t('activities.status.irrecoverable')}
-                disabled={!(realLastStatus.includes(DocumentStatus.CREATED)
-                || realLastStatus.includes(DocumentStatus.SENT))}
+                disabled={
+                  !(realLastStatus.includes(DocumentStatus.CREATED) || realLastStatus.includes(DocumentStatus.SENT))
+                }
               />
-          )}
+            }
           />
         </AuthorizationComponent>
       );
@@ -159,7 +151,7 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
       rightButton = (
         <AuthorizationComponent roles={[Roles.GENERAL, Roles.ADMIN]} notFound={false}>
           <Popup
-            trigger={(
+            trigger={
               <Button
                 floated="right"
                 labelPosition="left"
@@ -170,18 +162,25 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
                     cancelModalOpen: true,
                   });
                 }}
-                content={t('activities.status.cancel', { entity: formatDocumentType(documentType).toLocaleLowerCase() })}
-                disabled={getToDoStatus(allCompletedStatuses[allCompletedStatuses.length - 1],
-                  documentType).length === 0}
+                content={t('activities.status.cancel', {
+                  entity: formatDocumentType(documentType).toLocaleLowerCase(),
+                })}
+                disabled={
+                  getToDoStatus(allCompletedStatuses[allCompletedStatuses.length - 1], documentType).length === 0
+                }
               />
-            )}
+            }
             header={t('activities.status.cancel', { entity: formatDocumentType(documentType).toLocaleLowerCase() })}
             content={() => {
               switch (documentType) {
-                case SingleEntities.Contract: return t('activities.status.cancelContractDescription');
-                case SingleEntities.Invoice: return t('activities.status.cancelInvoiceDescription');
-                case SingleEntities.ProductInstance: return t('activities.status.cancelProductInstanceDescription');
-                default: return '';
+                case SingleEntities.Contract:
+                  return t('activities.status.cancelContractDescription');
+                case SingleEntities.Invoice:
+                  return t('activities.status.cancelInvoiceDescription');
+                case SingleEntities.ProductInstance:
+                  return t('activities.status.cancelProductInstanceDescription');
+                default:
+                  return '';
               }
             }}
           />
@@ -194,54 +193,44 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
             content={cancelReason}
             mouseEnterDelay={500}
             wide
-            trigger={(
+            trigger={
               <div style={{ display: 'inline-block', float: 'right' }}>
                 <Button
                   floated="right"
                   labelPosition="left"
                   icon="close"
                   basic
-                  content={t('activities.status.cancel', { entity: formatDocumentType(documentType).toLocaleLowerCase() })}
+                  content={t('activities.status.cancel', {
+                    entity: formatDocumentType(documentType).toLocaleLowerCase(),
+                  })}
                   disabled
                   style={{ pointerEvents: 'auto !important' }}
                 />
               </div>
-          )}
+            }
           />
         </AuthorizationComponent>
       );
     }
 
-    const topButtonsGrid = (!completedStatuses.includes(DocumentStatus.CANCELLED)) ? (
+    const topButtonsGrid = !completedStatuses.includes(DocumentStatus.CANCELLED) ? (
       <Grid columns={3}>
         <Grid.Row>
+          <Grid.Column>{leftButton}</Grid.Column>
           <Grid.Column>
-            {leftButton}
-          </Grid.Column>
-          <Grid.Column>
-            <h3
-              style={{ marginTop: '0.3em', textAlign: 'center' }}
-            >
-              {formatDocumentStatusTitle(
-                allStatusActivities[allStatusActivities.length - 1],
-                documentType,
-              )}
+            <h3 style={{ marginTop: '0.3em', textAlign: 'center' }}>
+              {formatDocumentStatusTitle(allStatusActivities[allStatusActivities.length - 1], documentType)}
             </h3>
           </Grid.Column>
-          <Grid.Column>
-            {rightButton}
-          </Grid.Column>
+          <Grid.Column>{rightButton}</Grid.Column>
         </Grid.Row>
       </Grid>
     ) : (
       <h3 style={{ textAlign: 'center' }}>
-        {formatDocumentStatusTitle(
-          allStatusActivities[allStatusActivities.length - 1],
-          documentType,
-        )}
+        {formatDocumentStatusTitle(allStatusActivities[allStatusActivities.length - 1], documentType)}
       </h3>
     );
-    const topButtonsModals = (!completedStatuses.includes(DocumentStatus.CANCELLED)) ? (
+    const topButtonsModals = !completedStatuses.includes(DocumentStatus.CANCELLED) ? (
       <>
         <DocumentStatusModal
           open={deferModalOpen}
@@ -278,7 +267,7 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
     const statusDisabledList: boolean[] = [];
     const statusClickableList: boolean[] = [];
     const statusDescriptionList: string[] = [];
-    const statusIconsList: JSX.Element[] = [];
+    const statusIconsList: ReactNode[] = [];
 
     for (let i = 0; i < allPossibleDocumentStatuses.length; i++) {
       const documentStatus = allPossibleDocumentStatuses[i];
@@ -290,15 +279,19 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
 
       // push the description of the status if it has a status
       if (documentStatusActivity !== undefined) {
-        statusDescriptionList.push(language === 'nl-NL' ? documentStatusActivity.descriptionDutch : documentStatusActivity.descriptionEnglish);
+        statusDescriptionList.push(
+          language === 'nl-NL' ? documentStatusActivity.descriptionDutch : documentStatusActivity.descriptionEnglish,
+        );
       } else {
         statusDescriptionList.push('');
       }
 
       // push whether the document status can be clicked
-      if (nextDocumentStatus.includes(documentStatus)
+      if (
+        nextDocumentStatus.includes(documentStatus) &&
         // FINISHED is set by delivering all products
-        && documentStatus !== DocumentStatus.FINISHED) {
+        documentStatus !== DocumentStatus.FINISHED
+      ) {
         statusClickableList.push(true);
       } else {
         statusClickableList.push(false);
@@ -308,8 +301,7 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
       if (realLastStatus === DocumentStatus.DEFERRED) {
         statusIconsList.push(<Icon color="orange" name="stopwatch" />);
         statusDisabledList.push(true);
-      } else if (realLastStatus === DocumentStatus.CANCELLED
-        || realLastStatus === DocumentStatus.IRRECOVERABLE) {
+      } else if (realLastStatus === DocumentStatus.CANCELLED || realLastStatus === DocumentStatus.IRRECOVERABLE) {
         statusIconsList.push(<Icon color="red" name="close" />);
         statusDisabledList.push(true);
       } else {
@@ -321,10 +313,7 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
     return (
       <>
         {topButtonsGrid}
-        <Step.Group
-          widths={5}
-          fluid
-        >
+        <Step.Group widths={5} fluid>
           {allPossibleDocumentStatuses.map((currentStatus, i) => (
             <FinancialDocumentStep
               key={currentStatus}
@@ -349,12 +338,9 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
 }
 
 const mapStateToProps = () => {
-  return {
-  };
+  return {};
 };
 
-const mapDispatchToProps = () => ({
-});
+const mapDispatchToProps = () => ({});
 
-export default withTranslation()(withRouter(connect(mapStateToProps,
-  mapDispatchToProps)(FinancialDocumentProgress)));
+export default withTranslation()(withRouter(connect(mapStateToProps, mapDispatchToProps)(FinancialDocumentProgress)));
