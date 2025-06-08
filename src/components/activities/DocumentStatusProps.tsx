@@ -1,26 +1,22 @@
-import React from 'react';
+import { Component } from 'react';
 import { connect } from 'react-redux';
 import { Form } from 'semantic-ui-react';
 import { Dispatch } from 'redux';
-import {
-  ContractStatusParams,
-  InvoiceStatusParams,
-} from '../../clients/server.generated';
+import { ContractStatusParams, InvoiceStatusParams } from '../../clients/server.generated';
 import ResourceStatus from '../../stores/resourceStatus';
 import PropsButtons from '../PropsButtons';
 import { SingleEntities } from '../../stores/single/single';
 import { formatStatus } from '../../helpers/activity';
 import { createSingleStatus } from '../../stores/single/actionCreators';
-import { DocumentStatus } from './DocumentStatus';
 import { createInstanceStatusSingle } from '../../stores/productinstance/actionCreator';
 import TextArea from '../TextArea';
+import { DocumentStatus } from './DocumentStatus';
 
 interface Props {
   create?: boolean;
   createSingleStatus: (entity: SingleEntities, id: number, statusParams: object) => void;
   createSingleInstanceStatus: (id: number, instanceId: number, statusParam: object) => void;
 
-  // eslint-disable-next-line react/no-unused-prop-types
   documentStatusParams: InvoiceStatusParams | ContractStatusParams;
   resourceStatus: ResourceStatus;
   documentId: number;
@@ -38,7 +34,7 @@ interface State {
   description: string;
 }
 
-class DocumentStatusProps extends React.Component<Props, State> {
+class DocumentStatusProps extends Component<Props, State> {
   static defaultProps = {
     parentId: undefined,
     create: undefined,
@@ -54,9 +50,7 @@ class DocumentStatusProps extends React.Component<Props, State> {
   }
 
   componentDidUpdate(prevProps: Props) {
-    if (prevProps.resourceStatus === ResourceStatus.SAVING
-      && this.props.resourceStatus === ResourceStatus.FETCHED) {
-      // eslint-disable-next-line react/no-did-update-set-state
+    if (prevProps.resourceStatus === ResourceStatus.SAVING && this.props.resourceStatus === ResourceStatus.FETCHED) {
       this.setState({ editing: false });
     }
   }
@@ -89,32 +83,22 @@ class DocumentStatusProps extends React.Component<Props, State> {
 
   saveDocument = () => {
     if (this.props.documentType === SingleEntities.ProductInstance) {
-      this.props.createSingleInstanceStatus(
-        this.props.parentId!,
-        this.props.documentId,
-        this.toStatusParams(),
-      );
+      this.props.createSingleInstanceStatus(this.props.parentId!, this.props.documentId, this.toStatusParams());
     } else {
-      this.props.createSingleStatus(
-        this.props.documentType,
-        this.props.documentId,
-        this.toStatusParams(),
-      );
+      this.props.createSingleStatus(this.props.documentType, this.props.documentId, this.toStatusParams());
     }
     this.props.close();
   };
 
   render() {
-    const {
-      editing,
-      description,
-    } = this.state;
+    const { editing, description } = this.state;
     const { documentStatus, documentType } = this.props;
 
     return (
       <>
         <h2>
-          {this.props.create ? `Post ${formatStatus(documentStatus)} Status`
+          {this.props.create
+            ? `Post ${formatStatus(documentStatus)} Status`
             : `${formatStatus(documentStatus)} Details} `}
 
           <PropsButtons
@@ -127,23 +111,17 @@ class DocumentStatusProps extends React.Component<Props, State> {
             cancel={this.cancel}
             edit={this.edit}
             save={this.saveDocument}
-            remove={() => {
-            }}
+            remove={() => {}}
           />
         </h2>
 
         <Form style={{ marginTop: '2em' }}>
           <Form.Field>
-            {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-            <label htmlFor="form-input-description">
-              Comments
-            </label>
+            <label htmlFor="form-input-description">Comments</label>
             <TextArea
               id="form-delivery-spec-english"
               value={description}
-              onChange={
-                (e) => this.setState({ description: e.target.value })
-              }
+              onChange={(e) => this.setState({ description: e.target.value })}
               placeholder="Comments"
             />
           </Form.Field>
@@ -154,12 +132,10 @@ class DocumentStatusProps extends React.Component<Props, State> {
 }
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
-  createSingleStatus: (entity: SingleEntities, id: number, statusParams: object) => dispatch(
-    createSingleStatus(entity, id, statusParams),
-  ),
-  createSingleInstanceStatus: (id: number, instanceId: number, statusParam: object) => dispatch(
-    createInstanceStatusSingle(id, instanceId, statusParam),
-  ),
+  createSingleStatus: (entity: SingleEntities, id: number, statusParams: object) =>
+    dispatch(createSingleStatus(entity, id, statusParams)),
+  createSingleInstanceStatus: (id: number, instanceId: number, statusParam: object) =>
+    dispatch(createInstanceStatusSingle(id, instanceId, statusParam)),
 });
 
 export default connect(null, mapDispatchToProps)(DocumentStatusProps);

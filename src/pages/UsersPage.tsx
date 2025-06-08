@@ -1,7 +1,5 @@
-import * as React from 'react';
-import {
-  Button, Container, Grid, Header, Icon, Segment,
-} from 'semantic-ui-react';
+import { useEffect } from 'react';
+import { Button, Container, Grid, Header, Icon, Segment } from 'semantic-ui-react';
 import { useTranslation } from 'react-i18next';
 import UsersTable from '../components/entities/user/UserTable';
 import UserTableControls from '../components/entities/user/UserTableControls';
@@ -13,9 +11,9 @@ function UsersPage(props: WithRouter) {
   const { setTitle } = useTitle();
   const { navigate } = props.router;
 
-  React.useEffect(() => {
+  useEffect(() => {
     setTitle(t('entity.users'));
-  }, []);
+  }, [setTitle, t]);
 
   return (
     <>
@@ -40,7 +38,6 @@ function UsersPage(props: WithRouter) {
           </Grid>
 
           <UserTableControls />
-
         </Container>
       </Segment>
       <Container style={{ marginTop: '20px' }}>

@@ -1,11 +1,8 @@
-import React from 'react';
-import {
-  Dimmer, Loader, Segment, Table,
-} from 'semantic-ui-react';
+import { Component } from 'react';
+import { Dimmer, Loader, Segment, Table } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import { withTranslation, WithTranslation } from 'react-i18next';
-import MegaTableRow from './MegaTableRow';
 import { RootState } from '../../stores/store';
 import { countFetched, countTotal, getTable } from '../../stores/tables/selectors';
 import { Tables } from '../../stores/tables/tables';
@@ -29,6 +26,7 @@ import { formatPriceFull } from '../../helpers/monetary';
 import ContractStatusFilter from '../tablefilters/ContractStatusFilter';
 import { dateToFinancialYear } from '../../helpers/timestamp';
 import { withRouter, WithRouter } from '../../WithRouter';
+import MegaTableRow from './MegaTableRow';
 
 interface Props extends WithTranslation, WithRouter {
   companies: ETCompany[];
@@ -43,7 +41,7 @@ interface Props extends WithTranslation, WithRouter {
   status: ResourceStatus;
 
   fetchCompanies: () => void;
-  setTableFilter: (filter: { column: string, values: any[] }) => void;
+  setTableFilter: (filter: { column: string; values: any[] }) => void;
   changeSort: (column: string) => void;
   setSort: (column: string, direction: 'ASC' | 'DESC') => void;
   setTake: (take: number) => void;
@@ -56,7 +54,7 @@ interface State {
   year?: number;
 }
 
-class MegaTable extends React.Component<Props, State> {
+class MegaTable extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
 
@@ -90,11 +88,17 @@ class MegaTable extends React.Component<Props, State> {
 
     switch (this.state.preFilters) {
       case 'suggested':
-        setTableFilter({ column: 'status2', values: [ContractStatus.CREATED, ContractStatus.PROPOSED, ContractStatus.SENT] });
+        setTableFilter({
+          column: 'status2',
+          values: [ContractStatus.CREATED, ContractStatus.PROPOSED, ContractStatus.SENT],
+        });
         break;
       case 'contracted':
         setTableFilter({ column: 'status2', values: [ContractStatus.CONFIRMED, ContractStatus.FINISHED] });
-        setTableFilter({ column: 'status', values: [ProductInstanceStatus.NOTDELIVERED, ProductInstanceStatus.DELIVERED] });
+        setTableFilter({
+          column: 'status',
+          values: [ProductInstanceStatus.NOTDELIVERED, ProductInstanceStatus.DELIVERED],
+        });
         setTableFilter({ column: 'invoiced', values: [-1, this.state.year] });
         break;
       case 'delivered':
@@ -108,7 +112,10 @@ class MegaTable extends React.Component<Props, State> {
         break;
       default:
         setTableFilter({ column: 'invoiced', values: [-1] });
-        setTableFilter({ column: 'status', values: [ProductInstanceStatus.NOTDELIVERED, ProductInstanceStatus.DELIVERED] });
+        setTableFilter({
+          column: 'status',
+          values: [ProductInstanceStatus.NOTDELIVERED, ProductInstanceStatus.DELIVERED],
+        });
         break;
     }
 
@@ -117,20 +124,30 @@ class MegaTable extends React.Component<Props, State> {
 
   render() {
     const {
-      companies, column, direction, changeSort,
-      total, fetched, skip, take, status,
-      prevPage, nextPage, setTake,
-      sumProducts, nrOfProducts, t,
+      companies,
+      column,
+      direction,
+      changeSort,
+      total,
+      fetched,
+      skip,
+      take,
+      status,
+      prevPage,
+      nextPage,
+      setTake,
+      sumProducts,
+      nrOfProducts,
+      t,
     } = this.props;
     return (
       <>
         <Segment style={{ padding: '0px' }}>
-          {status === ResourceStatus.FETCHING || status === ResourceStatus.SAVING
-            ? (
-              <Dimmer active inverted>
-                <Loader inverted />
-              </Dimmer>
-            ) : null}
+          {status === ResourceStatus.FETCHING || status === ResourceStatus.SAVING ? (
+            <Dimmer active inverted>
+              <Loader inverted />
+            </Dimmer>
+          ) : null}
           <Table attached compact sortable striped fixed>
             <Table.Header>
               <Table.Row>
@@ -158,12 +175,8 @@ class MegaTable extends React.Component<Props, State> {
                   {t('entities.productInstance.props.invoiced')}
                   <ProductInstanceInvoicedFilter />
                 </Table.HeaderCell>
-                <Table.HeaderCell>
-                  {t('entities.productInstance.props.price')}
-                </Table.HeaderCell>
-                <Table.HeaderCell>
-                  {t('entities.productInstance.props.details')}
-                </Table.HeaderCell>
+                <Table.HeaderCell>{t('entities.productInstance.props.price')}</Table.HeaderCell>
+                <Table.HeaderCell>{t('entities.productInstance.props.details')}</Table.HeaderCell>
               </Table.Row>
             </Table.Header>
             <Table.Body>
@@ -173,9 +186,7 @@ class MegaTable extends React.Component<Props, State> {
             </Table.Body>
             <Table.Footer>
               <Table.Row>
-                <Table.HeaderCell colSpan="3">
-                  {t('pages.insights.totals')}
-                </Table.HeaderCell>
+                <Table.HeaderCell colSpan="3">{t('pages.insights.totals')}</Table.HeaderCell>
                 <Table.HeaderCell colSpan="2" style={{ textAlign: 'center' }}>
                   {t('pages.insights.nrOfProducts')}
                   {': '}
@@ -210,19 +221,16 @@ const mapStateToProps = (state: RootState) => {
     skip: contractTable.skip,
     take: contractTable.take,
     companies: contractTable.data,
-    // @ts-ignore
     nrOfProducts: contractTable.extra.nrOfProducts,
-    // @ts-ignore
     sumProducts: contractTable.extra.sumProducts,
     column: contractTable.sortColumn,
-    direction: contractTable.sortDirection === 'ASC'
-      ? 'ascending' : 'descending' as 'ascending' | 'descending',
+    direction: contractTable.sortDirection === 'ASC' ? 'ascending' : ('descending' as 'ascending' | 'descending'),
   };
 };
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
   fetchCompanies: () => dispatch(fetchTable(Tables.ETCompanies)),
-  setTableFilter: (filter: { column: string, values: any[] }) => {
+  setTableFilter: (filter: { column: string; values: any[] }) => {
     dispatch(setFilterTable(Tables.ETCompanies, filter));
   },
   changeSort: (column: string) => {
@@ -247,5 +255,4 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   },
 });
 
-export default withTranslation()(withRouter(connect(mapStateToProps,
-  mapDispatchToProps)(MegaTable)));
+export default withTranslation()(withRouter(connect(mapStateToProps, mapDispatchToProps)(MegaTable)));

@@ -1,4 +1,3 @@
-import React from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import { Button, Icon } from 'semantic-ui-react';
@@ -10,44 +9,31 @@ import { RootState } from '../../../stores/store';
 interface Props {
   hasApiKey: boolean | undefined;
   apiKey: string | undefined;
-  apiKeyStatus: ResourceStatus,
+  apiKeyStatus: ResourceStatus;
 
-  getApiKey: () => void,
-  generateApiKey: () => void,
-  revokeApiKey: () => void,
+  getApiKey: () => void;
+  generateApiKey: () => void;
+  revokeApiKey: () => void;
 }
 
 function UserApiKey(props: Props) {
-  const {
-    hasApiKey, apiKey, apiKeyStatus, getApiKey,
-    generateApiKey, revokeApiKey,
-  } = props;
+  const { hasApiKey, apiKey, apiKeyStatus, getApiKey, generateApiKey, revokeApiKey } = props;
   const { t } = useTranslation();
 
   if (hasApiKey) {
     return (
       <>
-        { apiKey === undefined ? (
-          <Button
-            onClick={getApiKey}
-            loading={apiKeyStatus === ResourceStatus.FETCHING}
-          >
+        {apiKey === undefined ? (
+          <Button onClick={getApiKey} loading={apiKeyStatus === ResourceStatus.FETCHING}>
             <Icon name="eye" />
             {t('pages.user.apiKey.viewKey')}
           </Button>
         ) : (
           <span>
-            <b style={{ marginRight: '1rem' }}>
-              ApiKey
-              {' '}
-              {apiKey}
-            </b>
+            <b style={{ marginRight: '1rem' }}>ApiKey {apiKey}</b>
           </span>
         )}
-        <Button
-          onClick={revokeApiKey}
-          loading={apiKeyStatus === ResourceStatus.DELETING}
-        >
+        <Button onClick={revokeApiKey} loading={apiKeyStatus === ResourceStatus.DELETING}>
           <Icon name="times" />
           {t('pages.user.apiKey.revoke')}
         </Button>
@@ -56,10 +42,7 @@ function UserApiKey(props: Props) {
   }
 
   return (
-    <Button
-      onClick={generateApiKey}
-      loading={apiKeyStatus === ResourceStatus.FETCHING}
-    >
+    <Button onClick={generateApiKey} loading={apiKeyStatus === ResourceStatus.FETCHING}>
       <Icon name="refresh" />
       {t('pages.user.apiKey.generate')}
     </Button>

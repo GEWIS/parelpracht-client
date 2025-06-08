@@ -1,4 +1,3 @@
-import React from 'react';
 import { connect } from 'react-redux';
 import ColumnFilter from '../ColumnFilter';
 import { Tables } from '../../stores/tables/tables';
@@ -17,13 +16,7 @@ function ProductInstanceInvoicedFilter(props: Props) {
   });
 
   return (
-    <ColumnFilter
-      column="invoiced"
-      columnName="invoice year"
-      multiple
-      table={Tables.ETCompanies}
-      options={options}
-    />
+    <ColumnFilter column="invoiced" columnName="invoice year" multiple table={Tables.ETCompanies} options={options} />
   );
 }
 

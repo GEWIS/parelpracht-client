@@ -1,28 +1,22 @@
-import React from 'react';
+import { Component } from 'react';
 import { withTranslation, WithTranslation } from 'react-i18next';
 import { Header, Label, Segment } from 'semantic-ui-react';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import ConfirmationDialog from '../../ConfirmationDialog';
-import {
-  Client, LdapIdentityParams, User,
-} from '../../../clients/server.generated';
+import { Client, LdapIdentityParams, User } from '../../../clients/server.generated';
 import ConfirmationDialogWithParameter from '../../tablefilters/ConfirmDialogWithParameter';
 import { fetchSingle } from '../../../stores/single/actionCreators';
 import { SingleEntities } from '../../../stores/single/single';
 
 interface Props extends WithTranslation {
   fetchUser: (id: number) => void;
-  user: User,
+  user: User;
 }
 
-interface State {}
-
-class UserAuthSettings extends React.Component<Props, State> {
+class UserAuthSettings extends Component<Props, null> {
   constructor(props: Props) {
     super(props);
-
-    this.state = {};
   }
 
   createLocalIdentity = async () => {
@@ -59,17 +53,13 @@ class UserAuthSettings extends React.Component<Props, State> {
     const { user, t } = this.props;
     return (
       <Segment>
-        <Header as="h3">
-          {t('entities.user.auth.segmentHeader')}
-        </Header>
+        <Header as="h3">{t('entities.user.auth.segmentHeader')}</Header>
         <div style={{ marginBottom: '0.5rem' }}>
           <Label color={user.identityLocal ? 'green' : 'red'}>{t('entities.user.auth.loginLocal')}</Label>
           <Label color={user.identityLdap ? 'green' : 'red'}>{t('entities.user.auth.loginLdap')}</Label>
         </div>
         <p>
-          <b>
-            {t('entities.user.auth.segmentDescription')}
-          </b>
+          <b>{t('entities.user.auth.segmentDescription')}</b>
         </p>
         <ConfirmationDialog
           header={t('entities.user.auth.segmentHeader')}

@@ -1,15 +1,9 @@
-import React, { ChangeEvent, useState } from 'react';
-import {
-  Button,
-  Checkbox,
-  Dropdown, Form, Icon, Input, Modal, Segment,
-} from 'semantic-ui-react';
+import { ChangeEvent, useState } from 'react';
+import { Button, Checkbox, Dropdown, Form, Icon, Input, Modal, Segment } from 'semantic-ui-react';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import { useTranslation } from 'react-i18next';
-import {
-  Language, ReturnFileType, GenerateInvoiceParams, Invoice,
-} from '../../clients/server.generated';
+import { Language, ReturnFileType, GenerateInvoiceParams, Invoice } from '../../clients/server.generated';
 import AlertContainer from '../alerts/AlertContainer';
 import { FilesClient } from '../../clients/filesClient';
 import ContactSelector from '../entities/contact/ContactSelector';
@@ -37,14 +31,17 @@ function GenerateContract(props: Props) {
   const save = async () => {
     changeLoading(true);
     const client = new FilesClient();
-    const success = await client.generateInvoiceFile(props.invoice.id, new GenerateInvoiceParams({
-      name,
-      language,
-      fileType,
-      showDiscountPercentages,
-      saveToDisk,
-      recipientId,
-    }));
+    const success = await client.generateInvoiceFile(
+      props.invoice.id,
+      new GenerateInvoiceParams({
+        name,
+        language,
+        fileType,
+        showDiscountPercentages,
+        saveToDisk,
+        recipientId,
+      }),
+    );
     changeLoading(false);
 
     if (success) {
@@ -67,26 +64,21 @@ function GenerateContract(props: Props) {
       open={isOpen}
       dimmer="blurring"
       size="tiny"
-      trigger={(
-        <Button
-          icon
-          loading={loading}
-          labelPosition="left"
-          floated="right"
-          style={{ marginTop: '-0.5em' }}
-          basic
-        >
+      trigger={
+        <Button icon loading={loading} labelPosition="left" floated="right" style={{ marginTop: '-0.5em' }} basic>
           <Icon name="plus" />
           {t('files.generate.header')}
         </Button>
-      )}
+      }
     >
       <Segment attached="bottom">
         <AlertContainer />
         <h2>
           {t('files.generate.header')}
           <Button
-            onClick={save}
+            onClick={() => {
+              save().catch(console.error);
+            }}
             floated="right"
             loading={loading}
             color="green"
@@ -97,18 +89,13 @@ function GenerateContract(props: Props) {
             <Icon name="download" />
             {t('files.generate.generateButton')}
           </Button>
-          <Button
-            icon
-            floated="right"
-            onClick={() => setOpen(false)}
-          >
+          <Button icon floated="right" onClick={() => setOpen(false)}>
             {t('buttons.cancel')}
           </Button>
         </h2>
         <Form style={{ marginTop: '2em' }}>
           <Form.Group widths="equal">
             <Form.Field required>
-              {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
               <label htmlFor="form-contact-selector">{t('files.generate.recipient')}</label>
               <ContactSelector
                 id="form-contact-selector"
@@ -128,10 +115,7 @@ function GenerateContract(props: Props) {
             />
           </Form.Group>
           <Form.Group widths="equal">
-            <Form.Field
-              required
-            >
-              {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
+            <Form.Field required>
               <label htmlFor="form-input-File-Type">{t('files.generate.fileType')}</label>
               <Dropdown
                 id="form-input-File-Type"
@@ -142,14 +126,11 @@ function GenerateContract(props: Props) {
                   { key: 0, text: 'PDF', value: ReturnFileType.PDF },
                   { key: 1, text: 'TEX', value: ReturnFileType.TEX },
                 ]}
-                onChange={(e, data) => changeFileType(data.value as ReturnFileType)}
+                onChange={(_, data) => changeFileType(data.value as ReturnFileType)}
                 fluid
               />
             </Form.Field>
-            <Form.Field
-              required
-            >
-              {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
+            <Form.Field required>
               <label htmlFor="form-input-language">{t('language.header')}</label>
               <Dropdown
                 id="form-input-language"
@@ -160,30 +141,28 @@ function GenerateContract(props: Props) {
                   { key: 0, text: t('language.dutch'), value: Language.DUTCH },
                   { key: 1, text: t('language.english'), value: Language.ENGLISH },
                 ]}
-                onChange={(e, data) => changeLanguage(data.value as Language)}
+                onChange={(_, data) => changeLanguage(data.value as Language)}
                 fluid
               />
             </Form.Field>
           </Form.Group>
           <Form.Group>
             <Form.Field>
-              {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
               <label htmlFor="form-input-Discount">{t('files.generate.showDiscount')}</label>
               <Checkbox
                 toggle
                 id="form-input-Discount"
                 checked={showDiscountPercentages}
-                onChange={(e, data) => changeDiscount(data.checked as boolean)}
+                onChange={(_, data) => changeDiscount(data.checked as boolean)}
               />
             </Form.Field>
             <Form.Field>
-              {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
               <label htmlFor="form-input-SaveToDisk">{t('files.generate.saveToDisk')}</label>
               <Checkbox
                 id="form-input-SaveToDisk"
                 toggle
                 checked={saveToDisk}
-                onChange={(e, data) => changeSaveToDisk(data.checked as boolean)}
+                onChange={(_, data) => changeSaveToDisk(data.checked as boolean)}
               />
             </Form.Field>
           </Form.Group>

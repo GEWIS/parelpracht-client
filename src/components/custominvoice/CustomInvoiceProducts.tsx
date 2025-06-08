@@ -1,7 +1,4 @@
-import React from 'react';
-import {
-  Button, Icon, Segment, Table,
-} from 'semantic-ui-react';
+import { Button, Icon, Segment, Table } from 'semantic-ui-react';
 import { useTranslation } from 'react-i18next';
 import { CustomProduct, VAT } from '../../clients/server.generated';
 import { formatPriceFull } from '../../helpers/monetary';
@@ -11,7 +8,11 @@ interface Props {
   products: CustomProduct[];
   addProduct: () => void;
   removeProduct: (id: number) => void;
-  updateProduct: (id: number, attribute: string, value: any) => void;
+  updateProduct: <T extends keyof CustomProduct = keyof CustomProduct>(
+    id: number,
+    attribute: T,
+    value: CustomProduct[T],
+  ) => void;
 }
 
 function VATtoNumber(valueAddedTax: VAT) {
@@ -83,15 +84,19 @@ function CustomInvoiceProducts(props: Props) {
               <br />
               {formatPriceFull(
                 props.products.reduce(
-                  (a, b) => (b.valueAddedTax === VAT.LOW ? a + b.amount * b.pricePerOne
-                    * (VATtoNumber(b.valueAddedTax) - 1) : a), 0,
+                  (a, b) =>
+                    b.valueAddedTax === VAT.LOW ? a + b.amount * b.pricePerOne * (VATtoNumber(b.valueAddedTax) - 1) : a,
+                  0,
                 ),
               )}
               <br />
               {formatPriceFull(
                 props.products.reduce(
-                  (a, b) => (b.valueAddedTax === VAT.HIGH ? a + b.amount * b.pricePerOne
-                    * (VATtoNumber(b.valueAddedTax) - 1) : a), 0,
+                  (a, b) =>
+                    b.valueAddedTax === VAT.HIGH
+                      ? a + b.amount * b.pricePerOne * (VATtoNumber(b.valueAddedTax) - 1)
+                      : a,
+                  0,
                 ),
               )}
             </Table.HeaderCell>
@@ -105,8 +110,9 @@ function CustomInvoiceProducts(props: Props) {
               <b>{t('entities.productInstance.props.realPriceWithVat')}</b>
             </Table.HeaderCell>
             <Table.HeaderCell collapsing>
-              {formatPriceFull(props.products.reduce((a, b) => a + b.amount * b.pricePerOne
-                * VATtoNumber(b.valueAddedTax), 0))}
+              {formatPriceFull(
+                props.products.reduce((a, b) => a + b.amount * b.pricePerOne * VATtoNumber(b.valueAddedTax), 0),
+              )}
             </Table.HeaderCell>
             <Table.HeaderCell />
           </Table.Row>

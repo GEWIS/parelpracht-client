@@ -1,13 +1,13 @@
-import React, { SyntheticEvent } from 'react';
+import { Component, SyntheticEvent } from 'react';
 import { withTranslation, WithTranslation } from 'react-i18next';
 import { Dropdown, DropdownProps, Form } from 'semantic-ui-react';
 import COUNTRY_OPTIONS from './countries.json';
 
 interface Country {
-  key: string,
-  value: string,
-  flag: string,
-  text: string,
+  key: string;
+  value: string;
+  flag: string;
+  text: string;
 }
 
 interface Props extends WithTranslation {
@@ -17,7 +17,7 @@ interface Props extends WithTranslation {
   id: string;
 }
 
-class CountrySelector extends React.Component<Props> {
+class CountrySelector extends Component<Props> {
   private readonly countries: Country[];
 
   constructor(props: Props) {
@@ -28,13 +28,8 @@ class CountrySelector extends React.Component<Props> {
   render() {
     const { t } = this.props;
     return (
-      <Form.Field
-        disabled={!this.props.editing}
-      >
-        {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-        <label htmlFor={this.props.id}>
-          {t('entities.company.props.country')}
-        </label>
+      <Form.Field disabled={!this.props.editing}>
+        <label htmlFor={this.props.id}>{t('entities.company.props.country')}</label>
         <Dropdown
           id={this.props.id}
           placeholder={t('entities.company.props.country')}

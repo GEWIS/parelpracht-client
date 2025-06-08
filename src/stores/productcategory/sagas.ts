@@ -1,6 +1,4 @@
-import {
-  call, put, select, throttle,
-} from 'redux-saga/effects';
+import { call, put, select, throttle } from 'redux-saga/effects';
 import {
   ApiException,
   CategoryListResponse,
@@ -14,9 +12,7 @@ import {
   SortDirection,
 } from '../../clients/server.generated';
 import { takeEveryWithErrorHandling } from '../errorHandling';
-import {
-  clearSingle, errorSingle, notFoundSingle, setSingle,
-} from '../single/actionCreators';
+import { clearSingle, errorSingle, notFoundSingle, setSingle } from '../single/actionCreators';
 import {
   singleActionPattern,
   SingleActionType,
@@ -26,9 +22,7 @@ import {
   SingleSaveAction,
 } from '../single/actions';
 import { SingleEntities } from '../single/single';
-import {
-  addSummary, deleteSummary, setSummaries, updateSummary,
-} from '../summaries/actionCreators';
+import { addSummary, deleteSummary, setSummaries, updateSummary } from '../summaries/actionCreators';
 import { summariesActionPattern, SummariesActionType } from '../summaries/actions';
 import { SummaryCollections } from '../summaries/summaries';
 import { fetchTable, prevPageTable, setTable } from '../tables/actionCreators';
@@ -48,11 +42,7 @@ function* fetchProductCategories() {
   const client = new Client();
 
   const state: TableState<ProductCategory> = yield select(getTable, Tables.ProductCategories);
-  const {
-    sortColumn, sortDirection,
-    take, skip,
-    search, filters,
-  } = state;
+  const { sortColumn, sortDirection, take, skip, search, filters } = state;
 
   let { list, count } = yield call(
     [client, client.getAllCategories],
@@ -104,9 +94,7 @@ function* fetchSingleProductCategory(action: SingleFetchAction<SingleEntities.Pr
   yield put(updateSummary(SummaryCollections.ProductCategories, toSummary(productCategory)));
 }
 
-function* errorFetchSingleProductCategory(
-  error: ApiException,
-) {
+function* errorFetchSingleProductCategory(error: ApiException) {
   if (error.status === 404) {
     yield put(notFoundSingle(SingleEntities.ProductCategory));
   } else {
@@ -114,9 +102,7 @@ function* errorFetchSingleProductCategory(
   }
 }
 
-function* saveSingleProductCategory(
-  action: SingleSaveAction<SingleEntities.ProductCategory, CategoryParams>,
-) {
+function* saveSingleProductCategory(action: SingleSaveAction<SingleEntities.ProductCategory, CategoryParams>) {
   const client = new Client();
   yield call([client, client.updateCategory], action.id, action.data);
   const productCategory: ProductCategory = yield call([client, client.getCategory], action.id);
@@ -137,9 +123,7 @@ function* watchSaveSingleProductCategory() {
   );
 }
 
-function* createSingleProductCategory(
-  action: SingleCreateAction<SingleEntities.ProductCategory, CategoryParams>,
-) {
+function* createSingleProductCategory(action: SingleCreateAction<SingleEntities.ProductCategory, CategoryParams>) {
   const client = new Client();
   const productCategory: ProductCategory = yield call([client, client.createCategory], action.data);
   yield put(setSingle(SingleEntities.ProductCategory, productCategory));
@@ -174,24 +158,18 @@ function* errorDeleteSingleProductCategory() {
 function* watchDeleteSingleProductCategory() {
   yield takeEveryWithErrorHandling(
     singleActionPattern(SingleEntities.ProductCategory, SingleActionType.Delete),
-    deleteSingleProductCategory, { onErrorSaga: errorDeleteSingleProductCategory },
+    deleteSingleProductCategory,
+    { onErrorSaga: errorDeleteSingleProductCategory },
   );
 }
 
 export default [
   function* watchFetchProductCategories() {
-    yield throttle(
-      500,
-      tableActionPattern(Tables.ProductCategories, TableActionType.Fetch),
-      fetchProductCategories,
-    );
+    yield throttle(500, tableActionPattern(Tables.ProductCategories, TableActionType.Fetch), fetchProductCategories);
   },
   function* watchFetchProductCategorySummaries() {
     yield takeEveryWithErrorHandling(
-      summariesActionPattern(
-        SummaryCollections.ProductCategories,
-        SummariesActionType.Fetch,
-      ),
+      summariesActionPattern(SummaryCollections.ProductCategories, SummariesActionType.Fetch),
       fetchProductCategorySummaries,
     );
   },

@@ -1,9 +1,7 @@
-import React from 'react';
+import { Component } from 'react';
 import { WithTranslation, withTranslation } from 'react-i18next';
 import { Loader, Table } from 'semantic-ui-react';
-import {
-  Client, PaginationParams, Product, ProductInstance,
-} from '../../../clients/server.generated';
+import { Client, PaginationParams, Product, ProductInstance } from '../../../clients/server.generated';
 import TablePagination from '../../TablePagination';
 import InvoiceCompactRow from './InvoiceCompactRow';
 
@@ -20,7 +18,7 @@ interface State {
   take: number;
 }
 
-class ContractCompactTable extends React.Component<Props, State> {
+class ContractCompactTable extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
@@ -32,8 +30,8 @@ class ContractCompactTable extends React.Component<Props, State> {
     };
   }
 
-  async componentDidMount() {
-    await this.getProductAttributes();
+  componentDidMount() {
+    this.getProductAttributes().catch(console.error);
   }
 
   async getProductAttributes() {
@@ -72,7 +70,7 @@ class ContractCompactTable extends React.Component<Props, State> {
   };
 
   setTake = async (take: number) => {
-    await this.setState({
+    this.setState({
       take,
       skip: 0,
     });
@@ -80,43 +78,31 @@ class ContractCompactTable extends React.Component<Props, State> {
   };
 
   render() {
-    const {
-      productInstances, countTotal, skip, take, loading,
-    } = this.state;
+    const { productInstances, countTotal, skip, take, loading } = this.state;
     const { t } = this.props;
 
     let invoiceList;
     if (productInstances.length === 0) {
-      invoiceList = (
-        <h4>
-          {t('entities.product.noInvoice')}
-        </h4>
-      );
+      invoiceList = <h4>{t('entities.product.noInvoice')}</h4>;
     } else {
       invoiceList = (
         <>
           <Table striped unstackable>
             <Table.Header>
               <Table.Row>
-                <Table.HeaderCell>
-                  {t('entities.invoice.props.title')}
-                </Table.HeaderCell>
-                <Table.HeaderCell>
-                  {t('entity.company')}
-                </Table.HeaderCell>
-                <Table.HeaderCell>
-                  {t('entities.generalProps.status')}
-                </Table.HeaderCell>
+                <Table.HeaderCell>{t('entities.invoice.props.title')}</Table.HeaderCell>
+                <Table.HeaderCell>{t('entity.company')}</Table.HeaderCell>
+                <Table.HeaderCell>{t('entities.generalProps.status')}</Table.HeaderCell>
                 <Table.HeaderCell style={{ width: '15%' }}>
                   {t('entities.invoice.props.financialYear')}
                 </Table.HeaderCell>
-                <Table.HeaderCell>
-                  {t('entities.generalProps.lastUpdate')}
-                </Table.HeaderCell>
+                <Table.HeaderCell>{t('entities.generalProps.lastUpdate')}</Table.HeaderCell>
               </Table.Row>
             </Table.Header>
             <Table.Body>
-              {productInstances.map((p) => <InvoiceCompactRow key={p.id} invoice={p.invoice!} />)}
+              {productInstances.map((p) => (
+                <InvoiceCompactRow key={p.id} invoice={p.invoice!} />
+              ))}
             </Table.Body>
           </Table>
           <TablePagination

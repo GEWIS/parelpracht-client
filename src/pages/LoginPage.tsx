@@ -1,8 +1,6 @@
-import React from 'react';
+import { useEffect } from 'react';
 import { Navigate as Redirect, NavLink } from 'react-router-dom';
-import {
-  Container, Image, Message, Segment,
-} from 'semantic-ui-react';
+import { Container, Image, Message, Segment } from 'semantic-ui-react';
 import './BackgroundAnimation.css';
 import { useTranslation } from 'react-i18next';
 import AlertContainer from '../components/alerts/AlertContainer';
@@ -22,22 +20,28 @@ function LoginPage({ loginMethod, setupDone }: Props) {
   const { t } = useTranslation();
   const { setTitle } = useTitle();
 
-  React.useEffect(() => {
+  useEffect(() => {
     setTitle(t('pages.login.title'));
-  }, []);
+  }, [setTitle, t]);
 
   let loginForm;
   switch (loginMethod) {
     case LoginMethods.Local:
-      loginForm = <LoginLocalForm />; break;
+      loginForm = <LoginLocalForm />;
+      break;
     case LoginMethods.Ldap:
-      loginForm = <LoginLDAPForm />; break;
+      loginForm = <LoginLDAPForm />;
+      break;
     default:
-      throw new Error(`Unknown login method: ${loginMethod}`);
+      throw new Error(`Unknown login method: ${loginMethod as string}`);
   }
 
   if (!setupDone) {
-    return <><Redirect to={'/setup'}/></>;
+    return (
+      <>
+        <Redirect to={'/setup'} />
+      </>
+    );
   }
 
   return (
@@ -55,10 +59,8 @@ function LoginPage({ loginMethod, setupDone }: Props) {
           </Segment>
           {loginMethod === LoginMethods.Local ? (
             <Message>
-              {t('pages.login.troubleSigningIn')}
-              {' '}
-              <NavLink to="/forgot-password">{t('pages.login.forgotPassword')}</NavLink>
-              .
+              {t('pages.login.troubleSigningIn')}{' '}
+              <NavLink to="/forgot-password">{t('pages.login.forgotPassword')}</NavLink>.
             </Message>
           ) : null}
           {loginMethod !== LoginMethods.Local ? (

@@ -1,7 +1,5 @@
-import React, { useState } from 'react';
-import {
-  Button, Dropdown, Grid, Segment,
-} from 'semantic-ui-react';
+import { useState } from 'react';
+import { Button, Dropdown, Grid, Segment } from 'semantic-ui-react';
 import { useTranslation } from 'react-i18next';
 
 interface Props {
@@ -10,15 +8,12 @@ interface Props {
   skip: number;
   take: number;
 
-  setTake: (take: number) => void;
-  nextPage: () => void;
-  prevPage: () => void;
+  setTake: (take: number) => Promise<void> | void;
+  nextPage: () => Promise<void> | void;
+  prevPage: () => Promise<void> | void;
 }
 
-function TablePagination({
-  countTotal, countFetched, skip, take,
-  setTake, nextPage, prevPage,
-}: Props) {
+function TablePagination({ countTotal, countFetched, skip, take, setTake, nextPage, prevPage }: Props) {
   const { t } = useTranslation();
 
   const canPrev = skip > 0;
@@ -40,30 +35,48 @@ function TablePagination({
       <Grid columns={2} verticalAlign="middle">
         <Grid.Column>
           {t('pages.tables.footer.items', {
-            begin: skip + 1, end: Math.min(skip + countFetched, countTotal), total: countTotal,
+            begin: skip + 1,
+            end: Math.min(skip + countFetched, countTotal),
+            total: countTotal,
           })}
         </Grid.Column>
         <Grid.Column>
           <Button.Group floated="right">
-            <Button icon="chevron left" disabled={!canPrev} onClick={prevPage} title={t('pages.tables.footer.pagination.previous')} />
-            <Button icon="chevron right" disabled={!canNext} onClick={nextPage} title={t('pages.tables.footer.pagination.next')} />
+            <Button
+              icon="chevron left"
+              disabled={!canPrev}
+              onClick={() => {
+                Promise.resolve(prevPage()).catch(console.error);
+              }}
+              title={t('pages.tables.footer.pagination.previous')}
+            />
+            <Button
+              icon="chevron right"
+              disabled={!canNext}
+              onClick={() => {
+                Promise.resolve(nextPage()).catch(console.error);
+              }}
+              title={t('pages.tables.footer.pagination.next')}
+            />
           </Button.Group>
           <Button.Group floated="right">
             <Dropdown
               options={takeOptions}
               button
               basic
-              text={selectedAll
-                ? t('pages.tables.footer.pagination.allItems')
-                : t('pages.tables.footer.pagination.nrItems', { take })}
+              text={
+                selectedAll
+                  ? t('pages.tables.footer.pagination.allItems')
+                  : t('pages.tables.footer.pagination.nrItems', { take })
+              }
               value={take}
               onChange={(_, data) => {
                 if (data.value === 'All') {
                   changeSelectedAll(true);
-                  setTake(countTotal);
+                  Promise.resolve(setTake(countTotal)).catch(console.error);
                 } else {
                   changeSelectedAll(false);
-                  setTake(data.value as number);
+                  Promise.resolve(setTake(data.value as number)).catch(console.error);
                 }
               }}
               style={{ marginRight: '1em' }}

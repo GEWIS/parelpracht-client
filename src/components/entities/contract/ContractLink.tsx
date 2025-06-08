@@ -1,4 +1,3 @@
-import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { Icon } from 'semantic-ui-react';
 import { connect } from 'react-redux';
@@ -19,13 +18,12 @@ interface Props {
 }
 
 function ContractLink(props: Props) {
-  const {
-    id, showId, showName, contractTitle, status,
-  } = props;
+  const { id, showId, showName, contractTitle, status } = props;
 
   let statusCircle;
   switch (status) {
-    case undefined: break;
+    case undefined:
+      break;
     case ContractStatus.CREATED:
       statusCircle = <PartialCircle endAngle={72} startAngle={0} />;
       break;
@@ -45,7 +43,7 @@ function ContractLink(props: Props) {
       statusCircle = <PartialCircle endAngle={359.99999} startAngle={0} fillColor="#ff6966" />;
       break;
     default:
-      throw new TypeError(`Unknown contract status: ${status} from contract ${id}`);
+      throw new TypeError(`Unknown contract status: ${status as string} from contract ${id}`);
   }
 
   return (
@@ -57,14 +55,10 @@ function ContractLink(props: Props) {
       <Icon name="file alternate" />
       {showId ? `C${id} ` : ''}
       {showName ? contractTitle : ''}
-      { statusCircle }
+      {statusCircle}
     </NavLink>
   );
 }
-
-ContractLink.defaultProps = {
-  status: undefined,
-};
 
 const mapStateToProps = (state: RootState, props: { id: number }) => {
   return {

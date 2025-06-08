@@ -1,22 +1,20 @@
-import React from 'react';
+import { Component, ReactNode } from 'react';
 import { connect } from 'react-redux';
 import { Step } from 'semantic-ui-react';
-import {
-  formatStatus,
-} from '../../helpers/activity';
-import DocumentStatusModal from './DocumentStatusModal';
+import { formatStatus } from '../../helpers/activity';
 import { SingleEntities } from '../../stores/single/single';
-import { DocumentStatus } from './DocumentStatus';
 import ResourceStatus from '../../stores/resourceStatus';
 import { Roles } from '../../clients/server.generated';
 import { RootState } from '../../stores/store';
 import { authedUserHasRole } from '../../stores/auth/selectors';
-import { withRouter } from '../../WithRouter';
+import { WithRouter, withRouter } from '../../WithRouter';
+import { DocumentStatus } from './DocumentStatus';
+import DocumentStatusModal from './DocumentStatusModal';
 
 /**
  * Definition of used variables
  */
-interface Props {
+interface Props extends WithRouter {
   documentId: number;
   documentType: SingleEntities;
   // If the document is a ProductInstance, the parentId is the contract ID
@@ -26,7 +24,7 @@ interface Props {
   statusClickable: boolean;
   statusDescription: string;
   statusDisabled: boolean;
-  statusIcon: JSX.Element;
+  statusIcon: ReactNode;
 
   resourceStatus: ResourceStatus;
 
@@ -39,7 +37,7 @@ interface State {
   stepModalOpen: boolean;
 }
 
-class FinancialDocumentProgress extends React.Component<Props, State> {
+class FinancialDocumentProgress extends Component<Props, State> {
   static defaultProps = {
     parentId: undefined,
   };
@@ -59,9 +57,18 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
 
   public render() {
     const {
-      documentId, documentType, status,
-      statusChecked, statusClickable, statusDescription, statusDisabled, statusIcon,
-      resourceStatus, parentId, hasRole, roles,
+      documentId,
+      documentType,
+      status,
+      statusChecked,
+      statusClickable,
+      statusDescription,
+      statusDisabled,
+      statusIcon,
+      resourceStatus,
+      parentId,
+      hasRole,
+      roles,
     } = this.props;
     const { stepModalOpen } = this.state;
 
@@ -88,9 +95,7 @@ class FinancialDocumentProgress extends React.Component<Props, State> {
         >
           {statusIcon}
           <Step.Content>
-            <Step.Title>
-              {formatStatus(status)}
-            </Step.Title>
+            <Step.Title>{formatStatus(status)}</Step.Title>
             <Step.Description style={{ maxWidth: '20ch', wordWrap: 'break-word' }}>
               {statusDescription}
             </Step.Description>

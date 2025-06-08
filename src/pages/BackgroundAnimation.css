@@ -1,14 +1,15 @@
-html, body {
+html,
+body {
   width: 100%;
   height: 100%;
 }
 
 .bg {
   animation: slide 7s ease-in-out infinite alternate;
-  background-image: linear-gradient(-60deg,#023ed6 50%, #09f 50%);
+  background-image: linear-gradient(-60deg, #023ed6 50%, #09f 50%);
   bottom: 0;
   left: -50%;
-  opacity: .5;
+  opacity: 0.5;
   position: fixed;
   right: -50%;
   top: 0;

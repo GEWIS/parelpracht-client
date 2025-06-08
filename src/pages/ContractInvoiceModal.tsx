@@ -1,24 +1,24 @@
-import * as React from 'react';
-import {
-  Button, Dropdown, Icon, Modal,
-} from 'semantic-ui-react';
+import { Component } from 'react';
+import { Button, Dropdown, Icon, Modal } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import { withTranslation, WithTranslation } from 'react-i18next';
 import {
-  Body as SBody, Client, Contract, InvoiceCreateParams, InvoiceStatus, InvoiceSummary,
+  Body as SBody,
+  Client,
+  Contract,
+  InvoiceCreateParams,
+  InvoiceStatus,
+  InvoiceSummary,
 } from '../clients/server.generated';
 import { RootState } from '../stores/store';
 import { SummaryCollections } from '../stores/summaries/summaries';
 import { getSummaryCollection } from '../stores/summaries/selectors';
 import { createSingle, fetchSingle } from '../stores/single/actionCreators';
 import { SingleEntities } from '../stores/single/single';
-import { withRouter } from '../WithRouter';
+import { WithRouter, withRouter } from '../WithRouter';
 
-interface SelfProps extends WithTranslation {
-}
-
-interface Props extends SelfProps {
+interface Props extends WithTranslation, WithRouter {
   contract: Contract;
   productInstanceIds: number[];
   clearSelection: () => void;
@@ -33,7 +33,7 @@ interface State {
   loading: boolean;
 }
 
-class ContractInvoiceModal extends React.Component<Props, State> {
+class ContractInvoiceModal extends Component<Props, State> {
   public constructor(props: Props) {
     super(props);
     this.state = {
@@ -44,22 +44,24 @@ class ContractInvoiceModal extends React.Component<Props, State> {
   }
 
   save = async () => {
-    const {
-      contract, productInstanceIds, createInvoice, fetchContract, clearSelection,
-    } = this.props;
+    const { contract, productInstanceIds, createInvoice, fetchContract, clearSelection } = this.props;
     this.setState({ loading: true });
 
     if (this.state.selectedInvoice === -1) {
-      await createInvoice(new InvoiceCreateParams({
-        title: contract.title,
-        companyId: contract.companyId,
-        productInstanceIds,
-      }));
+      createInvoice(
+        new InvoiceCreateParams({
+          title: contract.title,
+          companyId: contract.companyId,
+          productInstanceIds,
+        }),
+      );
     } else if (this.state.selectedInvoice !== undefined) {
       const client = new Client();
-      await Promise.all(this.props.productInstanceIds.map((x) => {
-        return client.addProductToInvoice(this.state.selectedInvoice!, new SBody({ productId: x }));
-      }));
+      await Promise.all(
+        this.props.productInstanceIds.map((x) => {
+          return client.addProductToInvoice(this.state.selectedInvoice!, new SBody({ productId: x }));
+        }),
+      );
       fetchContract(contract.id);
     }
     clearSelection();
@@ -67,26 +69,30 @@ class ContractInvoiceModal extends React.Component<Props, State> {
   };
 
   public render() {
-    const {
-      invoices, contract, t,
-    } = this.props;
+    const { invoices, contract, t } = this.props;
     const { loading, selectedInvoice } = this.state;
     const availableInvoices = invoices.filter((i) => {
-      return i.companyId === contract.companyId
-        && (i.status === InvoiceStatus.CREATED || i.status === InvoiceStatus.PROPOSED);
+      return (
+        i.companyId === contract.companyId &&
+        (i.status === InvoiceStatus.CREATED || i.status === InvoiceStatus.PROPOSED)
+      );
     });
-    const dropdownOptions = [{ key: -1, text: t('pages.contract.products.createNewInvoice'), value: -1 }, ...availableInvoices.map((x) => ({
-      key: x.id,
-      description: `F${x.id.toString()}`,
-      text: x.title,
-      value: x.id,
-    }))];
+    const dropdownOptions = [
+      { key: -1, text: t('pages.contract.products.createNewInvoice'), value: -1 },
+      ...availableInvoices.map((x) => ({
+        key: x.id,
+        description: `F${x.id.toString()}`,
+        text: x.title,
+        value: x.id,
+      })),
+    ];
 
     dropdownOptions.push();
 
-    const header = this.props.productInstanceIds.length === 1
-      ? t('pages.contract.products.addSingleToInvoice')
-      : t('pages.contract.products.addToInvoice', { amount: this.props.productInstanceIds.length });
+    const header =
+      this.props.productInstanceIds.length === 1
+        ? t('pages.contract.products.addSingleToInvoice')
+        : t('pages.contract.products.addToInvoice', { amount: this.props.productInstanceIds.length });
 
     const dropdown = (
       <Dropdown
@@ -95,7 +101,7 @@ class ContractInvoiceModal extends React.Component<Props, State> {
         selection
         options={dropdownOptions}
         value={selectedInvoice}
-        onChange={(e, data) => this.setState({ selectedInvoice: data.value as any })}
+        onChange={(_, data) => this.setState({ selectedInvoice: Number(data.value) })}
       />
     );
 
@@ -115,8 +121,12 @@ class ContractInvoiceModal extends React.Component<Props, State> {
 
     return (
       <Modal
-        onClose={() => { this.setState({ open: false }); }}
-        onOpen={() => { this.setState({ open: true }); }}
+        onClose={() => {
+          this.setState({ open: false });
+        }}
+        onOpen={() => {
+          this.setState({ open: true });
+        }}
         closeIcon
         open={this.state.open}
         dimmer="blurring"
@@ -130,7 +140,9 @@ class ContractInvoiceModal extends React.Component<Props, State> {
             labelPosition="left"
             color="green"
             floated="right"
-            onClick={this.save}
+            onClick={() => {
+              this.save().catch(console.error);
+            }}
             loading={loading}
           >
             <Icon name="save" />
@@ -139,14 +151,14 @@ class ContractInvoiceModal extends React.Component<Props, State> {
           <Button
             icon
             floated="right"
-            onClick={() => { this.setState({ open: false }); }}
+            onClick={() => {
+              this.setState({ open: false });
+            }}
           >
             {t('buttons.cancel')}
           </Button>
         </Modal.Header>
-        <Modal.Content attached="bottom">
-          {dropdown}
-        </Modal.Content>
+        <Modal.Content attached="bottom">{dropdown}</Modal.Content>
       </Modal>
     );
   }
@@ -159,13 +171,8 @@ const mapStateToProps = (state: RootState) => {
 };
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
-  createInvoice: (invoice: InvoiceCreateParams) => dispatch(
-    createSingle(SingleEntities.Invoice, invoice),
-  ),
-  fetchContract: (id: number) => dispatch(
-    fetchSingle(SingleEntities.Contract, id),
-  ),
+  createInvoice: (invoice: InvoiceCreateParams) => dispatch(createSingle(SingleEntities.Invoice, invoice)),
+  fetchContract: (id: number) => dispatch(fetchSingle(SingleEntities.Contract, id)),
 });
 
-export default withTranslation()(withRouter(connect(mapStateToProps,
-  mapDispatchToProps)(ContractInvoiceModal)));
+export default withTranslation()(withRouter(connect(mapStateToProps, mapDispatchToProps)(ContractInvoiceModal)));

@@ -1,14 +1,12 @@
-import * as React from 'react';
+import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import {
-  Button, Container, Grid, Header, Icon, Segment,
-} from 'semantic-ui-react';
+import { Button, Container, Grid, Header, Icon, Segment } from 'semantic-ui-react';
+import { useNavigate } from 'react-router-dom';
 import { Roles } from '../clients/server.generated';
 import AuthorizationComponent from '../components/AuthorizationComponent';
 import ProductCategoriesTable from '../components/entities/productcategories/ProductCategoriesTable';
 import ProductCategoriesTableControls from '../components/entities/productcategories/ProductCategoriesTableControls';
 import { useTitle } from '../components/TitleContext';
-import { useNavigate } from 'react-router-dom';
 import { withRouter } from '../WithRouter';
 
 function ProductCategoriesPage() {
@@ -16,9 +14,9 @@ function ProductCategoriesPage() {
   const { setTitle } = useTitle();
   const history = useNavigate();
 
-  React.useEffect(() => {
+  useEffect(() => {
     setTitle(t('entity.categories'));
-  }, []);
+  }, [setTitle, t]);
 
   return (
     <AuthorizationComponent roles={[Roles.GENERAL, Roles.ADMIN]} notFound>
@@ -45,7 +43,6 @@ function ProductCategoriesPage() {
           </Grid>
 
           <ProductCategoriesTableControls />
-
         </Container>
       </Segment>
       <Container style={{ marginTop: '20px' }}>

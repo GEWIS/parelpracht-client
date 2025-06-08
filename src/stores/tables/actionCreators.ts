@@ -19,7 +19,11 @@ export function fetchTable<T extends Tables>(table: T): TableFetchAction<T> {
 }
 
 export function setTable<T extends Tables, R>(
-  table: T, data: R[], count: number, extra: object, lastSeen?: Date,
+  table: T,
+  data: R[],
+  count: number,
+  extra: object,
+  lastSeen?: Date,
 ): TableSetAction<T, R> {
   return {
     type: tableActionPattern(table, TableActionType.Set),
@@ -34,27 +38,23 @@ export function clearTable<T extends Tables>(table: T): TableClearAction<T> {
   return { type: tableActionPattern(table, TableActionType.Clear) };
 }
 
-export function changeSortTable<T extends Tables>(
-  table: T, column: string,
-): TableChangeSortAction<T> {
+export function changeSortTable<T extends Tables>(table: T, column: string): TableChangeSortAction<T> {
   return { type: tableActionPattern(table, TableActionType.ChangeSort), column };
 }
 
 export function setSortTable<T extends Tables>(
-  table: T, column: string, direction: 'ASC' | 'DESC',
+  table: T,
+  column: string,
+  direction: 'ASC' | 'DESC',
 ): TableSetSortAction<T> {
   return { type: tableActionPattern(table, TableActionType.SetSort), column, direction };
 }
 
-export function setTakeTable<T extends Tables>(
-  table: T, take: number,
-): TableSetTakeAction<T> {
+export function setTakeTable<T extends Tables>(table: T, take: number): TableSetTakeAction<T> {
   return { type: tableActionPattern(table, TableActionType.SetTake), take };
 }
 
-export function searchTable<T extends Tables>(
-  table: T, search: string,
-): TableSearchAction<T> {
+export function searchTable<T extends Tables>(table: T, search: string): TableSearchAction<T> {
   return { type: tableActionPattern(table, TableActionType.Search), search };
 }
 
@@ -67,7 +67,8 @@ export function prevPageTable<T extends Tables>(table: T): TablePrevPageAction<T
 }
 
 export function setFilterTable<T extends Tables>(
-  table: T, filter: { column: string, values: any[] },
+  table: T,
+  filter: { column: string; values: any[] },
 ): TableSetFilterAction<T> {
   return { type: tableActionPattern(table, TableActionType.SetFilter), ...filter };
 }

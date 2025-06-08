@@ -1,11 +1,11 @@
 import { useTranslation } from 'react-i18next';
 import { Button, Checkbox, Dropdown, Form, Input } from 'semantic-ui-react';
-import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
-import { Gender } from '../../clients/server.generated';
+import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
-import { authSetup } from '../../stores/auth/actionCreators';
 import validator from 'validator';
+import { authSetup } from '../../stores/auth/actionCreators';
+import { Gender } from '../../clients/server.generated';
 import PasswordStrength from './PasswordStrength';
 
 interface Props {
@@ -14,9 +14,10 @@ interface Props {
     firstname: string,
     preposition: string,
     lastname: string,
-    gender: string,
+    gender: Gender,
     password: string,
-    rememberMe: boolean) => void;
+    rememberMe: boolean,
+  ) => void;
 }
 
 function SetupForm(props: Props) {
@@ -30,31 +31,31 @@ function SetupForm(props: Props) {
   const [rememberMe, changeRememberMe] = useState(false);
   const [passwordIsValid, setPasswordIsValid] = useState(false);
 
-  const inputRef = useRef<Input>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
   useEffect(() => {
     inputRef.current!.focus();
   }, []);
 
-  const formHasErrors = () =>{
-    return !validator.isEmail(email) || validator.isEmpty(firstName) || validator.isEmpty(lastName) || !passwordIsValid || gender == Gender.UNKNOWN;
+  const formHasErrors = () => {
+    return (
+      !validator.isEmail(email) ||
+      validator.isEmpty(firstName) ||
+      validator.isEmpty(lastName) ||
+      !passwordIsValid ||
+      gender == Gender.UNKNOWN
+    );
   };
 
   return (
     <Form
-      error={
-        formHasErrors()
-      }
+      error={formHasErrors()}
       onSubmit={() => {
         if (!formHasErrors()) {
           props.setup(email, firstName, preposition, lastName, gender, password, rememberMe);
         }
       }}
     >
-      <Form.Field
-        error={
-        !validator.isEmail(email)
-      }
-      >
+      <Form.Field error={!validator.isEmail(email)}>
         <Input
           value={email}
           placeholder={t('pages.login.email')}
@@ -64,9 +65,7 @@ function SetupForm(props: Props) {
           type="email"
         />
       </Form.Field>
-      <Form.Field
-        error={validator.isEmpty(firstName)}
-      >
+      <Form.Field error={validator.isEmpty(firstName)}>
         <Input
           placeholder={t('entities.user.props.firstName')}
           value={firstName}
@@ -81,9 +80,7 @@ function SetupForm(props: Props) {
           onChange={(e: ChangeEvent<HTMLInputElement>) => changePreposition(e.target.value)}
         />
       </Form.Field>
-      <Form.Field
-        error={validator.isEmpty(lastName)}
-      >
+      <Form.Field error={validator.isEmpty(lastName)}>
         <Input
           placeholder={t('entities.user.props.lastName')}
           value={lastName}
@@ -91,9 +88,7 @@ function SetupForm(props: Props) {
           required={true}
         />
       </Form.Field>
-      <Form.Field
-        error={gender === Gender.UNKNOWN}
-      >
+      <Form.Field error={gender === Gender.UNKNOWN}>
         <Dropdown
           placeholder={t('entities.user.props.gender.header')}
           fluid
@@ -109,7 +104,7 @@ function SetupForm(props: Props) {
         />
       </Form.Field>
       <Form.Field
-        name='password-field'
+        name="password-field"
         id="form-input-password"
         control={Input}
         value={password}
@@ -117,9 +112,7 @@ function SetupForm(props: Props) {
         placeholder={t('pages.login.password')}
         onChange={(e: ChangeEvent<HTMLInputElement>) => changePassword(e.target.value)}
         required={true}
-        error={
-          !passwordIsValid
-        }
+        error={!passwordIsValid}
       />
       <PasswordStrength password={password} setPasswordIsValid={setPasswordIsValid} />
       <Form.Field>
@@ -131,16 +124,9 @@ function SetupForm(props: Props) {
           label={t('pages.login.rememberMe')}
         />
       </Form.Field>
-      <Button
-        fluid
-        primary
-        size="large"
-        type="submit"
-        disabled={formHasErrors()}
-      >
+      <Button fluid primary size="large" type="submit" disabled={formHasErrors()}>
         {t('pages.setup')}
       </Button>
-
     </Form>
   );
 }
@@ -154,9 +140,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
     gender: Gender,
     password: string,
     rememberMe: boolean,
-  )=> dispatch(
-    authSetup(email, firstName, preposition, lastName, gender, password, rememberMe),
-  ),
+  ) => dispatch(authSetup(email, firstName, preposition, lastName, gender, password, rememberMe)),
 });
 
 export default connect(null, mapDispatchToProps)(SetupForm);

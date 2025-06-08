@@ -1,18 +1,17 @@
-import React from 'react';
 import { Table } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import { Contract, ContractStatus } from '../../../clients/server.generated';
 import CompanyLink from '../company/CompanyLink';
-import ContractLink from './ContractLink';
 import { formatLastUpdate } from '../../../helpers/timestamp';
 import { RootState } from '../../../stores/store';
 import { getContractStatus } from '../../../stores/contract/selectors';
 import { formatStatus } from '../../../helpers/activity';
+import ContractLink from './ContractLink';
 
 interface Props {
-  contract: Contract,
+  contract: Contract;
 
-  status: ContractStatus,
+  status: ContractStatus;
 }
 
 function ContractCompactRow(props: Props) {
@@ -25,12 +24,8 @@ function ContractCompactRow(props: Props) {
       <Table.Cell>
         <CompanyLink id={contract.companyId} />
       </Table.Cell>
-      <Table.Cell>
-        {formatStatus(status)}
-      </Table.Cell>
-      <Table.Cell>
-        {formatLastUpdate(contract.updatedAt)}
-      </Table.Cell>
+      <Table.Cell>{formatStatus(status)}</Table.Cell>
+      <Table.Cell>{formatLastUpdate(contract.updatedAt)}</Table.Cell>
     </Table.Row>
   );
 }

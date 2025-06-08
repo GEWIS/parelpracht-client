@@ -1,10 +1,8 @@
-import React, { ReactNode } from 'react';
-import {
-  Header, Icon, Loader, Placeholder, Segment, SemanticICONS,
-} from 'semantic-ui-react';
+import { ReactNode } from 'react';
+import { Header, Icon, Loader, Placeholder, Segment, SemanticICONS } from 'semantic-ui-react';
+import { useTranslation } from 'react-i18next';
 import { SingleEntities } from '../../stores/single/single';
 import './EntitySummary.scss';
-import { useTranslation } from 'react-i18next';
 
 interface Props {
   loading: boolean;
@@ -17,21 +15,23 @@ interface Props {
   children?: ReactNode;
 }
 
-export function EntitySummary(props: Props) {
+export function EntitySummary({ loading, icon, entity, title = '', rightHeader, children }: Props) {
   const { t } = useTranslation();
 
-  if (props.loading) {
+  if (loading) {
     return (
       <>
         <Header as="h1" attached="top" style={{ backgroundColor: 'rgba(238, 238, 238, 0.98)' }}>
-          <Icon name={props.icon} />
+          <Icon name={icon} />
           <Header.Content>
-            <Header.Subheader>{t(`entity.${props.entity.toLowerCase()}`)}</Header.Subheader>
+            <Header.Subheader>{t(`entity.${entity.toLowerCase()}`)}</Header.Subheader>
             <Loader active inline />
           </Header.Content>
         </Header>
         <Segment attached="bottom" style={{ backgroundColor: 'rgba(255, 255, 255, 0.95)' }}>
-          <Placeholder><Placeholder.Line length="long" /></Placeholder>
+          <Placeholder>
+            <Placeholder.Line length="long" />
+          </Placeholder>
         </Segment>
       </>
     );
@@ -42,20 +42,15 @@ export function EntitySummary(props: Props) {
       <Header as="h1" attached="top" style={{ backgroundColor: 'rgba(238, 238, 238, 0.98)' }}>
         <div className="header-container">
           <div className="icon">
-            <Icon name={props.icon} size="large" />
+            <Icon name={icon} size="large" />
           </div>
           <div className="name">
             <Header.Content style={{ paddingLeft: '1.25rem' }}>
-              <Header.Subheader>{t(`entity.${props.entity.toLowerCase()}`)}</Header.Subheader>
-              {props.title}
+              <Header.Subheader>{t(`entity.${entity.toLowerCase()}`)}</Header.Subheader>
+              {title}
             </Header.Content>
           </div>
-          { props.rightHeader ? (
-            <div className="logo">
-              {props.rightHeader}
-            </div>
-          ) : undefined }
-
+          {rightHeader ? <div className="logo">{rightHeader}</div> : undefined}
         </div>
         {/* <Grid> */}
         {/*  <Grid.Row columns="2"> */}
@@ -81,16 +76,8 @@ export function EntitySummary(props: Props) {
         {/* </Grid> */}
       </Header>
       <Segment attached="bottom" style={{ backgroundColor: 'rgba(255, 255, 255, 0.95)' }}>
-        <div className="summary-container">
-          {props.children}
-        </div>
+        <div className="summary-container">{children}</div>
       </Segment>
     </>
   );
 }
-
-EntitySummary.defaultProps = {
-  title: '',
-  rightHeader: undefined,
-  children: undefined,
-};

@@ -1,6 +1,4 @@
-import {
-  call, put, select, throttle,
-} from 'redux-saga/effects';
+import { call, put, select, throttle } from 'redux-saga/effects';
 import {
   ActivityParams,
   ApiException,
@@ -17,9 +15,7 @@ import {
   SortDirection,
 } from '../../clients/server.generated';
 import { takeEveryWithErrorHandling } from '../errorHandling';
-import {
-  addSummary, deleteSummary, setSummaries, updateSummary,
-} from '../summaries/actionCreators';
+import { addSummary, deleteSummary, setSummaries, updateSummary } from '../summaries/actionCreators';
 import { summariesActionPattern, SummariesActionType } from '../summaries/actions';
 import { SummaryCollections } from '../summaries/summaries';
 import { fetchTable, prevPageTable, setTable } from '../tables/actionCreators';
@@ -27,9 +23,7 @@ import { tableActionPattern, TableActionType } from '../tables/actions';
 import { getTable } from '../tables/selectors';
 import { Tables } from '../tables/tables';
 import { TableState } from '../tables/tableState';
-import {
-  clearSingle, errorSingle, notFoundSingle, setSingle,
-} from '../single/actionCreators';
+import { clearSingle, errorSingle, notFoundSingle, setSingle } from '../single/actionCreators';
 import {
   singleActionPattern,
   SingleActionType,
@@ -58,11 +52,7 @@ function* fetchCompanies() {
   const client = new Client();
 
   const state: TableState<Company> = yield select(getTable, Tables.Companies);
-  const {
-    sortColumn, sortDirection,
-    take, skip,
-    search, filters,
-  } = state;
+  const { sortColumn, sortDirection, take, skip, search, filters } = state;
 
   const { list, count } = yield call(
     [client, client.getAllCompanies],
@@ -92,11 +82,7 @@ function* fetchCompaniesExtensive() {
   const client = new Client();
 
   const state: TableState<ETCompany> = yield select(getTable, Tables.ETCompanies);
-  const {
-    sortColumn, sortDirection,
-    take, skip,
-    search, filters,
-  } = state;
+  const { sortColumn, sortDirection, take, skip, search, filters } = state;
 
   let { list, count, extra } = yield call(
     [client, client.getAllContractsExtensive],
@@ -143,9 +129,7 @@ function* fetchSingleCompany(action: SingleFetchAction<SingleEntities.Company>) 
   yield put(updateSummary(SummaryCollections.Companies, toSummary(company)));
 }
 
-function* errorFetchSingleCompany(
-  error: ApiException,
-) {
+function* errorFetchSingleCompany(error: ApiException) {
   if (error.status === 404) {
     yield put(notFoundSingle(SingleEntities.Company));
   } else {
@@ -153,9 +137,7 @@ function* errorFetchSingleCompany(
   }
 }
 
-function* saveSingleCompany(
-  action: SingleSaveAction<SingleEntities.Company, CompanyParams>,
-) {
+function* saveSingleCompany(action: SingleSaveAction<SingleEntities.Company, CompanyParams>) {
   const client = new Client();
   yield call([client, client.updateCompany], action.id, action.data);
   const company: Company = yield call([client, client.getCompany], action.id);
@@ -175,9 +157,7 @@ function* watchSaveSingleCompany() {
   );
 }
 
-function* createSingleCompany(
-  action: SingleCreateAction<SingleEntities.Company, CompanyParams>,
-) {
+function* createSingleCompany(action: SingleCreateAction<SingleEntities.Company, CompanyParams>) {
   const client = new Client();
   const company: Company = yield call([client, client.createCompany], action.data);
   yield put(setSingle(SingleEntities.Company, company));
@@ -212,13 +192,12 @@ function* errorDeleteSingleCompany() {
 function* watchDeleteSingleCompany() {
   yield takeEveryWithErrorHandling(
     singleActionPattern(SingleEntities.Company, SingleActionType.Delete),
-    deleteSingleCompany, { onErrorSaga: errorDeleteSingleCompany },
+    deleteSingleCompany,
+    { onErrorSaga: errorDeleteSingleCompany },
   );
 }
 
-function* saveSingleCompanyFile(
-  action: SingleSaveFileAction<SingleEntities.Company, Partial_FileParams_>,
-) {
+function* saveSingleCompanyFile(action: SingleSaveFileAction<SingleEntities.Company, Partial_FileParams_>) {
   const client = new Client();
   yield call([client, client.updateCompanyFile], action.id, action.fileId, action.data);
   const company: Company = yield call([client, client.getCompany], action.id);
@@ -232,7 +211,8 @@ function* errorSaveSingleCompanyFile() {
 function* watchSaveSingleCompanyFile() {
   yield takeEveryWithErrorHandling(
     singleActionPattern(SingleEntities.Company, SingleActionType.SaveFile),
-    saveSingleCompanyFile, { onErrorSaga: errorSaveSingleCompanyFile },
+    saveSingleCompanyFile,
+    { onErrorSaga: errorSaveSingleCompanyFile },
   );
 }
 
@@ -250,13 +230,12 @@ function* errorDeleteSingleCompanyFile() {
 function* watchDeleteSingleCompanyFile() {
   yield takeEveryWithErrorHandling(
     singleActionPattern(SingleEntities.Company, SingleActionType.DeleteFile),
-    deleteSingleCompanyFile, { onErrorSaga: errorDeleteSingleCompanyFile },
+    deleteSingleCompanyFile,
+    { onErrorSaga: errorDeleteSingleCompanyFile },
   );
 }
 
-function* createSingleCompanyComment(
-  action: SingleCreateCommentAction<SingleEntities.Company, ActivityParams>,
-) {
+function* createSingleCompanyComment(action: SingleCreateCommentAction<SingleEntities.Company, ActivityParams>) {
   const client = new Client();
   yield call([client, client.addCompanyComment], action.id, action.data);
   const company: Company = yield call([client, client.getCompany], action.id);
@@ -270,13 +249,12 @@ function* errorCreateSingleCompanyComment() {
 function* watchCreateSingleCompanyComment() {
   yield takeEveryWithErrorHandling(
     singleActionPattern(SingleEntities.Company, SingleActionType.CreateComment),
-    createSingleCompanyComment, { onErrorSaga: errorCreateSingleCompanyComment },
+    createSingleCompanyComment,
+    { onErrorSaga: errorCreateSingleCompanyComment },
   );
 }
 
-function* saveSingleCompanyActivity(
-  action: SingleSaveActivityAction<SingleEntities.Company, ActivityParams>,
-) {
+function* saveSingleCompanyActivity(action: SingleSaveActivityAction<SingleEntities.Company, ActivityParams>) {
   const client = new Client();
   yield call([client, client.updateCompanyActivity], action.id, action.activityId, action.data);
   const company: Company = yield call([client, client.getCompany], action.id);
@@ -290,13 +268,12 @@ function* errorSaveSingleCompanyActivity() {
 function* watchSaveSingleCompanyActivity() {
   yield takeEveryWithErrorHandling(
     singleActionPattern(SingleEntities.Company, SingleActionType.SaveActivity),
-    saveSingleCompanyActivity, { onErrorSaga: errorSaveSingleCompanyActivity },
+    saveSingleCompanyActivity,
+    { onErrorSaga: errorSaveSingleCompanyActivity },
   );
 }
 
-function* deleteSingleCompanyActivity(
-  action: SingleDeleteActivityAction<SingleEntities.Company>,
-) {
+function* deleteSingleCompanyActivity(action: SingleDeleteActivityAction<SingleEntities.Company>) {
   const client = new Client();
   yield call([client, client.deleteCompanyActivity], action.id, action.activityId);
   const company: Company = yield call([client, client.getCompany], action.id);
@@ -310,33 +287,23 @@ function* errorDeleteSingleCompanyActivity() {
 function* watchDeleteSingleCompanyActivity() {
   yield takeEveryWithErrorHandling(
     singleActionPattern(SingleEntities.Company, SingleActionType.DeleteActivity),
-    deleteSingleCompanyActivity, { onErrorSaga: errorDeleteSingleCompanyActivity },
+    deleteSingleCompanyActivity,
+    { onErrorSaga: errorDeleteSingleCompanyActivity },
   );
 }
 
 export default [
   function* watchFetchCompanies() {
-    yield throttle(
-      500,
-      tableActionPattern(Tables.Companies, TableActionType.Fetch),
-      fetchCompanies,
-    );
+    yield throttle(500, tableActionPattern(Tables.Companies, TableActionType.Fetch), fetchCompanies);
   },
   function* watchFetchCompanySummaries() {
     yield takeEveryWithErrorHandling(
-      summariesActionPattern(
-        SummaryCollections.Companies,
-        SummariesActionType.Fetch,
-      ),
+      summariesActionPattern(SummaryCollections.Companies, SummariesActionType.Fetch),
       fetchCompanySummaries,
     );
   },
   function* watchFetchContractsExtensive() {
-    yield throttle(
-      500,
-      tableActionPattern(Tables.ETCompanies, TableActionType.Fetch),
-      fetchCompaniesExtensive,
-    );
+    yield throttle(500, tableActionPattern(Tables.ETCompanies, TableActionType.Fetch), fetchCompaniesExtensive);
   },
   function* watchFetchSingleCompany() {
     yield takeEveryWithErrorHandling(

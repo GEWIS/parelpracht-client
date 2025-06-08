@@ -1,4 +1,3 @@
-import React from 'react';
 import { Modal } from 'semantic-ui-react';
 import { useTranslation } from 'react-i18next';
 
@@ -7,15 +6,15 @@ function Credits() {
 
   return (
     <Modal
-      trigger={(
+      trigger={
         <span style={{ cursor: 'pointer' }}>
-          {t('footer.creators1')}
-          {' '}
-          <span role="img" aria-label="love">🍑</span>
-          {' '}
+          {t('footer.creators1')}{' '}
+          <span role="img" aria-label="love">
+            🍑
+          </span>{' '}
           {t('footer.creators2')}
         </span>
-    )}
+      }
       closeIcon
     >
       <Modal.Header>{t('footer.credits.header')}</Modal.Header>

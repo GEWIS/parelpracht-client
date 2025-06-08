@@ -1,9 +1,7 @@
-import React, { ChangeEvent } from 'react';
+import { ChangeEvent, Component } from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
-import {
-  Form, Input,
-} from 'semantic-ui-react';
+import { Form, Input } from 'semantic-ui-react';
 import validator from 'validator';
 import { WithTranslation, withTranslation } from 'react-i18next';
 import { CategoryParams, ProductCategory, Roles } from '../../../clients/server.generated';
@@ -34,7 +32,7 @@ interface State {
   // products: [];
 }
 
-class ProductCategoryProps extends React.Component<Props, State> {
+class ProductCategoryProps extends Component<Props, State> {
   static defaultProps = {
     create: undefined,
     onCancel: undefined,
@@ -50,9 +48,7 @@ class ProductCategoryProps extends React.Component<Props, State> {
   }
 
   componentDidUpdate(prevProps: Props) {
-    if (prevProps.status === ResourceStatus.SAVING
-      && this.props.status === ResourceStatus.FETCHED) {
-      // eslint-disable-next-line react/no-did-update-set-state
+    if (prevProps.status === ResourceStatus.SAVING && this.props.status === ResourceStatus.FETCHED) {
       this.setState({ editing: false });
     }
   }
@@ -151,12 +147,12 @@ class ProductCategoryProps extends React.Component<Props, State> {
               control={Input}
               label={t('entities.category.props.name')}
               value={name}
-              onChange={(e: ChangeEvent<HTMLInputElement>) => this.setState({
-                name: e.target.value,
-              })}
-              error={
-                validator.isEmpty(name)
+              onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                this.setState({
+                  name: e.target.value,
+                })
               }
+              error={validator.isEmpty(name)}
             />
           </Form.Group>
         </Form>
@@ -172,17 +168,10 @@ const mapStateToProps = (state: RootState) => {
 };
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
-  saveCategory: (id: number, category: CategoryParams) => dispatch(
-    saveSingle(SingleEntities.ProductCategory, id, category),
-  ),
-  createCategory: (category: CategoryParams) => dispatch(
-    createSingle(SingleEntities.ProductCategory, category),
-  ),
-  deleteCategory: (id: number) => dispatch(
-    deleteSingle(SingleEntities.ProductCategory, id),
-  ),
+  saveCategory: (id: number, category: CategoryParams) =>
+    dispatch(saveSingle(SingleEntities.ProductCategory, id, category)),
+  createCategory: (category: CategoryParams) => dispatch(createSingle(SingleEntities.ProductCategory, category)),
+  deleteCategory: (id: number) => dispatch(deleteSingle(SingleEntities.ProductCategory, id)),
 });
 
-export default withTranslation()(
-  withRouter(connect(mapStateToProps, mapDispatchToProps)(ProductCategoryProps)),
-);
+export default withTranslation()(withRouter(connect(mapStateToProps, mapDispatchToProps)(ProductCategoryProps)));

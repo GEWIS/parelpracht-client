@@ -1,9 +1,6 @@
-import * as React from 'react';
+import { Component } from 'react';
 import { NavLink } from 'react-router-dom';
-import {
-  Breadcrumb,
-  Container, Grid, Loader, Segment, Tab,
-} from 'semantic-ui-react';
+import { Breadcrumb, Container, Grid, Loader, Segment, Tab, TabPane } from 'semantic-ui-react';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import { withTranslation, WithTranslation } from 'react-i18next';
@@ -23,9 +20,9 @@ import FilesList from '../components/files/FilesList';
 import GenerateInvoiceModal from '../components/files/GenerateInvoiceModal';
 import AuthorizationComponent from '../components/AuthorizationComponent';
 import { authedUserHasRole } from '../stores/auth/selectors';
-import NotFound from './NotFound';
 import { TitleContext } from '../components/TitleContext';
 import { WithRouter, withRouter } from '../WithRouter';
+import NotFound from './NotFound';
 
 interface Props extends WithTranslation, WithRouter {
   invoice: Invoice | undefined;
@@ -40,7 +37,7 @@ interface State {
   paneIndex: number;
 }
 
-class SingleInvoicePage extends React.Component<Props, State> {
+class SingleInvoicePage extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
     const { location, navigate } = props.router;
@@ -70,7 +67,9 @@ class SingleInvoicePage extends React.Component<Props, State> {
     const { params } = this.props.router;
 
     this.props.clearInvoice();
-    this.props.fetchInvoice(Number.parseInt(params.invoiceId, 10));
+    if (params.invoiceId) {
+      this.props.fetchInvoice(Number.parseInt(params.invoiceId, 10));
+    }
   }
 
   componentDidUpdate() {
@@ -83,58 +82,53 @@ class SingleInvoicePage extends React.Component<Props, State> {
   }
 
   getPanes = () => {
-    const {
-      invoice, fetchInvoice, status, hasRole, t,
-    } = this.props;
+    const { invoice, fetchInvoice, status, hasRole, t } = this.props;
 
     const panes = [
       {
         menuItem: t('entity.products'),
-        render: invoice ? () => (
-          <Tab.Pane>
-            <InvoiceProductList
-              invoice={invoice}
-              fetchInvoice={fetchInvoice}
-            />
-          </Tab.Pane>
-        ) : () => <Tab.Pane />,
+        render: invoice
+          ? () => (
+              <TabPane>
+                <InvoiceProductList invoice={invoice} fetchInvoice={fetchInvoice} />
+              </TabPane>
+            )
+          : () => <TabPane />,
       },
     ];
 
-    if (hasRole(Roles.GENERAL)
-      || hasRole(Roles.ADMIN) || hasRole(Roles.AUDIT) || hasRole(Roles.FINANCIAL)) {
+    if (hasRole(Roles.GENERAL) || hasRole(Roles.ADMIN) || hasRole(Roles.AUDIT) || hasRole(Roles.FINANCIAL)) {
       panes.push({
         menuItem: t('entity.files'),
-        render: invoice ? () => (
-          <Tab.Pane>
-            <FilesList
-              files={invoice.files}
-              entityId={invoice.id}
-              entity={SingleEntities.Invoice}
-              fetchEntity={fetchInvoice}
-              generateModal={(
-                <GenerateInvoiceModal
-                  invoice={invoice}
-                  fetchInvoice={fetchInvoice}
+        render: invoice
+          ? () => (
+              <TabPane>
+                <FilesList
+                  files={invoice.files}
+                  entityId={invoice.id}
+                  entity={SingleEntities.Invoice}
+                  fetchEntity={fetchInvoice}
+                  generateModal={<GenerateInvoiceModal invoice={invoice} fetchInvoice={fetchInvoice} />}
+                  status={status}
                 />
-              )}
-              status={status}
-            />
-          </Tab.Pane>
-        ) : () => <Tab.Pane />,
+              </TabPane>
+            )
+          : () => <TabPane />,
       });
       panes.push({
         menuItem: t('entity.activities'),
-        render: invoice ? () => (
-          <Tab.Pane>
-            <ActivitiesList
-              activities={invoice.activities as GeneralActivity[]}
-              componentId={invoice.id}
-              componentType={SingleEntities.Invoice}
-              resourceStatus={status}
-            />
-          </Tab.Pane>
-        ) : () => <Tab.Pane />,
+        render: invoice
+          ? () => (
+              <TabPane>
+                <ActivitiesList
+                  activities={invoice.activities as GeneralActivity[]}
+                  componentId={invoice.id}
+                  componentType={SingleEntities.Invoice}
+                  resourceStatus={status}
+                />
+              </TabPane>
+            )
+          : () => <TabPane />,
       });
     }
 
@@ -161,10 +155,7 @@ class SingleInvoicePage extends React.Component<Props, State> {
     const panes = this.getPanes();
 
     return (
-      <AuthorizationComponent
-        roles={[Roles.GENERAL, Roles.FINANCIAL, Roles.AUDIT, Roles.ADMIN]}
-        notFound
-      >
+      <AuthorizationComponent roles={[Roles.GENERAL, Roles.FINANCIAL, Roles.AUDIT, Roles.ADMIN]} notFound>
         <Segment style={{ backgroundColor: 'rgba(255, 255, 255, 0.95)' }} vertical basic>
           <Container>
             <Breadcrumb
@@ -196,7 +187,7 @@ class SingleInvoicePage extends React.Component<Props, State> {
                 <Tab
                   panes={panes}
                   menu={{ pointing: true, inverted: true }}
-                  onTabChange={(e, data) => {
+                  onTabChange={(_, data) => {
                     this.setState({ paneIndex: data.activeIndex! as number });
                     navigate(`#${data.panes![data.activeIndex! as number].menuItem.toLowerCase()}`, { replace: true });
                   }}
@@ -205,9 +196,7 @@ class SingleInvoicePage extends React.Component<Props, State> {
               </Grid.Column>
               <Grid.Column width={6}>
                 <Segment secondary style={{ backgroundColor: 'rgba(243, 244, 245, 0.98)' }}>
-                  <InvoiceProps
-                    invoice={invoice}
-                  />
+                  <InvoiceProps invoice={invoice} />
                 </Segment>
               </Grid.Column>
             </Grid.Row>
@@ -233,5 +222,4 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
 
 SingleInvoicePage.contextType = TitleContext;
 
-export default withTranslation()(withRouter(connect(mapStateToProps,
-  mapDispatchToProps)(SingleInvoicePage)));
+export default withTranslation()(withRouter(connect(mapStateToProps, mapDispatchToProps)(SingleInvoicePage)));

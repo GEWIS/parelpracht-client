@@ -1,11 +1,8 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import { Dispatch } from 'redux';
-import {
-  Button,
-  Container, Header, Icon, Segment,
-} from 'semantic-ui-react';
+import { Button, Container, Header, Icon, Segment } from 'semantic-ui-react';
 import './BackgroundAnimation.css';
 import { useTranslation } from 'react-i18next';
 import AlertContainer from '../components/alerts/AlertContainer';
@@ -41,12 +38,8 @@ function ForgotPasswordPage(props: Props) {
         <Container>
           <CenterInPage>
             <Segment color="green" size="large">
-              <Header as="h1">
-                {t('pages.forgotPassword.header')}
-              </Header>
-              <p>
-                {t('pages.forgotPassword.successMessage')}
-              </p>
+              <Header as="h1">{t('pages.forgotPassword.header')}</Header>
+              <p>{t('pages.forgotPassword.successMessage')}</p>
               <Button as={NavLink} to="/login" style={{ marginTop: '1em' }} basic>
                 <Icon name="arrow left" />
                 Back to login
@@ -66,9 +59,7 @@ function ForgotPasswordPage(props: Props) {
       <Container>
         <CenterInPage>
           <Segment>
-            <Header as="h1">
-              {t('pages.forgotPassword.header')}
-            </Header>
+            <Header as="h1">{t('pages.forgotPassword.header')}</Header>
             <ForgotPasswordForm />
             <Button as={NavLink} to="/login" style={{ marginTop: '1em' }} basic>
               <Icon name="arrow left" />

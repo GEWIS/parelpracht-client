@@ -1,7 +1,5 @@
-import * as React from 'react';
-import {
-  Modal, Segment,
-} from 'semantic-ui-react';
+import { Component } from 'react';
+import { Modal, Segment } from 'semantic-ui-react';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import { withTranslation, WithTranslation } from 'react-i18next';
@@ -22,7 +20,7 @@ interface Props extends WithTranslation, WithRouter {
   clearUser: () => void;
 }
 
-class UserCreatePage extends React.Component<Props> {
+class UserCreatePage extends Component<Props> {
   componentDidMount() {
     const { clearUser, t } = this.props;
     clearUser();
@@ -30,8 +28,7 @@ class UserCreatePage extends React.Component<Props> {
   }
 
   componentDidUpdate(prevProps: Props) {
-    if (prevProps.status === ResourceStatus.SAVING
-      && this.props.status === ResourceStatus.FETCHED) {
+    if (prevProps.status === ResourceStatus.SAVING && this.props.status === ResourceStatus.FETCHED) {
       this.close();
     }
   }
@@ -53,24 +50,13 @@ class UserCreatePage extends React.Component<Props> {
       function: '',
       comment: '',
       roles: [],
-    } as any;
+    } as unknown as User;
 
     return (
-      <Modal
-        onClose={this.close}
-        open
-        dimmer="blurring"
-        closeOnDimmerClick={false}
-        size="tiny"
-      >
+      <Modal onClose={this.close} open dimmer="blurring" closeOnDimmerClick={false} size="tiny">
         <Segment>
           <AlertContainer />
-          <UserProps
-            user={user}
-            create
-            onCancel={this.close}
-            canEdit={[Roles.GENERAL]}
-          />
+          <UserProps user={user} create onCancel={this.close} canEdit={[Roles.GENERAL]} />
         </Segment>
       </Modal>
     );
@@ -90,5 +76,4 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
 
 UserCreatePage.contextType = TitleContext;
 
-export default withTranslation()(withRouter(connect(mapStateToProps,
-  mapDispatchToProps)(UserCreatePage)));
+export default withTranslation()(withRouter(connect(mapStateToProps, mapDispatchToProps)(UserCreatePage)));

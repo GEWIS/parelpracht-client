@@ -1,12 +1,14 @@
-import * as React from 'react';
-import {
-  Dimmer, Loader, Modal, Segment,
-} from 'semantic-ui-react';
+import { Component } from 'react';
+import { Dimmer, Loader, Modal, Segment } from 'semantic-ui-react';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import { withTranslation, WithTranslation } from 'react-i18next';
 import {
-  Contract, ProductInstance, ProductInstanceParams, ProductInstanceStatus, Roles,
+  Contract,
+  ProductInstance,
+  ProductInstanceParams,
+  ProductInstanceStatus,
+  Roles,
 } from '../clients/server.generated';
 import { fetchSingle } from '../stores/single/actionCreators';
 import { RootState } from '../stores/store';
@@ -42,7 +44,7 @@ interface Props extends WithTranslation, SelfProps {
   removeProductInstance: (contractId: number, id: number) => void;
 }
 
-class ContractProductInstanceModal extends React.Component<Props> {
+class ContractProductInstanceModal extends Component<Props> {
   static defaultProps = {
     create: undefined,
     contract: undefined,
@@ -59,12 +61,14 @@ class ContractProductInstanceModal extends React.Component<Props> {
 
   close = () => {
     const { params, navigate } = this.props.router;
+    if (!params.contractId) return;
     this.props.fetchContract(parseInt(params.contractId, 10));
     navigate(-1);
   };
 
-  saveProductInstance = async (productInstance: ProductInstanceParams) => {
+  saveProductInstance = (productInstance: ProductInstanceParams) => {
     const { params } = this.props.router;
+    if (!params.contractId || !params.productInstanceId) return;
     this.props.saveProductInstance(
       parseInt(params.contractId, 10),
       parseInt(params.productInstanceId, 10),
@@ -73,21 +77,17 @@ class ContractProductInstanceModal extends React.Component<Props> {
     this.close();
   };
 
-  createProductInstance = async (productInstance: ProductInstanceParams) => {
+  createProductInstance = (productInstance: ProductInstanceParams) => {
     const { params } = this.props.router;
-    this.props.createProductInstance(
-      parseInt(params.contractId, 10),
-      productInstance,
-    );
+    if (!params.contractId) return;
+    this.props.createProductInstance(parseInt(params.contractId, 10), productInstance);
     this.close();
   };
 
-  removeProductInstance = async () => {
+  removeProductInstance = () => {
     const { params } = this.props.router;
-    this.props.removeProductInstance(
-      parseInt(params.contractId, 10),
-      parseInt(params.productInstanceId, 10),
-    );
+    if (!params.contractId || !params.productInstanceId) return;
+    this.props.removeProductInstance(parseInt(params.contractId, 10), parseInt(params.productInstanceId, 10));
     this.close();
   };
 
@@ -95,7 +95,7 @@ class ContractProductInstanceModal extends React.Component<Props> {
     const { create, status, contract } = this.props;
     const { params } = this.props.router;
     let productInstance: ProductInstance | undefined;
-    if (create) {
+    if (create && params.contractId) {
       productInstance = {
         id: -1,
         contractId: parseInt(params.contractId, 10),
@@ -104,20 +104,14 @@ class ContractProductInstanceModal extends React.Component<Props> {
         discount: 0,
         details: '',
         status: ProductInstanceStatus.NOTDELIVERED,
-      } as any as ProductInstance;
-    } else {
+      } as unknown as ProductInstance;
+    } else if (params.contractId) {
       productInstance = this.props.productInstance;
     }
 
     if (productInstance === undefined) {
       return (
-        <Modal
-          onClose={this.close}
-          closeIcon
-          open
-          dimmer="blurring"
-          size="tiny"
-        >
+        <Modal onClose={this.close} closeIcon open dimmer="blurring" size="tiny">
           <Segment placeholder attached="bottom">
             <AlertContainer />
             <Dimmer active inverted>
@@ -155,13 +149,7 @@ class ContractProductInstanceModal extends React.Component<Props> {
     }
 
     return (
-      <Modal
-        onClose={this.close}
-        open
-        closeIcon
-        dimmer="blurring"
-        size="small"
-      >
+      <Modal onClose={this.close} open closeIcon dimmer="blurring" size="small">
         <div style={{ margin: '1em' }}>
           <AlertContainer />
           <ProductInstanceProps
@@ -185,8 +173,8 @@ const mapStateToProps = (state: RootState, props: SelfProps) => {
   const { params } = props.router;
   const prodInstance = !props.create
     ? getSingle<Contract>(state, SingleEntities.Contract).data?.products.find(
-      (p) => p.id === parseInt(params.productInstanceId, 10),
-    )
+        (p) => p.id === parseInt(params.productInstanceId || '', 10),
+      )
     : undefined;
   let prodName = '';
   if (prodInstance !== undefined) {
@@ -202,18 +190,15 @@ const mapStateToProps = (state: RootState, props: SelfProps) => {
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
   fetchContract: (id: number) => dispatch(fetchSingle(SingleEntities.Contract, id)),
-  saveProductInstance: (contractId: number, id: number, inst: ProductInstanceParams) => dispatch(
-    saveInstanceSingle(contractId, id, inst),
-  ),
-  createProductInstance: (contractId: number, inst: ProductInstanceParams) => dispatch(
-    createInstanceSingle(contractId, inst),
-  ),
-  removeProductInstance: (contractId: number, id: number) => dispatch(
-    deleteInstanceSingle(contractId, id),
-  ),
+  saveProductInstance: (contractId: number, id: number, inst: ProductInstanceParams) =>
+    dispatch(saveInstanceSingle(contractId, id, inst)),
+  createProductInstance: (contractId: number, inst: ProductInstanceParams) =>
+    dispatch(createInstanceSingle(contractId, inst)),
+  removeProductInstance: (contractId: number, id: number) => dispatch(deleteInstanceSingle(contractId, id)),
 });
 
 ContractProductInstanceModal.contextType = TitleContext;
 
-export default withTranslation()(withRouter(connect(mapStateToProps,
-  mapDispatchToProps)(ContractProductInstanceModal)));
+export default withTranslation()(
+  withRouter(connect(mapStateToProps, mapDispatchToProps)(ContractProductInstanceModal)),
+);

@@ -1,12 +1,11 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
 import { Segment, Table } from 'semantic-ui-react';
 import { WithTranslation, withTranslation } from 'react-i18next';
 import { Client, ExpiredInvoice } from '../../clients/server.generated';
 import DashboardInvoicesRow from './DashboardInvoicesRow';
 import './DashboardInvoices.scss';
 
-interface Props extends WithTranslation {
-}
+type Props = WithTranslation;
 
 interface State {
   invoices: ExpiredInvoice[];
@@ -22,14 +21,18 @@ class DashboardInvoices extends Component<Props, State> {
     };
   }
 
-  async componentDidMount() {
+  componentDidMount() {
     const client = new Client();
     this.setState({ loading: true });
-    const invoices = await client.getExpiredInvoices();
-    this.setState({
-      invoices,
-      loading: false,
-    });
+    client
+      .getExpiredInvoices()
+      .then((invoices) => {
+        this.setState({
+          invoices,
+          loading: false,
+        });
+      })
+      .catch(console.error);
   }
 
   render() {
@@ -41,7 +44,9 @@ class DashboardInvoices extends Component<Props, State> {
         <h3>{t('dashboard.expiredInvoices.header')}</h3>
         <Table striped compact fixed singleLine className="expired-invoices" unstackable>
           <Table.Body>
-            {invoices.map((i) => <DashboardInvoicesRow invoice={i} key={i.id} />)}
+            {invoices.map((i) => (
+              <DashboardInvoicesRow invoice={i} key={i.id} />
+            ))}
           </Table.Body>
         </Table>
       </Segment>

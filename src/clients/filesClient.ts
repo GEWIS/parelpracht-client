@@ -1,34 +1,35 @@
 import FileSaver from 'file-saver';
-import { CustomInvoiceGenSettings, GenerateContractParams, GenerateInvoiceParams } from './server.generated';
 import { SingleEntities } from '../stores/single/single';
+import { CustomInvoiceGenSettings, GenerateContractParams, GenerateInvoiceParams } from './server.generated';
 
 export class FilesClient {
   private readonly http: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> };
 
   private readonly baseUrl: string;
 
-  constructor(
-    baseUrl?: string,
-    http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> },
-  ) {
+  constructor(baseUrl?: string, http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> }) {
     this.http = http || <any>window;
     this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : '/api';
   }
 
   private getBaseUrl(entity: SingleEntities): string {
     switch (entity) {
-      case SingleEntities.Contract: return `${this.baseUrl}/contract/{id}`;
-      case SingleEntities.Invoice: return `${this.baseUrl}/invoice/{id}`;
-      case SingleEntities.Product: return `${this.baseUrl}/product/{id}`;
-      case SingleEntities.Company: return `${this.baseUrl}/company/{id}`;
-      case SingleEntities.User: return `${this.baseUrl}/user/{id}`;
-      default: throw new Error(`${entity} does not support files`);
+      case SingleEntities.Contract:
+        return `${this.baseUrl}/contract/{id}`;
+      case SingleEntities.Invoice:
+        return `${this.baseUrl}/invoice/{id}`;
+      case SingleEntities.Product:
+        return `${this.baseUrl}/product/{id}`;
+      case SingleEntities.Company:
+        return `${this.baseUrl}/company/{id}`;
+      case SingleEntities.User:
+        return `${this.baseUrl}/user/{id}`;
+      default:
+        throw new Error(`${entity} does not support files`);
     }
   }
 
-  getFile(
-    entityId: number, fileId: number, entity: SingleEntities,
-  ): Promise<any> {
+  getFile(entityId: number, fileId: number, entity: SingleEntities): Promise<any> {
     let url = `${this.getBaseUrl(entity)}/file/{fileId}`;
 
     if (entityId === undefined || entityId === null) throw new Error("The parameter 'id' must be defined.");
@@ -53,7 +54,9 @@ export class FilesClient {
     const { status } = response;
     const headers: any = {};
     if (response.headers && response.headers.forEach) {
-      response.headers.forEach((v: any, k: any) => { headers[k] = v; });
+      response.headers.forEach((v: any, k: any) => {
+        headers[k] = v;
+      });
     }
 
     let filename = '';
@@ -72,9 +75,7 @@ export class FilesClient {
     return false;
   }
 
-  async uploadFile(
-    entityId: number, file: FormData, entity: SingleEntities,
-  ): Promise<Boolean> {
+  async uploadFile(entityId: number, file: FormData, entity: SingleEntities): Promise<boolean> {
     let url = `${this.getBaseUrl(entity)}/file/upload`;
 
     if (entityId === undefined || entityId === null) throw new Error("The parameter 'id' must be defined.");
@@ -93,9 +94,7 @@ export class FilesClient {
     });
   }
 
-  async uploadLogo(
-    entityId: number, file: FormData, entity: SingleEntities,
-  ): Promise<Boolean> {
+  async uploadLogo(entityId: number, file: FormData, entity: SingleEntities): Promise<boolean> {
     let url = `${this.getBaseUrl(entity)}/logo`;
 
     if (entityId === undefined || entityId === null) throw new Error("The parameter 'id' must be defined.");
@@ -114,9 +113,7 @@ export class FilesClient {
     });
   }
 
-  async uploadBackground(
-    entityId: number, file: FormData, entity: SingleEntities,
-  ): Promise<Boolean> {
+  async uploadBackground(entityId: number, file: FormData, entity: SingleEntities): Promise<boolean> {
     let url = `${this.getBaseUrl(entity)}/background`;
 
     if (entityId === undefined || entityId === null) throw new Error("The parameter 'id' must be defined.");

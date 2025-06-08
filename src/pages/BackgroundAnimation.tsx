@@ -1,4 +1,3 @@
-import React from 'react';
 import './BackgroundAnimation.css';
 
 interface Props {
@@ -6,11 +5,7 @@ interface Props {
 }
 
 function BackgroundAnimation({ children }: Props) {
-  return (
-    <>
-      {children}
-    </>
-  );
+  return <>{children}</>;
 }
 
 export default BackgroundAnimation;

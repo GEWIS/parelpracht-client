@@ -1,25 +1,21 @@
-import React, { ChangeEvent } from 'react';
+import { ChangeEvent, Component } from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
-import {
-  Checkbox, Form, Input,
-} from 'semantic-ui-react';
+import { Checkbox, Form, Input } from 'semantic-ui-react';
 import validator from 'validator';
 import { withTranslation, WithTranslation } from 'react-i18next';
-import {
-  Company, CompanyParams, CompanyStatus, Roles,
-} from '../../../clients/server.generated';
+import { Company, CompanyParams, CompanyStatus, Roles } from '../../../clients/server.generated';
 import { createSingle, deleteSingle, saveSingle } from '../../../stores/single/actionCreators';
 import ResourceStatus from '../../../stores/resourceStatus';
 import { RootState } from '../../../stores/store';
 import PropsButtons from '../../PropsButtons';
 import { getSingle } from '../../../stores/single/selectors';
 import { SingleEntities } from '../../../stores/single/single';
-import CountrySelector from './CountrySelector';
 import AuthorizationComponent from '../../AuthorizationComponent';
 import TextArea from '../../TextArea';
 import { authedUserHasRole } from '../../../stores/auth/selectors';
 import { withRouter, WithRouter } from '../../../WithRouter';
+import CountrySelector from './CountrySelector';
 
 interface Props extends WithTranslation, WithRouter {
   create?: boolean;
@@ -53,7 +49,7 @@ interface State {
   invoiceAddressCountry: string;
 }
 
-class CompanyProps extends React.Component<Props, State> {
+class CompanyProps extends Component<Props, State> {
   static defaultProps = {
     create: undefined,
     onCancel: undefined,
@@ -69,8 +65,7 @@ class CompanyProps extends React.Component<Props, State> {
   }
 
   componentDidUpdate(prevProps: Props) {
-    if (prevProps.status === ResourceStatus.SAVING
-      && this.props.status === ResourceStatus.FETCHED) {
+    if (prevProps.status === ResourceStatus.SAVING && this.props.status === ResourceStatus.FETCHED) {
       this.setState({ editing: false });
     }
   }
@@ -143,20 +138,21 @@ class CompanyProps extends React.Component<Props, State> {
     if (this.props.create) {
       return undefined;
     }
-    return !(this.props.company.contacts.length > 0
-      || this.props.company.invoices.length > 0
-      || this.props.company.contacts.length > 0);
+    return !(
+      this.props.company.contacts.length > 0 ||
+      this.props.company.invoices.length > 0 ||
+      this.props.company.contacts.length > 0
+    );
   };
 
   propsHaveErrors = (): boolean => {
-    const {
-      name, phoneNumber, addressStreet, addressCity, addressPostalCode,
-    } = this.state;
-    return (validator.isEmpty(name)
-      || (!validator.isEmpty(phoneNumber!) && !validator.isMobilePhone(phoneNumber!))
-      || validator.isEmpty(addressStreet)
-      || validator.isEmpty(addressCity)
-      || !validator.isPostalCode(addressPostalCode, 'any')
+    const { name, phoneNumber, addressStreet, addressCity, addressPostalCode } = this.state;
+    return (
+      validator.isEmpty(name) ||
+      (!validator.isEmpty(phoneNumber!) && !validator.isMobilePhone(phoneNumber!)) ||
+      validator.isEmpty(addressStreet) ||
+      validator.isEmpty(addressCity) ||
+      !validator.isPostalCode(addressPostalCode, 'any')
     );
   };
 
@@ -209,12 +205,12 @@ class CompanyProps extends React.Component<Props, State> {
               control={Input}
               label={t('entities.company.props.name')}
               value={name}
-              onChange={(e: ChangeEvent<HTMLInputElement>) => this.setState({
-                name: e.target.value,
-              })}
-              error={
-                validator.isEmpty(name)
+              onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                this.setState({
+                  name: e.target.value,
+                })
               }
+              error={validator.isEmpty(name)}
             />
             <Form.Field
               disabled={!editing}
@@ -224,39 +220,38 @@ class CompanyProps extends React.Component<Props, State> {
               label={t('entities.company.props.number')}
               placeholder={t('entities.company.props.number')}
               value={phoneNumber}
-              onChange={(e: ChangeEvent<HTMLInputElement>) => this.setState({
-                phoneNumber: e.target.value,
-              })}
-              error={
-                !validator.isEmpty(phoneNumber!) && !validator.isMobilePhone(phoneNumber!)
+              onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                this.setState({
+                  phoneNumber: e.target.value,
+                })
               }
+              error={!validator.isEmpty(phoneNumber!) && !validator.isMobilePhone(phoneNumber!)}
             />
           </Form.Group>
           <Form.Group widths="equal">
             <Form.Field>
-              {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-              <label htmlFor="form-check-status">
-                {t('entities.product.props.status.header')}
-              </label>
+              <label htmlFor="form-check-status">{t('entities.product.props.status.header')}</label>
               <Checkbox
                 disabled={!editing}
                 toggle
                 id="form-check-status"
-                label={status === CompanyStatus.ACTIVE ? t('entities.product.props.status.active') : t('entities.product.props.status.inactive')}
+                label={
+                  status === CompanyStatus.ACTIVE
+                    ? t('entities.product.props.status.active')
+                    : t('entities.product.props.status.inactive')
+                }
                 checked={status === CompanyStatus.ACTIVE}
-                onChange={(_, data) => this.setState({
-                  status:
-                    data.checked ? CompanyStatus.ACTIVE : CompanyStatus.INACTIVE,
-                })}
+                onChange={(_, data) =>
+                  this.setState({
+                    status: data.checked ? CompanyStatus.ACTIVE : CompanyStatus.INACTIVE,
+                  })
+                }
               />
             </Form.Field>
           </Form.Group>
           <Form.Group widths="equal">
             <Form.Field disabled={!editing}>
-              {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-              <label htmlFor="form-input-description">
-                {t('entities.company.props.description')}
-              </label>
+              <label htmlFor="form-input-description">{t('entities.company.props.description')}</label>
               <TextArea
                 id="form-input-description"
                 value={comments}
@@ -265,21 +260,10 @@ class CompanyProps extends React.Component<Props, State> {
               />
             </Form.Field>
           </Form.Group>
-          <h2>
-            {t('entities.company.props.addressInformation')}
-          </h2>
+          <h2>{t('entities.company.props.addressInformation')}</h2>
           <Form.Group widths="equal">
-            <Form.Field
-              disabled={!editing}
-              required
-              error={
-                validator.isEmpty(addressStreet)
-              }
-            >
-              {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-              <label htmlFor="form-input-address-street">
-                {t('entities.company.props.street')}
-              </label>
+            <Form.Field disabled={!editing} required error={validator.isEmpty(addressStreet)}>
+              <label htmlFor="form-input-address-street">{t('entities.company.props.street')}</label>
               <Input
                 id="form-input-address-street"
                 value={addressStreet}
@@ -289,10 +273,7 @@ class CompanyProps extends React.Component<Props, State> {
               />
             </Form.Field>
             <Form.Field disabled={!editing} required error={validator.isEmpty(addressCity)}>
-              {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-              <label htmlFor="form-input-address-city">
-                {t('entities.company.props.city')}
-              </label>
+              <label htmlFor="form-input-address-city">{t('entities.company.props.city')}</label>
               <Input
                 id="form-input-address-city"
                 value={addressCity}
@@ -303,17 +284,8 @@ class CompanyProps extends React.Component<Props, State> {
             </Form.Field>
           </Form.Group>
           <Form.Group widths="equal">
-            <Form.Field
-              disabled={!editing}
-              required
-              error={
-                !validator.isPostalCode(addressPostalCode, 'any')
-              }
-            >
-              {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-              <label htmlFor="form-input-address-postal-code">
-                {t('entities.company.props.postalCode')}
-              </label>
+            <Form.Field disabled={!editing} required error={!validator.isPostalCode(addressPostalCode, 'any')}>
+              <label htmlFor="form-input-address-postal-code">{t('entities.company.props.postalCode')}</label>
               <Input
                 id="form-input-address-postal-code"
                 value={addressPostalCode}
@@ -325,21 +297,18 @@ class CompanyProps extends React.Component<Props, State> {
             <CountrySelector
               editing={editing}
               country={addressCountry}
-              updateValue={(e, data) => this.setState({
-                addressCountry: data.value as any,
-              })}
+              updateValue={(_, data) =>
+                this.setState({
+                  addressCountry: data.value?.toString() ?? '',
+                })
+              }
               id="form-input-address-country"
             />
           </Form.Group>
-          <h2>
-            {t('entities.company.props.invoiceAddress')}
-          </h2>
+          <h2>{t('entities.company.props.invoiceAddress')}</h2>
           <Form.Group widths="equal">
             <Form.Field disabled={!editing}>
-              {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-              <label htmlFor="form-input--invoice-address-street">
-                {t('entities.company.props.street')}
-              </label>
+              <label htmlFor="form-input--invoice-address-street">{t('entities.company.props.street')}</label>
               <Input
                 id="form-input-invoice-address-street"
                 value={invoiceAddressStreet}
@@ -349,10 +318,7 @@ class CompanyProps extends React.Component<Props, State> {
               />
             </Form.Field>
             <Form.Field disabled={!editing}>
-              {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-              <label htmlFor="form-input-invoice-address-city">
-                {t('entities.company.props.city')}
-              </label>
+              <label htmlFor="form-input-invoice-address-city">{t('entities.company.props.city')}</label>
               <Input
                 id="form-input-invoice-address-city"
                 value={invoiceAddressCity}
@@ -363,13 +329,8 @@ class CompanyProps extends React.Component<Props, State> {
             </Form.Field>
           </Form.Group>
           <Form.Group widths="equal">
-            <Form.Field
-              disabled={!editing}
-            >
-              {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-              <label htmlFor="form-input-invoice-address-postal-code">
-                {t('entities.company.props.postalCode')}
-              </label>
+            <Form.Field disabled={!editing}>
+              <label htmlFor="form-input-invoice-address-postal-code">{t('entities.company.props.postalCode')}</label>
               <Input
                 id="form-input-invoice-address-postal-code"
                 value={invoiceAddressPostalCode}
@@ -381,9 +342,11 @@ class CompanyProps extends React.Component<Props, State> {
             <CountrySelector
               editing={editing}
               country={invoiceAddressCountry}
-              updateValue={(e, data) => this.setState({
-                invoiceAddressCountry: data.value as any,
-              })}
+              updateValue={(_, data) =>
+                this.setState({
+                  invoiceAddressCountry: data.value?.toString() ?? '',
+                })
+              }
               id="form-input-invoice-address-country"
             />
           </Form.Group>
@@ -401,16 +364,9 @@ const mapStateToProps = (state: RootState) => {
 };
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
-  saveCompany: (id: number, company: CompanyParams) => dispatch(
-    saveSingle(SingleEntities.Company, id, company),
-  ),
-  createCompany: (company: CompanyParams) => dispatch(
-    createSingle(SingleEntities.Company, company),
-  ),
-  deleteCompany: (id: number) => dispatch(
-    deleteSingle(SingleEntities.Company, id),
-  ),
+  saveCompany: (id: number, company: CompanyParams) => dispatch(saveSingle(SingleEntities.Company, id, company)),
+  createCompany: (company: CompanyParams) => dispatch(createSingle(SingleEntities.Company, company)),
+  deleteCompany: (id: number) => dispatch(deleteSingle(SingleEntities.Company, id)),
 });
 
-export default withTranslation()(withRouter(connect(mapStateToProps, mapDispatchToProps)(CompanyProps)),
-);
+export default withTranslation()(withRouter(connect(mapStateToProps, mapDispatchToProps)(CompanyProps)));

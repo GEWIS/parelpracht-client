@@ -1,4 +1,3 @@
-import React from 'react';
 import ConfirmationDialogWithParameter from './tablefilters/ConfirmDialogWithParameter';
 
 interface Props {
@@ -13,16 +12,7 @@ interface Props {
 }
 
 const ConfirmationDialog = (props: Props) => {
-  return (
-    <ConfirmationDialogWithParameter
-      // eslint-disable-next-line react/jsx-props-no-spreading
-      {...props}
-    />
-  );
+  return <ConfirmationDialogWithParameter {...props} />;
 };
-
-ConfirmationDialog.defaultProps = ({
-  onCancel: undefined,
-});
 
 export default ConfirmationDialog;

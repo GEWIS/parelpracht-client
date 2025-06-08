@@ -1,23 +1,19 @@
-import React from 'react';
-import {
-  Button, Icon, Input, Popup, Table,
-} from 'semantic-ui-react';
+import { Component } from 'react';
+import { Button, Icon, Input, Popup, Table } from 'semantic-ui-react';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import { WithTranslation, withTranslation } from 'react-i18next';
-import {
-  Partial_FileParams_, Roles,
-} from '../../clients/server.generated';
+import { Partial_FileParams_, Roles } from '../../clients/server.generated';
 import { FilesClient } from '../../clients/filesClient';
 import { formatLastUpdate } from '../../helpers/timestamp';
 import { deleteFileSingle, saveSingleFile } from '../../stores/single/actionCreators';
 import { SingleEntities } from '../../stores/single/single';
-import { GeneralFile } from './GeneralFile';
 import ResourceStatus from '../../stores/resourceStatus';
 import AuthorizationComponent from '../AuthorizationComponent';
-import { withRouter } from '../../WithRouter';
+import { WithRouter, withRouter } from '../../WithRouter';
+import { GeneralFile } from './GeneralFile';
 
-interface Props extends WithTranslation {
+interface Props extends WithTranslation, WithRouter {
   file: GeneralFile;
   create: boolean;
   closeCreate?: (shouldUpdate: boolean) => void;
@@ -25,8 +21,7 @@ interface Props extends WithTranslation {
   entity: SingleEntities;
   entityId: number;
 
-  saveFile: (entityId: number, fileId: number,
-    file: Partial_FileParams_, entity: SingleEntities) => void;
+  saveFile: (entityId: number, fileId: number, file: Partial_FileParams_, entity: SingleEntities) => void;
   deleteFile: (entityId: number, fileId: number, entity: SingleEntities) => void;
   status: ResourceStatus;
 }
@@ -35,12 +30,12 @@ interface State {
   editing: boolean;
 
   fileName: string;
-  fileData: any;
+  fileData?: Blob;
 
   saveLoading: boolean;
 }
 
-class SingleFile extends React.Component<Props, State> {
+class SingleFile extends Component<Props, State> {
   static defaultProps = {
     closeCreate: undefined,
   };
@@ -53,16 +48,13 @@ class SingleFile extends React.Component<Props, State> {
       ...this.extractState(props),
     };
 
-    if (this.props.create
-      && (this.props.closeCreate === undefined || this.props.closeCreate === null)) {
+    if (this.props.create && (this.props.closeCreate === undefined || this.props.closeCreate === null)) {
       throw new Error('A "create" SingleFile should also have a closeCreate function');
     }
   }
 
   private async getFile() {
-    const {
-      entityId, file, entity,
-    } = this.props;
+    const { entityId, file, entity } = this.props;
 
     const client = new FilesClient();
     await client.getFile(entityId, file.id, entity);
@@ -71,7 +63,9 @@ class SingleFile extends React.Component<Props, State> {
   private toFormDataParams = (): FormData => {
     const formData = new FormData();
     formData.append('name', this.state.fileName);
-    formData.append('file', this.state.fileData);
+    if (this.state.fileData) {
+      formData.append('file', this.state.fileData);
+    }
     return formData;
   };
 
@@ -102,19 +96,18 @@ class SingleFile extends React.Component<Props, State> {
   };
 
   save = async () => {
+    if (this.state.fileData === undefined) return;
+
     this.setState({ saveLoading: true });
 
     if (this.props.create) {
       const client = new FilesClient();
-      const result = await client.uploadFile(
-        this.props.entityId, this.toFormDataParams(), this.props.entity,
-      );
+      const result = await client.uploadFile(this.props.entityId, this.toFormDataParams(), this.props.entity);
       if (result) {
         if (this.props.closeCreate) this.props.closeCreate(true);
       }
     } else {
-      this.props.saveFile(this.props.entityId, this.props.file.id,
-        this.toPOSTParams(), this.props.entity);
+      this.props.saveFile(this.props.entityId, this.props.file.id, this.toPOSTParams(), this.props.entity);
       this.setState({ editing: false });
     }
 
@@ -135,10 +128,18 @@ class SingleFile extends React.Component<Props, State> {
     if (fileExtension.match(/(jpg|jpeg|png|bmp|gif|ico|svg|eps|ps|psd|xcf|ai|cdr|tif|tiff)$/i)) {
       return 'file image';
     }
-    if (fileExtension.match(/(mp4|mkv|avi|mov|flv|f4v|f4p|f4a|f4b|wmv|webm|mpg|mp2|mpeg|mpe|mpv|ogg|ogv|vob|gifv|mng|m4p|m4v|qt|swf|3gp|3g2|h264|rm)$/i)) {
+    if (
+      fileExtension.match(
+        /(mp4|mkv|avi|mov|flv|f4v|f4p|f4a|f4b|wmv|webm|mpg|mp2|mpeg|mpe|mpv|ogg|ogv|vob|gifv|mng|m4p|m4v|qt|swf|3gp|3g2|h264|rm)$/i,
+      )
+    ) {
       return 'file video';
     }
-    if (fileExtension.match(/(aa|aac|aax|act|aif|aiff|alac|amr|ape|au|awb|dss|dvf|flac|gsm|iklax|ivs|m4a|m4b|m4p|mid|midi|mmf|mpc|msv|nmf|ogg|oga|mogg|org|opus|ra|rf64|sln|tta|voc|vox|wav|wma|wv|8svx|cda|wpl)$/i)) {
+    if (
+      fileExtension.match(
+        /(aa|aac|aax|act|aif|aiff|alac|amr|ape|au|awb|dss|dvf|flac|gsm|iklax|ivs|m4a|m4b|m4p|mid|midi|mmf|mpc|msv|nmf|ogg|oga|mogg|org|opus|ra|rf64|sln|tta|voc|vox|wav|wma|wv|8svx|cda|wpl)$/i,
+      )
+    ) {
       return 'file audio';
     }
     if (fileExtension.match(/(pdf)$/i)) {
@@ -190,9 +191,7 @@ class SingleFile extends React.Component<Props, State> {
   };
 
   public render() {
-    const {
-      file, create, status, t,
-    } = this.props;
+    const { file, create, status, t } = this.props;
     const { editing } = this.state;
 
     if (create) {
@@ -214,18 +213,16 @@ class SingleFile extends React.Component<Props, State> {
             />
           </Table.Cell>
           <Table.Cell>
-            <Button
-              icon="x"
-              negative
-              onClick={() => this.cancel()}
-              title={t('buttons.files.cancel')}
-            />
+            <Button icon="x" negative onClick={() => this.cancel()} title={t('buttons.files.cancel')} />
             <Button
               icon="save"
               positive
-              onClick={() => this.save()}
+              onClick={() => {
+                this.save().catch(console.error);
+              }}
               loading={this.state.saveLoading}
               title={t('buttons.files.save')}
+              disabled={this.state.fileData === undefined}
             />
           </Table.Cell>
         </Table.Row>
@@ -248,25 +245,25 @@ class SingleFile extends React.Component<Props, State> {
               onChange={(e) => this.setState({ fileName: e.target.value })}
             />
           </Table.Cell>
-          <Table.Cell>{formatLastUpdate(file!.updatedAt)}</Table.Cell>
+          <Table.Cell>{formatLastUpdate(file.updatedAt)}</Table.Cell>
           <Table.Cell>
-            <Button
-              icon="x"
-              negative
-              onClick={() => this.cancel()}
-              title={t('buttons.files.cancel')}
-            />
+            <Button icon="x" negative onClick={() => this.cancel()} title={t('buttons.files.cancel')} />
             <Button
               icon="save"
               positive
-              onClick={() => this.save()}
+              onClick={() => {
+                this.save().catch(console.error);
+              }}
               loading={this.state.saveLoading}
               title={t('buttons.files.save')}
+              disabled={this.state.fileData === undefined}
             />
             <Button
               icon="download"
               primary
-              onClick={() => this.getFile()}
+              onClick={() => {
+                this.getFile().catch(console.error);
+              }}
               title={t('buttons.files.download')}
             />
           </Table.Cell>
@@ -274,35 +271,37 @@ class SingleFile extends React.Component<Props, State> {
       );
     }
 
-    const fileHasLabel = file!.name !== undefined && file!.name !== '';
+    const fileHasLabel = file.name !== undefined && file.name !== '';
 
     return (
       <Table.Row>
         <Table.Cell>
-          <Icon name={this.getFileIcon(file!.downloadName)} />
-          <span title={file!.downloadName}>{file!.downloadName}</span>
+          <Icon name={this.getFileIcon(file.downloadName)} />
+          <span title={file.downloadName}>{file.downloadName}</span>
           {fileHasLabel ? (
             <>
               <br />
-              <span className="label" title={file!.name}>{file!.name}</span>
+              <span className="label" title={file.name}>
+                {file.name}
+              </span>
             </>
           ) : undefined}
         </Table.Cell>
-        <Table.Cell>{formatLastUpdate(file!.createdAt)}</Table.Cell>
+        <Table.Cell>{formatLastUpdate(file.createdAt)}</Table.Cell>
         <Table.Cell>
           <AuthorizationComponent roles={[Roles.GENERAL, Roles.ADMIN]} notFound={false}>
             <Popup
-              trigger={(
+              trigger={
                 <Button
                   icon="trash"
                   negative
                   loading={status === ResourceStatus.DELETING}
                   title={t('buttons.files.delete')}
                 />
-            )}
+              }
               on="click"
               hideOnScroll
-              content={(
+              content={
                 <Button
                   color="red"
                   onClick={() => this.remove()}
@@ -311,7 +310,7 @@ class SingleFile extends React.Component<Props, State> {
                 >
                   Delete file
                 </Button>
-            )}
+              }
               header="Are you sure you want to delete this file?"
             />
             <Button
@@ -324,7 +323,9 @@ class SingleFile extends React.Component<Props, State> {
           <Button
             icon="download"
             primary
-            onClick={() => this.getFile()}
+            onClick={() => {
+              this.getFile().catch(console.error);
+            }}
             title={t('buttons.files.download')}
           />
         </Table.Cell>
@@ -334,13 +335,10 @@ class SingleFile extends React.Component<Props, State> {
 }
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
-  saveFile: (entityId: number, fileId: number,
-    file: Partial_FileParams_, entity: SingleEntities) => dispatch(
-    saveSingleFile(entity, entityId, fileId, file),
-  ),
-  deleteFile: (entityId: number, fileId: number, entity: SingleEntities) => dispatch(
-    deleteFileSingle(entity, entityId, fileId),
-  ),
+  saveFile: (entityId: number, fileId: number, file: Partial_FileParams_, entity: SingleEntities) =>
+    dispatch(saveSingleFile(entity, entityId, fileId, file)),
+  deleteFile: (entityId: number, fileId: number, entity: SingleEntities) =>
+    dispatch(deleteFileSingle(entity, entityId, fileId)),
 });
 
 export default withTranslation()(withRouter(connect(null, mapDispatchToProps)(SingleFile)));

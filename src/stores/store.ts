@@ -4,6 +4,7 @@ import createSagaMiddleware from 'redux-saga';
 import { all, fork } from 'redux-saga/effects';
 import { createRouterReducer, createRouterMiddleware } from '@lagunovsky/redux-react-router';
 
+import { configureStore } from '@reduxjs/toolkit';
 import authReducer from './auth/reducer';
 import alertsReducer from './alerts/reducer';
 import generalReducer from './general/reducer';
@@ -24,8 +25,6 @@ import userSagas from './user/sagas';
 import { tablesReducer } from './tables/reducer';
 import { singleEntitiesReducer } from './single/reducer';
 import { summariesReducer } from './summaries/reducer';
-
-import { configureStore } from '@reduxjs/toolkit';
 
 // Import all watching sagas
 const watchSagas = [
@@ -53,10 +52,11 @@ const reducers = {
   single: singleEntitiesReducer,
 };
 
-const createRootReducer = (historyObject: BrowserHistory) => combineReducers({
-  ...reducers,
-  router: createRouterReducer(historyObject),
-});
+const createRootReducer = (historyObject: BrowserHistory) =>
+  combineReducers({
+    ...reducers,
+    router: createRouterReducer(historyObject),
+  });
 
 function* rootSaga() {
   // Fetch general information
@@ -77,7 +77,8 @@ const sagaMiddleware = createSagaMiddleware();
 
 const store = configureStore({
   reducer: createRootReducer(history),
-  middleware: (getDefaultMiddleware) => getDefaultMiddleware({ serializableCheck: false }).prepend(sagaMiddleware).prepend(routerMiddleware),
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({ serializableCheck: false }).prepend(sagaMiddleware).prepend(routerMiddleware),
   // devTools: process.env.NODE_ENV === 'development',
 });
 sagaMiddleware.run(rootSaga);

@@ -1,14 +1,14 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
 import { Segment } from 'semantic-ui-react';
 import { WithTranslation, withTranslation } from 'react-i18next';
 import { NavLink } from 'react-router-dom';
 import { Client, RecentContract } from '../../clients/server.generated';
 import DashboardContractsRow from './DashboardContractsRow';
 
-interface Props extends WithTranslation {}
+type Props = WithTranslation;
 
 interface State {
-  contracts: RecentContract[]
+  contracts: RecentContract[];
   loading: boolean;
 }
 
@@ -21,14 +21,18 @@ class DashboardContracts extends Component<Props, State> {
     };
   }
 
-  async componentDidMount() {
+  componentDidMount() {
     const client = new Client();
     this.setState({ loading: true });
-    const contracts = await client.getRecentContracts();
-    this.setState({
-      contracts,
-      loading: false,
-    });
+    client
+      .getRecentContracts()
+      .then((contracts) => {
+        this.setState({
+          contracts,
+          loading: false,
+        });
+      })
+      .catch(console.error);
   }
 
   render() {
@@ -37,11 +41,11 @@ class DashboardContracts extends Component<Props, State> {
     return (
       <Segment loading={loading}>
         <h3>{t('dashboard.recentContracts.header')}</h3>
-        {contracts.map((c) => <DashboardContractsRow contract={c} key={c.id} />)}
+        {contracts.map((c) => (
+          <DashboardContractsRow contract={c} key={c.id} />
+        ))}
         <div style={{ marginTop: '1em' }}>
-          <NavLink to="/contract/">
-            {t('dashboard.recentContracts.allContracts')}
-          </NavLink>
+          <NavLink to="/contract/">{t('dashboard.recentContracts.allContracts')}</NavLink>
         </div>
       </Segment>
     );

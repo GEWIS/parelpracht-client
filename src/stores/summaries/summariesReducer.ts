@@ -2,7 +2,8 @@ import ResourceStatus from '../resourceStatus';
 import {
   SummariesActions,
   SummariesActionType,
-  SummariesAddAction, SummariesDeleteAction,
+  SummariesAddAction,
+  SummariesDeleteAction,
   summariesExtractAction,
   SummariesSetAction,
   SummariesUpdateAction,
@@ -42,8 +43,10 @@ const createSummariesReducer = <S extends SummaryCollections, R extends SummaryB
         const a = action as SummariesSetAction<S, R>;
         const lookup: { [key: number]: R } = {};
         // To prevent state mutation during render
-        let aData = [...a.data];
-        aData.forEach((x) => { lookup[x.id] = x; });
+        const aData = [...a.data];
+        aData.forEach((x) => {
+          lookup[x.id] = x;
+        });
         return {
           ...state,
           options: aData,
@@ -56,8 +59,8 @@ const createSummariesReducer = <S extends SummaryCollections, R extends SummaryB
         const a = action as SummariesAddAction<S, R>;
         const { lookup, options } = state;
         // To prevent state mutation during render
-        let copyLookup = { ...lookup };
-        let copyOptions = [...options];
+        const copyLookup = { ...lookup };
+        const copyOptions = [...options];
 
         copyLookup[a.data.id] = a.data;
         copyOptions.push(a.data);
@@ -72,8 +75,8 @@ const createSummariesReducer = <S extends SummaryCollections, R extends SummaryB
         const a = action as SummariesUpdateAction<S, R>;
         const { lookup, options } = state;
         // To prevent state mutation during render
-        let copyLookup = { ...lookup };
-        let copyOptions = [...options];
+        const copyLookup = { ...lookup };
+        const copyOptions = [...options];
 
         const index = copyOptions.findIndex((x) => x.id === a.data.id);
         if (index >= 0) copyOptions[index] = a.data;
@@ -90,8 +93,8 @@ const createSummariesReducer = <S extends SummaryCollections, R extends SummaryB
         const a = action as SummariesDeleteAction<S>;
         const { lookup, options } = state;
         // To prevent state mutation during render
-        let copyLookup = { ...lookup };
-        let copyOptions = [...options];
+        const copyLookup = { ...lookup };
+        const copyOptions = [...options];
         const index = copyOptions.findIndex((x) => x.id === a.id);
         if (index >= 0) copyOptions.splice(index, 1);
         delete copyLookup[a.id];
@@ -102,7 +105,8 @@ const createSummariesReducer = <S extends SummaryCollections, R extends SummaryB
           lastUpdated: new Date(),
         };
       }
-      default: return state;
+      default:
+        return state;
     }
   };
 };

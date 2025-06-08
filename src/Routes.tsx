@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { Navigate as Redirect, useRoutes, Outlet } from 'react-router-dom';
 import { Container, Dimmer, Header, Loader } from 'semantic-ui-react';
 import { connect } from 'react-redux';
@@ -57,100 +56,108 @@ interface Props extends WithRouter {
 function Routes(props: Props) {
   const { t } = useTranslation();
 
-  let loginRoutes = [
+  const loginRoutes = [
     {
       path: '*',
-      element:
+      element: (
         <>
-          <Redirect to="/login"/>,
-        </>,
+          <Redirect to="/login" />,
+        </>
+      ),
     },
     {
       path: '/login',
-      element:
+      element: (
         <>
-          <LoginPage loginMethod={props.loginMethod} setupDone={props.setupDone}/>
-          <Footer/>
-        </>,
+          <LoginPage loginMethod={props.loginMethod} setupDone={props.setupDone} />
+          <Footer />
+        </>
+      ),
     },
     {
       path: '*',
-      element:
+      element: (
         <>
-          <LoginPage loginMethod={props.loginMethod} setupDone={props.setupDone}/>
-          <Footer/>
-        </>,
+          <LoginPage loginMethod={props.loginMethod} setupDone={props.setupDone} />
+          <Footer />
+        </>
+      ),
     },
     {
       path: '/forgot-password',
-      element:
+      element: (
         <>
-          <ForgotPasswordPage/>
-          <Footer/>
-        </>,
+          <ForgotPasswordPage />
+          <Footer />
+        </>
+      ),
     },
     {
       path: '/reset-password',
-      element:
+      element: (
         <>
-          <ResetPasswordPage/>
-          <Footer/>
-        </>,
+          <ResetPasswordPage />
+          <Footer />
+        </>
+      ),
     },
     {
       path: '/setup',
-      element:
+      element: (
         <>
-          <SetupPage setupDone={props.setupDone}/>
-          <Footer/>
-        </>,
+          <SetupPage setupDone={props.setupDone} />
+          <Footer />
+        </>
+      ),
     },
   ];
 
   if (props.loginMethod !== LoginMethods.Local) {
     loginRoutes.push({
       path: '/login/local',
-      element:
+      element: (
         <>
-          <LoginPage loginMethod={LoginMethods.Local} setupDone={props.setupDone}/>
-          <Footer/>
-        </>,
+          <LoginPage loginMethod={LoginMethods.Local} setupDone={props.setupDone} />
+          <Footer />
+        </>
+      ),
     });
   }
 
-  let mainRoutes = [
+  const mainRoutes = [
     {
       path: '/login',
-      element: <Redirect to="/"/>,
+      element: <Redirect to="/" />,
     },
     {
       path: '/login/local',
-      element: <Redirect to="/"/>,
+      element: <Redirect to="/" />,
     },
     {
       path: '/setup',
-      element: <Redirect to="/"/>,
+      element: <Redirect to="/" />,
     },
     {
       path: '/',
-      element: <DashboardPage/>,
+      element: <DashboardPage />,
     },
     {
       path: '/norights',
-      element: <NoRights/>,
+      element: <NoRights />,
     },
     {
       path: '',
-      element: <NotFound/>,
+      element: <NotFound />,
     },
     {
       path: '/settings',
-      element:
+      element: (
         <>
           <AuthorizationComponent roles={[Roles.ADMIN]} notFound>
-            <SettingsPage/>
+            <SettingsPage />
           </AuthorizationComponent>
-        </>,
+        </>
+      ),
     },
     /**
      * PRODUCT
@@ -160,31 +167,33 @@ function Routes(props: Props) {
       children: [
         {
           index: true,
-          element: <ProductsPage/>,
+          element: <ProductsPage />,
         },
         {
           path: 'new',
-          element:
+          element: (
             <>
               <AuthorizationComponent roles={[Roles.ADMIN, Roles.GENERAL]} notFound>
-                <ProductsPage/>
-                <ProductCreatePage/>
+                <ProductsPage />
+                <ProductCreatePage />
               </AuthorizationComponent>
-            </>,
+            </>
+          ),
         },
         {
           path: ':productId',
-          element: <SingleProductPage/>,
+          element: <SingleProductPage />,
         },
         {
           path: ':productId/contract/new',
-          element:
+          element: (
             <>
               <AuthorizationComponent roles={[Roles.ADMIN, Roles.GENERAL]} notFound>
-                <SingleProductPage/>
-                <ContractModal/>
+                <SingleProductPage />
+                <ContractModal />
               </AuthorizationComponent>
-            </>,
+            </>
+          ),
         },
       ],
     },
@@ -196,27 +205,29 @@ function Routes(props: Props) {
       children: [
         {
           index: true,
-          element: <ProductCategoriesPage/>,
+          element: <ProductCategoriesPage />,
         },
         {
           path: 'new',
-          element:
+          element: (
             <>
               <AuthorizationComponent roles={[Roles.ADMIN]} notFound>
-                <ProductCategoriesPage/>
-                <ProductCategoriesCreatePage/>
+                <ProductCategoriesPage />
+                <ProductCategoriesCreatePage />
               </AuthorizationComponent>
-            </>,
+            </>
+          ),
         },
         {
           path: ':categoryId',
-          element:
+          element: (
             <>
               <AuthorizationComponent roles={[Roles.ADMIN, Roles.GENERAL]} notFound>
-                <ProductCategoriesPage/>
-                <ProductCategoryModal/>
+                <ProductCategoriesPage />
+                <ProductCategoryModal />
               </AuthorizationComponent>
-            </>,
+            </>
+          ),
         },
       ],
     },
@@ -228,50 +239,53 @@ function Routes(props: Props) {
       children: [
         {
           index: true,
-          element: <CompaniesPage/>,
+          element: <CompaniesPage />,
         },
         {
           path: 'new',
           element: (
             <>
               <AuthorizationComponent roles={[Roles.ADMIN]} notFound>
-                <CompaniesPage/>
-                <CompaniesCreatePage/>
+                <CompaniesPage />
+                <CompaniesCreatePage />
               </AuthorizationComponent>
             </>
           ),
         },
         {
           path: ':companyId',
-          element: <SingleCompanyPage/>,
+          element: <SingleCompanyPage />,
         },
         {
           path: ':companyId/contact/new',
-          element:
+          element: (
             <>
               <AuthorizationComponent roles={[Roles.GENERAL, Roles.ADMIN]} notFound>
-                <SingleCompanyPage/>
-                <ContactModal create onCompanyPage/>
+                <SingleCompanyPage />
+                <ContactModal create onCompanyPage />
               </AuthorizationComponent>
-            </>,
+            </>
+          ),
         },
         {
           path: ':companyId/contact/:contactId',
-          element:
+          element: (
             <>
-              <SingleCompanyPage/>
-              <ContactModal onCompanyPage/>
-            </>,
+              <SingleCompanyPage />
+              <ContactModal onCompanyPage />
+            </>
+          ),
         },
         {
           path: ':companyId/contract/new',
-          element:
+          element: (
             <>
               <AuthorizationComponent roles={[Roles.GENERAL, Roles.ADMIN]} notFound>
-                <SingleCompanyPage/>
-                <ContractModal/>
+                <SingleCompanyPage />
+                <ContractModal />
               </AuthorizationComponent>
-            </>,
+            </>
+          ),
         },
       ],
     },
@@ -283,17 +297,18 @@ function Routes(props: Props) {
       children: [
         {
           index: true,
-          element: <ContactsPage/>,
+          element: <ContactsPage />,
         },
         {
           path: ':contactId',
-          element:
+          element: (
             <>
               <AuthorizationComponent roles={[Roles.GENERAL, Roles.ADMIN, Roles.AUDIT]} notFound>
-                <ContactsPage/>
-                <ContactModal onCompanyPage={false}/>
+                <ContactsPage />
+                <ContactModal onCompanyPage={false} />
               </AuthorizationComponent>
-            </>,
+            </>
+          ),
         },
       ],
     },
@@ -305,15 +320,15 @@ function Routes(props: Props) {
       children: [
         {
           index: true,
-          element: <InvoicesPage/>,
+          element: <InvoicesPage />,
         },
         {
           path: 'custom',
-          element: <CustomInvoicePage/>,
+          element: <CustomInvoicePage />,
         },
         {
           path: ':invoiceId',
-          element: <SingleInvoicePage/>,
+          element: <SingleInvoicePage />,
         },
       ],
     },
@@ -325,44 +340,44 @@ function Routes(props: Props) {
       children: [
         {
           index: true,
-          element: <ContractsPage/>,
+          element: <ContractsPage />,
         },
         {
           path: 'new',
-          element:
+          element: (
             <>
               <AuthorizationComponent roles={[Roles.GENERAL, Roles.ADMIN]} notFound>
-                <ContractsPage/>
-                <ContractModal/>
+                <ContractsPage />
+                <ContractModal />
               </AuthorizationComponent>
-            </>,
+            </>
+          ),
         },
         {
           path: ':contractId',
-          element: <SingleContractPage/>,
+          element: <SingleContractPage />,
         },
         {
           path: ':contractId/product/new',
-          element:
+          element: (
             <>
               <AuthorizationComponent roles={[Roles.GENERAL, Roles.ADMIN]} notFound>
-                <SingleContractPage/>
-                <ContractProductInstanceModal create/>
+                <SingleContractPage />
+                <ContractProductInstanceModal create />
               </AuthorizationComponent>
-            </>,
+            </>
+          ),
         },
         {
           path: ':contractId/product/:productInstanceId',
-          element:
+          element: (
             <>
-              <AuthorizationComponent
-                roles={[Roles.GENERAL, Roles.ADMIN, Roles.AUDIT]}
-                notFound={false}
-              >
-                <SingleContractPage/>
-                <ContractProductInstanceModal/>
+              <AuthorizationComponent roles={[Roles.GENERAL, Roles.ADMIN, Roles.AUDIT]} notFound={false}>
+                <SingleContractPage />
+                <ContractProductInstanceModal />
               </AuthorizationComponent>
-            </>,
+            </>
+          ),
         },
       ],
     },
@@ -371,14 +386,14 @@ function Routes(props: Props) {
      */
     {
       path: '/insights',
-      element: <Insights/>,
+      element: <Insights />,
     },
     /**
      * USERS
      */
     {
       path: 'user/:userId',
-      element: <SingleUserPage/>,
+      element: <SingleUserPage />,
     },
   ];
 
@@ -388,15 +403,16 @@ function Routes(props: Props) {
       children: [
         {
           index: true,
-          element: <UsersPage/>,
+          element: <UsersPage />,
         },
         {
           path: '/users/new',
-          element:
+          element: (
             <>
-              <UsersPage/>
-              <UserCreatePage/>
-            </>,
+              <UsersPage />
+              <UserCreatePage />
+            </>
+          ),
         },
       ],
     });
@@ -407,11 +423,7 @@ function Routes(props: Props) {
     <Container>
       <Dimmer active page inverted>
         <Header as="h2" icon>
-          <Loader
-            inline
-            content={(<ParelPrachtFullLogo/>)}
-            size="large"
-          />
+          <Loader inline content={<ParelPrachtFullLogo />} size="large" />
           <Header.Subheader>{t('pages.loading')}</Header.Subheader>
         </Header>
       </Dimmer>
@@ -430,34 +442,29 @@ function Routes(props: Props) {
     return loader;
   }
 
-  const mainStyle = props.profile.backgroundFilename === '' ? (
-    {
-      backgroundColor: 'white',
-    }
-  ) : (
-    {
-      width: '100vw',
-      backgroundImage: `url("/static/backgrounds/${props.profile.backgroundFilename}`,
-      backgroundSize: 'cover',
-      backgroundRepeat: 'no-repeat',
-      backgroundPosition: 'center center',
-    }
-  );
+  const mainStyle =
+    props.profile.backgroundFilename === ''
+      ? {
+          backgroundColor: 'white',
+        }
+      : {
+          width: '100vw',
+          backgroundImage: `url("/static/backgrounds/${props.profile.backgroundFilename}`,
+          backgroundSize: 'cover',
+          backgroundRepeat: 'no-repeat',
+          backgroundPosition: 'center center',
+        };
 
   return (
     <div>
-      <Navigation/>
-      <Container
-        className="main"
-        fluid
-        style={mainStyle}
-      >
-        <AlertContainer internal/>
+      <Navigation />
+      <Container className="main" fluid style={mainStyle}>
+        <AlertContainer internal />
         {routes}
 
-        <Outlet/>
+        <Outlet />
       </Container>
-      <Footer/>
+      <Footer />
     </div>
   );
 }

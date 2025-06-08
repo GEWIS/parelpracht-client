@@ -1,5 +1,5 @@
 /* eslint no-trailing-spaces: 0 */
-import React from 'react';
+import { Component } from 'react';
 import { connect } from 'react-redux';
 import { Rail } from 'semantic-ui-react';
 import { AlertItemState } from '../../stores/alerts/reducer';
@@ -12,7 +12,7 @@ interface AlertsProps {
   alerts: AlertItemState[];
 }
 
-class AlertContainer extends React.Component<AlertsProps> {
+class AlertContainer extends Component<AlertsProps> {
   static defaultProps = {
     internal: undefined,
   };
@@ -20,16 +20,13 @@ class AlertContainer extends React.Component<AlertsProps> {
   public render() {
     return (
       <Rail
-          internal={this.props.internal}
-          position="right"
-          style={{ marginTop: this.props.internal ? '2em' : undefined, height: 'auto', maxHeight: 'calc(100% - 2em)' }}
+        internal={this.props.internal}
+        position="right"
+        style={{ marginTop: this.props.internal ? '2em' : undefined, height: 'auto', maxHeight: 'calc(100% - 2em)' }}
       >
-          {this.props.alerts.map((alert) => (
-              <AlertItem
-                  key={alert.id}
-                  alert={alert}
-              />
-          ))}
+        {this.props.alerts.map((alert) => (
+          <AlertItem key={alert.id} alert={alert} />
+        ))}
       </Rail>
     );
   }
