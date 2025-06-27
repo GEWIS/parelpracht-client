@@ -1,0 +1,198 @@
+{
+  "entryFile": "./src/index.ts",
+  "noImplicitAdditionalProperties": "throw-on-extras",
+  "controllerPathGlobs": ["src/controllers/*.ts"],
+  "ignore": ["**/node_modules/@types/lodash/**"],
+  "spec": {
+    "outputDirectory": "build",
+    "host": "localhost:3001",
+    "schemes": ["http", "https"],
+    "basePath": "/api",
+    "securityDefinitions": {
+      "local": {
+        "type": "apikey",
+        "name": "connect.sid",
+        "in": "cookie"
+      }
+    },
+    "specVersion": 3,
+    "specMerging": "recursive",
+    "spec": {
+      "components": {
+        "schemas": {
+          "LoginParams": {
+            "dataType": "refObject",
+            "properties": {
+              "email": {
+                "type": "string"
+              },
+              "password": {
+                "type": "string"
+              },
+              "rememberMe": {
+                "type": "boolean"
+              }
+            },
+            "additionalProperties": false
+          },
+          "LDAPLoginParams": {
+            "dataType": "refObject",
+            "properties": {
+              "username": {
+                "type": "string"
+              },
+              "password": {
+                "type": "string"
+              },
+              "rememberMe": {
+                "type": "boolean"
+              }
+            },
+            "additionalProperties": false
+          }
+        }
+      },
+      "paths": {
+        "/login/local": {
+          "post": {
+            "operationId": "Login",
+            "responses": {
+              "200": {
+                "description": "Ok"
+              },
+              "204": {
+                "description": "No content"
+              },
+              "400": {
+                "description": "Bad Request",
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "$ref": "#/components/schemas/WrappedApiError"
+                    }
+                  }
+                }
+              }
+            },
+            "security": [],
+            "parameters": [],
+            "requestBody": {
+              "required": true,
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/LoginParams"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "/login/ldap": {
+          "post": {
+            "operationId": "LoginLDAP",
+            "responses": {
+              "200": {
+                "description": "Ok"
+              },
+              "204": {
+                "description": "No content"
+              },
+              "400": {
+                "description": "Bad Request",
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "$ref": "#/components/schemas/WrappedApiError"
+                    }
+                  }
+                }
+              }
+            },
+            "security": [],
+            "parameters": [],
+            "requestBody": {
+              "required": true,
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/LDAPLoginParams"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "/contract/{id}/file/upload": {
+          "post": {
+            "consumes": ["multipart/form-data"],
+            "parameters": [
+              {
+                "in": "formData",
+                "name": "file",
+                "required": true,
+                "type": "file",
+                "description": "The file to upload"
+              },
+              {
+                "in": "formData",
+                "name": "name",
+                "required": true,
+                "type": "string",
+                "description": "The name of the new file, as seen in the UI"
+              }
+            ]
+          }
+        },
+        "/invoice/{id}/file/upload": {
+          "post": {
+            "consumes": ["multipart/form-data"],
+            "parameters": [
+              {
+                "in": "formData",
+                "name": "file",
+                "required": true,
+                "type": "file",
+                "description": "The file to upload"
+              },
+              {
+                "in": "formData",
+                "name": "name",
+                "required": true,
+                "type": "string",
+                "description": "The name of the new file, as seen in the UI"
+              }
+            ]
+          }
+        },
+        "/product/{id}/file/upload": {
+          "post": {
+            "consumes": ["multipart/form-data"],
+            "parameters": [
+              {
+                "in": "formData",
+                "name": "file",
+                "required": true,
+                "type": "file",
+                "description": "The file to upload"
+              },
+              {
+                "in": "formData",
+                "name": "name",
+                "required": true,
+                "type": "string",
+                "description": "The name of the new file, as seen in the UI"
+              }
+            ]
+          }
+        }
+      }
+    }
+  },
+  "routes": {
+    "basePath": "/api",
+    "routesDir": "build",
+    "middleware": "express",
+    "authenticationModule": "./src/auth/authentication.ts"
+  }
+}
