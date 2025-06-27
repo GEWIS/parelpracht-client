@@ -114,11 +114,6 @@ dist
 .yarn/build-state.yml
 .pnp.*
 
-# Jetbrains pls
-.idea/**.*
-.idea/
-.idea
-
 # File management
 data/generated/
 data/generated/*
