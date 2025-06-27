@@ -2,7 +2,7 @@ version: '2'
 services:
   frontend:
     build:
-      context: ../parelpracht-client
+      context: ./parelpracht-client
       dockerfile: Dockerfile
     image: parelpracht.docker-registry.gewis.nl/parelpracht-client:latest
     restart: 'unless-stopped'
@@ -15,7 +15,7 @@ services:
       - logos:/usr/src/app/data/logos
       - backgrounds:/usr/src/app/data/backgrounds
   backend:
-    build: ../parelpracht-server
+    build: ./parelpracht-server
     image: parelpracht.docker-registry.gewis.nl/parelpracht-server:latest
     restart: 'unless-stopped'
     networks:
