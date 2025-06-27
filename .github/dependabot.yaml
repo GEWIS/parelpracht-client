@@ -2,7 +2,8 @@ version: 2
 updates:
   - package-ecosystem: "npm"
     directories:
-      - "."
+      - "parelpracht-client"
+      - "parelpracht-server"
     schedule:
       interval: "weekly"
     target-branch: "develop"
@@ -20,4 +21,3 @@ updates:
         dependency-type: "production"
         update-types:
         - "patch"
-
