@@ -18,6 +18,6 @@ jobs:
     with:
       node-version: '20.x'
       lint: true
-      format: false
+      format: true
       build: true
       working-directory: parelpracht-client
