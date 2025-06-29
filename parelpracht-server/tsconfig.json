@@ -38,7 +38,7 @@
     "emitDecoratorMetadata": true,
 
     /* Advanced Options */
-    "forceConsistentCasingInFileNames": true,
+    "forceConsistentCasingInFileNames": true
   },
   "ts-node": {
     "files": true

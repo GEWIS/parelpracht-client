@@ -2,7 +2,7 @@ import 'reflect-metadata';
 import * as fs from 'fs';
 import path from 'path';
 import express, { Express, json as expressJson, static as expressStatic } from 'express';
-import 'dotenv/config'
+import 'dotenv/config';
 
 import errorhandler from 'strong-error-handler';
 import { serve as serverSwagger, setup as setupSwagger } from 'swagger-ui-express';
