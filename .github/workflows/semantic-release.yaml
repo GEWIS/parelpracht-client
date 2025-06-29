@@ -11,7 +11,7 @@ jobs:
     uses: GEWIS/actions/.github/workflows/versioning.yml@v1
 
   release:
-    uses: GEWIS/actions/.github/workflows/docker-release.yml@v1
+    uses: GEWIS/actions/.github/workflows/docker-release.yml@0afd41a8f1a0e9342f7edffa71cac0a286f15135
     needs: versioning
     if: ${{ needs.versioning.outputs.next-version != '' }}
     with:
