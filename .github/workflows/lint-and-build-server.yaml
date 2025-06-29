@@ -5,14 +5,12 @@ on:
     branches:
       - main
       - develop
-    paths:
-      - parelpracht-server
+      - ci/github-actions
   pull_request:
     branches:
       - main
       - develop
-    paths:
-      - parelpracht-server
+      - ci/github-actions
 
 jobs:
   build-and-lint:
