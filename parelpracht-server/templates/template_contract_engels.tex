@@ -1,0 +1,78 @@
+%% GEWIS Letterhead Template
+%% Stijl
+%% All documentation can be found on https://gewis.nl/~stijl/
+
+\documentclass[
+printaddress,
+]{GEWISLetter}
+
+%% This example letter requires major version 1.x for compatibility
+\letterMajorVersion{1}
+
+%% In case we want to use a different sender or contact details, we set it here
+%\setSenderName{Ouderdagcommissie}
+%\setSenderMail{odc@gewis.nl}
+%\setSenderPhone{+31 123 456789}
+%\setSenderWeb{odc.gewis.nl}
+
+%% Set the recipient (required parameters have to be set, but can be set as empty string if needed)
+\setType{}
+\setRecipient{{{company}}}
+\setAttn{{{contactperson}}}
+
+\setStreet{{{street}}}
+\setPostcode{{{postalcode}}}
+\setCity{{{city}}}
+\setCountry{{{country}}}
+
+%% Set letter properties
+\setYourreference{{{yourreference}}}
+\setMyreference{{{ourreference}}}
+\setSubject{{{subject}}}
+
+\setDate{{{dateday}}}{{{datemonth}}}{{{dateyear}}}
+
+\begin{document}
+	Dear {{{contactperson}}},
+	
+	Hereby I am sending you the contract for the collaboration with study association GEWIS. Would you be so kind to return a signed copy to us?
+	
+	With kind regards,	
+	
+	{{sender}}\\
+	{{senderfunction}}
+	
+	
+	\newpage
+	\section{Agreement}
+	Undersigned, {{contactperson}} on behalf of {{company}}, and {{firstcontractor}} and {{secondcontractor}} on behalf of study association GEWIS, henceforth be known as GEWIS, hereby declare to have agreed on the following:
+	\begin{products}
+		{{productlist}}
+	\end{products}
+	
+	The amount due from {{company}} to GEWIS for this contract amounts to \euro{{{exclvat}}} excluding VAT. The price specification is added as attachment. Payment by {{company}} will take place based on the invoices supplied by GEWIS, which will be send after every activity, if possible accompanied with evidence. Unless agreed upon otherwise, {{company}} will pay the invoice within 30 business days.
+	\vspace{2em}
+	
+	\signature{{{firstcontractor}}\\{{firstcontractorfunction}}}
+	\hfill
+	\signature{{{contactperson}}\\{{company}}}
+
+	\signature{{{secondcontractor}}\\{{secondcontractorfunction}}}
+
+
+	\newpage
+	\appendix
+	\section{Product specifications}
+	\begin{specifications}
+		{{contractspecifications}}
+	\end{specifications}
+	
+	\section{Price specifications}
+	\begin{invoice}{}
+		{{invoiceentries}}
+		\totalexcl{{{exclvat}}}
+		\totallow{{{vatlow}}}
+		\totalhigh{{{vathigh}}}
+		\totalincl{{{inclvat}}}
+	\end{invoice}
+\end{document}
