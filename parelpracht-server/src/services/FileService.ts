@@ -5,7 +5,7 @@ import path from 'path';
 import { v4 as uuidv4 } from 'uuid';
 import multer from 'multer';
 import { Repository } from 'typeorm';
-import mime from 'mime';
+import { lookup, extension } from 'mime-types';
 import BaseFile from '../entity/file/BaseFile';
 import { ContractFile } from '../entity/file/ContractFile';
 import { InvoiceFile } from '../entity/file/InvoiceFile';
@@ -231,7 +231,7 @@ export default class FileService {
       throw new ApiError(HTTPStatus.BadRequest, 'No file is passed in the request');
     }
 
-    const randomFileName = `${uuidv4()}.${mime.getExtension(request.file.mimetype)}`;
+    const randomFileName = `${uuidv4()}.${extension(request.file.mimetype)}`;
     file.location = path.join(__dirname, '/../../', uploadDirLoc, randomFileName);
     fs.writeFileSync(file.location, request.file.buffer);
     file.downloadName = request.file.originalname;
@@ -319,7 +319,7 @@ export default class FileService {
       throw new ApiError(HTTPStatus.BadRequest, 'No file is passed in the request');
     }
 
-    const fileExtension = mime.getExtension(request.file.mimetype) || '';
+    const fileExtension = extension(request.file.mimetype) || '';
     if (!['jpg', 'jpeg', 'png', 'bmp', 'gif'].includes(fileExtension)) {
       throw new ApiError(HTTPStatus.BadRequest, 'Company logo needs to be an image file');
     }
@@ -344,7 +344,7 @@ export default class FileService {
       throw new ApiError(HTTPStatus.BadRequest, 'No file is passed in the request');
     }
 
-    const fileExtension = mime.getExtension(request.file.mimetype) || '';
+    const fileExtension = extension(request.file.mimetype) || '';
     if (!['jpg', 'jpeg', 'png', 'bmp', 'gif'].includes(fileExtension)) {
       throw new ApiError(HTTPStatus.BadRequest, 'User avatar needs to be an image file');
     }
@@ -369,7 +369,7 @@ export default class FileService {
       throw new ApiError(HTTPStatus.BadRequest, 'No file is passed in the request');
     }
 
-    const fileExtension = mime.getExtension(request.file.mimetype) || '';
+    const fileExtension = extension(request.file.mimetype) || '';
     if (!['jpg', 'jpeg', 'png', 'bmp', 'gif'].includes(fileExtension)) {
       throw new ApiError(HTTPStatus.BadRequest, 'User background needs to be an image file');
     }

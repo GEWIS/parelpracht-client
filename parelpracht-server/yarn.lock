@@ -1033,6 +1033,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/mime-types@npm:^3.0.1":
+  version: 3.0.1
+  resolution: "@types/mime-types@npm:3.0.1"
+  checksum: 10c0/61c2056529dc5bc73c25b2a053e21f063fd547c21e12a2be94ca78b89b0f83c9a75afed9a8bda3c78592ee880acc82778302651527f7882cf5ba8e58ab320e29
+  languageName: node
+  linkType: hard
+
 "@types/mime@npm:^1":
   version: 1.3.5
   resolution: "@types/mime@npm:1.3.5"
@@ -4498,15 +4505,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"mime@npm:^4.0.7":
-  version: 4.0.7
-  resolution: "mime@npm:4.0.7"
-  bin:
-    mime: bin/cli.js
-  checksum: 10c0/2fd22ee2012a3f1dcac7dd06b7dc314dd677ebcefb14355b7c9453f0092af6eabbe9d754d9849d2a1f346ddd53d716a851379be05386f7a6ccb40af4bd61f32b
-  languageName: node
-  linkType: hard
-
 "mimic-fn@npm:^2.1.0":
   version: 2.1.0
   resolution: "mimic-fn@npm:2.1.0"
@@ -5029,6 +5027,7 @@ __metadata:
     "@types/lodash": "npm:^4.17.18"
     "@types/method-override": "npm:3.0.0"
     "@types/mime": "npm:^3.0.4"
+    "@types/mime-types": "npm:^3.0.1"
     "@types/multer": "npm:^1.4.13"
     "@types/node": "npm:^22.15.32"
     "@types/node-cron": "npm:^3.0.11"
@@ -5053,7 +5052,7 @@ __metadata:
     ldapjs: "npm:^3.0.7"
     lodash: "npm:^4.17.21"
     method-override: "npm:^3.0.0"
-    mime: "npm:^4.0.7"
+    mime-types: "npm:^3.0.1"
     multer: "npm:^2.0.1"
     mysql2: "npm:^3.14.1"
     node-cron: "npm:^4.1.1"
