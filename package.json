@@ -1,0 +1,7 @@
+{
+  "name": "parelpracht",
+  "packageManager": "yarn@4.9.1",
+  "dependencies": {
+    "@gewis/release-config": "^2.4.0"
+  }
+}
