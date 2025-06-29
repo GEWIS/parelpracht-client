@@ -4,22 +4,22 @@ on:
   push:
     branches:
       - main
+      - ci/github-actions
 
 jobs:
   versioning:
     uses: GEWIS/actions/.github/workflows/versioning.yml@v1
 
-#  TODO: shared image for both client/server
-#  release:
-#    uses: GEWIS/actions/.github/workflows/docker-release.yml@v1
-#    needs: versioning
-#    if: ${{ needs.versioning.outputs.next-version != '' }}
-#    with:
-#      projects: "['.']"
-#      version: ${{ needs.versioning.outputs.next-version }}
-#      docker-registry: 'abc.docker-registry.gewis.nl'
-#      docker-paths: "['crm/parelpracht/server']"
-#      github-registry: 'false'
-#    secrets:
-#      REGISTRY_USERNAME: ${{ secrets.SVC_GH_PARELPRACHT_USERNAME }}
-#      REGISTRY_PASSWORD: ${{ secrets.SVC_GH_PARELPRACHT_PWD }}
+  release:
+    uses: GEWIS/actions/.github/workflows/docker-release.yml@v1
+    needs: versioning
+    if: ${{ needs.versioning.outputs.next-version != '' }}
+    with:
+      projects: "['parelpacht-client', 'parelpracht-server']"
+      version: ${{ needs.versioning.outputs.next-version }}
+      docker-registry: 'abc.docker-registry.gewis.nl'
+      docker-paths: "['crm/parelpracht']"
+      github-registry: 'false'
+    secrets:
+      REGISTRY_USERNAME: ${{ secrets.SVC_GH_PARELPRACHT_USERNAME }}
+      REGISTRY_PASSWORD: ${{ secrets.SVC_GH_PARELPRACHT_PWD }}
