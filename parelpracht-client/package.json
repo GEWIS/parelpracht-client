@@ -6,7 +6,7 @@
   "author": "The 39th board & Applicatie Beheer Commissie of Study Association GEWIS",
   "scripts": {
     "start": "vite",
-    "build": "vite build && tsc",
+    "build": "tsc && vite build",
     "serve": "vite preview",
     "lint": "eslint src --max-warnings=1",
     "lint-fix": "eslint src --fix",

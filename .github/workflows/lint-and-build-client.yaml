@@ -5,14 +5,10 @@ on:
     branches:
       - main
       - develop
-    paths:
-      - parelpracht-client
   pull_request:
     branches:
       - main
       - develop
-    paths:
-      - parelpracht-client
 
 jobs:
   build-and-lint:
@@ -20,6 +16,6 @@ jobs:
     with:
       node-version: '20.x'
       lint: true
-      format: false
+      format: true
       build: true
       working-directory: parelpracht-client

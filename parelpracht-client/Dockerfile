@@ -1,11 +1,20 @@
 # build environment
-FROM node:22 as build
+FROM node:22 AS build
 WORKDIR /app
-ENV PATH /app/node_modules/.bin:$PATH
-COPY package*.json ./
-RUN npm ci --silent
-COPY . ./
-RUN npm run build
+ENV PATH=/app/node_modules/.bin:$PATH
+COPY package.json ./
+COPY yarn.lock ./
+RUN corepack enable
+RUN yarn install --immutable
+
+COPY index.html ./
+COPY vite.config.mts ./
+COPY tsconfig.json ./
+COPY tsconfig.app.json ./
+COPY tsconfig.node.json ./
+COPY public ./public
+COPY src ./src
+RUN yarn run build
 
 # production environment
 FROM nginx:stable-alpine
