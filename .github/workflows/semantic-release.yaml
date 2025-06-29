@@ -15,7 +15,7 @@ jobs:
     needs: versioning
     if: ${{ needs.versioning.outputs.next-version != '' }}
     with:
-      projects: "['parelpacht-client', 'parelpracht-server']"
+      projects: "['parelpracht-client', 'parelpracht-server']"
       version: ${{ needs.versioning.outputs.next-version }}
       docker-registry: 'abc.docker-registry.gewis.nl'
       docker-paths: "['crm/parelpracht']"
