@@ -5198,10 +5198,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"node-cron@npm:^4.1.1":
-  version: 4.1.1
-  resolution: "node-cron@npm:4.1.1"
-  checksum: 10c0/4798e3bc4a234512eae22e4a69dd24f82b5516e92011bfdeedb09270ab47a982c991c7fa5c4a9e22167123a1f01350dd041485560be1fd4abf174be15910b91c
+"node-cron@npm:^4.2.1":
+  version: 4.2.1
+  resolution: "node-cron@npm:4.2.1"
+  checksum: 10c0/804df01df230e96fd2f8ffcde004f4d5af953bccdf3ccf993dc450526dd65f553a2f2ad4bc0faf55c90c38cbc99c9ddbb88ee16cba3fc6bc74e606da6efb249e
   languageName: node
   linkType: hard
 
@@ -5570,7 +5570,7 @@ __metadata:
     mime-types: "npm:^3.0.1"
     multer: "npm:^2.0.1"
     mysql2: "npm:^3.14.1"
-    node-cron: "npm:^4.1.1"
+    node-cron: "npm:^4.2.1"
     node-latex: "npm:^3.1.0"
     nodemailer: "npm:^7.0.4"
     nodemon: "npm:^3.1.10"
