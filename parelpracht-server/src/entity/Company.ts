@@ -39,7 +39,7 @@ export class Company extends BaseEnt {
 
   /** Status of the collaboration with this company */
   @Column({
-    type: 'enum',
+    type: 'simple-enum',
     enum: CompanyStatus,
     default: CompanyStatus.ACTIVE,
   })

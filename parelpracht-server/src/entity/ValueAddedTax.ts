@@ -7,7 +7,7 @@ import { Product } from './Product';
 export class ValueAddedTax extends BaseEnt {
   /** VAT category */
   @Column({
-    type: 'enum',
+    type: 'simple-enum',
     enum: VAT,
     default: VAT.HIGH,
   })

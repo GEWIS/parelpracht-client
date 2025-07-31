@@ -10,7 +10,7 @@ import { IdentityLocal } from './IdentityLocal';
 export class User extends BaseEnt {
   /** Gender of this user */
   @Column({
-    type: 'enum',
+    type: 'simple-enum',
     enum: Gender,
     default: Gender.UNKNOWN,
   })

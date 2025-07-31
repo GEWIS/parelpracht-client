@@ -5,7 +5,11 @@ import { ActivityType } from '../enums/ActivityType';
 
 export default abstract class BaseActivity extends BaseEnt {
   /** Type of the activity (status or comment) */
-  @Column({ type: 'enum', enum: ActivityType, update: false })
+  @Column({
+    type: 'simple-enum',
+    enum: ActivityType,
+    update: false,
+  })
   type!: ActivityType;
 
   /** Description of this activity (English) */

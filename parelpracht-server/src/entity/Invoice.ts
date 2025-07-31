@@ -21,7 +21,7 @@ export class Invoice extends BaseEnt {
   poNumber?: string;
 
   /** Date at which this invoice will be sent */
-  @Column({ default: () => 'now()' })
+  @Column({ default: () => 'CURRENT_TIMESTAMP' })
   startDate!: Date;
 
   @Column({ type: 'integer', update: false })

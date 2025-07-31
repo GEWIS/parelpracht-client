@@ -24,7 +24,7 @@ export class Product extends BaseEnt {
 
   /** Status of the collaboration with this company */
   @Column({
-    type: 'enum',
+    type: 'simple-enum',
     enum: ProductStatus,
     default: ProductStatus.ACTIVE,
   })

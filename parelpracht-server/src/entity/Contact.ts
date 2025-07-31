@@ -9,7 +9,7 @@ import { Gender } from './enums/Gender';
 export class Contact extends BaseEnt {
   /** The gender of this contact */
   @Column({
-    type: 'enum',
+    type: 'simple-enum',
     enum: Gender,
     default: Gender.UNKNOWN,
   })
@@ -40,7 +40,11 @@ export class Contact extends BaseEnt {
   comments!: string;
 
   /** Function of this contact person within the company, if known. Normal by default. */
-  @Column({ type: 'enum', enum: ContactFunction, default: ContactFunction.NORMAL })
+  @Column({
+    type: 'simple-enum',
+    enum: ContactFunction,
+    default: ContactFunction.NORMAL,
+  })
   function!: ContactFunction;
 
   @Column({ type: 'integer', update: false })
