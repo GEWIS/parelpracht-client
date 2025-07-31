@@ -202,7 +202,7 @@ export default class AuthService {
   }
 
   checkToken(token: string | JwtPayload | null): token is JwtToken {
-    return token != null && typeof token === 'object' && 'used_id' in token;
+    return token != null && typeof token === 'object' && 'user_id' in token;
   }
 
   async resetPassword(newPassword: string, tokenString: string): Promise<void> {
