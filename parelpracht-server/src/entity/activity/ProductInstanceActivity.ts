@@ -19,7 +19,7 @@ export class ProductInstanceActivity extends BaseActivity {
 
   /** Subtype of this activity, only used when the type = "STATUS" */
   @Column({
-    type: 'enum',
+    type: 'simple-enum',
     enum: ProductInstanceStatus,
     nullable: true,
     update: false,

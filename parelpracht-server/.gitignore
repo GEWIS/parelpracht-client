@@ -129,3 +129,4 @@ tmp/
 .yarn
 
 build
+local.sqlite

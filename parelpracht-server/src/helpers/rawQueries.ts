@@ -136,33 +136,17 @@ function letterError(x: string, msg: string) {
   }
 }
 
-/*
- *   Year helper functions
- */
-
-function inOrBeforeYearFilter(column: string, year: number): string {
-  numberError(year, 'Year is not a number');
-  return `EXTRACT(YEAR FROM ${column} + interval '6' month) <= ${year}`;
-}
-
-function inYearFilter(column: string, year: number): string {
-  numberError(year, 'Year is not a number');
-  return `EXTRACT(YEAR FROM ${column} + interval '6' month) = ${year}`;
-}
-
-function inYearsFilter(column: string, years: number[]): string {
-  arrayNumberError(years, 'Year is not a number');
-  return `EXTRACT(YEAR FROM ${column} + interval '6' month) IN ${arrayToQueryArray(years)}`;
-}
-
 export default class RawQueries {
-  private readonly database: 'mysql' | 'postgres';
+  private readonly database: 'mysql' | 'postgres' | 'sqlite';
 
   constructor() {
     switch (process.env.TYPEORM_CONNECTION) {
       case 'mariadb':
       case 'mysql':
         this.database = 'mysql';
+        break;
+      case 'sqlite':
+        this.database = 'sqlite';
         break;
       case 'postgres':
         this.database = 'postgres';
@@ -172,6 +156,50 @@ export default class RawQueries {
           `Database type ${process.env.TYPEORM_CONNECTION} is not supported by the raw queries of ParelPracht`,
         );
     }
+  }
+
+  /**
+   * Format a parameter used in a SQL query according to the database format.
+   * For example, MySQL and Postgres return years and months as integers, but
+   * SQLite returns them as strings. Therefore, the number we compare to must
+   * also be a integer or string respectively.
+   * @param p
+   * @private
+   */
+  private formatDateParameter(p: number): string {
+    if (this.database === 'sqlite') {
+      return `'${p}'`;
+    }
+    return p.toString();
+  }
+
+  private extractMonth(column: string): string {
+    if (this.database === 'sqlite') {
+      return `strftime('%m', DATE(${column}, '+6 months'))`;
+    }
+    return `EXTRACT(MONTH FROM ${column} + interval '6' month)`;
+  }
+
+  private extractYear(column: string): string {
+    if (this.database === 'sqlite') {
+      return `strftime('%Y', DATE(${column}, '+6 months'))`;
+    }
+    return `EXTRACT(YEAR FROM ${column} + interval '6' month)`;
+  }
+
+  private inOrBeforeYearFilter(column: string, year: number): string {
+    numberError(year, 'Year is not a number');
+    return `${this.extractYear(column)} <= ${this.formatDateParameter(year)}`;
+  }
+
+  private inYearFilter(column: string, year: number): string {
+    numberError(year, 'Year is not a number');
+    return `${this.extractYear(column)} = ${this.formatDateParameter(year)}`;
+  }
+
+  private inYearsFilter(column: string, years: number[]): string {
+    arrayNumberError(years, 'Year is not a number');
+    return `${this.extractYear(column)} IN ${arrayToQueryArray(years.map(toString))}`;
   }
 
   private postProcessing(query: string) {
@@ -239,13 +267,13 @@ export default class RawQueries {
             // Only filter on a financial year
           } else if (i < 0 && f.values.length > 0) {
             arrayNumberError(f.values, 'InvoiceID is not a number');
-            invoice = `AND ${inYearsFilter('invoice."startDate"', f.values)}`;
+            invoice = `AND ${this.inYearsFilter('invoice."startDate"', f.values)}`;
             // Filter on both "not invoiced" as well as one or more financial years
           } else if (i >= 0 && f.values.length > 1) {
             arrayNumberError(f.values, 'InvoiceID is not a number');
             const values = f.values.slice();
             values.splice(i, 1);
-            invoice = `AND (p."invoiceId" IS NULL OR ${inYearsFilter('invoice."startDate"', values)})`;
+            invoice = `AND (p."invoiceId" IS NULL OR ${this.inYearsFilter('invoice."startDate"', values)})`;
           }
         }
       });
@@ -466,6 +494,14 @@ export default class RawQueries {
   };
 
   getExpiredInvoices = (): Promise<ExpiredInvoice[]> => {
+    const expiryDays: number = 21;
+    let expiryDate: string;
+    if (this.database === 'sqlite') {
+      expiryDate = `DATE(current_date, '-21 days')`;
+    } else {
+      expiryDate = `current_date - interval '${expiryDays}' day`;
+    }
+
     return this.postProcessing(`
     SELECT i.id, i.version, i."startDate", i."companyId", i."assignedToId", i."createdAt", a1."updatedAt", a1."createdById", (
       SELECT sum(p."basePrice" - p.discount)
@@ -476,7 +512,7 @@ export default class RawQueries {
     JOIN invoice_activity a1 ON (i.id = a1."invoiceId" AND a1.type = 'STATUS')
     LEFT OUTER JOIN invoice_activity a2 ON (i.id = a2."invoiceId" AND a2.type = 'STATUS' AND
         (a1."createdAt" < a2."createdAt" OR (a1."createdAt" = a2."createdAt" AND a1.id < a2.id)))
-    WHERE (a2.id IS NULL AND a1."subType" = 'SENT' AND date(i."startDate") < current_date - interval '21' day);
+    WHERE (a2.id IS NULL AND a1."subType" = 'SENT' AND date(i."startDate") < ${expiryDate});
   `);
   };
 
@@ -527,14 +563,14 @@ export default class RawQueries {
    ************************ */
   getProductsContractedPerMonthByFinancialYear = (year: number): Promise<ProductsPerCategoryPerPeriod[]> => {
     return this.postProcessing(`
-      SELECT p."categoryId", EXTRACT(MONTH FROM a1."createdAt" + interval '6' month) as period, sum(pi."basePrice" - pi.discount) as amount, COUNT(pi.id) as "nrOfProducts"
+      SELECT p."categoryId", ${this.extractMonth('a1."createdAt"')} as period, sum(pi."basePrice" - pi.discount) as amount, COUNT(pi.id) as "nrOfProducts"
       FROM product_instance pi
       JOIN product p ON (p.id = pi."productId")
       JOIN contract c ON (c.id = pi."contractId")
       JOIN contract_activity a1 ON (c.id = a1."contractId" AND a1.type = 'STATUS')
       LEFT OUTER JOIN contract_activity a2 ON (c.id = a2."contractId" AND a2.type = 'STATUS' AND
           (a1."createdAt" < a2."createdAt" OR (a1."createdAt" = a2."createdAt" AND a1.id < a2.id)))
-      WHERE (a2.id IS NULL AND a1."subType" = 'CONFIRMED' AND ${inYearFilter('a1."createdAt"', year)})
+      WHERE (a2.id IS NULL AND a1."subType" = 'CONFIRMED' AND ${this.inYearFilter('a1."createdAt"', year)})
       GROUP BY p."categoryId", period
       ORDER BY p."categoryId", period;
     `);
@@ -545,8 +581,8 @@ export default class RawQueries {
       SELECT COALESCE(sum(p."basePrice" - p.discount), 0) as amount, count(p.id) as "nrOfProducts"
       FROM product_instance p
       JOIN contract c ON (p."contractId" = c.id)
-      JOIN contract_activity a1 ON (c.id = a1."contractId" AND a1.type = 'STATUS' AND ${inOrBeforeYearFilter('a1."createdAt"', year)})
-      LEFT OUTER JOIN contract_activity a2 ON (c.id = a2."contractId" AND a2.type = 'STATUS' AND ${inOrBeforeYearFilter('a2."createdAt"', year)} AND
+      JOIN contract_activity a1 ON (c.id = a1."contractId" AND a1.type = 'STATUS' AND ${this.inOrBeforeYearFilter('a1."createdAt"', year)})
+      LEFT OUTER JOIN contract_activity a2 ON (c.id = a2."contractId" AND a2.type = 'STATUS' AND ${this.inOrBeforeYearFilter('a2."createdAt"', year)} AND
           (a1."createdAt" < a2."createdAt" OR (a1."createdAt" = a2."createdAt" AND a1.id < a2.id)))
       WHERE (a2.id IS NULL AND a1."subType" IN ('CREATED', 'PROPOSED', 'SENT') )
     `);
@@ -560,15 +596,15 @@ export default class RawQueries {
       LEFT OUTER JOIN product_instance_activity pa2 ON (p.id = pa2."productInstanceId" AND pa2.type = 'STATUS' AND
           (pa1."createdAt" < pa2."createdAt" OR (pa1."createdAt" = pa2."createdAt" AND pa1.id < pa2.id)))
       JOIN contract c ON (p."contractId" = c.id)
-      JOIN contract_activity a1 ON (c.id = a1."contractId" AND a1.type = 'STATUS' AND ${inOrBeforeYearFilter('a1."createdAt"', year)})
-      LEFT OUTER JOIN contract_activity a2 ON (c.id = a2."contractId" AND a2.type = 'STATUS' AND ${inOrBeforeYearFilter('a2."createdAt"', year)} AND
+      JOIN contract_activity a1 ON (c.id = a1."contractId" AND a1.type = 'STATUS' AND ${this.inOrBeforeYearFilter('a1."createdAt"', year)})
+      LEFT OUTER JOIN contract_activity a2 ON (c.id = a2."contractId" AND a2.type = 'STATUS' AND ${this.inOrBeforeYearFilter('a2."createdAt"', year)} AND
           (a1."createdAt" < a2."createdAt" OR (a1."createdAt" = a2."createdAt" AND a1.id < a2.id)))
       WHERE (pa2.id IS NULL AND a2.id IS NULL AND a1."subType" IN ('CONFIRMED', 'FINISHED') AND pa1."subType" IN ('DELIVERED', 'NOTDELIVERED') AND
           (p."invoiceId" IS NULL OR (
-            SELECT EXTRACT(YEAR FROM i."startDate" + interval '6' month)
+            SELECT ${this.extractYear('i."startDate"')}
             FROM invoice i
             WHERE i.id = p."invoiceId"
-          ) = ${year}))
+          ) = ${this.formatDateParameter(year)}))
     `);
   };
 
@@ -576,19 +612,19 @@ export default class RawQueries {
     return this.postProcessing(`
       SELECT COALESCE(sum(p."basePrice" - p.discount), 0) as amount, count(p.id) as "nrOfProducts"
       FROM product_instance p
-      JOIN product_instance_activity pa1 ON (p.id = pa1."productInstanceId" AND pa1.type = 'STATUS' AND ${inOrBeforeYearFilter('pa1."createdAt"', year)})
-      LEFT OUTER JOIN product_instance_activity pa2 ON (p.id = pa2."productInstanceId" AND pa2.type = 'STATUS' AND ${inOrBeforeYearFilter('pa2."createdAt"', year)} AND
+      JOIN product_instance_activity pa1 ON (p.id = pa1."productInstanceId" AND pa1.type = 'STATUS' AND ${this.inOrBeforeYearFilter('pa1."createdAt"', year)})
+      LEFT OUTER JOIN product_instance_activity pa2 ON (p.id = pa2."productInstanceId" AND pa2.type = 'STATUS' AND ${this.inOrBeforeYearFilter('pa2."createdAt"', year)} AND
           (pa1."createdAt" < pa2."createdAt" OR (pa1."createdAt" = pa2."createdAt" AND pa1.id < pa2.id)))
       JOIN contract c ON (p."contractId" = c.id)
-      JOIN contract_activity a1 ON (c.id = a1."contractId" AND a1.type = 'STATUS' AND ${inOrBeforeYearFilter('a1."createdAt"', year)})
-      LEFT OUTER JOIN contract_activity a2 ON (c.id = a2."contractId" AND a2.type = 'STATUS' AND ${inOrBeforeYearFilter('a2."createdAt"', year)} AND
+      JOIN contract_activity a1 ON (c.id = a1."contractId" AND a1.type = 'STATUS' AND ${this.inOrBeforeYearFilter('a1."createdAt"', year)})
+      LEFT OUTER JOIN contract_activity a2 ON (c.id = a2."contractId" AND a2.type = 'STATUS' AND ${this.inOrBeforeYearFilter('a2."createdAt"', year)} AND
           (a1."createdAt" < a2."createdAt" OR (a1."createdAt" = a2."createdAt" AND a1.id < a2.id)))
       WHERE (a2.id IS NULL AND a1."subType" IN ('CONFIRMED', 'CANCELLED', 'FINISHED') AND pa1."subType" = 'DELIVERED' AND
           (p."invoiceId" IS NULL OR (
-            SELECT EXTRACT(YEAR FROM i."startDate" + interval '6' month)
+            SELECT ${this.extractYear('i."startDate"')}
             FROM invoice i
             WHERE i.id = p."invoiceId"
-          ) = ${year}))
+          ) = ${this.formatDateParameter(year)}))
     `);
   };
 
@@ -605,7 +641,7 @@ export default class RawQueries {
           (ia1."createdAt" < ia2."createdAt" OR (ia1."createdAt" = ia2."createdAt" AND ia1.id < ia2.id)))
       WHERE (ia2.id IS NULL AND ia1."subType" IN ('PROPOSED', 'SENT', 'PAID', 'IRRECOVERABLE') AND
           pa2.id is NULL AND pa1."subType" = 'NOTDELIVERED' AND
-          ${inYearFilter('i."startDate"', year)} )
+          ${this.inYearFilter('i."startDate"', year)} )
     `);
   };
 
@@ -622,7 +658,7 @@ export default class RawQueries {
           (ia1."createdAt" < ia2."createdAt" OR (ia1."createdAt" = ia2."createdAt" AND ia1.id < ia2.id)))
       WHERE (ia2.id IS NULL AND ia1."subType" IN ('PROPOSED', 'SENT', 'PAID', 'IRRECOVERABLE') AND
           pa2.id is NULL AND pa1."subType" = 'DELIVERED' AND
-          ${inYearFilter('i."startDate"', year)} )
+          ${this.inYearFilter('i."startDate"', year)} )
     `);
   };
 
@@ -635,7 +671,7 @@ export default class RawQueries {
       LEFT OUTER JOIN invoice_activity a2 ON (i.id = a2."invoiceId" AND a2.type = 'STATUS' AND
           (a1."createdAt" < a2."createdAt" OR (a1."createdAt" = a2."createdAt" AND a1.id < a2.id)))
       WHERE (a2.id IS NULL AND a1."subType" = 'PAID' AND
-          ${inYearFilter('i."startDate"', year)} )
+          ${this.inYearFilter('i."startDate"', year)} )
     `);
   };
 
@@ -644,14 +680,14 @@ export default class RawQueries {
 
     return this.postProcessing(`
       SELECT COALESCE(sum(p."basePrice" - p.discount), 0) as amount, count(p.id) as "nrOfProducts",
-        COALESCE(EXTRACT(YEAR FROM i."startDate" + interval '6' month), ${currentFinancialYear()}) as year
+        COALESCE(${this.extractYear('i."startDate"')}, ${currentFinancialYear()}) as year
       FROM product_instance p
       LEFT JOIN invoice i ON (p."invoiceId" = i.id)
       LEFT JOIN product_instance_activity a1 ON (p.id = a1."productInstanceId" AND a1.type = 'STATUS')
       LEFT OUTER JOIN product_instance_activity a2 ON (p.id = a2."productInstanceId" AND a2.type = 'STATUS' AND
           (a1."createdAt" < a2."createdAt" OR (a1."createdAt" = a2."createdAt" AND a1.id < a2.id)))
       WHERE (a2.id IS NULL AND a1."subType" != '${ProductInstanceStatus.DEFERRED}' AND p."productId" = ${id} AND
-          COALESCE(EXTRACT(YEAR FROM i."startDate" + interval '6' month), ${currentFinancialYear()}) > ${currentFinancialYear() - 10})
+          COALESCE(${this.extractYear('i."startDate"')}, ${this.formatDateParameter(currentFinancialYear())}) > ${this.formatDateParameter(currentFinancialYear() - 10)})
       GROUP BY year
     `);
   };
@@ -676,7 +712,7 @@ export default class RawQueries {
     numberError(id, 'ID is not a number');
 
     return this.postProcessing(`
-      SELECT p."categoryId", EXTRACT(YEAR FROM a1."createdAt" + interval '6' month) as period, sum(pi."basePrice" - pi.discount) as amount, COUNT(pi.id) as "nrOfProducts"
+      SELECT p."categoryId", ${this.extractMonth('a1."createdAt"')} as period, sum(pi."basePrice" - pi.discount) as amount, COUNT(pi.id) as "nrOfProducts"
       FROM product_instance pi
       JOIN product p ON (p.id = pi."productId")
       JOIN contract c ON (c.id = pi."contractId")
@@ -684,7 +720,7 @@ export default class RawQueries {
       LEFT OUTER JOIN contract_activity a2 ON (c.id = a2."contractId" AND a2.type = 'STATUS' AND
           (a1."createdAt" < a2."createdAt" OR (a1."createdAt" = a2."createdAt" AND a1.id < a2.id)))
       WHERE (a2.id IS NULL AND a1."subType" = 'CONFIRMED' AND c."companyId" = ${id} AND
-          EXTRACT(YEAR FROM a1."createdAt" + interval '6' month) > ${currentFinancialYear() - 10})
+          ${this.extractYear('a1."createdAt"')} > ${this.formatDateParameter(currentFinancialYear() - 10)})
       GROUP BY p."categoryId", period
       ORDER BY period, p."categoryId";
     `);

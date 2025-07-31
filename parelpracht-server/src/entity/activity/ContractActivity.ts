@@ -19,7 +19,7 @@ export class ContractActivity extends BaseActivity {
 
   /** Subtype of this activity, only used when the type = "STATUS" */
   @Column({
-    type: 'enum',
+    type: 'simple-enum',
     enum: ContractStatus,
     nullable: true,
     update: false,
