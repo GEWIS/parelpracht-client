@@ -497,7 +497,7 @@ export default class RawQueries {
     const expiryDays: number = 21;
     let expiryDate: string;
     if (this.database === 'sqlite') {
-      expiryDate = `DATE(current_date, '-21 days')`
+      expiryDate = `DATE(current_date, '-21 days')`;
     } else {
       expiryDate = `current_date - interval '${expiryDays}' day`;
     }
