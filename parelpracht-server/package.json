@@ -18,7 +18,7 @@
   },
   "author": "The 39th board & Applicatie Beheer Commissie of Study Association GEWIS",
   "dependencies": {
-    "axios": "^1.10.0",
+    "axios": "^1.11.0",
     "body-parser": "^2.2.0",
     "connect-typeorm": "^2.0.0",
     "cors": "^2.8.5",
