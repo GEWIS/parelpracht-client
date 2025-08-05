@@ -3,7 +3,7 @@ import { Icon } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import { RootState } from '../../../stores/store';
 import { getContractTitle } from '../../../stores/contract/selectors';
-import { formatStatus } from '../../../helpers/activity';
+import { formatTranslateStatus } from '../../../helpers/activity';
 import './ContactLink.scss';
 import { ContractStatus } from '../../../clients/server.generated';
 import PartialCircle from '../../PartialCircle';
@@ -50,7 +50,7 @@ function ContractLink(props: Props) {
     <NavLink
       to={`/contract/${id}`}
       className="contact-link"
-      title={`C${id} ${contractTitle}${status ? ` (${formatStatus(status)})` : ''}`}
+      title={`C${id} ${contractTitle}${status ? ` (${formatTranslateStatus(status)})` : ''}`}
     >
       <Icon name="file alternate" />
       {showId ? `C${id} ` : ''}

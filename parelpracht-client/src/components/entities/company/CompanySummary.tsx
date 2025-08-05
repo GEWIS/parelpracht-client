@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import { Company } from '../../../clients/server.generated';
-import { formatStatus } from '../../../helpers/activity';
+import { formatTranslateStatus } from '../../../helpers/activity';
 import ResourceStatus from '../../../stores/resourceStatus';
 import { fetchSingle } from '../../../stores/single/actionCreators';
 import { getSingle } from '../../../stores/single/selectors';
@@ -50,7 +50,7 @@ function CompanySummary(props: Props) {
       </div>
       <div>
         <h5>Status</h5>
-        <p>{formatStatus(company.status)}</p>
+        <p>{formatTranslateStatus(company.status)}</p>
       </div>
     </EntitySummary>
   );

@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Invoice, InvoiceStatus } from '../../../clients/server.generated';
 import { dateToFullFinancialYear, formatLastUpdate } from '../../../helpers/timestamp';
 import { RootState } from '../../../stores/store';
-import { formatStatus } from '../../../helpers/activity';
+import { formatTranslateStatus } from '../../../helpers/activity';
 import { getInvoiceStatus } from '../../../stores/invoice/selectors';
 import CompanyLink from '../company/CompanyLink';
 import InvoiceLink from './InvoiceLink';
@@ -25,7 +25,7 @@ function InvoiceCompactRow(props: Props): JSX.Element {
       <Table.Cell>
         <CompanyLink id={invoice.companyId} />
       </Table.Cell>
-      <Table.Cell>{formatStatus(status)}</Table.Cell>
+      <Table.Cell>{formatTranslateStatus(status)}</Table.Cell>
       <Table.Cell>{dateToFullFinancialYear(invoice.startDate)}</Table.Cell>
       <Table.Cell>{formatLastUpdate(invoice.updatedAt)}</Table.Cell>
     </Table.Row>

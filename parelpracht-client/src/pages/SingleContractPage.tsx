@@ -1,10 +1,10 @@
 import { Component } from 'react';
 import { NavLink } from 'react-router-dom';
-import { Breadcrumb, Container, Grid, Loader, Segment, Tab, TabPane, TabProps } from 'semantic-ui-react';
+import { Breadcrumb, Container, Grid, Loader, Segment, Tab, TabPane } from 'semantic-ui-react';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import { withTranslation, WithTranslation } from 'react-i18next';
-import { Contract, ProductInstanceStatus, Roles } from '../clients/server.generated';
+import { Contract, Roles } from '../clients/server.generated';
 import { clearSingle, fetchSingle } from '../stores/single/actionCreators';
 import { RootState } from '../stores/store';
 import ContractProps from '../components/entities/contract/ContractProps';
@@ -15,7 +15,7 @@ import { getSingle } from '../stores/single/selectors';
 import { SingleEntities } from '../stores/single/single';
 import ActivitiesList from '../components/activities/ActivitiesList';
 import { GeneralActivity } from '../components/activities/GeneralActivity';
-import FinancialDocumentProgress from '../components/activities/FinancialDocumentProgress';
+import ContractProgress from '../components/activities/ContractProgress';
 import { showTransientAlert } from '../stores/alerts/actionCreators';
 import { TransientAlert } from '../stores/alerts/actions';
 import FilesList from '../components/files/FilesList';
@@ -185,19 +185,7 @@ class SingleContractPage extends Component<Props, State> {
           <ContractSummary />
           <Grid rows={2} stackable>
             <Grid.Row centered columns={1} style={{ paddingLeft: '1em', paddingRight: '1em' }}>
-              <Segment secondary style={{ backgroundColor: 'rgba(243, 244, 245, 0.98)' }}>
-                <FinancialDocumentProgress
-                  documentId={contract.id}
-                  activities={contract.activities as GeneralActivity[]}
-                  documentType={SingleEntities.Contract}
-                  resourceStatus={status}
-                  roles={[Roles.ADMIN, Roles.GENERAL]}
-                  canCancel={contract.products.every(
-                    (p) => p.activities.find((a) => a.subType === ProductInstanceStatus.CANCELLED) !== undefined,
-                  )}
-                  cancelReason={t('pages.contract.cancelError')}
-                />
-              </Segment>
+              <ContractProgress contract={contract} resourceStatus={status} />
             </Grid.Row>
             <Grid.Row columns={2}>
               <Grid.Column width={10}>

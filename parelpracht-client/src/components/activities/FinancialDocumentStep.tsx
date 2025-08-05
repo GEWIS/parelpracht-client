@@ -1,124 +1,78 @@
-import { Component, ReactNode } from 'react';
-import { connect } from 'react-redux';
-import { Step } from 'semantic-ui-react';
-import { formatStatus } from '../../helpers/activity';
-import { SingleEntities } from '../../stores/single/single';
+import { Icon, Step, StepContent, StepDescription, StepTitle } from 'semantic-ui-react';
+import { JSX, useState } from 'react';
+import { ContractStatus, InvoiceStatus, ProductInstanceStatus } from '../../clients/server.generated';
 import ResourceStatus from '../../stores/resourceStatus';
-import { Roles } from '../../clients/server.generated';
-import { RootState } from '../../stores/store';
-import { authedUserHasRole } from '../../stores/auth/selectors';
-import { WithRouter, withRouter } from '../../WithRouter';
-import { DocumentStatus } from './DocumentStatus';
-import DocumentStatusModal from './DocumentStatusModal';
+import FinancialDocumentStatusModal from './FinancialDocumentStatusModal.tsx';
 
-/**
- * Definition of used variables
- */
-interface Props extends WithRouter {
-  documentId: number;
-  documentType: SingleEntities;
-  // If the document is a ProductInstance, the parentId is the contract ID
-  parentId?: number;
-  status: DocumentStatus;
-  statusChecked: boolean;
-  statusClickable: boolean;
-  statusDescription: string;
-  statusDisabled: boolean;
-  statusIcon: ReactNode;
+export enum FinancialDocumentStepStatus {
+  COMPLETED,
+  CREATABLE,
+  CANCELLED,
+  DEFERRED,
+}
 
+interface Props<T extends ContractStatus | InvoiceStatus | ProductInstanceStatus> {
+  documentStatus: T;
+  stepStatus?: FinancialDocumentStepStatus | undefined;
+  title: string;
+  description?: string | undefined;
   resourceStatus: ResourceStatus;
-
-  hasRole: (role: Roles) => boolean;
-
-  roles: Roles[];
+  onSave: (documentStatus: T, description: string) => void;
 }
 
-interface State {
-  stepModalOpen: boolean;
-}
+function FinancialDocumentStep<T extends ContractStatus | InvoiceStatus | ProductInstanceStatus>({
+  stepStatus = undefined,
+  title,
+  description,
+  documentStatus,
+  resourceStatus,
+  onSave: onSaveOriginal,
+}: Props<T>) {
+  const [documentStatusModalOpen, setDocumentStatusModalOpen] = useState(false);
 
-class FinancialDocumentProgress extends Component<Props, State> {
-  static defaultProps = {
-    parentId: undefined,
-  };
-
-  public constructor(props: Props) {
-    super(props);
-    this.state = {
-      stepModalOpen: false,
-    };
-  }
-
-  closeStepModal = () => {
-    this.setState({
-      stepModalOpen: false,
-    });
-  };
-
-  public render() {
-    const {
-      documentId,
-      documentType,
-      status,
-      statusChecked,
-      statusClickable,
-      statusDescription,
-      statusDisabled,
-      statusIcon,
-      resourceStatus,
-      parentId,
-      hasRole,
-      roles,
-    } = this.props;
-    const { stepModalOpen } = this.state;
-
-    // check if status can be clicked and give properties depending on that
-    let statusClickableString = '';
-    let onStepClick;
-    const permissionToClick = roles.some(hasRole);
-    if (statusClickable) {
-      statusClickableString = 'clickable';
-      onStepClick = () => {
-        this.setState({
-          stepModalOpen: true,
-        });
-      };
+  const getIcon = (): JSX.Element | null => {
+    switch (stepStatus) {
+      case FinancialDocumentStepStatus.COMPLETED:
+        return <Icon name="check" color="green" />;
+      case FinancialDocumentStepStatus.CANCELLED:
+        return <Icon color="red" name="close" />;
+      case FinancialDocumentStepStatus.DEFERRED:
+        return <Icon color="orange" name="stopwatch" />;
+      default:
+        return null;
     }
+  };
 
-    return (
-      <>
-        <Step
-          completed={statusChecked}
-          className={statusClickableString}
-          onClick={onStepClick}
-          disabled={!permissionToClick || statusDisabled}
-        >
-          {statusIcon}
-          <Step.Content>
-            <Step.Title>{formatStatus(status)}</Step.Title>
-            <Step.Description style={{ maxWidth: '20ch', wordWrap: 'break-word' }}>
-              {statusDescription}
-            </Step.Description>
-          </Step.Content>
-        </Step>
-        <DocumentStatusModal
-          open={stepModalOpen}
-          documentId={documentId}
-          parentId={parentId}
-          documentType={documentType}
-          documentStatus={status}
-          close={this.closeStepModal}
-          resourceStatus={resourceStatus}
-        />
-      </>
-    );
-  }
+  return (
+    <>
+      <FinancialDocumentStatusModal
+        documentStatus={documentStatus}
+        documentStatusText={title}
+        open={documentStatusModalOpen}
+        originalDescription={description}
+        resourceStatus={resourceStatus}
+        onClose={() => {
+          setDocumentStatusModalOpen(false);
+        }}
+        onSave={(documentStatus, description) => {
+          onSaveOriginal(documentStatus, description);
+          setDocumentStatusModalOpen(false);
+        }}
+      />
+      <Step
+        completed={stepStatus === FinancialDocumentStepStatus.COMPLETED}
+        onClick={
+          stepStatus === FinancialDocumentStepStatus.CREATABLE ? () => setDocumentStatusModalOpen(true) : undefined
+        }
+      >
+        {getIcon()}
+        <StepContent>
+          <StepTitle>{title}</StepTitle>
+          <StepDescription>{description}</StepDescription>
+        </StepContent>
+      </Step>
+    </>
+  );
 }
 
-const mapStateToProps = (state: RootState) => {
-  return {
-    hasRole: (role: Roles): boolean => authedUserHasRole(state, role),
-  };
-};
-
-export default withRouter(connect(mapStateToProps)(FinancialDocumentProgress));
+export default FinancialDocumentStep;

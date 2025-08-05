@@ -1,6 +1,6 @@
 import ColumnFilter from '../ColumnFilter';
 import { ContractStatus } from '../../clients/server.generated';
-import { formatStatus } from '../../helpers/activity';
+import { formatTranslateStatus } from '../../helpers/activity';
 import { Tables } from '../../stores/tables/tables';
 
 interface Props {
@@ -15,7 +15,7 @@ function ContractStatusFilter({
   table = Tables.Contracts,
 }: Props) {
   const options = Object.values(ContractStatus).map((s: string, i) => {
-    return { key: i, value: s, text: formatStatus(s) };
+    return { key: i, value: s, text: formatTranslateStatus(s) };
   });
 
   return <ColumnFilter column={column} columnName={columnName} table={table} options={options} />;

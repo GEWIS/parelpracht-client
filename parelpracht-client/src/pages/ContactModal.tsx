@@ -14,7 +14,7 @@ import { SingleEntities } from '../stores/single/single';
 import { TransientAlert } from '../stores/alerts/actions';
 import { showTransientAlert } from '../stores/alerts/actionCreators';
 import { formatContactName } from '../helpers/contact';
-import { formatStatus } from '../helpers/activity';
+import { formatTranslateStatus } from '../helpers/activity';
 import { getContractStatus } from '../stores/contract/selectors';
 import CompanyLink from '../components/entities/company/CompanyLink';
 import { TitleContext } from '../components/TitleContext';
@@ -159,7 +159,7 @@ class ContactModal extends Component<Props> {
                     <Table.Cell>
                       <CompanyLink id={contract.companyId} />
                     </Table.Cell>
-                    <Table.Cell>{formatStatus(this.props.getContractStatus(contract.id))}</Table.Cell>
+                    <Table.Cell>{formatTranslateStatus(this.props.getContractStatus(contract.id))}</Table.Cell>
                   </Table.Row>
                 );
               })}
