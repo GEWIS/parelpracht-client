@@ -2,7 +2,7 @@ import { ChangeEvent, Component } from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import { Checkbox, Dropdown, Form, Icon, Input, Popup, Segment } from 'semantic-ui-react';
-import validator from 'validator';
+import * as validator from 'validator';
 import _ from 'lodash';
 import { withTranslation, WithTranslation } from 'react-i18next';
 import { Gender, LoginMethods, Partial_UserParams_, Roles, User, UserParams } from '../../../clients/server.generated';

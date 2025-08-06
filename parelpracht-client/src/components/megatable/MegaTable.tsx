@@ -41,7 +41,10 @@ interface Props extends WithTranslation, WithRouter {
   status: ResourceStatus;
 
   fetchCompanies: () => void;
-  setTableFilter: (filter: { column: string; values: any[] }) => void;
+  setTableFilter: (filter: {
+    column: 'status' | 'status2' | 'invoiced';
+    values: (ContractStatus | ProductInstanceStatus | number | undefined)[];
+  }) => void;
   changeSort: (column: string) => void;
   setSort: (column: string, direction: 'ASC' | 'DESC') => void;
   setTake: (take: number) => void;
@@ -230,7 +233,10 @@ const mapStateToProps = (state: RootState) => {
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
   fetchCompanies: () => dispatch(fetchTable(Tables.ETCompanies)),
-  setTableFilter: (filter: { column: string; values: any[] }) => {
+  setTableFilter: (filter: {
+    column: 'status' | 'status2' | 'invoiced';
+    values: (ContractStatus | ProductInstanceStatus | number | undefined)[];
+  }) => {
     dispatch(setFilterTable(Tables.ETCompanies, filter));
   },
   changeSort: (column: string) => {

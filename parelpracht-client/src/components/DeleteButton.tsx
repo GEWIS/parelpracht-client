@@ -1,5 +1,4 @@
-import { Button, Popup, SemanticCOLORS } from 'semantic-ui-react';
-import { SemanticSIZES } from 'semantic-ui-react/dist/commonjs/generic';
+import { Button, ButtonProps, Popup } from 'semantic-ui-react';
 import { useTranslation } from 'react-i18next';
 import ResourceStatus from '../stores/resourceStatus';
 import { SingleEntities } from '../stores/single/single';
@@ -9,8 +8,8 @@ interface DeleteProps {
   entity: SingleEntities | 'InvoiceProduct';
   remove: () => void;
   status: ResourceStatus;
-  size?: SemanticSIZES;
-  color?: SemanticCOLORS;
+  size?: ButtonProps['size'];
+  color?: ButtonProps['color'];
   style?: Partial<CSSStyleDeclaration>;
 }
 

@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { Dropdown, DropdownProps } from 'semantic-ui-react';
 import { CategorySummary } from '../../../clients/server.generated';
 import { RootState } from '../../../stores/store';
+import { SummariesState } from '../../../stores/summaries/reducer';
 
 interface Props {
   value: number;
@@ -47,7 +48,7 @@ function ProductCategorySelector(props: Props & DropdownProps) {
 }
 
 const mapStateToProps = (state: RootState) => ({
-  options: state.summaries.ProductCategories.options,
+  options: (state.summaries as SummariesState).ProductCategories.options,
 });
 
 export default connect(mapStateToProps)(ProductCategorySelector);

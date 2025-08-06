@@ -82,27 +82,35 @@ class PricingTable extends Component<Props, State> {
     this.setState({ editing: true });
   };
 
-  save = async () => {
+  save = () => {
     const { productId, fetchProduct } = this.props;
     const { description, pricingData } = this.state;
     const client = new Client();
-    await client.updatePricing(productId, {
-      description,
-      data: pricingData,
-    } as Partial_PricingParams_);
-    fetchProduct(productId);
-    this.setState({ editing: false });
+    client
+      .updatePricing(productId, {
+        description,
+        data: pricingData,
+      } as Partial_PricingParams_)
+      .then(() => {
+        fetchProduct(productId);
+        this.setState({ editing: false });
+      })
+      .catch((e) => console.error(e));
   };
 
   cancel = () => {
     this.setState({ editing: false });
   };
 
-  remove = async () => {
+  remove = () => {
     const { productId, fetchProduct } = this.props;
     const client = new Client();
-    await client.deletePricing(productId);
-    fetchProduct(productId);
+    client
+      .deletePricing(productId)
+      .then(() => {
+        fetchProduct(productId);
+      })
+      .catch((e) => console.error(e));
   };
 
   render() {

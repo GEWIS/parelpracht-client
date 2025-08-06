@@ -12,15 +12,19 @@ interface Props extends WithTranslation {
 }
 
 function CreatePricing(props: Props) {
-  const createPricing = async () => {
+  const createPricing = () => {
     const client = new Client();
-    await client.addPricing(props.productId);
-    props.fetchProduct(props.productId);
+    client
+      .addPricing(props.productId)
+      .then(() => {
+        props.fetchProduct(props.productId);
+      })
+      .catch((e) => console.error(e));
   };
   const { t } = props;
 
   return (
-    <Button primary onClick={() => createPricing()}>
+    <Button primary onClick={createPricing}>
       {t('entities.product.props.customPriceButton')}
     </Button>
   );

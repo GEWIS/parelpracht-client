@@ -2,7 +2,7 @@ import { ChangeEvent, Component } from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import { Form, Input, TextArea } from 'semantic-ui-react';
-import validator from 'validator';
+import * as validator from 'validator';
 import { withTranslation, WithTranslation } from 'react-i18next';
 import DatePicker from 'react-datepicker';
 import { ActivityType, Invoice, InvoiceStatus, Partial_InvoiceParams_, Roles } from '../../../clients/server.generated';

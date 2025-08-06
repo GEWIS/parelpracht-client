@@ -1,9 +1,8 @@
 import { useEffect, useState, useRef } from 'react';
 import { Dropdown, Grid, Popup, Segment, Table } from 'semantic-ui-react';
 import { useTranslation } from 'react-i18next';
-import { Bar } from 'react-chartjs-2';
-import { ChartJSOrUndefined } from 'react-chartjs-2/dist/types';
-import { ChartData } from 'chart.js';
+import { Chart } from 'react-chartjs-2';
+import { Chart as ChartJS, ChartData } from 'chart.js';
 import { useNavigate } from 'react-router-dom';
 import { Client, DashboardProductInstanceStats } from '../../clients/server.generated';
 import { dateToFinancialYear } from '../../helpers/timestamp';
@@ -12,7 +11,7 @@ import './FinancialOverview.scss';
 import { FinancialOverviewField } from './FinancialOverviewField';
 
 function FinancialOverview() {
-  const chart = useRef<ChartJSOrUndefined<'bar'> | null>(null);
+  const chart = useRef<ChartJS | null>(null);
   const navigate = useNavigate();
   const { t } = useTranslation();
 
@@ -108,7 +107,8 @@ function FinancialOverview() {
         </Grid.Row>
       </Grid>
       <div>
-        <Bar
+        <Chart
+          type="bar"
           ref={chart}
           data={createBarChartDataObject()}
           options={{

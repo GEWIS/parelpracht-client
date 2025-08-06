@@ -70,7 +70,7 @@ class SingleCompanyPage extends Component<Props, State> {
     const { params } = this.props.router;
 
     this.props.clearCompany();
-    this.props.fetchCompany(Number.parseInt(params.companyId, 10));
+    this.props.fetchCompany(Number(params.companyId));
   }
 
   componentDidUpdate(prevProps: Readonly<Props>) {
@@ -226,9 +226,11 @@ class SingleCompanyPage extends Component<Props, State> {
               <Tab
                 panes={panes}
                 menu={{ pointing: true, inverted: true }}
-                onTabChange={(e, data) => {
+                onTabChange={(_, data) => {
                   this.setState({ paneIndex: data.activeIndex! as number });
-                  navigate(`#${data.panes![data.activeIndex! as number].menuItem.toLowerCase()}`, { replace: true });
+                  navigate(`#${(data.panes![data.activeIndex! as number].menuItem as string).toLowerCase()}`, {
+                    replace: true,
+                  });
                 }}
                 activeIndex={paneIndex}
               />

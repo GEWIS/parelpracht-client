@@ -180,7 +180,9 @@ class SingleInvoicePage extends Component<Props, State> {
                   menu={{ pointing: true, inverted: true }}
                   onTabChange={(_, data) => {
                     this.setState({ paneIndex: data.activeIndex! as number });
-                    navigate(`#${data.panes![data.activeIndex! as number].menuItem.toLowerCase()}`, { replace: true });
+                    navigate(`#${(data.panes![data.activeIndex! as number].menuItem as string).toLowerCase()}`, {
+                      replace: true,
+                    });
                   }}
                   activeIndex={paneIndex}
                 />

@@ -2,7 +2,7 @@ import { Component } from 'react';
 import { connect } from 'react-redux';
 import { Button, Input } from 'semantic-ui-react';
 import { Dispatch } from 'redux';
-import validator from 'validator';
+import * as validator from 'validator';
 import { withTranslation, WithTranslation } from 'react-i18next';
 import ResourceStatus from '../../stores/resourceStatus';
 import { SingleEntities } from '../../stores/single/single';

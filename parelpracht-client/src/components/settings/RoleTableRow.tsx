@@ -27,14 +27,18 @@ class RoleTableRow extends Component<Props, State> {
     };
   }
 
-  save = async () => {
+  save = () => {
     const { role, updateTable } = this.props;
     const { ldapGroup } = this.state;
     this.setState({ saving: true });
     const client = new Client();
-    const newRole = await client.updateRole(role.name, new Partial_RoleParams_({ ldapGroup }));
-    updateTable(newRole);
-    this.setState({ saving: false, editing: false });
+    client
+      .updateRole(role.name, new Partial_RoleParams_({ ldapGroup }))
+      .then((newRole) => {
+        updateTable(newRole);
+        this.setState({ saving: false, editing: false });
+      })
+      .catch((e) => console.error(e));
   };
 
   cancel = () => {

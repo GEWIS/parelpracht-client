@@ -1,10 +1,9 @@
 import { createRef, Component, ReactNode, RefObject } from 'react';
 import { Dropdown, Grid } from 'semantic-ui-react';
 import { withTranslation, WithTranslation } from 'react-i18next';
-import { Line } from 'react-chartjs-2';
+import { Chart } from 'react-chartjs-2';
 import { connect } from 'react-redux';
-import { ChartData, ChartOptions } from 'chart.js';
-import { ChartJSOrUndefined } from 'react-chartjs-2/dist/types';
+import { Chart as ChartJS, ChartData, ChartOptions } from 'chart.js';
 import { formatPriceFull } from '../../helpers/monetary';
 import { randomColorSet } from '../../helpers/colors';
 import { ProductsPerCategory } from '../../clients/server.generated';
@@ -32,7 +31,7 @@ class CategoryLineChart extends Component<Props, State> {
     extraDropdown: undefined,
   };
 
-  private chartReference: RefObject<ChartJSOrUndefined<'line'>>;
+  private chartReference: RefObject<ChartJS<'line'> | null>;
 
   constructor(props: Props) {
     super(props);
@@ -175,7 +174,7 @@ class CategoryLineChart extends Component<Props, State> {
           </Grid.Row>
         </Grid>
         <div>
-          <Line ref={this.chartReference} data={chartData} options={options} redraw />
+          <Chart type="line" ref={this.chartReference} data={chartData} options={options} redraw />
         </div>
       </>
     );

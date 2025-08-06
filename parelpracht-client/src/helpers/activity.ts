@@ -61,8 +61,6 @@ export function formatActivityType(
       return i18n.t('activities.types.addProduct', { entity: formatDocumentType(entity).toLowerCase() });
     case ActivityType.DELPRODUCT:
       return i18n.t('activities.types.delProduct', { entity: formatDocumentType(entity).toLowerCase() });
-    default:
-      throw new Error(`Unknown activity type ${activityType}`);
   }
 }
 
