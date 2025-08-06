@@ -1,4 +1,4 @@
-import FileSaver from 'file-saver';
+import * as FileSaver from 'file-saver';
 import { SingleEntities } from '../stores/single/single';
 import { CustomInvoiceGenSettings, GenerateContractParams, GenerateInvoiceParams } from './server.generated';
 

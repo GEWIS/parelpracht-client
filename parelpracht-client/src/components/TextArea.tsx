@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { CSSProperties, useEffect, useRef } from 'react';
 import { TextAreaProps } from 'semantic-ui-react/dist/commonjs/addons/TextArea/TextArea';
 import { TextArea } from 'semantic-ui-react';
 
@@ -22,11 +22,13 @@ function ExtendableTextArea(props: TextAreaProps) {
         setHeight();
         if (props.onChange) props.onChange(event, x);
       }}
-      style={{
-        overflowY: 'hidden',
-        resize: 'none',
-        ...props.style,
-      }}
+      style={
+        {
+          overflowY: 'hidden',
+          resize: 'none',
+          ...props.style,
+        } as CSSProperties
+      }
       ref={textArea}
     />
   );
