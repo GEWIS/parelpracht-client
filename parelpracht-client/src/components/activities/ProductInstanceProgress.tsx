@@ -1,25 +1,23 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { Button, Popup } from 'semantic-ui-react';
-import { ProductInstance, ProductInstanceStatus, Roles } from '../../clients/server.generated';
+import { ProductInstance, ProductInstanceActivity, ProductInstanceStatus, Roles } from '../../clients/server.generated';
 import ResourceStatus from '../../stores/resourceStatus';
-import {
-  formatTranslateStatus,
-  getCompletedStatuses,
-  getLastDocumentStatus,
-  getStatusDescriptionMap,
-  StatusDescriptionMap,
-} from '../../helpers/activity';
+import { getLastDocumentStatusFromActivities } from '../../helpers/activity';
 import { createInstanceStatusSingle } from '../../stores/productinstance/actionCreator';
 import AuthorizationComponent from '../AuthorizationComponent';
-import { authedUserHasRole } from '../../stores/auth/selectors';
-import { RootState } from '../../stores/store';
 import FinancialDocumentProgress from './FinancialDocumentProgress';
-import FinancialDocumentStep, { FinancialDocumentStepStatus } from './FinancialDocumentStep';
 import FinancialDocumentStatusModal from './FinancialDocumentStatusModal';
 
-const ORDERED_PRODUCT_INSTANCE_STATUSES = [ProductInstanceStatus.NOTDELIVERED, ProductInstanceStatus.DELIVERED];
+const PRODUCT_INSTANCE_STATUS_STEPS = [ProductInstanceStatus.NOTDELIVERED, ProductInstanceStatus.DELIVERED];
+const PRODUCT_INSTANCE_STATUS_ORDERING = [
+  ...PRODUCT_INSTANCE_STATUS_STEPS,
+  ProductInstanceStatus.DEFERRED,
+  ProductInstanceStatus.CANCELLED,
+];
+const INITIAL_STATUS = ProductInstanceStatus.NOTDELIVERED;
+const APPLICABLE_ROLES = [Roles.ADMIN, Roles.GENERAL];
 
 interface Props {
   productInstance: ProductInstance;
@@ -30,59 +28,32 @@ function getPrerequisiteStatuses(a: ProductInstanceStatus): Set<ProductInstanceS
   if (a === ProductInstanceStatus.DELIVERED)
     return new Set([ProductInstanceStatus.DELIVERED, ...getPrerequisiteStatuses(ProductInstanceStatus.NOTDELIVERED)]);
   if (a === ProductInstanceStatus.NOTDELIVERED) return new Set([ProductInstanceStatus.NOTDELIVERED]);
+  return new Set([a]);
+}
+
+function getNextPossibleStatuses(s: ProductInstanceStatus): Set<ProductInstanceStatus> {
+  switch (s) {
+    case ProductInstanceStatus.NOTDELIVERED:
+      return new Set([ProductInstanceStatus.DELIVERED]);
+  }
   return new Set();
 }
 
-function getNextPossibleStatuses(s: ProductInstanceStatus): ProductInstanceStatus[] {
-  switch (s) {
-    case ProductInstanceStatus.NOTDELIVERED:
-      return [ProductInstanceStatus.DELIVERED];
-  }
-  return [];
-}
-
 function ProductInstanceProgress({ productInstance, resourceStatus }: Props) {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const dispatch = useDispatch();
-  const hasRole = useSelector((state: RootState) => (role: Roles) => authedUserHasRole(state, role));
 
-  const [activityMap, setActivityMap] = useState<StatusDescriptionMap<ProductInstanceStatus>>(new Map());
-  const [lastStatus, setLastStatus] = useState<ProductInstanceStatus>(ProductInstanceStatus.NOTDELIVERED);
-  const [completedStatuses, setCompletedStatuses] = useState<Set<ProductInstanceStatus>>(new Set());
-  const [nextPossibleStatuses, setNextPossibleStatuses] = useState<Set<ProductInstanceStatus>>(new Set());
-
+  const [lastStatus, setLastStatus] = useState<ProductInstanceStatus>(INITIAL_STATUS);
   const [cancelModalOpen, setCancelModalOpen] = useState(false);
   const [deferModalOpen, setDeferModalOpen] = useState(false);
 
   useEffect(() => {
-    const newActivityMap = getStatusDescriptionMap(productInstance.activities);
-    setActivityMap(newActivityMap);
-
-    const lastDocumentStatus =
-      getLastDocumentStatus(
-        [...newActivityMap.keys()],
-        [...ORDERED_PRODUCT_INSTANCE_STATUSES, ProductInstanceStatus.CANCELLED, ProductInstanceStatus.DEFERRED],
-      ) ?? ProductInstanceStatus.NOTDELIVERED;
-    setLastStatus(lastDocumentStatus);
-
-    const newCompletedStatuses = getCompletedStatuses([lastDocumentStatus], getPrerequisiteStatuses);
-    setCompletedStatuses(newCompletedStatuses);
-
-    const newNextPossibleStatuses = new Set(getNextPossibleStatuses(lastDocumentStatus));
-    setNextPossibleStatuses(newNextPossibleStatuses);
+    const mostRecentStatus = getLastDocumentStatusFromActivities(
+      productInstance.activities,
+      PRODUCT_INSTANCE_STATUS_ORDERING,
+    );
+    setLastStatus(mostRecentStatus ?? INITIAL_STATUS);
   }, [productInstance]);
-
-  const authorizedToEdit = (): boolean => {
-    return [Roles.GENERAL, Roles.ADMIN].some((r) => hasRole(r));
-  };
-
-  const getStatusForActivity = (activity: ProductInstanceStatus): FinancialDocumentStepStatus | undefined => {
-    if (activityMap.has(ProductInstanceStatus.DEFERRED)) return FinancialDocumentStepStatus.DEFERRED;
-    if (completedStatuses.has(activity)) return FinancialDocumentStepStatus.COMPLETED;
-    if (activityMap.has(ProductInstanceStatus.CANCELLED)) return FinancialDocumentStepStatus.CANCELLED;
-    if (nextPossibleStatuses.has(activity) && authorizedToEdit()) return FinancialDocumentStepStatus.CREATABLE;
-    return undefined;
-  };
 
   const onStatusSave = (documentStatus: ProductInstanceStatus, description: string): void => {
     dispatch(
@@ -93,27 +64,9 @@ function ProductInstanceProgress({ productInstance, resourceStatus }: Props) {
     );
   };
 
-  const getDescription = (documentStatus: ProductInstanceStatus): string | undefined => {
-    const descriptions = activityMap.get(documentStatus);
-    // Status does not exist, so return undefined. This indicates to the step as well that the status does not exist
-    if (!descriptions) return undefined;
-    if (i18n.language === 'nl-NL') return descriptions.descriptionDutch;
-    return descriptions.descriptionEnglish;
-  };
-
-  const getTitle = (): string => {
-    if (lastStatus === ProductInstanceStatus.CANCELLED) {
-      return t('activities.status.header.cancelled', { entity: t('entity.productinstance') });
-    }
-    if (lastStatus === ProductInstanceStatus.DEFERRED) {
-      return t('activities.status.header.deferred', { entity: t('entity.productinstance') });
-    }
-    return t('activities.status.header.general', { entity: t('entity.productinstance') });
-  };
-
   const deferButton = () => {
     return (
-      <AuthorizationComponent roles={[Roles.GENERAL, Roles.ADMIN]} notFound={false}>
+      <AuthorizationComponent roles={APPLICABLE_ROLES} notFound={false}>
         <Popup
           trigger={
             <Button
@@ -131,7 +84,7 @@ function ProductInstanceProgress({ productInstance, resourceStatus }: Props) {
           header={t('activities.status.defer', { entity: t('entity.productinstance').toLowerCase() })}
           content={t('activities.status.deferDescription', { entity: t('entity.productinstance').toLowerCase() })}
         />
-        <FinancialDocumentStatusModal
+        <FinancialDocumentStatusModal<ProductInstanceActivity>
           documentStatus={ProductInstanceStatus.DEFERRED}
           documentStatusText={t('entities.status.deferred')}
           open={deferModalOpen}
@@ -148,7 +101,7 @@ function ProductInstanceProgress({ productInstance, resourceStatus }: Props) {
 
   const cancelButton = () => {
     return (
-      <AuthorizationComponent roles={[Roles.GENERAL, Roles.ADMIN]} notFound={false}>
+      <AuthorizationComponent roles={APPLICABLE_ROLES} notFound={false}>
         <Popup
           trigger={
             <Button
@@ -170,7 +123,7 @@ function ProductInstanceProgress({ productInstance, resourceStatus }: Props) {
             return t('activities.status.cancelProductInstanceDescription');
           }}
         />
-        <FinancialDocumentStatusModal
+        <FinancialDocumentStatusModal<ProductInstanceActivity>
           documentStatus={ProductInstanceStatus.CANCELLED}
           documentStatusText={t('entities.status.cancelled')}
           open={cancelModalOpen}
@@ -188,24 +141,20 @@ function ProductInstanceProgress({ productInstance, resourceStatus }: Props) {
   return (
     <FinancialDocumentProgress
       resourceStatus={resourceStatus}
-      title={getTitle()}
+      formattedEntityName={t('entity.productinstance')}
       leftButton={deferButton()}
       rightButton={cancelButton()}
-    >
-      {ORDERED_PRODUCT_INSTANCE_STATUSES.map((s) => {
-        return (
-          <FinancialDocumentStep
-            key={s}
-            title={formatTranslateStatus(s)}
-            stepStatus={getStatusForActivity(s)}
-            documentStatus={s}
-            description={getDescription(s)}
-            resourceStatus={resourceStatus}
-            onSave={onStatusSave}
-          />
-        );
-      })}
-    </FinancialDocumentProgress>
+      activities={productInstance.activities}
+      orderedStatuses={PRODUCT_INSTANCE_STATUS_ORDERING}
+      statusesToShow={PRODUCT_INSTANCE_STATUS_STEPS}
+      initialStatus={INITIAL_STATUS}
+      cancelledStatus={ProductInstanceStatus.CANCELLED}
+      deferredStatus={ProductInstanceStatus.DEFERRED}
+      getPrerequisiteStatuses={getPrerequisiteStatuses}
+      getNextPossibleStatuses={getNextPossibleStatuses}
+      onStatusSave={onStatusSave}
+      roles={APPLICABLE_ROLES}
+    />
   );
 }
 

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Form } from 'semantic-ui-react';
 import { useTranslation } from 'react-i18next';
-import { ContractStatus, InvoiceStatus, ProductInstanceStatus } from '../../clients/server.generated';
+import { DocumentStatus, FinancialDocumentActivity } from '../../helpers/activity';
 import ResourceStatus from '../../stores/resourceStatus';
 import PropsButtons from '../PropsButtons';
 import { SingleEntities } from '../../stores/single/single';
@@ -9,7 +9,7 @@ import TextArea from '../TextArea';
 
 const DEFAULT_DESCRIPTION = '';
 
-interface Props<T extends ContractStatus | InvoiceStatus | ProductInstanceStatus> {
+interface Props<R extends FinancialDocumentActivity, T extends DocumentStatus<R> = DocumentStatus<R>> {
   /**
    * The status this modal will represent
    */
@@ -30,7 +30,7 @@ interface Props<T extends ContractStatus | InvoiceStatus | ProductInstanceStatus
   onSave: (documentStatus: T, description: string) => void;
 }
 
-function FinancialDocumentStatusProps<T extends ContractStatus | InvoiceStatus | ProductInstanceStatus>({
+function FinancialDocumentStatusProps<T extends FinancialDocumentActivity>({
   documentStatus,
   documentStatusText,
   originalDescription,
@@ -56,7 +56,6 @@ function FinancialDocumentStatusProps<T extends ContractStatus | InvoiceStatus |
   return (
     <>
       <h2>
-        {/*{creating() ? `Post ${formatStatus(documentStatus)} Status` : `${formatStatus(documentStatus)} Details} `}*/}
         {creating()
           ? t(`activities.status.headerCreate`, { status: documentStatusText })
           : t(`activities.status.headerUpdate`, { status: documentStatusText })}

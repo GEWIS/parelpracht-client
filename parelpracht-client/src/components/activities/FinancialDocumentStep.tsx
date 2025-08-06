@@ -1,8 +1,8 @@
 import { Icon, Step, StepContent, StepDescription, StepTitle } from 'semantic-ui-react';
 import { JSX, useState } from 'react';
-import { ContractStatus, InvoiceStatus, ProductInstanceStatus } from '../../clients/server.generated';
+import { DocumentStatus, FinancialDocumentActivity } from '../../helpers/activity';
 import ResourceStatus from '../../stores/resourceStatus';
-import FinancialDocumentStatusModal from './FinancialDocumentStatusModal.tsx';
+import FinancialDocumentStatusModal from './FinancialDocumentStatusModal';
 
 export enum FinancialDocumentStepStatus {
   COMPLETED,
@@ -11,7 +11,7 @@ export enum FinancialDocumentStepStatus {
   DEFERRED,
 }
 
-interface Props<T extends ContractStatus | InvoiceStatus | ProductInstanceStatus> {
+interface Props<R extends FinancialDocumentActivity, T extends DocumentStatus<R> = DocumentStatus<R>> {
   documentStatus: T;
   stepStatus?: FinancialDocumentStepStatus | undefined;
   title: string;
@@ -20,7 +20,7 @@ interface Props<T extends ContractStatus | InvoiceStatus | ProductInstanceStatus
   onSave: (documentStatus: T, description: string) => void;
 }
 
-function FinancialDocumentStep<T extends ContractStatus | InvoiceStatus | ProductInstanceStatus>({
+function FinancialDocumentStep<T extends FinancialDocumentActivity>({
   stepStatus = undefined,
   title,
   description,

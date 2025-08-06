@@ -1,32 +1,26 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { Button, Popup } from 'semantic-ui-react';
-import { Contract, ContractStatus, Roles } from '../../clients/server.generated';
+import { Contract, ContractActivity, ContractStatus, Roles } from '../../clients/server.generated';
 import ResourceStatus from '../../stores/resourceStatus';
-import {
-  formatTranslateStatus,
-  getCompletedStatuses,
-  getLastDocumentStatus,
-  getStatusDescriptionMap,
-  StatusDescriptionMap,
-} from '../../helpers/activity';
+import { getLastDocumentStatusFromActivities } from '../../helpers/activity';
 import { createSingleStatus } from '../../stores/single/actionCreators';
 import { SingleEntities } from '../../stores/single/single';
 import AuthorizationComponent from '../AuthorizationComponent';
-import { RootState } from '../../stores/store';
-import { authedUserHasRole } from '../../stores/auth/selectors';
 import FinancialDocumentProgress from './FinancialDocumentProgress';
-import FinancialDocumentStep, { FinancialDocumentStepStatus } from './FinancialDocumentStep';
 import FinancialDocumentStatusModal from './FinancialDocumentStatusModal';
 
-const ORDERED_CONTRACT_STATUSES = [
+const CONTRACT_STATUS_STEPS = [
   ContractStatus.CREATED,
   ContractStatus.PROPOSED,
   ContractStatus.SENT,
   ContractStatus.CONFIRMED,
   ContractStatus.FINISHED,
 ];
+const CONTRACT_STATUS_ORDERING = [...CONTRACT_STATUS_STEPS, ContractStatus.CANCELLED];
+const INITIAL_STATUS = ContractStatus.CREATED;
+const APPLICABLE_ROLES = [Roles.ADMIN, Roles.GENERAL];
 
 interface Props {
   contract: Contract;
@@ -47,84 +41,42 @@ function getPrerequisiteStatuses(a: ContractStatus): Set<ContractStatus> {
   if (a === ContractStatus.PROPOSED)
     return new Set([ContractStatus.PROPOSED, ...getPrerequisiteStatuses(ContractStatus.CREATED)]);
   if (a === ContractStatus.CREATED) return new Set([ContractStatus.CREATED]);
+  return new Set([a]);
+}
+
+function getNextPossibleStatuses(s: ContractStatus): Set<ContractStatus> {
+  switch (s) {
+    case ContractStatus.CREATED:
+      return new Set([ContractStatus.PROPOSED, ContractStatus.SENT]);
+    case ContractStatus.PROPOSED:
+      return new Set([ContractStatus.SENT]);
+    case ContractStatus.SENT:
+      return new Set([ContractStatus.CONFIRMED]);
+    case ContractStatus.CONFIRMED:
+      return new Set([ContractStatus.FINISHED]);
+  }
   return new Set();
 }
 
-function getNextPossibleStatuses(s: ContractStatus): ContractStatus[] {
-  switch (s) {
-    case ContractStatus.CREATED:
-      return [ContractStatus.PROPOSED, ContractStatus.SENT];
-    case ContractStatus.PROPOSED:
-      return [ContractStatus.SENT];
-    case ContractStatus.SENT:
-      return [ContractStatus.CONFIRMED];
-    case ContractStatus.CONFIRMED:
-      return [ContractStatus.FINISHED];
-  }
-  return [];
-}
-
 function ContractProgress({ contract, resourceStatus }: Props) {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const dispatch = useDispatch();
-  const hasRole = useSelector((state: RootState) => (role: Roles) => authedUserHasRole(state, role));
 
-  const [activityMap, setActivityMap] = useState<StatusDescriptionMap<ContractStatus>>(new Map());
-  const [lastStatus, setLastStatus] = useState<ContractStatus>(ContractStatus.CREATED);
-  const [completedStatuses, setCompletedStatuses] = useState<Set<ContractStatus>>(new Set());
-  const [nextPossibleStatuses, setNextPossibleStatuses] = useState<Set<ContractStatus>>(new Set());
-
+  const [lastStatus, setLastStatus] = useState<ContractStatus>(INITIAL_STATUS);
   const [cancelModalOpen, setCancelModalOpen] = useState(false);
 
   useEffect(() => {
-    const newActivityMap = getStatusDescriptionMap(contract.activities);
-    setActivityMap(newActivityMap);
-
-    const lastDocumentStatus =
-      getLastDocumentStatus([...newActivityMap.keys()], [...ORDERED_CONTRACT_STATUSES, ContractStatus.CANCELLED]) ??
-      ContractStatus.CREATED;
-    setLastStatus(lastDocumentStatus);
-
-    const newCompletedStatuses = getCompletedStatuses([lastDocumentStatus], getPrerequisiteStatuses);
-    setCompletedStatuses(newCompletedStatuses);
-
-    const newNextPossibleStatuses = new Set(getNextPossibleStatuses(lastDocumentStatus));
-    setNextPossibleStatuses(newNextPossibleStatuses);
+    const mostRecentStatus = getLastDocumentStatusFromActivities(contract.activities, CONTRACT_STATUS_ORDERING);
+    setLastStatus(mostRecentStatus ?? INITIAL_STATUS);
   }, [contract]);
-
-  const authorizedToEdit = (): boolean => {
-    return [Roles.GENERAL, Roles.ADMIN].some((r) => hasRole(r));
-  };
-
-  const getStatusForActivity = (activity: ContractStatus): FinancialDocumentStepStatus | undefined => {
-    if (completedStatuses.has(activity)) return FinancialDocumentStepStatus.COMPLETED;
-    if (activityMap.has(ContractStatus.CANCELLED)) return FinancialDocumentStepStatus.CANCELLED;
-    if (nextPossibleStatuses.has(activity) && authorizedToEdit()) return FinancialDocumentStepStatus.CREATABLE;
-    return undefined;
-  };
 
   const onStatusSave = (documentStatus: ContractStatus, description: string): void => {
     dispatch(createSingleStatus(SingleEntities.Contract, contract.id, { subType: documentStatus, description }));
   };
 
-  const getDescription = (documentStatus: ContractStatus): string | undefined => {
-    const descriptions = activityMap.get(documentStatus);
-    // Status does not exist, so return undefined. This indicates to the step as well that the status does not exist
-    if (!descriptions) return undefined;
-    if (i18n.language === 'nl-NL') return descriptions.descriptionDutch;
-    return descriptions.descriptionEnglish;
-  };
-
-  const getTitle = (): string => {
-    if (lastStatus === ContractStatus.CANCELLED) {
-      return t('activities.status.header.cancelled', { entity: t('entity.contract') });
-    }
-    return t('activities.status.header.general', { entity: t('entity.contract') });
-  };
-
   const cancelButton = () => {
     return (
-      <AuthorizationComponent roles={[Roles.GENERAL, Roles.ADMIN]} notFound={false}>
+      <AuthorizationComponent roles={APPLICABLE_ROLES} notFound={false}>
         <Popup
           trigger={
             <Button
@@ -146,7 +98,7 @@ function ContractProgress({ contract, resourceStatus }: Props) {
             return t('activities.status.cancelContractDescription');
           }}
         />
-        <FinancialDocumentStatusModal
+        <FinancialDocumentStatusModal<ContractActivity>
           documentStatus={ContractStatus.CANCELLED}
           documentStatusText={t('entities.status.cancelled')}
           open={cancelModalOpen}
@@ -162,21 +114,20 @@ function ContractProgress({ contract, resourceStatus }: Props) {
   };
 
   return (
-    <FinancialDocumentProgress resourceStatus={resourceStatus} title={getTitle()} rightButton={cancelButton()}>
-      {ORDERED_CONTRACT_STATUSES.map((s) => {
-        return (
-          <FinancialDocumentStep
-            key={s}
-            title={formatTranslateStatus(s)}
-            stepStatus={getStatusForActivity(s)}
-            documentStatus={s}
-            description={getDescription(s)}
-            resourceStatus={resourceStatus}
-            onSave={onStatusSave}
-          />
-        );
-      })}
-    </FinancialDocumentProgress>
+    <FinancialDocumentProgress
+      resourceStatus={resourceStatus}
+      formattedEntityName={t('entity.contract')}
+      rightButton={cancelButton()}
+      activities={contract.activities}
+      orderedStatuses={CONTRACT_STATUS_ORDERING}
+      statusesToShow={CONTRACT_STATUS_STEPS}
+      initialStatus={INITIAL_STATUS}
+      cancelledStatus={ContractStatus.CANCELLED}
+      getPrerequisiteStatuses={getPrerequisiteStatuses}
+      getNextPossibleStatuses={getNextPossibleStatuses}
+      onStatusSave={onStatusSave}
+      roles={APPLICABLE_ROLES}
+    />
   );
 }
 

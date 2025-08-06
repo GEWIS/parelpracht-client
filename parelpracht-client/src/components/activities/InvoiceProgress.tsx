@@ -1,31 +1,20 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { Button, Popup } from 'semantic-ui-react';
-import { Invoice, InvoiceStatus, Roles } from '../../clients/server.generated';
+import { Invoice, InvoiceActivity, InvoiceStatus, Roles } from '../../clients/server.generated';
 import ResourceStatus from '../../stores/resourceStatus';
-import {
-  formatTranslateStatus,
-  getCompletedStatuses,
-  getLastDocumentStatus,
-  getStatusDescriptionMap,
-  StatusDescriptionMap,
-} from '../../helpers/activity';
+import { getLastDocumentStatusFromActivities } from '../../helpers/activity';
 import { createSingleStatus } from '../../stores/single/actionCreators';
 import { SingleEntities } from '../../stores/single/single';
 import AuthorizationComponent from '../AuthorizationComponent';
-import { authedUserHasRole } from '../../stores/auth/selectors';
-import { RootState } from '../../stores/store';
 import FinancialDocumentProgress from './FinancialDocumentProgress';
-import FinancialDocumentStep, { FinancialDocumentStepStatus } from './FinancialDocumentStep';
 import FinancialDocumentStatusModal from './FinancialDocumentStatusModal';
 
-const ORDERED_INVOICE_STATUSES = [
-  InvoiceStatus.CREATED,
-  InvoiceStatus.PROPOSED,
-  InvoiceStatus.SENT,
-  InvoiceStatus.PAID,
-];
+const INVOICE_STATUS_STEPS = [InvoiceStatus.CREATED, InvoiceStatus.PROPOSED, InvoiceStatus.SENT, InvoiceStatus.PAID];
+const INVOICE_STATUS_ORDERING = [...INVOICE_STATUS_STEPS, InvoiceStatus.CANCELLED, InvoiceStatus.IRRECOVERABLE];
+const INITIAL_STATUS = InvoiceStatus.CREATED;
+const APPLICABLE_ROLES = [Roles.ADMIN, Roles.GENERAL, Roles.FINANCIAL];
 
 interface Props {
   invoice: Invoice;
@@ -43,88 +32,42 @@ function getPrerequisiteStatuses(a: InvoiceStatus): Set<InvoiceStatus> {
   if (a === InvoiceStatus.PROPOSED)
     return new Set([InvoiceStatus.PROPOSED, ...getPrerequisiteStatuses(InvoiceStatus.CREATED)]);
   if (a === InvoiceStatus.CREATED) return new Set([InvoiceStatus.CREATED]);
+  return new Set([a]);
+}
+
+function getNextPossibleStatuses(s: InvoiceStatus): Set<InvoiceStatus> {
+  switch (s) {
+    case InvoiceStatus.CREATED:
+      return new Set([InvoiceStatus.PROPOSED, InvoiceStatus.SENT]);
+    case InvoiceStatus.PROPOSED:
+      return new Set([InvoiceStatus.SENT]);
+    case InvoiceStatus.SENT:
+      return new Set([InvoiceStatus.PAID]);
+  }
   return new Set();
 }
 
-function getNextPossibleStatuses(s: InvoiceStatus): InvoiceStatus[] {
-  switch (s) {
-    case InvoiceStatus.CREATED:
-      return [InvoiceStatus.PROPOSED, InvoiceStatus.SENT];
-    case InvoiceStatus.PROPOSED:
-      return [InvoiceStatus.SENT];
-    case InvoiceStatus.SENT:
-      return [InvoiceStatus.PAID];
-  }
-  return [];
-}
-
 function InvoiceProgress({ invoice, resourceStatus }: Props) {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const dispatch = useDispatch();
-  const hasRole = useSelector((state: RootState) => (role: Roles) => authedUserHasRole(state, role));
 
-  const [activityMap, setActivityMap] = useState<StatusDescriptionMap<InvoiceStatus>>(new Map());
-  const [lastStatus, setLastStatus] = useState<InvoiceStatus>(InvoiceStatus.CREATED);
-  const [completedStatuses, setCompletedStatuses] = useState<Set<InvoiceStatus>>(new Set());
-  const [nextPossibleStatuses, setNextPossibleStatuses] = useState<Set<InvoiceStatus>>(new Set());
+  const [lastStatus, setLastStatus] = useState<InvoiceStatus>(INITIAL_STATUS);
 
   const [cancelModalOpen, setCancelModalOpen] = useState(false);
   const [irrecoverableModalOpen, setIrrecoverableModalOpen] = useState(false);
 
   useEffect(() => {
-    const newActivityMap = getStatusDescriptionMap(invoice.activities);
-    setActivityMap(newActivityMap);
-
-    const lastDocumentStatus =
-      getLastDocumentStatus(
-        [...newActivityMap.keys()],
-        [...ORDERED_INVOICE_STATUSES, InvoiceStatus.CANCELLED, InvoiceStatus.IRRECOVERABLE],
-      ) ?? InvoiceStatus.CREATED;
-    setLastStatus(lastDocumentStatus);
-
-    const newCompletedStatuses = getCompletedStatuses([lastDocumentStatus], getPrerequisiteStatuses);
-    setCompletedStatuses(newCompletedStatuses);
-
-    const newNextPossibleStatuses = new Set(getNextPossibleStatuses(lastDocumentStatus));
-    setNextPossibleStatuses(newNextPossibleStatuses);
+    const mostRecentStatus = getLastDocumentStatusFromActivities(invoice.activities, INVOICE_STATUS_ORDERING);
+    setLastStatus(mostRecentStatus ?? INITIAL_STATUS);
   }, [invoice]);
-
-  const authorizedToEdit = (): boolean => {
-    return [Roles.GENERAL, Roles.ADMIN, Roles.FINANCIAL].some((r) => hasRole(r));
-  };
-
-  const getStatusForActivity = (activity: InvoiceStatus): FinancialDocumentStepStatus | undefined => {
-    if (completedStatuses.has(activity)) return FinancialDocumentStepStatus.COMPLETED;
-    if (activityMap.has(InvoiceStatus.CANCELLED)) return FinancialDocumentStepStatus.CANCELLED;
-    if (nextPossibleStatuses.has(activity) && authorizedToEdit()) return FinancialDocumentStepStatus.CREATABLE;
-    return undefined;
-  };
 
   const onStatusSave = (documentStatus: InvoiceStatus, description: string): void => {
     dispatch(createSingleStatus(SingleEntities.Invoice, invoice.id, { subType: documentStatus, description }));
   };
 
-  const getDescription = (documentStatus: InvoiceStatus): string | undefined => {
-    const descriptions = activityMap.get(documentStatus);
-    // Status does not exist, so return undefined. This indicates to the step as well that the status does not exist
-    if (!descriptions) return undefined;
-    if (i18n.language === 'nl-NL') return descriptions.descriptionDutch;
-    return descriptions.descriptionEnglish;
-  };
-
-  const getTitle = (): string => {
-    if (lastStatus === InvoiceStatus.CANCELLED) {
-      return t('activities.status.header.cancelled', { entity: t('entity.invoice') });
-    }
-    if (lastStatus === InvoiceStatus.IRRECOVERABLE) {
-      return t('activities.status.header.irrecoverable', { entity: t('entity.invoice') });
-    }
-    return t('activities.status.header.general', { entity: t('entity.invoice') });
-  };
-
   const irrecoverableButton = () => {
     return (
-      <AuthorizationComponent roles={[Roles.GENERAL, Roles.ADMIN, Roles.FINANCIAL]} notFound={false}>
+      <AuthorizationComponent roles={APPLICABLE_ROLES} notFound={false}>
         <Popup
           trigger={
             <Button
@@ -144,7 +87,7 @@ function InvoiceProgress({ invoice, resourceStatus }: Props) {
             return t('activities.status.irrecoverableDescription');
           }}
         />
-        <FinancialDocumentStatusModal
+        <FinancialDocumentStatusModal<InvoiceActivity>
           documentStatus={InvoiceStatus.IRRECOVERABLE}
           documentStatusText={t('entities.status.irrecoverable')}
           open={irrecoverableModalOpen}
@@ -161,7 +104,7 @@ function InvoiceProgress({ invoice, resourceStatus }: Props) {
 
   const cancelButton = () => {
     return (
-      <AuthorizationComponent roles={[Roles.GENERAL, Roles.ADMIN, Roles.FINANCIAL]} notFound={false}>
+      <AuthorizationComponent roles={APPLICABLE_ROLES} notFound={false}>
         <Popup
           trigger={
             <Button
@@ -183,7 +126,7 @@ function InvoiceProgress({ invoice, resourceStatus }: Props) {
             return t('activities.status.cancelInvoiceDescription');
           }}
         />
-        <FinancialDocumentStatusModal
+        <FinancialDocumentStatusModal<InvoiceActivity>
           documentStatus={InvoiceStatus.CANCELLED}
           documentStatusText={t('entities.status.cancelled')}
           open={cancelModalOpen}
@@ -201,24 +144,19 @@ function InvoiceProgress({ invoice, resourceStatus }: Props) {
   return (
     <FinancialDocumentProgress
       resourceStatus={resourceStatus}
-      title={getTitle()}
+      formattedEntityName={t('entity.invoice')}
       leftButton={irrecoverableButton()}
       rightButton={cancelButton()}
-    >
-      {ORDERED_INVOICE_STATUSES.map((s) => {
-        return (
-          <FinancialDocumentStep
-            key={s}
-            title={formatTranslateStatus(s)}
-            stepStatus={getStatusForActivity(s)}
-            documentStatus={s}
-            description={getDescription(s)}
-            resourceStatus={resourceStatus}
-            onSave={onStatusSave}
-          />
-        );
-      })}
-    </FinancialDocumentProgress>
+      activities={invoice.activities}
+      orderedStatuses={INVOICE_STATUS_ORDERING}
+      statusesToShow={INVOICE_STATUS_STEPS}
+      initialStatus={INITIAL_STATUS}
+      cancelledStatus={InvoiceStatus.CANCELLED}
+      getPrerequisiteStatuses={getPrerequisiteStatuses}
+      getNextPossibleStatuses={getNextPossibleStatuses}
+      onStatusSave={onStatusSave}
+      roles={APPLICABLE_ROLES}
+    />
   );
 }
 

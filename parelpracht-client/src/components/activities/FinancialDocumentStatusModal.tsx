@@ -1,10 +1,10 @@
 import { Modal, Segment } from 'semantic-ui-react';
-import { ContractStatus, InvoiceStatus, ProductInstanceStatus } from '../../clients/server.generated';
+import { DocumentStatus, FinancialDocumentActivity } from '../../helpers/activity';
 import AlertContainer from '../alerts/AlertContainer';
 import ResourceStatus from '../../stores/resourceStatus';
-import FinancialDocumentStatusProps from './FinancialDocumentStatusProps.tsx';
+import FinancialDocumentStatusProps from './FinancialDocumentStatusProps';
 
-interface Props<T extends ContractStatus | InvoiceStatus | ProductInstanceStatus> {
+interface Props<R extends FinancialDocumentActivity, T extends DocumentStatus<R> = DocumentStatus<R>> {
   /**
    * The status this modal will represent
    */
@@ -31,7 +31,7 @@ interface Props<T extends ContractStatus | InvoiceStatus | ProductInstanceStatus
   onSave: (documentStatus: T, description: string) => void;
 }
 
-function FinancialDocumentStatusModal<T extends ContractStatus | InvoiceStatus | ProductInstanceStatus>({
+function FinancialDocumentStatusModal<T extends FinancialDocumentActivity>({
   documentStatus,
   documentStatusText,
   open,

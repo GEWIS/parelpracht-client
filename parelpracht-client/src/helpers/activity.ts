@@ -116,14 +116,14 @@ export function getLastStatus<T extends BaseActivity>(activities: T[]): T | unde
   return undefined;
 }
 
-/*
- * New helper functions; all others (above) should be removed
- */
+export type FinancialDocumentActivity = ContractActivity | InvoiceActivity | ProductInstanceActivity;
 
-export type StatusDescriptionMap<T extends ContractStatus | InvoiceStatus | ProductInstanceStatus> = Map<
-  T,
-  { descriptionDutch: string; descriptionEnglish: string }
->;
+export type DocumentStatus<T extends FinancialDocumentActivity> = Exclude<T['subType'], undefined>;
+
+export type StatusDescriptionMap<
+  T extends ContractActivity | InvoiceActivity | ProductInstanceActivity,
+  R extends DocumentStatus<T> = DocumentStatus<T>,
+> = Map<R, { descriptionDutch: string; descriptionEnglish: string }>;
 
 /**
  * Get a mapping from every document status to its comments. The mapping can also be used as a list of all
@@ -132,11 +132,11 @@ export type StatusDescriptionMap<T extends ContractStatus | InvoiceStatus | Prod
  */
 export function getStatusDescriptionMap<T extends ContractActivity | InvoiceActivity | ProductInstanceActivity>(
   activities: T[],
-): StatusDescriptionMap<Exclude<T['subType'], undefined>> {
-  const s = new Map<Exclude<T['subType'], undefined>, { descriptionDutch: string; descriptionEnglish: string }>();
+): StatusDescriptionMap<T> {
+  const s = new Map<DocumentStatus<T>, { descriptionDutch: string; descriptionEnglish: string }>();
   activities.forEach((activity) => {
     if (activity.subType) {
-      s.set(activity.subType as Exclude<T['subType'], undefined>, {
+      s.set(activity.subType as DocumentStatus<T>, {
         descriptionDutch: activity.descriptionDutch,
         descriptionEnglish: activity.descriptionEnglish,
       });
@@ -153,14 +153,28 @@ export function getStatusDescriptionMap<T extends ContractActivity | InvoiceActi
  * @returns the most recent status of a document. Undefined if none of the given statuses are in the orderedStatuses
  * array.
  */
-export function getLastDocumentStatus<T extends ContractStatus | InvoiceStatus | ProductInstanceStatus>(
-  statuses: T[],
-  orderedStatuses: T[],
-): T | undefined {
+export function getLastDocumentStatus<
+  R extends FinancialDocumentActivity,
+  T extends DocumentStatus<R> = DocumentStatus<R>,
+>(statuses: T[], orderedStatuses: T[]): T | undefined {
   for (const status of orderedStatuses.toReversed()) {
     if (statuses.includes(status)) return status;
   }
   return undefined;
+}
+
+/**
+ * Get the most recent status of a document
+ * @param activities All activities a document has
+ * @param orderedStatuses All statuses a document can have, ordered from earliest (CREATED) to last (FINISHED)
+ * @returns the most recent status of a document. Undefined if none of the given statuses are in the orderedStatuses
+ * array.
+ */
+export function getLastDocumentStatusFromActivities<
+  T extends ContractActivity | InvoiceActivity | ProductInstanceActivity,
+>(activities: T[], orderedStatuses: DocumentStatus<T>[]): DocumentStatus<T> | undefined {
+  const statusDescriptionMap = getStatusDescriptionMap(activities);
+  return getLastDocumentStatus([...statusDescriptionMap.keys()], orderedStatuses);
 }
 
 /**
@@ -170,10 +184,10 @@ export function getLastDocumentStatus<T extends ContractStatus | InvoiceStatus |
  * @param statuses
  * @param getPrerequisiteStatuses
  */
-export function getCompletedStatuses<T extends ContractStatus | InvoiceStatus | ProductInstanceStatus>(
-  statuses: T[],
-  getPrerequisiteStatuses: (s: T) => Set<T>,
-): Set<T> {
+export function getCompletedStatuses<
+  R extends FinancialDocumentActivity,
+  T extends DocumentStatus<R> = DocumentStatus<R>,
+>(statuses: T[], getPrerequisiteStatuses: (s: T) => Set<T>): Set<T> {
   const set = new Set<T>();
   statuses.forEach((status) => {
     // No need to calculate the set of statuses for a status we have already processed
