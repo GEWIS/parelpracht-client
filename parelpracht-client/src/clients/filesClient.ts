@@ -8,7 +8,7 @@ export class FilesClient {
   private readonly baseUrl: string;
 
   constructor(baseUrl?: string, http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> }) {
-    this.http = http || <any>window;
+    this.http = http || window;
     this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : '/api';
   }
 
@@ -29,7 +29,7 @@ export class FilesClient {
     }
   }
 
-  getFile(entityId: number, fileId: number, entity: SingleEntities): Promise<any> {
+  async getFile(entityId: number, fileId: number, entity: SingleEntities): Promise<boolean> {
     let url = `${this.getBaseUrl(entity)}/file/{fileId}`;
 
     if (entityId === undefined || entityId === null) throw new Error("The parameter 'id' must be defined.");
@@ -52,9 +52,9 @@ export class FilesClient {
 
   private async processGetGeneralFile(response: Response): Promise<boolean> {
     const { status } = response;
-    const headers: any = {};
+    const headers: Record<string, string> = {};
     if (response.headers && response.headers.forEach) {
-      response.headers.forEach((v: any, k: any) => {
+      response.headers.forEach((v, k) => {
         headers[k] = v;
       });
     }

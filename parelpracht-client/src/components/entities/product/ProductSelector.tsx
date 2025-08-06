@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { connect } from 'react-redux';
 import { Dropdown, DropdownProps } from 'semantic-ui-react';
 import { useTranslation } from 'react-i18next';
 import { ProductStatus, ProductSummary } from '../../../clients/server.generated';
 import { RootState } from '../../../stores/store';
 import { getLanguage } from '../../../localization';
+import { SummariesState } from '../../../stores/summaries/reducer';
 
 interface Props {
   value: number;
@@ -40,7 +41,7 @@ function ProductSelector(props: Props & DropdownProps) {
       selection
       options={dropdownOptions}
       value={value < 0 ? '' : value}
-      onChange={(e, data) => onChange(data.value as any)}
+      onChange={(_, data) => onChange(data.value as number | number[])}
       error={value < 1 && !open}
       onOpen={() => changeOpen(true)}
       onClose={() => changeOpen(false)}
@@ -49,7 +50,7 @@ function ProductSelector(props: Props & DropdownProps) {
 }
 
 const mapStateToProps = (state: RootState) => ({
-  options: state.summaries.Products.options,
+  options: (state.summaries as SummariesState).Products.options,
 });
 
 export default connect(mapStateToProps)(ProductSelector);

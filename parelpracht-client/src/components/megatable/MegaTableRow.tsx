@@ -10,6 +10,7 @@ import CompanyLink from '../entities/company/CompanyLink';
 import ContractLink from '../entities/contract/ContractLink';
 import ProductLink from '../entities/product/ProductLink';
 import { dateToFullFinancialYear } from '../../helpers/timestamp';
+import { SummariesState } from '../../stores/summaries/reducer';
 
 interface Props {
   company: ETCompany;
@@ -86,7 +87,7 @@ function MegaTableRow(props: Props) {
 }
 
 const mapStateToProps = (state: RootState) => ({
-  products: state.summaries.Products.options,
+  products: (state.summaries as SummariesState).Products.options,
 });
 
 export default connect(mapStateToProps)(MegaTableRow);

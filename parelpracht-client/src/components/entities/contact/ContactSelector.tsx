@@ -4,6 +4,7 @@ import { Dropdown, DropdownProps } from 'semantic-ui-react';
 import { ContactFunction, ContactSummary } from '../../../clients/server.generated';
 import { formatContactName, formatFunctionShort, sortContactsByFunction } from '../../../helpers/contact';
 import { RootState } from '../../../stores/store';
+import { SummariesState } from '../../../stores/summaries/reducer';
 
 interface Props {
   disabled?: boolean;
@@ -48,7 +49,7 @@ function ContactSelector(props: Props & DropdownProps) {
 }
 
 const mapStateToProps = (state: RootState) => ({
-  options: state.summaries.Contacts.options,
+  options: (state.summaries as SummariesState).Contacts.options,
 });
 
 export default connect(mapStateToProps)(ContactSelector);

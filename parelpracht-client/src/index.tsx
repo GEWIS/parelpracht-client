@@ -1,4 +1,4 @@
-import ReactDOM from 'react-dom/client';
+import { createRoot } from 'react-dom/client';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { Chart, registerables } from 'chart.js';
@@ -24,7 +24,7 @@ Chart.register(...registerables);
 //   }
 // };
 
-const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
+const root = createRoot(document.getElementById('root') as HTMLElement);
 root.render(
   <I18nextProvider i18n={i18n}>
     <TitleRenderer>

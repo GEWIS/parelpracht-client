@@ -36,7 +36,7 @@ interface Props {
   changeSort: (column: string) => void;
   setSort: (column: string, direction: 'ASC' | 'DESC') => void;
   setTake: (take: number) => void;
-  setTableFilter: (filter: { column: string; values: any[] }) => void;
+  setTableFilter: (filter: { column: keyof Product; values: Product[keyof Product][] }) => void;
   prevPage: () => void;
   nextPage: () => void;
 }
@@ -145,7 +145,7 @@ const mapStateToProps = (state: RootState) => {
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
   fetchProducts: () => dispatch(fetchTable(Tables.Products)),
-  setTableFilter: (filter: { column: string; values: any[] }) => {
+  setTableFilter: (filter: { column: keyof Product; values: Product[keyof Product][] }) => {
     dispatch(setFilterTable(Tables.Products, filter));
   },
   changeSort: (column: string) => {

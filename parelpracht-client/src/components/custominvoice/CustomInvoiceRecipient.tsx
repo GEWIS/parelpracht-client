@@ -1,6 +1,6 @@
 import { Form, Input, Segment } from 'semantic-ui-react';
 import { ChangeEvent, Component } from 'react';
-import validator from 'validator';
+import * as validator from 'validator';
 import { withTranslation, WithTranslation } from 'react-i18next';
 import { CustomRecipient } from '../../clients/server.generated';
 

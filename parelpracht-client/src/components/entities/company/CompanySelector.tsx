@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { Dropdown, DropdownProps } from 'semantic-ui-react';
 import { CompanyStatus, CompanySummary } from '../../../clients/server.generated';
 import { RootState } from '../../../stores/store';
+import { SummariesState } from '../../../stores/summaries/reducer';
 
 interface Props {
   value: number;
@@ -39,7 +40,7 @@ function CompanySelector(props: Props & DropdownProps) {
       error={!(value > -1) && !open}
       options={dropdownOptions}
       value={value < 0 ? '' : value}
-      onChange={(e, data) => onChange(data.value as any)}
+      onChange={(_, data) => onChange(data.value as number | number[])}
       // Because the text is also red when error=true, we need to
       // keep a state whether the dropdown is open
       onOpen={() => changeOpen(true)}
@@ -49,7 +50,7 @@ function CompanySelector(props: Props & DropdownProps) {
 }
 
 const mapStateToProps = (state: RootState) => ({
-  options: state.summaries.Companies.options,
+  options: (state.summaries as SummariesState).Companies.options,
 });
 
 export default connect(mapStateToProps)(CompanySelector);

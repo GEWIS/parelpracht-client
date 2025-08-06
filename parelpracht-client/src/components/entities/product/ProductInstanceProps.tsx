@@ -21,6 +21,7 @@ import AuthorizationComponent from '../../AuthorizationComponent';
 import { getLastStatus } from '../../../helpers/activity';
 import { authedUserHasRole } from '../../../stores/auth/selectors';
 import { SummaryCollections } from '../../../stores/summaries/summaries';
+import { SummariesState } from '../../../stores/summaries/reducer';
 import ProductLink from './ProductLink';
 import ProductSelector from './ProductSelector';
 
@@ -321,7 +322,7 @@ class ProductInstanceProps extends Component<Props, State> {
 }
 
 const mapStateToProps = (state: RootState) => ({
-  options: state.summaries.Products.options,
+  options: (state.summaries as SummariesState).Products.options,
   hasRole: (role: Roles): boolean => authedUserHasRole(state, role),
   getBasePrice: (id: number) => getSummary<ProductSummary>(state, SummaryCollections.Products, id).targetPrice,
   getValueAddedTax: (id: number) =>

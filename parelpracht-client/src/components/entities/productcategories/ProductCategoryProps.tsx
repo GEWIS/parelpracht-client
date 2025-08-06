@@ -2,7 +2,7 @@ import { ChangeEvent, Component } from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import { Form, Input } from 'semantic-ui-react';
-import validator from 'validator';
+import * as validator from 'validator';
 import { WithTranslation, withTranslation } from 'react-i18next';
 import { CategoryParams, ProductCategory, Roles } from '../../../clients/server.generated';
 import { createSingle, deleteSingle, saveSingle } from '../../../stores/single/actionCreators';

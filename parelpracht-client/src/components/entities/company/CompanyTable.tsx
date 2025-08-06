@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import { Dimmer, Loader, Segment, Table } from 'semantic-ui-react';
 import { useTranslation } from 'react-i18next';
-import { Company } from '../../../clients/server.generated';
+import { Company, CompanyStatus } from '../../../clients/server.generated';
 import TablePagination from '../../TablePagination';
 import { RootState } from '../../../stores/store';
 import {
@@ -32,7 +32,7 @@ interface Props {
   status: ResourceStatus;
 
   fetchCompanies: () => void;
-  setTableFilter: (filter: { column: string; values: any[] }) => void;
+  setTableFilter: (filter: { column: keyof Company; values: Company[keyof Company][] }) => void;
   changeSort: (column: string) => void;
   setSort: (column: string, direction: 'ASC' | 'DESC') => void;
   setTake: (take: number) => void;
@@ -59,7 +59,7 @@ function CompaniesTable({
 }: Props) {
   useEffect(() => {
     setSort('name', 'ASC');
-    setTableFilter({ column: 'status', values: ['ACTIVE'] });
+    setTableFilter({ column: 'status', values: [CompanyStatus.ACTIVE] });
     fetchCompanies();
   }, [setSort, setTableFilter, fetchCompanies]);
   const { t } = useTranslation();
@@ -134,7 +134,7 @@ const mapStateToProps = (state: RootState) => {
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
   fetchCompanies: () => dispatch(fetchTable(Tables.Companies)),
-  setTableFilter: (filter: { column: string; values: any[] }) => {
+  setTableFilter: (filter: { column: keyof Company; values: Company[keyof Company][] }) => {
     dispatch(setFilterTable(Tables.Companies, filter));
   },
   changeSort: (column: string) => {

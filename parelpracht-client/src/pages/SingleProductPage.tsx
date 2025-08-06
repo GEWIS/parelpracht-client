@@ -1,6 +1,6 @@
 import { Component } from 'react';
 import { NavLink } from 'react-router-dom';
-import { Breadcrumb, Container, Grid, Loader, Segment, Tab, TabPane } from 'semantic-ui-react';
+import { Breadcrumb, Container, Grid, Loader, Segment, Tab, TabPane, TabProps } from 'semantic-ui-react';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import { WithTranslation, withTranslation } from 'react-i18next';

@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { Roles, UserSummary } from '../../../clients/server.generated';
 import { formatContactName } from '../../../helpers/contact';
 import { RootState } from '../../../stores/store';
+import { SummariesState } from '../../../stores/summaries/reducer';
 
 interface Props {
   value: number;
@@ -52,7 +53,7 @@ function UserSelector(props: Props & DropdownProps) {
 }
 
 const mapStateToProps = (state: RootState) => ({
-  options: state.summaries.Users.options,
+  options: (state.summaries as SummariesState).Users.options,
 });
 
 export default connect(mapStateToProps)(UserSelector);

@@ -1,6 +1,6 @@
 import { ChangeEvent, useState } from 'react';
 import { Button, Input, Table, Dropdown } from 'semantic-ui-react';
-import validator from 'validator';
+import * as validator from 'validator';
 import { useTranslation } from 'react-i18next';
 import { CustomProduct, VAT } from '../../clients/server.generated';
 import { formatPriceFull } from '../../helpers/monetary';
