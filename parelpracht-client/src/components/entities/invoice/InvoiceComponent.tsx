@@ -4,7 +4,7 @@ import { getCompanyName } from '../../../stores/company/selectors';
 import { RootState } from '../../../stores/store';
 import { dateToFullFinancialYear, formatLastUpdate } from '../../../helpers/timestamp';
 import { Invoice, InvoiceStatus } from '../../../clients/server.generated';
-import { formatStatus } from '../../../helpers/activity';
+import { formatTranslateStatus } from '../../../helpers/activity';
 import { getInvoiceStatus, getInvoiceValue } from '../../../stores/invoice/selectors';
 import { formatPriceFull } from '../../../helpers/monetary';
 import InvoiceLink from './InvoiceLink';
@@ -24,7 +24,7 @@ function InvoiceComponent(props: Props) {
         <InvoiceLink id={invoice.id} short={false} />
       </Table.Cell>
       <Table.Cell>{formatPriceFull(invoiceValue)}</Table.Cell>
-      <Table.Cell>{formatStatus(invoiceStatus)}</Table.Cell>
+      <Table.Cell>{formatTranslateStatus(invoiceStatus)}</Table.Cell>
       <Table.Cell>{dateToFullFinancialYear(invoice.startDate)}</Table.Cell>
       <Table.Cell>{formatLastUpdate(invoice.updatedAt)}</Table.Cell>
     </Table.Row>

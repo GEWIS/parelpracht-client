@@ -1,346 +1,159 @@
-import { Component, ReactNode } from 'react';
-import { connect } from 'react-redux';
-import { Button, Grid, Icon, Popup, Step } from 'semantic-ui-react';
-import { withTranslation, WithTranslation } from 'react-i18next';
-import {
-  formatDocumentStatusTitle,
-  formatDocumentType,
-  getAllDocumentStatuses,
-  getAllStatusActivities,
-  getCompletedDocumentStatuses,
-  getLastStatusNotCancelled,
-  getStatusesFromActivities,
-  getToDoStatus,
-} from '../../helpers/activity';
-import { SingleEntities } from '../../stores/single/single';
+import { PropsWithChildren, ReactNode, useEffect, useState } from 'react';
+import { Grid, GridColumn, GridRow, Segment, StepGroup } from 'semantic-ui-react';
+import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
 import ResourceStatus from '../../stores/resourceStatus';
-import { Roles } from '../../clients/server.generated';
-import AuthorizationComponent from '../AuthorizationComponent';
-import { getLanguage } from '../../localization';
-import { WithRouter, withRouter } from '../../WithRouter';
-import { DocumentStatus } from './DocumentStatus';
-import DocumentStatusModal from './DocumentStatusModal';
-import FinancialDocumentStep from './FinancialDocumentStep';
-import { GeneralActivity } from './GeneralActivity';
+import {
+  DocumentStatus,
+  formatTranslateStatus,
+  getCompletedStatuses,
+  getLastDocumentStatus,
+  getStatusDescriptionMap,
+  StatusDescriptionMap,
+} from '../../helpers/activity';
+import { ContractActivity, InvoiceActivity, ProductInstanceActivity, Roles } from '../../clients/server.generated';
+import { RootState } from '../../stores/store';
+import { authedUserHasRole } from '../../stores/auth/selectors';
+import FinancialDocumentStep, { FinancialDocumentStepStatus } from './FinancialDocumentStep';
 
-interface Props extends WithTranslation, WithRouter {
-  documentId: number;
-  // If the document is a ProductInstance, the parentId is the contract ID
-  parentId?: number;
-  activities: GeneralActivity[];
-  documentType: SingleEntities;
-
-  canCancel: boolean;
-  cancelReason?: string;
-
+interface Props<T extends ContractActivity | InvoiceActivity | ProductInstanceActivity> extends PropsWithChildren {
+  leftButton?: ReactNode;
+  rightButton?: ReactNode;
   resourceStatus: ResourceStatus;
+  /**
+   * The formatted (translated) name of the entity this progress stepper belongs to.
+   */
+  formattedEntityName: string;
+  activities: T[];
+  /**
+   * The statuses that should be shown as steps. Defaults to all ordered statuses.
+   */
+  statusesToShow?: DocumentStatus<T>[];
+  /**
+   * All statuses the entity can have, ordered from earliest (CREATED) to last (FINISHED/CANCELLED)
+   */
+  orderedStatuses: DocumentStatus<T>[];
+  /**
+   * The first, initial status of the entity
+   */
+  initialStatus: DocumentStatus<T>;
+  /**
+   * The status the entity should have to be marked as cancelled (red X'es)
+   */
+  cancelledStatus?: DocumentStatus<T>;
+  /**
+   * The status the entity should have to be marked as deferred (orange stopwatches)
+   */
+  deferredStatus?: DocumentStatus<T>;
+
+  getPrerequisiteStatuses: (s: DocumentStatus<T>) => Set<DocumentStatus<T>>;
+  getNextPossibleStatuses: (s: DocumentStatus<T>) => Set<DocumentStatus<T>>;
+  onStatusSave: (s: DocumentStatus<T>, description: string) => void;
+
+  /**
+   * List of roles that are allowed to update the document status
+   */
   roles: Roles[];
 }
 
-interface State {
-  deferModalOpen: boolean;
-  cancelModalOpen: boolean;
-  irrecoverableModalOpen: boolean;
-}
+function FinancialDocumentProgress<T extends ContractActivity | InvoiceActivity | ProductInstanceActivity>({
+  leftButton = undefined,
+  rightButton = undefined,
+  resourceStatus,
+  formattedEntityName,
+  activities,
+  orderedStatuses,
+  statusesToShow = orderedStatuses,
+  initialStatus,
+  cancelledStatus = undefined,
+  deferredStatus = undefined,
+  getPrerequisiteStatuses,
+  getNextPossibleStatuses,
+  onStatusSave,
+  roles,
+}: Props<T>) {
+  const { t, i18n } = useTranslation();
+  const hasRole = useSelector((state: RootState) => (role: Roles) => authedUserHasRole(state, role));
 
-class FinancialDocumentProgress extends Component<Props, State> {
-  static defaultProps = {
-    parentId: undefined,
-    cancelReason: undefined,
+  const [activityMap, setActivityMap] = useState<StatusDescriptionMap<T>>(getStatusDescriptionMap(activities));
+  const [lastStatus, setLastStatus] = useState<DocumentStatus<T>>(initialStatus);
+  const [completedStatuses, setCompletedStatuses] = useState<Set<DocumentStatus<T>>>(new Set());
+  const [nextPossibleStatuses, setNextPossibleStatuses] = useState<Set<DocumentStatus<T>>>(new Set());
+
+  useEffect(() => {
+    const newActivityMap = getStatusDescriptionMap(activities);
+    setActivityMap(newActivityMap);
+
+    const lastDocumentStatus = getLastDocumentStatus([...newActivityMap.keys()], orderedStatuses) ?? initialStatus;
+    setLastStatus(lastDocumentStatus);
+
+    const newCompletedStatuses = getCompletedStatuses([lastDocumentStatus], getPrerequisiteStatuses);
+    setCompletedStatuses(newCompletedStatuses);
+
+    const newNextPossibleStatuses = getNextPossibleStatuses(lastDocumentStatus);
+    setNextPossibleStatuses(newNextPossibleStatuses);
+  }, [activities, getNextPossibleStatuses, getPrerequisiteStatuses, initialStatus, orderedStatuses]);
+
+  const getDescription = (documentStatus: DocumentStatus<T>): string | undefined => {
+    const descriptions = activityMap.get(documentStatus);
+    // Status does not exist, so return undefined. This indicates to the step as well that the status does not exist
+    if (!descriptions) return undefined;
+    if (i18n.language === 'nl-NL') return descriptions.descriptionDutch;
+    return descriptions.descriptionEnglish;
   };
 
-  public constructor(props: Props) {
-    super(props);
-    this.state = {
-      deferModalOpen: false,
-      cancelModalOpen: false,
-      irrecoverableModalOpen: false,
-    };
-  }
-
-  closeCancelModal = () => {
-    this.setState({
-      cancelModalOpen: false,
-    });
+  const authorizedToEdit = (): boolean => {
+    return roles.some((r) => hasRole(r));
   };
 
-  closeDeferModal = () => {
-    this.setState({
-      deferModalOpen: false,
-    });
+  const getStatusForActivity = (activity: DocumentStatus<T>): FinancialDocumentStepStatus | undefined => {
+    if (deferredStatus && completedStatuses.has(deferredStatus)) return FinancialDocumentStepStatus.DEFERRED;
+    if (completedStatuses.has(activity)) return FinancialDocumentStepStatus.COMPLETED;
+    if (cancelledStatus && activityMap.has(cancelledStatus)) return FinancialDocumentStepStatus.CANCELLED;
+    if (nextPossibleStatuses.has(activity) && authorizedToEdit()) return FinancialDocumentStepStatus.CREATABLE;
+    return undefined;
   };
 
-  closeIrrecoverableModal = () => {
-    this.setState({
-      irrecoverableModalOpen: false,
-    });
-  };
-
-  public render() {
-    const { activities, documentType, documentId, resourceStatus, parentId, roles, canCancel, cancelReason, t } =
-      this.props;
-    const language = getLanguage();
-
-    const { cancelModalOpen, deferModalOpen, irrecoverableModalOpen } = this.state;
-    const allPossibleDocumentStatuses = getAllDocumentStatuses(documentType);
-    const allStatusActivities = getAllStatusActivities(activities);
-    const completedStatuses = getStatusesFromActivities(allStatusActivities);
-    const lastActiveStatus = getLastStatusNotCancelled(completedStatuses);
-    const allCompletedStatuses = getCompletedDocumentStatuses(lastActiveStatus, documentType);
-    const realLastStatus = completedStatuses[completedStatuses.length - 1];
-
-    let leftButton;
-    if (documentType === SingleEntities.ProductInstance) {
-      leftButton = (
-        <AuthorizationComponent roles={[Roles.GENERAL, Roles.ADMIN, Roles.FINANCIAL]} notFound={false}>
-          <Popup
-            header={t('activities.status.defer', { entity: formatDocumentType(documentType).toLowerCase() })}
-            content={t('activities.status.deferDescription', {
-              entity: formatDocumentType(documentType).toLowerCase(),
-            })}
-            mouseEnterDelay={500}
-            wide
-            trigger={
-              <Button
-                floated="left"
-                labelPosition="left"
-                icon="stopwatch"
-                basic
-                onClick={() => {
-                  this.setState({
-                    deferModalOpen: true,
-                  });
-                }}
-                content={t('activities.status.defer', { entity: formatDocumentType(documentType).toLowerCase() })}
-                disabled={allCompletedStatuses[allCompletedStatuses.length - 1] !== DocumentStatus.NOTDELIVERED}
-              />
-            }
-          />
-        </AuthorizationComponent>
-      );
-    } else if (documentType === SingleEntities.Invoice) {
-      leftButton = (
-        <AuthorizationComponent roles={[Roles.ADMIN, Roles.FINANCIAL]} notFound={false}>
-          <Popup
-            header={t('activities.status.irrecoverable')}
-            content={t('activities.status.irrecoverableDescription')}
-            mouseEnterDelay={500}
-            wide
-            trigger={
-              <Button
-                floated="left"
-                labelPosition="left"
-                icon="close"
-                basic
-                onClick={() => {
-                  this.setState({ irrecoverableModalOpen: true });
-                }}
-                content={t('activities.status.irrecoverable')}
-                disabled={
-                  !(realLastStatus.includes(DocumentStatus.CREATED) || realLastStatus.includes(DocumentStatus.SENT))
-                }
-              />
-            }
-          />
-        </AuthorizationComponent>
-      );
+  const getTitle = (): string => {
+    if (lastStatus === cancelledStatus) {
+      return t('activities.status.header.cancelled', { entity: formattedEntityName });
     }
-
-    let rightButton;
-    if (canCancel) {
-      rightButton = (
-        <AuthorizationComponent roles={[Roles.GENERAL, Roles.ADMIN]} notFound={false}>
-          <Popup
-            trigger={
-              <Button
-                floated="right"
-                labelPosition="left"
-                icon="close"
-                basic
-                onClick={() => {
-                  this.setState({
-                    cancelModalOpen: true,
-                  });
-                }}
-                content={t('activities.status.cancel', {
-                  entity: formatDocumentType(documentType).toLocaleLowerCase(),
-                })}
-                disabled={
-                  getToDoStatus(allCompletedStatuses[allCompletedStatuses.length - 1], documentType).length === 0
-                }
-              />
-            }
-            header={t('activities.status.cancel', { entity: formatDocumentType(documentType).toLocaleLowerCase() })}
-            content={() => {
-              switch (documentType) {
-                case SingleEntities.Contract:
-                  return t('activities.status.cancelContractDescription');
-                case SingleEntities.Invoice:
-                  return t('activities.status.cancelInvoiceDescription');
-                case SingleEntities.ProductInstance:
-                  return t('activities.status.cancelProductInstanceDescription');
-                default:
-                  return '';
-              }
-            }}
-          />
-        </AuthorizationComponent>
-      );
-    } else {
-      rightButton = (
-        <AuthorizationComponent roles={[Roles.GENERAL, Roles.ADMIN]} notFound={false}>
-          <Popup
-            content={cancelReason}
-            mouseEnterDelay={500}
-            wide
-            trigger={
-              <div style={{ display: 'inline-block', float: 'right' }}>
-                <Button
-                  floated="right"
-                  labelPosition="left"
-                  icon="close"
-                  basic
-                  content={t('activities.status.cancel', {
-                    entity: formatDocumentType(documentType).toLocaleLowerCase(),
-                  })}
-                  disabled
-                  style={{ pointerEvents: 'auto !important' }}
-                />
-              </div>
-            }
-          />
-        </AuthorizationComponent>
-      );
+    if (lastStatus === deferredStatus) {
+      return t('activities.status.header.deferred', { entity: formattedEntityName });
     }
+    return t('activities.status.header.general', { entity: formattedEntityName });
+  };
 
-    const topButtonsGrid = !completedStatuses.includes(DocumentStatus.CANCELLED) ? (
+  return (
+    <Segment
+      secondary
+      style={{ backgroundColor: 'rgba(243, 244, 245, 0.98)' }}
+      loading={[ResourceStatus.FETCHING, ResourceStatus.SAVING, ResourceStatus.DELETING].includes(resourceStatus)}
+    >
       <Grid columns={3}>
-        <Grid.Row>
-          <Grid.Column>{leftButton}</Grid.Column>
-          <Grid.Column>
-            <h3 style={{ marginTop: '0.3em', textAlign: 'center' }}>
-              {formatDocumentStatusTitle(allStatusActivities[allStatusActivities.length - 1], documentType)}
-            </h3>
-          </Grid.Column>
-          <Grid.Column>{rightButton}</Grid.Column>
-        </Grid.Row>
+        <GridRow>
+          <GridColumn verticalAlign="middle">{leftButton}</GridColumn>
+          <GridColumn verticalAlign="middle">
+            <h3 style={{ textAlign: 'center' }}>{getTitle()}</h3>
+          </GridColumn>
+          <GridColumn verticalAlign="middle">{rightButton}</GridColumn>
+        </GridRow>
       </Grid>
-    ) : (
-      <h3 style={{ textAlign: 'center' }}>
-        {formatDocumentStatusTitle(allStatusActivities[allStatusActivities.length - 1], documentType)}
-      </h3>
-    );
-    const topButtonsModals = !completedStatuses.includes(DocumentStatus.CANCELLED) ? (
-      <>
-        <DocumentStatusModal
-          open={deferModalOpen}
-          documentId={documentId}
-          parentId={parentId}
-          documentType={documentType}
-          documentStatus={DocumentStatus.DEFERRED}
-          close={this.closeDeferModal}
-          resourceStatus={resourceStatus}
-        />
-        <DocumentStatusModal
-          open={cancelModalOpen}
-          documentId={documentId}
-          parentId={parentId}
-          documentType={documentType}
-          documentStatus={DocumentStatus.CANCELLED}
-          close={this.closeCancelModal}
-          resourceStatus={resourceStatus}
-        />
-        <DocumentStatusModal
-          open={irrecoverableModalOpen}
-          documentId={documentId}
-          parentId={parentId}
-          documentType={documentType}
-          documentStatus={DocumentStatus.IRRECOVERABLE}
-          close={this.closeIrrecoverableModal}
-          resourceStatus={resourceStatus}
-        />
-      </>
-    ) : undefined;
-
-    // define the variables for the document step
-    const statusDoneList: boolean[] = [];
-    const statusDisabledList: boolean[] = [];
-    const statusClickableList: boolean[] = [];
-    const statusDescriptionList: string[] = [];
-    const statusIconsList: ReactNode[] = [];
-
-    for (let i = 0; i < allPossibleDocumentStatuses.length; i++) {
-      const documentStatus = allPossibleDocumentStatuses[i];
-      const nextDocumentStatus = getToDoStatus(lastActiveStatus, documentType);
-      const documentStatusActivity = allStatusActivities.find((a) => a.subType === documentStatus);
-
-      // push whether the status has been completed
-      statusDoneList.push(allCompletedStatuses.includes(documentStatus));
-
-      // push the description of the status if it has a status
-      if (documentStatusActivity !== undefined) {
-        statusDescriptionList.push(
-          language === 'nl-NL' ? documentStatusActivity.descriptionDutch : documentStatusActivity.descriptionEnglish,
-        );
-      } else {
-        statusDescriptionList.push('');
-      }
-
-      // push whether the document status can be clicked
-      if (
-        nextDocumentStatus.includes(documentStatus) &&
-        // FINISHED is set by delivering all products
-        documentStatus !== DocumentStatus.FINISHED
-      ) {
-        statusClickableList.push(true);
-      } else {
-        statusClickableList.push(false);
-      }
-
-      // push the icon and whether the status has to be disabled.
-      if (realLastStatus === DocumentStatus.DEFERRED) {
-        statusIconsList.push(<Icon color="orange" name="stopwatch" />);
-        statusDisabledList.push(true);
-      } else if (realLastStatus === DocumentStatus.CANCELLED || realLastStatus === DocumentStatus.IRRECOVERABLE) {
-        statusIconsList.push(<Icon color="red" name="close" />);
-        statusDisabledList.push(true);
-      } else {
-        statusDisabledList.push(false);
-        statusIconsList.push(<Icon />);
-      }
-    }
-
-    return (
-      <>
-        {topButtonsGrid}
-        <Step.Group widths={5} fluid>
-          {allPossibleDocumentStatuses.map((currentStatus, i) => (
-            <FinancialDocumentStep
-              key={currentStatus}
-              documentId={documentId}
-              documentType={documentType}
-              statusChecked={statusDoneList[i]}
-              statusClickable={statusClickableList[i]}
-              statusDescription={statusDescriptionList[i]}
-              statusDisabled={statusDisabledList[i]}
-              statusIcon={statusIconsList[i]}
-              status={currentStatus}
-              resourceStatus={resourceStatus}
-              parentId={parentId}
-              roles={roles}
-            />
-          ))}
-        </Step.Group>
-        {topButtonsModals}
-      </>
-    );
-  }
+      <StepGroup fluid widths={5}>
+        {statusesToShow.map((s) => (
+          <FinancialDocumentStep
+            key={s}
+            title={formatTranslateStatus(s)}
+            stepStatus={getStatusForActivity(s)}
+            documentStatus={s}
+            description={getDescription(s)}
+            resourceStatus={resourceStatus}
+            onSave={onStatusSave}
+          />
+        ))}
+      </StepGroup>
+    </Segment>
+  );
 }
 
-const mapStateToProps = () => {
-  return {};
-};
-
-const mapDispatchToProps = () => ({});
-
-export default withTranslation()(withRouter(connect(mapStateToProps, mapDispatchToProps)(FinancialDocumentProgress)));
+export default FinancialDocumentProgress;

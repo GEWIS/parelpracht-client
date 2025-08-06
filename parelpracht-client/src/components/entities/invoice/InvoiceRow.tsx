@@ -4,7 +4,7 @@ import { Table } from 'semantic-ui-react';
 import { Invoice, InvoiceStatus } from '../../../clients/server.generated';
 import { RootState } from '../../../stores/store';
 import { dateToFullFinancialYear, formatLastUpdate } from '../../../helpers/timestamp';
-import { formatStatus } from '../../../helpers/activity';
+import { formatTranslateStatus } from '../../../helpers/activity';
 import { getInvoiceStatus, getInvoiceValue } from '../../../stores/invoice/selectors';
 import CompanyLink from '../company/CompanyLink';
 import { formatPriceFull } from '../../../helpers/monetary';
@@ -18,7 +18,7 @@ interface Props {
 function InvoiceRow(props: Props) {
   const { invoice, value, invoiceStatus } = props;
 
-  const status = formatStatus(invoiceStatus);
+  const status = formatTranslateStatus(invoiceStatus);
   const amount = formatPriceFull(value);
   const financialYear = dateToFullFinancialYear(invoice.startDate);
   const lastUpdate = formatLastUpdate(invoice.updatedAt);

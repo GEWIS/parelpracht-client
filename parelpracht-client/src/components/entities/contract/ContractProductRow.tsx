@@ -5,7 +5,7 @@ import './ContractComponent.scss';
 import { formatPriceDiscount, formatPriceFull } from '../../../helpers/monetary';
 import ProductInstanceLink from '../product/ProductInstanceLink';
 import { SingleEntities } from '../../../stores/single/single';
-import { formatStatus, getLastStatus } from '../../../helpers/activity';
+import { formatTranslateStatus, getLastStatus } from '../../../helpers/activity';
 import InvoiceLink from '../invoice/InvoiceLink';
 import { WithRouter, withRouter } from '../../../WithRouter';
 
@@ -61,7 +61,7 @@ class ContractProductRow extends Component<Props> {
         </Table.Cell>
         <Table.Cell collapsing>{formatPriceDiscount(productInstance.discount)}</Table.Cell>
         <Table.Cell collapsing>{formatPriceFull(productInstance.basePrice - productInstance.discount)}</Table.Cell>
-        <Table.Cell collapsing>{formatStatus(showRecentStatus(productInstance))}</Table.Cell>
+        <Table.Cell collapsing>{formatTranslateStatus(showRecentStatus(productInstance))}</Table.Cell>
         <Table.Cell collapsing>{invoice}</Table.Cell>
       </Table.Row>
     );

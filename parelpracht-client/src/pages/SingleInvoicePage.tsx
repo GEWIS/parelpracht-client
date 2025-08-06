@@ -14,7 +14,7 @@ import { SingleEntities } from '../stores/single/single';
 import { getSingle } from '../stores/single/selectors';
 import ActivitiesList from '../components/activities/ActivitiesList';
 import { GeneralActivity } from '../components/activities/GeneralActivity';
-import FinancialDocumentProgress from '../components/activities/FinancialDocumentProgress';
+import InvoiceProgress from '../components/activities/InvoiceProgress';
 import InvoiceProductList from '../components/entities/invoice/InvoiceProductList';
 import FilesList from '../components/files/FilesList';
 import GenerateInvoiceModal from '../components/files/GenerateInvoiceModal';
@@ -171,16 +171,7 @@ class SingleInvoicePage extends Component<Props, State> {
           <InvoiceSummary />
           <Grid rows={2} stackable>
             <Grid.Row centered columns={1} style={{ paddingLeft: '1em', paddingRight: '1em' }}>
-              <Segment secondary style={{ backgroundColor: 'rgba(243, 244, 245, 0.98)' }}>
-                <FinancialDocumentProgress
-                  documentId={invoice.id}
-                  activities={invoice.activities as GeneralActivity[]}
-                  documentType={SingleEntities.Invoice}
-                  resourceStatus={status}
-                  roles={[Roles.ADMIN, Roles.GENERAL, Roles.FINANCIAL]}
-                  canCancel
-                />
-              </Segment>
+              <InvoiceProgress invoice={invoice} resourceStatus={status} />
             </Grid.Row>
             <Grid.Row columns={2}>
               <Grid.Column width={10}>

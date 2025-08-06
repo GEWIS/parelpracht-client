@@ -7,7 +7,7 @@ import { getContactName } from '../../../stores/contact/selectors';
 import { RootState } from '../../../stores/store';
 import { formatLastUpdate } from '../../../helpers/timestamp';
 import { getContractStatus, getContractValue } from '../../../stores/contract/selectors';
-import { formatStatus } from '../../../helpers/activity';
+import { formatTranslateStatus } from '../../../helpers/activity';
 import CompanyLink from '../company/CompanyLink';
 import { formatPriceFull } from '../../../helpers/monetary';
 import { WithRouter, withRouter } from '../../../WithRouter';
@@ -34,7 +34,7 @@ function ContractRow(props: Props) {
         <CompanyLink id={contract.companyId} />
       </Table.Cell>
       <Table.Cell>{contactName}</Table.Cell>
-      <Table.Cell>{formatStatus(contractStatus)}</Table.Cell>
+      <Table.Cell>{formatTranslateStatus(contractStatus)}</Table.Cell>
       <Table.Cell>{formatPriceFull(value)}</Table.Cell>
       <Table.Cell>{formatLastUpdate(contract.updatedAt)}</Table.Cell>
     </Table.Row>
