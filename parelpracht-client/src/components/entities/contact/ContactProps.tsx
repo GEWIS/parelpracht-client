@@ -95,6 +95,9 @@ const ContactProps = (props: Props) => {
       }
     }
     prevStatusRef.current = status;
+    // Ignore next line, because we cannot set formState as part of the hook's dependencies: this will cause the alerts
+    // to appear when you change the form.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [status]);
 
   const toParams = (): ContactParams => {

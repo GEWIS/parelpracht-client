@@ -62,7 +62,7 @@ function ProductsTable({
     setTableFilter({ column: 'status', values: ['ACTIVE'] });
     setSort('nameEnglish', 'ASC');
     fetchProducts();
-  }, []);
+  }, [fetchProducts, setSort, setTableFilter]);
   const { t } = useTranslation();
 
   const table = (
