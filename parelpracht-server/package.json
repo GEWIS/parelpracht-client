@@ -9,6 +9,7 @@
     "start": "node dist/src/index.js",
     "tsoa": "tsoa spec-and-routes",
     "gen-client": "nswag openapi2tsclient /input:src/public/swagger.json /output:../parelpracht-client/src/clients/server.generated.ts /ServiceHost:.",
+    "gen-client-new": "openapi-ts",
     "db:diagram": "typeorm-uml ormconfig.json",
     "db:validate": "ts-node src/dbvalidator/validate.ts",
     "lint": "yarn tsoa && eslint src",
@@ -55,6 +56,7 @@
   "devDependencies": {
     "@gewis/eslint-config-typescript": "^2.4.0",
     "@gewis/prettier-config": "^2.2.2",
+    "@hey-api/openapi-ts": "0.80.2",
     "@types/axios": "^0.14.4",
     "@types/express": "5.0.3",
     "@types/jsonwebtoken": "^9.0.10",
