@@ -12,7 +12,7 @@ function VersionModal() {
       return lastCommitTags.join('-');
     }
     return `${lastTag}-dev-${shortHash}`;
-  }
+  };
 
   useEffect(() => {
     const fillLog = async () => {

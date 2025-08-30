@@ -1,6 +1,6 @@
 import { Container, Grid, Segment } from 'semantic-ui-react';
 import { useTranslation } from 'react-i18next';
-import {useEffect, useState} from "react";
+import { useEffect, useState } from 'react';
 import Version from '../Version';
 import Credits from '../Credits';
 
@@ -11,7 +11,7 @@ function Footer() {
   useEffect(() => {
     const { date: rawDate } = __LAST_COMMIT_INFO;
     const y = new Date(rawDate).getFullYear();
-    setYear((y))
+    setYear(y);
   }, []);
 
   return (
