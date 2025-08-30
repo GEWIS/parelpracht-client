@@ -3,10 +3,16 @@ import { marked } from 'marked';
 import { useEffect, useState } from 'react';
 import releaseNotes from '../changelog.md';
 
-export const version = 'v1.5.0';
-
 function VersionModal() {
   const [changeLog, setChangeLog] = useState('');
+
+  const getVersion = () => {
+    const { shortHash, lastTag, lastCommitTags } = __LAST_COMMIT_INFO;
+    if (lastCommitTags && lastCommitTags.length > 0) {
+      return lastCommitTags.join('-');
+    }
+    return `${lastTag}-dev-${shortHash}`;
+  }
 
   useEffect(() => {
     const fillLog = async () => {
@@ -18,7 +24,7 @@ function VersionModal() {
   }, []);
 
   return (
-    <Modal trigger={<span style={{ cursor: 'pointer' }}>ParelPracht {version}</span>} closeIcon>
+    <Modal trigger={<span style={{ cursor: 'pointer' }}>ParelPracht {getVersion()}</span>} closeIcon>
       <Segment style={{ marginTop: '0' }} dangerouslySetInnerHTML={{ __html: changeLog }} />
     </Modal>
   );
