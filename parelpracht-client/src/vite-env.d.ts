@@ -4,8 +4,12 @@ declare interface CommitInfo {
   hash: string;
   shortHash: string;
   date: string;
-  lastTag: string;
-  lastCommitTags: string[];
+  tags: string[];
 }
 
-declare const __LAST_COMMIT_INFO: CommitInfo;
+declare interface CommitHistory {
+  lastCommit: CommitInfo;
+  lastRelease: CommitInfo;
+}
+
+declare const __LAST_COMMIT_INFO: CommitHistory;

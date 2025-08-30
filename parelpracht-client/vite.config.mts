@@ -7,32 +7,42 @@ interface CommitInfo {
   hash: string;
   shortHash: string;
   date: string;
-  lastTag: string;
-  lastCommitTags: string[];
+  tags: string[];
 }
 
-function getCommitInfo(): CommitInfo {
-  const shortHash = execSync('git rev-parse --short HEAD').toString().trim();
-  const lastCommit = execSync('git log -1').toString();
-  const lastCommitTags = execSync('git tag --contains HEAD').toString().trim().split(' ');
-  const lastCommitLines = lastCommit.split('\n').map((l) => l.trim());
+interface CommitHistory {
+  lastCommit: CommitInfo;
+  lastRelease: CommitInfo;
+}
 
-  const hash = lastCommitLines[0].split(' ')[1].trim();
-  const dateLine = lastCommitLines.find((l) => l.includes('Date:'));
-  let date = new Date().toISOString();
-  if (dateLine) {
-    date = new Date(dateLine.substring(dateLine.indexOf('Date:') + 1).trim()).toISOString();
-  }
-
-  const allSortedTags = execSync('git tag --sort=committerdate').toString().split('\n').filter((s) => s.length > 0);
-  const lastTag = allSortedTags[allSortedTags.length - 1];
+function getCommitInfo(commitHash: string): CommitInfo {
+  const shortHash = execSync(`git log -1 --format="%h" ${commitHash}`).toString().trim();
+  const date = execSync(`git log -1 --format="%cI" ${commitHash}`).toString().trim();
+  const tags = execSync(`git tag --points-at ${commitHash}`).toString().split('\n').filter((l) => l.length > 0);
 
   return {
-    hash, shortHash, date, lastTag, lastCommitTags: lastCommitTags.filter((t) => t.length > 0),
-  };
+    hash: commitHash,
+    shortHash,
+    date,
+    tags,
+  }
 }
 
-const commitInfo = getCommitInfo();
+function getReleaseHistory(): CommitHistory {
+  const lastCommitHash = execSync('git log -1 --format="%H"').toString().trim();
+
+  // Get the last commit containing a tag (aka a release)
+  const allSortedTags = execSync('git tag --sort=committerdate').toString().split('\n').filter((s) => s.length > 0);
+  const lastTag = allSortedTags[allSortedTags.length - 1];
+  const lastReleaseCommitHash = execSync(`git rev-list -n 1 ${lastTag}`).toString().trim();
+
+  return {
+    lastCommit: getCommitInfo(lastCommitHash),
+    lastRelease: getCommitInfo(lastReleaseCommitHash),
+  }
+}
+
+const commitInfo = getReleaseHistory();
 
 export default defineConfig({
   base: '/',
