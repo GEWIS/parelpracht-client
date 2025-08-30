@@ -1,9 +1,9 @@
-import {Modal, ModalContent, ModalHeader} from 'semantic-ui-react';
+import { Modal, ModalContent, ModalHeader } from 'semantic-ui-react';
 import { marked } from 'marked';
 import { useEffect, useState } from 'react';
-import {useTranslation} from "react-i18next";
+import { useTranslation } from 'react-i18next';
 import releaseNotes from '../changelog.md';
-import {getLanguage} from "../localization";
+import { getLanguage } from '../localization';
 
 function VersionModal() {
   const { t } = useTranslation();
@@ -28,7 +28,7 @@ function VersionModal() {
       if (rows[0].startsWith('<h1>')) {
         const endTagIndex = rows[0].indexOf('</h1>');
         setTitle(rows[0].substring('<h1>'.length, endTagIndex));
-        rows.splice(0, 1)
+        rows.splice(0, 1);
 
         c = rows.join('\n');
       }
@@ -42,7 +42,15 @@ function VersionModal() {
     <Modal trigger={<span style={{ cursor: 'pointer' }}>ParelPracht {getVersion()}</span>} closeIcon>
       <ModalHeader>{title}</ModalHeader>
       <ModalContent scrolling>
-        <p>{t('changelog.description1')} <span style={{ fontWeight: 'bold' }}>{__LAST_COMMIT_INFO.lastRelease.tags.join('-')}</span>, {t('changelog.description2', { date: new Date(__LAST_COMMIT_INFO.lastRelease.date).toLocaleDateString(getLanguage(), { dateStyle: 'long' })})}</p>
+        <p>
+          {t('changelog.description1')}{' '}
+          <span style={{ fontWeight: 'bold' }}>{__LAST_COMMIT_INFO.lastRelease.tags.join('-')}</span>,{' '}
+          {t('changelog.description2', {
+            date: new Date(__LAST_COMMIT_INFO.lastRelease.date).toLocaleDateString(getLanguage(), {
+              dateStyle: 'long',
+            }),
+          })}
+        </p>
         <hr />
         <div style={{ marginTop: '0' }} dangerouslySetInnerHTML={{ __html: changeLog }} />
       </ModalContent>
