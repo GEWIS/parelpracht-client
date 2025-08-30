@@ -9,8 +9,8 @@ function Footer() {
   const { t } = useTranslation();
 
   useEffect(() => {
-    const { date: rawDate } = __LAST_COMMIT_INFO;
-    const y = new Date(rawDate).getFullYear();
+    const { lastRelease } = __LAST_COMMIT_INFO;
+    const y = new Date(lastRelease.date).getFullYear();
     setYear(y);
   }, []);
 

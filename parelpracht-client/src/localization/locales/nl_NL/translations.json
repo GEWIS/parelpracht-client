@@ -1,5 +1,9 @@
 {
   "Welcome to React": "Welkom bij React en react-i18next",
+  "changelog": {
+    "description1": "De huidige versie van ParelPracht is",
+    "description2": "uitgebracht op {{date}}. Je kunt de release notes hieronder vinden (in het Engels)."
+  },
   "activities": {
     "button": {
       "details": "Opmerking details",
