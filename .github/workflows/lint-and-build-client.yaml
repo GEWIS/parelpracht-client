@@ -11,7 +11,7 @@ on:
       - develop
 
 jobs:
-  build-and-lint:
+  build-and-lint-client:
     uses: GEWIS/actions/.github/workflows/lint-and-build-yarn.yml@v1
     with:
       node-version: '20.x'

@@ -4,15 +4,48 @@ on:
   push:
     branches:
       - main
+      - feat/update-changelog-on-release
 
 jobs:
   versioning:
+    uses: GEWIS/actions/.github/workflows/versioning.yml@73694258b792a98c532e2090e24aabf130a31615
+    name: Find new version tag
+    with:
+      dry-run: 'true'
+
+  update-compatibility-table:
+    runs-on: ubuntu-latest
+    needs: versioning
+    name: Update compatibility table in README
+    if: ${{ needs.versioning.outputs.next-version != '' }}
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+
+      - name: Update changelog
+        run: |
+          echo "${{ needs.versioning.outputs.new-release-notes }}" | cat - ./parelpracht-client/src/changelog.md > temp && mv temp ./parelpracht-client/src/changelog.md
+
+      - name: Commit changes
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "github-actions@users.noreply.github.com"
+          git add ./parelpracht-client/src/changelog.md
+          git commit --no-verify -m "docs: update changelog"
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  versioning-2:
     uses: GEWIS/actions/.github/workflows/versioning.yml@v1
+    needs: update-compatibility-table
+    name: Versioning
+    with:
+      dry-run: 'true'
 
   release:
-    uses: GEWIS/actions/.github/workflows/docker-release.yml@0afd41a8f1a0e9342f7edffa71cac0a286f15135
-    needs: versioning
-    if: ${{ needs.versioning.outputs.next-version != '' }}
+    uses: GEWIS/actions/.github/workflows/docker-release.yml@v1
+    needs: versioning-2
     with:
       projects: "['parelpracht-client', 'parelpracht-server']"
       version: ${{ needs.versioning.outputs.next-version }}
