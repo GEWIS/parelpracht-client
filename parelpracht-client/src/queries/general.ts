@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { Client } from '../clients/server.generated';
+import { getPublicGeneralInfoOptions } from '../clients/generated-client-new/@tanstack/react-query.gen';
 
 export const generalQueryKeys = {
   base: () => ['general'],
@@ -7,11 +7,9 @@ export const generalQueryKeys = {
 }
 
 export function useGetPublicGeneralQuery() {
-  const client = new Client();
 
   return useQuery({
-    queryKey: generalQueryKeys.publicGeneralInfo(),
-    retry: 0,
-    queryFn: () => client.getPublicGeneralInfo(),
-  });
+    ...getPublicGeneralInfoOptions(),
+    retry: 1,
+  })
 }

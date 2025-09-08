@@ -7,9 +7,9 @@ import AlertContainer from '../components/alerts/AlertContainer';
 import LoginLocalForm from '../components/auth/LoginLocalForm';
 import LoginLDAPForm from '../components/auth/LoginLDAPForm';
 import ParelPrachtFullLogo from '../components/ParelPrachtFullLogo';
-import { LoginMethods } from '../clients/server.generated';
 import CenterInPage from '../components/CenterInPage';
 import { useTitle } from '../components/TitleContext';
+import { LoginMethods } from '../clients/generated-client-new';
 
 interface Props {
   loginMethod: LoginMethods;
@@ -26,10 +26,10 @@ function LoginPage({ loginMethod, setupDone }: Props) {
 
   let loginForm;
   switch (loginMethod) {
-    case LoginMethods.Local:
+    case LoginMethods.LOCAL:
       loginForm = <LoginLocalForm />;
       break;
-    case LoginMethods.Ldap:
+    case LoginMethods.LDAP:
       loginForm = <LoginLDAPForm />;
       break;
     default:
@@ -57,13 +57,13 @@ function LoginPage({ loginMethod, setupDone }: Props) {
             <ParelPrachtFullLogo />
             {loginForm}
           </Segment>
-          {loginMethod === LoginMethods.Local ? (
+          {loginMethod === LoginMethods.LOCAL ? (
             <Message>
               {t('pages.login.troubleSigningIn')}{' '}
               <NavLink to="/forgot-password">{t('pages.login.forgotPassword')}</NavLink>.
             </Message>
           ) : null}
-          {loginMethod !== LoginMethods.Local ? (
+          {loginMethod !== LoginMethods.LOCAL ? (
             <Message>
               <NavLink to="/login/local">{t('pages.login.localLoginInstead')}</NavLink>
             </Message>
