@@ -14,7 +14,13 @@ interface State {
   hasError: boolean;
 }
 
-const queryClient = new QueryClient()
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 20 * 1000, // time in miliseconds
+    }
+  }
+})
 
 class App extends Component<object, State> {
   constructor(props: object) {

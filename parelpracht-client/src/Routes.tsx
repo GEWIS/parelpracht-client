@@ -18,7 +18,7 @@ import ContractModal from './pages/ContractModal';
 import Navigation from './components/navigation/Navigation';
 import { RootState } from './stores/store';
 import ResourceStatus from './stores/resourceStatus';
-import { AuthStatus, LoginMethods, Roles, User } from './clients/server.generated';
+import { AuthStatus, Roles, User } from './clients/server.generated';
 import LoginPage from './pages/LoginPage';
 import SetupPage from './pages/SetupPage';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
@@ -44,6 +44,7 @@ import SettingsPage from './pages/SettingsPage';
 import { WithRouter, withRouter } from './WithRouter';
 import ServerDown from './pages/ServerDown';
 import { useGetPublicGeneralQuery } from './queries/general';
+import { LoginMethods } from './clients/generated-client-new';
 
 interface Props extends WithRouter {
   authStatus: AuthStatus | undefined;
@@ -55,15 +56,9 @@ interface Props extends WithRouter {
 
 function Routes(props: Props) {
   const { t } = useTranslation();
-
-  console.info(props.status);
-
   const { data: publicData, isError } = useGetPublicGeneralQuery();
 
-  console.info('isError', isError);
-
   const loginRoutes: RouteObject[] = [];
-
   if (publicData) {
 
     loginRoutes.push(
@@ -121,19 +116,17 @@ function Routes(props: Props) {
         ),
       },
     );
-  }
 
-  if (publicData) {
-    if (publicData.loginMethod !== LoginMethods.Local) {
+    if (publicData.loginMethod !== LoginMethods.LOCAL) {
       loginRoutes.push({
         path: '/login/local',
         element: (
           <>
-            <LoginPage loginMethod={LoginMethods.Local} setupDone={publicData.setupDone} />
+            <LoginPage loginMethod={LoginMethods.LOCAL} setupDone={publicData.setupDone} />
             <Footer />
           </>
         ),
-      });
+      })
     }
   }
 

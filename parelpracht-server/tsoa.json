@@ -5,7 +5,6 @@
   "ignore": ["**/node_modules/@types/lodash/**"],
   "spec": {
     "outputDirectory": "build",
-    "host": "localhost:3001",
     "schemes": ["http", "https"],
     "basePath": "/api",
     "securityDefinitions": {
