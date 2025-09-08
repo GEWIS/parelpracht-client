@@ -11,6 +11,7 @@ export function useGetPublicGeneralQuery() {
 
   return useQuery({
     queryKey: generalQueryKeys.publicGeneralInfo(),
+    retry: 0,
     queryFn: () => client.getPublicGeneralInfo(),
   });
 }
