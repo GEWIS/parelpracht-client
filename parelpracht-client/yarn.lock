@@ -733,9 +733,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@lagunovsky/redux-react-router@npm:^4.4.1":
-  version: 4.4.1
-  resolution: "@lagunovsky/redux-react-router@npm:4.4.1"
+"@lagunovsky/redux-react-router@npm:^4.5.0":
+  version: 4.5.0
+  resolution: "@lagunovsky/redux-react-router@npm:4.5.0"
   peerDependencies:
     history: ^5
     react: ^16.8 || ^17 || ^18 || ^19
@@ -743,7 +743,7 @@ __metadata:
     react-redux: ^6 || ^7 || ^8 || ^9
     react-router: ^6 || ^7
     redux: ^4 || ^5
-  checksum: 10c0/05037ad06077ff03e7b4273642b1aab0c91f3b468cb35ea39c381a2af68ef6d44c0dac0b1e4ed1b62a2a5176e3d90b19bdeafb7ad3e16fa438dec889fe430eff
+  checksum: 10c0/87f686ca75c6d12ad33b6fbd10ccc58633f3d3ea9b4d373abce649cbe36f51b8de6931c34ed303add4c147e9aa9d028fb15bbe53828ec49e5f0e2e4a0b602cc1
   languageName: node
   linkType: hard
 
@@ -4970,7 +4970,7 @@ __metadata:
     "@gewis/eslint-config-react": "npm:^2.4.0"
     "@gewis/eslint-config-typescript": "npm:^2.4.0"
     "@gewis/prettier-config": "npm:^2.2.2"
-    "@lagunovsky/redux-react-router": "npm:^4.4.1"
+    "@lagunovsky/redux-react-router": "npm:^4.5.0"
     "@redux-devtools/extension": "npm:^3.3.0"
     "@reduxjs/toolkit": "npm:^2.8.2"
     "@rollup/plugin-alias": "npm:^5.1.1"
