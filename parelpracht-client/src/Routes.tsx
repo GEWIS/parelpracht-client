@@ -1,4 +1,4 @@
-import { Navigate as Redirect, useRoutes, Outlet } from 'react-router-dom';
+import { Navigate as Redirect, useRoutes, Outlet, RouteObject } from 'react-router-dom';
 import { Container, Dimmer, Header, Loader } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import { useTranslation } from 'react-i18next';
@@ -18,7 +18,7 @@ import ContractModal from './pages/ContractModal';
 import Navigation from './components/navigation/Navigation';
 import { RootState } from './stores/store';
 import ResourceStatus from './stores/resourceStatus';
-import { AuthStatus, LoginMethods, Roles, User } from './clients/server.generated';
+import { AuthStatus, Roles, User } from './clients/server.generated';
 import LoginPage from './pages/LoginPage';
 import SetupPage from './pages/SetupPage';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
@@ -42,86 +42,92 @@ import AuthorizationComponent from './components/AuthorizationComponent';
 import ParelPrachtFullLogo from './components/ParelPrachtFullLogo';
 import SettingsPage from './pages/SettingsPage';
 import { WithRouter, withRouter } from './WithRouter';
+import ServerDown from './pages/ServerDown';
+import { useGetPublicGeneralQuery } from './queries/general';
+import { LoginMethods } from './clients/generated-client-new';
 
 interface Props extends WithRouter {
   authStatus: AuthStatus | undefined;
   status: ResourceStatus;
   profile: User | undefined;
-  loginMethod: LoginMethods;
-  setupDone: boolean;
 
   hasRole: (role: Roles) => boolean;
 }
 
 function Routes(props: Props) {
   const { t } = useTranslation();
+  const { data: publicData, isError } = useGetPublicGeneralQuery();
 
-  const loginRoutes = [
-    {
-      path: '*',
-      element: (
-        <>
-          <Redirect to="/login" />,
-        </>
-      ),
-    },
-    {
-      path: '/login',
-      element: (
-        <>
-          <LoginPage loginMethod={props.loginMethod} setupDone={props.setupDone} />
-          <Footer />
-        </>
-      ),
-    },
-    {
-      path: '*',
-      element: (
-        <>
-          <LoginPage loginMethod={props.loginMethod} setupDone={props.setupDone} />
-          <Footer />
-        </>
-      ),
-    },
-    {
-      path: '/forgot-password',
-      element: (
-        <>
-          <ForgotPasswordPage />
-          <Footer />
-        </>
-      ),
-    },
-    {
-      path: '/reset-password',
-      element: (
-        <>
-          <ResetPasswordPage />
-          <Footer />
-        </>
-      ),
-    },
-    {
-      path: '/setup',
-      element: (
-        <>
-          <SetupPage setupDone={props.setupDone} />
-          <Footer />
-        </>
-      ),
-    },
-  ];
+  const loginRoutes: RouteObject[] = [];
+  if (publicData) {
 
-  if (props.loginMethod !== LoginMethods.Local) {
-    loginRoutes.push({
-      path: '/login/local',
-      element: (
-        <>
-          <LoginPage loginMethod={LoginMethods.Local} setupDone={props.setupDone} />
-          <Footer />
-        </>
-      ),
-    });
+    loginRoutes.push(
+      {
+        path: '*',
+        element: (
+          <>
+            <Redirect to="/login" />,
+          </>
+        ),
+      },
+      {
+        path: '/login',
+        element: (
+          <>
+            <LoginPage loginMethod={publicData.loginMethod} setupDone={publicData.setupDone} />
+            <Footer />
+          </>
+        ),
+      },
+      {
+        path: '*',
+        element: (
+          <>
+            <LoginPage loginMethod={publicData.loginMethod} setupDone={publicData.setupDone} />
+            <Footer />
+          </>
+        ),
+      },
+      {
+        path: '/forgot-password',
+        element: (
+          <>
+            <ForgotPasswordPage />
+            <Footer />
+          </>
+        ),
+      },
+      {
+        path: '/reset-password',
+        element: (
+          <>
+            <ResetPasswordPage />
+            <Footer />
+          </>
+        ),
+      },
+      {
+        path: '/setup',
+        element: (
+          <>
+            <SetupPage setupDone={publicData.setupDone} />
+            <Footer />
+          </>
+        ),
+      },
+    );
+
+    if (publicData.loginMethod !== LoginMethods.LOCAL) {
+      loginRoutes.push({
+        path: '/login/local',
+        element: (
+          <>
+            <LoginPage loginMethod={LoginMethods.LOCAL} setupDone={publicData.setupDone} />
+            <Footer />
+          </>
+        ),
+      })
+    }
   }
 
   const mainRoutes = [
@@ -430,6 +436,10 @@ function Routes(props: Props) {
     </Container>
   );
 
+  if (isError) {
+    return <ServerDown />;
+  }
+
   if (props.status !== ResourceStatus.FETCHED || props.authStatus === undefined) {
     return loader;
   }
@@ -442,18 +452,19 @@ function Routes(props: Props) {
     return loader;
   }
 
+
   const mainStyle =
     props.profile.backgroundFilename === ''
       ? {
-          backgroundColor: 'white',
-        }
+        backgroundColor: 'white',
+      }
       : {
-          width: '100vw',
-          backgroundImage: `url("/static/backgrounds/${props.profile.backgroundFilename}`,
-          backgroundSize: 'cover',
-          backgroundRepeat: 'no-repeat',
-          backgroundPosition: 'center center',
-        };
+        width: '100vw',
+        backgroundImage: `url("/static/backgrounds/${props.profile.backgroundFilename}`,
+        backgroundSize: 'cover',
+        backgroundRepeat: 'no-repeat',
+        backgroundPosition: 'center center',
+      };
 
   return (
     <div>
@@ -476,8 +487,6 @@ const mapStateToProps = (state: RootState) => {
     profile: state.auth.profile,
     profileStatus: state.auth.profileStatus,
     hasRole: (role: Roles): boolean => authedUserHasRole(state, role),
-    loginMethod: state.general.loginMethod,
-    setupDone: state.general.setupDone,
   };
 };
 

@@ -1,11 +1,8 @@
-import { LoginMethods } from '../../clients/server.generated';
 import { GeneralState } from './state';
 import * as actionCreators from './actionCreators';
 import { GeneralActionType } from './actions';
 
 const initialState: GeneralState = {
-  loginMethod: LoginMethods.Local,
-  setupDone: false,
   financialYears: [],
 };
 
@@ -17,12 +14,6 @@ export default function generalReducer(state: GeneralState = initialState, actio
       return {
         ...state,
         financialYears: action.financialYears,
-      };
-    case GeneralActionType.SetPublicInfo:
-      return {
-        ...state,
-        loginMethod: action.loginMethod,
-        setupDone: action.setupDone,
       };
     default:
       return state;

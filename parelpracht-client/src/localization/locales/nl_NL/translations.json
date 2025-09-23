@@ -556,6 +556,11 @@
       "title": "Instellingen",
       "warning": "WAARSCHUWING: Het aanpassen van instellingen op deze pagina heeft gevolgen voor de werking van ParelPracht. Je kunt mogelijk het systeem volledig slopen. Pas hier dus alleen dingen aan als je weet wat je aan het doen bent."
     },
+    "serverDown": {
+      "header": "Kan niet verbinden met de server",
+      "subheader": "Er ging iets mis aan onze kant, probeer het later nog een keer.",
+      "title": "Server Down"
+    },
     "tables": {
       "footer": {
         "items": "Items {{begin}} tot {{end}} van {{total}} geladen",

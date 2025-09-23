@@ -28,4 +28,5 @@ yarn-error.log*
 .yarn
 .pnp.*
 
+/src/clients/generated-client-new
 .idea

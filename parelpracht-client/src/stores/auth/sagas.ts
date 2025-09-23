@@ -11,7 +11,7 @@ import {
 import { takeEveryWithErrorHandling } from '../errorHandling';
 import { fetchSummaries } from '../summaries/actionCreators';
 import { SummaryCollections } from '../summaries/summaries';
-import { generalPrivateFetchInfo, generalPublicFetchInfo } from '../general/actionCreators';
+import { generalPrivateFetchInfo } from '../general/actionCreators';
 import {
   authFetchProfile,
   authFetchStatus,
@@ -169,7 +169,7 @@ function* setup(action: AuthSetup) {
       }),
     }),
   );
-  yield put(generalPublicFetchInfo());
+  // yield put(generalPublicFetchInfo());
   yield put(authFetchStatus());
 }
 

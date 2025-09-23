@@ -2,6 +2,8 @@ import { Component, ErrorInfo } from 'react';
 import { ReduxRouter, ReduxRouterSelector } from '@lagunovsky/redux-react-router';
 import './App.scss';
 import './Form.scss';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
 import store, { history, RootState } from './stores/store';
 import Routes from './Routes';
@@ -11,6 +13,14 @@ import AlertContainer from './components/alerts/AlertContainer';
 interface State {
   hasError: boolean;
 }
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 20 * 1000, // time in miliseconds
+    }
+  }
+})
 
 class App extends Component<object, State> {
   constructor(props: object) {
@@ -50,9 +60,12 @@ class App extends Component<object, State> {
     }
     const routerSelector: ReduxRouterSelector<RootState> = (state) => state.router;
     return (
-      <ReduxRouter history={history} routerSelector={routerSelector}>
-        {this.getContent()}
-      </ReduxRouter>
+      <QueryClientProvider client={queryClient}>
+        <ReduxRouter history={history} routerSelector={routerSelector}>
+          {this.getContent()}
+        </ReduxRouter>
+        <ReactQueryDevtools initialIsOpen={false} />
+      </QueryClientProvider>
     );
   }
 }

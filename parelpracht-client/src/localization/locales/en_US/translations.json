@@ -558,6 +558,11 @@
       "title": "Settings",
       "warning": "WARNING: Changing anything on this page will have consequences for the workings of ParelPracht, and you could possibly deadlock the system. Only change these settings when you know what you are doing."
     },
+    "serverDown": {
+      "header": "Cannot connect to server",
+      "subheader": "Something went wrong on our end. Please try again later.",
+      "title": "Server Down"
+    },
     "tables": {
       "footer": {
         "items": "Showing {{begin}} to {{end}} of {{total}}",
