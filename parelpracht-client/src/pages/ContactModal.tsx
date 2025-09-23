@@ -14,17 +14,17 @@ import { SingleEntities } from '../stores/single/single';
 import { TransientAlert } from '../stores/alerts/actions';
 import { showTransientAlert } from '../stores/alerts/actionCreators';
 import { formatContactName } from '../helpers/contact';
-import { formatStatus } from '../helpers/activity';
+import { formatTranslateStatus } from '../helpers/activity';
 import { getContractStatus } from '../stores/contract/selectors';
 import CompanyLink from '../components/entities/company/CompanyLink';
 import { TitleContext } from '../components/TitleContext';
 import { withRouter, WithRouter } from '../WithRouter';
-import ContactProps from '../components/entities/contact/ContactProps';
+import ContactProps, { PartialContact } from '../components/entities/contact/ContactProps';
 
 interface Props extends WithTranslation, WithRouter {
   create?: boolean;
   onCompanyPage: boolean;
-  contact: Contact | undefined;
+  contact: PartialContact | undefined;
   status: ResourceStatus;
   getContractStatus: (id: number) => ContractStatus;
 
@@ -93,12 +93,12 @@ class ContactModal extends Component<Props> {
 
   public render() {
     const { t } = this.props;
-    let contact: Contact | undefined;
+    let contact: PartialContact | undefined;
 
     if (this.props.create) {
       document.title = t('entities.contact.newContact');
       const { params } = this.props.router;
-      const companyId = params.companyId;
+      const companyId = Number(params.companyId);
       contact = {
         id: 0,
         firstName: '',
@@ -110,9 +110,10 @@ class ContactModal extends Component<Props> {
         comments: '',
         function: ContactFunction.NORMAL,
         companyId,
-      } as any as Contact;
+        contracts: [],
+      };
     } else {
-      contact = this.props.contact;
+      contact = this.props.contact as PartialContact;
     }
 
     if (contact === undefined) {
@@ -159,7 +160,7 @@ class ContactModal extends Component<Props> {
                     <Table.Cell>
                       <CompanyLink id={contract.companyId} />
                     </Table.Cell>
-                    <Table.Cell>{formatStatus(this.props.getContractStatus(contract.id))}</Table.Cell>
+                    <Table.Cell>{formatTranslateStatus(this.props.getContractStatus(contract.id))}</Table.Cell>
                   </Table.Row>
                 );
               })}

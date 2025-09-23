@@ -1,7 +1,7 @@
 import { Component } from 'react';
 import { Button, Container, Grid, Header, Icon, Segment } from 'semantic-ui-react';
 import { withTranslation, WithTranslation } from 'react-i18next';
-import validator from 'validator';
+import * as validator from 'validator';
 import {
   CustomInvoiceGenSettings,
   CustomProduct,

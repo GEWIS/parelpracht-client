@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { Dropdown, DropdownProps } from 'semantic-ui-react';
 import { VATSummary } from '../../../clients/server.generated';
 import { RootState } from '../../../stores/store';
+import { SummariesState } from '../../../stores/summaries/reducer';
 
 interface Props {
   value: number;
@@ -44,7 +45,7 @@ function ProductVATSelector(props: Props & DropdownProps) {
 }
 
 const mapStateToProps = (state: RootState) => ({
-  options: state.summaries.ValueAddedTax.options,
+  options: (state.summaries as SummariesState).ValueAddedTax.options,
 });
 
 export default connect(mapStateToProps)(ProductVATSelector);

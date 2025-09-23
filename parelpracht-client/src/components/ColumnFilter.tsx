@@ -78,7 +78,9 @@ function ColumnFilter({
           button
           clearable
           fluid
-          value={multiple ? filter.values : filter.values[0]}
+          value={
+            (multiple && !Array.isArray(filter.values) ? filter.values : filter.values[0]) as number | string | boolean
+          }
           onChange={(_, data) => {
             if (multiple) {
               setFilter(data.value as string[]);

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { Dropdown, Icon, Menu } from 'semantic-ui-react';
 import { useTranslation } from 'react-i18next';
@@ -17,12 +17,10 @@ function CompaniesMenu() {
         item
         icon={null}
         trigger={
-          (
-            <NavLink to="/company" title={t('mainMenu.companies')}>
-              <Icon name="building" />
-              <span> {t('mainMenu.companies')}</span>
-            </NavLink>
-          ) as any
+          <NavLink to="/company" title={t('mainMenu.companies')}>
+            <Icon name="building" />
+            <span> {t('mainMenu.companies')}</span>
+          </NavLink>
         }
       >
         <Dropdown.Menu>

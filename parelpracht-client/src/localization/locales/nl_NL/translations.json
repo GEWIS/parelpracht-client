@@ -8,14 +8,17 @@
     },
     "newComment": "Schrijf een nieuwe opmerking...",
     "status": {
+      "headerCreate": "Maak status \"{{status}}\"",
+      "headerUpdate": "Update status \"{{status}}\"",
       "cancel": "Annuleer {{entity}}",
       "cancelContractDescription": "Door een contract te annuleren, geef je aan dat het gehele contract niet geleverd wordt. Let op: sommige producten op het contract zouden nog wel geleverd en gefactureerd kunnen worden. Annuleer alleen een contract nadat je de Commissaris Externe Betrekkingen hebt geraadpleegd.",
       "cancelInvoiceDescription": "Door een factuur te annuleren, geef je aan dat de factuur of één of meer producten op de factuur niet naar het bedrijf worden gestuurd. Annuleer alleen een factuur nadat je Commissaris Externe Betrekkingen en de Penningmeester hebt geraadpleegd.",
       "cancelProductInstanceDescription": "Door een product te annuleren, geef je aan dat deze nooit geleverd zal worden. Annuleer alleen een product nadat je de Commissaris Externe Betrekkingen hebt geraadpleegd.",
       "defer": "Stel {{entity}} uit",
-      "deferDescription": "Door deze {{entity}} uit te stellen, geef je aan dat dit product niet geleverd wordt in het huidige academische jaar, maar wel in het volgende academische jaar.",
+      "deferDescription": "Door dit {{entity}} uit te stellen, geef je aan dat dit product niet geleverd wordt in het huidige academische jaar, maar wel in het volgende academische jaar.",
       "header": {
         "cancelled": "{{entity}} is geannuleerd",
+        "deferred": "{{entity}} is uitgesteld",
         "general": "{{entity}} status",
         "irrecoverable": "{{entity}} is oninbaar"
       },

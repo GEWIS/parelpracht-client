@@ -1,6 +1,6 @@
 import { ChangeEvent } from 'react';
 import { Dropdown, Form, Input, Segment } from 'semantic-ui-react';
-import validator from 'validator';
+import * as validator from 'validator';
 import { useTranslation } from 'react-i18next';
 import DatePicker from 'react-datepicker';
 import { ICustomInvoiceGenSettings, Language, ReturnFileType } from '../../clients/server.generated';

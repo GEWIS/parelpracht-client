@@ -3,7 +3,7 @@ import { Button, Checkbox, Dropdown, Form, Input } from 'semantic-ui-react';
 import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
-import validator from 'validator';
+import * as validator from 'validator';
 import { authSetup } from '../../stores/auth/actionCreators';
 import { Gender } from '../../clients/server.generated';
 import PasswordStrength from './PasswordStrength';

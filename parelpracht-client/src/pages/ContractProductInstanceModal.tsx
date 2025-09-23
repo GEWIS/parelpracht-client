@@ -3,13 +3,7 @@ import { Dimmer, Loader, Modal, Segment } from 'semantic-ui-react';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import { withTranslation, WithTranslation } from 'react-i18next';
-import {
-  Contract,
-  ProductInstance,
-  ProductInstanceParams,
-  ProductInstanceStatus,
-  Roles,
-} from '../clients/server.generated';
+import { Contract, ProductInstance, ProductInstanceParams, ProductInstanceStatus } from '../clients/server.generated';
 import { fetchSingle } from '../stores/single/actionCreators';
 import { RootState } from '../stores/store';
 import ProductInstanceProps from '../components/entities/product/ProductInstanceProps';
@@ -17,7 +11,7 @@ import ResourceStatus from '../stores/resourceStatus';
 import AlertContainer from '../components/alerts/AlertContainer';
 import { getSingle } from '../stores/single/selectors';
 import { SingleEntities } from '../stores/single/single';
-import FinancialDocumentProgress from '../components/activities/FinancialDocumentProgress';
+import ProductInstanceProgress from '../components/activities/ProductInstanceProgress';
 import { GeneralActivity } from '../components/activities/GeneralActivity';
 import ActivitiesList from '../components/activities/ActivitiesList';
 import {
@@ -125,17 +119,7 @@ class ContractProductInstanceModal extends Component<Props> {
     let activities;
     if (!create) {
       activities = [
-        <Segment secondary style={{ backgroundColor: 'rgba(243, 244, 245, 0.98)', margin: '2em 1em 1em' }} key="seg-1">
-          <FinancialDocumentProgress
-            documentId={productInstance.id}
-            parentId={productInstance.contractId}
-            activities={productInstance.activities as GeneralActivity[]}
-            documentType={SingleEntities.ProductInstance}
-            resourceStatus={status}
-            roles={[Roles.ADMIN, Roles.GENERAL]}
-            canCancel
-          />
-        </Segment>,
+        <ProductInstanceProgress key={productInstance.id} productInstance={productInstance} resourceStatus={status} />,
         <Segment style={{ margin: '2em 1em 1em' }} key="seg-2">
           <ActivitiesList
             activities={productInstance.activities as GeneralActivity[]}

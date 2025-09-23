@@ -1,7 +1,7 @@
 import { Icon } from 'semantic-ui-react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import validator from 'validator';
+import * as validator from 'validator';
 
 interface PasswordStrengthProps {
   password: string;

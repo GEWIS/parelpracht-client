@@ -19,16 +19,16 @@ interface Props {
   clearStatus: () => void;
 }
 
-function ForgotPasswordPage(props: Props) {
+function ForgotPasswordPage({ status, clearStatus }: Props) {
   const { t } = useTranslation();
   const { setTitle } = useTitle();
 
   useEffect(() => {
-    props.clearStatus();
+    clearStatus();
     setTitle(t('pages.forgotPassword.title'));
-  }, []);
+  }, [clearStatus, setTitle, t]);
 
-  if (props.status === ResourceStatus.FETCHED) {
+  if (status === ResourceStatus.FETCHED) {
     return (
       <>
         <div className="bg" />

@@ -7,7 +7,7 @@ import { RootState } from '../../../stores/store';
 import { getContactName } from '../../../stores/contact/selectors';
 import { getContractStatus } from '../../../stores/contract/selectors';
 import { formatLastUpdate } from '../../../helpers/timestamp';
-import { formatStatus } from '../../../helpers/activity';
+import { formatTranslateStatus } from '../../../helpers/activity';
 import ContractLink from './ContractLink';
 
 interface Props {
@@ -26,7 +26,7 @@ function ContractComponent(props: Props) {
           <ContractLink id={contract.id} showId showName />
         </Table.Cell>
         <Table.Cell>{contactName}</Table.Cell>
-        <Table.Cell>{formatStatus(status)}</Table.Cell>
+        <Table.Cell>{formatTranslateStatus(status)}</Table.Cell>
         <Table.Cell>{formatLastUpdate(contract.updatedAt)}</Table.Cell>
       </Table.Row>
     </>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Button, Grid, Input } from 'semantic-ui-react';
 import TimeAgo from 'javascript-time-ago';
 import { useTranslation } from 'react-i18next';

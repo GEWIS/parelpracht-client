@@ -1,8 +1,7 @@
 import './BackgroundAnimation.css';
+import { PropsWithChildren } from 'react';
 
-interface Props {
-  children: any;
-}
+type Props = PropsWithChildren;
 
 function BackgroundAnimation({ children }: Props) {
   return <>{children}</>;

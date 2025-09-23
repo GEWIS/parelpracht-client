@@ -5,7 +5,7 @@ import CompanyLink from '../company/CompanyLink';
 import { formatLastUpdate } from '../../../helpers/timestamp';
 import { RootState } from '../../../stores/store';
 import { getContractStatus } from '../../../stores/contract/selectors';
-import { formatStatus } from '../../../helpers/activity';
+import { formatTranslateStatus } from '../../../helpers/activity';
 import ContractLink from './ContractLink';
 
 interface Props {
@@ -24,7 +24,7 @@ function ContractCompactRow(props: Props) {
       <Table.Cell>
         <CompanyLink id={contract.companyId} />
       </Table.Cell>
-      <Table.Cell>{formatStatus(status)}</Table.Cell>
+      <Table.Cell>{formatTranslateStatus(status)}</Table.Cell>
       <Table.Cell>{formatLastUpdate(contract.updatedAt)}</Table.Cell>
     </Table.Row>
   );

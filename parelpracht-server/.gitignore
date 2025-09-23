@@ -130,3 +130,5 @@ tmp/
 
 build
 local.sqlite
+
+.idea

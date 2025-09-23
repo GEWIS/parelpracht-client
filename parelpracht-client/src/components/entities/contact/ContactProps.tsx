@@ -2,9 +2,16 @@ import { useTranslation } from 'react-i18next';
 import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Dropdown, Form, Input, TextArea } from 'semantic-ui-react';
-import validator from 'validator';
+import * as validator from 'validator';
 import { useNavigate } from 'react-router';
-import { Contact, ContactFunction, ContactParams, Gender, Roles } from '../../../clients/server.generated';
+import {
+  Contact,
+  ContactFunction,
+  ContactParams,
+  Gender,
+  IContactParams,
+  Roles,
+} from '../../../clients/server.generated';
 import AuthorizationComponent from '../../AuthorizationComponent';
 import PropsButtons from '../../PropsButtons';
 import { SingleEntities } from '../../../stores/single/single';
@@ -16,9 +23,11 @@ import { createSingle, deleteSingle, fetchSingle, saveSingle } from '../../../st
 import { showTransientAlert } from '../../../stores/alerts/actionCreators';
 import { TransientAlert } from '../../../stores/alerts/actions';
 
+export type PartialContact = IContactParams & Pick<Contact, 'id' | 'contracts' | 'companyId'>;
+
 interface Props {
   create?: boolean;
-  contact: Contact;
+  contact: PartialContact;
   onCompanyPage: boolean;
   onCancel?: () => void;
 }
@@ -27,7 +36,7 @@ const ContactProps = (props: Props) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [editing, setEditing] = useState<boolean>(props.create ?? false);
-  const [formState, setFormState] = useState<ContactParams>(props.contact);
+  const [formState, setFormState] = useState<IContactParams>(props.contact);
 
   const status = useSelector((state: RootState) => {
     return getSingle<Contact>(state, SingleEntities.Contact).status;
@@ -86,6 +95,9 @@ const ContactProps = (props: Props) => {
       }
     }
     prevStatusRef.current = status;
+    // Ignore next line, because we cannot set formState as part of the hook's dependencies: this will cause the alerts
+    // to appear when you change the form.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [status]);
 
   const toParams = (): ContactParams => {
@@ -141,9 +153,9 @@ const ContactProps = (props: Props) => {
         formState.function,
       )
     ) {
-      return validator.isEmpty(formState.email) || validator.isEmail(formState.email);
+      return validator.isEmpty(formState.email ?? '') || validator.isEmail(formState.email ?? '');
     } else {
-      return validator.isEmail(formState.email);
+      return validator.isEmail(formState.email ?? '');
     }
   };
 
@@ -246,7 +258,7 @@ const ContactProps = (props: Props) => {
                 { key: 1, text: t('entities.contact.props.gender.female'), value: Gender.FEMALE },
                 { key: 2, text: t('entities.contact.props.gender.unknown'), value: Gender.UNKNOWN },
               ]}
-              onChange={(e, data) =>
+              onChange={(_, data) =>
                 updateFormState({
                   gender: data.value as Gender,
                 })
@@ -266,7 +278,7 @@ const ContactProps = (props: Props) => {
                 value: x,
                 text: formatFunction(x),
               }))}
-              onChange={(e, data) =>
+              onChange={(_, data) =>
                 updateFormState({
                   function: data.value as ContactFunction,
                 })

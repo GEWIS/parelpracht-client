@@ -2,7 +2,7 @@ import { ChangeEvent, useState } from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import { Button, Form, Input } from 'semantic-ui-react';
-import validator from 'validator';
+import * as validator from 'validator';
 import { useTranslation } from 'react-i18next';
 import { authResetPassword } from '../../stores/auth/actionCreators';
 import ResourceStatus from '../../stores/resourceStatus';

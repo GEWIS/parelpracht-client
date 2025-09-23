@@ -1,7 +1,7 @@
 import TimeAgo from 'javascript-time-ago';
 import nl from 'javascript-time-ago/locale/en';
 import en from 'javascript-time-ago/locale/nl';
-import i18n from 'i18next';
+import i18next from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
 import en_US from './locales/en_US/translations.json';
@@ -22,7 +22,7 @@ const resources = {
 };
 
 // eslint-disable-next-line import/no-named-as-default-member
-i18n
+i18next
   .use(initReactI18next)
   .use(LanguageDetector)
   .init({
@@ -36,11 +36,11 @@ i18n
 
 export const changeLanguage = (language: locales) => {
   // eslint-disable-next-line import/no-named-as-default-member
-  i18n.changeLanguage(language).catch(console.error);
+  i18next.changeLanguage(language).catch(console.error);
 };
 
 export const getLanguage = (): locales => {
-  return i18n.languages[0] as locales;
+  return i18next.languages[0] as locales;
 };
 
 const currentLanguage = getLanguage();
@@ -50,4 +50,4 @@ if (currentLanguage === 'nl-NL') {
   TimeAgo.setDefaultLocale('en-US');
 }
 
-export default i18n;
+export default i18next;

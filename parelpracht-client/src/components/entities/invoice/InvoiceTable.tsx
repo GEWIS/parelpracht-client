@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import { Dimmer, Loader, Segment, Table } from 'semantic-ui-react';
@@ -34,7 +34,7 @@ interface Props {
   status: ResourceStatus;
 
   fetchInvoices: () => void;
-  setTableFilter: (filter: { column: string; values: any[] }) => void;
+  setTableFilter: (filter: { column: keyof Invoice | 'activityStatus'; values: Invoice[keyof Invoice][] }) => void;
   changeSort: (column: string) => void;
   setSort: (column: string, direction: 'ASC' | 'DESC') => void;
   setTake: (take: number) => void;
@@ -68,7 +68,7 @@ function InvoicesTable({
     if ([Roles.FINANCIAL].some(hasRole) && ![Roles.ADMIN].some(hasRole))
       setTableFilter({ column: 'activityStatus', values: ['SENT'] });
     fetchInvoices();
-  }, []);
+  }, [fetchInvoices, hasRole, setSort, setTableFilter]);
 
   const table = (
     <>
@@ -169,7 +169,7 @@ const mapStateToProps = (state: RootState) => {
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
   fetchInvoices: () => dispatch(fetchTable(Tables.Invoices)),
-  setTableFilter: (filter: { column: string; values: any[] }) => {
+  setTableFilter: (filter: { column: keyof Invoice | 'activityStatus'; values: Invoice[keyof Invoice][] }) => {
     dispatch(setFilterTable(Tables.Invoices, filter));
   },
   changeSort: (column: string) => {

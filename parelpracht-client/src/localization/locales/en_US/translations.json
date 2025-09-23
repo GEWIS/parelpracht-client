@@ -8,6 +8,8 @@
     },
     "newComment": "Write a new comment...",
     "status": {
+      "headerCreate": "Post status \"{{status}}\"",
+      "headerUpdate": "Update status \"{{status}}\"",
       "cancel": "Cancel {{entity}}",
       "cancelContractDescription": "By cancelling this contract, you indicate that the contract will not be delivered. Note that other products from the contract might still be delivered and invoiced.  Only cancel a contract in consultation with the External Affairs Officer.",
       "cancelInvoiceDescription": "By cancelling an invoice, you indicate that the invoice or any of the products on this invoice will not be sent to the company. Please only cancel an invoice after consultation with the External Affairs Officer and the Treasurer.",
@@ -16,6 +18,7 @@
       "deferDescription": "By defering this {{entity}}, you indicate that it will not be delivered in the current academic year and that delivery will be postponed until the next academic year.",
       "header": {
         "cancelled": "{{entity}} has been cancelled",
+        "deferred": "{{entity}} has been deferred",
         "general": "{{entity}} status",
         "irrecoverable": "{{entity}} is irrecoverable"
       },

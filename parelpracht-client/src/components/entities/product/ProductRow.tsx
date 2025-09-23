@@ -3,7 +3,7 @@ import { Table } from 'semantic-ui-react';
 import { Product } from '../../../clients/server.generated';
 import { formatPriceFull } from '../../../helpers/monetary';
 import ProductCategoryLink from '../productcategories/ProductCategoryLink';
-import { formatStatus } from '../../../helpers/activity';
+import { formatTranslateStatus } from '../../../helpers/activity';
 import { getLanguage } from '../../../localization';
 
 interface Props {
@@ -22,7 +22,7 @@ function ProductRow(props: Props) {
         </NavLink>
       </Table.Cell>
       <Table.Cell>{formatPriceFull(product.targetPrice)}</Table.Cell>
-      <Table.Cell>{formatStatus(product.status)}</Table.Cell>
+      <Table.Cell>{formatTranslateStatus(product.status)}</Table.Cell>
       <Table.Cell>
         <ProductCategoryLink id={product.categoryId} />
       </Table.Cell>

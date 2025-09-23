@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import { Checkbox, Form, Input, Label } from 'semantic-ui-react';
 import { withTranslation, WithTranslation } from 'react-i18next';
-import validator from 'validator';
+import * as validator from 'validator';
 import {
   Client,
   PaginationParams,
@@ -75,7 +75,7 @@ class ProductProps extends Component<Props, State> {
       ...this.extractState(props),
     };
 
-    this.hasInstances();
+    this.hasInstances().catch((e) => console.error(e));
   }
 
   componentDidUpdate(prevProps: Props) {

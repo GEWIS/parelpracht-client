@@ -21,7 +21,7 @@ interface State {
   input: string;
 }
 
-class ConfirmationDialogWithParameter extends Component<Props, State> {
+class ConfirmDialogWithParameter extends Component<Props, State> {
   static defaultProps = {
     inputField: undefined,
     defaultInput: undefined,
@@ -41,13 +41,16 @@ class ConfirmationDialogWithParameter extends Component<Props, State> {
     this.setState({ open: false });
   };
 
-  onApprove = async () => {
+  onApprove = () => {
     const { onApprove, inputField } = this.props;
     const { input } = this.state;
 
     this.setState({ loading: true });
-    await onApprove(inputField ? input : undefined);
-    this.setState({ loading: false, open: false });
+    onApprove(inputField ? input : undefined)
+      .then(() => {
+        this.setState({ loading: false, open: false });
+      })
+      .catch((e) => console.error(e));
   };
 
   render() {
@@ -101,4 +104,4 @@ class ConfirmationDialogWithParameter extends Component<Props, State> {
   }
 }
 
-export default withTranslation()(ConfirmationDialogWithParameter);
+export default withTranslation()(ConfirmDialogWithParameter);
