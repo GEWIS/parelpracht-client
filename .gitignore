@@ -1,5 +1,8 @@
 .idea
 .vscode
+.claude
 
 .yarn
 .pnp.cjs
+
+.direnv
