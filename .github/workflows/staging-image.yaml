@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - develop
+    paths-ignore:
+      - 'deploy/**'
 
 jobs:
   build:
@@ -11,7 +13,7 @@ jobs:
     with:
       projects: "['parelpracht-client', 'parelpracht-server']"
       docker-registry: 'abc.docker-registry.gewis.nl'
-      docker-paths: "['crm/parelpracht/parelpracht-client', 'crm/parelpracht/parelpracht-server']"
+      docker-paths: "['crm/parelpracht/client', 'crm/parelpracht/server']"
       github-registry: 'false'
       build-args: |
         APP_VERSION=develop
