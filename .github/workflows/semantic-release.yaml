@@ -28,3 +28,41 @@ jobs:
     secrets:
       REGISTRY_USERNAME: ${{ secrets.SVC_GH_PARELPRACHT_USERNAME }}
       REGISTRY_PASSWORD: ${{ secrets.SVC_GH_PARELPRACHT_PWD }}
+
+  pin:
+    needs: [versioning, release]
+    if: ${{ needs.versioning.outputs.next-version != '' }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    env:
+      REGISTRY: abc.docker-registry.gewis.nl
+      VERSION: ${{ needs.versioning.outputs.next-version }}
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10
+        with:
+          ref: main
+
+      - name: Install kustomize
+        run: |
+          curl -sSfL "https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize%2Fv5.5.0/kustomize_v5.5.0_linux_amd64.tar.gz" | tar -xz
+          sudo install -m 0755 kustomize /usr/local/bin/kustomize
+
+      - name: Pin production images to the released version
+        run: |
+          for app in client server; do
+            (cd deploy/production && kustomize edit set image "${REGISTRY}/crm/parelpracht/${app}:${VERSION}")
+          done
+
+      - name: Commit the pin
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if git diff --quiet -- deploy/production/kustomization.yaml; then
+            echo "No image change to commit"
+          else
+            git add deploy/production/kustomization.yaml
+            git commit -m "chore(deploy): pin production images to ${VERSION} [skip ci]"
+            git push origin HEAD:main
+          fi

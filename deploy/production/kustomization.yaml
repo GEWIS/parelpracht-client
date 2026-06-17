@@ -1,0 +1,11 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - ../base
+
+images:
+  - name: abc.docker-registry.gewis.nl/crm/parelpracht/client
+    newTag: "1.5.0"
+  - name: abc.docker-registry.gewis.nl/crm/parelpracht/server
+    newTag: "1.5.0"

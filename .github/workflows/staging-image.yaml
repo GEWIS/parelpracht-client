@@ -22,3 +22,45 @@ jobs:
     secrets:
       REGISTRY_USERNAME: ${{ secrets.SVC_GH_PARELPRACHT_USERNAME }}
       REGISTRY_PASSWORD: ${{ secrets.SVC_GH_PARELPRACHT_PWD }}
+
+  pin:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    env:
+      REGISTRY: abc.docker-registry.gewis.nl
+    steps:
+      - name: Checkout develop
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10
+        with:
+          ref: develop
+
+      - name: Install kustomize
+        run: |
+          curl -sSfL "https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize%2Fv5.5.0/kustomize_v5.5.0_linux_amd64.tar.gz" | tar -xz
+          sudo install -m 0755 kustomize /usr/local/bin/kustomize
+
+      - name: Pin staging images to the new :develop digests
+        env:
+          REGISTRY_USERNAME: ${{ secrets.SVC_GH_PARELPRACHT_USERNAME }}
+          REGISTRY_PASSWORD: ${{ secrets.SVC_GH_PARELPRACHT_PWD }}
+        run: |
+          echo "${REGISTRY_PASSWORD}" | docker login "${REGISTRY}" -u "${REGISTRY_USERNAME}" --password-stdin
+          for app in client server; do
+            ref="${REGISTRY}/crm/parelpracht/${app}"
+            digest="$(docker buildx imagetools inspect "${ref}:develop" --format '{{.Manifest.Digest}}')"
+            (cd deploy/staging && kustomize edit set image "${ref}@${digest}")
+          done
+
+      - name: Commit the pin
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if git diff --quiet -- deploy/staging/kustomization.yaml; then
+            echo "No image change to commit"
+          else
+            git add deploy/staging/kustomization.yaml
+            git commit -m "chore(deploy): pin staging images [skip ci]"
+            git push origin HEAD:develop
+          fi

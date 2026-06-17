@@ -1,0 +1,16 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: parelpracht-test
+
+resources:
+  - ../base
+  - backend-config.yaml
+  - backend-sealed-secret.yaml
+  - ingress.yaml
+
+images:
+  - name: abc.docker-registry.gewis.nl/crm/parelpracht/client
+    newTag: develop
+  - name: abc.docker-registry.gewis.nl/crm/parelpracht/server
+    newTag: develop
