@@ -14,6 +14,13 @@ COPY tsconfig.app.json ./
 COPY tsconfig.node.json ./
 COPY public ./public
 COPY src ./src
+
+ARG APP_VERSION=
+ARG GIT_COMMIT_HASH=
+ARG GIT_COMMIT_DATE=
+ENV APP_VERSION=$APP_VERSION
+ENV GIT_COMMIT_HASH=$GIT_COMMIT_HASH
+ENV GIT_COMMIT_DATE=$GIT_COMMIT_DATE
 RUN yarn run build
 
 # production environment

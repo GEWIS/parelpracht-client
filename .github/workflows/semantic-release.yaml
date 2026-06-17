@@ -10,7 +10,7 @@ jobs:
     uses: GEWIS/actions/.github/workflows/versioning.yml@v1
 
   release:
-    uses: GEWIS/actions/.github/workflows/docker-release.yml@0afd41a8f1a0e9342f7edffa71cac0a286f15135
+    uses: GEWIS/actions/.github/workflows/docker-release.yml@4ea6ab6760d180c2262078cf557e516d01f2f4c0
     needs: versioning
     if: ${{ needs.versioning.outputs.next-version != '' }}
     with:
@@ -19,6 +19,10 @@ jobs:
       docker-registry: 'abc.docker-registry.gewis.nl'
       docker-paths: "['crm/parelpracht']"
       github-registry: 'false'
+      build-args: |
+        APP_VERSION=${{ needs.versioning.outputs.next-version }}
+        GIT_COMMIT_HASH=${{ github.sha }}
+        GIT_COMMIT_DATE=${{ github.event.head_commit.timestamp }}
     secrets:
       REGISTRY_USERNAME: ${{ secrets.SVC_GH_PARELPRACHT_USERNAME }}
       REGISTRY_PASSWORD: ${{ secrets.SVC_GH_PARELPRACHT_PWD }}
