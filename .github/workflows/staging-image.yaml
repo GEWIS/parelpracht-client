@@ -36,21 +36,20 @@ jobs:
         with:
           ref: develop
 
-      - name: Install kustomize and crane
+      - name: Install kustomize
         run: |
           curl -sSfL "https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize%2Fv5.5.0/kustomize_v5.5.0_linux_amd64.tar.gz" | tar -xz kustomize
-          curl -sSfL "https://github.com/google/go-containerregistry/releases/download/v0.20.2/go-containerregistry_Linux_x86_64.tar.gz" | tar -xz crane
-          sudo install -m 0755 kustomize crane /usr/local/bin/
+          sudo install -m 0755 kustomize /usr/local/bin/
 
       - name: Pin staging images to the new :develop digests
         env:
           REGISTRY_USERNAME: ${{ secrets.SVC_GH_PARELPRACHT_USERNAME }}
           REGISTRY_PASSWORD: ${{ secrets.SVC_GH_PARELPRACHT_PWD }}
         run: |
-          crane auth login "${REGISTRY}" -u "${REGISTRY_USERNAME}" -p "${REGISTRY_PASSWORD}"
+          echo "${REGISTRY_PASSWORD}" | docker login "${REGISTRY}" -u "${REGISTRY_USERNAME}" --password-stdin
           for app in client server; do
             ref="${REGISTRY}/crm/parelpracht/${app}"
-            digest="$(crane digest "${ref}:develop")"
+            digest="$(docker buildx imagetools inspect "${ref}:develop" --format '{{.Manifest.Digest}}')"
             (cd deploy/staging && kustomize edit set image "${ref}@${digest}")
           done
 
