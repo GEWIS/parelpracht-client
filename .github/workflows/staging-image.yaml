@@ -1,26 +1,20 @@
-name: Semantic release
+name: Staging image
 
 on:
   push:
     branches:
-      - main
+      - develop
 
 jobs:
-  versioning:
-    uses: GEWIS/actions/.github/workflows/versioning.yml@v1
-
-  release:
-    uses: GEWIS/actions/.github/workflows/docker-release.yml@4ea6ab6760d180c2262078cf557e516d01f2f4c0
-    needs: versioning
-    if: ${{ needs.versioning.outputs.next-version != '' }}
+  build:
+    uses: GEWIS/actions/.github/workflows/docker-branch-release.yml@4ea6ab6760d180c2262078cf557e516d01f2f4c0
     with:
       projects: "['parelpracht-client', 'parelpracht-server']"
-      version: ${{ needs.versioning.outputs.next-version }}
       docker-registry: 'abc.docker-registry.gewis.nl'
       docker-paths: "['crm/parelpracht/parelpracht-client', 'crm/parelpracht/parelpracht-server']"
       github-registry: 'false'
       build-args: |
-        APP_VERSION=${{ needs.versioning.outputs.next-version }}
+        APP_VERSION=develop
         GIT_COMMIT_HASH=${{ github.sha }}
         GIT_COMMIT_DATE=${{ github.event.head_commit.timestamp }}
     secrets:
