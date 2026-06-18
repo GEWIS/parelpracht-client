@@ -1,0 +1,53 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend
+  labels:
+    io.kompose.service: frontend
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      io.kompose.service: frontend
+  template:
+    metadata:
+      labels:
+        io.kompose.service: frontend
+    spec:
+      containers:
+        - name: frontend
+          image: abc.docker-registry.gewis.nl/crm/parelpracht/client:1.5.0
+          ports:
+            - containerPort: 80
+              protocol: TCP
+          volumeMounts:
+            - name: logos
+              mountPath: /usr/src/app/data/logos
+            - name: backgrounds
+              mountPath: /usr/src/app/data/backgrounds
+      restartPolicy: Always
+      volumes:
+        - name: logos
+          persistentVolumeClaim:
+            claimName: logos
+        - name: backgrounds
+          persistentVolumeClaim:
+            claimName: backgrounds
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend
+  labels:
+    io.kompose.service: frontend
+spec:
+  selector:
+    io.kompose.service: frontend
+  ports:
+    - name: http
+      port: 80
+      targetPort: 80
+      protocol: TCP

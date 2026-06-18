@@ -1,0 +1,3 @@
+# never commit plaintext secrets, only the sealed versions
+deploy/**/*-secret.yaml
+!deploy/**/*-sealed-secret.yaml

@@ -1,0 +1,63 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend
+  labels:
+    io.kompose.service: backend
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      io.kompose.service: backend
+  template:
+    metadata:
+      labels:
+        io.kompose.service: backend
+    spec:
+      containers:
+        - name: backend
+          image: abc.docker-registry.gewis.nl/crm/parelpracht/server:1.5.0
+          ports:
+            - containerPort: 80
+              protocol: TCP
+          envFrom:
+            - configMapRef:
+                name: backend-config
+            - secretRef:
+                name: backend-secret
+          volumeMounts:
+            - name: backend-files
+              mountPath: /usr/src/app/data
+            - name: logos
+              mountPath: /usr/src/app/data/logos
+            - name: backgrounds
+              mountPath: /usr/src/app/data/backgrounds
+      restartPolicy: Always
+      volumes:
+        - name: backend-files
+          persistentVolumeClaim:
+            claimName: backend-files
+        - name: logos
+          persistentVolumeClaim:
+            claimName: logos
+        - name: backgrounds
+          persistentVolumeClaim:
+            claimName: backgrounds
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend
+  labels:
+    io.kompose.service: backend
+spec:
+  selector:
+    io.kompose.service: backend
+  ports:
+    - name: http
+      port: 80
+      targetPort: 80
+      protocol: TCP
