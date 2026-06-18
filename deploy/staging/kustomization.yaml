@@ -10,7 +10,7 @@ resources:
 - ingress.yaml
 
 images:
-- digest: sha256:8c19d95b430eb03a6fbbd9e187753f58d674db42c71d107b282b9e2aeb20712d
+- digest: sha256:2820abf584dfae151b805fffccb3ce5f2d629d9ebe1c5583a710f3c6f5eb28e5
   name: abc.docker-registry.gewis.nl/crm/parelpracht/client
-- digest: sha256:85d0ed245e1eb1f49d0f2fc6a8896fe128c3cbd1614925d9771e12486b689c47
+- digest: sha256:bcac2a9965cdb9863402c7f1a974204a9d30e25103e5527fdd00a032d507cdc5
   name: abc.docker-registry.gewis.nl/crm/parelpracht/server
