@@ -6,3 +6,7 @@
 .pnp.cjs
 
 .direnv
+
+# never commit plaintext secrets, only sealed ones
+deploy/*-secret.yaml
+!deploy/*-sealed-secret.yaml
