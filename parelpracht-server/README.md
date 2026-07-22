@@ -24,5 +24,5 @@ done with the `/setup` endpoint.
 3. Check the console for the confirmation link.
 
 Note: the confirmation link will only be logged in development mode. In
-production, an actual mail will be send with the confirmation link to the
+production, an actual mail will be sent with the confirmation link to the
 indicated email address.
