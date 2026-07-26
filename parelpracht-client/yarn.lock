@@ -2545,16 +2545,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"corepack@npm:^0.33.0":
-  version: 0.33.0
-  resolution: "corepack@npm:0.33.0"
+"corepack@npm:^0.34.0":
+  version: 0.34.0
+  resolution: "corepack@npm:0.34.0"
   bin:
     corepack: ./dist/corepack.js
     pnpm: ./dist/pnpm.js
     pnpx: ./dist/pnpx.js
     yarn: ./dist/yarn.js
     yarnpkg: ./dist/yarnpkg.js
-  checksum: 10c0/cc73285af8485ffaf6f42c945e0eb0cddef4e9063f4fed090216c49c48cf849716254d49738865c3e296b188f33419cf335738a70c97269d7c256ff3646833ff
+  checksum: 10c0/a432dcd619aa532652177f727662c1f3117dba24613213c1c49292d1ea695832de476c43f05c262227f64f0a8cf3a02bbd6a05fa7222012b36a2fd83abc2c26a
   languageName: node
   linkType: hard
 
@@ -4988,7 +4988,7 @@ __metadata:
     "@vitejs/plugin-react-swc": "npm:^3.10.2"
     chart.js: "npm:^4.4.9"
     chartjs-plugin-annotation: "npm:^3.1.0"
-    corepack: "npm:^0.33.0"
+    corepack: "npm:^0.34.0"
     eslint: "npm:^9.32.0"
     file-saver: "npm:^2.0.5"
     history: "npm:^5.3.0"
